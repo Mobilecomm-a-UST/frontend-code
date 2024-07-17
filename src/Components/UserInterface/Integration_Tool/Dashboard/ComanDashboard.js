@@ -116,8 +116,7 @@ const ComanDashboard = () => {
         { title: 'Activity Name', field: 'Activity_Name' },
         { title: 'Site ID', field: 'Site_ID' },
         { title: 'MO NAME', field: 'MO_NAME' },
-        { title: '5G RSI', field: 'RSI_5G' },
-        { title: '5G PCI', field: 'PCI_5G' },
+       
         { title: 'LNBTS ID', field: 'LNBTS_ID' },
         { title: 'Technology', field: 'Technology' },
         { title: 'OSS Details', field: 'OSS_Details' },
@@ -161,12 +160,13 @@ const ComanDashboard = () => {
         { title: 'PCI FDD 2100', field: 'PCI_FDD_2100' },
         { title: 'PCI FDD 1800', field: 'PCI_FDD_1800' },
         { title: 'PCI L900', field: 'PCI_L900' },
+        { title: '5G PCI', field: 'PCI_5G' },
         { title: 'RSI TDD 20', field: 'RSI_TDD_20' },
         { title: 'RSI TDD 10/20', field: 'RSI_TDD_10_20' },
         { title: 'RSI FDD 2100', field: 'RSI_FDD_2100' },
         { title: 'RSI FDD 1800', field: 'RSI_FDD_1800' },
         { title: 'RSI L900', field: 'RSI_L900' },
-
+        { title: '5G RSI', field: 'RSI_5G' },
         { title: 'GPL', field: 'GPL' },
         { title: 'Pre/Post Check', field: 'Pre_Post_Check' },
         {
