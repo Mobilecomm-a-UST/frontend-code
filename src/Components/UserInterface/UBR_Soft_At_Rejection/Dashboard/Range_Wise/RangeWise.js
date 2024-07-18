@@ -623,8 +623,7 @@ const RangeWise = () => {
                     <div style={{ margin: 5, marginLeft: 10 }}>
                         <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
                             <Link underline="hover" href='/tools'>Tools</Link>
-                            <Link underline="hover" href='/tools/others'>Other</Link>
-                            <Link underline="hover" href='/tools/others/UBR_soft_at_Tracker'>UBR Soft AT Tracker</Link>
+                            <Link underline="hover" href='/tools/UBR_soft_at_Tracker'>UBR Soft AT Tracker</Link>
                             <Typography color='text.primary'>Range Wise</Typography>
                         </Breadcrumbs>
                     </div>

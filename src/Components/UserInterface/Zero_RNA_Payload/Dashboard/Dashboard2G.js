@@ -5,6 +5,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { MobileDateTimePicker } from '@mui/x-date-pickers';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
+import { useNavigate } from 'react-router-dom';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import DownloadIcon from '@mui/icons-material/Download';
 import Dialog from '@mui/material/Dialog';
@@ -30,6 +31,7 @@ import { useQuery } from '@tanstack/react-query';
 
 const Dashboard2G = () => {
     const [open, setOpen] = useState(false)
+    const navigate = useNavigate()
     const [displayFilterData, setDisplayFilterData] = useState('')
     const [fromDate, setFromDate] = useState('')
     const [toDate, setToDate] = useState('')
@@ -342,9 +344,8 @@ const Dashboard2G = () => {
                 <div style={{ margin: 10 }}>
                     <div style={{ margin: 5, marginLeft: 10 ,display:'flex',justifyContent:'space-between',alignItems:'center' }}>
                         <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
-                            <Link underline="hover" href='/tools'>Tools</Link>
-                            <Link underline="hover" href='/tools/others'>Other</Link>
-                            <Link underline="hover" href='/tools/others/zero_RNA_payload'>Zero RNA Payload</Link>
+                            <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
+                            <Link underline="hover" onClick={() => { navigate('/tools/zero_rna_payload') }}>Zero RNA Payload</Link>
                             <Typography color='text.primary'>GSM KPI Trend</Typography>
                         </Breadcrumbs>
                         <Box style={{ float: 'right' }}>

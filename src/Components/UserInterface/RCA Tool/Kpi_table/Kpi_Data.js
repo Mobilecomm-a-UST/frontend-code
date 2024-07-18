@@ -1,7 +1,9 @@
 import React, { useState, useCallback, useRef } from 'react'
 import { useEffect } from 'react'
 import { styled } from '@mui/material/styles';
-import { Box, Grid, Stack, Button } from "@mui/material";
+import { Box, Grid, Stack, Button, Popover, List, ListItem, ListItemText,Link , Breadcrumbs , Typography } from "@mui/material";
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import { useNavigate } from 'react-router-dom';
 import Tooltip from '@mui/material/Tooltip';
 import DownloadIcon from '@mui/icons-material/Download';
 import Table from '@mui/material/Table';
@@ -69,6 +71,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const Kpi_Data = () => {
     const { makeGetRequest } = useGet()
+    const navigate = useNavigate()
     const { action, loading } = useLoadingDialog()
     const classes = useStyles();
     const [add, setAdd] = useState(false)
@@ -348,6 +351,13 @@ const Kpi_Data = () => {
     return (
         <>
             <div style={{ margin: 10 }}>
+            <div style={{ margin: 5, marginLeft: 10 }}>
+                <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
+                    <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
+                    <Link underline="hover" onClick={() => { navigate('/tools/rca') }}>RCA Tool</Link>
+                    <Typography color='text.primary'>KPI Table</Typography>
+                </Breadcrumbs>
+            </div>
                 <div style={{ height: 'auto', width: '100%', margin: '5px 0px', boxShadow: 'rgba(0, 0, 0, 0.5) 0px 3px 8px', backgroundColor: 'white', borderRadius: '10px', padding: '1px', display: 'flex' }}>
                     <Grid container spacing={1}>
                         <Grid item xs={10} style={{ display: "flex" }}>

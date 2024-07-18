@@ -1,7 +1,9 @@
 import React, { useState, useCallback, useRef } from 'react'
 import { useEffect } from 'react'
 import { styled } from '@mui/material/styles';
-import { Box, Grid, Stack, Button, Popover, List, ListItem, ListItemText } from "@mui/material";
+import { Box, Grid, Stack, Button, Popover, List, ListItem, ListItemText,Link , Breadcrumbs , Typography } from "@mui/material";
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import { useNavigate } from 'react-router-dom';
 import InputAdornment from '@mui/material/InputAdornment';
 import Tooltip from '@mui/material/Tooltip';
 import DownloadIcon from '@mui/icons-material/Download';
@@ -104,6 +106,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const Rca_data = () => {
+    const navigate = useNavigate();
     const { makeGetRequest } = useGet()
     const { action, loading } = useLoadingDialog()
     const classes = useStyles();
@@ -590,6 +593,13 @@ const Rca_data = () => {
     return (
         <>
             <div style={{ margin: 10 }}>
+            <div style={{ margin: 5, marginLeft: 10 }}>
+                <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
+                    <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
+                    <Link underline="hover" onClick={() => { navigate('/tools/rca') }}>RCA Tool</Link>
+                    <Typography color='text.primary'>RCA Table</Typography>
+                </Breadcrumbs>
+            </div>
                 <div style={{ height: 'auto', width: '100%', margin: '5px 0px', boxShadow: 'rgba(0, 0, 0, 0.5) 0px 3px 8px', backgroundColor: 'white', borderRadius: '10px', padding: '1px', display: 'flex' }}>
                     <Grid container spacing={1}>
                         <Grid item xs={10} style={{ display: "flex" }}>

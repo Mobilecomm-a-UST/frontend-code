@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Box, Grid, Stack } from "@mui/material";
+import { Box} from "@mui/material";
 import Tooltip from '@mui/material/Tooltip';
+import { useNavigate } from 'react-router-dom';
 import IconButton from '@mui/material/IconButton';
 import DownloadIcon from '@mui/icons-material/Download';
 import * as ExcelJS from 'exceljs'
@@ -19,6 +20,7 @@ import {ServerURL} from '../../../services/FetchNodeServices'
 
 const Dashboard4G = () => {
     const scrollableContainerRef = useRef(null);
+    const navigate = useNavigate()
     const [open, setOpen] = useState(false)
     const { makeGetRequest } = useGet()
     const { loading, action } = useLoadingDialog();
@@ -1493,9 +1495,8 @@ const Dashboard4G = () => {
                 <div style={{ margin: 10 }}>
                     <div style={{ margin: 5, marginLeft: 10,display:'flex',justifyContent:'space-between',alignItems:'center' }}>
                         <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
-                            <Link underline="hover" href='/tools'>Tools</Link>
-                            <Link underline="hover" href='/tools/others'>Other</Link>
-                            <Link underline="hover" href='/tools/others/zero_RNA_payload'>Zero RNA Payload</Link>
+                            <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
+                            <Link underline="hover" onClick={() => { navigate('/tools/zero_rna_payload') }}>Zero RNA Payload</Link>
                             <Typography color='text.primary'>LTE KPI Trend</Typography>
                         </Breadcrumbs>
                         <Box style={{ float: 'right' }}>

@@ -156,8 +156,7 @@ const Upload = () => {
                 <div style={{ margin: 10, marginLeft: 10 }}>
                     <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
                         <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
-                        <Link underline="hover" onClick={() => { navigate('/tools/others') }}>Other</Link>
-                        <Link underline="hover" onClick={() => { navigate('/tools/others/cats_tracker') }}>CATS Tracker</Link>
+                        <Link underline="hover" onClick={() => { navigate('/tools/cats_tracker') }}>CATS Tracker</Link>
                         <Typography color='text.primary'>Upload Data</Typography>
                     </Breadcrumbs>
                 </div>

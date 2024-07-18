@@ -142,8 +142,7 @@ const MakeAlaramTrend = () => {
     <div style={{ margin: 10, marginLeft: 10 }}>
           <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
             <Link underline="hover" href='/tools'>Tools</Link>
-            <Link underline="hover" href='/tools/others'>Others</Link>
-            <Link underline="hover" href='/tools/others/schedular'>Schedular</Link>
+            <Link underline="hover" href='/tools/schedular'>Schedular</Link>
             <Typography color='text.primary'>Make Alarm Trend</Typography>
           </Breadcrumbs>
       </div>

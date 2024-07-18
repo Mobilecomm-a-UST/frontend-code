@@ -20,7 +20,6 @@ const Zero_rna_tool = () => {
         <div style={{ margin: 10, marginLeft: 10 }}>
           <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
             <Link underline="hover" onClick={()=>{ navigate('/tools')}}>Tools</Link>
-            <Link underline="hover" onClick={()=>{ navigate('/tools/others')}}>Other</Link>
             {/* <Link underline="hover" onClick={()=>{ navigate('/tools/others/zero_RNA_payload')}}>Zero RNA Payload</Link> */}
             <Typography color='text.primary'>Zero RNA Payload</Typography>
           </Breadcrumbs>

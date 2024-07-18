@@ -20,7 +20,6 @@ const SchedularTools = () => {
           <div style={{ margin: 10, marginLeft: 10 }}>
             <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
               <Link underline="hover" href='/tools'>Tools</Link>
-              <Link underline="hover" href='/tools/others'>Others</Link>
               <Typography color='text.primary'>SCHEDULER</Typography>
             </Breadcrumbs>
           </div>

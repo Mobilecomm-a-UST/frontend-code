@@ -153,13 +153,13 @@ const ToolData = [
         link:  '/tools/cats_tracker'
 
     },
-    {
-        id: 21,
-        name: 'Circle Inputs',
-        title: 'This is a Circle Inputs',
-        icons: OperatePeopleIcon,
-        link:  '/tools/circle_inputs'
-    },
+    // {
+    //     id: 21,
+    //     name: 'Circle Inputs',
+    //     title: 'This is a Circle Inputs',
+    //     icons: OperatePeopleIcon,
+    //     link:  '/tools/circle_inputs'
+    // },
     {
         id: 22,
         name: 'RCA Tool',

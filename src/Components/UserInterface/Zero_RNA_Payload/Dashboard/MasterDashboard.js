@@ -1,24 +1,15 @@
 import React, { useState, useEffect,useMemo } from 'react';
 import { Box, Grid, Stack } from "@mui/material";
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { MobileDateTimePicker } from '@mui/x-date-pickers';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import DownloadIcon from '@mui/icons-material/Download';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import Button from '@mui/material/Button';
-import ClearIcon from '@mui/icons-material/Clear';
-import DialogActions from '@mui/material/DialogActions';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import PublishIcon from '@mui/icons-material/Publish';
 import * as ExcelJS from 'exceljs'
 import TableContainer from '@mui/material/TableContainer';
 import Paper from '@mui/material/Paper';
 import Slide from '@mui/material/Slide';
 import { Breadcrumbs, Link, Typography } from "@mui/material";
+import { useNavigate } from 'react-router-dom';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { useGet } from '../../../Hooks/GetApis';
 import { useLoadingDialog } from '../../../Hooks/LoadingDialog';
@@ -26,6 +17,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useStyles } from '../../ToolsCss'
 const MasterDashboard = () => {
     const classes = useStyles()
+    const navigate = useNavigate()
     const [open, setOpen] = useState(false)
     const [fromDate, setFromDate] = useState('')
     const [toDate, setToDate] = useState('')
@@ -402,9 +394,8 @@ const MasterDashboard = () => {
                 <div style={{ margin: 10 }}>
                     <div style={{ margin: 5, marginLeft: 10,display:'flex',justifyContent:'space-between',alignItems:'center' }}>
                         <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
-                            <Link underline="hover" href='/tools'>Tools</Link>
-                            <Link underline="hover" href='/tools/others'>Other</Link>
-                            <Link underline="hover" href='/tools/others/zero_RNA_payload'>Zero RNA Payload</Link>
+                            <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
+                            <Link underline="hover" onClick={()=>{ navigate('/tools/zero_RNA_payload')}}>Zero RNA Payload</Link>
                             <Typography color='text.primary'>Master Dashboard</Typography>
                         </Breadcrumbs>
                         <Box style={{ float: 'right' }}>

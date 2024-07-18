@@ -39,7 +39,7 @@ const Zero_rna = () => {
               <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#223354", marginTop: 5, borderRadius: 10 }}>
                 <Sidenav.Body>
                   <Nav activeKey={activeKey} onSelect={setActiveKey} >
-                    <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 18 }}>Zero RNA TOOL</Nav>
+                    <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 18 }}>Zero RNA Tool</Nav>
 
                     <Nav.Menu eventKey="1" placement="rightStart" title="Dashboard" icon={<DashboardIcon size="3em" />}>
                       <Nav.Item eventKey="1-1" placement="rightStart" onClick={() => navigate('/tools/zero_RNA_payload/master_dasboard')}>

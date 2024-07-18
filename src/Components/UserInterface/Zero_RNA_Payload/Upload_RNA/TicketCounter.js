@@ -4,7 +4,6 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import UploadIcon from '@mui/icons-material/Upload';
 import DoDisturbIcon from '@mui/icons-material/DoDisturb';
 import { getData, ServerURL } from "../../../services/FetchNodeServices";
-import Tooltip from '@mui/material/Tooltip';
 import Swal from "sweetalert2";
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
@@ -158,8 +157,8 @@ const TicketCounter = () => {
                 <div style={{ margin: 10, marginLeft: 10 }}>
                     <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
                         <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
-                        <Link underline="hover" onClick={() => { navigate('/tools/others') }}>Other</Link>
-                        <Link underline="hover" onClick={() => { navigate('/tools/others/zero_RNA_payload') }}>Zero RNA Payload</Link>
+
+                        <Link underline="hover" onClick={() => { navigate('/tools/zero_RNA_payload') }}>Zero RNA Payload</Link>
                         <Typography color='text.primary'>Ticket Status Counter</Typography>
                     </Breadcrumbs>
                 </div>
