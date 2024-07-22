@@ -11,7 +11,7 @@ import ToolData from '../UserBased/Data/ToolData';
 // import DocPassIcon from '@rsuite/icons/DocPass';
 
 const tempJson = [
-  {name:"TREND",read:true},
+  { name: "TREND", read: true },
 ]
 
 
@@ -25,7 +25,8 @@ export default function Tools() {
   //    console.log('ggggggggg', window.location.href ,item.coords  )
   //   })
 
-  const userType = JSON.parse(localStorage.getItem('user_type'))
+  // const userType = JSON.parse(localStorage.getItem('user_type'))
+  const userType = (JSON.parse(localStorage.getItem('user_type'))?.split(","))
 
   const linker = window.location.pathname;
 
@@ -51,6 +52,26 @@ export default function Tools() {
     textShadow: '2px 2px 4px #ffffff',
     color: '#223354',
     // border:"1px solid black"
+  }
+
+  const checkUserType = ({ allowedUserTypes, propsdata }) => {
+    // const userMatch = userType.some(type => allowedUserTypes.includes(type));
+    // const commonUserTypes = userType.filter(type => allowedUserTypes.includes(type));
+    // const userMatch = commonUserTypes.length > 0;
+    // if (userMatch) {
+    return userType.some(type => allowedUserTypes.includes(type)) ? (
+      <Grid item xs={4} key={propsdata.id}>
+        <Box sx={backgroundStyle} className={classes.des} onClick={() => { handleClickTool(propsdata.link) }}>
+          <div className={classes.centerIcon}><propsdata.icons /></div>
+          <div >
+            <div className={classes.center}>{propsdata.name}</div>
+          </div>
+        </Box>
+      </Grid>
+    ) : null
+
+
+
   }
 
   useEffect(() => {
@@ -86,7 +107,29 @@ export default function Tools() {
 
             <Box sx={{}}>
               <Box sx={{ width: '90%', marginLeft: 'auto', marginRight: '1%' }}>
-                {userType === 'Admin' && <Grid container rowSpacing={2} columnSpacing={1} direction={{ xs: "column", sm: "column", md: "row" }} >
+
+                <Grid container rowSpacing={2} columnSpacing={1} direction={{ xs: "column", sm: "column", md: "row" }} >
+                  {ToolData.map((item, index) => {
+                    const userMatch = userType.some(type => item.groupBy.some(group => group.toLowerCase().includes(type.toLowerCase())));
+                    if (userMatch) {
+                      return (
+                        <Grid item xs={4} key={index}>
+                          <Box sx={backgroundStyle} className={classes.des} onClick={() => { handleClickTool(item.link) }}>
+                            <div className={classes.centerIcon}><item.icons /></div>
+                            <div >
+                              <div className={classes.center}>{item.name}</div>
+                            </div>
+                          </Box>
+                        </Grid>
+                      )
+                    }
+                    // checkUserType({ allowedUserTypes: item.groupBy, propsdata: item })
+                    // return (<checkUserType allowedUserTypes={item.groupBy} propsdata={item} />)
+                  })}
+                </Grid>
+
+
+                {/* {userType === 'Admin' && <Grid container rowSpacing={2} columnSpacing={1} direction={{ xs: "column", sm: "column", md: "row" }} >
                   {ToolData?.map((item, index) => {
                     return (
                       <Grid item xs={4} key={index}>
@@ -94,15 +137,14 @@ export default function Tools() {
                           <div className={classes.centerIcon}><item.icons /></div>
                           <div >
                             <div className={classes.center}>{item.name}</div>
-                            {/* <div>This is a trend tool</div> */}
                           </div>
                         </Box>
                       </Grid>
                     )
                   })}
-                </Grid>}
+                </Grid>} */}
 
-                {userType === 'Soft_At_Team' && <Grid container rowSpacing={2} columnSpacing={1} direction={{ xs: "column", sm: "column", md: "row" }} >
+                {/* {userType === 'Soft_At_Team' && <Grid container rowSpacing={2} columnSpacing={1} direction={{ xs: "column", sm: "column", md: "row" }} >
                   <Grid item xs={4}>
                     <Box sx={backgroundStyle} className={classes.des} onClick={() => { handleClickTool('/tools/soft_at') }}>
                       <div className={classes.centerIcon}><PcIcon /></div>
@@ -110,7 +152,7 @@ export default function Tools() {
                         <div className={classes.center}  >SOFT AT</div>
                         <div>This is a SOFT AT tool</div>
                       </div>
-                      {/* <span className={classes.center}>SOFT AT</span> */}
+                    
                     </Box>
                   </Grid>
 
@@ -119,14 +161,14 @@ export default function Tools() {
                       <div className={classes.centerIcon}><PcIcon /></div>
                       <div >
                         <div className={classes.center}  >SOFT AT Tracking</div>
-                        {/* <div>This is a SOFT AT tool</div> */}
+                   
                       </div>
-                      {/* <span className={classes.center}>SOFT AT</span> */}
+                      
                     </Box>
                   </Grid>
-                </Grid>}
+                </Grid>} */}
 
-                {userType === 'IX' && <Grid container rowSpacing={2} columnSpacing={1} direction={{ xs: "column", sm: "column", md: "row" }} >
+                {/* {userType === 'IX' && <Grid container rowSpacing={2} columnSpacing={1} direction={{ xs: "column", sm: "column", md: "row" }} >
                   <Grid item xs={4}>
                     <Box sx={backgroundStyle} className={classes.des} onClick={() => { handleClickTool('/tools/Integration') }}>
                       <div className={classes.centerIcon}><DocPassIcon /></div>
@@ -134,25 +176,23 @@ export default function Tools() {
                         <div className={classes.center}>IX Tracker</div>
                         <div>This is a IX Tracker Tool</div>
                       </div>
-                      {/* <span className={classes.center}>FILE MERGE</span> */}
                     </Box>
                   </Grid>
 
-                </Grid>}
+                </Grid>} */}
 
-                {userType === 'Quality' && <Grid container rowSpacing={2} columnSpacing={1} direction={{ xs: "column", sm: "column", md: "row" }} >
+                {/* {userType === 'Quality' && <Grid container rowSpacing={2} columnSpacing={1} direction={{ xs: "column", sm: "column", md: "row" }} >
                   <Grid item xs={4}>
                     <Box sx={backgroundStyle} className={classes.des} onClick={() => { handleClickTool('/tools/audit') }}>
                       <div className={classes.centerIcon}><DocPassIcon /></div>
                       <div >
                         <div className={classes.center}>Audit</div>
-                        {/* <div>This is a IX Tracker Tool</div> */}
+
                       </div>
-                      {/* <span className={classes.center}>FILE MERGE</span> */}
                     </Box>
                   </Grid>
 
-                </Grid>}
+                </Grid>} */}
 
               </Box>
             </Box>

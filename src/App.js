@@ -38,25 +38,25 @@ import CircleInputs from "./Components/UserInterface/Employee_skills/CircleInput
 import Integration from "./Components/UserInterface/Integration_Tool/Integration";
 import Rca from "./Components/UserInterface/RCA Tool/Rca";
 import G2Audit from "./Components/UserInterface/Audit Tool/G2Audit/G2Audit";
-import { Navigate } from 'react-router-dom';
+import { useNavigate,Navigate} from 'react-router-dom';
 const queryClient = new QueryClient()
 
-const userType = JSON.parse(localStorage.getItem('user_type'))
+const userType = (JSON.parse(localStorage.getItem('user_type'))?.split(","))
 
 
 function App() {
 
+
   const chackToken = localStorage.getItem("tokenKey")
 
-  // console.log(typeof userType)
+  console.log('usertype', userType)
 
 
   const ProtectedRoute = ({ element: Component, allowedUserTypes, userType, ...rest }) => {
     // console.log(allowedUserTypes, userType,allowedUserTypes.includes(userType))
-    return allowedUserTypes.includes(userType) ? (
+    return userType.some(type => allowedUserTypes.some(group => group.toLowerCase().includes(type.toLowerCase()))) ? (
       <Component {...rest} />
-    ) :
-      window.location.reload();
+    ) :<Navigate to="/error" />
   };
 
 
@@ -115,37 +115,38 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/tools/*" element={<Tools />} />
             <Route path="/" element={<HomePage />} />
+            <Route path="/:id" element={<Error />} />
             <Route path="/profile/*" element={<Profile />} />
             <Route path="/view_site" element={<ProtectedRoute element={ViewSite} allowedUserTypes={['Admin']} userType={userType} />} />
-            <Route path="/dpr/*" element={<ProtectedRoute element={Dpr} allowedUserTypes={['Admin']} userType={userType} />} />
-            <Route path="/trends/*" element={<ProtectedRoute element={Trends} allowedUserTypes={['Admin']} userType={userType} />} />
-            <Route path="/tools/vendor/*" element={<ProtectedRoute element={Vendor} allowedUserTypes={['Admin']} userType={userType} />} />
-            <Route path="/tools/soft_at/*" element={<ProtectedRoute element={SoftAT} allowedUserTypes={['Admin', 'Soft_At_Team']} userType={userType} />} />
-            <Route path="/tools/physical_at/*" element={<ProtectedRoute element={Physical_At} allowedUserTypes={['Admin']} userType={userType} />} />
-            <Route path="/tools/performance_at/*" element={<ProtectedRoute element={Performance_At} allowedUserTypes={['Admin']} userType={userType} />} />
-            <Route path="/tools/wpr/*" element={<ProtectedRoute element={Wpr} allowedUserTypes={['Admin']} userType={userType} />} />
+            <Route path="/dpr/*" element={<ProtectedRoute element={Dpr} allowedUserTypes={['central','admin']} userType={userType} />} />
+            <Route path="/trends/*" element={<ProtectedRoute element={Trends} allowedUserTypes={['quality','admin']} userType={userType} />} />
+            <Route path="/tools/vendor/*" element={<ProtectedRoute element={Vendor} allowedUserTypes={['central','admin']} userType={userType} />} />
+            <Route path="/tools/soft_at/*" element={<ProtectedRoute element={SoftAT} allowedUserTypes={['soft_at_team','admin']} userType={userType} />} />
+            <Route path="/tools/physical_at/*" element={<ProtectedRoute element={Physical_At} allowedUserTypes={['central','admin']} userType={userType} />} />
+            <Route path="/tools/performance_at/*" element={<ProtectedRoute element={Performance_At} allowedUserTypes={['quality','admin']} userType={userType} />} />
+            <Route path="/tools/wpr/*" element={<ProtectedRoute element={Wpr} allowedUserTypes={['quality','admin']} userType={userType} />} />
             <Route path="/tools/de-grow/*" element={<ProtectedRoute element={Degrow} allowedUserTypes={['Admin']} userType={userType} />} />
-            <Route path="/tools/file_merge" element={<ProtectedRoute element={File_Merge} allowedUserTypes={['Admin']} userType={userType} />} />
-            <Route path="/tools/schedular/*" element={<ProtectedRoute element={Schedular} allowedUserTypes={['Admin']} userType={userType} />} />
+            <Route path="/tools/file_merge" element={<ProtectedRoute element={File_Merge} allowedUserTypes={['admin']} userType={userType} />} />
+            <Route path="/tools/schedular/*" element={<ProtectedRoute element={Schedular} allowedUserTypes={['admin']} userType={userType} />} />
             <Route path="/tools/others/*" element={<ProtectedRoute element={Others} allowedUserTypes={['Admin']} userType={userType} />} />
             <Route path="/tools/others/degrow/*" element={<ProtectedRoute element={Degrow} allowedUserTypes={['Admin']} userType={userType} />} />
             <Route path="/tools/circle_inputs/*" element={<ProtectedRoute element={CircleInputs} allowedUserTypes={['Admin']} userType={userType} />} />
-            <Route path="/tools/cats_tracker/*" element={<ProtectedRoute element={CatsTracker} allowedUserTypes={['Admin']} userType={userType} />} />
-            <Route path="/tools/inventory/*" element={<ProtectedRoute element={Inventory} allowedUserTypes={['Admin']} userType={userType} />} />
-            <Route path="/tools/zero_RNA_payload/*" element={<ProtectedRoute element={Zero_rna} allowedUserTypes={['Admin']} userType={userType} />} />
-            <Route path="/tools/audit/*" element={<ProtectedRoute element={Audit} allowedUserTypes={['Admin','Quality']} userType={userType} />} />
-            <Route path="/tools/audit/FDD/*" element={<ProtectedRoute element={FDD} allowedUserTypes={['Admin','Quality']} userType={userType} />} />
-            <Route path="/tools/audit/TDD/*" element={<ProtectedRoute element={TDD} allowedUserTypes={['Admin','Quality']} userType={userType} />} />
-            <Route path="/tools/audit/2G_audit/*" element={<ProtectedRoute element={G2Audit} allowedUserTypes={['Admin','Quality']} userType={userType} />} />
-            <Route path="/tools/mdp/*" element={<ProtectedRoute element={MDPTool} allowedUserTypes={['Admin']} userType={userType} />} />
-            <Route path="/tools/mdp/ran/*" element={<ProtectedRoute element={Mdp} allowedUserTypes={['Admin']} userType={userType} />} />
-            <Route path="/tools/mdp/ubr/*" element={<ProtectedRoute element={MdpUBR} allowedUserTypes={['Admin']} userType={userType} />} />
-            <Route path="/tools/mcom-scripting/*" element={<ProtectedRoute element={Mcomms} allowedUserTypes={['Admin']} userType={userType} />} />
-            <Route path="/tools/soft_at_rejection/*" element={<ProtectedRoute element={Soft_at_Rejection} allowedUserTypes={['Admin', 'Soft_At_Team']} userType={userType} />} />
+            <Route path="/tools/cats_tracker/*" element={<ProtectedRoute element={CatsTracker} allowedUserTypes={['quality','admin']} userType={userType} />} />
+            <Route path="/tools/inventory/*" element={<ProtectedRoute element={Inventory} allowedUserTypes={['central','circle','admin']} userType={userType} />} />
+            <Route path="/tools/zero_RNA_payload/*" element={<ProtectedRoute element={Zero_rna} allowedUserTypes={['quality','admin']} userType={userType} />} />
+            <Route path="/tools/audit/*" element={<ProtectedRoute element={Audit} allowedUserTypes={['quality','admin']} userType={userType} />} />
+            <Route path="/tools/audit/FDD/*" element={<ProtectedRoute element={FDD} allowedUserTypes={['quality','admin']} userType={userType} />} />
+            <Route path="/tools/audit/TDD/*" element={<ProtectedRoute element={TDD} allowedUserTypes={['quality','admin']} userType={userType} />} />
+            <Route path="/tools/audit/2G_audit/*" element={<ProtectedRoute element={G2Audit} allowedUserTypes={['quality','admin']} userType={userType} />} />
+            <Route path="/tools/mdp/*" element={<ProtectedRoute element={MDPTool} allowedUserTypes={['central','circle','admin']} userType={userType} />} />
+            <Route path="/tools/mdp/ran/*" element={<ProtectedRoute element={Mdp} allowedUserTypes={['central','circle','admin']} userType={userType} />} />
+            <Route path="/tools/mdp/ubr/*" element={<ProtectedRoute element={MdpUBR} allowedUserTypes={['central','circle','admin']} userType={userType} />} />
+            <Route path="/tools/mcom-scripting/*" element={<ProtectedRoute element={Mcomms} allowedUserTypes={['central','circle','admin']} userType={userType} />} />
+            <Route path="/tools/soft_at_rejection/*" element={<ProtectedRoute element={Soft_at_Rejection} allowedUserTypes={['soft_at_team','admin']} userType={userType} />} />
             <Route path="/profileSetting/*" element={<ProtectedRoute element={ProfileSetting} allowedUserTypes={['Admin']} userType={userType} />} />
-            <Route path="/tools/UBR_soft_at_Tracker/*" element={<ProtectedRoute element={Ubr_Soft_at_Rejection} allowedUserTypes={['Admin']} userType={userType} />} />
-            <Route path="/tools/Integration/*" element={<ProtectedRoute element={Integration} allowedUserTypes={['Admin', 'IX']} userType={userType} />} />
-            <Route path="/tools/rca/*" element={<ProtectedRoute element={Rca} allowedUserTypes={['Admin', 'IX']} userType={userType} />} />
+            <Route path="/tools/UBR_soft_at_Tracker/*" element={<ProtectedRoute element={Ubr_Soft_at_Rejection} allowedUserTypes={['admin']} userType={userType} />} />
+            <Route path="/tools/Integration/*" element={<ProtectedRoute element={Integration} allowedUserTypes={['quality','soft_at_team','admin','IX']} userType={userType} />} />
+            <Route path="/tools/rca/*" element={<ProtectedRoute element={Rca} allowedUserTypes={['quality','admin']} userType={userType} />} />
           </Routes>
 
         </Router>

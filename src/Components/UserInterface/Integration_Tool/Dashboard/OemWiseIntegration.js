@@ -294,7 +294,7 @@ const OemWiseIntegration = ({ onData }) => {
 
                             <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
                                 <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Circle</th>
+                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>CIRCLE</th>
                                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>DE-GROW</th>
                                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>MACRO</th>
                                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>RELOCATION</th>
@@ -403,7 +403,7 @@ const OemWiseIntegration = ({ onData }) => {
                                     <th colSpan={6} style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{monthNames[month]}-{year}</th>
                                     </tr>
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Circle</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>CIRCLE</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>ERICSSON</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>HUAWEI</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>NOKIA</th>

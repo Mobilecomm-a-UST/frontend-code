@@ -72,7 +72,7 @@ const MonthWiseIntegration = ({ onData }) => {
                 setYears(res.latest_year)
                 ShortDate(res.latest_months, res.latest_year)
                 setTableData(JSON.parse(res.table_data))
-                console.log(JSON.parse(res.table_data))
+                // console.log(JSON.parse(res.table_data))
                 onData(res)
                 return res;
             }
@@ -376,7 +376,7 @@ const MonthWiseIntegration = ({ onData }) => {
 
                                 <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
-                                        <th rowSpan='2' style={{ padding: '5px 20px', whiteSpace: 'nowrap', position: 'sticky', left: 0, top: 0, backgroundColor: '#223354' }}>Circle</th>
+                                        <th rowSpan='2' style={{ padding: '5px 20px', whiteSpace: 'nowrap', position: 'sticky', left: 0, top: 0, backgroundColor: '#223354' }}>CIRCLE</th>
                                         {/* <th colSpan='7' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#2F75B5' }}>{monthArray[2]}</th>
                                         <th colSpan='7' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: "#DD761C" }}>{monthArray[1]}</th>
                                         <th colSpan='7' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#03AED2' }}>{monthArray[0]}</th> */}

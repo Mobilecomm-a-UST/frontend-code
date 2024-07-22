@@ -19,6 +19,9 @@ import TimeIcon from '@rsuite/icons/Time';
 import SingleSourceIcon from '@rsuite/icons/SingleSource';
 import BlockIcon from '@rsuite/icons/Block';
 import TreeIcon from '@rsuite/icons/Tree';
+import { groupBy } from 'lodash';
+
+// const userType =  ['admin','quality','central','soft_at','circle']
 
 const ToolData = [
     {
@@ -27,34 +30,40 @@ const ToolData = [
         title: 'This is a trend tool',
         icons: TrendIcon,
         link: '/trends',
+        groupBy:['quality','admin']
     },
     {
         id: 1,
         name: 'DPR',
         title: 'This is a DPR tool',
         icons: DetailIcon,
-        link: ''
+        link: '/tools/dpr',
+        groupBy:['central','admin']
     },
     {
         id: 2,
         name: 'VENDOR',
         title: 'This is a Vendor tool',
         icons: PeopleBranchIcon,
-        link: '/tools/vendor'
+        link: '/tools/vendor',
+        groupBy:['central','admin']
     },
     {
         id: 3,
         name: 'PHYSICAL AT',
         title: 'This is a PHYSICAL AT tool',
         icons: CellTowerIcon,
-        link: '/tools/physical_at'
+        link: '/tools/physical_at',
+        groupBy:['central','admin']
+
     },
     {
         id: 4,
         name: 'SOFT AT',
         title: 'This is a SOFT AT tool',
         icons: PcIcon,
-        link: '/tools/soft_at'
+        link: '/tools/soft_at',
+        groupBy:['soft_at_team','admin']
     },
 
     {
@@ -62,7 +71,8 @@ const ToolData = [
         name: 'SOFT AT Tracking',
         title: 'This is a SOFT AT tool',
         icons: PcIcon,
-        link: '/tools/soft_at_rejection'
+        link: '/tools/soft_at_rejection',
+        groupBy:['soft_at_team','admin']
     },
 
     {
@@ -70,35 +80,40 @@ const ToolData = [
         name: 'PERFORMANCE AT',
         title: 'This is a PERFORMANCE AT tool',
         icons: WavePointIcon,
-        link: '/tools/performance_at'
+        link: '/tools/performance_at',
+        groupBy:['quality','admin']
     },
     {
         id: 7,
         name: 'WPR',
         title: 'This is a WPR tool',
         icons: FunnelStepsIcon,
-        link:'/tools/wpr'
+        link:'/tools/wpr',
+        groupBy:['quality','admin']
     },
     {
         id: 8,
         name: 'MDP',
         title: 'This is a MDP tool',
         icons: CalendarIcon,
-        link: '/tools/mdp'
+        link: '/tools/mdp',
+        groupBy:['central','circle','admin']
     },
     {
         id: 9,
         name: 'Inventory',
         title: 'This is a Inventory tool',
         icons: ThreeColumnsIcon,
-        link: '/tools/inventory'
+        link: '/tools/inventory',
+        groupBy:['central','circle','admin']
     },
     {
         id: 10,
         name: 'Mcom Scripting',
         title: 'This is a Mcom Scripting tool',
         icons: PageIcon,
-        link: '/tools/mcom-scripting'
+        link: '/tools/mcom-scripting',
+        groupBy:['central','circle','admin']
     },
 
     {
@@ -106,14 +121,18 @@ const ToolData = [
         name: 'AUDIT',
         title: 'This is a AUDIT tool',
         icons: DocPassIcon,
-        link: '/tools/audit'
+        link: '/tools/audit',
+        groupBy:['quality','admin']
+
     },
     {
         id: 12,
         name: 'IX Tracker',
         title: 'This is a IX Tracker Tool',
         icons: DocPassIcon,
-        link: '/tools/Integration'
+        link: '/tools/Integration',
+        groupBy:['quality','soft_at_team','admin','IX']
+
     },
 
     {
@@ -121,28 +140,32 @@ const ToolData = [
         name: 'FILE MERGE',
         title: 'This is a file merge tool<',
         icons: SingleSourceIcon,
-        link: '/tools/file_merge'
+        link: '/tools/file_merge',
+        groupBy:['admin']
     },
     {
         id: 15,
         name: 'SCHEDULER',
         title: 'This is a SCHEDULER tool',
         icons: TimeIcon,
-        link: '/tools/schedular'
+        link: '/tools/schedular',
+        groupBy:['admin']
     },
     {
         id: 18,
         name: 'UBR Soft-At Tracker',
         title: '',
         icons: BlockIcon,
-        link: '/tools/UBR_soft_at_Tracker'
+        link: '/tools/UBR_soft_at_Tracker',
+        groupBy:['admin']
     },
     {
         id: 19,
         name: 'Zero RNA Payload',
         title: 'This is a Zero RNA Payload',
         icons: CombinationIcon,
-        link:  '/tools/zero_RNA_payload'
+        link:  '/tools/zero_RNA_payload',
+        groupBy:['quality','admin']
 
     },
     {
@@ -150,7 +173,8 @@ const ToolData = [
         name: 'CATS Tracker',
         title: 'This is a CATS Tracker',
         icons: RelatedMapIcon,
-        link:  '/tools/cats_tracker'
+        link:  '/tools/cats_tracker',
+        groupBy:['quality','admin']
 
     },
     // {
@@ -165,7 +189,8 @@ const ToolData = [
         name: 'RCA Tool',
         title: 'This is a RCA Tool',
         icons: TreeIcon,
-        link:  '/tools/rca'
+        link:  '/tools/rca',
+        groupBy:['quality','admin']
     }
 
 
