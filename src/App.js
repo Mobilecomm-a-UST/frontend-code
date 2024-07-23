@@ -38,6 +38,7 @@ import CircleInputs from "./Components/UserInterface/Employee_skills/CircleInput
 import Integration from "./Components/UserInterface/Integration_Tool/Integration";
 import Rca from "./Components/UserInterface/RCA Tool/Rca";
 import G2Audit from "./Components/UserInterface/Audit Tool/G2Audit/G2Audit";
+import IntegrationRead from "./Components/UserInterface/Integration_Read/IntegrationRead";
 import { useNavigate,Navigate} from 'react-router-dom';
 const queryClient = new QueryClient()
 
@@ -146,6 +147,7 @@ function App() {
             <Route path="/profileSetting/*" element={<ProtectedRoute element={ProfileSetting} allowedUserTypes={['Admin']} userType={userType} />} />
             <Route path="/tools/UBR_soft_at_Tracker/*" element={<ProtectedRoute element={Ubr_Soft_at_Rejection} allowedUserTypes={['admin']} userType={userType} />} />
             <Route path="/tools/Integration/*" element={<ProtectedRoute element={Integration} allowedUserTypes={['quality','soft_at_team','admin','IX']} userType={userType} />} />
+            <Route path="/tools/IX_Tracker/*" element={<ProtectedRoute element={IntegrationRead} allowedUserTypes={['IX_reader']} userType={userType} />} />
             <Route path="/tools/rca/*" element={<ProtectedRoute element={Rca} allowedUserTypes={['quality','admin']} userType={userType} />} />
           </Routes>
 

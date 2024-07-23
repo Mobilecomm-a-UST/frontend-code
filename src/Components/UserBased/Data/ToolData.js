@@ -191,6 +191,15 @@ const ToolData = [
         icons: TreeIcon,
         link:  '/tools/rca',
         groupBy:['quality','admin']
+    },
+    {
+        id: 23,
+        name: 'IX Tracker',
+        title: 'This is a IX Tracker Tool',
+        icons: DocPassIcon,
+        link: '/tools/IX_Tracker',
+        groupBy:['IX_reader']
+
     }
 
 
