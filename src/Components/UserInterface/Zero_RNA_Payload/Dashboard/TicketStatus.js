@@ -24,9 +24,8 @@ import { usePost } from '../../../Hooks/PostApis';
 import { useLoadingDialog } from '../../../Hooks/LoadingDialog';
 import { useQuery } from '@tanstack/react-query';
 import { useStyles } from '../../ToolsCss'
-import { ServerURL } from '../../../services/FetchNodeServices';
-
-import FormControlLabel from '@mui/material/FormControlLabel';
+import _ from 'lodash';
+import CheckPicker from 'rsuite/CheckPicker';
 import Switch from '@mui/material/Switch';
 
 const colorType = ['#223354', '#2c426d', '#3b5891', '#4a6eb5', '#ffe6cc']
@@ -38,13 +37,17 @@ const TicketStatus = () => {
     const { response, makeGetRequest } = useGet()
     const { makePostRequest } = usePost()
     const { loading, action } = useLoadingDialog();
+    const [payloadCircle, setPayloadCircle] = useState([])
+    const [selectCircle, setSelectCircle] = useState([])
+    const [payloadSiteID, setPayloadSiteID] = useState([])
+    const [selectSiteID, setSelectSiteID] = useState([])
+    const [payloadTicketId , setPayloadTicketId] = useState([])
+    const [selectTicketId , setSelectTicketId] = useState([])
     const [mainDataT2, setMainDataT2] = useState([])
     const [totalTable, setTotalTable] = useState([])
     const [totalOpen, setTotalOpen] = useState(false)
     const [toggalButton, setToggalButton] = useState(false)
     const [payloadStatus, setPayloadStatus] = useState(false)
-    const [currentDate, setCurrentDate] = useState('')
-    const [previousDate, setPreviousDate] = useState('')
     const [ticketDipForm, setTicketDipForm] = useState({
         Circle: "",
         Circle_Spoc: "",
@@ -106,7 +109,7 @@ const TicketStatus = () => {
     }
 
     // Handle Submit data to update ticket status
-    const handleSubmit = async(e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         action(true)
         const responce = await makePostRequest(`Zero_Count_Rna_Payload_Tool/ticket_status_open_close/${ticketDipForm.ticket_id}/`, ticketDipForm)
@@ -116,12 +119,12 @@ const TicketStatus = () => {
         //     body: JSON.stringify(ticketDipForm),
         //   });
         // console.log('get responce ' , responce)
-        if(responce.Status){
+        if (responce.Status) {
             action(false)
             setPayloadStatus(false)
             handleTotalData()
         }
-        else{
+        else {
             action(false)
         }
     }
@@ -559,6 +562,9 @@ const TicketStatus = () => {
             if (responce) {
                 action(false)
                 setTotalTable(responce.data)
+                setPayloadCircle(_.uniq(_.map(responce.data, 'Circle')))
+                setPayloadSiteID(_.uniq(_.map(responce.data, 'Site_ID')))
+                setPayloadTicketId(_.uniq(_.map(responce.data, 'ticket_id')))
                 // setCurrentDate(responce.current_date)
                 // setPreviousDate(responce.previous_date)
                 // setTotalOpen(true)
@@ -568,9 +574,40 @@ const TicketStatus = () => {
                 setTotalOpen(false)
                 // setTotalOpen(false)
             }
-        }
 
+        }
     }
+
+    const FilterPayloadDipData = useCallback(() => {
+        let filteredData = _.filter(totalTable, item => {
+
+            const circleMatch = selectCircle.length === 0 || _.includes(selectCircle, item.Circle);
+            const siteIdMatch = selectSiteID.length === 0 || _.includes(selectSiteID, item.Site_ID);
+            const ticketMatch = selectTicketId.length === 0 || _.includes(selectTicketId, item.ticket_id);
+
+
+            return circleMatch && siteIdMatch && ticketMatch;
+        });
+        return filteredData?.map((item, index) => (
+            <tr className={classes.hover} style={{ textAlign: "center", fontWeigth: 700 }}>
+                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.ticket_id}</th>
+                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Circle}</th>
+                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Short_name}</th>
+                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Date}</th>
+                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Open_Date}</th>
+                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{CalculateDaysBetweenDates(item.Date, item.Open_Date)}</th>
+                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Unique_Id}</th>
+                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', cursor: 'pointer' }} className={classes.hover} onClick={() => { handleSetDataTicket(item) }}>{item.Status == 'nan' ? '' : item.Status}</th>
+                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Remarks == 'nan' ? '' : item.Remarks}</th>
+                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Ownership == 'nan' ? '' : item.Ownership}</th>
+                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Circle_Spoc}</th>
+                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Site_ID}</th>
+                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Pre_Remarks == 'nan' ? '' : item.Pre_Remarks}</th>
+            </tr>
+        ))
+
+    }, [toggalButton, selectCircle, selectSiteID,selectTicketId, totalTable])
+
     const TotalTableDialog = useCallback(() => {
         return (
             <Dialog
@@ -578,7 +615,10 @@ const TicketStatus = () => {
                 // onClose={handleClose}
                 keepMounted
                 fullWidth
-                maxWidth={'lg'}
+                maxWidth={'xl'}
+                BackdropProps={{
+                    style: { backgroundColor: 'rgba(0, 0, 0, 0.5)', backdropFilter: 'blur(3px)' },
+                }}
                 style={{ zIndex: 5 }}
             >
                 <DialogTitle><span style={{ color: toggalButton ? '' : '#1976D2' }}>All Over Raw Data</span>
@@ -605,8 +645,8 @@ const TicketStatus = () => {
                         {toggalButton ? <table style={{ width: "100%", border: "1px solid black", borderCollapse: 'collapse', overflow: 'auto' }} >
                             <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
                                 <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Ticket ID</th>
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Circle</th>
+                                    <th style={{ padding: '5px 60px', whiteSpace: 'nowrap' }}>Ticket ID <CheckPicker data={payloadTicketId.map(item => ({ label: item, value: item }))} value={selectTicketId} onChange={(value) => { setSelectTicketId(value) }} size="sm" appearance="default" style={{ width: 40 }} /></th>
+                                    <th style={{ padding: '5px 60px', whiteSpace: 'nowrap' }} >Circle <CheckPicker data={payloadCircle.map(item => ({ label: item, value: item }))} value={selectCircle} onChange={(value) => { setSelectCircle(value) }} size="sm" appearance="default" style={{ width: 20 }} /> </th>
                                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Cell Name</th>
                                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Date</th>
                                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Open Date</th>
@@ -616,29 +656,30 @@ const TicketStatus = () => {
                                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Remarks</th>
                                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Ownership</th>
                                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Circle Spoc</th>
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Site ID</th>
+                                    <th style={{ padding: '5px 60px', whiteSpace: 'nowrap' }}>Site ID <CheckPicker data={payloadSiteID.map(item => ({ label: item, value: item }))} value={selectSiteID} onChange={(value) => { setSelectSiteID(value) }} size="sm" appearance="default" style={{ width: 20 }} /></th>
                                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Pre Remarks</th>
 
                                 </tr>
                             </thead>
                             <tbody>
-                                {totalTable?.map((item) => (
+                                {/* {totalTable?.map((item) => (
                                     <tr className={classes.hover} style={{ textAlign: "center", fontWeigth: 700 }}>
-                                        <th>{item.ticket_id}</th>
-                                        <th>{item.Circle}</th>
-                                        <th>{item.Short_name}</th>
-                                        <th>{item.Date}</th>
-                                        <th>{item.Open_Date}</th>
-                                        <th>{CalculateDaysBetweenDates(item.Date, item.Open_Date)}</th>
-                                        <th>{item.Unique_Id}</th>
-                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => { handleSetDataTicket(item) }}>{item.Status == 'nan' ? '' : item.Status}</th>
-                                        <th>{item.Remarks == 'nan' ? '' : item.Remarks}</th>
-                                        <th>{item.Ownership == 'nan' ? '' : item.Ownership}</th>
-                                        <th>{item.Circle_Spoc}</th>
-                                        <th>{item.Site_ID}</th>
-                                        <th>{item.Pre_Remarks == 'nan' ? '' : item.Pre_Remarks}</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.ticket_id}</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Circle}</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Short_name}</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Date}</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Open_Date}</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{CalculateDaysBetweenDates(item.Date, item.Open_Date)}</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Unique_Id}</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', cursor: 'pointer' }} className={classes.hover} onClick={() => { handleSetDataTicket(item) }}>{item.Status == 'nan' ? '' : item.Status}</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Remarks == 'nan' ? '' : item.Remarks}</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Ownership == 'nan' ? '' : item.Ownership}</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Circle_Spoc}</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Site_ID}</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Pre_Remarks == 'nan' ? '' : item.Pre_Remarks}</th>
                                     </tr>
-                                ))}
+                                ))} */}
+                                {FilterPayloadDipData()}
                             </tbody>
                         </table> : <table style={{ width: "100%", border: "1px solid black", borderCollapse: 'collapse', overflow: 'auto' }} >
                             <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
@@ -675,7 +716,7 @@ const TicketStatus = () => {
                 </DialogContent>
             </Dialog>
         )
-    }, [totalOpen, totalTable, toggalButton]);
+    }, [totalOpen, totalTable,selectCircle,selectSiteID,selectTicketId, toggalButton]);
 
 
     const Dashboard = useCallback(({ dataa, color }) => {
@@ -831,7 +872,7 @@ const TicketStatus = () => {
                                           type='text'
                                     /> */}
                                     <FormControl fullWidth>
-                                    <InputLabel id="demo-simple-select-label">Status</InputLabel>
+                                        <InputLabel id="demo-simple-select-label">Status</InputLabel>
                                         <Select
                                             labelId="demo-simple-select-label"
                                             id="demo-simple-select"
@@ -944,6 +985,7 @@ const TicketStatus = () => {
     }, [])
     return (
         <>
+
             <style>{"th{border:1px solid black;}"}</style>
             <Slide direction="left" in='true' timeout={700} style={{ transformOrigin: '1 1 1' }}>
                 <div style={{ margin: 10 }}>

@@ -520,30 +520,7 @@ const Rca_data = () => {
     const filterRCAData = useCallback(() => {
 
         let filteredData = _.filter(data, item => {
-            // if (selectKpi.length > 0 && selectDataSource.length > 0 && selectTentative.length > 0) {
-            //     return _.includes(selectKpi, item.KPI) && _.includes(selectDataSource, item.Data_source) && _.includes(selectTentative, item.Tentative_counters);
-            // }
-            // else if (selectKpi.length > 0 && selectDataSource.length > 0) {
-            //     return _.includes(selectKpi, item.KPI) && _.includes(selectDataSource, item.Data_source);
-            // }
-            // else if (selectDataSource.length > 0 && selectTentative.length > 0) {
-            //     return _.includes(selectDataSource, item.Data_source) && _.includes(selectTentative, item.Tentative_counters)
-            // }
-            // else if (selectKpi.length > 0 && selectTentative.length > 0) {
-            //     return _.includes(selectKpi, item.KPI) && _.includes(selectTentative, item.Tentative_counters);
-            // }
-            // else if (selectKpi.length > 0) {
-            //     return _.includes(selectKpi, item.KPI)
-            // }
-            // else if (selectDataSource.length > 0) {
-            //     return _.includes(selectDataSource, item.Data_source)
-            // }
-            // else if (selectTentative.length > 0) {
-            //     return _.includes(selectTentative, item.Tentative_counters)
-            // }
-            // else {
-            //     return data
-            // }
+           
             const kpiMatch = selectKpi.length === 0 || _.includes(selectKpi, item.KPI);
             const dataSourceMatch = selectDataSource.length === 0 || _.includes(selectDataSource, item.Data_source);
             const tentativeMatch = selectTentative.length === 0 || _.includes(selectTentative, item.Tentative_counters);

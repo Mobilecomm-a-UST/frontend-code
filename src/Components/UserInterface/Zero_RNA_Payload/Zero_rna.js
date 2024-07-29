@@ -20,6 +20,7 @@ const TicketStatus = lazy(() => import('./Dashboard/TicketStatus'));
 const TicketStatusData = lazy(() => import('./Dashboard/Ticket Status/TicketStatusExpend'));
 const Ms1_Done = lazy(() => import('./Upload_RNA/MS1-Done-site/Ms1_Done'));
 const TicketCounter = lazy(()=> import('./Upload_RNA/TicketCounter'))
+const PayloadDip = lazy(()=> import('./MasterDashboard/PayloadDip'))
 
 const Zero_rna = () => {
   const [expanded, setExpanded] = useState(true);

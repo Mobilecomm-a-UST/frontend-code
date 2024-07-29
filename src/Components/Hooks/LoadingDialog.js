@@ -12,7 +12,9 @@ export const useLoadingDialog = () => {
         return (
             <Dialog
                 open={open}
-
+                BackdropProps={{
+                    style: { backgroundColor: 'rgba(0, 0, 0, 0.5)', backdropFilter: 'blur(3px)' },
+                  }}
                 // TransitionComponent={Transition}
                 keepMounted
             // aria-describedby="alert-dialog-slide-description"

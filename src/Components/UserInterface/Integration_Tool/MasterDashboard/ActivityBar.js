@@ -65,20 +65,26 @@ const ActivityBar = () => {
       var formData = new FormData()
       formData.append('month', month)
       formData.append('year', year)
-      const res = await makePostRequest("IntegrationTracker/monthwise-integration-data/", formData);
-      if (res) {
-        action(false)
-        setMonth(res.latest_months)
-        setYear(res.latest_year)
-        setDate(`${res.latest_year[0]}-${res.latest_months[0] < 10 ? '0' + res.latest_months[0] : res.latest_months[0]}`)
-        setCircle(_.map(JSON.parse(res.table_data), 'cir'))
-        // console.log('activity data', res)
-        setActivityData(JSON.parse(res.table_data))
-        return res;
-      }
-      else {
-        action(false)
-      }
+       try {
+            const res = await makePostRequest("IntegrationTracker/monthwise-integration-data/", formData);
+            action(false);
+
+            if (res) {
+                setMonth(res.latest_months);
+                setYear(res.latest_year);
+                setDate(`${res.latest_year[0]}-${res.latest_months[0] < 10 ? '0' + res.latest_months[0] : res.latest_months[0]}`);
+                setCircle(_.map(JSON.parse(res.table_data), 'cir'));
+                setActivityData(JSON.parse(res.table_data));
+                return res;
+            } else {
+                // Handle the case where res is falsy
+                return {};
+            }
+        } catch (error) {
+            action(false);
+            console.error('Error fetching data:', error);
+            return {}; // Return an empty object or some default value in case of error
+        }
     },
     staleTime: 100000,
     refetchOnReconnect: false,
@@ -97,91 +103,95 @@ const ActivityBar = () => {
   }
 
 
-  const filterData = () => {
+  const filterData = useCallback(() => {
+    handleClear()
+    circle?.map((items)=>{
+      const tempcircle = _.filter(activityData, item => _.includes(items, item.cir))
+      console.log('circle filter ', tempcircle)
+      // const temMonth = _.map(_.pickBy(tempcircle, (value, key) => key.includes('_OTHERS')), Number);
+      // const temMonth = _.get(tempcircle[0], `M1${selectActivity}`)
+      setMonth1((prev)=> [...prev ,_.get(tempcircle[0],`M1${selectActivity}`)])
+      setMonth2((prev)=> [...prev ,_.get(tempcircle[0],`M2${selectActivity}`)])
+      setMonth3((prev)=> [...prev ,_.get(tempcircle[0],`M3${selectActivity}`)])
+      setMonth4((prev)=> [...prev ,_.get(tempcircle[0],`M4${selectActivity}`)])
+      setMonth5((prev)=> [...prev ,_.get(tempcircle[0],`M5${selectActivity}`)])
+      setMonth6((prev)=> [...prev ,_.get(tempcircle[0],`M6${selectActivity}`)])
+      // console.log('temMonth', selectActivity, temMonth)
+    })
 
-    const tempcircle = _.filter(activityData, item => _.includes(selectCircle, item.cir))
-    console.log('circle filter ', tempcircle)
-    // const temMonth = _.map(_.pickBy(tempcircle, (value, key) => key.includes('_OTHERS')), Number);
-    const temMonth = _.get(tempcircle[0], `M1${selectActivity}`)
-    setMonth1(_.get(tempcircle[0],`M1${selectActivity}`))
-    setMonth2(_.get(tempcircle[0],`M2${selectActivity}`))
-    setMonth3(_.get(tempcircle[0],`M3${selectActivity}`))
-    setMonth4(_.get(tempcircle[0],`M4${selectActivity}`))
-    setMonth5(_.get(tempcircle[0],`M5${selectActivity}`))
-    setMonth6(_.get(tempcircle[0],`M6${selectActivity}`))
-    console.log('temMonth', selectActivity, temMonth)
+   
 
-  }
+  },[selectCircle,selectActivity,activityData])
 
 
 
   const data1 = {
-    labels: [selectActivity.replaceAll('_',' ')],
+    labels: circle,
     datasets: [
       {
-        label: 'Month 1',
+        label: `${monthNames[month[0]]}-${year[0]}`,
         data: month1,
-        borderColor: 'black',
-        backgroundColor: ['rgb(237,108,2,0.8)'],
-        borderWidth: 1,
+        borderColor: 'rgb(0, 159, 189)',
+        backgroundColor: ['rgb(0, 159, 189)'],
+        borderWidth: 2,
         borderRadius: 5,
-        fill: true,
+        fill: false,
         tension: 0.4
       },
       {
-        label: 'month 2',
+        label: `${monthNames[month[1]]}-${year[1]}`,
         data: month2,
-        borderColor: 'black',
-        backgroundColor: ['rgb(241,4,5,0.6)'],
-        borderWidth: 1,
+        borderColor: 'rgb(249, 226, 175)',
+        backgroundColor: ['rgb(249, 226, 175)'],
+        borderWidth: 2,
         borderRadius: 5,
         color: 'red',
-        fill: true,
+        fill: false,
         tension: 0.4
       },
       {
-        label: 'month 3',
+        label: `${monthNames[month[2]]}-${year[2]}`,
         data: month3,
-        borderColor: 'black',
-        backgroundColor: ['rgb(0,90,255,0.7)'],
-        borderWidth: 1,
+        borderColor: 'rgb(63, 162, 246)',
+        backgroundColor: ['rgb(63, 162, 246)'],
+        borderWidth: 2,
         borderRadius: 5,
         color: 'red',
-        fill: true,
+        fill: false,
         tension: 0.4
       },
       {
-        label: 'month 4',
+        label: `${monthNames[month[3]]}-${year[3]}`,
         data: month4,
-        borderColor: 'black',
-        backgroundColor: ['rgb(244, 208, 63,0.8)'],
-        borderWidth: 1,
+        borderColor: 'rgb(54, 186, 152)',
+        backgroundColor: ['rgb(54, 186, 152)'],
+        borderWidth: 2,
         borderRadius: 5,
         color: 'red',
-        fill: true,
+        fill: false,
         tension: 0.4
       },
       {
-        label: 'month 5',
+        label: `${monthNames[month[4]]}-${year[4]}`,
         data: month5,
-        borderColor: 'black',
-        backgroundColor: ['rgb(0,76,156,0.8)'],
-        borderWidth: 1,
+        borderColor: 'rgb(255, 177, 177)',
+        backgroundColor: ['rgb(255, 177, 177)'],
+        borderWidth: 2,
         borderRadius: 5,
         color: 'red',
-        fill: true,
+        fill: false,
         tension: 0.4,
         borderRadius: 5
       },
       {
-        label: 'month 6',
+        label: `${monthNames[month[5]]}-${year[5]}`,
         data: month6,
-        borderColor: 'black',
+        borderColor: 'rgb(0,76,156,0.8)',
         backgroundColor: ['rgb(0,76,156,0.8)'],
-        borderWidth: 1,
+        borderWidth: 2,
         borderRadius: 5,
         color: 'red',
-        fill: true,
+        fill: false,
         tension: 0.4,
         borderRadius: 5
       }
@@ -189,11 +199,11 @@ const ActivityBar = () => {
   }
 
   const data2 = {
-    labels: [selectActivity.replaceAll('_',' ')],
+    labels: circle,
     datasets: [
       {
         label: `${monthNames[month[0]]}-${year[0]}`,
-        data: [month1],
+        data: month1,
         borderColor: 'black',
         backgroundColor: ['rgb(0, 159, 189)'],
         borderWidth: 1,
@@ -203,7 +213,7 @@ const ActivityBar = () => {
       },
       {
         label: `${monthNames[month[1]]}-${year[1]}`,
-        data: [month2],
+        data: month2,
         borderColor: 'black',
         backgroundColor: ['rgb(249, 226, 175)'],
         borderWidth: 1,
@@ -214,7 +224,7 @@ const ActivityBar = () => {
       },
       {
         label: `${monthNames[month[2]]}-${year[2]}`,
-        data: [month3],
+        data: month3,
         borderColor: 'black',
         backgroundColor: ['rgb(63, 162, 246)'],
         borderWidth: 1,
@@ -225,7 +235,7 @@ const ActivityBar = () => {
       },
       {
         label: `${monthNames[month[3]]}-${year[3]}`,
-        data: [month4],
+        data: month4,
         borderColor: 'black',
         backgroundColor: ['rgb(54, 186, 152)'],
         borderWidth: 1,
@@ -236,7 +246,7 @@ const ActivityBar = () => {
       },
       {
         label:  `${monthNames[month[4]]}-${year[4]}`,
-        data: [month5],
+        data: month5,
         borderColor: 'black',
         backgroundColor: ['rgb(255, 177, 177)'],
         borderWidth: 1,
@@ -249,7 +259,7 @@ const ActivityBar = () => {
       ,
       {
         label:`${monthNames[month[5]]}-${year[5]}`,
-        data: [month6],
+        data: month6,
         borderColor: 'black',
         backgroundColor: ['rgb(0,76,156,0.8)'],
         borderWidth: 1,
@@ -266,11 +276,11 @@ const ActivityBar = () => {
     responsive: true,
     // events: ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove'],
     maintainApectRatio: false,
-    // interaction: {
-    //     mode: 'index',
-    //     intersect: false,
-    //     // axis:'x',
-    // },
+    interaction: {
+        mode: 'index',
+        intersect: false,
+        // axis:'x',
+    },
     plugins: {
       // backgroundImageUrl:'https://www.msoutlook.info/pictures/bgconfidential.png',
       legend: {
@@ -454,53 +464,14 @@ const ActivityBar = () => {
 
   }
 
-  // useEffect(() => {
-  //     const chart = chartRef.current;
-
-  //     if (chart) {
-  //         chart.canvas.onclick = function (event) {
-  //             const points = chart.getElementsAtEventForMode(event, 'nearest', { intersect: true }, true);
-
-  //             if (points.length > 0) {
-  //                 const firstPoint = points[0];
-  //                 const label = chart.data.labels[firstPoint.index];
-  //                 const datasetLabel = chart.data.datasets[firstPoint.datasetIndex].label;
-  //                 const value = chart.data.datasets[firstPoint.datasetIndex].data[firstPoint.index];
-
-  //                 //   console.log('Label:', label);
-  //                 //   console.log('Dataset Label:', datasetLabel);
-  //                 //   console.log('Value:', value);
-  //                 // setBarData({circle:label,oem:datasetLabel,month:month,year:year})
-
-  //                 const ClickDataGet = async () => {
-  //                     action(true)
-  //                     var formData = new FormData();
-  //                     formData.append("circle", label);
-  //                     formData.append("oem", datasetLabel.toUpperCase());
-  //                     formData.append("month", month);
-  //                     formData.append("year", year);
-
-  //                     const responce = await makePostRequest('IntegrationTracker/hyperlink-monthly-oemwise-integration-data/', formData)
-  //                     if (responce) {
-
-  //                         action(false)
-  //                         // console.log('hyperlink data', JSON.parse(responce.table_data))
-  //                         setActivity_Name(datasetLabel.toUpperCase())
-  //                         setBarData(JSON.parse(responce.table_data))
-  //                         setBarDialogOpen(true)
-  //                     }
-  //                     else {
-  //                         action(false)
-  //                     }
-  //                 }
-
-  //                 ClickDataGet()
-  //                 // You can perform further actions with the retrieved data here
-  //             }
-  //         };
-  //     }
-  // }, [data2]);
-
+ const handleClear = () => {
+   setMonth1([])
+   setMonth2([])
+   setMonth3([])
+   setMonth4([])
+   setMonth5([])
+   setMonth6([])
+ }
 
 
 
@@ -540,8 +511,9 @@ const ActivityBar = () => {
   }, [open])
 
   useEffect(() => {
+    // console.log('aaaa')
     filterData()
-  },[selectCircle,selectActivity,activityData])
+  },[filterData])
 
   useEffect(() => {
     if (data) {
@@ -565,12 +537,12 @@ const ActivityBar = () => {
           <input type='month' value={date} onChange={(e) => handleMonthData(e.target.value)} />
         </div>
         {/* select circle */}
-        <div>
+        {/* <div>
           <InputLabel style={{ fontSize: 15 }}>Select Circle</InputLabel>
           <select style={{ width: 145, height: 25, borderRadius: 2 }} value={selectCircle} onChange={(e) => setSelectCircle(e.target.value)}>
             {circle?.map((item, index) => <option key={index} >{item}</option>)}
           </select>
-        </div>
+        </div> */}
         {/* select Activity */}
         <div>
           <InputLabel style={{ fontSize: 15 }}>Select Activity</InputLabel>
