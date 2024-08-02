@@ -5,6 +5,8 @@ import Button from '@mui/material/Button';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import zoomPlugin from 'chartjs-plugin-zoom';
 import ChartjsPluginWatermark from 'chartjs-plugin-watermark'
+import TableContainer from '@mui/material/TableContainer';
+import Paper from '@mui/material/Paper';
 import { ServerURL } from '../../../services/FetchNodeServices';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import InputLabel from '@mui/material/InputLabel';
@@ -13,10 +15,15 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import LaunchIcon from '@mui/icons-material/Launch';
 import Dialog from '@mui/material/Dialog';
 import Slide from '@mui/material/Slide';
+import { useStyles } from '../../ToolsCss';
 import { usePost } from '../../../Hooks/PostApis';
 import { useLoadingDialog } from '../../../Hooks/LoadingDialog';
 import { useQuery } from '@tanstack/react-query';
+import DialogTitle from '@mui/material/DialogTitle';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 import _ from 'lodash';
+import { DialogContent } from '@mui/material';
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -25,8 +32,10 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const PayloadDip = () => {
   const chartRef = useRef(null);
+  const classes = useStyles()
   const [graphType, setGraphType] = useState(false);
   const [open, setOpen] = useState(false)
+  const [open2, setOpen2] = useState(false)
   const { makePostRequest } = usePost()
   const { loading, action } = useLoadingDialog();
   const [openPayloadDip, setOpenPayloadDip] = useState([])
@@ -34,6 +43,7 @@ const PayloadDip = () => {
   const [circle, setCircle] = useState([])
   const [fromDate, setFromDate] = useState('')
   const [toDate, setToDate] = useState('')
+  const [tableData, setTableData] = useState([])
   const { isPending, isFetching, isError, data, error, refetch } = useQuery({
     queryKey: ['PayloadDip_MasterDashboard'],
     queryFn: async () => {
@@ -42,27 +52,27 @@ const PayloadDip = () => {
       // formData.append('circle', '')
       formData.append('to_date', toDate)
       formData.append('from_date', fromDate)
-       try {
-            const res = await makePostRequest("Zero_Count_Rna_Payload_Tool/circle_wise_open_close_dashboard/", formData);
-            action(false);
+      try {
+        const res = await makePostRequest("Zero_Count_Rna_Payload_Tool/circle_wise_open_close_dashboard/", formData);
+        action(false);
 
-            if (res) {
-                // console.log('Payload Dip data res', res)
-                setFromDate(res.from_date)
-                setToDate(res.to_date)
-                setCircle(res.result.map(item => Object.keys(item)[0]))
-                setOpenPayloadDip(res.result.map(item => Object.values(item)[0].OPEN))
-                setClosePayloadDip(res.result.map(item => Object.values(item)[0].CLOSE))
-                return res;
-            } else {
-                // Handle the case where res is falsy
-                return {};
-            }
-        } catch (error) {
-            action(false);
-            console.error('Error fetching data:', error);
-            return {}; // Return an empty object or some default value in case of error
+        if (res) {
+          console.log('Payload Dip data res', res)
+          setFromDate(res.from_date)
+          setToDate(res.to_date)
+          setCircle(res.result.map(item => Object.keys(item)[0]))
+          setOpenPayloadDip(res.result.map(item => Object.values(item)[0].OPEN))
+          setClosePayloadDip(res.result.map(item => Object.values(item)[0].CLOSE))
+          return res;
+        } else {
+          // Handle the case where res is falsy
+          return {};
         }
+      } catch (error) {
+        action(false);
+        console.error('Error fetching data:', error);
+        return {}; // Return an empty object or some default value in case of error
+      }
     },
     staleTime: 100000,
     refetchOnReconnect: false,
@@ -79,7 +89,7 @@ const PayloadDip = () => {
     return `${day}-${month}-${year}`
   }
 
-  
+
 
 
   const data1 = {
@@ -119,6 +129,7 @@ const PayloadDip = () => {
         backgroundColor: ['rgb(136, 214, 108,0.7)'],
         borderWidth: 1,
         borderRadius: 10,
+        cursor: 'pointer',
         fill: true,
         tension: 0.4
       },
@@ -129,6 +140,7 @@ const PayloadDip = () => {
         backgroundColor: ['rgb(198, 60, 81,0.8)'],
         borderWidth: 1,
         borderRadius: 10,
+        cursor: 'pointer',
         color: 'red',
         fill: true,
         tension: 0.4
@@ -141,9 +153,9 @@ const PayloadDip = () => {
     // events: ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove'],
     maintainApectRatio: false,
     interaction: {
-        mode: 'index',
-        intersect: false,
-        // axis:'x',
+      mode: 'index',
+      intersect: false,
+      // axis:'x',
     },
     plugins: {
       // backgroundImageUrl:'https://www.msoutlook.info/pictures/bgconfidential.png',
@@ -318,11 +330,11 @@ const PayloadDip = () => {
     },
   }
 
-  const handleFromDateChange = async(event) => {
+  const handleFromDateChange = async (event) => {
     await setFromDate(event.target.value);
     await refetch();
   };
-  const handleToDateChange = async(event) => {
+  const handleToDateChange = async (event) => {
     await setToDate(event.target.value);
     await refetch();
   };
@@ -335,11 +347,63 @@ const PayloadDip = () => {
   }
   const handleClose = () => {
     setOpen(false);
+    setOpen2(false);
   }
   // End Toggal Button.......
 
 
+  useEffect(() => {
+    const chart = chartRef.current;
 
+    if (chart) {
+      chart.canvas.onclick = function (event) {
+        const points = chart.getElementsAtEventForMode(event, 'nearest', { intersect: true }, true);
+
+        if (points.length > 0) {
+          const firstPoint = points[0];
+          const circle = chart.data.labels[firstPoint.index];
+          const status = chart.data.datasets[firstPoint.datasetIndex].label;
+          const value = chart.data.datasets[firstPoint.datasetIndex].data[firstPoint.index];
+
+          console.log('circle:', circle);
+          console.log('status:', status);
+          console.log('Value:', value);
+
+          const tempData = data?.data.filter((item) => item.Circle === circle && item.Status === status)
+
+          setTableData(tempData)
+
+          setOpen2(true)
+          // setBarData({circle:label,oem:datasetLabel,month:month,year:year})
+
+          // const ClickDataGet = async () => {
+          //     action(true)
+          //     var formData = new FormData();
+          //     formData.append("circle", label);
+          //     formData.append("oem", datasetLabel.toUpperCase());
+          //     formData.append("month", month);
+          //     formData.append("year", year);
+
+          //     const responce = await makePostRequest('IntegrationTracker/hyperlink-monthly-oemwise-integration-data/', formData)
+          //     if (responce) {
+
+          //         action(false)
+          //         // console.log('hyperlink data', JSON.parse(responce.table_data))
+          //         setActivity_Name(datasetLabel.toUpperCase())
+          //         setBarData(JSON.parse(responce.table_data))
+          //         setBarDialogOpen(true)
+          //     }
+          //     else {
+          //         action(false)
+          //     }
+          // }
+
+          // ClickDataGet()
+          // You can perform further actions with the retrieved data here
+        }
+      };
+    }
+  }, [data2]);
 
 
   const handleDialogBox = useCallback(() => {
@@ -375,31 +439,96 @@ const PayloadDip = () => {
     )
   }, [open])
 
+  const handleTableDialogBox = useCallback(() => {
+    return (
+      <Dialog
+        fullWidth={true}
+        maxWidth={'xl'}
+        TransitionComponent={Transition}
+        open={open2}
+        onClose={handleClose}
+      >
+        <DialogTitle>
+          <span style={{ float: 'right' }}>
+            <IconButton size="large" onClick={handleClose}><CloseIcon /></IconButton>
+          </span>
+        </DialogTitle>
+        <DialogContent>
+          <TableContainer sx={{ maxHeight: '70vh', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} component={Paper}>
+            <table style={{ width: "100%", border: "1px solid black", borderCollapse: 'collapse', overflow: 'auto' }} >
+              <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
+                <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
+                  <th style={{ padding: '5px 10px', whiteSpace: 'nowrap' }}>S.No.</th>
+                  <th style={{ padding: '5px 10px', whiteSpace: 'nowrap' }}>Ticket ID </th>
+                  <th style={{ padding: '5px 10px', whiteSpace: 'nowrap' }} >Circle </th>
+                  <th style={{ padding: '5px 10px', whiteSpace: 'nowrap' }}>Cell Name</th>
+                  <th style={{ padding: '5px 10px', whiteSpace: 'nowrap' }}>Date</th>
+                  <th style={{ padding: '5px 10px', whiteSpace: 'nowrap' }}>Open Date</th>
+                  <th style={{ padding: '5px 10px', whiteSpace: 'nowrap' }}>Aging</th>
+                  <th style={{ padding: '5px 10px', whiteSpace: 'nowrap' }}>Priority </th>
+                  <th style={{ padding: '5px 10px', whiteSpace: 'nowrap' }}>Status</th>
+                  <th style={{ padding: '5px 10px', whiteSpace: 'nowrap' }}>Circle Spoc</th>
+                  <th style={{ padding: '5px 10px', whiteSpace: 'nowrap' }}>Site ID </th>
+                  <th style={{ padding: '5px 10px', whiteSpace: 'nowrap' }}>Remarks</th>
+                  <th style={{ padding: '5px 10px', whiteSpace: 'nowrap' }}>Ownership</th>
+
+                  <th style={{ padding: '5px 10px', whiteSpace: 'nowrap' }}>Pre Remarks</th>
+                </tr>
+              </thead>
+              <tbody>
+                {tableData && tableData.map((item, index) => (
+                  <tr key={index} className={classes.hover} style={{ textAlign: "center", fontWeigth: 700 }}>
+                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{index + 1}</th>
+                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.ticket_id}</th>
+                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Circle}</th>
+                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Short_name}</th>
+                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Date}</th>
+                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Open_Date}</th>
+                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.aging}</th>
+                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.priority}</th>
+                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', cursor: 'pointer' }}  >{item.Status == 'nan' ? '' : item.Status}</th>
+                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Circle_Spoc}</th>
+                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Site_ID}</th>
+                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Remarks == 'nan' ? '' : item.Remarks}</th>
+                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Ownership == 'nan' ? '' : item.Ownership}</th>
+
+                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Pre_Remarks == 'nan' ? '' : item.Pre_Remarks}</th>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </TableContainer>
+        </DialogContent>
+      </Dialog>
+    )
+  }, [open2])
+
   useEffect(() => {
-    if(data){
+    if (data) {
       setFromDate(data.from_date)
       setToDate(data.to_date)
       setCircle(data.result.map(item => Object.keys(item)[0]))
       setOpenPayloadDip(data.result.map(item => Object.values(item)[0].OPEN))
       setClosePayloadDip(data.result.map(item => Object.values(item)[0].CLOSE))
     }
-  
+
     document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
   }, [])
 
 
-  return (
-    <div style={{margin: 10, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', padding: 10, height: 'auto', width: "98%", borderRadius: 10, backgroundColor: "white", display: "flex", justifyContent: 'space-around', alignItems: 'center' }}>
+  return (<>
+    <style>{"th{border:1px solid black;}"}</style>
+    <div style={{ margin: 10, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', padding: 10, height: 'auto', width: "98%", borderRadius: 10, backgroundColor: "white", display: "flex", justifyContent: 'space-around', alignItems: 'center' }}>
       <div style={{ width: 200, height: 350, borderRadius: 5, padding: 10, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: "12px" }}>
         <div style={{ display: 'flex', alignItems: 'center', fontSize: '18px', fontWeight: 'bold', color: "black" }}><FilterAltIcon />FILTER DATA</div>
         {/* select month */}
         <div>
           <InputLabel style={{ fontSize: 15 }}>Select From Date</InputLabel>
-          <input type='date' value={fromDate}  onChange={handleFromDateChange} />
+          <input type='date' value={fromDate} onChange={handleFromDateChange} />
         </div>
         <div>
           <InputLabel style={{ fontSize: 15 }}>Select To Date</InputLabel>
-          <input type='date' value={toDate} onChange={handleToDateChange}/>
+          <input type='date' value={toDate} onChange={handleToDateChange} />
         </div>
         {/* select circle */}
         {/* <div>
@@ -470,9 +599,11 @@ const PayloadDip = () => {
       </div>
 
       {handleDialogBox()}
+      {handleTableDialogBox()}
       {loading}
 
     </div>
+  </>
   )
 }
 
