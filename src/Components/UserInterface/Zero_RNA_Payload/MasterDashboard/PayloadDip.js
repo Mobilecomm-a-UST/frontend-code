@@ -1,8 +1,478 @@
-import React from 'react'
+import React, { useEffect, useState, useRef, useCallback } from 'react'
+import { Chart as Chartjs } from 'chart.js/auto'
+import { Line, Bar } from 'react-chartjs-2';
+import Button from '@mui/material/Button';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+import zoomPlugin from 'chartjs-plugin-zoom';
+import ChartjsPluginWatermark from 'chartjs-plugin-watermark'
+import { ServerURL } from '../../../services/FetchNodeServices';
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import InputLabel from '@mui/material/InputLabel';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import LaunchIcon from '@mui/icons-material/Launch';
+import Dialog from '@mui/material/Dialog';
+import Slide from '@mui/material/Slide';
+import { usePost } from '../../../Hooks/PostApis';
+import { useLoadingDialog } from '../../../Hooks/LoadingDialog';
+import { useQuery } from '@tanstack/react-query';
+import _ from 'lodash';
+
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="down" timeout={2500} style={{ transformOrigin: '0 0 0' }} mountOnEnter unmountOnExit ref={ref} {...props} />;
+});
 
 const PayloadDip = () => {
+  const chartRef = useRef(null);
+  const [graphType, setGraphType] = useState(false);
+  const [open, setOpen] = useState(false)
+  const { makePostRequest } = usePost()
+  const { loading, action } = useLoadingDialog();
+  const [openPayloadDip, setOpenPayloadDip] = useState([])
+  const [closePayloadDip, setClosePayloadDip] = useState([])
+  const [circle, setCircle] = useState([])
+  const [fromDate, setFromDate] = useState('')
+  const [toDate, setToDate] = useState('')
+  const { isPending, isFetching, isError, data, error, refetch } = useQuery({
+    queryKey: ['PayloadDip_MasterDashboard'],
+    queryFn: async () => {
+      action(isPending)
+      var formData = new FormData()
+      // formData.append('circle', '')
+      formData.append('to_date', toDate)
+      formData.append('from_date', fromDate)
+       try {
+            const res = await makePostRequest("Zero_Count_Rna_Payload_Tool/circle_wise_open_close_dashboard/", formData);
+            action(false);
+
+            if (res) {
+                // console.log('Payload Dip data res', res)
+                setFromDate(res.from_date)
+                setToDate(res.to_date)
+                setCircle(res.result.map(item => Object.keys(item)[0]))
+                setOpenPayloadDip(res.result.map(item => Object.values(item)[0].OPEN))
+                setClosePayloadDip(res.result.map(item => Object.values(item)[0].CLOSE))
+                return res;
+            } else {
+                // Handle the case where res is falsy
+                return {};
+            }
+        } catch (error) {
+            action(false);
+            console.error('Error fetching data:', error);
+            return {}; // Return an empty object or some default value in case of error
+        }
+    },
+    staleTime: 100000,
+    refetchOnReconnect: false,
+  })
+  let delayed;
+
+
+  const handleDateFormat = (event) => {
+    let date = new Date(event);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    // console.log('date formate',year , month , day);
+    return `${day}-${month}-${year}`
+  }
+
+  
+
+
+  const data1 = {
+    labels: circle,
+    datasets: [
+      {
+        label: 'OPEN',
+        data: openPayloadDip,
+        borderColor: 'rgb(136, 214, 108)',
+        backgroundColor: ['rgb(136, 214, 108)'],
+        borderWidth: 3,
+        borderRadius: 5,
+        fill: false,
+        tension: 0.4
+      },
+      {
+        label: 'CLOSE',
+        data: closePayloadDip,
+        borderColor: 'rgb(198, 60, 81)',
+        backgroundColor: ['rgb(198, 60, 81)'],
+        borderWidth: 3,
+        borderRadius: 5,
+        color: 'red',
+        fill: false,
+        tension: 0.4
+      }
+    ]
+  }
+
+  const data2 = {
+    labels: circle,
+    datasets: [
+      {
+        label: 'OPEN',
+        data: openPayloadDip,
+        borderColor: 'black',
+        backgroundColor: ['rgb(136, 214, 108,0.7)'],
+        borderWidth: 1,
+        borderRadius: 10,
+        fill: true,
+        tension: 0.4
+      },
+      {
+        label: 'CLOSE',
+        data: closePayloadDip,
+        borderColor: 'black',
+        backgroundColor: ['rgb(198, 60, 81,0.8)'],
+        borderWidth: 1,
+        borderRadius: 10,
+        color: 'red',
+        fill: true,
+        tension: 0.4
+      }
+    ]
+  }
+
+  const options = {
+    responsive: true,
+    // events: ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove'],
+    maintainApectRatio: false,
+    interaction: {
+        mode: 'index',
+        intersect: false,
+        // axis:'x',
+    },
+    plugins: {
+      // backgroundImageUrl:'https://www.msoutlook.info/pictures/bgconfidential.png',
+      legend: {
+        position: 'bottom',
+        labels: {
+          // This more specific font property overrides the global property
+          font: {
+            size: 13,
+            // weight: 'bold',
+          },
+          // color: "white",
+          boxWidth: 18,
+        }
+      },
+      title: {
+        display: true,
+        text: `Payload Dip Status ( ${handleDateFormat(fromDate)} ~ ${handleDateFormat(toDate)} )`,
+        font: {
+          size: 16,
+          weight: 'bold'
+        }
+
+      },
+      datalabels: {
+        display: true,
+        color: 'black',
+        anchor: 'end',
+        align: 'top',
+        offset: 0.5,
+        font: {
+          size: 12,
+          weight: 'bold'
+        }
+        // formatter:(value,context)=>{
+        //         console.log(context)
+        // }
+      },
+      zoom: {
+        zoom: {
+          wheel: {
+            enabled: true,
+            speed: 0.01,
+          },
+          pinch: {
+            enabled: true,
+            speed: 0.01,
+          },
+          mode: 'x',
+          // mode:'y',
+        },
+        pan: {
+          enabled: true,
+          mode: 'x'
+        },
+      },
+      // tooltip: {
+      //     displayColors: false,
+      //     backgroundColor: 'white',
+      //     borderColor: 'black',
+      //     borderWidth: '1',
+      //     padding: 10,
+      //     bodyColor: 'black',
+      //     bodyFont: {
+      //         size: '14'
+      //     },
+      //     bodyAlign: 'left',
+      //     footerAlign: 'right',
+      //     titleColor: 'black',
+      //     titleFont: {
+      //         weight: 'bold',
+      //         size: '15'
+      //     },
+      //     yAlign: 'bottom',
+      //     xAlign: 'center',
+      //     callbacks: {
+      //         // labelColor: function(context) {
+      //         //     return {
+      //         //         borderColor: 'rgb(0, 0, 255)',
+      //         //         backgroundColor: 'rgb(255, 0, 0)',
+      //         //         borderWidth: 2,
+      //         //         borderDash: [2, 2],
+      //         //         borderRadius: 2,
+      //         //     };
+      //         // },
+      //         // labelTextColor: function(context) {
+      //         //     return '#543453';
+      //         // },
+      //         label: ((tooltipItem) => {
+      //             // console.log(tooltipItem.dataset.label,":",tooltipItem.formattedValue)
+
+      //         })
+      //     },
+      //     // external: function(context) {
+      //     //     const tooltipModel = context.tooltip;
+      //     //     const canvas = context.chart.canvas;
+
+      //     //     canvas.onclick = function(event) {
+      //     //         if (tooltipModel.opacity === 0) {
+      //     //             return;
+      //     //         }
+
+      //     //         const rect = canvas.getBoundingClientRect();
+      //     //         const tooltipPosition = {
+      //     //             x: event.clientX - rect.left,
+      //     //             y: event.clientY - rect.top
+      //     //         };
+
+      //     //         if (
+      //     //             tooltipPosition.x >= tooltipModel.caretX - tooltipModel.width / 2 &&
+      //     //             tooltipPosition.x <= tooltipModel.caretX + tooltipModel.width / 2 &&
+      //     //             tooltipPosition.y >= tooltipModel.caretY - tooltipModel.height / 2 &&
+      //     //             tooltipPosition.y <= tooltipModel.caretY + tooltipModel.height / 2
+      //     //         ) {
+      //     //             console.log('You clicked on the tooltip for', tooltipModel.dataPoints[0]);
+      //     //         }
+      //     //     };
+      //     // }
+
+      // },
+
+    },
+    scales: {
+      x: {
+        grid: {
+          display: false
+        },
+        ticks: {
+          // color:"white"
+        },
+        // stacked: true
+
+      },
+      y: {
+        grid: {
+          display: true,
+          // color:'white'
+        },
+        ticks: {
+          // forces step size to be 50 units
+          stepSize: 1,
+          // color:'white'
+        },
+        // stacked: true
+      }
+    },
+    watermark: {
+
+      image: `${ServerURL}/media/assets/logo-new.png`,
+      x: 50,
+      y: 50,
+      width: 300,
+      height: 150,
+      opacity: 0.25,
+      alignX: "right",
+      alignY: "top",
+      alignToChartArea: false,
+      position: "back"
+
+    },
+    animation: {
+      onComplete: () => {
+        delayed = true;
+      },
+      delay: (context) => {
+        let delay = 0;
+        if (context.type === 'data' && context.mode === 'default' && !delayed) {
+          delay = context.dataIndex * 300 + context.datasetIndex * 100;
+        }
+        return delay;
+      },
+    },
+  }
+
+  const handleFromDateChange = async(event) => {
+    await setFromDate(event.target.value);
+    await refetch();
+  };
+  const handleToDateChange = async(event) => {
+    await setToDate(event.target.value);
+    await refetch();
+  };
+
+
+
+  // TOGGAL BUTTON..........
+  const handleChange = () => {
+    setGraphType(!graphType)
+  }
+  const handleClose = () => {
+    setOpen(false);
+  }
+  // End Toggal Button.......
+
+
+
+
+
+  const handleDialogBox = useCallback(() => {
+    return (
+      <Dialog
+        fullWidth={true}
+        maxWidth={'lg'}
+        TransitionComponent={Transition}
+        open={open}
+        onClose={handleClose}
+      >
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <div style={{ display: graphType ? 'none' : 'inherit', filter: 'drop-shadow(rgba(0, 0, 0, 0.34) 0px 3px 3px)', width: "1100px", height: '600px' }}>
+            <Bar
+              // style={{  width: "100%", height: '100%' }}
+              ref={chartRef}
+              data={data2}
+              options={options}
+              plugins={[ChartDataLabels, zoomPlugin, ChartjsPluginWatermark]}
+            >
+            </Bar>
+          </div>
+          <div style={{ display: graphType ? 'inherit' : 'none', filter: 'drop-shadow(rgba(0, 0, 0, 0.34) 0px 3px 3px)', width: "1100px", height: '600px' }}><Line
+            // style={{ width: "100%", height: 350 }}
+            data={data1}
+            options={options}
+            plugins={[ChartDataLabels, zoomPlugin, ChartjsPluginWatermark]}
+          >
+          </Line></div>
+        </div>
+
+      </Dialog>
+    )
+  }, [open])
+
+  useEffect(() => {
+    if(data){
+      setFromDate(data.from_date)
+      setToDate(data.to_date)
+      setCircle(data.result.map(item => Object.keys(item)[0]))
+      setOpenPayloadDip(data.result.map(item => Object.values(item)[0].OPEN))
+      setClosePayloadDip(data.result.map(item => Object.values(item)[0].CLOSE))
+    }
+  
+    document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
+  }, [])
+
+
   return (
-    <div>PayloadDip</div>
+    <div style={{margin: 10, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', padding: 10, height: 'auto', width: "98%", borderRadius: 10, backgroundColor: "white", display: "flex", justifyContent: 'space-around', alignItems: 'center' }}>
+      <div style={{ width: 200, height: 350, borderRadius: 5, padding: 10, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: "12px" }}>
+        <div style={{ display: 'flex', alignItems: 'center', fontSize: '18px', fontWeight: 'bold', color: "black" }}><FilterAltIcon />FILTER DATA</div>
+        {/* select month */}
+        <div>
+          <InputLabel style={{ fontSize: 15 }}>Select From Date</InputLabel>
+          <input type='date' value={fromDate}  onChange={handleFromDateChange} />
+        </div>
+        <div>
+          <InputLabel style={{ fontSize: 15 }}>Select To Date</InputLabel>
+          <input type='date' value={toDate} onChange={handleToDateChange}/>
+        </div>
+        {/* select circle */}
+        {/* <div>
+          <InputLabel style={{ fontSize: 15 }}>Select Circle</InputLabel>
+          <select style={{ width: 145, height: 25, borderRadius: 2 }} value={selectCircle} onChange={(e) => setSelectCircle(e.target.value)}>
+            {circle?.map((item, index) => <option key={index} >{item}</option>)}
+          </select>
+        </div> */}
+        {/* select Activity */}
+        {/* <div>
+          <InputLabel style={{ fontSize: 15 }}>Select Activity</InputLabel>
+          <select style={{ width: 145, height: 25, borderRadius: 2 }} value={selectActivity} onChange={(e) => setSelectActivity(e.target.value)}>
+            <option selected value={'_DE_GROW'}>DE-GROW</option>
+            <option value={'_MACRO'}>MACRO</option>
+            <option value={'_RELOCATION'}>RELOCATION</option>
+            <option value={'_RET'}>RET</option>
+            <option value={'_ULS_HPSC'}>ULS-HPSC</option>
+            <option value={'_UPGRADE'}>UPGRADE</option>
+            <option value={'_FEMTO'}>FEMTO</option>
+            <option value={'_HT_INCREMENT'}>HT-INCREMENT</option>
+            <option value={'_IBS'}>IBS</option>
+            <option value={'_IDSC'}>IDSC</option>
+            <option value={'_ODSC'}>ODSC</option>
+            <option value={'_RECTIFICATION'}>RECTIFICATION</option>
+            <option value={'_OTHERS'}>OTHER</option>
+          </select>
+        </div> */}
+
+        {/* toggle button */}
+        <div>
+          <ToggleButtonGroup
+            size="small"
+            color="primary"
+            value={graphType}
+            exclusive
+            onChange={handleChange}
+            aria-label="Platform"
+
+          >
+            <ToggleButton value={true}>Line</ToggleButton>
+            <ToggleButton value={false}>Bar</ToggleButton>
+          </ToggleButtonGroup>
+        </div>
+        {/* full screen button */}
+        <div>
+          <Button color="primary" endIcon={<LaunchIcon />} onClick={() => { setOpen(true) }}>Full screen</Button>
+        </div>
+      </div>
+      <div style={{ display: graphType ? 'inherit' : 'none', filter: 'drop-shadow(rgba(0, 0, 0, 0.34) 0px 3px 3px)', width: "800px", height: 400 }}>
+        <Line
+          // style={{ width: "100%", height: 350 }}
+          ref={chartRef}
+          data={data1}
+          options={options}
+          plugins={[ChartDataLabels, zoomPlugin, ChartjsPluginWatermark]}
+        >
+        </Line>
+      </div>
+      <div style={{ display: graphType ? 'none' : 'inherit', filter: 'drop-shadow(rgba(0, 0, 0, 0.34) 0px 3px 3px)', width: "80hv", height: 400 }}>
+        <Bar
+          // style={{ width: "100%", height: 400 }}
+          ref={chartRef}
+          data={data2}
+          options={options}
+          plugins={[ChartDataLabels, zoomPlugin, ChartjsPluginWatermark]}
+        >
+        </Bar>
+      </div>
+
+      {handleDialogBox()}
+      {loading}
+
+    </div>
   )
 }
 

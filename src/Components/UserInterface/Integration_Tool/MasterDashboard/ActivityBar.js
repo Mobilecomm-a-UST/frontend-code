@@ -107,7 +107,7 @@ const ActivityBar = () => {
     handleClear()
     circle?.map((items)=>{
       const tempcircle = _.filter(activityData, item => _.includes(items, item.cir))
-      console.log('circle filter ', tempcircle)
+      // console.log('circle filter ', tempcircle)
       // const temMonth = _.map(_.pickBy(tempcircle, (value, key) => key.includes('_OTHERS')), Number);
       // const temMonth = _.get(tempcircle[0], `M1${selectActivity}`)
       setMonth1((prev)=> [...prev ,_.get(tempcircle[0],`M1${selectActivity}`)])

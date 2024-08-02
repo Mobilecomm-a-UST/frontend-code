@@ -5,6 +5,7 @@ import { Grid } from '@mui/material'
 import { Sidenav, Nav } from 'rsuite';
 import DashboardIcon from '@rsuite/icons/legacy/Dashboard';
 import FileUploadIcon from '@rsuite/icons/FileUpload';
+import AppSelectIcon from '@rsuite/icons/AppSelect';
 import { useNavigate } from 'react-router-dom'
 import { Routes, Route } from "react-router-dom";
 const Zero_rna_tool = lazy(() => import('./Zero_rna_tool'));
@@ -19,8 +20,9 @@ const Dip_Track_A_A = lazy(() => import('./Dashboard/Dip_Track_A_A'));
 const TicketStatus = lazy(() => import('./Dashboard/TicketStatus'));
 const TicketStatusData = lazy(() => import('./Dashboard/Ticket Status/TicketStatusExpend'));
 const Ms1_Done = lazy(() => import('./Upload_RNA/MS1-Done-site/Ms1_Done'));
-const TicketCounter = lazy(()=> import('./Upload_RNA/TicketCounter'))
-const PayloadDip = lazy(()=> import('./MasterDashboard/PayloadDip'))
+const TicketCounter = lazy(()=> import('./Upload_RNA/TicketCounter'));
+const PayloadDip = lazy(()=> import('./MasterDashboard/PayloadDip'));
+
 
 const Zero_rna = () => {
   const [expanded, setExpanded] = useState(true);
@@ -41,6 +43,12 @@ const Zero_rna = () => {
                 <Sidenav.Body>
                   <Nav activeKey={activeKey} onSelect={setActiveKey} >
                     <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 18 }}>Zero RNA Tool</Nav>
+
+                    <Nav.Menu eventKey="3" placement="rightStart" title="Master Dashboard" icon={<AppSelectIcon size="3em" />}>
+                      <Nav.Item eventKey="3-1" placement="rightStart" onClick={() => navigate('/tools/zero_RNA_payload/payload_dip')}>
+                        Payload Dip
+                      </Nav.Item>
+                    </Nav.Menu>
 
                     <Nav.Menu eventKey="1" placement="rightStart" title="Dashboard" icon={<DashboardIcon size="3em" />}>
                       <Nav.Item eventKey="1-1" placement="rightStart" onClick={() => navigate('/tools/zero_RNA_payload/master_dasboard')}>
@@ -104,6 +112,7 @@ const Zero_rna = () => {
                 <Route element={<TicketStatus />} path="/ticket_status/*" />
                 <Route element={<TicketStatusData />} path="/ticket_status/:name" />
                 <Route element={< Ms1_Done />} path="/ms1_done_sites/*" />
+                <Route element={< PayloadDip />} path="/payload_dip" />
 
               </Routes>
           </Suspense>

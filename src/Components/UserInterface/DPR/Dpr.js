@@ -119,7 +119,6 @@ export default function Dpr() {
               <Route element={<DprReport />} path="/dpr_report" />
               <Route element={<DprReportStatus />} path="/dpr_report_status" />
               <Route element={<MasterDasboard />} path="/master_dasboard" />
-
             </Routes>
 
           </div>

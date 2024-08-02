@@ -27,6 +27,8 @@ import { useStyles } from '../../ToolsCss'
 import _ from 'lodash';
 import CheckPicker from 'rsuite/CheckPicker';
 import Switch from '@mui/material/Switch';
+import Toolbar from '@mui/material/Toolbar';
+import AppBar from '@mui/material/AppBar';
 
 const colorType = ['#223354', '#2c426d', '#3b5891', '#4a6eb5', '#ffe6cc']
 
@@ -41,8 +43,10 @@ const TicketStatus = () => {
     const [selectCircle, setSelectCircle] = useState([])
     const [payloadSiteID, setPayloadSiteID] = useState([])
     const [selectSiteID, setSelectSiteID] = useState([])
-    const [payloadTicketId , setPayloadTicketId] = useState([])
-    const [selectTicketId , setSelectTicketId] = useState([])
+    const [payloadTicketId, setPayloadTicketId] = useState([])
+    const [selectTicketId, setSelectTicketId] = useState([])
+    const [payloadPriority, setPayloadPriority] = useState([])
+    const [selectPriority, setSelectPriority] = useState([])
     const [mainDataT2, setMainDataT2] = useState([])
     const [totalTable, setTotalTable] = useState([])
     const [totalOpen, setTotalOpen] = useState(false)
@@ -565,9 +569,11 @@ const TicketStatus = () => {
                 setPayloadCircle(_.uniq(_.map(responce.data, 'Circle')))
                 setPayloadSiteID(_.uniq(_.map(responce.data, 'Site_ID')))
                 setPayloadTicketId(_.uniq(_.map(responce.data, 'ticket_id')))
+                setPayloadPriority(_.uniq(_.map(responce.data, 'priority')))
                 // setCurrentDate(responce.current_date)
                 // setPreviousDate(responce.previous_date)
                 // setTotalOpen(true)
+                console.log('sat', responce)
             }
             else {
                 action(false)
@@ -584,29 +590,30 @@ const TicketStatus = () => {
             const circleMatch = selectCircle.length === 0 || _.includes(selectCircle, item.Circle);
             const siteIdMatch = selectSiteID.length === 0 || _.includes(selectSiteID, item.Site_ID);
             const ticketMatch = selectTicketId.length === 0 || _.includes(selectTicketId, item.ticket_id);
+            const priorityMatch = selectPriority.length === 0 || _.includes(selectPriority, item.priority);
 
 
-            return circleMatch && siteIdMatch && ticketMatch;
+            return circleMatch && siteIdMatch && ticketMatch && priorityMatch;
         });
         return filteredData?.map((item, index) => (
             <tr className={classes.hover} style={{ textAlign: "center", fontWeigth: 700 }}>
-                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.ticket_id}</th>
-                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Circle}</th>
-                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Short_name}</th>
-                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Date}</th>
-                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Open_Date}</th>
-                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{CalculateDaysBetweenDates(item.Date, item.Open_Date)}</th>
-                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Unique_Id}</th>
-                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', cursor: 'pointer' }} className={classes.hover} onClick={() => { handleSetDataTicket(item) }}>{item.Status == 'nan' ? '' : item.Status}</th>
-                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Remarks == 'nan' ? '' : item.Remarks}</th>
-                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Ownership == 'nan' ? '' : item.Ownership}</th>
-                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Circle_Spoc}</th>
-                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Site_ID}</th>
-                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Pre_Remarks == 'nan' ? '' : item.Pre_Remarks}</th>
+                <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.ticket_id}</th>
+                <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.Circle}</th>
+                <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.Short_name}</th>
+                <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.Date}</th>
+                <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.Open_Date}</th>
+                <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{CalculateDaysBetweenDates(item.Date, item.Open_Date)}</th>
+                <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.priority}</th>
+                <th style={{ padding: '1px 5px', whiteSpace: 'nowrap', cursor: 'pointer' }} className={classes.hover} onClick={() => { handleSetDataTicket(item) }}>{item.Status == 'nan' ? '' : item.Status}</th>
+                <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.Remarks == 'nan' ? '' : item.Remarks}</th>
+                <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.Ownership == 'nan' ? '' : item.Ownership}</th>
+                <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.Circle_Spoc}</th>
+                <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.Site_ID}</th>
+                <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.Pre_Remarks == 'nan' ? '' : item.Pre_Remarks}</th>
             </tr>
         ))
 
-    }, [toggalButton, selectCircle, selectSiteID,selectTicketId, totalTable])
+    }, [toggalButton, selectCircle, selectSiteID, selectTicketId,selectPriority, totalTable])
 
     const TotalTableDialog = useCallback(() => {
         return (
@@ -614,13 +621,14 @@ const TicketStatus = () => {
                 open={totalOpen}
                 // onClose={handleClose}
                 keepMounted
-                fullWidth
+                fullScreen
                 maxWidth={'xl'}
                 BackdropProps={{
                     style: { backgroundColor: 'rgba(0, 0, 0, 0.5)', backdropFilter: 'blur(3px)' },
                 }}
-                style={{ zIndex: 5 }}
+                style={{ zIndex: 2 ,marginTop:'4%'}}
             >
+               
                 <DialogTitle><span style={{ color: toggalButton ? '' : '#1976D2' }}>All Over Raw Data</span>
 
                     <Switch onChange={() => { setToggalButton(!toggalButton) }} /> <span style={{ color: toggalButton ? '#1976D2' : '' }}>Payload Dip Data</span>
@@ -640,24 +648,24 @@ const TicketStatus = () => {
                 </DialogTitle>
 
                 <DialogContent >
-                    <TableContainer sx={{ maxHeight: 400, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} component={Paper}>
+                    <TableContainer sx={{ maxHeight: '70vh', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} component={Paper}>
 
                         {toggalButton ? <table style={{ width: "100%", border: "1px solid black", borderCollapse: 'collapse', overflow: 'auto' }} >
                             <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
                                 <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
-                                    <th style={{ padding: '5px 60px', whiteSpace: 'nowrap' }}>Ticket ID <CheckPicker data={payloadTicketId.map(item => ({ label: item, value: item }))} value={selectTicketId} onChange={(value) => { setSelectTicketId(value) }} size="sm" appearance="default" style={{ width: 40 }} /></th>
-                                    <th style={{ padding: '5px 60px', whiteSpace: 'nowrap' }} >Circle <CheckPicker data={payloadCircle.map(item => ({ label: item, value: item }))} value={selectCircle} onChange={(value) => { setSelectCircle(value) }} size="sm" appearance="default" style={{ width: 20 }} /> </th>
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Cell Name</th>
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Date</th>
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Open Date</th>
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Aging</th>
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Cell + Date</th>
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Status</th>
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Remarks</th>
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Ownership</th>
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Circle Spoc</th>
-                                    <th style={{ padding: '5px 60px', whiteSpace: 'nowrap' }}>Site ID <CheckPicker data={payloadSiteID.map(item => ({ label: item, value: item }))} value={selectSiteID} onChange={(value) => { setSelectSiteID(value) }} size="sm" appearance="default" style={{ width: 20 }} /></th>
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Pre Remarks</th>
+                                    <th style={{ padding: '1px 70px 1px 1px', whiteSpace: 'nowrap' }}>Ticket ID <CheckPicker data={payloadTicketId.map(item => ({ label: item, value: item }))} value={selectTicketId} onChange={(value) => { setSelectTicketId(value) }} size="sm" appearance="default" placeholder="" style={{ width: 10 }} /></th>
+                                    <th style={{ padding: '1px 60px 1px 2px', whiteSpace: 'nowrap' }} >Circle <CheckPicker data={payloadCircle.map(item => ({ label: item, value: item }))} value={selectCircle} onChange={(value) => { setSelectCircle(value) }} size="sm" appearance="default" style={{ width: 20 }} /> </th>
+                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Cell Name</th>
+                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Date</th>
+                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Open Date</th>
+                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Aging</th>
+                                    <th style={{ padding: '1px 60px 1px 2px', whiteSpace: 'nowrap' }}>Priority <CheckPicker data={payloadPriority.map(item => ({ label: item, value: item }))} value={selectPriority} onChange={(value) => { setSelectPriority(value) }} size="sm" appearance="default" style={{ width: 20 }} /></th>
+                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Status</th>
+                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Remarks</th>
+                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Ownership</th>
+                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Circle Spoc</th>
+                                    <th style={{ padding: '1px 60px 1px 2px', whiteSpace: 'nowrap' }}>Site ID <CheckPicker data={payloadSiteID.map(item => ({ label: item, value: item }))} value={selectSiteID} onChange={(value) => { setSelectSiteID(value) }} size="sm" appearance="default" style={{ width: 20 }} /></th>
+                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Pre Remarks</th>
 
                                 </tr>
                             </thead>
@@ -684,29 +692,29 @@ const TicketStatus = () => {
                         </table> : <table style={{ width: "100%", border: "1px solid black", borderCollapse: 'collapse', overflow: 'auto' }} >
                             <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
                                 <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
-                                    <th rowSpan={2} style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Circle</th>
-                                    <th rowSpan={2} style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Short Name</th>
-                                    <th colSpan={2} style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>MV 4G Data Volume GB</th>
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>MV Radio NW Availability</th>
-                                    <th rowSpan={2} style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Site Priority</th>
-                                    <th rowSpan={2} style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Delta</th>
+                                    <th rowSpan={2} style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Circle</th>
+                                    <th rowSpan={2} style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Short Name</th>
+                                    <th colSpan={2} style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>MV 4G Data Volume GB</th>
+                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>MV Radio NW Availability</th>
+                                    <th rowSpan={2} style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Site Priority</th>
+                                    <th rowSpan={2} style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Delta</th>
                                 </tr>
                                 <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{data?.latest_date}</th>
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{data?.previous_date}</th>
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{data?.latest_date}</th>
+                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>{data?.latest_date}</th>
+                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>{data?.previous_date}</th>
+                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>{data?.latest_date}</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {data?.all_data?.map((item) => (
                                     <tr className={classes.hover} style={{ textAlign: "center", fontWeigth: 700 }}>
-                                        <th>{item.Circle}</th>
-                                        <th>{item.Short_name}</th>
-                                        <th>{item.MV_4G_Data_Volume_GB_current_date}</th>
-                                        <th>{item.MV_4G_Data_Volume_GB_previous_date}</th>
-                                        <th>{item.MV_Radio_NW_Availability_current_date}</th>
-                                        <th>{item.del_value}</th>
-                                        <th>{item.delta}</th>
+                                        <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.Circle}</th>
+                                        <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.Short_name}</th>
+                                        <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.MV_4G_Data_Volume_GB_current_date}</th>
+                                        <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.MV_4G_Data_Volume_GB_previous_date}</th>
+                                        <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.MV_Radio_NW_Availability_current_date}</th>
+                                        <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.del_value}</th>
+                                        <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.delta}</th>
                                     </tr>
                                 ))}
                             </tbody>
@@ -716,7 +724,7 @@ const TicketStatus = () => {
                 </DialogContent>
             </Dialog>
         )
-    }, [totalOpen, totalTable,selectCircle,selectSiteID,selectTicketId, toggalButton]);
+    }, [totalOpen, totalTable, selectCircle, selectSiteID, selectTicketId,selectPriority, toggalButton]);
 
 
     const Dashboard = useCallback(({ dataa, color }) => {
