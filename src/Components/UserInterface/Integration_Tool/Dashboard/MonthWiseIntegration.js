@@ -103,6 +103,7 @@ const MonthWiseIntegration = ({ onData }) => {
             M1_IDSC: 0,
             M1_ODSC: 0,
             M1_RECTIFICATION: 0,
+            M1_5G_SECTOR_ADDITION: 0,
             M2_DE_GROW: 0,
             M2_MACRO: 0,
             M2_OTHERS: 0,
@@ -116,6 +117,7 @@ const MonthWiseIntegration = ({ onData }) => {
             M2_IDSC: 0,
             M2_ODSC: 0,
             M2_RECTIFICATION: 0,
+            M2_5G_SECTOR_ADDITION: 0,
             M3_DE_GROW: 0,
             M3_MACRO: 0,
             M3_OTHERS: 0,
@@ -129,6 +131,8 @@ const MonthWiseIntegration = ({ onData }) => {
             M3_IDSC: 0,
             M3_ODSC: 0,
             M3_RECTIFICATION: 0,
+            M3_5G_SECTOR_ADDITION: 0,
+
         };
 
         datass.forEach(item => {
@@ -381,7 +385,7 @@ const MonthWiseIntegration = ({ onData }) => {
                                         <th colSpan='7' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: "#DD761C" }}>{monthArray[1]}</th>
                                         <th colSpan='7' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#03AED2' }}>{monthArray[0]}</th> */}
                                         {monthArray?.map((item, index) => index < 3 && (
-                                            <th colSpan='13' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: headerColor[index] }}>{monthNames[item.month]}-{item.year}</th>
+                                            <th colSpan='14' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: headerColor[index] }}>{monthNames[item.month]}-{item.year}</th>
                                         ))}
                                     </tr>
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
@@ -398,6 +402,7 @@ const MonthWiseIntegration = ({ onData }) => {
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>IDSC</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>ODSC</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>RECTIFICATION</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>5G SECTOR ADDITION</th>
 
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: "#FF9933" }}>DE-GROW</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: "#FF9933" }}>MACRO</th>
@@ -412,6 +417,7 @@ const MonthWiseIntegration = ({ onData }) => {
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>IDSC</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>ODSC</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>RECTIFICATION</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>5G SECTOR ADDITION</th>
 
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>DE-GROW</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>MACRO</th>
@@ -426,6 +432,7 @@ const MonthWiseIntegration = ({ onData }) => {
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>IDSC</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>ODSC</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>RECTIFICATION</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>5G SECTOR ADDITION</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -447,6 +454,7 @@ const MonthWiseIntegration = ({ onData }) => {
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'IDSC' })}>{it?.M1_IDSC}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'ODSC' })}>{it?.M1_ODSC}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'RECTIFICATION' })}>{it?.M1_RECTIFICATION}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: '5G SECTOR ADDITION' })}>{it?.M1_5G_SECTOR_ADDITION}</th>
 
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: 'DE-GROW' })}>{it?.M2_DE_GROW}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: 'MACRO' })}>{it?.M2_MACRO}</th>
@@ -461,6 +469,7 @@ const MonthWiseIntegration = ({ onData }) => {
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: 'IDSC' })}>{it?.M2_IDSC}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: 'ODSC' })}>{it?.M2_ODSC}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: 'RECTIFICATION' })}>{it?.M2_RECTIFICATION}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: '5G SECTOR ADDITION' })}>{it?.M2_5G_SECTOR_ADDITION}</th>
 
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: 'DE-GROW' })}>{it?.M3_DE_GROW}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: 'MACRO' })}>{it?.M3_MACRO}</th>
@@ -475,6 +484,7 @@ const MonthWiseIntegration = ({ onData }) => {
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: 'IDSC' })}>{it?.M3_IDSC}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: 'ODSC' })}>{it?.M3_ODSC}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: 'RECTIFICATION' })}>{it?.M3_RECTIFICATION}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: '5G SECTOR ADDITION' })}>{it?.M3_5G_SECTOR_ADDITION}</th>
 
                                             </tr>
                                         )

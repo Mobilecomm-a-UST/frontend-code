@@ -353,7 +353,7 @@ const OemWiseIntegration = ({ onData }) => {
 
         const responce = await makePostRequest('IntegrationTracker/hyperlink-monthly-oemwise-integration-data/', formData)
         if (responce) {
-            // console.log('hyperlink data', JSON.parse(responce.table_data))
+            console.log('hyperlink data', JSON.parse(responce.table_data))
             setMainDataT2(JSON.parse(responce.table_data))
             action(false)
             setOpen(true)

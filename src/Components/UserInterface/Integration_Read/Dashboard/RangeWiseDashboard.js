@@ -53,6 +53,7 @@ const RangeWiseDashboard = ({ onData }) => {
                 setFromDate(res.date_range[0])
                 setToDate(res.date_range[1])
                 setTableData(JSON.parse(res.table_data))
+                // console.log(JSON.parse(res.table_data))
                 onData(res);
                 return res;
             }
@@ -82,6 +83,7 @@ const RangeWiseDashboard = ({ onData }) => {
             D1_IDSC: 0,
             D1_ODSC: 0,
             D1_RECTIFICATION: 0,
+            D1_5G_SECTOR_ADDITION:0
         };
 
         datass.forEach(item => {
@@ -355,7 +357,7 @@ const RangeWiseDashboard = ({ onData }) => {
                                 <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
                                         <th rowSpan='2' style={{ padding: '5px 20px', whiteSpace: 'nowrap', position: 'sticky', left: 0, top: 0, backgroundColor: '#223354' }}>CIRCLE</th>
-                                        <th colSpan='13' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#2F75B5' }}>{data && ChangeDateFormate(data?.date_range[0])} to {data &&  ChangeDateFormate(data?.date_range[1])}</th>
+                                        <th colSpan='14' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#2F75B5' }}>{data && ChangeDateFormate(data?.date_range[0])} to {data &&  ChangeDateFormate(data?.date_range[1])}</th>
                                     </tr>
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>DE-GROW     </th>
@@ -371,6 +373,7 @@ const RangeWiseDashboard = ({ onData }) => {
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>IDSC         </th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>ODSC          </th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>RECTIFICATION</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>5G SECTOR ADDITION</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -391,6 +394,7 @@ const RangeWiseDashboard = ({ onData }) => {
                                                 <th style={{ cursor: 'pointer' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: 'IDSC' })}>{it?.D1_IDSC}</th>
                                                 <th style={{ cursor: 'pointer' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: 'ODSC' })}>{it?.D1_ODSC}</th>
                                                 <th style={{ cursor: 'pointer' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: 'RECTIFICATION' })}>{it?.D1_RECTIFICATION}</th>
+                                                <th style={{ cursor: 'pointer' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: '5G SECTOR ADDITION' })}>{it?.D1_5G_SECTOR_ADDITION}</th>
 
                                             </tr>
                                         )
