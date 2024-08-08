@@ -23,6 +23,10 @@ import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import _ from 'lodash';
+import DownloadIcon from '@mui/icons-material/Download';
+import Tooltip from '@mui/material/Tooltip';
+
+import * as ExcelJS from 'exceljs'
 import { DialogContent } from '@mui/material';
 
 
@@ -439,6 +443,127 @@ const PayloadDip = () => {
     )
   }, [open])
 
+  const handleExport = () => {
+
+    const workbook = new ExcelJS.Workbook();
+    const sheet3 = workbook.addWorksheet("Payload Dip", { properties: { tabColor: { argb: 'f1948a' } } })
+    // sheet.properties.defaultRowHeight = 20;
+    // sheet.properties.showGridLines = '#58D68D';
+
+
+
+    // sheet3.mergeCells('A1:S1');
+    // sheet3.mergeCells('A1:A3');
+    // sheet3.mergeCells('F1:F3');
+    // sheet3.mergeCells('B1:E1');
+
+    sheet3.getCell('A1').value = 'Ticket ID';
+    sheet3.getCell('B1').value = 'Circle';
+    sheet3.getCell('C1').value = 'Cell Name';
+    sheet3.getCell('C1').value = 'Date';
+    sheet3.getCell('D1').value = 'Open Date';
+    sheet3.getCell('E1').value = 'Aging';
+    sheet3.getCell('F1').value = 'Priority';
+    sheet3.getCell('G1').value = 'Status';
+    sheet3.getCell('H1').value = 'Circle Spoc';
+    sheet3.getCell('I1').value = 'Site ID';
+    sheet3.getCell('J1').value = 'Remarks';
+    sheet3.getCell('K1').value = 'Ownership';
+    sheet3.getCell('L1').value = 'Pre Remarks';
+
+
+
+    sheet3.columns = [
+      { key: 'ticket_id' },
+      { key: 'Circle' },
+      { key: 'Short_name' },
+      { key: 'Open_Date' },
+      { key: 'aging' },
+      { key: 'priority' },
+      { key: 'Status' },
+      { key: 'Site_ID' },
+      { key: 'Remarks' },
+      { key: 'Ownership' },
+      { key: 'Pre_Remarks' },
+    ]
+
+    tableData?.map(item => {
+      sheet3.addRow({
+        ticket_id: item?.ticket_id,
+        Circle: item?.Circle,
+        Short_name: item?.Short_name,
+        Date: item?.Date,
+        Open_Date: item?.Open_Date,
+        aging: item?.aging,
+        priority: item?.priority,
+        Status: item?.Status,
+        Circle_Spoc: item?.Circle_Spoc,
+        Site_ID: item?.Site_ID,
+        Remarks: item?.Remarks,
+        Ownership: item?.Ownership,
+        Pre_Remarks: item?.Pre_Remarks,
+
+
+      })
+    })
+
+
+    ///__________ STYLING IN EXCEL TABLE ______________ ///
+    sheet3.eachRow({ includeEmpty: true }, (row, rowNumber) => {
+      const rows = sheet3.getColumn(1);
+      const rowsCount = rows['_worksheet']['_rows'].length;
+      row.eachCell({ includeEmpty: true }, (cell) => {
+        cell.alignment = { vertical: 'middle', horizontal: 'center' }
+        cell.border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' }
+        }
+        if (rowNumber === rowsCount) {
+          cell.fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: 'FE9209' }
+          }
+          cell.font = {
+            color: { argb: 'FFFFFF' },
+            bold: true,
+            size: 13,
+          }
+        }
+
+        if (rowNumber === 1) {
+          // First set the background of header row
+          cell.fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: '223354' }
+          }
+          cell.font = {
+            color: { argb: 'FFFFFF' },
+            bold: true,
+            size: 12,
+          }
+          cell.views = [{ state: 'frozen', ySplit: 1 }]
+        }
+      })
+    })
+
+    workbook.xlsx.writeBuffer().then(item => {
+      const blob = new Blob([item], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheet.sheet"
+      })
+      const url = window.URL.createObjectURL(blob);
+      const anchor = document.createElement('a');
+      anchor.href = url;
+      anchor.download = "Payload_Dip_Tracker.xlsx";
+      anchor.click();
+      window.URL.revokeObjectURL(url);
+    })
+
+  }
+
   const handleTableDialogBox = useCallback(() => {
     return (
       <Dialog
@@ -449,6 +574,11 @@ const PayloadDip = () => {
         onClose={handleClose}
       >
         <DialogTitle>
+          <Tooltip title="Raw Data">
+            <IconButton onClick={() => { handleExport() }}>
+              <DownloadIcon fontSize='medium' color='primary' />
+            </IconButton>
+          </Tooltip>
           <span style={{ float: 'right' }}>
             <IconButton size="large" onClick={handleClose}><CloseIcon /></IconButton>
           </span>
@@ -471,7 +601,6 @@ const PayloadDip = () => {
                   <th style={{ padding: '5px 10px', whiteSpace: 'nowrap' }}>Site ID </th>
                   <th style={{ padding: '5px 10px', whiteSpace: 'nowrap' }}>Remarks</th>
                   <th style={{ padding: '5px 10px', whiteSpace: 'nowrap' }}>Ownership</th>
-
                   <th style={{ padding: '5px 10px', whiteSpace: 'nowrap' }}>Pre Remarks</th>
                 </tr>
               </thead>

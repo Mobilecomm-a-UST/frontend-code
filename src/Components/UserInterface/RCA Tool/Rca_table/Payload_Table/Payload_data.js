@@ -28,18 +28,17 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { useGet } from '../../../Hooks/GetApis';
-import { useLoadingDialog } from '../../../Hooks/LoadingDialog';
-import { useStyles } from '../../ToolsCss';
+import { useGet } from '../../../../Hooks/GetApis';
+import { useLoadingDialog } from '../../../../Hooks/LoadingDialog';
+import { useStyles } from '../../../ToolsCss';
 import { useQuery } from '@tanstack/react-query';
-import { ServerURL } from '../../../services/FetchNodeServices';
+import { ServerURL } from '../../../../services/FetchNodeServices';
 import axios from 'axios';
 import Swal from "sweetalert2";
-import { MemoAdd_Rca } from './Add_Rca';
+import { MemoAdd_Rca } from './Add_Payload';
 import _ from 'lodash';
 import SearchIcon from '@mui/icons-material/Search';
 import CheckPicker from 'rsuite/CheckPicker';
-import Payload_data from './Payload_Table/Payload_data';
 
 // import { SelectPicker } from 'rsuite';
 
@@ -106,7 +105,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const Rca_data = () => {
+const Payload_data = (props) => { 
     const navigate = useNavigate();
     const { makeGetRequest } = useGet()
     const { action, loading } = useLoadingDialog()
@@ -133,10 +132,10 @@ const Rca_data = () => {
         Proposed_solution: ''
     })
     const { isPending, data, refetch } = useQuery({
-        queryKey: ['RCA_TABLE_DATA'],
+        queryKey: ['Payload_TABLE_DATA'],
         queryFn: async () => {
             action(isPending)
-            const res = await makeGetRequest("RCA_TOOL/rca-tables/");
+            const res = await makeGetRequest("RCA_TOOL/rca_payload_tables/");
             if (res) {
                 action(false)
                 // console.log('RCA table data', res)
@@ -169,6 +168,9 @@ const Rca_data = () => {
 
     const [filteredCategories, setFilteredCategories] = useState(unique.data?.tentative_counters);
     const open2 = Boolean(anchorE1);
+
+    console.log('Payload table data component');
+
     const handleSearchChange = (event) => {
         const value = event.target.value;
         setSearchTerm(value);
@@ -198,7 +200,7 @@ const Rca_data = () => {
     const handleDelete = async (id) => {
         try {
             // Make the DELETE request
-            const response = await axios.delete(`${ServerURL}/RCA_TOOL/rca-tables/${id}/`,
+            const response = await axios.delete(`${ServerURL}/RCA_TOOL/rca_payload_tables/${id}/`,
                 {
                     headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` }
                 }
@@ -237,7 +239,7 @@ const Rca_data = () => {
 
     const handleUpdateData = async (e) => {
         e.preventDefault()
-        const response = await axios.put(`${ServerURL}/RCA_TOOL/rca-tables/${editDataId}/`, formData,
+        const response = await axios.put(`${ServerURL}/RCA_TOOL/rca_payload_tables/${editDataId}/`, formData,
             {
                 headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` }
             }
@@ -570,15 +572,10 @@ const Rca_data = () => {
 
     return (
         <>
-            <div style={{ margin: 10 }}>
-                <div style={{ margin: 5, marginLeft: 10 }}>
-                    <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
-                        <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
-                        <Link underline="hover" onClick={() => { navigate('/tools/rca') }}>RCA Tool</Link>
-                        <Typography color='text.primary'>RCA Table</Typography>
-                    </Breadcrumbs>
-                </div>
+            <div style={{ marginTop: 3 }}>
+
                 <div style={{ height: 'auto', width: '100%', margin: '5px 0px', boxShadow: 'rgba(0, 0, 0, 0.5) 0px 3px 8px', backgroundColor: 'white', borderRadius: '10px', padding: '1px' }}>
+
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                         <Box >
                             <Tooltip title="Add List" color='primary'>
@@ -587,8 +584,9 @@ const Rca_data = () => {
                                 </IconButton>
                             </Tooltip>
                         </Box>
+
                         <Box>
-                        <h3>Accessibility Table</h3>
+                            <h3>Payload Table</h3>
                         </Box>
 
                         <Box style={{ float: 'right', display: 'flex' }}>
@@ -599,6 +597,7 @@ const Rca_data = () => {
                             </Tooltip>
                         </Box>
                     </Box>
+
                 </div>
                 <Slide
                     direction='left'
@@ -657,16 +656,11 @@ const Rca_data = () => {
                     </Paper>
                 </Slide>
                 {handleEditDialog()}
-
-                <Box sx={{marginTop:5}}>
-                      <Payload_data />
-                </Box>
                 <MemoAdd_Rca open={add} handleClick={handleClick} handleFetch={refetch} />
                 {loading}
             </div>
-
         </>
     )
 }
 
-export default Rca_data
+export default React.memo(Payload_data)

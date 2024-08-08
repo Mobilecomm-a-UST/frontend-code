@@ -17,6 +17,7 @@ const Daily4G_KPI = lazy(()=> import('./Upload_files/Daily4G_KPI'))
 const TentativeCounter = lazy(()=> import('./Upload_files/TentativeCounter'))
 const AlarmFiles = lazy(()=> import('./Upload_files/AlarmFiles'))
 const Generate_rca = lazy(()=> import('./Generate_RCA/Generate_rca'))
+const MDashboard = lazy(()=> import('./MasterDashboard/MDashboard'))
 
 const Rca = () => {
 
@@ -39,6 +40,10 @@ const Rca = () => {
                                 <Sidenav.Body>
                                     <Nav activeKey={activeKey} onSelect={setActiveKey} >
                                         <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 18 }}>RCA Tool</Nav>
+
+                                        <Nav.Item eventKey="0" placement="rightStart" icon={<DashboardIcon size="3em" />} onClick={() => navigate('/tools/rca/master_dashboard')}>
+                                            Master Dashboard
+                                        </Nav.Item>
 
                                         <Nav.Menu eventKey="1" placement="rightStart" title="Dashboard" icon={<DashboardIcon size="3em" />}>
                                             <Nav.Item eventKey="1-1" placement="rightStart" onClick={() => navigate('/tools/rca/kpi_table')}>
@@ -79,6 +84,7 @@ const Rca = () => {
                                 <Route element={<TentativeCounter />} path="/tentative_counter" />
                                 <Route element={<AlarmFiles />} path="/alarm_files" />
                                 <Route element={<Generate_rca />} path="/generate_rca" />
+                                <Route element={<MDashboard />} path="/master_dashboard" />
                             </Routes>
                         </Suspense>
                     </Grid>
