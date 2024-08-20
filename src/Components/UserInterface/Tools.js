@@ -110,7 +110,7 @@ export default function Tools() {
 
                 <Grid container rowSpacing={2} columnSpacing={1} direction={{ xs: "column", sm: "column", md: "row" }} >
                   {ToolData.map((item, index) => {
-                    const userMatch = userType.some(type => item.groupBy.some(group => group.toLowerCase() === type.toLowerCase()));
+                    const userMatch = userType?.some(type => item.groupBy.some(group => group.toLowerCase() === type.toLowerCase()));
                     if (userMatch) {
                       return (
                         <Grid item xs={4} key={index}>

@@ -186,7 +186,7 @@ const handleDateChange = async(e) => {
             },
             title: {
                 display: true,
-                text: `Count of OK and NOT OK`,
+                text: `Count of OK and NOT OK []`,
                 font: {
                     size: 16,
                     weight: 'bold'

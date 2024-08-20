@@ -40,7 +40,7 @@ const Vendor = () => {
   return (
     <>
 
-    <Box style={{marginTop:'70px'}}>
+    <Box style={{marginTop:'60px'}}>
 
         <Grid container spacing={1}>
             <Grid item xs={2} >

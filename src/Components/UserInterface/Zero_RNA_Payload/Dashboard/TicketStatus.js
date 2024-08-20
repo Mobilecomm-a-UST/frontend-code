@@ -46,6 +46,8 @@ const TicketStatus = () => {
     const [selectTicketId, setSelectTicketId] = useState([])
     const [payloadPriority, setPayloadPriority] = useState([])
     const [selectPriority, setSelectPriority] = useState([])
+    const [payloadStatusData , setPayloadStatusData] = useState([])
+    const [selectStatusData , setSelectStatusData] = useState([])
     const [mainDataT2, setMainDataT2] = useState([])
     const [totalTable, setTotalTable] = useState([])
     const [totalOpen, setTotalOpen] = useState(false)
@@ -569,6 +571,7 @@ const TicketStatus = () => {
                 setPayloadSiteID(_.uniq(_.map(responce.data, 'Site_ID')))
                 setPayloadTicketId(_.uniq(_.map(responce.data, 'ticket_id')))
                 setPayloadPriority(_.uniq(_.map(responce.data, 'priority')))
+                setPayloadStatusData(_.uniq(_.map(responce.data , 'Status')))
                 // setCurrentDate(responce.current_date)
                 // setPreviousDate(responce.previous_date)
                 // setTotalOpen(true)
@@ -590,9 +593,10 @@ const TicketStatus = () => {
             const siteIdMatch = selectSiteID.length === 0 || _.includes(selectSiteID, item.Site_ID);
             const ticketMatch = selectTicketId.length === 0 || _.includes(selectTicketId, item.ticket_id);
             const priorityMatch = selectPriority.length === 0 || _.includes(selectPriority, item.priority);
+            const statusMatch = selectStatusData.length === 0 || _.includes(selectStatusData , item.Status)
 
 
-            return circleMatch && siteIdMatch && ticketMatch && priorityMatch;
+            return circleMatch && siteIdMatch && ticketMatch && priorityMatch && statusMatch;
         });
         return filteredData?.map((item, index) => (
             <tr key={index} className={classes.hover} style={{ textAlign: "center", fontWeigth: 700 }}>
@@ -613,7 +617,7 @@ const TicketStatus = () => {
             </tr>
         ))
 
-    }, [toggalButton, selectCircle, selectSiteID, selectTicketId,selectPriority, totalTable])
+    }, [toggalButton, selectCircle, selectSiteID, selectTicketId,selectPriority,selectStatusData, totalTable])
 
     const TotalTableDialog = useCallback(() => {
         return (
@@ -661,7 +665,7 @@ const TicketStatus = () => {
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Open Date</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Aging</th>
                                     <th style={{ padding: '1px 60px 1px 2px', whiteSpace: 'nowrap' }}>Priority <CheckPicker data={payloadPriority.map(item => ({ label: item, value: item }))} value={selectPriority} onChange={(value) => { setSelectPriority(value) }} size="sm" appearance="default" style={{ width: 20 }} /></th>
-                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Status</th>
+                                    <th style={{ padding: '1px 60px 1px 2px', whiteSpace: 'nowrap' }}>Status <CheckPicker data={payloadStatusData.map(item => ({ label: item, value: item }))} value={selectStatusData} onChange={(value) => { setSelectStatusData(value) }} size="sm" appearance="default" style={{ width: 20 }} /></th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Remarks</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Ownership</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Circle Spoc</th>
@@ -727,7 +731,7 @@ const TicketStatus = () => {
                 </DialogContent>
             </Dialog>
         )
-    }, [totalOpen, totalTable, selectCircle, selectSiteID, selectTicketId,selectPriority, toggalButton]);
+    }, [totalOpen, totalTable, selectCircle, selectSiteID, selectTicketId,selectPriority,selectStatusData, toggalButton]);
 
 
     const Dashboard = useCallback(({ dataa, color }) => {

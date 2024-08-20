@@ -143,6 +143,7 @@ const Rca_data = () => {
                 setKpi(_.uniq(_.map(res, 'KPI')))
                 setDataSource(_.uniq(_.map(res, 'Data_source')))
                 setTentative(_.uniq(_.map(res, 'Tentative_counters')))
+                console.log('sssssssaa',_.uniq(_.map(res, 'RCA')))
 
                 return _.sortBy(res, ['KPI'])
             }

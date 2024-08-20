@@ -180,7 +180,7 @@ const KPICount = ({data}) => {
             },
             title: {
                 display: true,
-                text: `Count of RRC and ERAB (NOT OK) `,
+                text: `KPI Count of RRC and ERAB (NOT OK) `,
                 font: {
                     size: 16,
                     weight: 'bold'

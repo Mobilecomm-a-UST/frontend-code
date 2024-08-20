@@ -520,18 +520,18 @@ const PayloadDip = () => {
           bottom: { style: 'thin' },
           right: { style: 'thin' }
         }
-        if (rowNumber === rowsCount) {
-          cell.fill = {
-            type: 'pattern',
-            pattern: 'solid',
-            fgColor: { argb: 'FE9209' }
-          }
-          cell.font = {
-            color: { argb: 'FFFFFF' },
-            bold: true,
-            size: 13,
-          }
-        }
+        // if (rowNumber === rowsCount) {
+        //   cell.fill = {
+        //     type: 'pattern',
+        //     pattern: 'solid',
+        //     fgColor: { argb: 'FE9209' }
+        //   }
+        //   cell.font = {
+        //     color: { argb: 'FFFFFF' },
+        //     bold: true,
+        //     size: 13,
+        //   }
+        // }
 
         if (rowNumber === 1) {
           // First set the background of header row

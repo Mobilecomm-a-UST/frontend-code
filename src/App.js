@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from "react";
+import React, { Suspense, lazy, useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Outlet } from "react-router-dom";
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useNavigate, Navigate } from 'react-router-dom';
@@ -44,24 +44,32 @@ const IntegrationRead = lazy(() => import('./Components/UserInterface/Integratio
 
 const queryClient = new QueryClient()
 
-const userType = (JSON.parse(localStorage.getItem('user_type'))?.split(","))
+// const userType = (JSON.parse(localStorage.getItem('user_type'))?.split(","))
 
 
 function App() {
 
+  const [userType , setUserType] = useState()
 
-  const chackToken = localStorage.getItem("tokenKey")
+
+
+  // const chackToken = localStorage.getItem("tokenKey")
 
   console.log('usertype', userType)
 
 
   const ProtectedRoute = ({ element: Component, allowedUserTypes, userType, ...rest }) => {
     // console.log(allowedUserTypes, userType,allowedUserTypes.includes(userType))
-    return userType.some(type => allowedUserTypes.some(group => group.toLowerCase() === type.toLowerCase())) ? (
+    const userTypes = (JSON.parse(localStorage.getItem('user_type'))?.split(","))
+    return userTypes?.some(type => allowedUserTypes?.some(group => group.toLowerCase() === type.toLowerCase())) ? (
       <Component {...rest} />
     ) : <Navigate to="/error" />
   };
 
+
+  useEffect(()=>{
+    setUserType(JSON.parse(localStorage.getItem('user_type'))?.split(","))
+  },[])
 
 
   return (

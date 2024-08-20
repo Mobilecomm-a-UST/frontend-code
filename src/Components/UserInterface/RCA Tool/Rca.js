@@ -13,11 +13,11 @@ import GearIcon from '@rsuite/icons/Gear';
 const Kpi_Data = lazy(() => import('./Kpi_table/Kpi_Data'))
 const Rca_tool = lazy(() => import('./Rca_tool'))
 const Rca_data = lazy(() => import('./Rca_table/Rca_data'))
-const Daily4G_KPI = lazy(()=> import('./Upload_files/Daily4G_KPI'))
-const TentativeCounter = lazy(()=> import('./Upload_files/TentativeCounter'))
-const AlarmFiles = lazy(()=> import('./Upload_files/AlarmFiles'))
-const Generate_rca = lazy(()=> import('./Generate_RCA/Generate_rca'))
-const MDashboard = lazy(()=> import('./MasterDashboard/MDashboard'))
+const Daily4G_KPI = lazy(() => import('./Upload_files/Daily4G_KPI'))
+const TentativeCounter = lazy(() => import('./Upload_files/TentativeCounter'))
+const AlarmFiles = lazy(() => import('./Upload_files/AlarmFiles'))
+const Generate_rca = lazy(() => import('./Generate_RCA/Generate_rca'))
+const MDashboard = lazy(() => import('./MasterDashboard/MDashboard'))
 
 const Rca = () => {
 
@@ -53,9 +53,9 @@ const Rca = () => {
                                                 RCA Table
                                             </Nav.Item>
                                         </Nav.Menu>
-                                            <Nav.Item eventKey="3" placement="rightStart" icon={<GearIcon size="3em" />} onClick={() => navigate('/tools/rca/generate_rca')}>
-                                                Generate RCA
-                                            </Nav.Item>
+                                        <Nav.Item eventKey="3" placement="rightStart" icon={<GearIcon size="3em" />} onClick={() => navigate('/tools/rca/generate_rca')}>
+                                            Generate RCA
+                                        </Nav.Item>
 
                                         <Nav.Menu eventKey="2" placement="rightStart" title="Upload Data" icon={<FileUploadIcon size="3em" />}>
                                             <Nav.Item eventKey="2-1" placement="rightStart" onClick={() => navigate('/tools/rca/daily_4G_kpi')}>

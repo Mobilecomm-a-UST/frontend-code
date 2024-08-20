@@ -31,14 +31,14 @@ useEffect(()=>{
   return (
     <>
 
-      <Box style={{ marginTop: '70px' }}>
+      <Box style={{ marginTop: '60px' }}>
 
         <Grid container spacing={2}>
           <Grid item xs={0} md={2} sx={{}}>
-            <div style={{ position: 'fixed' }}>
-              <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle">
+            <div style={{ position: 'fixed', width: '16%' }}>
+              <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#223354", marginTop: 5, borderRadius: 10 }}>
                 <Sidenav.Body>
-                  <Nav activeKey={activeKey} onSelect={setActiveKey} style={{ width: 'auto', minHeight: "670px", height: "100hv", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
+                  <Nav activeKey={activeKey} onSelect={setActiveKey} >
                     <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>PHYSICAL AT TOOL</Nav>
                     {/* <Nav.Menu eventKey="1" placement="rightStart" title="Dashboard" icon={<DashboardIcon size="3em" />}>
                       <Nav.Item eventKey="1-1" onClick={() => navigate('/tools/soft_at/master_dashboard')} >

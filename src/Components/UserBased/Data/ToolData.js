@@ -101,7 +101,7 @@ const ToolData = [
     },
     {
         id: 9,
-        name: 'Inventory',
+        name: 'INVENTORY',
         title: 'This is a Inventory tool',
         icons: ThreeColumnsIcon,
         link: '/tools/inventory',
@@ -186,7 +186,7 @@ const ToolData = [
     // },
     {
         id: 22,
-        name: 'RCA Tool',
+        name: 'RCA',
         title: 'This is a RCA Tool',
         icons: TreeIcon,
         link:  '/tools/rca',

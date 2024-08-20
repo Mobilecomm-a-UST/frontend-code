@@ -235,7 +235,7 @@ var prevScrollpos = window.pageYOffset;
               </Navbar>
             </Box>
             <Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" } }}>
-            <span style={{  marginRight: 10, fontSize: 20, fontWeight: 'bold' }}>{userName}</span>
+            <span style={{  marginRight: 10, fontSize: 20, fontWeight: 'bold' }}>{userName?.split('@')[0].replace('.', ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}</span>
             </Box>
 
             {chackToken != null ? <>

@@ -42,7 +42,7 @@ const handleChange = (e) => {
 
 const handleCallApp=async()=>{
 const responce = await getData('get_user_circle')
-console.log('user type' , responce)
+// console.log('user type' , responce)
 localStorage.setItem("user_type", JSON.stringify(responce.user_catagory));
 }
 
