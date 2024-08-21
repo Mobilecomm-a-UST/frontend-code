@@ -85,7 +85,7 @@ const ComanDashboard = () => {
     const params = useParams()
 
 
-    console.log('table data', editData)
+    console.log('table data', listData)
 
 
 
@@ -97,6 +97,7 @@ const ComanDashboard = () => {
     }
 
     const handleEdit = async(rowData) => {
+        // console.log(rowData)
         setEditData({    OEM: rowData.OEM,
             Integration_Date: rowData.Integration_Date,
             CIRCLE: rowData.CIRCLE,
@@ -138,12 +139,12 @@ const ComanDashboard = () => {
             PCI_FDD_2100: rowData.PCI_FDD_2100,
             PCI_L900: rowData.PCI_L900,
             PCI_5G: rowData.PCI_5G,
-            RSI_TDD_20: Number(rowData.RSI_TDD_20),
-            RSI_TDD_10_20: Number(rowData.RSI_TDD_10_20),
-            RSI_FDD_2100: Number(rowData.RSI_FDD_2100),
-            RSI_FDD_1800: Number(rowData.RSI_FDD_1800),
-            RSI_L900: Number(rowData.RSI_L900),
-            RSI_5G: Number(rowData.RSI_5G),
+            RSI_TDD_20: rowData.RSI_TDD_20,
+            RSI_TDD_10_20: rowData.RSI_TDD_10_20,
+            RSI_FDD_2100: rowData.RSI_FDD_2100,
+            RSI_FDD_1800: rowData.RSI_FDD_1800,
+            RSI_L900: rowData.RSI_L900,
+            RSI_5G: rowData.RSI_5G,
             GPL: rowData.GPL,
             Pre_Post_Check: rowData.Pre_Post_Check,
             CTR_STATUS: rowData.CTR_STATUS,
