@@ -76,7 +76,7 @@ const TicketStatus = () => {
             const res = await makeGetRequest("Zero_Count_Rna_Payload_Tool/ticket_counter_api/");
             if (res) {
                 action(false)
-                // console.log('res ticket status', res)
+                console.log('res ticket status', res)
                 return res;
             }
         },
@@ -704,6 +704,7 @@ const TicketStatus = () => {
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>MV Radio NW Availability</th>
                                     <th rowSpan={2} style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Site Priority</th>
                                     <th rowSpan={2} style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Delta</th>
+                                    <th rowSpan={2} style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>RCA</th>
                                 </tr>
                                 <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>{data?.latest_date}</th>
@@ -722,6 +723,7 @@ const TicketStatus = () => {
                                         <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.MV_Radio_NW_Availability_current_date}</th>
                                         <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.del_value}</th>
                                         <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.delta}</th>
+                                        <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.RCA}</th>
                                     </tr>
                                 ))}
                             </tbody>
@@ -1069,19 +1071,21 @@ const TicketStatus = () => {
                                 <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
                                         <th rowSpan='3' style={{ padding: '5px 20px', whiteSpace: 'nowrap', border: '1px solid white' }}>Circle</th>
-                                        <th colSpan='2' style={{ padding: '5px 20px', whiteSpace: 'nowrap', border: '1px solid white' }}>{convertDate(data?.previous_date)} ~ {convertDate(data?.latest_date)}</th>
+                                        <th colSpan='3' style={{ padding: '5px 20px', whiteSpace: 'nowrap', border: '1px solid white' }}>{convertDate(data?.previous_date)} ~ {convertDate(data?.latest_date)}</th>
                                         <th rowSpan='3' style={{ padding: '5px 20px', whiteSpace: 'nowrap', border: '1px solid white' }}>Total</th>
                                     </tr>
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
                                         {/* <th rowSpan='2' style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Circle</th> */}
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', border: '1px solid white' }}>P-0</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', border: '1px solid white' }}>P-1</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', border: '1px solid white' }}>P-2</th>
                                         {/* <th rowSpan='2' style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Total</th> */}
                                     </tr>
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
 
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', border: '1px solid white' }}> {`> 100GB`} </th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', border: '1px solid white' }}>{`≥ 50GB < 100GB`}</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', border: '1px solid white' }}>{`≥ 30GB < 50GB`}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -1093,8 +1097,8 @@ const TicketStatus = () => {
                                                     <th >Total</th>
                                                     <th >{it?.P0 ? it.P0 : 0}</th>
                                                     <th >{it?.P1 ? it.P1 : 0}</th>
-                                                    {/* <th >{it?.p2 ? it.p2 : 0}</th>
-                                                    <th >{it?.p3 ? it.p3 : 0}</th> */}
+                                                    <th >{it?.P2 ? it.P2 : 0}</th>
+                                                    {/* <th >{it?.p3 ? it.p3 : 0}</th> */}
                                                     <th className={classes.hover} style={{ cursor: "pointer" }} onClick={() => setTotalOpen(true)}>{it?.total}</th>
                                                 </tr>
                                             )
@@ -1106,8 +1110,8 @@ const TicketStatus = () => {
                                                     <th >{it?.Circle}</th>
                                                     <th className={classes.hover} style={{ cursor: "pointer" }} onClick={() => { ClickDataGet({ circle: it.Circle, delta: 'P0' }) }}>{it?.P0 ? it.P0 : 0}</th>
                                                     <th className={classes.hover} style={{ cursor: "pointer" }} onClick={() => { ClickDataGet({ circle: it.Circle, delta: 'P1' }) }}>{it?.P1 ? it.P1 : 0}</th>
-                                                    {/* <th className={classes.hover} style={{ cursor: "pointer" }} onClick={() => { ClickDataGet({ circle: it.Circle, delta: 'p2' }) }}>{it?.p2 ? it.p2 : 0}</th>
-                                                    <th className={classes.hover} style={{ cursor: "pointer" }} onClick={() => { ClickDataGet({ circle: it.Circle, delta: 'p3' }) }}>{it?.p3 ? it.p3 : 0}</th> */}
+                                                    <th className={classes.hover} style={{ cursor: "pointer" }} onClick={() => { ClickDataGet({ circle: it.Circle, delta: 'P2' }) }}>{it?.P2 ? it.P2 : 0}</th>
+                                                    {/* <th className={classes.hover} style={{ cursor: "pointer" }} onClick={() => { ClickDataGet({ circle: it.Circle, delta: 'p3' }) }}>{it?.p3 ? it.p3 : 0}</th> */}
                                                     <th >{it?.total}</th>
                                                 </tr>
                                             )
