@@ -118,7 +118,7 @@ const ComanDashboard = () => {
         { title: 'MO NAME', field: 'MO_NAME' },
        
         { title: 'LNBTS ID', field: 'LNBTS_ID' },
-        { title: 'Technology', field: 'Technology' },
+        { title: 'Technology (SIWA)', field: 'Technology_SIWA' },
         { title: 'OSS Details', field: 'OSS_Details' },
         { title: 'Cell ID', field: 'Cell_ID' },
         { title: 'CELL COUNT', field: 'CELL_COUNT' },
@@ -128,7 +128,9 @@ const ComanDashboard = () => {
         { title: 'RET', field: 'RET' },
         { title: 'POST VSWR', field: 'POST_VSWR' },
         { title: 'POST Alarms', field: 'POST_Alarms' },
-        { title: 'Activity Type', field: 'Activity_Type' },
+        { title: 'Activity Mode (SA/NSA)', field: 'Activity_Mode' },
+        { title: 'Activity Type (SIWA)', field: 'Activity_Type_SIWA' },
+        { title: 'Band (SIWA)', field: 'Band_SIWA' },
 
 
         { title: 'CELL STATUS', field: 'CELL_STATUS' },
@@ -169,19 +171,19 @@ const ComanDashboard = () => {
         { title: '5G RSI', field: 'RSI_5G' },
         { title: 'GPL', field: 'GPL' },
         { title: 'Pre/Post Check', field: 'Pre_Post_Check' },
-        {
-            title: 'Actions',
-            field: 'actions',
-            render: rowData => (
-                <IconButton aria-label="delete" title={'Delete'} size="large"   onClick={() => { handleDelete(rowData) }}>
-                    <DeleteOutlineIcon
-                        style={{ cursor: 'pointer' }}
-                        color='error'
-                    />
-                </IconButton>
+        // {
+        //     title: 'Actions',
+        //     field: 'actions',
+        //     render: rowData => (
+        //         <IconButton aria-label="delete" title={'Delete'} size="large"   onClick={() => { handleDelete(rowData) }}>
+        //             <DeleteOutlineIcon
+        //                 style={{ cursor: 'pointer' }}
+        //                 color='error'
+        //             />
+        //         </IconButton>
 
-            )
-        }
+        //     )
+        // }
 
     ]
 
