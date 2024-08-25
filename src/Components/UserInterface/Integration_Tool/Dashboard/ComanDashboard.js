@@ -29,9 +29,11 @@ const ComanDashboard = () => {
     const [listData, setListData] = useState(JSON.parse(localStorage.getItem("integration_final_tracker")))
     const [editData, setEditData] = useState({    OEM: "",
         Activity_Name: "",
-        Activity_Type: "",
+        Activity_Mode: "",
         BBU_TYPE: "",
+        Activity_Type_SIWA:"",
         BB_CARD: "",
+        Band_SIWA:"",
         CELL_COUNT: "",
         CELL_STATUS: "",
         CIRCLE: "",
@@ -77,7 +79,7 @@ const ComanDashboard = () => {
         T2T4R: "",
         TAC: "",
         TRX_Count: "",
-        Technology: ""})
+        Technology_SIWA: ""})
     const [editDataID , setEditDataID] = useState('')
     const [open, setOpen] = useState(false)
     const [status, setStatus] = useState()
@@ -105,7 +107,7 @@ const ComanDashboard = () => {
             Site_ID: rowData.Site_ID,
             MO_NAME: rowData.MO_NAME,
             LNBTS_ID: rowData.LNBTS_ID,
-            Technology: rowData.Technology,
+            Technology_SIWA: rowData.Technology_SIWA,
             OSS_Details: rowData.OSS_Details,
             Cell_ID: rowData.Cell_ID,
             CELL_COUNT: rowData.CELL_COUNT,
@@ -115,7 +117,9 @@ const ComanDashboard = () => {
             RET: rowData.RET,
             POST_VSWR: rowData.POST_VSWR,
             POST_Alarms: rowData.POST_Alarms,
-            Activity_Type: rowData.Activity_Type,
+            Activity_Mode: rowData.Activity_Mode,
+            Activity_Type_SIWA: rowData.Activity_Type_SIWA,
+            Band_SIWA: rowData.Band_SIWA,
             CELL_STATUS: rowData.CELL_STATUS,
             Integration_Remark: rowData.Integration_Remark,
             T2T4R: rowData.T2T4R,
@@ -234,7 +238,7 @@ const ComanDashboard = () => {
         { title: 'MO NAME', field: 'MO_NAME' },
        
         { title: 'LNBTS ID', field: 'LNBTS_ID' },
-        { title: 'Technology', field: 'Technology' },
+        { title: 'Technology (SIWA)', field: 'Technology_SIWA' },
         { title: 'OSS Details', field: 'OSS_Details' },
         { title: 'Cell ID', field: 'Cell_ID' },
         { title: 'CELL COUNT', field: 'CELL_COUNT' },
@@ -244,7 +248,9 @@ const ComanDashboard = () => {
         { title: 'RET', field: 'RET' },
         { title: 'POST VSWR', field: 'POST_VSWR' },
         { title: 'POST Alarms', field: 'POST_Alarms' },
-        { title: 'Activity Type', field: 'Activity_Type' },
+        { title: 'Activity Mode (SA/NSA)', field: 'Activity_Mode' },
+        { title: 'Activity Type (SIWA)', field: 'Activity_Type_SIWA' },
+        { title: 'Band (SIWA)', field: 'Band_SIWA' },
 
 
         { title: 'CELL STATUS', field: 'CELL_STATUS' },
