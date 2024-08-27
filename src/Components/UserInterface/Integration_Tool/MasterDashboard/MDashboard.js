@@ -2,6 +2,7 @@ import React from 'react'
 import OemBar from './OemBar';
 import { Box } from '@mui/material';
 import ActivityBar from './ActivityBar';
+import UnicCount from './UnicCount';
 
 const MDashboard = () => {
     return (
@@ -10,6 +11,8 @@ const MDashboard = () => {
                 <ActivityBar />
                 <br/>
                 <OemBar/>
+                <br/>
+                <UnicCount/>
             </Box>
         </>
 

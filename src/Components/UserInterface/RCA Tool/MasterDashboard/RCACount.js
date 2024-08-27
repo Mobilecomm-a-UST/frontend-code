@@ -17,7 +17,7 @@ import LaunchIcon from '@mui/icons-material/Launch';
 import Dialog from '@mui/material/Dialog';
 import { useStyles } from '../../ToolsCss';
 import Slide from '@mui/material/Slide';
-import _, { iteratee } from 'lodash';
+import _ from 'lodash';
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {

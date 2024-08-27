@@ -4,11 +4,9 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import CloseIcon from '@mui/icons-material/Close';
-// import * as ExcelJS from 'exceljs'
 import TableContainer from '@mui/material/TableContainer';
 import Paper from '@mui/material/Paper';
 import Slide from '@mui/material/Slide';
-import { useGet } from '../../../Hooks/GetApis';
 import { usePost } from '../../../Hooks/PostApis';
 import { useLoadingDialog } from '../../../Hooks/LoadingDialog';
 import { useQuery } from '@tanstack/react-query';
@@ -42,7 +40,6 @@ const headerColor = ['#2F75B5', "#DD761C", '#03AED2']
 const MonthWiseIntegration = ({ onData }) => {
     const classes = useStyles()
     const [open, setOpen] = useState(false)
-    const { response, makeGetRequest } = useGet()
     const { makePostRequest } = usePost()
     const { loading, action } = useLoadingDialog();
     const [mainDataT2, setMainDataT2] = useState([])
@@ -52,12 +49,6 @@ const MonthWiseIntegration = ({ onData }) => {
     const [year, setYear] = useState('')
     const [months, setMonths] = useState('')
     const [years, setYears] = useState('')
-    // const [totals, setTotals] = useState()
-
-
-
-    // console.log("Month wise data")
-
     const { isPending, isFetching, isError, data, error, refetch } = useQuery({
         queryKey: ['Integration_month_wise'],
         queryFn: async () => {
@@ -72,7 +63,7 @@ const MonthWiseIntegration = ({ onData }) => {
                 setYears(res.latest_year)
                 ShortDate(res.latest_months, res.latest_year)
                 setTableData(JSON.parse(res.table_data))
-                // console.log(JSON.parse(res.table_data))
+                console.log('test data month', res)
                 onData(res)
                 return res;
             }
