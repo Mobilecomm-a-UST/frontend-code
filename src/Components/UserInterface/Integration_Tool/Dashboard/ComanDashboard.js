@@ -79,7 +79,9 @@ const ComanDashboard = () => {
         T2T4R: "",
         TAC: "",
         TRX_Count: "",
-        Technology_SIWA: ""})
+        Technology_SIWA: "",
+        BCF:'',
+        BSC_NAME:''})
     const [editDataID , setEditDataID] = useState('')
     const [open, setOpen] = useState(false)
     const [status, setStatus] = useState()
@@ -111,6 +113,8 @@ const ComanDashboard = () => {
             OSS_Details: rowData.OSS_Details,
             Cell_ID: rowData.Cell_ID,
             CELL_COUNT: rowData.CELL_COUNT,
+            BSC_NAME: rowData.BSC_NAME,
+            BCF: rowData.BCF,
             TRX_Count: rowData.TRX_Count,
             PRE_ALARM: rowData.PRE_ALARM,
             GPS_IP_CLK: rowData.GPS_IP_CLK,
@@ -242,6 +246,8 @@ const ComanDashboard = () => {
         { title: 'OSS Details', field: 'OSS_Details' },
         { title: 'Cell ID', field: 'Cell_ID' },
         { title: 'CELL COUNT', field: 'CELL_COUNT' },
+        { title: 'BSC NAME', field: 'BSC_NAME' },
+        { title: 'BCF', field: 'BCF' },
         { title: 'TRX Count', field: 'TRX_Count' },
         { title: 'PRE ALARM', field: 'PRE_ALARM' },
         { title: 'GPS IP CLK', field: 'GPS_IP_CLK' },

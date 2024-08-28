@@ -122,6 +122,8 @@ const ComanDashboard = () => {
         { title: 'OSS Details', field: 'OSS_Details' },
         { title: 'Cell ID', field: 'Cell_ID' },
         { title: 'CELL COUNT', field: 'CELL_COUNT' },
+        { title: 'BSC NAME', field: 'BSC_NAME' },
+        { title: 'BCF', field: 'BCF' },
         { title: 'TRX Count', field: 'TRX_Count' },
         { title: 'PRE ALARM', field: 'PRE_ALARM' },
         { title: 'GPS IP CLK', field: 'GPS_IP_CLK' },
