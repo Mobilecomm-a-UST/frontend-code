@@ -51,7 +51,7 @@ export const usePost = (options) => {
   const cancelRequest = () => {
 
 
-    console.log('girraj singh')
+    // console.log('girraj singh')
     if (cancelToken) {
       cancelToken.cancel();
     }
