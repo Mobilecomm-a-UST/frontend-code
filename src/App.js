@@ -41,6 +41,7 @@ const Integration = lazy(() => import('./Components/UserInterface/Integration_To
 const Rca = lazy(() => import('./Components/UserInterface/RCA Tool/Rca'));
 const G2Audit = lazy(() => import('./Components/UserInterface/Audit Tool/G2Audit/G2Audit'));
 const IntegrationRead = lazy(() => import('./Components/UserInterface/Integration_Read/IntegrationRead'));
+const SoftAtTem = lazy(() => import('./Components/UserInterface/SoftAt Temp/SoftAT'));
 
 const queryClient = new QueryClient()
 
@@ -55,7 +56,7 @@ function App() {
 
   // const chackToken = localStorage.getItem("tokenKey")
 
-  console.log('usertype', userType)
+  // console.log('usertype', userType)
 
 
   const ProtectedRoute = ({ element: Component, allowedUserTypes, userType, ...rest }) => {
@@ -237,6 +238,11 @@ function App() {
             <Route path="/tools/rca/*" element={
               <Suspense fallback={<div>Loading...</div>}>
                 <ProtectedRoute element={Rca} allowedUserTypes={['quality', 'admin']} userType={userType} />
+              </Suspense>
+            } />
+             <Route path="/tools/softAt/*" element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProtectedRoute element={SoftAtTem} allowedUserTypes={['soft_at_team', 'admin']} userType={userType} />
               </Suspense>
             } />
           </Routes>

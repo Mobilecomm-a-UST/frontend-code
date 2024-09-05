@@ -140,7 +140,7 @@ const MonthWiseIntegration = ({ onData }) => {
 
         const result = [];
 
-        for (let i = 0; i < Math.min(months.length, years.length); i++) {
+        for (let i = 0; i < Math.min(months?.length, years?.length); i++) {
             result.push({
                 month: months[i],
                 year: years[i]

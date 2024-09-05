@@ -611,6 +611,7 @@ const TicketStatus = () => {
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap', cursor: 'pointer' }} className={classes.hover} onClick={() => { handleSetDataTicket(item) }}>{item.Status == 'nan' ? '' : item.Status}</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.Remarks == 'nan' ? '' : item.Remarks}</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.Ownership == 'nan' ? '' : item.Ownership}</th>
+                <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.RCA == 'nan' ? '' : item.RCA}</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.Circle_Spoc}</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.Site_ID}</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.Pre_Remarks == 'nan' ? '' : item.Pre_Remarks}</th>
@@ -668,6 +669,7 @@ const TicketStatus = () => {
                                     <th style={{ padding: '1px 60px 1px 2px', whiteSpace: 'nowrap' }}>Status <CheckPicker data={payloadStatusData.map(item => ({ label: item, value: item }))} value={selectStatusData} onChange={(value) => { setSelectStatusData(value) }} size="sm" appearance="default" style={{ width: 20 }} /></th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Remarks</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Ownership</th>
+                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Auto RCA</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Circle Spoc</th>
                                     <th style={{ padding: '1px 60px 1px 2px', whiteSpace: 'nowrap' }}>Site ID <CheckPicker data={payloadSiteID.map(item => ({ label: item, value: item }))} value={selectSiteID} onChange={(value) => { setSelectSiteID(value) }} size="sm" appearance="default" style={{ width: 20 }} /></th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Pre Remarks</th>
@@ -905,6 +907,7 @@ const TicketStatus = () => {
                                         </Select>
                                     </FormControl>
                                 </Grid>
+                             
                                 <Grid item xs={6}>
                                     <TextField
                                         variant="outlined"

@@ -73,23 +73,23 @@ const SoftAT = () => {
                       <Nav activeKey={activeKey} onSelect={setActiveKey} style={{ width: 'auto', minHeight: "670px", height: "100hv", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
                         <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>Soft AT TOOL</Nav>
                         <Nav.Menu eventKey="1" placement="rightStart" title="Dashboard" icon={<DashboardIcon size="3em" />}>
-                          <Nav.Item eventKey="1-1" onClick={() => { navigate('/tools/soft_at/master_dashboard'); show(); setMenuButton(true) }} >
+                          <Nav.Item eventKey="1-1" onClick={() => { navigate('/tools/softAt/master_dashboard'); show(); setMenuButton(true) }} >
                             Master Dashboard
                           </Nav.Item>
-                          <Nav.Item eventKey="1-2" onClick={() => { navigate('/tools/soft_at/circle_wise'); show(); setMenuButton(true) }}>
+                          <Nav.Item eventKey="1-2" onClick={() => { navigate('/tools/softAt/circle_wise'); show(); setMenuButton(true) }}>
                             Circle Wise
                           </Nav.Item>
-                          <Nav.Item eventKey="1-6" onClick={() => { navigate('/tools/soft_at/weekly_comparison'); show(); setMenuButton(true) }}>
+                          <Nav.Item eventKey="1-6" onClick={() => { navigate('/tools/softAt/weekly_comparison'); show(); setMenuButton(true) }}>
                             Weekly Comparison
                           </Nav.Item>
                         </Nav.Menu>
-                        <Nav.Item eventKey="2" placement="rightStart" icon={<FileUploadIcon />} onClick={() => { navigate('/tools/soft_at/upload_soft_at'); show(); setMenuButton(true) }}>
+                        <Nav.Item eventKey="2" placement="rightStart" icon={<FileUploadIcon />} onClick={() => { navigate('/tools/softAt/upload_soft_at'); show(); setMenuButton(true) }}>
                           Upload Soft AT
                         </Nav.Item>
-                        <Nav.Item eventKey="3" placement="rightStart" icon={<PageIcon />} onClick={() => { navigate('/tools/soft_at/view_report'); show(); setMenuButton(true) }}>
+                        <Nav.Item eventKey="3" placement="rightStart" icon={<PageIcon />} onClick={() => { navigate('/tools/softAt/view_report'); show(); setMenuButton(true) }}>
                           View Report
                         </Nav.Item>
-                        <Nav.Item eventKey="4" placement="rightStart" icon={<FileDownloadIcon />} onClick={() => { navigate('/tools/soft_at/download_template'); show(); setMenuButton(true) }}>
+                        <Nav.Item eventKey="4" placement="rightStart" icon={<FileDownloadIcon />} onClick={() => { navigate('/tools/softAt/download_template'); show(); setMenuButton(true) }}>
                         Download Template
                       </Nav.Item>
                         {/* <Nav.Item eventKey="4" placement="rightStart" icon={<ViewsUnauthorizeIcon />} onClick={() => { navigate('/tools/soft_at/rejected_report'); show(); setMenuButton(true) }}>
@@ -111,23 +111,23 @@ const SoftAT = () => {
                     <Nav activeKey={activeKey} onSelect={setActiveKey} >
                       <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>Soft AT TOOL</Nav>
                       <Nav.Menu eventKey="1" placement="rightStart" title="Dashboard" icon={<DashboardIcon size="3em" />}>
-                        <Nav.Item eventKey="1-1" onClick={() => { navigate('/tools/soft_at/master_dashboard'); show(); setMenuButton(true) }} >
+                        <Nav.Item eventKey="1-1" onClick={() => { navigate('/tools/softAt/master_dashboard'); show(); setMenuButton(true) }} >
                           Master Dashboard
                         </Nav.Item>
-                        <Nav.Item eventKey="1-2" onClick={() => { navigate('/tools/soft_at/circle_wise'); show(); setMenuButton(true) }}>
+                        <Nav.Item eventKey="1-2" onClick={() => { navigate('/tools/softAt/circle_wise'); show(); setMenuButton(true) }}>
                           Circle Wise
                         </Nav.Item>
-                        <Nav.Item eventKey="1-6" onClick={() => { navigate('/tools/soft_at/weekly_comparison'); show(); setMenuButton(true) }}>
+                        <Nav.Item eventKey="1-6" onClick={() => { navigate('/tools/softAt/weekly_comparison'); show(); setMenuButton(true) }}>
                           Weekly Comparison
                         </Nav.Item>
                       </Nav.Menu>
-                      <Nav.Item eventKey="2" placement="rightStart" icon={<FileUploadIcon />} onClick={() => { navigate('/tools/soft_at/upload_soft_at'); show(); setMenuButton(true) }}>
+                      <Nav.Item eventKey="2" placement="rightStart" icon={<FileUploadIcon />} onClick={() => { navigate('/tools/softAt/upload_soft_at'); show(); setMenuButton(true) }}>
                         Upload Soft AT
                       </Nav.Item>
-                      <Nav.Item eventKey="3" placement="rightStart" icon={<PageIcon />} onClick={() => { navigate('/tools/soft_at/view_report'); show(); setMenuButton(true) }}>
+                      <Nav.Item eventKey="3" placement="rightStart" icon={<PageIcon />} onClick={() => { navigate('/tools/softAt/view_report'); show(); setMenuButton(true) }}>
                         View Report
                       </Nav.Item>
-                      <Nav.Item eventKey="4" placement="rightStart" icon={<FileDownloadIcon />} onClick={() => { navigate('/tools/soft_at/download_template'); show(); setMenuButton(true) }}>
+                      <Nav.Item eventKey="4" placement="rightStart" icon={<FileDownloadIcon />} onClick={() => { navigate('/tools/softAt/download_template'); show(); setMenuButton(true) }}>
                         Download Template
                       </Nav.Item>
                       {/* <Nav.Item eventKey="4" placement="rightStart" icon={<ViewsUnauthorizeIcon />} onClick={() => { navigate('/tools/soft_at/rejected_report'); show(); setMenuButton(true) }}>
