@@ -62,7 +62,7 @@ const ToolData = [
         name: 'SOFT AT',
         title: 'This is a SOFT AT tool',
         icons: PcIcon,
-        link: '/tools/soft_at',
+        link: '/tools/softAt',
         groupBy:['soft_at_team','admin']
     },
 
