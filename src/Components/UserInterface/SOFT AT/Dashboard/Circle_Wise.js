@@ -1086,7 +1086,7 @@ const Circle_Wise = () => {
           <Box sx={{ display: { xs: 'none', md: 'inherit' } }}>
             <TableContainer sx={{ maxHeight: 540, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} component={Paper}>
 
-              <table style={{ width: "100%", border: "2px solid black", borderCollapse: 'collapse' }}>
+              <table style={{ width: "100%", border: "1px solid black", borderCollapse: 'collapse' }}>
                 <tr>
                   <th colspan="8" style={{ fontSize: 24, backgroundColor: "#F1948A", color: "", }}>Circle wise</th>
                 </tr>
@@ -1135,7 +1135,7 @@ const Circle_Wise = () => {
           <Box sx={{ display: { xs: 'none', md: 'inherit' } }}>
             <TableContainer sx={{ maxHeight: 500, marginTop: 3, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} component={Paper}>
 
-              <table border="3" style={{ width: "100%", border: "2px solid" }}>
+              <table border="3" style={{ width: "100%", border: "1px solid" }}>
                 <tr>
                   <th colspan="6" style={{ fontSize: 24, backgroundColor: "#F4D03F", color: "black", }}>Pending Sites</th>
                 </tr>
@@ -1180,9 +1180,9 @@ const Circle_Wise = () => {
           {/* ************* ALARM BUCKET TABLE *************** */}
           <Box sx={{ display: { xs: 'none', md: 'inherit' } }}>
             <TableContainer sx={{ maxHeight: 500, marginTop: 3, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} component={Paper}>
-              <table border="3" style={{ width: "100%", border: "2px solid" }}>
+              <table border="3" style={{ width: "100%", border: "1px solid" }}>
                 <tr>
-                  <th colspan="2" style={{ fontSize: 24, backgroundColor: "#52BE80", color: "", }}>Alarm Bucket</th>
+                  <th colspan="2" style={{ fontSize: 24, backgroundColor: "#52BE80", color: "white", }}>Alarm Bucket</th>
                 </tr>
                 <tr style={{ fontSize: 20, backgroundColor: "#223354", color: "white", }}>
                   <th>Row Labels</th>
@@ -1210,9 +1210,9 @@ const Circle_Wise = () => {
           {/* ************AGEING DATA CIRCLE WISE************* */}
           <Box sx={{ display: { xs: 'none', md: 'inherit' } }}>
             <TableContainer sx={{ maxHeight: 540, marginTop: 3, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} component={Paper}>
-              <table border="3" style={{ width: "100%", border: "2px solid" }}>
+              <table border="3" style={{ width: "100%", border: "1px solid" }}>
                 <tr>
-                  <th colspan="8" style={{ fontSize: 24, backgroundColor: "#AF7AC5", color: "black", }}>Ageing (Circle Wise)</th>
+                  <th colspan="8" style={{ fontSize: 24, backgroundColor: "#AF7AC5", color: "white", }}>Ageing (Circle Wise)</th>
                 </tr>
                 <tr style={{ fontSize: 19, backgroundColor: "#223354", color: "white", }}>
                   <th>Circle</th>

@@ -62,7 +62,7 @@ const ToolData = [
         name: 'SOFT AT',
         title: 'This is a SOFT AT tool',
         icons: PcIcon,
-        link: '/tools/softAt',
+        link: '/tools/soft_at',
         groupBy:['soft_at_team','admin']
     },
 
@@ -199,6 +199,16 @@ const ToolData = [
         icons: DocPassIcon,
         link: '/tools/IX_Tracker',
         groupBy:['IX_reader']
+
+    }
+    ,
+    {
+        id: 24,
+        name: 'Mcom Physical AT',
+        title: 'This is a IX Tracker Tool',
+        icons: CellTowerIcon,
+        link: '/tools/mcom_physical_at',
+        groupBy:['soft_at_team', 'admin']
 
     }
 

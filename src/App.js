@@ -42,6 +42,7 @@ const Rca = lazy(() => import('./Components/UserInterface/RCA Tool/Rca'));
 const G2Audit = lazy(() => import('./Components/UserInterface/Audit Tool/G2Audit/G2Audit'));
 const IntegrationRead = lazy(() => import('./Components/UserInterface/Integration_Read/IntegrationRead'));
 const SoftAtTem = lazy(() => import('./Components/UserInterface/SoftAt Temp/SoftAT'));
+const McomePhycical = lazy(()=>import('./Components/UserInterface/McomPhysicalAt/McomePhycical'))
 
 const queryClient = new QueryClient()
 
@@ -243,6 +244,11 @@ function App() {
              <Route path="/tools/softAt/*" element={
               <Suspense fallback={<div>Loading...</div>}>
                 <ProtectedRoute element={SoftAtTem} allowedUserTypes={['soft_at_team', 'admin']} userType={userType} />
+              </Suspense>
+            } />
+                 <Route path="/tools/mcom_physical_at/*" element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProtectedRoute element={McomePhycical} allowedUserTypes={['soft_at_team', 'admin']} userType={userType} />
               </Suspense>
             } />
           </Routes>

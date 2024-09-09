@@ -720,8 +720,8 @@ const Circle_Wise = () => {
       }
       else {
         return (
-          <tr key={index} className={classes.hover} style={{ textAlign: "center", fontWeigth: 700 }}>
-            <td style={{ fontWeight: 'bold', border: '1px solid black' }} className={classes.hover} onClick={() => { handleAlarmBucketFilter(item.row_labels) }} >{item.row_labels}</td>
+          <tr key={index} className={classes.hover} style={{ textAlign: "center", fontWeigth: 700}}>
+            <td style={{ fontWeight: 'bold', border: '1px solid black' ,cursor:'pointer' }} className={classes.hover} onClick={() => { handleAlarmBucketFilter(item.row_labels) }} >{item.row_labels}</td>
             <td style={{ fontWeight: 'bold', border: '1px solid black' }}>{item.Count_of_Alarm_Bucket}</td>
           </tr>
         )
@@ -1066,7 +1066,7 @@ const Circle_Wise = () => {
 
   const handleAlarmDialog = useCallback(() => {
     return (
-      <Dialog open={alarmOpen} onClose={handleClose} fullWidth={true} maxWidth='md'>
+      <Dialog open={alarmOpen} onClose={handleClose} fullWidth={true} maxWidth='lg'>
         <DialogContent>
           <TableContainer sx={{ maxHeight: 400, marginTop: 3, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} component={Paper}>
             <table border="3" style={{ width: "100%", border: "1px solid" }}>
