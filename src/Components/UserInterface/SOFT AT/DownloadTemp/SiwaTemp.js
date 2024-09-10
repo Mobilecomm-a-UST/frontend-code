@@ -25,13 +25,11 @@ import Slide from '@mui/material/Slide';
 
 
 
-
 const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" timeout={1000}  ref={ref}  {...props} />;
+    return <Slide direction="up" timeout={1000} ref={ref}  {...props} />;
 });
 
-
-const SoftAtStatus = () => {
+const SiwaTemp = () => {
     const classes = OverAllCss();
     const [toggalValue, setToggalValue] = useState('Date')
     const [date, setDate] = useState('')
@@ -116,13 +114,13 @@ const SoftAtStatus = () => {
         >
             <DialogContent>
                 <Box style={{ padding: 20, display: 'flex', justifyContent: "center" }}>
-                    <a download href={link}><Button variant="outlined" onClick='' startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />} sx={{ marginTop: "10px", width: "auto" }}><span style={{ fontFamily: "Poppins", fontSize: "22px", fontWeight: 800, textTransform: "none", textDecorationLine: "none" }}>Download Soft-AT Status</span></Button></a>
+                    <a download href={link}><Button variant="outlined" onClick='' startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />} sx={{ marginTop: "10px", width: "auto" }}><span style={{ fontFamily: "Poppins", fontSize: "22px", fontWeight: 800, textTransform: "none", textDecorationLine: "none" }}>Download SIWA Template</span></Button></a>
                 </Box>
             </DialogContent>
 
         </Dialog>)
 
-    },[open])
+    }, [open])
 
 
     const handleClose = () => {
@@ -141,26 +139,21 @@ const SoftAtStatus = () => {
         fetchCircle();
 
     }, [])
-
-
-
-
-
     return (
         <Zoom in='true' timeout={800} style={{ transformOrigin: '1 1 1' }}>
             <div>
-                <div style={{ margin: 5, marginLeft: 10 }}>
+            <div style={{ margin: 5, marginLeft: 10 }}>
                     <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
                         <Link underline="hover" href='/tools'>Tools</Link>
                         <Link underline="hover" href='/tools/soft_at'>Soft AT</Link>
-                        <Typography color='text.primary'>Soft AT Status</Typography>
+                        <Typography color='text.primary'>SIVA Template</Typography>
                     </Breadcrumbs>
                 </div>
-
+        
                 <Box className={classes.main_Box}>
                     <Box className={classes.Back_Box} component="form" sx={{ width: { md: '75%', xs: '100%' } }}>
                         <Box className={classes.Box_Hading} >
-                            SOFT AT STATUS TEMPLATE
+                            SIWA TEMPLATE
                         </Box>
 
                         <Stack spacing={2} sx={{ marginTop: "-40px" }} direction={'column'}>
@@ -186,7 +179,7 @@ const SoftAtStatus = () => {
                                         </LocalizationProvider>
                                     </Box></> : <><Box sx={{ textAlign: 'center' }}>
                                         <LocalizationProvider dateAdapter={AdapterDayjs} size="small">
-                                            <DatePicker label="From Date" value={fromDate} onChange={(e) => setFromDate(e)}    /><span style={{ margin: 5, fontSize: 20, fontWeight: 600 }}>~</span>
+                                            <DatePicker label="From Date" value={fromDate} onChange={(e) => setFromDate(e)} /><span style={{ margin: 5, fontSize: 20, fontWeight: 600 }}>~</span>
                                             <DatePicker label="To Date" value={toDate} onChange={(e) => setToDate(e)} />
                                         </LocalizationProvider>
                                     </Box></>}
@@ -242,8 +235,8 @@ const SoftAtStatus = () => {
                 {loading}
 
             </div>
-        </Zoom>
+            </Zoom>
     )
 }
 
-export default React.memo(SoftAtStatus)
+export default SiwaTemp;

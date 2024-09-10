@@ -25,6 +25,9 @@ const Master_Dashboard = lazy(() => import('./Dashboard/Master_Dashboard'))
 const WeeklyComparision = lazy(() => import('./Dashboard/WeeklyComparision'))
 const ViewReport = lazy(() => import('./View Report/ViewReport'));
 const DownloadSoftAtTemplate = lazy(() => import('./DownloadTemp/DownloadSoftAtTemp'));
+const SoftAtStatusTemplate = lazy(() => import('./DownloadTemp/SoftAtStatus'));
+const SIVATemplate = lazy(() => import('./DownloadTemp/SiwaTemp'));
+const SoftAtOffering = lazy(() => import('./DownloadTemp/SoftAtOffering'));
 
 
 
@@ -127,9 +130,11 @@ const SoftAT = () => {
                       <Nav.Item eventKey="3" placement="rightStart" icon={<PageIcon />} onClick={() => { navigate('/tools/soft_at/view_report'); show(); setMenuButton(true) }}>
                         View Report
                       </Nav.Item>
-                      <Nav.Item eventKey="4" placement="rightStart" icon={<FileDownloadIcon />} onClick={() => { navigate('/tools/soft_at/download_template'); show(); setMenuButton(true) }}>
-                        Download Template
-                      </Nav.Item>
+                      <Nav.Menu eventKey="4" title="Download Template" placement="rightStart"  icon={<FileDownloadIcon />} >
+                          <Nav.Item eventKey="4-1" onClick={() => { navigate('/tools/soft_at/download_soft_at_status_template'); show(); setMenuButton(true) }}>Soft-AT Status</Nav.Item>
+                          <Nav.Item eventKey="4-2" onClick={() => { navigate('/tools/soft_at/download_siva_template'); show(); setMenuButton(true) }}>SIVA Template</Nav.Item>
+                          <Nav.Item eventKey="4-3" onClick={() => { navigate('/tools/soft_at/download_soft_at_offering_template'); show(); setMenuButton(true) }}>Soft-AT Offering</Nav.Item>
+                      </Nav.Menu>
                       {/* <Nav.Item eventKey="4" placement="rightStart" icon={<ViewsUnauthorizeIcon />} onClick={() => { navigate('/tools/soft_at/rejected_report'); show(); setMenuButton(true) }}>
                         Rejected Report
                       </Nav.Item> */}
@@ -155,7 +160,9 @@ const SoftAT = () => {
                 <Route element={<AgeingCircleWise />} path='/ageing_circle_wise' />
                 <Route element={<ViewReport />} path='/view_report' />
                 <Route element={<WeeklyComparision />} path='/weekly_comparison' />
-                <Route element={<DownloadSoftAtTemplate />} path='/download_template' />
+                <Route element={<SoftAtStatusTemplate />} path='/download_soft_at_status_template' />
+                <Route element={<SIVATemplate />} path='/download_siva_template' />
+                <Route element={<SoftAtOffering />} path='/download_soft_at_offering_template' />
 
               </Routes>
             </Suspense>

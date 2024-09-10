@@ -27,11 +27,10 @@ import Slide from '@mui/material/Slide';
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" timeout={1000}  ref={ref}  {...props} />;
+    return <Slide direction="up" timeout={1000} ref={ref}  {...props} />;
 });
 
-
-const SoftAtStatus = () => {
+const SoftAtOffering = () => {
     const classes = OverAllCss();
     const [toggalValue, setToggalValue] = useState('Date')
     const [date, setDate] = useState('')
@@ -40,6 +39,7 @@ const SoftAtStatus = () => {
     const [circle, setCircle] = useState('')
     const [allcircle, setAllcircle] = useState([])
     const [siteId, setSiteId] = useState('')
+    const [selectOem, setSelectOem] = useState('')
     const [fileData, setFileData] = useState()
     const [open, setOpen] = useState(false);
     const { loading, action } = useLoadingDialog()
@@ -84,8 +84,9 @@ const SoftAtStatus = () => {
             formData.append('from_date', handleDateFormat(fromDate))
             formData.append('to_date', handleDateFormat(toDate))
             formData.append('circle', circle)
+            formData.append('oem', selectOem)
             formData.append('site_id', siteId)
-            const response = await postData('IntegrationTracker/softAt-status-update-template/', formData)
+            const response = await postData('IntegrationTracker/softAt-offering-templates/', formData)
             if (response) {
                 console.log('response', response)
                 setFileData(response.url)
@@ -116,13 +117,13 @@ const SoftAtStatus = () => {
         >
             <DialogContent>
                 <Box style={{ padding: 20, display: 'flex', justifyContent: "center" }}>
-                    <a download href={link}><Button variant="outlined" onClick='' startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />} sx={{ marginTop: "10px", width: "auto" }}><span style={{ fontFamily: "Poppins", fontSize: "22px", fontWeight: 800, textTransform: "none", textDecorationLine: "none" }}>Download Soft-AT Status</span></Button></a>
+                    <a download href={link}><Button variant="outlined" onClick='' startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />} sx={{ marginTop: "10px", width: "auto" }}><span style={{ fontFamily: "Poppins", fontSize: "22px", fontWeight: 800, textTransform: "none", textDecorationLine: "none" }}>Download Soft-AT Offering</span></Button></a>
                 </Box>
             </DialogContent>
 
         </Dialog>)
 
-    },[open])
+    }, [open])
 
 
     const handleClose = () => {
@@ -142,10 +143,6 @@ const SoftAtStatus = () => {
 
     }, [])
 
-
-
-
-
     return (
         <Zoom in='true' timeout={800} style={{ transformOrigin: '1 1 1' }}>
             <div>
@@ -153,14 +150,14 @@ const SoftAtStatus = () => {
                     <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
                         <Link underline="hover" href='/tools'>Tools</Link>
                         <Link underline="hover" href='/tools/soft_at'>Soft AT</Link>
-                        <Typography color='text.primary'>Soft AT Status</Typography>
+                        <Typography color='text.primary'>Soft AT Offering</Typography>
                     </Breadcrumbs>
                 </div>
 
                 <Box className={classes.main_Box}>
                     <Box className={classes.Back_Box} component="form" sx={{ width: { md: '75%', xs: '100%' } }}>
                         <Box className={classes.Box_Hading} >
-                            SOFT AT STATUS TEMPLATE
+                            SOFT AT OFFERING TEMPLATE
                         </Box>
 
                         <Stack spacing={2} sx={{ marginTop: "-40px" }} direction={'column'}>
@@ -186,7 +183,7 @@ const SoftAtStatus = () => {
                                         </LocalizationProvider>
                                     </Box></> : <><Box sx={{ textAlign: 'center' }}>
                                         <LocalizationProvider dateAdapter={AdapterDayjs} size="small">
-                                            <DatePicker label="From Date" value={fromDate} onChange={(e) => setFromDate(e)}    /><span style={{ margin: 5, fontSize: 20, fontWeight: 600 }}>~</span>
+                                            <DatePicker label="From Date" value={fromDate} onChange={(e) => setFromDate(e)} /><span style={{ margin: 5, fontSize: 20, fontWeight: 600 }}>~</span>
                                             <DatePicker label="To Date" value={toDate} onChange={(e) => setToDate(e)} />
                                         </LocalizationProvider>
                                     </Box></>}
@@ -209,10 +206,36 @@ const SoftAtStatus = () => {
                                             onChange={(e) => setCircle(e.target.value)}
                                             size="medium"
                                         >
-
                                             {allcircle?.map((data, index) => (
                                                 <MenuItem key={index} value={data}>{data}</MenuItem>
                                             ))}
+                                        </Select>
+                                    </FormControl>
+                                </Box>
+                            </Box>
+
+                            <Box className={classes.Front_Box}>
+                                <Box className={classes.Front_Box_Hading}>
+                                    Select OEM
+                                </Box>
+                                <Box sx={{ marginTop: "5px", float: "left" }}>
+                                    <FormControl sx={{ minWidth: 150 }}>
+                                        <InputLabel id="demo-simple-select-label">Select OEM</InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={selectOem}
+                                            label="Select Circle"
+                                            onChange={(e) => setSelectOem(e.target.value)}
+                                            size="medium"
+                                        >
+                                            
+                                                <MenuItem  value={'ERICSSON'}>Ericsson</MenuItem>
+                                                <MenuItem  value={'HUAWEI'}>Huawei</MenuItem>
+                                                <MenuItem  value={'NOKIA'}>Nokia</MenuItem>
+                                                <MenuItem  value={'SAMSUNG'}>Samsung</MenuItem>
+                                                <MenuItem  value={'ZTE'}>ZTE</MenuItem>
+                                       
                                         </Select>
                                     </FormControl>
                                 </Box>
@@ -246,4 +269,4 @@ const SoftAtStatus = () => {
     )
 }
 
-export default React.memo(SoftAtStatus)
+export default SoftAtOffering
