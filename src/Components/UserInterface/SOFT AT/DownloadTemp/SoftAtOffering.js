@@ -22,6 +22,7 @@ import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
 import Slide from '@mui/material/Slide';
+import Swal from "sweetalert2";
 
 
 
@@ -77,7 +78,7 @@ const SoftAtOffering = () => {
     }
 
     const handleSubmit = async () => {
-        if ((date) || (fromDate)) {
+        if ((date && selectOem) || (fromDate && selectOem)) {
             action(true)
             var formData = new FormData();
             formData.append('date', handleDateFormat(date))
@@ -96,13 +97,14 @@ const SoftAtOffering = () => {
             else {
                 action(false)
             }
-
-            // if(response){
-            //     setFileData(response.data)
-            // }
         }
         else {
-
+            Swal.fire({
+                title: "Alart!",
+                text: "Please Select Date/Range and Select Oem",
+                // icon: "question"
+              });
+              
         }
     }
 
