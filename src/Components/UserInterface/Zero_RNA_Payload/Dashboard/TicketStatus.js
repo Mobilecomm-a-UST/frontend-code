@@ -46,8 +46,8 @@ const TicketStatus = () => {
     const [selectTicketId, setSelectTicketId] = useState([])
     const [payloadPriority, setPayloadPriority] = useState([])
     const [selectPriority, setSelectPriority] = useState([])
-    const [payloadStatusData , setPayloadStatusData] = useState([])
-    const [selectStatusData , setSelectStatusData] = useState([])
+    const [payloadStatusData, setPayloadStatusData] = useState([])
+    const [selectStatusData, setSelectStatusData] = useState([])
     const [mainDataT2, setMainDataT2] = useState([])
     const [totalTable, setTotalTable] = useState([])
     const [totalOpen, setTotalOpen] = useState(false)
@@ -66,7 +66,8 @@ const TicketStatus = () => {
         Status: "",
         Unique_Id: "",
         aging: '',
-        ticket_id: ""
+        ticket_id: "",
+        RCA: '',
     })
     // console.log('toggalButton', toggalButton)
     const { isPending, isFetching, isError, data, error } = useQuery({
@@ -108,7 +109,8 @@ const TicketStatus = () => {
             Status: item.Status,
             Unique_Id: item.Unique_Id,
             aging: CalculateDaysBetweenDates(item.Date, item.Open_Date),
-            ticket_id: item.ticket_id
+            ticket_id: item.ticket_id,
+            RCA: item.RCA
         })
         setPayloadStatus(true);
     }
@@ -571,7 +573,7 @@ const TicketStatus = () => {
                 setPayloadSiteID(_.uniq(_.map(responce.data, 'Site_ID')))
                 setPayloadTicketId(_.uniq(_.map(responce.data, 'ticket_id')))
                 setPayloadPriority(_.uniq(_.map(responce.data, 'priority')))
-                setPayloadStatusData(_.uniq(_.map(responce.data , 'Status')))
+                setPayloadStatusData(_.uniq(_.map(responce.data, 'Status')))
                 // setCurrentDate(responce.current_date)
                 // setPreviousDate(responce.previous_date)
                 // setTotalOpen(true)
@@ -586,6 +588,19 @@ const TicketStatus = () => {
         }
     }
 
+    const handleDateFormets = (timestamp) => {
+        const date = new Date(timestamp);
+
+        // Extract day, month, and year
+        const day = String(date.getDate()).padStart(2, '0'); // Ensure two-digit day
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed, so add 1
+        const year = date.getFullYear();
+
+        const formattedDate = `${day}-${month}-${year}`;
+
+        return formattedDate;
+    }
+
     const FilterPayloadDipData = useCallback(() => {
         let filteredData = _.filter(totalTable, item => {
 
@@ -593,19 +608,19 @@ const TicketStatus = () => {
             const siteIdMatch = selectSiteID.length === 0 || _.includes(selectSiteID, item.Site_ID);
             const ticketMatch = selectTicketId.length === 0 || _.includes(selectTicketId, item.ticket_id);
             const priorityMatch = selectPriority.length === 0 || _.includes(selectPriority, item.priority);
-            const statusMatch = selectStatusData.length === 0 || _.includes(selectStatusData , item.Status)
+            const statusMatch = selectStatusData.length === 0 || _.includes(selectStatusData, item.Status)
 
 
             return circleMatch && siteIdMatch && ticketMatch && priorityMatch && statusMatch;
         });
         return filteredData?.map((item, index) => (
             <tr key={index} className={classes.hover} style={{ textAlign: "center", fontWeigth: 700 }}>
-                <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{index+1}</th>
+                <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{index + 1}</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.ticket_id}</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.Circle}</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.Short_name}</th>
-                <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.Date}</th>
-                <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.Open_Date}</th>
+                <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{handleDateFormets(item.Date)}</th>
+                <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{handleDateFormets(item.Open_Date)}</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{CalculateDaysBetweenDates(item.Date, item.Open_Date)}</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.priority}</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap', cursor: 'pointer' }} className={classes.hover} onClick={() => { handleSetDataTicket(item) }}>{item.Status == 'nan' ? '' : item.Status}</th>
@@ -618,7 +633,7 @@ const TicketStatus = () => {
             </tr>
         ))
 
-    }, [toggalButton, selectCircle, selectSiteID, selectTicketId,selectPriority,selectStatusData, totalTable])
+    }, [toggalButton, selectCircle, selectSiteID, selectTicketId, selectPriority, selectStatusData, totalTable])
 
     const TotalTableDialog = useCallback(() => {
         return (
@@ -631,9 +646,9 @@ const TicketStatus = () => {
                 BackdropProps={{
                     style: { backgroundColor: 'rgba(0, 0, 0, 0.5)', backdropFilter: 'blur(3px)' },
                 }}
-                style={{ zIndex: 2 ,marginTop:'4%'}}
+                style={{ zIndex: 2, marginTop: '4%' }}
             >
-               
+
                 <DialogTitle><span style={{ color: toggalButton ? '' : '#1976D2' }}>All Over Raw Data</span>
 
                     <Switch onChange={() => { setToggalButton(!toggalButton) }} /> <span style={{ color: toggalButton ? '#1976D2' : '' }}>Payload Dip Data</span>
@@ -715,9 +730,9 @@ const TicketStatus = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {data?.all_data?.map((item,index) => (
-                                    <tr  key={index} className={classes.hover} style={{ textAlign: "center", fontWeigth: 700 }}>
-                                        <th style={{ padding: '1px 2px', whiteSpace: 'nowrap' }}>{index+1}</th>
+                                {data?.all_data?.map((item, index) => (
+                                    <tr key={index} className={classes.hover} style={{ textAlign: "center", fontWeigth: 700 }}>
+                                        <th style={{ padding: '1px 2px', whiteSpace: 'nowrap' }}>{index + 1}</th>
                                         <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.Circle}</th>
                                         <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.Short_name}</th>
                                         <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.MV_4G_Data_Volume_GB_current_date}</th>
@@ -735,7 +750,7 @@ const TicketStatus = () => {
                 </DialogContent>
             </Dialog>
         )
-    }, [totalOpen, totalTable, selectCircle, selectSiteID, selectTicketId,selectPriority,selectStatusData, toggalButton]);
+    }, [totalOpen, totalTable, selectCircle, selectSiteID, selectTicketId, selectPriority, selectStatusData, toggalButton]);
 
 
     const Dashboard = useCallback(({ dataa, color }) => {
@@ -907,7 +922,7 @@ const TicketStatus = () => {
                                         </Select>
                                     </FormControl>
                                 </Grid>
-                             
+
                                 <Grid item xs={6}>
                                     <TextField
                                         variant="outlined"
@@ -917,6 +932,19 @@ const TicketStatus = () => {
                                         label="Remarks"
                                         name="Remarks"
                                         value={ticketDipForm.Remarks}
+                                        onChange={handleChange}
+                                        size="small"
+                                        type='text'
+                                    />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <TextField
+                                        variant="outlined"
+                                        fullWidth
+                                        placeholder="Auto RCA"
+                                        label="Auto RCA"
+                                        name="RCA"
+                                        value={ticketDipForm.RCA}
                                         onChange={handleChange}
                                         size="small"
                                         type='text'

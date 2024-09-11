@@ -50,8 +50,8 @@ const Circle_Wise = () => {
   const [open, setOpen] = useState(false)
   const classes = useStyles()
   const [latestDate, setLatestDate] = useState('')
-  const {action , loading} = useLoadingDialog()
-  const [count , setCount]  = useState(0)
+  const { action, loading } = useLoadingDialog()
+  const [count, setCount] = useState(0)
   const { makePostRequest } = usePost()
   var displayMonth = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
@@ -67,7 +67,7 @@ const Circle_Wise = () => {
     years.push(year);
   }
 
-  const {  data ,refetch} = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ['soft_at_master_api'],
     queryFn: async () => {
       action(true)
@@ -139,6 +139,9 @@ const Circle_Wise = () => {
       });
     }
 
+
+    // console.log('fhgfghgfhgh',arr)
+
     return arr?.map((item, index) => {
       if (item.circle == 'Total') {
         return (
@@ -147,7 +150,8 @@ const Circle_Wise = () => {
               <td style={{ border: '1px solid black' }}>{item.circle}</td>
               <td style={{ border: '1px solid black' }}>{item.Accepted}</td>
               <td style={{ border: '1px solid black' }}>{item.Dismantle}</td>
-              {count>0?<td style={{ border: '1px solid black' }}>{item.Need_to_be_offer}</td>:''}
+              <td style={{ border: '1px solid black' }}>{item.Need_to_be_offer}</td>
+              <td style={{ border: '1px solid black' }}>{item.NOT_OFFERED}</td>
               <td style={{ border: '1px solid black' }}>{item.Offered}</td>
               <td style={{ border: '1px solid black' }}>{item.Rejected}</td>
               <td style={{ border: '1px solid black' }}>{item.Pending}</td>
@@ -164,7 +168,8 @@ const Circle_Wise = () => {
               <td style={{ fontWeight: 'bold', border: '1px solid black' }} >{item.circle}</td>
               <td style={{ color: item.Accepted > 0 ? 'white' : 'black', border: '1px solid black', backgroundColor: item.Accepted > 0 ? "#58D68D" : "", fontWeight: 'bold' }}>{item.Accepted}</td>
               <td style={{ color: item.Dismantle > 0 ? 'white' : 'black', border: '1px solid black', backgroundColor: item.Dismantle > 0 ? "#F96A56" : "", fontWeight: 'bold' }}>{item.Dismantle}</td>
-              {count>0? <td style={{ fontWeight: 'bold', border: '1px solid black' }}>{item.Need_to_be_offer}</td>:''}
+              <td style={{ fontWeight: 'bold', border: '1px solid black' }}>{item.Need_to_be_offer}</td>
+              <td style={{ fontWeight: 'bold', border: '1px solid black' }}>{item.NOT_OFFERED}</td>
               <td style={{ fontWeight: 'bold', border: '1px solid black' }}>{item.Offered}</td>
               <td style={{ color: item.Rejected > 0 ? 'white' : 'black', border: '1px solid black', backgroundColor: item.Rejected > 0 ? "#F96A56" : "", fontWeight: 'bold' }}>{item.Rejected}</td>
               <td style={{ color: item.Pending > 0 ? 'black' : 'black', border: '1px solid black', backgroundColor: item.Pending > 0 ? "#F4D03F" : "", fontWeight: 'bold' }}>{item.Pending}</td>
@@ -1034,8 +1039,8 @@ const Circle_Wise = () => {
   }
 
   useEffect(() => {
-    if(data){
-          fetchCircle();
+    if (data) {
+      fetchCircle();
     }
 
     fetchTodayDate();
@@ -1088,14 +1093,14 @@ const Circle_Wise = () => {
 
               <table style={{ width: "100%", border: "1px solid black", borderCollapse: 'collapse' }}>
                 <tr>
-                  <th colspan="8" style={{ fontSize: 24, backgroundColor: "#F1948A", color: "", }}>Circle wise</th>
+                  <th colspan="9" style={{ fontSize: 24, backgroundColor: "#F1948A", color: "", }}>Circle wise</th>
                 </tr>
                 <tr style={{ fontSize: 20, backgroundColor: "#223354", color: "white", }}>
                   <th>Circle</th>
                   <th>Accepted</th>
                   <th>Dismantle</th>
-                  {count>0?<th>Need to be Offer</th>:''}
-
+                  <th>Need to be Offer</th>
+                  <th>Not Offered</th>
                   <th>Offered</th>
                   <th>Rejected</th>
                   <th>Pending</th>
