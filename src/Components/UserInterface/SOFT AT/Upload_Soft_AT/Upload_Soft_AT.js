@@ -42,8 +42,8 @@ const Upload_Soft_AT = () => {
     if (fileLength > 0) {
       setOpen(true)
       var formData = new FormData();
-      formData.append("Soft_At_report_file", softAt.bytes);
-      formData.append("upload_date", pdate);
+      formData.append("soft_at_status", softAt.bytes);
+      // formData.append("upload_date", pdate);
       const response = await postData('Soft_At/upload/', formData, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
       console.log('response data', response)
       sessionStorage.setItem('upload_soft_at_status', JSON.stringify(response.status_obj))
@@ -119,10 +119,10 @@ const Upload_Soft_AT = () => {
   }
 
   useEffect(() => {
-    pastDate();
+    // pastDate();
     handleDownload();
     // useEffect(()=>{
-      document.title=`${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/',' | ').toUpperCase()}`
+    document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
 
     //  },[])
   }, [])
@@ -130,24 +130,24 @@ const Upload_Soft_AT = () => {
   return (
     <Zoom in='true' timeout={800} style={{ transformOrigin: '1 1 1' }}>
       <div>
-      <div style={{ margin: 5, marginLeft: 10 }}>
+        <div style={{ margin: 5, marginLeft: 10 }}>
           <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
             <Link underline="hover" href='/tools'>Tools</Link>
             <Link underline="hover" href='/tools/soft_at'>Soft AT</Link>
             <Typography color='text.primary'>Upload Soft AT</Typography>
           </Breadcrumbs>
-      </div>
-      <Box style={{position:'fixed',right:20}}>
-      <Tooltip title="Download Soft-At Temp.">
-      <a download href={link}>
-        <Fab color="primary" aria-label="add" >
-              <DownloadIcon />
-        </Fab>
-        </a>
-        </Tooltip>
-      </Box>
+        </div>
+        <Box style={{ position: 'fixed', right: 20 }}>
+          <Tooltip title="Download Soft-At Temp.">
+            <a download href={link}>
+              <Fab color="primary" aria-label="add" >
+                <DownloadIcon />
+              </Fab>
+            </a>
+          </Tooltip>
+        </Box>
         <Box className={classes.main_Box}>
-          <Box className={classes.Back_Box} sx={{width:{md:'75%',xs:'100%'}}}>
+          <Box className={classes.Back_Box} sx={{ width: { md: '75%', xs: '100%' } }}>
             <Box className={classes.Box_Hading} >
               UPLOAD SOFT AT REPORT
             </Box>
@@ -167,7 +167,7 @@ const Upload_Soft_AT = () => {
                   <div></div>
                 </div>
               </Box>
-              <Box className={classes.Front_Box}>
+              {/* <Box className={classes.Front_Box}>
                 <div className={classes.Front_Box_Hading}>
                   Upload Date:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}></span>
                 </div>
@@ -176,14 +176,15 @@ const Upload_Soft_AT = () => {
                     <input required value={pdate} onChange={(event) => setPdate(event.target.value)} max={new Date()} type="date" style={{ width: '165px', height: '35px', fontSize: '20px', fontWeight: 500, borderRadius: "10px" }} />
                   </div>
                 </div>
-              </Box>
+              </Box> */}
 
 
             </Stack>
             <Stack direction={{ xs: "column", sm: "column", md: "row" }} spacing={2} style={{ display: 'flex', justifyContent: "space-around", marginTop: "20px" }}>
-                <Button variant="contained" onClick={handleCancel} style={{ backgroundColor: "red", color: 'white' }} endIcon={<DoDisturbIcon />} >cancel</Button>
+              <Button variant="contained" color="success" onClick={handleSubmit} endIcon={<UploadIcon />}>upload</Button>
 
-                <Button variant="contained" color="success" onClick={handleSubmit} endIcon={<UploadIcon />}>upload</Button>
+              <Button variant="contained" onClick={handleCancel} style={{ backgroundColor: "red", color: 'white' }} endIcon={<DoDisturbIcon />} >cancel</Button>
+
             </Stack>
           </Box>
           {/* <a download href={link}><Button variant="outlined" onClick='' startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />} sx={{ marginTop: "10px", width: "auto" }}><span style={{ fontFamily: "Poppins", fontSize: "22px", fontWeight: 800, textTransform: "none", textDecorationLine: "none" }}>Download Temp</span></Button></a> */}
