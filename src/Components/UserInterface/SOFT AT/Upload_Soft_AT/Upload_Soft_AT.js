@@ -43,7 +43,7 @@ const Upload_Soft_AT = () => {
       setOpen(true)
       var formData = new FormData();
       formData.append("soft_at_status", softAt.bytes);
-      // formData.append("upload_date", pdate);
+      formData.append("upload_date", pdate);
       const response = await postData('Soft_At/upload/', formData, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
       console.log('response data', response)
       sessionStorage.setItem('upload_soft_at_status', JSON.stringify(response.status_obj))
@@ -119,7 +119,7 @@ const Upload_Soft_AT = () => {
   }
 
   useEffect(() => {
-    // pastDate();
+    pastDate();
     handleDownload();
     // useEffect(()=>{
     document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
@@ -167,7 +167,7 @@ const Upload_Soft_AT = () => {
                   <div></div>
                 </div>
               </Box>
-              {/* <Box className={classes.Front_Box}>
+              <Box className={classes.Front_Box}>
                 <div className={classes.Front_Box_Hading}>
                   Upload Date:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}></span>
                 </div>
@@ -176,7 +176,7 @@ const Upload_Soft_AT = () => {
                     <input required value={pdate} onChange={(event) => setPdate(event.target.value)} max={new Date()} type="date" style={{ width: '165px', height: '35px', fontSize: '20px', fontWeight: 500, borderRadius: "10px" }} />
                   </div>
                 </div>
-              </Box> */}
+              </Box>
 
 
             </Stack>

@@ -83,6 +83,7 @@ const RangeWiseDashboard = ({ onData }) => {
             D1_IDSC: 0,
             D1_ODSC: 0,
             D1_RECTIFICATION: 0,
+            D1_OPERATIONS: 0,
             D1_5G_SECTOR_ADDITION:0
         };
 
@@ -382,6 +383,7 @@ const RangeWiseDashboard = ({ onData }) => {
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>IDSC         </th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>ODSC          </th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>RECTIFICATION</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>OPERATIONS</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>5G SECTOR ADDITION</th>
                                     </tr>
                                 </thead>
@@ -403,6 +405,7 @@ const RangeWiseDashboard = ({ onData }) => {
                                                 <th style={{ cursor: 'pointer' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: 'IDSC' })}>{it?.D1_IDSC}</th>
                                                 <th style={{ cursor: 'pointer' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: 'ODSC' })}>{it?.D1_ODSC}</th>
                                                 <th style={{ cursor: 'pointer' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: 'RECTIFICATION' })}>{it?.D1_RECTIFICATION}</th>
+                                                <th style={{ cursor: 'pointer' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: 'OPERATIONS' })}>{it?.D1_OPERATIONS}</th>
                                                 <th style={{ cursor: 'pointer' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: '5G SECTOR ADDITION' })}>{it?.D1_5G_SECTOR_ADDITION}</th>
 
                                             </tr>

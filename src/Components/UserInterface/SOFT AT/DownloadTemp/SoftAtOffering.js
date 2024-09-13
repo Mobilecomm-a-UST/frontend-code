@@ -22,6 +22,7 @@ import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
 import Slide from '@mui/material/Slide';
+import Collapse from '@mui/material/Collapse';
 import Swal from "sweetalert2";
 
 
@@ -30,6 +31,25 @@ import Swal from "sweetalert2";
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" timeout={1000} ref={ref}  {...props} />;
 });
+
+const circleOem = [{id:1,circle:'AP',OEM:['Ericsson']},
+                    {id:2,circle:'BIH',OEM:['Nokia']},
+                    {id:3,circle:'CHN',OEM:['Ericsson','Huawei']},
+                    {id:4,circle:'DEL',OEM:['Ericsson']},
+                    {id:5,circle:'HRY',OEM:['Ericsson','ZTE']},
+                    {id:6,circle:'JK',OEM:['Ericsson']},
+                    {id:7,circle:'JRK',OEM:['Nokia']},
+                    {id:8,circle:'KK',OEM:['Huawei']},
+                    {id:9,circle:'KOL',OEM:['Samsung','ZTE']},
+                    {id:10,circle:'MP',OEM:['Nokia']},
+                    {id:11,circle:'MUM',OEM:['Nokia']},
+                    {id:12,circle:'ORI',OEM:['Nokia']},
+                    {id:13,circle:'PUN',OEM:['Nokia','Samsung','ZTE']},
+                    {id:14,circle:'RAY',OEM:['Ericsson']},
+                    {id:15,circle:'ROTH',OEM:['Ericsson','Huawei']},
+                    {id:16,circle:'UPE',OEM:['Nokia']},
+                    {id:17,circle:'UPW',OEM:['Ericsson','Huawei']},
+                    {id:18,circle:'WB',OEM:['Nokia']},];
 
 const SoftAtOffering = () => {
     const classes = OverAllCss();
@@ -40,8 +60,10 @@ const SoftAtOffering = () => {
     const [circle, setCircle] = useState('')
     const [allcircle, setAllcircle] = useState([])
     const [siteId, setSiteId] = useState('')
+    const [oemList, setOemList] = useState([])
     const [selectOem, setSelectOem] = useState('')
     const [fileData, setFileData] = useState()
+    const [oemShow, setOemShow] = useState(false)
     const [open, setOpen] = useState(false);
     const { loading, action } = useLoadingDialog()
 
@@ -103,8 +125,8 @@ const SoftAtOffering = () => {
                 title: "Alart!",
                 text: "Please Select Date/Range and Select Oem",
                 // icon: "question"
-              });
-              
+            });
+
         }
     }
 
@@ -126,6 +148,17 @@ const SoftAtOffering = () => {
         </Dialog>)
 
     }, [open])
+
+
+    const SelectCircle = (circles) => {
+        console.log('oemsssss', circles)
+        let filterlist = circleOem.filter((item) => item.circle === circles)
+
+        console.log('filterlist', filterlist[0].OEM)
+        setOemList(filterlist[0].OEM)
+        setOemShow(true);
+
+    }
 
 
     const handleClose = () => {
@@ -205,7 +238,7 @@ const SoftAtOffering = () => {
                                             id="demo-simple-select"
                                             value={circle}
                                             label="Select Circle"
-                                            onChange={(e) => setCircle(e.target.value)}
+                                            onChange={(e) => { setCircle(e.target.value); SelectCircle(e.target.value)} }
                                             size="medium"
                                         >
                                             {allcircle?.map((data, index) => (
@@ -216,32 +249,32 @@ const SoftAtOffering = () => {
                                 </Box>
                             </Box>
 
-                            <Box className={classes.Front_Box}>
-                                <Box className={classes.Front_Box_Hading}>
-                                    Select OEM
-                                </Box>
-                                <Box sx={{ marginTop: "5px", float: "left" }}>
-                                    <FormControl sx={{ minWidth: 150 }}>
-                                        <InputLabel id="demo-simple-select-label">Select OEM</InputLabel>
-                                        <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            value={selectOem}
-                                            label="Select Circle"
-                                            onChange={(e) => setSelectOem(e.target.value)}
-                                            size="medium"
-                                        >
-                                            
-                                                <MenuItem  value={'ERICSSON'}>Ericsson</MenuItem>
-                                                <MenuItem  value={'HUAWEI'}>Huawei</MenuItem>
-                                                <MenuItem  value={'NOKIA'}>Nokia</MenuItem>
-                                                <MenuItem  value={'SAMSUNG'}>Samsung</MenuItem>
-                                                <MenuItem  value={'ZTE'}>ZTE</MenuItem>
-                                       
-                                        </Select>
-                                    </FormControl>
-                                </Box>
-                            </Box>
+                            
+                                <Collapse in={oemShow} timeout={500} className={classes.Front_Box} sx={{ display: oemShow ? "block" : "none" }}>
+                                    <Box className={classes.Front_Box_Hading}>
+                                        Select OEM
+                                    </Box>
+                                    <Box sx={{ marginTop: "5px", float: "left" }}>
+                                        <FormControl sx={{ minWidth: 150 }}>
+                                            <InputLabel id="demo-simple-select-label">Select OEM</InputLabel>
+                                            <Select
+                                                labelId="demo-simple-select-label"
+                                                id="demo-simple-select"
+                                                value={selectOem}
+                                                label="Select Circle"
+                                                onChange={(e) => setSelectOem(e.target.value)}
+                                                size="medium"
+                                            >
+                                                {oemList?.map((data, index) => (
+                                                    <MenuItem key={index} value={data.toUpperCase()}>{data}</MenuItem>
+                                                ))}
+                                               
+                                            </Select>
+                                        </FormControl>
+                                    </Box>
+                                </Collapse>
+                     
+
 
                             <Box className={classes.Front_Box}>
                                 <Box className={classes.Front_Box_Hading}>Enter Site ID</Box>

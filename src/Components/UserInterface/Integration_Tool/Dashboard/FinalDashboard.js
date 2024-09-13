@@ -28,7 +28,7 @@ const monthNames = [" ",
     "November",
     "December"
 ];
-const alphaBate = ['B', 'P', 'AD']
+const alphaBate = ['B', 'Q', 'AF']
 
 const colorType = ['#B0EBB4', '#A0DEFF', '#FF9F66', '#ECB176', '#CDE8E5']
 
@@ -103,7 +103,7 @@ const FinalDashboard = () => {
         const sheet1 = workbook.addWorksheet("Date Wise", { properties: { tabColor: { argb: 'B0EBB4' } } })
         const sheet2 = workbook.addWorksheet("Month Wise", { properties: { tabColor: { argb: 'AD88C6' } } })
         const sheet3 = workbook.addWorksheet("Monthly OEM Wise", { properties: { tabColor: { argb: 'A0DEFF' } } })
-        const sheet4 = workbook.addWorksheet("Range Wise", { properties: { tabColor: { argb: 'A0DEFF' } } })
+        const sheet4 = workbook.addWorksheet("Range Wise", { properties: { tabColor: { argb: '5AB2FF' } } })
 
         // sheet.properties.defaultRowHeight = 20;
         // sheet.properties.showGridLines = '#58D68D';
@@ -112,14 +112,14 @@ const FinalDashboard = () => {
 
         // sheet3.mergeCells('A1:S1');
         sheet1.mergeCells('A1:A2');
-        sheet1.mergeCells('B1:O1');
-        sheet1.mergeCells('P1:AC1');
-        sheet1.mergeCells('AD1:AQ1');
+        sheet1.mergeCells('B1:P1');
+        sheet1.mergeCells('Q1:AE1');
+        sheet1.mergeCells('AF1:AT1');
 
         sheet1.getCell('A1').value = 'Circle';
         sheet1.getCell('B1').value = `${sheet1Date[0]}`;
-        sheet1.getCell('P1').value = `${sheet1Date[1]}`;
-        sheet1.getCell('AD1').value = `${sheet1Date[2]}`;
+        sheet1.getCell('Q1').value = `${sheet1Date[1]}`;
+        sheet1.getCell('AF1').value = `${sheet1Date[2]}`;
 
         sheet1.getCell('B2').value = 'DE-GROW';
         sheet1.getCell('C2').value = 'MACRO';
@@ -134,44 +134,47 @@ const FinalDashboard = () => {
         sheet1.getCell('L2').value = 'IDSC';
         sheet1.getCell('M2').value = 'ODSC';
         sheet1.getCell('N2').value = 'RECTIFICATION';
-        sheet1.getCell('O2').value = '5G SECTOR ADDITION';
-
-        sheet1.getCell('P2').value = 'DE-GROW';
-        sheet1.getCell('Q2').value = 'MACRO';
-        sheet1.getCell('R2').value = 'OTHER';
-        sheet1.getCell('S2').value = 'RELOCATION';
-        sheet1.getCell('T2').value = 'RET';
-        sheet1.getCell('U2').value = 'ULS-HPSC';
-        sheet1.getCell('V2').value = 'UPGRADE';
-        sheet1.getCell('W2').value = 'FEMTO';
-        sheet1.getCell('X2').value = 'HT-INCREMENT';
-        sheet1.getCell('Y2').value = 'IBS';
-        sheet1.getCell('Z2').value = 'IDSC';
-        sheet1.getCell('AA2').value = 'ODSC';
-        sheet1.getCell('AB2').value = 'RECTIFICATION';
-        sheet1.getCell('AC2').value = '5G SECTOR ADDITION';
-
-        sheet1.getCell('AD2').value = 'DE-GROW';
-        sheet1.getCell('AE2').value = 'MACRO';
-        sheet1.getCell('AF2').value = 'OTHER';
-        sheet1.getCell('AG2').value = 'RELOCATION';
-        sheet1.getCell('AH2').value = 'RET';
-        sheet1.getCell('AI2').value = 'ULS-HPSC';
-        sheet1.getCell('AJ2').value = 'UPGRADE';
-        sheet1.getCell('AK2').value = 'FEMTO';
-        sheet1.getCell('AL2').value = 'HT-INCREMENT';
-        sheet1.getCell('AM2').value = 'IBS';
-        sheet1.getCell('AN2').value = 'IDSC';
-        sheet1.getCell('AO2').value = 'ODSC';
-        sheet1.getCell('AP2').value = 'RECTIFICATION';
-        sheet1.getCell('AQ2').value = '5G SECTOR ADDITION';
+        sheet1.getCell('O2').value = 'OPERATIONS'; // Added OPERATIONS here
+        sheet1.getCell('P2').value = '5G SECTOR ADDITION'; // 5G SECTOR ADDITION retained
+        
+        sheet1.getCell('Q2').value = 'DE-GROW';
+        sheet1.getCell('R2').value = 'MACRO';
+        sheet1.getCell('S2').value = 'OTHER';
+        sheet1.getCell('T2').value = 'RELOCATION';
+        sheet1.getCell('U2').value = 'RET';
+        sheet1.getCell('V2').value = 'ULS-HPSC';
+        sheet1.getCell('W2').value = 'UPGRADE';
+        sheet1.getCell('X2').value = 'FEMTO';
+        sheet1.getCell('Y2').value = 'HT-INCREMENT';
+        sheet1.getCell('Z2').value = 'IBS';
+        sheet1.getCell('AA2').value = 'IDSC';
+        sheet1.getCell('AB2').value = 'ODSC';
+        sheet1.getCell('AC2').value = 'RECTIFICATION';
+        sheet1.getCell('AD2').value = 'OPERATIONS'; // Added OPERATIONS here
+        sheet1.getCell('AE2').value = '5G SECTOR ADDITION'; // 5G SECTOR ADDITION retained
+        
+        sheet1.getCell('AF2').value = 'DE-GROW';
+        sheet1.getCell('AG2').value = 'MACRO';
+        sheet1.getCell('AH2').value = 'OTHER';
+        sheet1.getCell('AI2').value = 'RELOCATION';
+        sheet1.getCell('AJ2').value = 'RET';
+        sheet1.getCell('AK2').value = 'ULS-HPSC';
+        sheet1.getCell('AL2').value = 'UPGRADE';
+        sheet1.getCell('AM2').value = 'FEMTO';
+        sheet1.getCell('AN2').value = 'HT-INCREMENT';
+        sheet1.getCell('AO2').value = 'IBS';
+        sheet1.getCell('AP2').value = 'IDSC';
+        sheet1.getCell('AQ2').value = 'ODSC';
+        sheet1.getCell('AR2').value = 'RECTIFICATION';
+        sheet1.getCell('AS2').value = 'OPERATIONS'; // Added OPERATIONS here
+        sheet1.getCell('AT2').value = '5G SECTOR ADDITION'; // 5G SECTOR ADDITION retained
 
         /// sheet 2 ///
 
         sheet2.mergeCells('A1:A2');
-        sheet2.mergeCells('B1:O1');
-        sheet2.mergeCells('P1:AC1');
-        sheet2.mergeCells('AD1:AQ1');
+        sheet2.mergeCells('B1:P1');
+        sheet2.mergeCells('Q1:AE1');
+        sheet2.mergeCells('AF1:AT1');
 
         sheet2.getCell('A1').value = 'Circle';
         {
@@ -199,37 +202,40 @@ const FinalDashboard = () => {
         sheet2.getCell('L2').value = 'IDSC';
         sheet2.getCell('M2').value = 'ODSC';
         sheet2.getCell('N2').value = 'RECTIFICATION';
-        sheet2.getCell('O2').value = '5G SECTOR ADDITION';
+        sheet2.getCell('O2').value = 'OPERATIONS'; // Added OPERATIONS here
+        sheet2.getCell('P2').value = '5G SECTOR ADDITION';
 
-        sheet2.getCell('P2').value = 'DE-GROW';
-        sheet2.getCell('Q2').value = 'MACRO';
-        sheet2.getCell('R2').value = 'OTHER';
-        sheet2.getCell('S2').value = 'RELOCATION';
-        sheet2.getCell('T2').value = 'RET';
-        sheet2.getCell('U2').value = 'ULS-HPSC';
-        sheet2.getCell('V2').value = 'UPGRADE';
-        sheet2.getCell('W2').value = 'FEMTO';
-        sheet2.getCell('X2').value = 'HT-INCREMENT';
-        sheet2.getCell('Y2').value = 'IBS';
-        sheet2.getCell('Z2').value = 'IDSC';
-        sheet2.getCell('AA2').value = 'ODSC';
-        sheet2.getCell('AB2').value = 'RECTIFICATION';
-        sheet2.getCell('AC2').value = '5G SECTOR ADDITION';
+        sheet2.getCell('Q2').value = 'DE-GROW';
+        sheet2.getCell('R2').value = 'MACRO';
+        sheet2.getCell('S2').value = 'OTHER';
+        sheet2.getCell('T2').value = 'RELOCATION';
+        sheet2.getCell('U2').value = 'RET';
+        sheet2.getCell('V2').value = 'ULS-HPSC';
+        sheet2.getCell('W2').value = 'UPGRADE';
+        sheet2.getCell('X2').value = 'FEMTO';
+        sheet2.getCell('Y2').value = 'HT-INCREMENT';
+        sheet2.getCell('Z2').value = 'IBS';
+        sheet2.getCell('AA2').value = 'IDSC';
+        sheet2.getCell('AB2').value = 'ODSC';
+        sheet2.getCell('AC2').value = 'RECTIFICATION';
+        sheet2.getCell('AD2').value = 'OPERATIONS'; // Added OPERATIONS here
+        sheet2.getCell('AE2').value = '5G SECTOR ADDITION';
 
-        sheet2.getCell('AD2').value = 'DE-GROW';
-        sheet2.getCell('AE2').value = 'MACRO';
-        sheet2.getCell('AF2').value = 'OTHER';
-        sheet2.getCell('AG2').value = 'RELOCATION';
-        sheet2.getCell('AH2').value = 'RET';
-        sheet2.getCell('AI2').value = 'ULS-HPSC';
-        sheet2.getCell('AJ2').value = 'UPGRADE';
-        sheet2.getCell('AK2').value = 'FEMTO';
-        sheet2.getCell('AL2').value = 'HT-INCREMENT';
-        sheet2.getCell('AM2').value = 'IBS';
-        sheet2.getCell('AN2').value = 'IDSC';
-        sheet2.getCell('AO2').value = 'ODSC';
-        sheet2.getCell('AP2').value = 'RECTIFICATION';
-        sheet2.getCell('AQ2').value = '5G SECTOR ADDITION';
+        sheet2.getCell('AF2').value = 'DE-GROW';
+        sheet2.getCell('AG2').value = 'MACRO';
+        sheet2.getCell('AH2').value = 'OTHER';
+        sheet2.getCell('AI2').value = 'RELOCATION';
+        sheet2.getCell('AJ2').value = 'RET';
+        sheet2.getCell('AK2').value = 'ULS-HPSC';
+        sheet2.getCell('AL2').value = 'UPGRADE';
+        sheet2.getCell('AM2').value = 'FEMTO';
+        sheet2.getCell('AN2').value = 'HT-INCREMENT';
+        sheet2.getCell('AO2').value = 'IBS';
+        sheet2.getCell('AP2').value = 'IDSC';
+        sheet2.getCell('AQ2').value = 'ODSC';
+        sheet2.getCell('AR2').value = 'RECTIFICATION';
+        sheet2.getCell('AS2').value = 'OPERATIONS'; // Added OPERATIONS here
+        sheet2.getCell('AT2').value = '5G SECTOR ADDITION'; 
 
         //          SHEET 3
 
@@ -244,7 +250,7 @@ const FinalDashboard = () => {
 
         //          SHEET 4
         sheet4.mergeCells('A1:A2');
-        sheet4.mergeCells('B1:O1');
+        sheet4.mergeCells('B1:P1');
 
         sheet4.getCell('A1').value = 'Circle';
         sheet4.getCell('B1').value = `${sheet4Date[0]} to ${sheet4Date[1]}`;
@@ -262,7 +268,8 @@ const FinalDashboard = () => {
         sheet4.getCell('L2').value = 'IDSC';
         sheet4.getCell('M2').value = 'ODSC';
         sheet4.getCell('N2').value = 'RECTIFICATION';
-        sheet4.getCell('O2').value = '5G SECTOR ADDITION';
+        sheet4.getCell('O2').value = 'OPERATIONS';
+        sheet4.getCell('P2').value = '5G SECTOR ADDITION';
 
 
         sheet1.columns = [
@@ -280,6 +287,7 @@ const FinalDashboard = () => {
             { key: 'D1_IDSC' },
             { key: 'D1_ODSC' },
             { key: 'D1_RECTIFICATION' },
+            { key: 'D1_OPERATIONS' },
             { key: 'D1_5G_SECTOR_ADDITION' },
 
             { key: 'D2_DE_GROW' },
@@ -295,6 +303,7 @@ const FinalDashboard = () => {
             { key: 'D2_IDSC' },
             { key: 'D2_ODSC' },
             { key: 'D2_RECTIFICATION' },
+            { key: 'D2_OPERATIONS' },
             { key: 'D2_5G_SECTOR_ADDITION' },
 
             { key: 'D3_DE_GROW' },
@@ -310,6 +319,7 @@ const FinalDashboard = () => {
             { key: 'D3_IDSC' },
             { key: 'D3_ODSC' },
             { key: 'D3_RECTIFICATION' },
+            { key: 'D3_OPERATIONS' },
             { key: 'D3_5G_SECTOR_ADDITION' },
 
         ]
@@ -329,6 +339,7 @@ const FinalDashboard = () => {
                 D1_IDSC: Number(item?.D1_IDSC),
                 D1_ODSC: Number(item?.D1_ODSC),
                 D1_RECTIFICATION: Number(item?.D1_RECTIFICATION),
+                D1_OPERATIONS: Number(item?.D1_OPERATIONS),
                 D1_5G_SECTOR_ADDITION: Number(item?.D1_5G_SECTOR_ADDITION),
             
                 D2_DE_GROW: Number(item?.D2_DE_GROW),
@@ -344,6 +355,7 @@ const FinalDashboard = () => {
                 D2_IDSC: Number(item?.D2_IDSC),
                 D2_ODSC: Number(item?.D2_ODSC),
                 D2_RECTIFICATION: Number(item?.D2_RECTIFICATION),
+                D2_OPERATIONS: Number(item?.D2_OPERATIONS),
                 D2_5G_SECTOR_ADDITION: Number(item?.D2_5G_SECTOR_ADDITION),
             
                 D3_DE_GROW: Number(item?.D3_DE_GROW),
@@ -359,6 +371,7 @@ const FinalDashboard = () => {
                 D3_IDSC: Number(item?.D3_IDSC),
                 D3_ODSC: Number(item?.D3_ODSC),
                 D3_RECTIFICATION: Number(item?.D3_RECTIFICATION),
+                D3_OPREATIONS: Number(item?.D3_OPREATIONS),
                 D3_5G_SECTOR_ADDITION: Number(item?.D3_5G_SECTOR_ADDITION),
 
             })
@@ -381,6 +394,7 @@ const FinalDashboard = () => {
             { key: 'M1_IDSC' },
             { key: 'M1_ODSC' },
             { key: 'M1_RECTIFICATION' },
+            { key: 'M1_OPERATIONS' },
             { key: 'M1_5G_SECTOR_ADDITION' },
 
             { key: 'M2_DE_GROW' },
@@ -396,6 +410,7 @@ const FinalDashboard = () => {
             { key: 'M2_IDSC' },
             { key: 'M2_ODSC' },
             { key: 'M2_RECTIFICATION' },
+            { key: 'M2_OPERATIONS' },
             { key: 'M2_5G_SECTOR_ADDITION' },
 
             { key: 'M3_DE_GROW' },
@@ -411,6 +426,7 @@ const FinalDashboard = () => {
             { key: 'M3_IDSC' },
             { key: 'M3_ODSC' },
             { key: 'M3_RECTIFICATION' },
+            { key: 'M3_OPERATIONS' },
             { key: 'M3_5G_SECTOR_ADDITION' },
 
         ]
@@ -430,6 +446,7 @@ const FinalDashboard = () => {
                 M1_IDSC: Number(item?.M1_IDSC),
                 M1_ODSC: Number(item?.M1_ODSC),
                 M1_RECTIFICATION: Number(item?.M1_RECTIFICATION),
+                M1_OPERATIONS: Number(item?.M1_OPERATIONS),
                 M1_5G_SECTOR_ADDITION: Number(item?.M1_5G_SECTOR_ADDITION),
             
                 M2_DE_GROW: Number(item?.M2_DE_GROW),
@@ -445,6 +462,7 @@ const FinalDashboard = () => {
                 M2_IDSC: Number(item?.M2_IDSC),
                 M2_ODSC: Number(item?.M2_ODSC),
                 M2_RECTIFICATION: Number(item?.M2_RECTIFICATION),
+                M2_OPERATIONS: Number(item?.M2_OPERATIONS),
                 M2_5G_SECTOR_ADDITION: Number(item?.M2_5G_SECTOR_ADDITION),
             
                 M3_DE_GROW: Number(item?.M3_DE_GROW),
@@ -460,6 +478,7 @@ const FinalDashboard = () => {
                 M3_IDSC: Number(item?.M3_IDSC),
                 M3_ODSC: Number(item?.M3_ODSC),
                 M3_RECTIFICATION: Number(item?.M3_RECTIFICATION),
+                M3_OPERATIONS: Number(item?.M3_OPERATIONS),
                 M3_5G_SECTOR_ADDITION: Number(item?.M3_5G_SECTOR_ADDITION),
             })
         })
@@ -498,6 +517,7 @@ const FinalDashboard = () => {
             { key: 'D1_IDSC' },
             { key: 'D1_ODSC' },
             { key: 'D1_RECTIFICATION' },
+            { key: 'D1_OPERATIONS' },
             { key: 'D1_5G_SECTOR_ADDITION' },
 
         ]
@@ -517,6 +537,7 @@ const FinalDashboard = () => {
                 D1_IDSC: Number(item?.D1_IDSC),
                 D1_ODSC: Number(item?.D1_ODSC),
                 D1_RECTIFICATION: Number(item?.D1_RECTIFICATION),
+                D1_OPERATIONS: Number(item?.D1_OPERATIONS),
                 D1_5G_SECTOR_ADDITION: Number(item?.D1_5G_SECTOR_ADDITION),
 
             })

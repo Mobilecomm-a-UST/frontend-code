@@ -118,21 +118,21 @@ const TicketStatus = () => {
     // Handle Submit data to update ticket status
     const handleSubmit = async (e) => {
         e.preventDefault();
-        action(true)
-        const responce = await makePostRequest(`Zero_Count_Rna_Payload_Tool/ticket_status_open_close/${ticketDipForm.ticket_id}/`, ticketDipForm)
-        // const response = await fetch(`${ServerURL}/Zero_Count_Rna_Payload_Tool/ticket_status_open_close/${ticketDipForm.ticket_id}/`, {
-        //     method: 'POST',
-        //     headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}`,'Content-Type':'application/json' },
-        //     body: JSON.stringify(ticketDipForm),
-        //   });
-        // console.log('get responce ' , responce)
-        if (responce.Status) {
-            action(false)
-            setPayloadStatus(false)
-            handleTotalData()
-        }
-        else {
-            action(false)
+      
+        try {
+            action(true)
+            const response = await makePostRequest(`Zero_Count_Rna_Payload_Tool/ticket_status_open_close/${ticketDipForm.ticket_id}/`, ticketDipForm);
+        
+            // console.log('Response received: ', response);
+    
+            if (response.Status) {
+                setPayloadStatus(false);
+                handleTotalData();
+            }
+        } catch (error) {
+            console.error('Error occurred: ', error);
+        } finally {
+            action(false);
         }
     }
 
@@ -835,7 +835,7 @@ const TicketStatus = () => {
                                         placeholder="Date"
                                         label="Date"
                                         name="Date"
-                                        value={ticketDipForm.Date}
+                                        value={handleDateFormets(ticketDipForm.Date)}
                                         onChange={handleChange}
                                         InputProps={{
                                             readOnly: true,
@@ -851,7 +851,7 @@ const TicketStatus = () => {
                                         placeholder="Open Date"
                                         label="Open Date"
                                         name="Open_Date"
-                                        value={ticketDipForm.Open_Date}
+                                        value={handleDateFormets(ticketDipForm.Open_Date)}
                                         onChange={handleChange}
                                         InputProps={{
                                             readOnly: true,
@@ -893,18 +893,7 @@ const TicketStatus = () => {
                                     />
                                 </Grid>
                                 <Grid item xs={6}>
-                                    {/* <TextField
-                                          variant="outlined"
-                                          required
-                                          fullWidth
-                                          placeholder="Status"
-                                          label="Status"
-                                          name="Status"
-                                          value={ticketDipForm.Status}
-                                          onChange={handleChange}
-                                          size="small"
-                                          type='text'
-                                    /> */}
+                                 
                                     <FormControl fullWidth>
                                         <InputLabel id="demo-simple-select-label">Status</InputLabel>
                                         <Select
@@ -996,7 +985,7 @@ const TicketStatus = () => {
                                         type='text'
                                     />
                                 </Grid>
-                                <Grid item xs={12}>
+                                <Grid item xs={6}>
                                     <TextField
                                         variant="outlined"
                                         fullWidth
