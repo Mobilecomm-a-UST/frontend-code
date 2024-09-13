@@ -47,6 +47,9 @@ const Circle_Wise = () => {
   const [pendingData, setPendingData] = useState([])
   const [alarmBucket, setAlarmBucket] = useState([])
   const [ageingData, setAgeingData] = useState([])
+  const [alarmOpen, setAlarmOpen] = useState(false)
+  const [hiperAlarmBucket, setHiperAlarmBucket] = useState([])
+  const [bucketTempData, setBucketTempData] = useState([])
   const [open, setOpen] = useState(false)
   const classes = useStyles()
   const [latestDate, setLatestDate] = useState('')
@@ -602,6 +605,20 @@ const Circle_Wise = () => {
   }
 
 
+  const handleAlarmBucketFilter = (event) => {
+    setBucketTempData([])
+    Object.keys(hiperAlarmBucket).map((key, item) => {
+
+      if (key === event.toUpperCase()) {
+        console.log('event', key, hiperAlarmBucket[key])
+        setBucketTempData({lable:key, data:hiperAlarmBucket[key]})
+      }
+    })
+
+    setAlarmOpen(true)
+
+  }
+
   // ********** Pending Table Data **********////
   const tablePendingData = () => {
     var arr = [];
@@ -712,7 +729,7 @@ const Circle_Wise = () => {
       else {
         return (
           <tr key={index} className={classes.hover} style={{ textAlign: "center", fontWeigth: 700 }}>
-            <td style={{ fontWeight: 'bold', border: '1px solid black' }}>{item.row_labels}</td>
+            <td style={{ fontWeight: 'bold', border: '1px solid black' ,cursor:'pointer'  }}  className={classes.hover} onClick={() => { handleAlarmBucketFilter(item.row_labels) }}>{item.row_labels}</td>
             <td style={{ fontWeight: 'bold', border: '1px solid black' }}>{item.Count_of_Alarm_Bucket}</td>
           </tr>
         )
@@ -898,6 +915,7 @@ const Circle_Wise = () => {
 
   const handleClose = () => {
     setOpen(false)
+    setAlarmOpen(false)
   }
 
   // ********** Handle Clear *************//
@@ -1037,6 +1055,43 @@ const Circle_Wise = () => {
       </Dialog>
     )
   }
+
+    // ************ Alarm Hiperlink Dialog Box .....
+
+    const handleAlarmDialog = useCallback(() => {
+      return (
+        <Dialog open={alarmOpen} onClose={handleClose} fullWidth={true} maxWidth='lg'>
+          <DialogContent>
+            <TableContainer sx={{ maxHeight: 400, marginTop: 3, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} component={Paper}>
+              <table border="3" style={{ width: "100%", border: "1px solid" }}>
+                <tr>
+                  <th colspan="6" style={{ fontSize: 24, backgroundColor: "#AF7AC5", color: "white", }}>Row Labels (<span style={{ color: "white",fontSize: 19 }}> {bucketTempData?.lable}</span> )</th>
+                </tr>
+                <tr style={{ fontSize: 16, backgroundColor: "#223354", color: "white", }}>
+                  <th>Sr. No.</th>
+                  <th>Circle</th>
+                  <th>Site ID</th>
+                  <th>Status</th>
+                  <th>Aging</th>
+                  <th>Alarms Details</th>
+                </tr>
+                {bucketTempData.data?.map((data,index) => (
+                  <tr key={index} className={classes.hover} style={{ textAlign: "center", fontWeigth: 700 }}>
+                    <td style={{ fontWeight: 'bold', border: '1px solid black' }} >{index+1}</td>
+                    <td style={{ fontWeight: 'bold', border: '1px solid black' }} >{data.CIRCLE}</td>
+                    <td style={{ fontWeight: 'bold', border: '1px solid black' }}>{data.SITE_ID}</td>
+                    <td style={{ fontWeight: 'bold', border: '1px solid black' , color: data.Status === 'Rejected' ? 'red' : '' }}>{data.Status}</td>
+                    <td style={{ fontWeight: 'bold', border: '1px solid black' }}>{data.Aging}</td>
+                    <td style={{ fontWeight: 'bold', border: '1px solid black' }}>{data.Alarms_Details}</td>
+                   
+                  </tr>
+                ))}
+              </table>
+            </TableContainer>
+          </DialogContent>
+        </Dialog>
+      )
+    }, [alarmOpen])
 
   useEffect(() => {
     if (data) {
@@ -1258,6 +1313,8 @@ const Circle_Wise = () => {
           </Box>
         </div>
       </Zoom>
+
+      {handleAlarmDialog()}
       {filterDialog()}
       {loading}
     </>

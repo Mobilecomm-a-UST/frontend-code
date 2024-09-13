@@ -14,6 +14,7 @@ import FileUploadIcon from '@rsuite/icons/FileUpload';
 import { useNavigate } from 'react-router-dom'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ViewsUnauthorizeIcon from '@rsuite/icons/ViewsUnauthorize';
+import AddOutlineIcon from '@rsuite/icons/AddOutline';
 import CheckOutlineIcon from '@rsuite/icons/CheckOutline';
 import McomTool from './McomTool';
 const UploadData = lazy(() => import('./Upload/UploadData'));
@@ -105,8 +106,8 @@ const McomePhycical = () => {
                                                     Acceptance Summary
                                                 </Nav.Item>
                                             </Nav.Menu>
-                                            <Nav.Item eventKey="2" placement="rightStart" icon={<FileUploadIcon />} onClick={() => { navigate('/tools/mcom_physical_at/upload_physical_at'); show(); setMenuButton(true) }}>
-                                                Upload Physical AT
+                                            <Nav.Item eventKey="2" placement="rightStart" icon={<AddOutlineIcon />} onClick={() => { navigate('/tools/mcom_physical_at/add_new_site'); show(); setMenuButton(true) }}>
+                                                Add New Site
                                             </Nav.Item>
                                             {/* <Nav.Item eventKey="3" placement="rightStart" icon={<PageIcon />} onClick={() => { navigate('/tools/soft_at/view_report'); show(); setMenuButton(true) }}>
                                                 View Report
@@ -130,7 +131,7 @@ const McomePhycical = () => {
                         <Suspense fallback={<div>loading............</div>}>
                             <Routes>
                                 <Route element={<McomTool />} path="/" />
-                                <Route element={<UploadData />} path="/upload_physical_at" />
+                                <Route element={<UploadData />} path="/add_new_site" />
                                 <Route element={<AcceptanceSummary />} path="/acceptance_summary" />
                                
 

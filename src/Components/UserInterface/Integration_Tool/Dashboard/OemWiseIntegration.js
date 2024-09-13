@@ -307,6 +307,7 @@ const OemWiseIntegration = ({ onData }) => {
                                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>IDSC</th>
                                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>ODSC</th>
                                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>RECTIFICATION</th>
+                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>OPERATIONS</th>
                                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>OTHERS</th>
 
                                 </tr>
@@ -327,6 +328,7 @@ const OemWiseIntegration = ({ onData }) => {
                                         <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'IDSC' })}>{item.IDSC}</th>
                                         <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'ODSC' })}>{item.ODSC}</th>
                                         <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'RECTIFICATION' })}>{item.RECTIFICATION}</th>
+                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'OPERATIONS' })}>{item.OPERATIONS}</th>
                                         <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'OTHERS' })}>{item.OTHERS}</th>
 
                                     </tr>

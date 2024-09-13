@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import GearIcon from '@rsuite/icons/Gear';
+import Slide from '@mui/material/Slide';
 import Fab from '@mui/material/Fab';
 import Tooltip from '@mui/material/Tooltip';
 import DownloadIcon from '@mui/icons-material/Download';
@@ -128,13 +129,13 @@ const UploadData = () => {
     }, [])
 
     return (
-        <Zoom in='true' timeout={800} style={{ transformOrigin: '1 1 1' }}>
+        <>
             <div>
                 <div style={{ margin: 5, marginLeft: 10 }}>
                     <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
                         <Link underline="hover" href='/tools'>Tools</Link>
                         <Link underline="hover" href='/tools/mcom_physical_at'>Physical AT</Link>
-                        <Typography color='text.primary'>Upload Physical AT</Typography>
+                        <Typography color='text.primary'>ADD NEW SITE</Typography>
                     </Breadcrumbs>
                 </div>
                 {/* <Box style={{ position: 'fixed', right: 20 }}>
@@ -146,47 +147,56 @@ const UploadData = () => {
                         </a>
                     </Tooltip>
                 </Box> */}
-                <Box className={classes.main_Box}>
-                    <Box className={classes.Back_Box} sx={{ width: { md: '75%', xs: '100%' } }}>
-                        <Box className={classes.Box_Hading} >
-                            UPLOAD PHYSICAL AT REPORT
-                        </Box>
-                        <Stack spacing={2} sx={{ marginTop: "-40px" }} direction={'column'}>
-                            <Box className={classes.Front_Box} >
-                                <div className={classes.Front_Box_Hading}>
-                                    Select Physical AT File:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{softAt.filename}</span>
-                                </div>
-                                <div className={classes.Front_Box_Select_Button} >
-                                    <div style={{ float: "left" }}>
-                                        <Button variant="contained" component="label" color={softAt.state ? "warning" : "primary"}>
-                                            select file
-                                            <input required onChange={handlesoftAt} hidden accept="/*" multiple type="file" />
-                                        </Button>
-                                    </div>
-                                    <div>  <span style={{ display: show ? 'inherit' : 'none', color: 'red', fontSize: '18px', fontWeight: 600 }}>This Field Is Required !</span> </div>
-                                    <div></div>
-                                </div>
+                <Slide
+                    direction='left'
+                    in='true'
+                    // style={{ transformOrigin: '0 0 0' }}
+                    timeout={1000}
+                >
+                    <Box>
+                        <Box className={classes.main_Box}>
+                            <Box className={classes.Back_Box} sx={{ width: { md: '75%', xs: '100%' } }}>
+                                <Box className={classes.Box_Hading} >
+                                    ADD NEW SITE PHYSICAL AT
+                                </Box>
+                                <Stack spacing={2} sx={{ marginTop: "-40px" }} direction={'column'}>
+                                    <Box className={classes.Front_Box} >
+                                        <div className={classes.Front_Box_Hading}>
+                                            Select Excel File:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{softAt.filename}</span>
+                                        </div>
+                                        <div className={classes.Front_Box_Select_Button} >
+                                            <div style={{ float: "left" }}>
+                                                <Button variant="contained" component="label" color={softAt.state ? "warning" : "primary"}>
+                                                    select file
+                                                    <input required onChange={handlesoftAt} hidden accept="/*" multiple type="file" />
+                                                </Button>
+                                            </div>
+                                            <div>  <span style={{ display: show ? 'inherit' : 'none', color: 'red', fontSize: '18px', fontWeight: 600 }}>This Field Is Required !</span> </div>
+                                            <div></div>
+                                        </div>
+                                    </Box>
+
+
+
+                                </Stack>
+                                <Stack direction={{ xs: "column", sm: "column", md: "row" }} spacing={2} style={{ display: 'flex', justifyContent: "space-around", marginTop: "20px" }}>
+
+                                    <Button variant="contained" color="success" onClick={handleSubmit} endIcon={<UploadIcon />}>upload</Button>
+
+                                    <Button variant="contained" onClick={handleCancel} style={{ backgroundColor: "red", color: 'white' }} endIcon={<DoDisturbIcon />} >cancel</Button>
+
+                                </Stack>
                             </Box>
-                     
-
-
-                        </Stack>
-                        <Stack direction={{ xs: "column", sm: "column", md: "row" }} spacing={2} style={{ display: 'flex', justifyContent: "space-around", marginTop: "20px" }}>
-
-                            <Button variant="contained" color="success" onClick={handleSubmit} endIcon={<UploadIcon />}>upload</Button>
-
-                            <Button variant="contained" onClick={handleCancel} style={{ backgroundColor: "red", color: 'white' }} endIcon={<DoDisturbIcon />} >cancel</Button>
-
-                        </Stack>
+                            {/* <a download href={link}><Button variant="outlined" onClick='' startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />} sx={{ marginTop: "10px", width: "auto" }}><span style={{ fontFamily: "Poppins", fontSize: "22px", fontWeight: 800, textTransform: "none", textDecorationLine: "none" }}>Download Temp</span></Button></a> */}
+                        </Box>
+                        {loadingDialog()}
                     </Box>
-                    {/* <a download href={link}><Button variant="outlined" onClick='' startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />} sx={{ marginTop: "10px", width: "auto" }}><span style={{ fontFamily: "Poppins", fontSize: "22px", fontWeight: 800, textTransform: "none", textDecorationLine: "none" }}>Download Temp</span></Button></a> */}
-                </Box>
-                {loadingDialog()}
-                {/* {handleError()} */}
 
+                    {/* {handleError()} */}
+                </Slide>
 
             </div>
-        </Zoom>
+        </>
     )
 }
 
