@@ -77,7 +77,7 @@ const SoftAtStatus = () => {
     }
 
     const handleSubmit = async () => {
-        if ((date) || (fromDate)) {
+       
             action(true)
             var formData = new FormData();
             formData.append('date', handleDateFormat(date))
@@ -96,13 +96,8 @@ const SoftAtStatus = () => {
                 action(false)
             }
 
-            // if(response){
-            //     setFileData(response.data)
-            // }
-        }
-        else {
-
-        }
+           
+       
     }
 
     const handleDialogBox = useCallback(() => {
