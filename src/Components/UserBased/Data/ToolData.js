@@ -19,6 +19,7 @@ import TimeIcon from '@rsuite/icons/Time';
 import SingleSourceIcon from '@rsuite/icons/SingleSource';
 import BlockIcon from '@rsuite/icons/Block';
 import TreeIcon from '@rsuite/icons/Tree';
+import ParagraphIcon from '@rsuite/icons/Paragraph';
 import { groupBy } from 'lodash';
 
 // const userType =  ['admin','quality','central','soft_at','circle']
@@ -210,7 +211,16 @@ const ToolData = [
         link: '/tools/mcom_physical_at',
         groupBy:['soft_at_team', 'admin']
 
-    }
+    },{
+        id: 25,
+        name: 'N Scriptor',
+        title: 'This is a IX Tracker Tool',
+        icons: ParagraphIcon,
+        link: '/tools/nomenclature_scriptor',
+        groupBy:['soft_at_team', 'admin']
+
+    },
+
 
 
 
