@@ -15,11 +15,12 @@ import { useNavigate } from 'react-router-dom'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ViewsUnauthorizeIcon from '@rsuite/icons/ViewsUnauthorize';
 import AddOutlineIcon from '@rsuite/icons/AddOutline';
-
+import DocPassIcon from '@rsuite/icons/DocPass';
 import CheckOutlineIcon from '@rsuite/icons/CheckOutline';
 import ChangeListIcon from '@rsuite/icons/ChangeList';
 const NscripterTool = lazy(() => import('./NscripterTool'))
 const UploadData = lazy(() => import('./Generate/UploadData'))
+const NomAudit = lazy(() => import('./Audit/NomAudit'))
 
 
 const Nscripter = () => {
@@ -91,6 +92,9 @@ const Nscripter = () => {
                                             <Nav.Item eventKey="2" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/nomenclature_scriptor/generate_script'); show(); setMenuButton(true) }}>
                                                Genetate Script
                                             </Nav.Item>
+                                            <Nav.Item eventKey="3" placement="rightStart" icon={<DocPassIcon />} onClick={() => { navigate('/tools/nomenclature_scriptor/nom_audit'); show(); setMenuButton(true) }}>
+                                             NOM Audit
+                                            </Nav.Item>
                                             {/* <Nav.Item eventKey="3" placement="rightStart" icon={<PageIcon />} onClick={() => { navigate('/tools/soft_at/view_report'); show(); setMenuButton(true) }}>
                                                 View Report
                                             </Nav.Item>
@@ -114,6 +118,7 @@ const Nscripter = () => {
                             <Routes>
                                 <Route element={<NscripterTool />} path="/" />
                                 <Route element={<UploadData />} path="/generate_script" />
+                                <Route element={<NomAudit />} path="/nom_audit" />
 
 
                             </Routes>

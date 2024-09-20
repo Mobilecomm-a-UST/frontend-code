@@ -14,7 +14,7 @@ import GearIcon from '@rsuite/icons/Gear';
 import Slide from '@mui/material/Slide';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
-const UploadData = () => {
+const NomAudit = () => {
     const [softAt, setSoftAt] = useState({ filename: "", bytes: "" })
     const [pdate, setPdate] = useState()
     const [fileData, setFileData] = useState()
@@ -24,6 +24,21 @@ const UploadData = () => {
     const fileLength = softAt.filename.length
     const classes = OverAllCss();
     var link = `${ServerURL}${fileData}`;
+    const [preFiles, setPreFiles] = useState([]);
+    const [postFiles, setPostFiles] = useState([]);
+
+    const handlePreFolderSelection = (event) => {
+        // const selectedFiles = Array.from(event.target.files);
+        // const filePaths = selectedFiles.map(file => file.webkitRelativePath);
+        console.log('filePaths', event.target.files[0])
+        setPreFiles(event.target.files);
+    };
+    const handlePostFolderSelection = (event) => {
+        // const selectedFiles = Array.from(event.target.files);
+        // const filePaths = selectedFiles.map(file => file.webkitRelativePath);
+        console.log('post', event.target.files)
+        setPostFiles(event.target.files);
+    };
 
     const handlesoftAt = (event) => {
         setShow(false);
@@ -37,13 +52,22 @@ const UploadData = () => {
     }
 
     const handleSubmit = async () => {
-        if (fileLength > 0) {
+        if (preFiles.length > 0 && postFiles.length > 0) {
             setOpen(true)
             var formData = new FormData();
-            formData.append("planned_site_file", softAt.bytes);
+            for (let i = 0; i < preFiles.length(); i++) {
+                    console.log('pre files' , preFiles[i])
+                formData.append(`pre_files_${i}`, preFiles[i]);
+            }
+            for (let i = 0; i < postFiles.length(); i++) {
+                console.log('post files' , postFiles[i])
+                formData.append(`post_files_${i}`, postFiles[i]);
+            }
+            // formData.append("pre_files", preFiles);
+            // formData.append("post_files",postFiles);
 
-            const response = await postData('nomenclature_scriptor/generate_script', formData, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
-         
+            const response = await postData('NOM_AUDIT/pre_post_audit_process/', formData, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
+
 
             if (response.status === true) {
                 setOpen(false)
@@ -52,7 +76,7 @@ const UploadData = () => {
                     title: "Done",
                     text: `${response.message}`,
                 });
-                // navigate('status')
+                console.log('sssssssssssssssssssss', response)
                 setOpen(true)
                 setFileData(response.Download_url)
 
@@ -71,7 +95,8 @@ const UploadData = () => {
     };
 
     const handleCancel = () => {
-        setSoftAt({ filename: "", bytes: "" })
+        setPreFiles([]);
+        setPostFiles([]);
     }
 
     // DATA PROCESSING DIALOG BOX...............
@@ -97,14 +122,10 @@ const UploadData = () => {
 
 
     useEffect(() => {
-        // pastDate();
-        // handleDownload();
-        // useEffect(()=>{
+
         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
 
-        //  },[])
     }, [])
-
     return (
         <>
             <div>
@@ -112,7 +133,7 @@ const UploadData = () => {
                     <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
                         <Link underline="hover" href='/tools'>Tools</Link>
                         <Link underline="hover" href='/tools/nomenclature_scriptor'>Nomenclature Scriptor</Link>
-                        <Typography color='text.primary'>Generate Script</Typography>
+                        <Typography color='text.primary'>Nomenclature Audit</Typography>
                     </Breadcrumbs>
                 </div>
                 {/* <Box style={{ position: 'fixed', right: 20 }}>
@@ -134,22 +155,48 @@ const UploadData = () => {
                         <Box className={classes.main_Box}>
                             <Box className={classes.Back_Box} sx={{ width: { md: '75%', xs: '100%' } }}>
                                 <Box className={classes.Box_Hading} >
-                                     Generate Nomenclature Script
+                                    Generate Nomenclature Audit
                                 </Box>
                                 <Stack spacing={2} sx={{ marginTop: "-40px" }} direction={'column'}>
                                     <Box className={classes.Front_Box} >
                                         <div className={classes.Front_Box_Hading}>
-                                            Select Planned Site File:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{softAt.filename}</span>
+                                            Select Pre Files:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{softAt.filename}</span>
                                         </div>
                                         <div className={classes.Front_Box_Select_Button} >
                                             <div style={{ float: "left" }}>
-                                                <Button variant="contained" component="label" color={softAt.state ? "warning" : "primary"}>
+                                                <Button variant="contained" component="label" color={preFiles.length > 0 ? "warning" : "primary"}>
                                                     select file
-                                                    <input required onChange={handlesoftAt} hidden accept="/*" multiple type="file" />
+                                                    <input required hidden accept="/*" multiple type="file"
+                                                        webkitdirectory="true"
+                                                        directory="true"
+                                                        onChange={handlePreFolderSelection} />
                                                 </Button>
                                             </div>
+
+                                            {preFiles.length > 0 && <span style={{ color: 'green', fontSize: '18px', fontWeight: 600 }}>Selected File(s) : {preFiles.length}</span>}
+
                                             <div>  <span style={{ display: show ? 'inherit' : 'none', color: 'red', fontSize: '18px', fontWeight: 600 }}>This Field Is Required !</span> </div>
-                                            <div></div>
+                                        </div>
+                                    </Box>
+                                    {/* post files */}
+                                    <Box className={classes.Front_Box} >
+                                        <div className={classes.Front_Box_Hading}>
+                                            Select Post Files:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{softAt.filename}</span>
+                                        </div>
+                                        <div className={classes.Front_Box_Select_Button} >
+                                            <div style={{ float: "left" }}>
+                                                <Button variant="contained" component="label" color={postFiles.length > 0 ? "warning" : "primary"}>
+                                                    select file
+                                                    <input required hidden accept="/*" multiple type="file"
+                                                        webkitdirectory="true"
+                                                        directory="true"
+                                                        onChange={handlePostFolderSelection} />
+                                                </Button>
+                                            </div>
+
+                                            {postFiles.length > 0 && <span style={{ color: 'green', fontSize: '18px', fontWeight: 600 }}>Selected File(s) : {postFiles.length}</span>}
+
+                                            <div>  <span style={{ display: show ? 'inherit' : 'none', color: 'red', fontSize: '18px', fontWeight: 600 }}>This Field Is Required !</span> </div>
                                         </div>
                                     </Box>
 
@@ -177,4 +224,4 @@ const UploadData = () => {
     )
 }
 
-export default UploadData
+export default NomAudit
