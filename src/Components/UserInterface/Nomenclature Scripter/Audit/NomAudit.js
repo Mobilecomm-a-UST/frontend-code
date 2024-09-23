@@ -15,73 +15,69 @@ import Slide from '@mui/material/Slide';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
 const NomAudit = () => {
-    const [softAt, setSoftAt] = useState({ filename: "", bytes: "" })
-    const [pdate, setPdate] = useState()
     const [fileData, setFileData] = useState()
     const [show, setShow] = useState(false)
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
-    const fileLength = softAt.filename.length
+    const [download, setDownload] = useState(false);
     const classes = OverAllCss();
     var link = `${ServerURL}${fileData}`;
     const [preFiles, setPreFiles] = useState([]);
     const [postFiles, setPostFiles] = useState([]);
 
+
+    // console.log('pre files', preFiles[0])
+
     const handlePreFolderSelection = (event) => {
         // const selectedFiles = Array.from(event.target.files);
         // const filePaths = selectedFiles.map(file => file.webkitRelativePath);
-        console.log('filePaths', event.target.files[0])
+        // console.log('filePaths', event.target.files)
         setPreFiles(event.target.files);
     };
     const handlePostFolderSelection = (event) => {
         // const selectedFiles = Array.from(event.target.files);
         // const filePaths = selectedFiles.map(file => file.webkitRelativePath);
-        console.log('post', event.target.files)
+        // console.log('post', event.target.files)
         setPostFiles(event.target.files);
     };
 
-    const handlesoftAt = (event) => {
-        setShow(false);
-        setSoftAt({
-            filename: event.target.files[0].name,
-            bytes: event.target.files[0],
-            state: true
 
-        })
-
-    }
 
     const handleSubmit = async () => {
         if (preFiles.length > 0 && postFiles.length > 0) {
             setOpen(true)
             var formData = new FormData();
-            for (let i = 0; i < preFiles.length(); i++) {
-                    console.log('pre files' , preFiles[i])
-                formData.append(`pre_files_${i}`, preFiles[i]);
+            for (let i = 0; i < preFiles.length; i++) {
+                    // console.log('pre files' , preFiles[i])
+                formData.append(`pre_files`, preFiles[i]);
             }
-            for (let i = 0; i < postFiles.length(); i++) {
-                console.log('post files' , postFiles[i])
-                formData.append(`post_files_${i}`, postFiles[i]);
+            for (let i = 0; i < postFiles.length; i++) {
+                // console.log('post files' , postFiles[i])
+                formData.append(`post_files`, postFiles[i]);
             }
-            // formData.append("pre_files", preFiles);
-            // formData.append("post_files",postFiles);
+            // formData.append("pre_files", preFiles[0]);
+            // formData.append("post_files", postFiles[0]);
 
             const response = await postData('NOM_AUDIT/pre_post_audit_process/', formData, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
 
+            // console.log('response data', response)
+            setFileData(response.Download_url)
 
-            if (response.status === true) {
+            if (response.Status === true) {
                 setOpen(false)
+                setDownload(true)
                 Swal.fire({
                     icon: "success",
                     title: "Done",
                     text: `${response.message}`,
                 });
-                console.log('sssssssssssssssssssss', response)
-                setOpen(true)
+                // console.log('sssssssssssssssssssss', response)
+          
                 setFileData(response.Download_url)
 
             } else {
                 setOpen(false)
+           
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",
@@ -160,15 +156,15 @@ const NomAudit = () => {
                                 <Stack spacing={2} sx={{ marginTop: "-40px" }} direction={'column'}>
                                     <Box className={classes.Front_Box} >
                                         <div className={classes.Front_Box_Hading}>
-                                            Select Pre Files:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{softAt.filename}</span>
+                                            Select Pre Files:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{}</span>
                                         </div>
                                         <div className={classes.Front_Box_Select_Button} >
                                             <div style={{ float: "left" }}>
                                                 <Button variant="contained" component="label" color={preFiles.length > 0 ? "warning" : "primary"}>
                                                     select file
                                                     <input required hidden accept="/*" multiple type="file"
-                                                        webkitdirectory="true"
-                                                        directory="true"
+                                                        // webkitdirectory="true"
+                                                        // directory="true"
                                                         onChange={handlePreFolderSelection} />
                                                 </Button>
                                             </div>
@@ -181,15 +177,15 @@ const NomAudit = () => {
                                     {/* post files */}
                                     <Box className={classes.Front_Box} >
                                         <div className={classes.Front_Box_Hading}>
-                                            Select Post Files:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{softAt.filename}</span>
+                                            Select Post Files:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{}</span>
                                         </div>
                                         <div className={classes.Front_Box_Select_Button} >
                                             <div style={{ float: "left" }}>
                                                 <Button variant="contained" component="label" color={postFiles.length > 0 ? "warning" : "primary"}>
                                                     select file
                                                     <input required hidden accept="/*" multiple type="file"
-                                                        webkitdirectory="true"
-                                                        directory="true"
+                                                        // webkitdirectory="true"
+                                                        // directory="true"
                                                         onChange={handlePostFolderSelection} />
                                                 </Button>
                                             </div>
@@ -211,7 +207,10 @@ const NomAudit = () => {
 
                                 </Stack>
                             </Box>
-                            {/* <a download href={link}><Button variant="outlined" onClick='' startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />} sx={{ marginTop: "10px", width: "auto" }}><span style={{ fontFamily: "Poppins", fontSize: "22px", fontWeight: 800, textTransform: "none", textDecorationLine: "none" }}>Download Temp</span></Button></a> */}
+                            <Box sx={{display:download?'block':'none'}}>
+                            <a download href={link}><Button variant="outlined" onClick='' startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />} sx={{ marginTop: "10px", width: "auto" }}><span style={{ fontFamily: "Poppins", fontSize: "22px", fontWeight: 800, textTransform: "none", textDecorationLine: "none" }}>Download NOM Audit</span></Button></a>
+
+                            </Box>
                         </Box>
                         {loadingDialog()}
                     </Box>
