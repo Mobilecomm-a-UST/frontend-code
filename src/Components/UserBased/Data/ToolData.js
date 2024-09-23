@@ -213,13 +213,13 @@ const ToolData = [
 
     },{
         id: 25,
-        name: 'N Scriptor',
+        name: 'NOM Scriptor',
         title: 'This is a IX Tracker Tool',
         icons: ParagraphIcon,
         link: '/tools/nomenclature_scriptor',
         groupBy:['soft_at_team', 'admin']
 
-    },
+    }
 
 
 

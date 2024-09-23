@@ -42,7 +42,7 @@ const Rca = lazy(() => import('./Components/UserInterface/RCA Tool/Rca'));
 const G2Audit = lazy(() => import('./Components/UserInterface/Audit Tool/G2Audit/G2Audit'));
 const IntegrationRead = lazy(() => import('./Components/UserInterface/Integration_Read/IntegrationRead'));
 const SoftAtTem = lazy(() => import('./Components/UserInterface/SoftAt Temp/SoftAT'));
-const McomePhycical = lazy(()=>import('./Components/UserInterface/McomPhysicalAt/McomePhycical'))
+const McomePhycical = lazy(() => import('./Components/UserInterface/McomPhysicalAt/McomePhycical'))
 const Nscripter = lazy(() => import('./Components/UserInterface/Nomenclature Scripter/Nscripter'));
 
 const queryClient = new QueryClient()
@@ -52,7 +52,7 @@ const queryClient = new QueryClient()
 
 function App() {
 
-  const [userType , setUserType] = useState()
+  const [userType, setUserType] = useState()
 
 
 
@@ -70,9 +70,9 @@ function App() {
   };
 
 
-  useEffect(()=>{
+  useEffect(() => {
     setUserType(JSON.parse(localStorage.getItem('user_type'))?.split(","))
-  },[])
+  }, [])
 
 
   return (
@@ -242,21 +242,22 @@ function App() {
                 <ProtectedRoute element={Rca} allowedUserTypes={['quality', 'admin']} userType={userType} />
               </Suspense>
             } />
-             <Route path="/tools/softAt/*" element={
+            <Route path="/tools/softAt/*" element={
               <Suspense fallback={<div>Loading...</div>}>
                 <ProtectedRoute element={SoftAtTem} allowedUserTypes={['soft_at_team', 'admin']} userType={userType} />
               </Suspense>
             } />
-                 <Route path="/tools/mcom_physical_at/*" element={
+            <Route path="/tools/mcom_physical_at/*" element={
               <Suspense fallback={<div>Loading...</div>}>
                 <ProtectedRoute element={McomePhycical} allowedUserTypes={['soft_at_team', 'admin']} userType={userType} />
               </Suspense>
             } />
-                <Route path="/tools/nomenclature_scriptor/*" element={
+            <Route path="/tools/nomenclature_scriptor/*" element={
               <Suspense fallback={<div>Loading...</div>}>
                 <ProtectedRoute element={Nscripter} allowedUserTypes={['soft_at_team', 'admin']} userType={userType} />
               </Suspense>
             } />
+           
           </Routes>
 
         </Router>
