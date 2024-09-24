@@ -132,7 +132,7 @@ const ToolData = [
         title: 'This is a IX Tracker Tool',
         icons: DocPassIcon,
         link: '/tools/Integration',
-        groupBy:['quality','soft_at_team','admin','IX']
+        groupBy:['soft_at_team','admin','IX']
 
     },
 
@@ -199,7 +199,7 @@ const ToolData = [
         title: 'This is a IX Tracker Tool',
         icons: DocPassIcon,
         link: '/tools/IX_Tracker',
-        groupBy:['IX_reader']
+        groupBy:['quality','IX_reader']
 
     }
     ,

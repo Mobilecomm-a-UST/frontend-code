@@ -2,13 +2,13 @@ import axios from "axios"
 
 
 // const ServerURL = "http://192.168.0.29:8001"
-const ServerURL = "http://127.0.0.1:8000"
+// const ServerURL = "http://127.0.0.1:8000"
 // const ServerURL = "http://192.168.1.16:8001"
 // const ServerURL = "http://192.168.0.146:8000"
 // const ServerURL = "http://103.242.225.195:8000"
 // const ServerURL = "http://192.168.0.50:8001"
 // const ServerURL = "http://192.168.0.164:8000"
-// const ServerURL = "http://103.242.225.195:8000"
+const ServerURL = "http://103.242.225.195:8000"
 // const ServerURL = "http://192.168.137.190:8001"
 // const ServerURL = "http://54.234.191.244"
 
