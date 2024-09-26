@@ -159,6 +159,7 @@ const DateWiseIntegration = ({ onData }) => {
 
     // Download Key and value
     const columnData = [
+        { title: 'Unique Key', field: 'unique_key' },
         { title: 'OEM', field: 'OEM' },
         { title: 'Integration Date', field: 'Integration_Date' },
         { title: 'CIRCLE', field: 'CIRCLE' },
