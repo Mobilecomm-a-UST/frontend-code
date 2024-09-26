@@ -234,7 +234,7 @@ function App() {
             } />
             <Route path="/tools/IX_Tracker/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={IntegrationRead} allowedUserTypes={['IX_reader']} userType={userType} />
+                <ProtectedRoute element={IntegrationRead} allowedUserTypes={['quality','IX_reader']} userType={userType} />
               </Suspense>
             } />
             <Route path="/tools/rca/*" element={

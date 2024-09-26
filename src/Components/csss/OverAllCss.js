@@ -73,6 +73,13 @@ const OverAllCss = makeStyles(theme=>({
     alignItems: "center",
     flexWrap: "wrap",
   },
+  hover: {
+    "&:hover": {
+      backgroundColor: 'rgb(42,128,234, 0.5)',
+      color:'black',
+      fontWeight:'bold',
+    }
+}
 }))
 
 export default OverAllCss

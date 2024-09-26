@@ -38,7 +38,7 @@ const Zero_rna = () => {
       <Box style={{ marginTop: '60px' }}>
         <Grid container spacing={1}>
           <Grid item xs={2} >
-            <div style={{ position: 'fixed' ,width:'16%'}}>
+            <div style={{ position: 'fixed' ,width:'16%',overflow:"scroll",scrollbarWidth:"2px"}}>
               <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#223354", marginTop: 5, borderRadius: 10 }}>
                 <Sidenav.Body>
                   <Nav activeKey={activeKey} onSelect={setActiveKey} >
