@@ -32,8 +32,10 @@ const NomAudit = () => {
     const [postFiles, setPostFiles] = useState([]);
     const [st_cell, setSt_cell] = useState([]);
     const [dialogOpen, setDialogOpen] = useState(false);
-    const [stData,setStData] = useState([])
-    const [filterStData , setFilterStData] = useState([])
+    const [stData, setStData] = useState([])
+    const [filterStData, setFilterStData] = useState([])
+    const [dialogsitedata, setDialogsitedata] = useState(false)
+    const [siteWiseData, setSiteWiseData] = useState([])
 
 
     // console.log('pre files', preFiles[0])
@@ -221,8 +223,9 @@ const NomAudit = () => {
         const groupedData = _.groupBy(data, 'PRE_IP_ADDR');
         // Calculate counts of PRE_MO and POST_MO for each unique PRE_IP_ADDR
         const result = Object.keys(groupedData).map(preIp => {
+            // console.log('filterssssss' ,_.filter(groupedData[preIp]fc, data=> data.audit_MO === "OK").length )
             const preMoCount = groupedData[preIp].length; // Count of PRE_MO (number of entries for each PRE_IP_ADDR)
-            const postMoCount = _.uniqBy(groupedData[preIp], 'POST_MO').length; // Count of unique POST_MO for each PRE_IP_ADDR
+            const postMoCount = _.filter(groupedData[preIp], data => data.audit_MO === "OK").length; // Count of unique POST_MO for each PRE_IP_ADDR
             return { preIp, preMoCount, postMoCount };
         });
 
@@ -230,11 +233,21 @@ const NomAudit = () => {
 
     }
 
-    const filetrIPAdd = (ip)=>{
-
-        let result =  _.filter(stData , data => data.PRE_IP_ADDR === ip)
-        console.log('filter dataa' , result)
-        setFilterStData(result)
+    const filetrIPAdd = (ip) => {
+        let result = _.filter(stData, data => data.PRE_IP_ADDR === ip)
+        console.log('filter dataa', result)
+        setSiteWiseData(result)
+        let preAdm = _.countBy(result, data => data.PRE_State == '(UNLOCKED)');
+        let preOp = _.countBy(result, data => data.PRE_State_1 === '(ENABLED)');
+        let postAdm = _.countBy(result, data => data.POST_State === '(UNLOCKED)');
+        let postOp = _.countBy(result, data => data.POST_State_1 === '(ENABLED)');
+        let auditMO = _.countBy(result, data => data.audit_MO == 'OK');
+        let auditAdmState = _.countBy(result, data => data.audit_AdmState == 'OK');
+        let auditOpState = _.countBy(result, data => data.audit_OpState == 'OK');
+        let auditIPADDR = _.countBy(result, data => data.audit_IP_ADDR == 'OK');
+        // let temp2 = _.countBy(result , data => data.audit_MO == 'NOT OK');
+        console.log('temp filter', [{ ip, preAdm, preOp, postAdm, postOp, auditAdmState, auditOpState, auditMO, auditIPADDR }])
+        setFilterStData([{ ip, preAdm, preOp, postAdm, postOp, auditAdmState, auditOpState, auditMO, auditIPADDR }])
         setDialogOpen(true)
     }
 
@@ -264,13 +277,14 @@ const NomAudit = () => {
 
 
 
+
     const Dialogtable = useCallback(() => {
         return (
             <Dialog
                 open={dialogOpen}
                 keepMounted
-                fullScreen
-                maxWidth={'xl'}
+                // fullScreen
+                maxWidth={'lg'}
                 BackdropProps={{
                     style: { backgroundColor: 'rgba(0, 0, 0, 0.5)', backdropFilter: 'blur(3px)' },
                 }}
@@ -284,12 +298,49 @@ const NomAudit = () => {
                         <table style={{ width: "100%", border: "1px solid black", borderCollapse: 'collapse', overflow: 'auto' }} >
                             <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
                                 <tr style={{ fontSize: 15, color: "black", border: '1px solid white' }}>
-                                    <th colSpan='8' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#66CCFF' }}>PRE</th>
-                                    <th colSpan='8' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#538DD5' }}>POST</th>
-                                    <th colSpan='4' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#DA9694' }}>AUDIT</th>
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', }}>OVER ALL</th>
+                                    <th rowSpan='3' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9900' }}>Site ID</th>
+                                    <th colSpan='4' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#66CCFF' }}>PRE</th>
+                                    <th colSpan='4' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#538DD5' }}>POST</th>
+                                    <th colSpan='8' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#DA9694' }}>AUDIT</th>
                                 </tr>
                                 <tr style={{ fontSize: 15, border: '1px solid white' }}>
+                                    <th colSpan='2' style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#B7DEE8' }}>Adm. State (Count)</th>
+                                    <th colSpan='2' style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#B7DEE8' }}>Op. State (Count)</th>
+                                    <th colSpan='2' style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#8DB4E2' }}>Adm. State (Count)</th>
+                                    <th colSpan='2' style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#8DB4E2' }}>Op. State (Count)</th>
+                                    <th colSpan='2' style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#E6B8B7' }}>Adm. State </th>
+                                    <th colSpan='2' style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#E6B8B7' }}>Op. State </th>
+                                    <th colSpan='2' style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#E6B8B7' }}>MO </th>
+                                    <th colSpan='2' style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#E6B8B7' }}>IP Add.</th>
+                                </tr>
+                                <tr style={{ fontSize: 13, border: '1px solid white' }}>
+                                    {/* Pre State unlock lock count */}
+                                    <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#DAEEF3' }}>UNLOCKED </th>
+                                    <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#DAEEF3' }}>LOCKED </th>
+                                    {/* pre State  enable disable count */}
+                                    <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#DAEEF3' }}>ENABLED </th>
+                                    <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#DAEEF3' }}>DISABLED </th>
+                                    {/* POST State unlock lock count */}
+                                    <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#C5D9F1' }}>UNLOCKED </th>
+                                    <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#C5D9F1' }}>LOCKED </th>
+                                    {/* POST State  enable disable count */}
+                                    <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#C5D9F1' }}>ENABLED </th>
+                                    <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#C5D9F1' }}>DISABLED </th>
+                                    {/* Adm. State */}
+                                    <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#F2DCDB' }}>OK</th>
+                                    <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#F2DCDB' }}>NOT OK</th>
+                                    {/* Op. State */}
+                                    <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#F2DCDB' }}>OK</th>
+                                    <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#F2DCDB' }}>NOT OK</th>
+                                    {/* OM */}
+                                    <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#F2DCDB' }}>OK</th>
+                                    <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#F2DCDB' }}>NOT OK</th>
+                                    {/* IP Add. */}
+                                    <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#F2DCDB' }}>OK</th>
+                                    <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#F2DCDB' }}>NOT OK</th>
+
+                                </tr>
+                                {/* <tr style={{ fontSize: 15, border: '1px solid white' }}>
                                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#CCECFF' }}>Proxy</th>
                                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#CCECFF' }}>Adm</th>
                                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#CCECFF' }}>Adm. State</th>
@@ -315,36 +366,29 @@ const NomAudit = () => {
 
 
                                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#ffffff' }}>Status</th>
-                                </tr>
+                                </tr> */}
                             </thead>
                             <tbody>
 
                                 {filterStData?.map((it, i) => (
-                                    <tr key={i} className={classes.hover} style={{ textAlign: "center", fontWeigth: 700 }}>
-                                        <th >{it.PRE_Proxy}</th>
-                                        <th >{it.PRE_Adm}</th>
-                                        <th >{it.PRE_State}</th>
-                                        <th >{it.PRE_Op}</th>
-                                        <th >{it?.PRE_State_1}</th>
-                                        <th >{it.PRE_MO}</th>
-                                        <th >{it.PRE_Date_Time}</th>
-                                        <th >{it.PRE_IP_ADDR}</th>
-
-                                        <th >{it.POST_Proxy}</th>
-                                        <th >{it.POST_Adm}</th>
-                                        <th >{it.POST_State}</th>
-                                        <th >{it.POST_Op}</th>
-                                        <th >{it?.POST_State_1}</th>
-                                        <th >{it.POST_MO}</th>
-                                        <th >{it.POST_Date_Time}</th>
-                                        <th >{it.POST_IP_ADDR}</th>
-
-
-                                        <th >{it.audit_AdmState}</th>
-                                        <th >{it.audit_OpState}</th>
-                                        <th >{it.audit_MO}</th>
-                                        <th >{it.audit_IP_ADDR}</th>
-                                        <th >{it.OverAll_Status}</th>
+                                    <tr key={i} className={classes.hover} onClick={() => { setDialogsitedata(true)}} style={{ textAlign: "center", fontWeigth: 700 }}>
+                                        <th style={{}}>{it.ip}</th>
+                                        <th style={{ color: 'green' }}>{it.preAdm?.true || 0}</th>
+                                        <th style={{ color: 'red' }}>{it.preAdm?.false || 0}</th>
+                                        <th style={{ color: 'green' }}>{it.preOp?.true || 0}</th>
+                                        <th style={{ color: 'red' }}>{it.preOp?.false || 0}</th>
+                                        <th style={{ color: 'green' }}>{it.postAdm?.true || 0}</th>
+                                        <th style={{ color: 'red' }}>{it.postAdm?.false || 0}</th>
+                                        <th style={{ color: 'green' }}>{it.postOp?.true || 0}</th>
+                                        <th style={{ color: 'red' }}>{it.postOp?.false || 0}</th>
+                                        <th style={{ color: 'green' }}>{it.auditAdmState?.true || 0}</th>
+                                        <th style={{ color: 'red' }}>{it.auditAdmState?.false || 0}</th>
+                                        <th style={{ color: 'green' }}>{it.auditOpState?.true || 0}</th>
+                                        <th style={{ color: 'red' }}>{it.auditOpState?.false || 0}</th>
+                                        <th style={{ color: 'green' }}>{it.auditMO?.true || 0}</th>
+                                        <th style={{ color: 'red' }}>{it.auditMO?.false || 0}</th>
+                                        <th style={{ color: 'green' }}>{it.auditIPADDR?.true || 0}</th>
+                                        <th style={{ color: 'red' }}>{it.auditIPADDR?.false || 0}</th>
 
                                     </tr>
                                 ))}
@@ -355,6 +399,99 @@ const NomAudit = () => {
             </Dialog>
         )
     }, [dialogOpen])
+    const DialogSiteData = useCallback(() => {
+        return (
+            <Dialog
+                open={dialogsitedata}
+                keepMounted
+                fullScreen
+                maxWidth={'lg'}
+                BackdropProps={{
+                    style: { backgroundColor: 'rgba(0, 0, 0, 0.5)', backdropFilter: 'blur(3px)' },
+                }}
+                style={{ zIndex: 2, marginTop: '4%' }}
+            >
+                <DialogTitle>
+                    <IconButton size="large" onClick={() => { setDialogsitedata(false) }}><CloseIcon /></IconButton>
+                </DialogTitle>
+                <DialogContent >
+                    <TableContainer sx={{ maxHeight: 450, width: '100%', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} component={Paper}>
+                        <table style={{ width: "100%", border: "1px solid black", borderCollapse: 'collapse', overflow: 'auto' }} >
+                            <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
+                                <tr style={{ fontSize: 15, color: "black", border: '1px solid white' }}>
+                                    <th colSpan='6' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#66CCFF' }}>PRE</th>
+                                    <th colSpan='6' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#538DD5' }}>POST</th>
+                                    <th colSpan='4' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#DA9694' }}>AUDIT</th>
+                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#DA9694' }}>OverAll</th>
+                                </tr>
+                                <tr style={{ fontSize: 15, border: '1px solid white' }}>
+                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#B7DEE8' }}>Proxy</th>
+                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#B7DEE8' }}>Adm. State</th>                                    
+                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#B7DEE8' }}>Op. State</th>                                   
+                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#B7DEE8' }}>MO</th>                                    
+                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#B7DEE8' }}>Date & Time(UTC)</th>                                  
+                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#B7DEE8' }}>IP Address</th>      
+
+
+                                     <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#8DB4E2' }}>Proxy</th>
+                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#8DB4E2' }}>Adm. State</th>                                    
+                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#8DB4E2' }}>Op. State</th>                                   
+                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#8DB4E2' }}>MO</th>                                    
+                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#8DB4E2' }}>Date & Time(UTC)</th>                                  
+                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#8DB4E2' }}>IP Address</th>       
+
+
+
+                                    
+                                     <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#E6B8B7' }}>Ad. mState</th>
+                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#E6B8B7' }}>Op. State</th>                                    
+                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#E6B8B7' }}>MO</th>                                   
+                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#E6B8B7' }}>IP Address</th>   
+
+
+                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#E6B8B7' }}>Status</th>                         
+
+
+
+                                </tr>
+
+
+                            </thead>
+                            <tbody>
+                                {siteWiseData?.map((it, i) => (
+                                    <tr key={i} className={classes.hover} style={{ textAlign: "center", fontWeigth: 700 }}>
+                                        <th style={{ padding: '5px 10px', border: '1px solid black' }}>{it.PRE_Proxy}</th>
+                                        <th style={{ padding: '5px 10px', border: '1px solid black' }}>{it.PRE_Adm}{it.PRE_State}</th>
+                                        <th style={{ padding: '5px 10px', border: '1px solid black' }}>{it.PRE_Op_}{it.PRE_State_1}</th>
+                                        <th style={{ padding: '5px 10px', border: '1px solid black' }}>{it.PRE_MO}</th>
+                                        <th style={{ padding: '5px 10px', border: '1px solid black' }}>{it?.PRE_Date__Time_UTC}</th>
+                                        <th style={{ padding: '5px 10px', border: '1px solid black' }}>{it.PRE_IP_ADDR}</th>
+
+                                        <th style={{ padding: '5px 10px', border: '1px solid black' }}>{it.POST_Proxy}</th>
+                                        <th style={{ padding: '5px 10px', border: '1px solid black' }}>{it.POST_Adm}{it.POST_State}</th>
+                                        <th style={{ padding: '5px 10px', border: '1px solid black' }}>{it.POST_Op_}{it.POST_State_1}</th>
+                                        <th style={{ padding: '5px 10px', border: '1px solid black' }}>{it.POST_MO}</th>
+                                        <th style={{ padding: '5px 10px', border: '1px solid black' }}>{it?.POST_Date__Time_UTC}</th>
+                                        <th style={{ padding: '5px 10px', border: '1px solid black' }}>{it.POST_IP_ADDR}</th>
+
+                                        <th style={{ padding: '5px 10px', border: '1px solid black',color:it.audit_AdmState=='OK'?'green':'red' }}>{it.audit_AdmState}</th>
+                                        <th style={{ padding: '5px 10px', border: '1px solid black',color:it.audit_OpState=='OK'?'green':'red' }}>{it.audit_OpState}</th>
+                                        <th style={{ padding: '5px 10px', border: '1px solid black',color:it.audit_MO=='OK'?'green':'red' }}>{it.audit_MO}</th>
+                                        <th style={{ padding: '5px 10px', border: '1px solid black',color:it.audit_IP_ADDR=='OK'?'green':'red'  }}>{it.audit_IP_ADDR}</th>
+
+                                        <th style={{ padding: '5px 10px', border: '1px solid black' }}>{it.OverAll_Status}</th>
+
+                                    </tr>
+                                ))}
+
+                            </tbody>
+                        </table>
+                    </TableContainer>
+                </DialogContent>
+            </Dialog>
+        )
+
+    }, [dialogsitedata])
 
 
 
@@ -460,7 +597,7 @@ const NomAudit = () => {
 
                                             {st_cell?.map((it, i) => (
                                                 <tr key={i} className={classes.hover} style={{ textAlign: "center", fontWeigth: 700 }}>
-                                                    <th className={classes.hover} onClick={()=>{filetrIPAdd(it.preIp);}} style={{ color: it.preMoCount === it.postMoCount ? 'green' : 'red', cursor: 'pointer' }}>{it.preIp}</th>
+                                                    <th className={classes.hover} onClick={() => { filetrIPAdd(it.preIp); }} style={{ color: it.preMoCount === it.postMoCount ? 'green' : 'red', cursor: 'pointer' }}>{it.preIp}</th>
                                                     <th >{it.preMoCount}</th>
                                                     <th >{it.postMoCount}</th>
                                                 </tr>
@@ -473,6 +610,7 @@ const NomAudit = () => {
                         </Box>
                         {loadingDialog()}
                         {Dialogtable()}
+                        {DialogSiteData()}
                     </Box>
 
                     {/* {handleError()} */}

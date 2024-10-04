@@ -229,7 +229,7 @@ function App() {
             } />
             <Route path="/tools/Integration/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={Integration} allowedUserTypes={['quality', 'soft_at_team', 'admin', 'IX']} userType={userType} />
+                <ProtectedRoute element={Integration} allowedUserTypes={[ 'soft_at_team', 'admin', 'IX']} userType={userType} />
               </Suspense>
             } />
             <Route path="/tools/IX_Tracker/*" element={
