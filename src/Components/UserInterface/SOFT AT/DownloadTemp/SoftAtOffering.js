@@ -23,6 +23,9 @@ import TextField from '@mui/material/TextField';
 import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
 import Slide from '@mui/material/Slide';
 import Collapse from '@mui/material/Collapse';
+import Checkbox from '@mui/material/Checkbox';
+import ListItemText from '@mui/material/ListItemText';
+import OutlinedInput from '@mui/material/OutlinedInput';
 import Swal from "sweetalert2";
 
 
@@ -32,24 +35,24 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" timeout={1000} ref={ref}  {...props} />;
 });
 
-const circleOem = [{id:1,circle:'AP',OEM:['Ericsson']},
-                    {id:2,circle:'BIH',OEM:['Nokia']},
-                    {id:3,circle:'CHN',OEM:['Ericsson','Huawei']},
-                    {id:4,circle:'DEL',OEM:['Ericsson']},
-                    {id:5,circle:'HRY',OEM:['Ericsson','ZTE']},
-                    {id:6,circle:'JK',OEM:['Ericsson']},
-                    {id:7,circle:'JRK',OEM:['Nokia']},
-                    {id:8,circle:'KK',OEM:['Huawei']},
-                    {id:9,circle:'KOL',OEM:['Samsung','ZTE']},
-                    {id:10,circle:'MP',OEM:['Nokia']},
-                    {id:11,circle:'MUM',OEM:['Nokia']},
-                    {id:12,circle:'ORI',OEM:['Nokia']},
-                    {id:13,circle:'PUN',OEM:['Nokia','Samsung','ZTE']},
-                    {id:14,circle:'RAY',OEM:['Ericsson']},
-                    {id:15,circle:'ROTH',OEM:['Ericsson','Huawei']},
-                    {id:16,circle:'UPE',OEM:['Nokia']},
-                    {id:17,circle:'UPW',OEM:['Ericsson','Huawei']},
-                    {id:18,circle:'WB',OEM:['Nokia']},];
+const circleOem = [{ id: 1, circle: 'AP', OEM: ['Ericsson (AP)'] },
+{ id: 2, circle: 'BIH', OEM: ['Nokia (BIH)'] },
+{ id: 3, circle: 'CHN', OEM: ['Ericsson (CHN)', 'Huawei (CHN)'] },
+{ id: 4, circle: 'DEL', OEM: ['Ericsson (DEL)'] },
+{ id: 5, circle: 'HRY', OEM: ['Ericsson (HRY)', 'ZTE (HRY)'] },
+{ id: 6, circle: 'JK', OEM: ['Ericsson (JK)'] },
+{ id: 7, circle: 'JRK', OEM: ['Nokia (JRK)'] },
+{ id: 8, circle: 'KK', OEM: ['Huawei (KK)'] },
+{ id: 9, circle: 'KOL', OEM: ['Samsung (KOL)', 'ZTE (KOL)'] },
+{ id: 10, circle: 'MP', OEM: ['Nokia (MP)'] },
+{ id: 11, circle: 'MUM', OEM: ['Nokia (MUM)'] },
+{ id: 12, circle: 'ORI', OEM: ['Nokia (ORI)'] },
+{ id: 13, circle: 'PUN', OEM: ['Nokia (PUN)', 'Samsung (PUN)', 'ZTE (PUN)'] },
+{ id: 14, circle: 'RAY', OEM: ['Ericsson (RAY)'] },
+{ id: 15, circle: 'ROTN', OEM: ['Ericsson (ROTN)', 'Huawei (ROTN)'] },
+{ id: 16, circle: 'UPE', OEM: ['Nokia (UPE)'] },
+{ id: 17, circle: 'UPW', OEM: ['Ericsson (UPW)', 'Huawei (UPW)'] },
+{ id: 18, circle: 'WB', OEM: ['Nokia (WB)'] },];
 
 const SoftAtOffering = () => {
     const classes = OverAllCss();
@@ -57,26 +60,23 @@ const SoftAtOffering = () => {
     const [date, setDate] = useState('')
     const [fromDate, setFromDate] = useState('')
     const [toDate, setToDate] = useState('')
-    const [circle, setCircle] = useState('')
+    const [circle, setCircle] = useState([])
     const [allcircle, setAllcircle] = useState([])
     const [siteId, setSiteId] = useState('')
     const [oemList, setOemList] = useState([])
-    const [selectOem, setSelectOem] = useState('')
+    const [selectOem, setSelectOem] = useState([])
     const [fileData, setFileData] = useState()
     const [oemShow, setOemShow] = useState(false)
     const [open, setOpen] = useState(false);
     const { loading, action } = useLoadingDialog()
-
+    const [finalJson, setFinalJson] = useState([])
     var link = `${ServerURL}${fileData}`;
 
-    // console.log('sssss', date)
+    // console.log('sssss', circle,selectOem,finalJson)
 
 
     const handleDateFormat = (e) => {
         const dateObject = new Date(e.$d);
-
-        // console.log('dsdsdssdsd', dateObject)
-
         const year = dateObject.getFullYear();
         const month = String(dateObject.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
         const day = String(dateObject.getDate()).padStart(2, '0');
@@ -106,8 +106,7 @@ const SoftAtOffering = () => {
             formData.append('date', handleDateFormat(date))
             formData.append('from_date', handleDateFormat(fromDate))
             formData.append('to_date', handleDateFormat(toDate))
-            formData.append('circle', circle)
-            formData.append('oem', selectOem)
+            formData.append('circle_oem', JSON.stringify(finalJson))
             formData.append('site_id', siteId)
             const response = await postData('IntegrationTracker/softAt-offering-templates/', formData)
             if (response) {
@@ -151,14 +150,76 @@ const SoftAtOffering = () => {
 
 
     const SelectCircle = (circles) => {
-        console.log('oemsssss', circles)
-        let filterlist = circleOem.filter((item) => item.circle === circles)
+        setFinalJson([])
+        const { target: { value }, } = circles;
+        setCircle(
+            typeof value === 'string' ? value.split(',') : value,
+        );
 
-        console.log('filterlist', filterlist[0].OEM)
-        setOemList(filterlist[0].OEM)
-        setOemShow(true);
+        // circles.target.value.forEach(circ => {
+        //     setFinalJson((prev) => [...prev, { [circ]: [] }])
+        // });
+
+        let filterlist = circleOem.filter((item) => (circles.target.value).includes(item.circle))
+
+        let arr = []
+
+        filterlist?.map((item) => {
+            // console.log('oem', item.OEM)
+            arr.push(item.OEM)
+        })
+        // console.log('oem list' , arr.flat())
+        setOemList(arr.flat())
+
+        if (circles.target.value.length > 0) {
+            setOemShow(true);
+        } else {
+            setOemShow(false);
+        }
+
 
     }
+
+    const selectedOem = (event) => {
+        const { target: { value }, } = event;
+        setSelectOem(
+            typeof value === 'string' ? value.split(',') : value,
+        );
+
+        // event.target.value.forEach(item => {
+        //     let circleName = item.split(' (')[1].slice(0, -1); 
+
+        //     if (circle.includes(circleName)) {
+        //         // finalJson[circleName].push(item);
+        //         setFileData((prev) => [...prev, { [circleName]:  finalJson[circleName].push(item) }])
+
+        //     }
+        // })
+    }
+
+
+    useEffect(() => {
+       
+    
+        let tempResult = {};
+    
+        // Initialize the result object with empty arrays for each circle
+        circle.forEach(circ => {
+          tempResult[circ] = [];
+        });
+    
+        // Populate the result object with OEM data
+        selectOem.forEach(item => {
+          // Extract the circle from the item
+          let circleName = item.split(' (')[1].slice(0, -1); // Get the circle name from 'Huawei (UPW)' -> 'UPW'
+    
+          if (circle.includes(circleName)) {
+            tempResult[circleName].push(item);
+          }
+        });
+
+        setFinalJson(tempResult);
+      }, [circle,selectOem]);
 
 
     const handleClose = () => {
@@ -231,49 +292,63 @@ const SoftAtOffering = () => {
                                     Select Circle
                                 </Box>
                                 <Box sx={{ marginTop: "5px", float: "left" }}>
-                                    <FormControl sx={{ minWidth: 150 }}>
-                                        <InputLabel id="demo-simple-select-label">Select Circle</InputLabel>
+                                    <FormControl sx={{ minWidth: 150, maxWidth: 500 }}>
+                                        <InputLabel id="Select_Circle">Select Circle</InputLabel>
                                         <Select
-                                            labelId="demo-simple-select-label"
+                                            labelId="Select_Circle"
                                             id="demo-simple-select"
+                                            multiple
                                             value={circle}
-                                            label="Select Circle"
-                                            onChange={(e) => { setCircle(e.target.value); SelectCircle(e.target.value)} }
+                                            // label="Select Circle"
+                                            onChange={(event) => { SelectCircle(event) }}
+                                            input={<OutlinedInput label="Tag" />}
+                                            renderValue={(selected) => selected.join(', ')}
                                             size="medium"
                                         >
                                             {allcircle?.map((data, index) => (
-                                                <MenuItem key={index} value={data}>{data}</MenuItem>
+                                                <MenuItem key={index} value={data}>
+                                                     <Checkbox checked={circle.includes(data)} />
+                                                     <ListItemText primary={data} />
+                                                    {/* {data} */}
+                                                </MenuItem>
                                             ))}
                                         </Select>
                                     </FormControl>
                                 </Box>
                             </Box>
 
-                            
-                                <Collapse in={oemShow} timeout={500} className={classes.Front_Box} sx={{ display: oemShow ? "block" : "none" }}>
-                                    <Box className={classes.Front_Box_Hading}>
-                                        Select OEM
-                                    </Box>
-                                    <Box sx={{ marginTop: "5px", float: "left" }}>
-                                        <FormControl sx={{ minWidth: 150 }}>
-                                            <InputLabel id="demo-simple-select-label">Select OEM</InputLabel>
-                                            <Select
-                                                labelId="demo-simple-select-label"
-                                                id="demo-simple-select"
-                                                value={selectOem}
-                                                label="Select Circle"
-                                                onChange={(e) => setSelectOem(e.target.value)}
-                                                size="medium"
-                                            >
-                                                {oemList?.map((data, index) => (
-                                                    <MenuItem key={index} value={data.toUpperCase()}>{data}</MenuItem>
-                                                ))}
-                                               
-                                            </Select>
-                                        </FormControl>
-                                    </Box>
-                                </Collapse>
-                     
+
+                            <Collapse in={oemShow} timeout={500} className={classes.Front_Box} sx={{ display: oemShow ? "block" : "none" }}>
+                                <Box className={classes.Front_Box_Hading}>
+                                    Select OEM
+                                </Box>
+                                <Box sx={{ marginTop: "5px", float: "left" }}>
+                                    <FormControl sx={{ minWidth: 150, maxWidth: 500 }}>
+                                        <InputLabel id="Select_OEM">Select OEM</InputLabel>
+                                        <Select
+                                            labelId="Select_OEM"
+                                            id="demo-simple-select"
+                                            multiple
+                                            value={selectOem}
+                                            // label="Select OEM"
+                                            onChange={(e) => selectedOem(e)}
+                                            input={<OutlinedInput label="Tag" />}
+                                            renderValue={(selected) => selected.join(', ')}
+                                            size="medium"
+                                        >
+                                            {oemList?.map((data, index) => (
+                                                <MenuItem key={index} value={data} >
+                                                     <Checkbox checked={selectOem.includes(data)} />
+                                                     <ListItemText primary={data} />
+                                                    {/* {data} */}
+                                                </MenuItem>
+                                            ))}
+
+                                        </Select>
+                                    </FormControl>
+                                </Box>
+                            </Collapse>
+
 
 
                             <Box className={classes.Front_Box}>
