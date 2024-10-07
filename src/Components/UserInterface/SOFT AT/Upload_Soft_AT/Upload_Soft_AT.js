@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Box, Button, Stack } from "@mui/material";
+import React, { useState, useEffect, useCallback } from "react";
+import { Box, Button, DialogTitle, Stack } from "@mui/material";
 import { Breadcrumbs, Link, Typography } from "@mui/material";
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import UploadIcon from '@mui/icons-material/Upload';
@@ -15,14 +15,49 @@ import Fab from '@mui/material/Fab';
 import Tooltip from '@mui/material/Tooltip';
 import DownloadIcon from '@mui/icons-material/Download';
 import Zoom from '@mui/material/Zoom';
+import { styled } from '@mui/material/styles';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+
+
+
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  '&:nth-of-type(odd)': {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  '&:last-child td, &:last-child th': {
+    border: 0,
+  },
+}));
 
 const Upload_Soft_AT = () => {
   const [softAt, setSoftAt] = useState({ filename: "", bytes: "" })
   const [pdate, setPdate] = useState()
   const [fileData, setFileData] = useState()
   const [show, setShow] = useState(false)
+  const [tableData, setTableData] = useState([])
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const [open1, setOpen1] = useState(false);
   const fileLength = softAt.filename.length
   const classes = OverAllCss();
   var link = `${ServerURL}${fileData}`;
@@ -46,7 +81,7 @@ const Upload_Soft_AT = () => {
       formData.append("upload_date", pdate);
       const response = await postData('Soft_At/upload/', formData, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
       console.log('response data', response)
-      sessionStorage.setItem('upload_soft_at_status', JSON.stringify(response.status_obj))
+      // sessionStorage.setItem('upload_soft_at_status', JSON.stringify(response.status_obj))
 
       if (response.status == true) {
         setOpen(false)
@@ -55,7 +90,9 @@ const Upload_Soft_AT = () => {
           title: "Done",
           text: `${response.message}`,
         });
-        navigate('status')
+        setTableData(response.error_rows)
+        setOpen1(true)
+        // navigate('status')
 
       } else {
         setOpen(false)
@@ -76,7 +113,7 @@ const Upload_Soft_AT = () => {
   }
 
   // DATA PROCESSING DIALOG BOX...............
-  const loadingDialog = () => {
+  const loadingDialog = useCallback(() => {
     return (
       <Dialog
         open={open}
@@ -93,7 +130,74 @@ const Upload_Soft_AT = () => {
 
       </Dialog>
     )
-  }
+  }, [open])
+
+  const showDialogStatus = useCallback(() => {
+    return (
+      <Dialog
+        open={open1}
+        // TransitionComponent={Transition}
+        fullWidth
+        maxWidth="lg"
+        keepMounted
+      // onClose={() => { setOpen1(false) }}
+      // aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle>
+          <div style={{ display: 'flex' ,justifyContent:'space-between'}}>
+            <div>
+
+            </div>
+            <div>
+                <h4 style={{color:'red'}}>These below sites can not be uploaded</h4>
+            </div>
+            <div>
+            <IconButton sx={{ float: 'right' }} size="large" onClick={() => { setOpen1(false) }}><CloseIcon /></IconButton>
+            </div>
+
+        </div>
+         
+        </DialogTitle>
+        <DialogContent>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 800 }} aria-label="customized table">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell>Invalid Field</StyledTableCell>
+                  <StyledTableCell >REMARKS</StyledTableCell>
+                  <StyledTableCell >Unique Key</StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {tableData?.map((row) => (
+                  <StyledTableRow>
+                    <StyledTableCell style={{ whiteSpace: 'nowrap' }}>
+                      <ol>
+                        {row.invalid_fields?.map((data) => (
+                          <li>{data}</li>
+                        ))}
+                      </ol>
+
+                    </StyledTableCell>
+                    <StyledTableCell align="left" style={{ whiteSpace: 'nowrap' }}>
+                      <ol>
+                        {row.remarks?.map((data) => (
+                          <li>{data}</li>
+                        ))}
+                      </ol>
+
+                    </StyledTableCell>
+                    <StyledTableCell align="center">{row.unique_key}</StyledTableCell>
+                  </StyledTableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </DialogContent>
+
+      </Dialog>
+    )
+  }, [open1])
 
   const pastDate = () => {
     var d = new Date();
@@ -115,7 +219,7 @@ const Upload_Soft_AT = () => {
   const handleDownload = async () => {
     const response = await getData('Soft_At/template/')
     setFileData(response.Download_url)
-    console.log('download data:', response)
+    // console.log('download data:', response)
   }
 
   useEffect(() => {
@@ -190,6 +294,7 @@ const Upload_Soft_AT = () => {
           {/* <a download href={link}><Button variant="outlined" onClick='' startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />} sx={{ marginTop: "10px", width: "auto" }}><span style={{ fontFamily: "Poppins", fontSize: "22px", fontWeight: 800, textTransform: "none", textDecorationLine: "none" }}>Download Temp</span></Button></a> */}
         </Box>
         {loadingDialog()}
+        {showDialogStatus()}
         {/* {handleError()} */}
 
 
