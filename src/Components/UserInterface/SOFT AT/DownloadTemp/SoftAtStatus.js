@@ -28,6 +28,7 @@ import Checkbox from '@mui/material/Checkbox';
 import ListItemText from '@mui/material/ListItemText';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { CsvBuilder } from 'filefy';
+import * as ExcelJS from 'exceljs'
 import Slide from '@mui/material/Slide';
 
 
@@ -168,25 +169,275 @@ const SoftAtStatus = () => {
                 .exportFile();
         }
 
-    const handleDateFormat = (e) => {
-        const dateObject = new Date(e.$d);
+        const handleExportExcel = () => {
+            const workbook = new ExcelJS.Workbook();
+            const sheet = workbook.addWorksheet("Soft At Status", { properties: { tabColor: { argb: 'f1948a' } } })
 
-        // console.log('dsdsdssdsd', dateObject)
+            sheet.mergeCells('A1:BZ1')
 
-        const year = dateObject.getFullYear();
-        const month = String(dateObject.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
-        const day = String(dateObject.getDate()).padStart(2, '0');
+            sheet.getCell('A1').value = '! Attention: This template cannot be directly uploaded. Download the template from the Soft AT upload section in the tool, copy and paste this data there, and upload that template. Any modifications should only be made after pasting this data to the downloaded template.'
+            // Add the column headers to the first row of the excel sheet
+            sheet.getCell('A2').value = 'Unique Key(Auto Generated)'
+            sheet.getCell('B2').value = 'OEM'
+            sheet.getCell('C2').value = 'Integration Date'
+            sheet.getCell('D2').value = 'CIRCLE'
+            sheet.getCell('E2').value = 'Activity Name'
+            sheet.getCell('F2').value = 'Site ID'
+            sheet.getCell('G2').value = 'MO NAME'
+            sheet.getCell('H2').value = 'LNBTS ID'
+            sheet.getCell('I2').value = 'Technology (SIWA)'
+            sheet.getCell('J2').value = 'OSS Details'
+            sheet.getCell('K2').value = 'Cell ID'
+            sheet.getCell('L2').value = 'CELL COUNT'
+            sheet.getCell('M2').value = 'BSC NAME'
+            sheet.getCell('N2').value = 'BCF'
+            sheet.getCell('O2').value = 'TRX Count'
+            sheet.getCell('P2').value = 'PRE ALARM'
+            sheet.getCell('Q2').value = 'GPS IP CLK'
+            sheet.getCell('R2').value = 'RET'
+            sheet.getCell('S2').value = 'POST VSWR'
+            sheet.getCell('T2').value = 'POST Alarms'
+            sheet.getCell('U2').value = 'Activity Mode (SA/NSA)'
+            sheet.getCell('V2').value = 'Activity Type (SIWA)'
+            sheet.getCell('W2').value = 'Band (SIWA)'
+            sheet.getCell('X2').value = 'CELL STATUS'
+            sheet.getCell('Y2').value = 'CTR STATUS'
+            sheet.getCell('Z2').value = 'Integration Remark'
+            sheet.getCell('AA2').value = 'T2T4R'
+            sheet.getCell('AB2').value = 'BBU TYPE'
+            sheet.getCell('AC2').value = 'BB CARD'
+            sheet.getCell('AD2').value = 'RRU Type'
+            sheet.getCell('AE2').value = 'Media Status'
+            sheet.getCell('AF2').value = 'Mplane IP'
+            sheet.getCell('AG2').value = 'SCF PREPARED_BY'
+            sheet.getCell('AH2').value = 'SITE INTEGRATE_BY'
+            sheet.getCell('AI2').value = 'Site Status'
+            sheet.getCell('AJ2').value = 'External Alarm Confirmation'
+            sheet.getCell('AK2').value = 'SOFT AT STATUS'
+            sheet.getCell('AL2').value = 'LICENCE Status'
+            sheet.getCell('AM2').value = 'ESN NO'
+            sheet.getCell('AN2').value = 'Responsibility for alarm clearance'
+            sheet.getCell('AO2').value = 'TAC'
+            sheet.getCell('AP2').value = 'PCI TDD 20'
+            sheet.getCell('AQ2').value = 'PCI TDD 10/20'
+            sheet.getCell('AR2').value = 'PCI FDD 2100'
+            sheet.getCell('AS2').value = 'PCI FDD 1800'
+            sheet.getCell('AT2').value = 'PCI L900'
+            sheet.getCell('AU2').value = '5G PCI'
+            sheet.getCell('AV2').value = 'RSI TDD 20'
+            sheet.getCell('AW2').value = 'RSI TDD 10/20'
+            sheet.getCell('AX2').value = 'RSI FDD 2100'
+            sheet.getCell('AY2').value = 'RSI FDD 1800'
+            sheet.getCell('AZ2').value = 'RSI L900'
+            sheet.getCell('BA2').value = '5G RSI'
+            sheet.getCell('BB2').value = 'GPL'
+            sheet.getCell('BC2').value = 'Pre/Post Check'
+            sheet.getCell('BD2').value = 'SPOC NAME'
+            sheet.getCell('BE2').value = 'Offering Type'
+            sheet.getCell('BF2').value = 'First Offering Date'
+            sheet.getCell('BG2').value = 'Offering Date'
+            sheet.getCell('BH2').value = 'Acceptance / Rejection Date'
+            sheet.getCell('BI2').value = 'Alarm Bucket'
+            sheet.getCell('BJ2').value = 'Alarm Details'
+            sheet.getCell('BK2').value = 'Final Responsibility (Circle Team/UBR Team/NOC Team)'
+            sheet.getCell('BL2').value = 'Workable/Non-Workable'
+            sheet.getCell('BM2').value = 'UBR MS2 Status'
+            sheet.getCell('BN2').value = 'UBR Link ID'
+            sheet.getCell('BO2').value = 'TWAMP Status'
+            sheet.getCell('BP2').value = 'Status Check Date'
+            sheet.getCell('BQ2').value = 'Ageing (in days)'
+            sheet.getCell('BR2').value = 'Actual Ageing'
+            sheet.getCell('BS2').value = 'TOCO Partner'
+            sheet.getCell('BT2').value = 'Support required from UBR Team'
+            sheet.getCell('BU2').value = 'Support required from Circle Team'
+            sheet.getCell('BV2').value = 'Support required from NOC Team'
+            sheet.getCell('BW2').value = 'Category (HW/Media/Infra)'
+            sheet.getCell('BX2').value = 'Problem Statement in detail'
+            sheet.getCell('BY2').value = 'Final Remarks'
+            sheet.getCell('BZ2').value = 'MS1'
 
-        // console.log(year, month, day)
+            sheet.columns = columnData.map(col => ({ key: col.field }));
 
-        if (year) {
-            return (`${year}-${month}-${day}`);
-        } else {
-            return ('')
+            jsonData?.map((item) => {
+                sheet.addRow({
+                    unique_key: item.unique_key,
+                    OEM: item.OEM,
+                    Integration_Date: item.Integration_Date,
+                    CIRCLE: item.CIRCLE,
+                    Activity_Name: item.Activity_Name,
+                    Site_ID: item.Site_ID,
+                    MO_NAME: item.MO_NAME,
+                    LNBTS_ID: item.LNBTS_ID,
+                    Technology_SIWA: item.Technology_SIWA,
+                    OSS_Details: item.OSS_Details,
+                    Cell_ID: item.Cell_ID,
+                    CELL_COUNT: item.CELL_COUNT,
+                    BSC_NAME: item.BSC_NAME,
+                    BCF: item.BCF,
+                    TRX_Count: item.TRX_Count,
+                    PRE_ALARM: item.PRE_ALARM,
+                    GPS_IP_CLK: item.GPS_IP_CLK,
+                    RET: item.RET,
+                    POST_VSWR: item.POST_VSWR,
+                    POST_Alarms: item.POST_Alarms,
+                    Activity_Mode: item.Activity_Mode,
+                    Activity_Type_SIWA: item.Activity_Type_SIWA,
+                    Band_SIWA: item.Band_SIWA,
+                    CELL_STATUS: item.CELL_STATUS,
+                    CTR_STATUS: item.CTR_STATUS,
+                    Integration_Remark: item.Integration_Remark,
+                    T2T4R: item.T2T4R,
+                    BBU_TYPE: item.BBU_TYPE,
+                    BB_CARD: item.BB_CARD,
+                    RRU_Type: item.RRU_Type,
+                    Media_Status: item.Media_Status,
+                    Mplane_IP: item.Mplane_IP,
+                    SCF_PREPARED_BY: item.SCF_PREPARED_BY,
+                    SITE_INTEGRATE_BY: item.SITE_INTEGRATE_BY,
+                    Site_Status: item.Site_Status,
+                    External_Alarm_Confirmation: item.External_Alarm_Confirmation,
+                    SOFT_AT_STATUS: item.SOFT_AT_STATUS,
+                    LICENCE_Status: item.LICENCE_Status,
+                    ESN_NO: item.ESN_NO,
+                    Responsibility_for_alarm_clearance: item.Responsibility_for_alarm_clearance,
+                    TAC: item.TAC,
+                    PCI_TDD_20: item.PCI_TDD_20,
+                    PCI_TDD_10_20: item.PCI_TDD_10_20,
+                    PCI_FDD_2100: item.PCI_FDD_2100,
+                    PCI_FDD_1800: item.PCI_FDD_1800,
+                    PCI_L900: item.PCI_L900,
+                    PCI_5G: item.PCI_5G,
+                    RSI_TDD_20: item.RSI_TDD_20,
+                    RSI_TDD_10_20: item.RSI_TDD_10_20,
+                    RSI_FDD_2100: item.RSI_FDD_2100,
+                    RSI_FDD_1800: item.RSI_FDD_1800,
+                    RSI_L900: item.RSI_L900,
+                    RSI_5G: item.RSI_5G,
+                    GPL: item.GPL,
+                    Pre_Post_Check: item.Pre_Post_Check,
+                    spoc_name: item.spoc_name,
+                    offering_type: item.offering_type,
+                    first_offering_date: item.first_offering_date,
+                    offering_date: item.offering_date,
+                    acceptance_rejection_date: item.acceptance_rejection_date,
+                    alarm_bucket: item.alarm_bucket,
+                    alarm_details: item.alarm_details,
+                    final_responsibility: item.final_responsibility,
+                    workable_non_workable: item.workable_non_workable,
+                    ubr_ms2_status: item.ubr_ms2_status,
+                    ubr_link_id: item.ubr_link_id,
+                    twamp_status: item.twamp_status,
+                    status_check_date: item.status_check_date,
+                    ageing_in_days: item.ageing_in_days,
+                    actual_ageing: item.actual_ageing,
+                    toco_partner: item.toco_partner,
+                    support_required_ubr_team: item.support_required_ubr_team,
+                    support_required_circle_team: item.support_required_circle_team,
+                    support_required_noc_team: item.support_required_noc_team,
+                    category: item.category,
+                    problem_statement: item.problem_statement,
+                    final_remarks: item.final_remarks,
+                    ms1: item.ms1
+                })
+                
+            })
+
+                  ///__________ STYLING IN EXCEL TABLE ______________ ///
+        sheet.eachRow({ includeEmpty: true }, (row, rowNumber) => {
+            const rows = sheet.getColumn(1);
+            const rowsCount = rows['_worksheet']['_rows'].length;
+            row.eachCell({ includeEmpty: true }, (cell,colNumber) => {
+                cell.alignment = { vertical: 'middle', horizontal: 'center' }
+                cell.border = {
+                    top: { style: 'thin' },
+                    left: { style: 'thin' },
+                    bottom: { style: 'thin' },
+                    right: { style: 'thin' }
+                }
+                // if (rowNumber === rowsCount) {
+                //     cell.fill = {
+                //         type: 'pattern',
+                //         pattern: 'solid',
+                //         fgColor: { argb: 'FE9209' }
+                //     }
+                //     cell.font = {
+                //         color: { argb: 'FFFFFF' },
+                //         bold: true,
+                //         size: 13,
+                //     }
+                // }
+
+                if (rowNumber === 2 && colNumber >= 57 && colNumber <= 78) {
+                    cell.fill = {
+                        type: 'pattern',
+                        pattern: 'solid',
+                        fgColor: { argb: 'FFFF00' } // Yellow background color
+                    };
+                    cell.font = {
+                        color: { argb: '000000' },
+                        bold: true,
+                        size: 12,
+                    }
+                }
+
+                if (rowNumber === 2 && colNumber < 57 ) {
+                    cell.fill = {
+                        type: 'pattern',
+                        pattern: 'solid',
+                        fgColor: { argb: '223354' }
+                    }
+                    cell.font = {
+                        color: { argb: 'FFFFFF' },
+                        bold: true,
+                        size: 12,
+                    }
+                }
+
+                if (rowNumber === 1 ) {
+                    // First set the background of header row
+                    cell.fill = {
+                        type: 'pattern',
+                        pattern: 'solid',
+                        fgColor: { argb: 'FFFFFF' }
+                    }
+                    cell.font = {
+                        color: { argb: 'ff6645' },
+                        bold: true,
+                        size: 12,
+                    }
+                    cell.views = [{ state: 'frozen', ySplit: 1 }]
+                }
+            })
+        })
+
+        workbook.xlsx.writeBuffer().then(item => {
+            const blob = new Blob([item], {
+                type: "application/vnd.openxmlformats-officedocument.spreadsheet.sheet"
+            })
+            const url = window.URL.createObjectURL(blob);
+            const anchor = document.createElement('a');
+            anchor.href = url;
+            anchor.download = "soft_at_status_tracker.xlsx";
+            anchor.click();
+            window.URL.revokeObjectURL(url);
+        })
+
         }
 
 
-    }
+        const handleDateFormat = (date) => {
+            if (date) {
+            const dateObject = new Date(date);
+            const year = dateObject.getFullYear();
+            const month = String(dateObject.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+            const day = String(dateObject.getDate()).padStart(2, '0');
+
+            return (`${year}-${month}-${day}`);
+            } else {
+                return ('')
+            }
+        }
+       
 
     const handleToggle = (event, value) => {
         setDate('');
@@ -208,8 +459,7 @@ const SoftAtStatus = () => {
         formData.append('site_id', siteId)
         const response = await postData('Soft_At/softAt-status-update-template/', formData)
         if (response) {
-            console.log('response', response)
-            // setFileData(response.url)
+            // console.log('response', response)
             setJsonData(response?.data)
             action(false)
             setOpen(true)
@@ -237,7 +487,7 @@ const SoftAtStatus = () => {
             <DialogContent>
                 <Box style={{ padding: 20, display: 'flex', justifyContent: "center" }}>
                     {/* <a download href={link}> */}
-                        <Button variant="outlined" onClick={handleExport} startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />} sx={{ marginTop: "10px", width: "auto" }}><span style={{ fontFamily: "Poppins", fontSize: "22px", fontWeight: 800, textTransform: "none", textDecorationLine: "none" }}>Download Soft-AT Status</span></Button>
+                        <Button variant="outlined" onClick={handleExportExcel} startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />} sx={{ marginTop: "10px", width: "auto" }}><span style={{ fontFamily: "Poppins", fontSize: "22px", fontWeight: 800, textTransform: "none", textDecorationLine: "none" }}>Download Soft-AT Status</span></Button>
                         {/* </a> */}
                 </Box>
             </DialogContent>

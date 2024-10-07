@@ -7,7 +7,6 @@ import DoDisturbIcon from '@mui/icons-material/DoDisturb';
 import { postData, ServerURL, getData } from "../../../services/FetchNodeServices";
 import OverAllCss from "../../../csss/OverAllCss";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import GearIcon from '@rsuite/icons/Gear';
@@ -18,8 +17,12 @@ import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
 import DialogTitle from '@mui/material/DialogTitle';
 import CloseIcon from '@mui/icons-material/Close';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 import * as ExcelJS from 'exceljs'
-import _ from "lodash";
+import _, { set } from "lodash";
 
 const NomAudit = () => {
     const [fileData, setFileData] = useState()
@@ -36,6 +39,7 @@ const NomAudit = () => {
     const [filterStData, setFilterStData] = useState([])
     const [dialogsitedata, setDialogsitedata] = useState(false)
     const [siteWiseData, setSiteWiseData] = useState([])
+    const [selectCircle , setSelectCircle] = useState('')
 
 
     // console.log('pre files', preFiles[0])
@@ -182,6 +186,7 @@ const NomAudit = () => {
                 formData.append(`post_files`, postFiles[i]);
             }
 
+            formData.append('circle', selectCircle)
 
             const response = await postData('NOM_AUDIT/pre_post_audit_process/', formData, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
 
@@ -525,6 +530,28 @@ const NomAudit = () => {
                                     Generate Nomenclature Audit
                                 </Box>
                                 <Stack spacing={2} sx={{ marginTop: "-40px" }} direction={'column'}>
+                                <Box className={classes.Front_Box}>
+                                <Box className={classes.Front_Box_Hading}>
+                                    Select Circle
+                                </Box>
+                                <Box sx={{ marginTop: "5px", float: "left" }}>
+                                    <FormControl sx={{ minWidth: 150 }}>
+                                        <InputLabel id="demo-simple-select-label">Select Circle</InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={selectCircle}
+                                            label="Select Circle"
+                                            onChange={(event) => { setSelectCircle(event.target.value) }}
+                                        >
+                                                <MenuItem value={'AP'}>AP</MenuItem>
+                                                <MenuItem value={'DL'}>DL</MenuItem>
+                                                <MenuItem value={'JK'}>JK</MenuItem>
+                                        
+                                        </Select>   
+                                    </FormControl>
+                                </Box>
+                            </Box>
                                     <Box className={classes.Front_Box} >
                                         <div className={classes.Front_Box_Hading}>
                                             Select Pre Files:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{ }</span>
