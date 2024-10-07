@@ -108,7 +108,7 @@ const SoftAtOffering = () => {
             formData.append('to_date', handleDateFormat(toDate))
             formData.append('circle_oem', JSON.stringify(finalJson))
             formData.append('site_id', siteId)
-            const response = await postData('IntegrationTracker/softAt-offering-templates/', formData)
+            const response = await postData('Soft_At/softAt-offering-templates/', formData)
             if (response) {
                 console.log('response', response)
                 setFileData(response.url)
@@ -229,7 +229,7 @@ const SoftAtOffering = () => {
 
     useEffect(() => {
         const fetchCircle = async () => {
-            const response = await getData('IntegrationTracker/get-integration-circle/');
+            const response = await getData('Soft_At/get-integration-circle/');
             // console.log('response',response.circle)
             if (response) {
                 setAllcircle(response.circle)
@@ -354,7 +354,7 @@ const SoftAtOffering = () => {
                             <Box className={classes.Front_Box}>
                                 <Box className={classes.Front_Box_Hading}>Enter Site ID</Box>
                                 <Box sx={{ marginTop: "5px", float: "left" }}>
-                                    <TextField size="medium" label="Enter Site ID" variant="outlined" value={siteId} onChange={(e) => setSiteId(e.target.value)} />
+                                    <TextField size="medium" type="search" label="Enter Site ID" variant="outlined" value={siteId} onChange={(e) => setSiteId(e.target.value)} />
                                 </Box>
                             </Box>
                         </Stack>
