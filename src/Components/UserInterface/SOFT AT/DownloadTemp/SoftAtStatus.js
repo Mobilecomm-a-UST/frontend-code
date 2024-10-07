@@ -50,7 +50,7 @@ const circleOem = [{ id: 1, circle: 'AP', OEM: ['Ericsson (AP)'] },
 { id: 11, circle: 'MUM', OEM: ['Nokia (MUM)'] },
 { id: 12, circle: 'ORI', OEM: ['Nokia (ORI)'] },
 { id: 13, circle: 'PUN', OEM: ['Nokia (PUN)', 'Samsung (PUN)', 'ZTE (PUN)'] },
-{ id: 14, circle: 'RAY', OEM: ['Ericsson (RAY)'] },
+{ id: 14, circle: 'RAJ', OEM: ['Ericsson (RAJ)'] },
 { id: 15, circle: 'ROTN', OEM: ['Ericsson (ROTN)', 'Huawei (ROTN)'] },
 { id: 16, circle: 'UPE', OEM: ['Nokia (UPE)'] },
 { id: 17, circle: 'UPW', OEM: ['Ericsson (UPW)', 'Huawei (UPW)'] },
@@ -72,6 +72,7 @@ const SoftAtStatus = () => {
     const [oemShow, setOemShow] = useState(false)
     const [open, setOpen] = useState(false);
     const [finalJson, setFinalJson] = useState([])
+    const [jsonData, setJsonData] = useState([])
     const { loading, action } = useLoadingDialog()
 
     var link = `${ServerURL}${fileData}`;
@@ -134,15 +135,38 @@ const SoftAtStatus = () => {
             { title: 'RSI L900', field: 'RSI_L900' },
             { title: '5G RSI', field: 'RSI_5G' },
             { title: 'GPL', field: 'GPL' },
-            { title: 'Pre/Post Check', field: 'Pre_Post_Check' }
+            { title: 'Pre/Post Check', field: 'Pre_Post_Check' },
+            { title: 'SPOC NAME', field: 'spoc_name' },
+            { title: 'Offering Type', field: 'offering_type' },
+            { title: 'First Offering Date', field: 'first_offering_date' },
+            { title: 'Offering Date', field: 'offering_date' },
+            { title: 'Acceptance / Rejection Date', field: 'acceptance_rejection_date' },
+            { title: 'Alarm Bucket', field: 'alarm_bucket' },
+            { title: 'Alarm Details', field: 'alarm_details' },
+            { title: 'Final Responsibility (Circle Team/UBR Team/NOC Team)', field: 'final_responsibility' },
+            { title: 'Workable/Non-Workable', field: 'workable_non_workable' },
+            { title: 'UBR MS2 Status', field: 'ubr_ms2_status' },
+            { title: 'UBR Link ID', field: 'ubr_link_id' },
+            { title: 'TWAMP Status', field: 'twamp_status' },
+            { title: 'Status Check Date', field: 'status_check_date' },
+            { title: 'Ageing (in days)', field: 'ageing_in_days' },
+            { title: 'Actual Ageing', field: 'actual_ageing' },
+            { title: 'TOCO Partner', field: 'toco_partner' },
+            { title: 'Support required from UBR Team', field: 'support_required_ubr_team' },
+            { title: 'Support required from Circle Team', field: 'support_required_circle_team' },
+            { title: 'Support required from NOC Team', field: 'support_required_noc_team' },
+            { title: 'Category (HW/Media/Infra)', field: 'category' },
+            { title: 'Problem Statement in detail', field: 'problem_statement' },
+            { title: 'Final Remarks', field: 'final_remarks' },
+            { title: 'MS1', field: 'ms1' },
         ];
         // // handleExport Range wise table in excel formet.........
-        // const handleExport = () => {
-        //     var csvBuilder = new CsvBuilder(`Date_Wise_Integration_Tracker.csv`)
-        //         .setColumns(columnData.map(item => item.title))
-        //         .addRows(data?.download_data.map(row => columnData.map(col => row[col.field])))
-        //         .exportFile();
-        // }
+        const handleExport = () => {
+            var csvBuilder = new CsvBuilder(`SOFT_AT_STATUS_TRACKER.csv`)
+                .setColumns(columnData.map(item => item.title))
+                .addRows(jsonData.map(row => columnData.map(col => row[col.field])))
+                .exportFile();
+        }
 
     const handleDateFormat = (e) => {
         const dateObject = new Date(e.$d);
@@ -182,10 +206,11 @@ const SoftAtStatus = () => {
         // formData.append('oem', selectOem)
         formData.append('circle_oem', JSON.stringify(finalJson))
         formData.append('site_id', siteId)
-        const response = await postData('IntegrationTracker/softAt-status-update-template/', formData)
+        const response = await postData('Soft_At/softAt-status-update-template/', formData)
         if (response) {
             console.log('response', response)
-            setFileData(response.url)
+            // setFileData(response.url)
+            setJsonData(response?.data)
             action(false)
             setOpen(true)
         }
@@ -211,7 +236,9 @@ const SoftAtStatus = () => {
             </DialogTitle>
             <DialogContent>
                 <Box style={{ padding: 20, display: 'flex', justifyContent: "center" }}>
-                    <a download href={link}><Button variant="outlined" onClick='' startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />} sx={{ marginTop: "10px", width: "auto" }}><span style={{ fontFamily: "Poppins", fontSize: "22px", fontWeight: 800, textTransform: "none", textDecorationLine: "none" }}>Download Soft-AT Status</span></Button></a>
+                    {/* <a download href={link}> */}
+                        <Button variant="outlined" onClick={handleExport} startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />} sx={{ marginTop: "10px", width: "auto" }}><span style={{ fontFamily: "Poppins", fontSize: "22px", fontWeight: 800, textTransform: "none", textDecorationLine: "none" }}>Download Soft-AT Status</span></Button>
+                        {/* </a> */}
                 </Box>
             </DialogContent>
 
@@ -284,7 +311,7 @@ const SoftAtStatus = () => {
 
     useEffect(() => {
         const fetchCircle = async () => {
-            const response = await getData('IntegrationTracker/get-integration-circle/');
+            const response = await getData('Soft_At/get-integration-circle/');
             // console.log('response',response.circle)
             if (response) {
                 setAllcircle(response.circle)
@@ -413,7 +440,7 @@ const SoftAtStatus = () => {
                             <Box className={classes.Front_Box}>
                                 <Box className={classes.Front_Box_Hading}>Enter Site ID</Box>
                                 <Box sx={{ marginTop: "5px", float: "left" }}>
-                                    <TextField size="medium" label="Enter Site ID" variant="outlined" value={siteId} onChange={(e) => setSiteId(e.target.value)} />
+                                    <TextField size="medium" type="search" label="Enter Site ID" variant="outlined" value={siteId} onChange={(e) => setSiteId(e.target.value)} />
                                 </Box>
                             </Box>
                         </Stack>
