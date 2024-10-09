@@ -276,13 +276,15 @@ const NomAudit = () => {
         let postAdm = _.countBy(result, data => data.POST_State === '(UNLOCKED)');
         let postOp = _.countBy(result, data => data.POST_State_1 === '(ENABLED)');
         let auditMO = _.countBy(result, data => data.audit_MO == 'OK');
+        let auditMOError = _.countBy(result, data => data.audit_MO == 'ERROR');
+        let auditMONotok = _.countBy(result, data => data.audit_MO == 'NOT OK');
         let auditAdmState = _.countBy(result, data => data.audit_AdmState == 'OK');
         let auditOpState = _.countBy(result, data => data.audit_OpState == 'OK');
         let auditIPADDR = _.countBy(result, data => data.audit_IP_ADDR == 'OK');
         let overAllStatusData = _.countBy(result, data => data.OverAll_Status == 'OK');
         // let temp2 = _.countBy(result , data => data.audit_MO == 'NOT OK');
-        console.log('temp filter', [{ ip, preAdm, preOp, postAdm, postOp, auditAdmState, auditOpState, auditMO, auditIPADDR }])
-        setFilterStData([{ ip, preAdm, preOp, postAdm, postOp, auditAdmState, auditOpState, auditMO, auditIPADDR, overAllStatusData }])
+        console.log('temp filter', [{ ip, preAdm, preOp, postAdm, postOp, auditAdmState, auditOpState, auditMO,auditMOError, auditIPADDR }])
+        setFilterStData([{ ip, preAdm, preOp, postAdm, postOp, auditAdmState, auditOpState, auditMO,auditMOError, auditMONotok,auditIPADDR, overAllStatusData }])
         setDialogOpen(true)
     }
 
@@ -337,7 +339,7 @@ const NomAudit = () => {
                                     <th rowSpan='3' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9900' }}>Site ID</th>
                                     <th colSpan='4' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#66CCFF' }}>PRE</th>
                                     <th colSpan='4' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#538DD5' }}>POST</th>
-                                    <th colSpan='8' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#DA9694' }}>AUDIT</th>
+                                    <th colSpan='9' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#DA9694' }}>AUDIT</th>
                                     <th colSpan='2' rowSpan={2} style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FFFFFF' }}>Over-All</th>
                                 </tr>
                                 <tr style={{ fontSize: 15, border: '1px solid white' }}>
@@ -347,7 +349,7 @@ const NomAudit = () => {
                                     <th colSpan='2' style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#8DB4E2' }}>Op. State (Count)</th>
                                     <th colSpan='2' style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#E6B8B7' }}>Adm. State </th>
                                     <th colSpan='2' style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#E6B8B7' }}>Op. State </th>
-                                    <th colSpan='2' style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#E6B8B7' }}>MO </th>
+                                    <th colSpan='3' style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#E6B8B7' }}>MO </th>
                                     <th colSpan='2' style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#E6B8B7' }}>IP Add.</th>
                                 </tr>
                                 <tr style={{ fontSize: 13, border: '1px solid white' }}>
@@ -372,6 +374,7 @@ const NomAudit = () => {
                                     {/* OM */}
                                     <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#F2DCDB' }}>OK</th>
                                     <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#F2DCDB' }}>NOT OK</th>
+                                    <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#7E60BF',color:'white' }}>ERROR</th>
                                     {/* IP Add. */}
                                     <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#F2DCDB' }}>OK</th>
                                     <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#F2DCDB' }}>NOT OK</th>
@@ -425,8 +428,11 @@ const NomAudit = () => {
                                         <th style={{ color: 'red' }}>{it.auditAdmState?.false || 0}</th>
                                         <th style={{ color: 'green' }}>{it.auditOpState?.true || 0}</th>
                                         <th style={{ color: 'red' }}>{it.auditOpState?.false || 0}</th>
+                                        {/* MO section */}
                                         <th style={{ color: 'green' }}>{it.auditMO?.true || 0}</th>
-                                        <th style={{ color: 'red' }}>{it.auditMO?.false || 0}</th>
+                                        <th style={{ color: 'red' }}>{it.auditMONotok?.true || 0}</th>
+                                        <th style={{ color: '#7E60BF' }}>{it.auditMOError?.true || 0}</th>
+                                        {/* end MO section */}
                                         <th style={{ color: 'green' }}>{it.auditIPADDR?.true || 0}</th>
                                         <th style={{ color: 'red' }}>{it.auditIPADDR?.false || 0}</th>
                                         {/* overAllStatusData */}
