@@ -24,9 +24,15 @@ import Select from '@mui/material/Select';
 import * as ExcelJS from 'exceljs'
 import _, { set } from "lodash";
 
+
+
+const colorType = ['#B0EBB4', '#A0DEFF', '#FF9F66', '#ECB176', '#CDE8E5']
+
 const NomAudit = () => {
     const [fileData, setFileData] = useState()
     const [show, setShow] = useState(false)
+    const [showPre, setShowPre] = useState(false)
+    const [showPost, setShowPost] = useState(false)
     const [open, setOpen] = useState(false);
     const [download, setDownload] = useState(false);
     const classes = OverAllCss();
@@ -39,7 +45,8 @@ const NomAudit = () => {
     const [filterStData, setFilterStData] = useState([])
     const [dialogsitedata, setDialogsitedata] = useState(false)
     const [siteWiseData, setSiteWiseData] = useState([])
-    const [selectCircle , setSelectCircle] = useState('')
+    const [selectCircle, setSelectCircle] = useState('')
+    const [overAllDataShow , setOverAllDataShow] = useState([])
 
 
     // console.log('pre files', preFiles[0])
@@ -174,7 +181,7 @@ const NomAudit = () => {
 
 
     const handleSubmit = async () => {
-        if (preFiles.length > 0 && postFiles.length > 0) {
+        if (preFiles.length > 0 && postFiles.length > 0 && selectCircle !== "") {
             setOpen(true)
             var formData = new FormData();
             for (let i = 0; i < preFiles.length; i++) {
@@ -219,7 +226,22 @@ const NomAudit = () => {
             }
         }
         else {
-            setShow(true);
+            if (preFiles.length === 0) {
+                setShowPre(true)
+            } else {
+                setShowPre(false)
+            }
+            if (postFiles.length === 0) {
+                setShowPost(true)
+            } else {
+                setShowPost(false)
+            }
+            if (selectCircle === "") {
+                setShow(true)
+            } else {
+                setShow(false)
+            }
+
         }
     };
 
@@ -227,14 +249,21 @@ const NomAudit = () => {
     const preTableData = (data) => {
         const groupedData = _.groupBy(data, 'PRE_IP_ADDR');
         // Calculate counts of PRE_MO and POST_MO for each unique PRE_IP_ADDR
+        // console.log('filterssssss',Object.keys(groupedData).length)
+        // console.log('count of ok or not ok', _.countBy(data, data => data.OverAll_Status === 'OK'))
+        let TotalCount  = Object.keys(groupedData).length;
+        let Accepted = _.countBy(data, data => data.OverAll_Status === 'OK');
+        // console.log('box count' , [TotalCount, Accepted])
         const result = Object.keys(groupedData).map(preIp => {
             // console.log('filterssssss' ,_.filter(groupedData[preIp]fc, data=> data.audit_MO === "OK").length )
+
             const preMoCount = groupedData[preIp].length; // Count of PRE_MO (number of entries for each PRE_IP_ADDR)
-            const postMoCount = _.filter(groupedData[preIp], data => data.audit_MO === "OK").length; // Count of unique POST_MO for each PRE_IP_ADDR
+            const postMoCount = _.filter(groupedData[preIp], data => data.OverAll_Status === "OK").length; // Count of unique POST_MO for each PRE_IP_ADDR
             return { preIp, preMoCount, postMoCount };
         });
-
+        
         setSt_cell(result);
+        setOverAllDataShow([TotalCount, Accepted])
 
     }
 
@@ -250,15 +279,17 @@ const NomAudit = () => {
         let auditAdmState = _.countBy(result, data => data.audit_AdmState == 'OK');
         let auditOpState = _.countBy(result, data => data.audit_OpState == 'OK');
         let auditIPADDR = _.countBy(result, data => data.audit_IP_ADDR == 'OK');
+        let overAllStatusData = _.countBy(result, data => data.OverAll_Status == 'OK');
         // let temp2 = _.countBy(result , data => data.audit_MO == 'NOT OK');
         console.log('temp filter', [{ ip, preAdm, preOp, postAdm, postOp, auditAdmState, auditOpState, auditMO, auditIPADDR }])
-        setFilterStData([{ ip, preAdm, preOp, postAdm, postOp, auditAdmState, auditOpState, auditMO, auditIPADDR }])
+        setFilterStData([{ ip, preAdm, preOp, postAdm, postOp, auditAdmState, auditOpState, auditMO, auditIPADDR, overAllStatusData }])
         setDialogOpen(true)
     }
 
     const handleCancel = () => {
         setPreFiles([]);
         setPostFiles([]);
+        setSelectCircle("")
     }
 
     // DATA PROCESSING DIALOG BOX...............
@@ -307,6 +338,7 @@ const NomAudit = () => {
                                     <th colSpan='4' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#66CCFF' }}>PRE</th>
                                     <th colSpan='4' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#538DD5' }}>POST</th>
                                     <th colSpan='8' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#DA9694' }}>AUDIT</th>
+                                    <th colSpan='2' rowSpan={2} style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FFFFFF' }}>Over-All</th>
                                 </tr>
                                 <tr style={{ fontSize: 15, border: '1px solid white' }}>
                                     <th colSpan='2' style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#B7DEE8' }}>Adm. State (Count)</th>
@@ -343,6 +375,9 @@ const NomAudit = () => {
                                     {/* IP Add. */}
                                     <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#F2DCDB' }}>OK</th>
                                     <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#F2DCDB' }}>NOT OK</th>
+                                    {/* Over-All */}
+                                    <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#FFFFFF' }}>OK</th>
+                                    <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#FFFFFF' }}>NOT OK</th>
 
                                 </tr>
                                 {/* <tr style={{ fontSize: 15, border: '1px solid white' }}>
@@ -376,7 +411,7 @@ const NomAudit = () => {
                             <tbody>
 
                                 {filterStData?.map((it, i) => (
-                                    <tr key={i} className={classes.hover} onClick={() => { setDialogsitedata(true)}} style={{ textAlign: "center", fontWeigth: 700 }}>
+                                    <tr key={i} className={classes.hover} onClick={() => { setDialogsitedata(true) }} style={{ textAlign: "center", fontWeigth: 700 }}>
                                         <th style={{}}>{it.ip}</th>
                                         <th style={{ color: 'green' }}>{it.preAdm?.true || 0}</th>
                                         <th style={{ color: 'red' }}>{it.preAdm?.false || 0}</th>
@@ -394,6 +429,9 @@ const NomAudit = () => {
                                         <th style={{ color: 'red' }}>{it.auditMO?.false || 0}</th>
                                         <th style={{ color: 'green' }}>{it.auditIPADDR?.true || 0}</th>
                                         <th style={{ color: 'red' }}>{it.auditIPADDR?.false || 0}</th>
+                                        {/* overAllStatusData */}
+                                        <th style={{ color: 'green' }}>{it.overAllStatusData?.true || 0}</th>
+                                        <th style={{ color: 'red' }}>{it.overAllStatusData?.false || 0}</th>
 
                                     </tr>
                                 ))}
@@ -431,30 +469,30 @@ const NomAudit = () => {
                                 </tr>
                                 <tr style={{ fontSize: 15, border: '1px solid white' }}>
                                     <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#B7DEE8' }}>Proxy</th>
-                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#B7DEE8' }}>Adm. State</th>                                    
-                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#B7DEE8' }}>Op. State</th>                                   
-                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#B7DEE8' }}>MO</th>                                    
-                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#B7DEE8' }}>Date & Time(UTC)</th>                                  
-                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#B7DEE8' }}>IP Address</th>      
+                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#B7DEE8' }}>Adm. State</th>
+                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#B7DEE8' }}>Op. State</th>
+                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#B7DEE8' }}>MO</th>
+                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#B7DEE8' }}>Date & Time(UTC)</th>
+                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#B7DEE8' }}>IP Address</th>
 
 
-                                     <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#8DB4E2' }}>Proxy</th>
-                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#8DB4E2' }}>Adm. State</th>                                    
-                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#8DB4E2' }}>Op. State</th>                                   
-                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#8DB4E2' }}>MO</th>                                    
-                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#8DB4E2' }}>Date & Time(UTC)</th>                                  
-                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#8DB4E2' }}>IP Address</th>       
+                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#8DB4E2' }}>Proxy</th>
+                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#8DB4E2' }}>Adm. State</th>
+                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#8DB4E2' }}>Op. State</th>
+                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#8DB4E2' }}>MO</th>
+                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#8DB4E2' }}>Date & Time(UTC)</th>
+                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#8DB4E2' }}>IP Address</th>
 
 
 
-                                    
-                                     <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#E6B8B7' }}>Ad. mState</th>
-                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#E6B8B7' }}>Op. State</th>                                    
-                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#E6B8B7' }}>MO</th>                                   
-                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#E6B8B7' }}>IP Address</th>   
+
+                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#E6B8B7' }}>Ad. mState</th>
+                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#E6B8B7' }}>Op. State</th>
+                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#E6B8B7' }}>MO</th>
+                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#E6B8B7' }}>IP Address</th>
 
 
-                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#E6B8B7' }}>Status</th>                         
+                                    <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', backgroundColor: '#E6B8B7' }}>Status</th>
 
 
 
@@ -479,10 +517,10 @@ const NomAudit = () => {
                                         <th style={{ padding: '5px 10px', border: '1px solid black' }}>{it?.POST_Date__Time_UTC}</th>
                                         <th style={{ padding: '5px 10px', border: '1px solid black' }}>{it.POST_IP_ADDR}</th>
 
-                                        <th style={{ padding: '5px 10px', border: '1px solid black',color:it.audit_AdmState=='OK'?'green':'red' }}>{it.audit_AdmState}</th>
-                                        <th style={{ padding: '5px 10px', border: '1px solid black',color:it.audit_OpState=='OK'?'green':'red' }}>{it.audit_OpState}</th>
-                                        <th style={{ padding: '5px 10px', border: '1px solid black',color:it.audit_MO=='OK'?'green':'red' }}>{it.audit_MO}</th>
-                                        <th style={{ padding: '5px 10px', border: '1px solid black',color:it.audit_IP_ADDR=='OK'?'green':'red'  }}>{it.audit_IP_ADDR}</th>
+                                        <th style={{ padding: '5px 10px', border: '1px solid black', color: it.audit_AdmState == 'OK' ? 'green' : 'red' }}>{it.audit_AdmState}</th>
+                                        <th style={{ padding: '5px 10px', border: '1px solid black', color: it.audit_OpState == 'OK' ? 'green' : 'red' }}>{it.audit_OpState}</th>
+                                        <th style={{ padding: '5px 10px', border: '1px solid black', color: it.audit_MO == 'OK' ? 'green' : 'red' }}>{it.audit_MO}</th>
+                                        <th style={{ padding: '5px 10px', border: '1px solid black', color: it.audit_IP_ADDR == 'OK' ? 'green' : 'red' }}>{it.audit_IP_ADDR}</th>
 
                                         <th style={{ padding: '5px 10px', border: '1px solid black' }}>{it.OverAll_Status}</th>
 
@@ -530,28 +568,30 @@ const NomAudit = () => {
                                     Generate Nomenclature Audit
                                 </Box>
                                 <Stack spacing={2} sx={{ marginTop: "-40px" }} direction={'column'}>
-                                <Box className={classes.Front_Box}>
-                                <Box className={classes.Front_Box_Hading}>
-                                    Select Circle
-                                </Box>
-                                <Box sx={{ marginTop: "5px", float: "left" }}>
-                                    <FormControl sx={{ minWidth: 150 }}>
-                                        <InputLabel id="demo-simple-select-label">Select Circle</InputLabel>
-                                        <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            value={selectCircle}
-                                            label="Select Circle"
-                                            onChange={(event) => { setSelectCircle(event.target.value) }}
-                                        >
-                                                <MenuItem value={'AP'}>AP</MenuItem>
-                                                <MenuItem value={'DL'}>DL</MenuItem>
-                                                <MenuItem value={'JK'}>JK</MenuItem>
-                                        
-                                        </Select>   
-                                    </FormControl>
-                                </Box>
-                            </Box>
+                                    <Box className={classes.Front_Box}>
+                                        <Box className={classes.Front_Box_Hading}>
+                                            Select Circle
+                                        </Box>
+                                        <Box className={classes.Front_Box_Select_Button} >
+                                            <FormControl sx={{ minWidth: 150 }}>
+                                                <InputLabel id="demo-simple-select-label">Select Circle</InputLabel>
+                                                <Select
+                                                    labelId="demo-simple-select-label"
+                                                    id="demo-simple-select"
+                                                    value={selectCircle}
+                                                    label="Select Circle"
+                                                    onChange={(event) => { setSelectCircle(event.target.value); setShow(false) }}
+                                                >
+                                                    <MenuItem value={'AP'}>AP</MenuItem>
+                                                    <MenuItem value={'DL'}>DL</MenuItem>
+                                                    <MenuItem value={'JK'}>JK</MenuItem>
+
+                                                </Select>
+                                            </FormControl>
+                                            <div>  <span style={{ display: show ? 'inherit' : 'none', color: 'red', fontSize: '18px', fontWeight: 600 }}>This Field Is Required !</span> </div>
+                                        </Box>
+
+                                    </Box>
                                     <Box className={classes.Front_Box} >
                                         <div className={classes.Front_Box_Hading}>
                                             Select Pre Files:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{ }</span>
@@ -563,13 +603,13 @@ const NomAudit = () => {
                                                     <input required hidden accept="/*" multiple type="file"
                                                         // webkitdirectory="true"
                                                         // directory="true"
-                                                        onChange={handlePreFolderSelection} />
+                                                        onChange={(e) => { handlePreFolderSelection(e); setShowPre(false); }} />
                                                 </Button>
                                             </div>
 
                                             {preFiles.length > 0 && <span style={{ color: 'green', fontSize: '18px', fontWeight: 600 }}>Selected File(s) : {preFiles.length}</span>}
 
-                                            <div>  <span style={{ display: show ? 'inherit' : 'none', color: 'red', fontSize: '18px', fontWeight: 600 }}>This Field Is Required !</span> </div>
+                                            <div>  <span style={{ display: showPre ? 'inherit' : 'none', color: 'red', fontSize: '18px', fontWeight: 600 }}>This Field Is Required !</span> </div>
                                         </div>
                                     </Box>
                                     {/* post files */}
@@ -582,15 +622,14 @@ const NomAudit = () => {
                                                 <Button variant="contained" component="label" color={postFiles.length > 0 ? "warning" : "primary"}>
                                                     select file
                                                     <input required hidden accept="/*" multiple type="file"
-                                                        // webkitdirectory="true"
-                                                        // directory="true"
-                                                        onChange={handlePostFolderSelection} />
+
+                                                        onChange={(e) => { handlePostFolderSelection(e); setShowPost(false) }} />
                                                 </Button>
                                             </div>
 
                                             {postFiles.length > 0 && <span style={{ color: 'green', fontSize: '18px', fontWeight: 600 }}>Selected File(s) : {postFiles.length}</span>}
 
-                                            <div>  <span style={{ display: show ? 'inherit' : 'none', color: 'red', fontSize: '18px', fontWeight: 600 }}>This Field Is Required !</span> </div>
+                                            <div>  <span style={{ display: showPost ? 'inherit' : 'none', color: 'red', fontSize: '18px', fontWeight: 600 }}>This Field Is Required !</span> </div>
                                         </div>
                                     </Box>
 
@@ -608,9 +647,27 @@ const NomAudit = () => {
                             <Box sx={{ display: download ? 'block' : 'none' }}>
                                 <a download href={link}><Button variant="outlined" onClick='' startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />} sx={{ marginTop: "10px", width: "auto" }}><span style={{ fontFamily: "Poppins", fontSize: "22px", fontWeight: 800, textTransform: "none", textDecorationLine: "none" }}>Download NOM Audit</span></Button></a>
                             </Box>
+{/* over all data block in box formet */}
+                            <Box sx={{ display: download ? 'block' : 'none',marginTop:'20px',width:'100%' }}>
+                                <Box sx={{display:'flex',justifyContent:'space-between'}}>
+                                    <Box sx={{ height: '15vh', width: '45vh', padding: 1.5, borderRadius: 1.5, boxShadow: " rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px", backgroundColor: '#B0EBB4', textAlign: 'center' }}>
+                                        <Box sx={{ fontWeight: 600, fontSize: '16px', color: "black", textAlign: 'left' }}>Total No. Of Sites Count</Box>
+                                        <Box sx={{ fontWeight: 600, fontSize: '24px', color: "black", fontFamily: 'cursive' }}>{overAllDataShow && overAllDataShow[0]}</Box>
+                                    </Box>
+                                    <Box sx={{ height: '15vh', width: '45vh', padding: 1.5, borderRadius: 1.5, boxShadow: " rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px", backgroundColor: '#A0DEFF', textAlign: 'center' }}>
+                                        <Box sx={{ fontWeight: 600, fontSize: '16px', color: "black", textAlign: 'left' }}>Total No. Of  ' OK ' Count</Box>
+                                        <Box sx={{ fontWeight: 600, fontSize: '24px', color: "black", fontFamily: 'cursive' }}>{overAllDataShow && overAllDataShow[1]?.true}</Box>
+                                    </Box>
+                                    <Box sx={{ height: '15vh', width: '45vh', padding: 1.5, borderRadius: 1.5, boxShadow: " rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px", backgroundColor: '#FF9F66', textAlign: 'center' }}>
+                                        <Box sx={{ fontWeight: 600, fontSize: '16px', color: "black", textAlign: 'left' }}>Total No. Of  ' NOT OK ' Count</Box>
+                                        <Box sx={{ fontWeight: 600, fontSize: '24px', color: "black", fontFamily: 'cursive' }}>{overAllDataShow && overAllDataShow[1]?.false}</Box>
+                                    </Box>
+                                </Box>
+                            </Box>
 
+
+                            {/* Table in which show data pre count and post count and site id */}
                             <Slide direction='left' in={download} timeout={1000}>
-
                                 <TableContainer sx={{ maxHeight: 540, width: '100%', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', marginTop: "20px" }} component={Paper}>
                                     <table style={{ width: "100%", border: "1px solid black", borderCollapse: 'collapse', overflow: 'auto' }} >
                                         <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
