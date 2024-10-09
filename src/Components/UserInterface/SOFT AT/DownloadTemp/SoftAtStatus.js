@@ -140,6 +140,7 @@ const SoftAtStatus = () => {
             { title: 'SPOC NAME', field: 'spoc_name' },
             { title: 'Offering Type', field: 'offering_type' },
             { title: 'First Offering Date', field: 'first_offering_date' },
+            { title: 'Soft At Status', field: 'soft_at_status' },
             { title: 'Offering Date', field: 'offering_date' },
             { title: 'Acceptance / Rejection Date', field: 'acceptance_rejection_date' },
             { title: 'Alarm Bucket', field: 'alarm_bucket' },
@@ -173,7 +174,7 @@ const SoftAtStatus = () => {
             const workbook = new ExcelJS.Workbook();
             const sheet = workbook.addWorksheet("Soft At Status", { properties: { tabColor: { argb: 'f1948a' } } })
 
-            sheet.mergeCells('A1:BZ1')
+            sheet.mergeCells('A1:CA1')
 
             sheet.getCell('A1').value = '! Attention: This template cannot be directly uploaded. Download the template from the Soft AT upload section in the tool, copy and paste this data there, and upload that template. Any modifications should only be made after pasting this data to the downloaded template.'
             // Add the column headers to the first row of the excel sheet
@@ -235,26 +236,27 @@ const SoftAtStatus = () => {
             sheet.getCell('BD2').value = 'SPOC NAME'
             sheet.getCell('BE2').value = 'Offering Type'
             sheet.getCell('BF2').value = 'First Offering Date'
-            sheet.getCell('BG2').value = 'Offering Date'
-            sheet.getCell('BH2').value = 'Acceptance / Rejection Date'
-            sheet.getCell('BI2').value = 'Alarm Bucket'
-            sheet.getCell('BJ2').value = 'Alarm Details'
-            sheet.getCell('BK2').value = 'Final Responsibility (Circle Team/UBR Team/NOC Team)'
-            sheet.getCell('BL2').value = 'Workable/Non-Workable'
-            sheet.getCell('BM2').value = 'UBR MS2 Status'
-            sheet.getCell('BN2').value = 'UBR Link ID'
-            sheet.getCell('BO2').value = 'TWAMP Status'
-            sheet.getCell('BP2').value = 'Status Check Date'
-            sheet.getCell('BQ2').value = 'Ageing (in days)'
-            sheet.getCell('BR2').value = 'Actual Ageing'
-            sheet.getCell('BS2').value = 'TOCO Partner'
-            sheet.getCell('BT2').value = 'Support required from UBR Team'
-            sheet.getCell('BU2').value = 'Support required from Circle Team'
-            sheet.getCell('BV2').value = 'Support required from NOC Team'
-            sheet.getCell('BW2').value = 'Category (HW/Media/Infra)'
-            sheet.getCell('BX2').value = 'Problem Statement in detail'
-            sheet.getCell('BY2').value = 'Final Remarks'
-            sheet.getCell('BZ2').value = 'MS1'
+            sheet.getCell('BG2').value = 'Soft At Status'
+            sheet.getCell('BH2').value = 'Offering Date'
+            sheet.getCell('BI2').value = 'Acceptance / Rejection Date'
+            sheet.getCell('BJ2').value = 'Alarm Bucket'
+            sheet.getCell('BK2').value = 'Alarm Details'
+            sheet.getCell('BL2').value = 'Final Responsibility (Circle Team/UBR Team/NOC Team)'
+            sheet.getCell('BM2').value = 'Workable/Non-Workable'
+            sheet.getCell('BN2').value = 'UBR MS2 Status'
+            sheet.getCell('BO2').value = 'UBR Link ID'
+            sheet.getCell('BP2').value = 'TWAMP Status'
+            sheet.getCell('BQ2').value = 'Status Check Date'
+            sheet.getCell('BR2').value = 'Ageing (in days)'
+            sheet.getCell('BS2').value = 'Actual Ageing'
+            sheet.getCell('BT2').value = 'TOCO Partner'
+            sheet.getCell('BU2').value = 'Support required from UBR Team'
+            sheet.getCell('BV2').value = 'Support required from Circle Team'
+            sheet.getCell('BW2').value = 'Support required from NOC Team'
+            sheet.getCell('BX2').value = 'Category (HW/Media/Infra)'
+            sheet.getCell('BY2').value = 'Problem Statement in detail'
+            sheet.getCell('BZ2').value = 'Final Remarks'
+            sheet.getCell('CA2').value = 'MS1'
 
             sheet.columns = columnData.map(col => ({ key: col.field }));
 
@@ -318,6 +320,7 @@ const SoftAtStatus = () => {
                     spoc_name: item.spoc_name,
                     offering_type: item.offering_type,
                     first_offering_date: item.first_offering_date,
+                    soft_at_status: item.soft_at_status,
                     offering_date: item.offering_date,
                     acceptance_rejection_date: item.acceptance_rejection_date,
                     alarm_bucket: item.alarm_bucket,
@@ -367,7 +370,7 @@ const SoftAtStatus = () => {
                 //     }
                 // }
 
-                if (rowNumber === 2 && colNumber >= 57 && colNumber <= 78) {
+                if (rowNumber === 2 && colNumber >= 56 && colNumber <= 79) {
                     cell.fill = {
                         type: 'pattern',
                         pattern: 'solid',
@@ -380,7 +383,7 @@ const SoftAtStatus = () => {
                     }
                 }
 
-                if (rowNumber === 2 && colNumber < 57 ) {
+                if (rowNumber === 2 && colNumber < 56 ) {
                     cell.fill = {
                         type: 'pattern',
                         pattern: 'solid',
@@ -548,7 +551,7 @@ const SoftAtStatus = () => {
             tempResult[circleName].push(item);
           }
         });
-        console.log('tempResult', tempResult)
+        // console.log('tempResult', tempResult)
 
         setFinalJson(tempResult);
       }, [circle,selectOem]);
