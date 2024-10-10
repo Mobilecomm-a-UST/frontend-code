@@ -127,8 +127,8 @@ const FourG = () => {
 
       setOpen(true)
       var formData = new FormData();
-      formData.append("raw_kpi", rawKpiFile.bytes);
-      formData.append("site_list", siteListFile.bytes);
+      formData.append("raw_kpi_4G", rawKpiFile.bytes);
+      formData.append("site_list_4G", siteListFile.bytes);
       formData.append("str_site_list", siteData);
       formData.append("offered_date", offerDate);
       // const response = await postData('trend/ap/makeKpiTrend/old/4G', formData, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` },signal : abortSignal})

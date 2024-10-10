@@ -46,7 +46,7 @@ const NomAudit = () => {
     const [dialogsitedata, setDialogsitedata] = useState(false)
     const [siteWiseData, setSiteWiseData] = useState([])
     const [selectCircle, setSelectCircle] = useState('')
-    const [overAllDataShow , setOverAllDataShow] = useState([])
+    const [overAllDataShow, setOverAllDataShow] = useState([])
 
 
     // console.log('pre files', preFiles[0])
@@ -251,7 +251,7 @@ const NomAudit = () => {
         // Calculate counts of PRE_MO and POST_MO for each unique PRE_IP_ADDR
         // console.log('filterssssss',Object.keys(groupedData).length)
         // console.log('count of ok or not ok', _.countBy(data, data => data.OverAll_Status === 'OK'))
-        let TotalCount  = Object.keys(groupedData).length;
+        let TotalCount = Object.keys(groupedData).length;
         let Accepted = _.countBy(data, data => data.OverAll_Status === 'OK');
         // console.log('box count' , [TotalCount, Accepted])
         const result = Object.keys(groupedData).map(preIp => {
@@ -259,9 +259,10 @@ const NomAudit = () => {
 
             const preMoCount = groupedData[preIp].length; // Count of PRE_MO (number of entries for each PRE_IP_ADDR)
             const postMoCount = _.filter(groupedData[preIp], data => data.OverAll_Status === "OK").length; // Count of unique POST_MO for each PRE_IP_ADDR
+
             return { preIp, preMoCount, postMoCount };
         });
-        
+
         setSt_cell(result);
         setOverAllDataShow([TotalCount, Accepted])
 
@@ -283,8 +284,8 @@ const NomAudit = () => {
         let auditIPADDR = _.countBy(result, data => data.audit_IP_ADDR == 'OK');
         let overAllStatusData = _.countBy(result, data => data.OverAll_Status == 'OK');
         // let temp2 = _.countBy(result , data => data.audit_MO == 'NOT OK');
-        console.log('temp filter', [{ ip, preAdm, preOp, postAdm, postOp, auditAdmState, auditOpState, auditMO,auditMOError, auditIPADDR }])
-        setFilterStData([{ ip, preAdm, preOp, postAdm, postOp, auditAdmState, auditOpState, auditMO,auditMOError, auditMONotok,auditIPADDR, overAllStatusData }])
+        console.log('temp filter', [{ ip, preAdm, preOp, postAdm, postOp, auditAdmState, auditOpState, auditMO, auditMOError, auditIPADDR }])
+        setFilterStData([{ ip, preAdm, preOp, postAdm, postOp, auditAdmState, auditOpState, auditMO, auditMOError, auditMONotok, auditIPADDR, overAllStatusData }])
         setDialogOpen(true)
     }
 
@@ -374,7 +375,7 @@ const NomAudit = () => {
                                     {/* OM */}
                                     <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#F2DCDB' }}>OK</th>
                                     <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#F2DCDB' }}>NOT OK</th>
-                                    <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#7E60BF',color:'white' }}>ERROR</th>
+                                    <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#7E60BF', color: 'white' }}>ERROR</th>
                                     {/* IP Add. */}
                                     <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#F2DCDB' }}>OK</th>
                                     <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#F2DCDB' }}>NOT OK</th>
@@ -653,9 +654,9 @@ const NomAudit = () => {
                             <Box sx={{ display: download ? 'block' : 'none' }}>
                                 <a download href={link}><Button variant="outlined" onClick='' startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />} sx={{ marginTop: "10px", width: "auto" }}><span style={{ fontFamily: "Poppins", fontSize: "22px", fontWeight: 800, textTransform: "none", textDecorationLine: "none" }}>Download NOM Audit</span></Button></a>
                             </Box>
-{/* over all data block in box formet */}
-                            <Box sx={{ display: download ? 'block' : 'none',marginTop:'20px',width:'100%' }}>
-                                <Box sx={{display:'flex',justifyContent:'space-between'}}>
+                            {/* over all data block in box formet */}
+                            <Box sx={{ display: download ? 'block' : 'none', marginTop: '20px', width: '100%' }}>
+                                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                     <Box sx={{ height: '15vh', width: '45vh', padding: 1.5, borderRadius: 1.5, boxShadow: " rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px", backgroundColor: '#B0EBB4', textAlign: 'center' }}>
                                         <Box sx={{ fontWeight: 600, fontSize: '16px', color: "black", textAlign: 'left' }}>Total No. Of Sites Count</Box>
                                         <Box sx={{ fontWeight: 600, fontSize: '24px', color: "black", fontFamily: 'cursive' }}>{overAllDataShow && overAllDataShow[0]}</Box>
@@ -674,7 +675,10 @@ const NomAudit = () => {
 
                             {/* Table in which show data pre count and post count and site id */}
                             <Slide direction='left' in={download} timeout={1000}>
-                                <TableContainer sx={{ maxHeight: 540, width: '100%', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', marginTop: "20px" }} component={Paper}>
+                                <TableContainer sx={{ maxHeight: 400, width: '100%', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', marginTop: "20px" }} component={Paper}>
+                                <Box style={{ fontSize: 22, fontWeight: 'bold' }}>
+                                 OK Sites
+                                </Box>
                                     <table style={{ width: "100%", border: "1px solid black", borderCollapse: 'collapse', overflow: 'auto' }} >
                                         <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
                                             <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
@@ -685,13 +689,50 @@ const NomAudit = () => {
                                         </thead>
                                         <tbody>
 
-                                            {st_cell?.map((it, i) => (
-                                                <tr key={i} className={classes.hover} style={{ textAlign: "center", fontWeigth: 700 }}>
-                                                    <th className={classes.hover} onClick={() => { filetrIPAdd(it.preIp); }} style={{ color: it.preMoCount === it.postMoCount ? 'green' : 'red', cursor: 'pointer' }}>{it.preIp}</th>
-                                                    <th >{it.preMoCount}</th>
-                                                    <th >{it.postMoCount}</th>
-                                                </tr>
-                                            ))}
+                                            {st_cell?.map((it, i) => {
+
+                                                if (it.preMoCount === it.postMoCount) {
+                                                    return (<tr key={i} className={classes.hover} style={{ textAlign: "center", fontWeigth: 700 }}>
+                                                        <th className={classes.hover} onClick={() => { filetrIPAdd(it.preIp); }} style={{ color: it.preMoCount === it.postMoCount ? 'green' : 'red', cursor: 'pointer' }}>{it.preIp}</th>
+                                                        <th >{it.preMoCount}</th>
+                                                        <th >{it.postMoCount}</th>
+                                                    </tr>)
+                                                }
+
+                                            })}
+                                        </tbody>
+                                    </table>
+                                </TableContainer>
+
+                            </Slide>
+
+                            <Slide direction='left' in={download} timeout={1000}>
+                                
+                                <TableContainer sx={{ maxHeight: 400, width: '100%', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', marginTop: "20px" }} component={Paper}>
+                                <Box style={{ fontSize: 22, fontWeight: 'bold' }}>
+                                    NOT OK Sites
+                                </Box>
+                                    <table style={{ width: "100%", border: "1px solid black", borderCollapse: 'collapse', overflow: 'auto' }} >
+                                        <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
+                                            <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
+                                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#2F75B5' }}>Site ID</th>
+                                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#2F75B5' }}>Pre Count</th>
+                                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#2F75B5' }}>Post Count</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            {st_cell?.map((it, i) => {
+
+                                                if (it.preMoCount !== it.postMoCount) {
+                                                    return (<tr key={i} className={classes.hover} style={{ textAlign: "center", fontWeigth: 700 }}>
+                                                        <th className={classes.hover} onClick={() => { filetrIPAdd(it.preIp); }} style={{ color: it.preMoCount === it.postMoCount ? 'green' : 'red', cursor: 'pointer' }}>{it.preIp}</th>
+                                                        <th >{it.preMoCount}</th>
+                                                        <th >{it.postMoCount}</th>
+                                                    </tr>)
+                                                }
+
+                                            })}
                                         </tbody>
                                     </table>
                                 </TableContainer>
