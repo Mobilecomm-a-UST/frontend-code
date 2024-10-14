@@ -40,7 +40,7 @@ const Circle_Wise = () => {
   const [fromDate, setFromDate] = useState('')
   const [project, setProject] = useState([]);
   const [toDate, setToDate] = useState('')
-  const [selectedYear, setSelectedYear] = useState('2023')
+  const [selectedYear, setSelectedYear] = useState('')
   const [displayFilter, setDisplayFilter] = useState()
   const [displayFilterData, setDisplayFilterData] = useState('OverAll Data Up Till :')
   const [tableData, setTableData] = useState([])
@@ -98,6 +98,31 @@ const Circle_Wise = () => {
     refetchOnReconnect: false,
 
   })
+
+  const fetchCircleWiseHyperlink =async(eventdata)=>{
+    action(true)
+    var formData = new FormData();
+    formData.append("circle", eventdata?.circle)
+    formData.append("status", eventdata?.type)
+    formData.append("Date", date)
+    formData.append("month", month)
+    formData.append("week", week)
+    formData.append('from_date', fromDate)
+    formData.append('to_date', toDate)
+    formData.append('year', selectedYear)
+    formData.append('project', project)
+
+    const response = await makePostRequest('Soft_At/hyperlink-circle-wise-dashboard/', formData)
+    if(response){
+      action(false)
+      localStorage.setItem("softat_hyperlink_data", JSON.stringify(response.data));
+      window.open(`${window.location.href}/${eventdata.type}`, "_blank")
+    }
+    else{
+      action(false)
+    }
+    console.log('eventdata',response)
+  }
 
 
   const fetchCircle = () => {
@@ -169,13 +194,13 @@ const Circle_Wise = () => {
           <>
             <tr key={item} className={classes.hover} style={{ textAlign: "center", fontWeigth: 700 }}>
               <td style={{ fontWeight: 'bold', border: '1px solid black' }} >{item.circle}</td>
-              <td style={{ color: item.Accepted > 0 ? 'white' : 'black', border: '1px solid black', backgroundColor: item.Accepted > 0 ? "#58D68D" : "", fontWeight: 'bold' }}>{item.Accepted}</td>
-              <td style={{ color: item.Dismantle > 0 ? 'white' : 'black', border: '1px solid black', backgroundColor: item.Dismantle > 0 ? "#F96A56" : "", fontWeight: 'bold' }}>{item.Dismantle}</td>
-              <td style={{ fontWeight: 'bold', border: '1px solid black' }}>{item.Need_to_be_offer}</td>
-              <td style={{ fontWeight: 'bold', border: '1px solid black' }}>{item.NOT_OFFERED}</td>
-              <td style={{ fontWeight: 'bold', border: '1px solid black' }}>{item.Offered}</td>
-              <td style={{ color: item.Rejected > 0 ? 'white' : 'black', border: '1px solid black', backgroundColor: item.Rejected > 0 ? "#F96A56" : "", fontWeight: 'bold' }}>{item.Rejected}</td>
-              <td style={{ color: item.Pending > 0 ? 'black' : 'black', border: '1px solid black', backgroundColor: item.Pending > 0 ? "#F4D03F" : "", fontWeight: 'bold' }}>{item.Pending}</td>
+              <td style={{ color: item.Accepted > 0 ? 'white' : 'black', border: '1px solid black', backgroundColor: item.Accepted > 0 ? "#58D68D" : "", fontWeight: 'bold',cursor: 'pointer' }} className={classes.hover} onClick={()=>{fetchCircleWiseHyperlink({circle:item.circle,type:'Accepted'})}}>{item.Accepted}</td>
+              <td style={{ color: item.Dismantle > 0 ? 'white' : 'black', border: '1px solid black', backgroundColor: item.Dismantle > 0 ? "#F96A56" : "", fontWeight: 'bold',cursor: 'pointer' }} className={classes.hover} onClick={()=>{fetchCircleWiseHyperlink({circle:item.circle,type:'Dismantle'})}}>{item.Dismantle}</td>
+              <td style={{ fontWeight: 'bold', border: '1px solid black',cursor:'pointer' }} onClick={()=>{fetchCircleWiseHyperlink({circle:item.circle,type:'Need To Be Offer'})}} className={classes.hover}>{item.Need_to_be_offer}</td>
+              <td style={{ fontWeight: 'bold', border: '1px solid black',cursor:'pointer' }} onClick={()=>{fetchCircleWiseHyperlink({circle:item.circle,type:'Not Offered'})}} className={classes.hover}>{item.NOT_OFFERED}</td>
+              <td style={{ fontWeight: 'bold', border: '1px solid black',cursor:'pointer' }} onClick={()=>{fetchCircleWiseHyperlink({circle:item.circle,type:'Offered'})}} className={classes.hover}>{item.Offered}</td>
+              <td style={{ color: item.Rejected > 0 ? 'white' : 'black', border: '1px solid black', backgroundColor: item.Rejected > 0 ? "#F96A56" : "", fontWeight: 'bold',cursor:'pointer'  }} className={classes.hover} onClick={()=>{fetchCircleWiseHyperlink({circle:item.circle,type:'Rejected'})}}>{item.Rejected}</td>
+              <td style={{ color: item.Pending > 0 ? 'black' : 'black', border: '1px solid black', backgroundColor: item.Pending > 0 ? "#F4D03F" : "", fontWeight: 'bold',cursor:'pointer'  }} className={classes.hover} onClick={()=>{fetchCircleWiseHyperlink({circle:item.circle,type:'Pending'})}}>{item.Pending}</td>
               <td style={{ fontWeight: 'bold', border: '1px solid black' }}>{item.Total}</td>
             </tr>
           </>
