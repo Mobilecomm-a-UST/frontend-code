@@ -28,6 +28,7 @@ const DownloadSoftAtTemplate = lazy(() => import('./DownloadTemp/DownloadSoftAtT
 const SoftAtStatusTemplate = lazy(() => import('./DownloadTemp/SoftAtStatus'));
 const SIVATemplate = lazy(() => import('./DownloadTemp/SiwaTemp'));
 const SoftAtOffering = lazy(() => import('./DownloadTemp/SoftAtOffering'));
+const CircleWiseStatus = lazy(() => import('./Dashboard/CircleWiseStatus'));
 
 
 
@@ -151,7 +152,8 @@ const SoftAT = () => {
             <Suspense fallback={<div>loading............</div>}>
               <Routes>
                 <Route element={<SoftAtTool />} path="/" />
-                <Route element={<Circle_Wise />} path="/circle_wise" />
+                <Route element={<Circle_Wise />} path="/circle_wise/*" />
+                <Route element={<CircleWiseStatus />} path="/circle_wise/:name" />
                 <Route element={<Upload_Soft_AT />} path="/upload_soft_at/*" />
                 <Route element={<Upload_Soft_AT_Status />} path="/upload_soft_at/status" />
                 <Route element={<Master_Dashboard />} path="/master_dashboard" />
