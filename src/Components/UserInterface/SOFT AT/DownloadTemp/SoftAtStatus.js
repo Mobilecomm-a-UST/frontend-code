@@ -6,6 +6,7 @@ import UploadIcon from '@mui/icons-material/Upload';
 import DoDisturbIcon from '@mui/icons-material/DoDisturb';
 import { postData, ServerURL, getData } from "../../../services/FetchNodeServices";
 import OverAllCss from "../../../csss/OverAllCss";
+import Swal from "sweetalert2";
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import Zoom from '@mui/material/Zoom';
@@ -29,6 +30,7 @@ import ListItemText from '@mui/material/ListItemText';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { CsvBuilder } from 'filefy';
 import * as ExcelJS from 'exceljs'
+import axios from "axios";
 import Slide from '@mui/material/Slide';
 
 
@@ -450,30 +452,39 @@ const SoftAtStatus = () => {
     }
 
     const handleSubmit = async () => {
-
-        action(true)
-        var formData = new FormData();
-        formData.append('date', handleDateFormat(date))
-        formData.append('from_date', handleDateFormat(fromDate))
-        formData.append('to_date', handleDateFormat(toDate))
-        // formData.append('circle', circle)
-        // formData.append('oem', selectOem)
-        formData.append('circle_oem', JSON.stringify(finalJson))
-        formData.append('site_id', siteId)
-        const response = await postData('Soft_At/softAt-status-update-template/', formData)
-        if (response) {
-            // console.log('response', response)
-            setJsonData(response?.data)
-            action(false)
-            setOpen(true)
+        try {
+            action(true)
+            var formData = new FormData();
+            formData.append('date', handleDateFormat(date))
+            formData.append('from_date', handleDateFormat(fromDate))
+            formData.append('to_date', handleDateFormat(toDate))
+            // formData.append('circle', circle)
+            // formData.append('oem', selectOem)
+            formData.append('circle_oem', JSON.stringify(finalJson))
+            formData.append('site_id', siteId)
+    
+            const response = await axios.post(`${ServerURL}/Soft_At/softAt-status-update-template/`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            
+            if (response) {
+                // console.log('response', response)
+                setJsonData(response?.data)
+                setOpen(true)
+            }
+        } catch (error) {
+            // console.error('Error while submitting form:', error.response.data);
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: `${error.response.data.message}`,
+            });
+        } finally {
+            action(false);  // Ensures action is reset whether the request is successful or fails
         }
-        else {
-            action(false)
-        }
-
-
-
-    }
+    };
 
     const handleDialogBox = useCallback(() => {
         return (<Dialog
