@@ -40,7 +40,7 @@ const Circle_Wise = () => {
   const [fromDate, setFromDate] = useState('')
   const [project, setProject] = useState([]);
   const [toDate, setToDate] = useState('')
-  const [selectedYear, setSelectedYear] = useState('')
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear())
   const [displayFilter, setDisplayFilter] = useState()
   const [displayFilterData, setDisplayFilterData] = useState('OverAll Data Up Till :')
   const [tableData, setTableData] = useState([])
@@ -197,7 +197,7 @@ const Circle_Wise = () => {
               <td style={{ color: item.Accepted > 0 ? 'white' : 'black', border: '1px solid black', backgroundColor: item.Accepted > 0 ? "#58D68D" : "", fontWeight: 'bold',cursor: 'pointer' }} className={classes.hover} onClick={()=>{fetchCircleWiseHyperlink({circle:item.circle,type:'Accepted'})}}>{item.Accepted}</td>
               <td style={{ color: item.Dismantle > 0 ? 'white' : 'black', border: '1px solid black', backgroundColor: item.Dismantle > 0 ? "#F96A56" : "", fontWeight: 'bold',cursor: 'pointer' }} className={classes.hover} onClick={()=>{fetchCircleWiseHyperlink({circle:item.circle,type:'Dismantle'})}}>{item.Dismantle}</td>
               <td style={{ fontWeight: 'bold', border: '1px solid black',cursor:'pointer' }} onClick={()=>{fetchCircleWiseHyperlink({circle:item.circle,type:'Need To Be Offer'})}} className={classes.hover}>{item.Need_to_be_offer}</td>
-              <td style={{ fontWeight: 'bold', border: '1px solid black',cursor:'pointer' }} onClick={()=>{fetchCircleWiseHyperlink({circle:item.circle,type:'Not Offered'})}} className={classes.hover}>{item.NOT_OFFERED}</td>
+              <td style={{ fontWeight: 'bold', border: '1px solid black',cursor:'pointer' }} onClick={()=>{fetchCircleWiseHyperlink({circle:item.circle,type:'NOT OFFERED'})}} className={classes.hover}>{item.NOT_OFFERED}</td>
               <td style={{ fontWeight: 'bold', border: '1px solid black',cursor:'pointer' }} onClick={()=>{fetchCircleWiseHyperlink({circle:item.circle,type:'Offered'})}} className={classes.hover}>{item.Offered}</td>
               <td style={{ color: item.Rejected > 0 ? 'white' : 'black', border: '1px solid black', backgroundColor: item.Rejected > 0 ? "#F96A56" : "", fontWeight: 'bold',cursor:'pointer'  }} className={classes.hover} onClick={()=>{fetchCircleWiseHyperlink({circle:item.circle,type:'Rejected'})}}>{item.Rejected}</td>
               <td style={{ color: item.Pending > 0 ? 'black' : 'black', border: '1px solid black', backgroundColor: item.Pending > 0 ? "#F4D03F" : "", fontWeight: 'bold',cursor:'pointer'  }} className={classes.hover} onClick={()=>{fetchCircleWiseHyperlink({circle:item.circle,type:'Pending'})}}>{item.Pending}</td>
@@ -912,6 +912,23 @@ const Circle_Wise = () => {
     })
   }
 
+  const presentYear = () =>{
+    const currentYear = new Date().getFullYear();
+  const years = [];
+
+  for (let i = 0; i < 10; i++) {
+    years.push((currentYear - i).toString());
+  }
+
+
+
+  return years.map((item) => {
+    return (
+      <option key={item} value={item}> {item}</option>
+    )
+  })
+  }
+
   const RangeDate = async (event) => {
 
     var fd = new Date(event[0]),
@@ -1014,11 +1031,12 @@ const Circle_Wise = () => {
                 <div >
                   <select value={selectedYear} onChange={(e) => { setSelectedYear(e.target.value) }} style={{ height: '35px', width: '150px', fontSize: '18px', border: '1px solid #eaedf0', cursor: 'pointer', borderRadius: 5 }}>
                     <option value="" disabled selected hidden>Select Year</option>
-                    {years.map((year) => (
+                    {/* {years.map((year) => (
                       <option key={year} value={year}>
                         {year}
                       </option>
-                    ))}
+                    ))} */}
+                    {presentYear()}
                   </select>
                 </div>
               </Box>

@@ -133,7 +133,7 @@ const SoftAT = () => {
                       </Nav.Item>
                       <Nav.Menu eventKey="4" title="Download Template" placement="rightStart"  icon={<FileDownloadIcon />} >
                           <Nav.Item eventKey="4-1" onClick={() => { navigate('/tools/soft_at/download_soft_at_status_template'); show(); setMenuButton(true) }}>Soft-AT Status</Nav.Item>
-                          <Nav.Item eventKey="4-2" onClick={() => { navigate('/tools/soft_at/download_siva_template'); show(); setMenuButton(true) }}>SIVA Template</Nav.Item>
+                          <Nav.Item eventKey="4-2" onClick={() => { navigate('/tools/soft_at/download_siwa_template'); show(); setMenuButton(true) }}>SIWA Template</Nav.Item>
                           <Nav.Item eventKey="4-3" onClick={() => { navigate('/tools/soft_at/download_soft_at_offering_template'); show(); setMenuButton(true) }}>Soft-AT Offering</Nav.Item>
                       </Nav.Menu>
                       {/* <Nav.Item eventKey="4" placement="rightStart" icon={<ViewsUnauthorizeIcon />} onClick={() => { navigate('/tools/soft_at/rejected_report'); show(); setMenuButton(true) }}>
@@ -163,7 +163,7 @@ const SoftAT = () => {
                 <Route element={<ViewReport />} path='/view_report' />
                 <Route element={<WeeklyComparision />} path='/weekly_comparison' />
                 <Route element={<SoftAtStatusTemplate />} path='/download_soft_at_status_template' />
-                <Route element={<SIVATemplate />} path='/download_siva_template' />
+                <Route element={<SIVATemplate />} path='/download_siwa_template' />
                 <Route element={<SoftAtOffering />} path='/download_soft_at_offering_template' />
 
               </Routes>
