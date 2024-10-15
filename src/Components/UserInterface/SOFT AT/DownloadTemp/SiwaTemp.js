@@ -146,7 +146,7 @@ const SiwaTemp = () => {
                     <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
                         <Link underline="hover" href='/tools'>Tools</Link>
                         <Link underline="hover" href='/tools/soft_at'>Soft AT</Link>
-                        <Typography color='text.primary'>SIVA Template</Typography>
+                        <Typography color='text.primary'>SIWA Template</Typography>
                     </Breadcrumbs>
                 </div>
         

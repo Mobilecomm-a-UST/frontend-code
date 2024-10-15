@@ -476,9 +476,7 @@ const CircleWiseStatus = () => {
                         {
                             tooltip: 'Selected Rows download',
                             icon: () => <DownloadIcon color='error' fontSize='large' />,
-
                             onClick: (evt, data) => {console.log('data', data)},
-                            isFreeAction: true
                         }
                     ]}
 
