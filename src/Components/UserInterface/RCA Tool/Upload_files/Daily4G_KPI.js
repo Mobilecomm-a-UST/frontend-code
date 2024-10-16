@@ -51,26 +51,25 @@ const Daily4G_KPI = () => {
             var formData = new FormData();
             formData.append("4G_raw", rawKpiFile.bytes);
             const response = await makePostRequest('RCA_TOOL/Daily_RAW_KPI_4G/', formData)
-            // console.log('Daily4G kpi', response)
-            if (response) {
+            console.log('Daily4G kpi', response)
+            if (response?.status) {
                 setOpen(false);
                 // setError(response.error_rows)
                 Swal.fire({
                     icon: "success",
                     title: "Done",
-                    text: `${response.massage}`,
+                    text: `${response.message}`,
                 });
                 // if (response.error_rows.length > 0) {
                 //     setTableDialog(true)
                 // }
-
             }
             else {
                 setOpen(false)
                 Swal.fire({
                     icon: "error",
                     title: "Oops...",
-                    text: `Something went wrong`,
+                    text: `${response?.message}`,
                 });
             }
 

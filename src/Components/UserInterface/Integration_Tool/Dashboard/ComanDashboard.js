@@ -604,6 +604,7 @@ const ComanDashboard = () => {
                         width: 'auto',
                         whiteSpace: 'nowrap'
                     },
+                  
 
                 }}
             />
