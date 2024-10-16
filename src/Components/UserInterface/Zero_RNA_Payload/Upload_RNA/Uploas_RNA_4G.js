@@ -33,7 +33,7 @@ const Uploas_RNA_4G = () => {
 
 
 
-    console.log('aaaaaaa', isLoading , error , response)
+    // console.log('aaaaaaa', isLoading , error , response)
 
     var link = `${ServerURL}${fileData}`;
 
@@ -86,7 +86,7 @@ const Uploas_RNA_4G = () => {
         formData.append("4G_raw", rawKpiFile.bytes);
         const response = await makePostRequest('Zero_Count_Rna_Payload_Tool/Daily_RAW_KPI_4G', formData )
         console.log('response data givan dataa', response)
-        if (response) {
+        if (response.status) {
           setOpen(false);
           Swal.fire({
             icon: "success",
@@ -99,7 +99,7 @@ const Uploas_RNA_4G = () => {
           Swal.fire({
             icon: "error",
             title: "Oops...",
-            text: `${error?.response.data.error}`,
+            text: `${response?.error}`,
           });
         }
 

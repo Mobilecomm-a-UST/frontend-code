@@ -80,6 +80,8 @@ const CircleWiseStatus = () => {
         RSI_5G: '',
         GPL: '',
         Pre_Post_Check: '',
+        combination: '',
+        upload_date: '',
         spoc_name: '',
         offering_type: '',
         first_offering_date: '',
@@ -179,6 +181,8 @@ const CircleWiseStatus = () => {
             RSI_5G: item.RSI_5G,
             GPL: item.GPL,
             Pre_Post_Check: item.Pre_Post_Check,
+            combination: item.combination,
+            upload_date: item.upload_date,
             spoc_name: item.spoc_name,
             offering_type: item.offering_type,
             first_offering_date: item.first_offering_date,
@@ -211,7 +215,7 @@ const CircleWiseStatus = () => {
     const handleUpdateData = async (e) => {
         e.preventDefault()
         try {
-            const response = await axios.put(`${ServerURL}/IntegrationTracker/edit-integration-record/${editDataID}/`, editData, {
+            const response = await axios.put(`${ServerURL}/Soft_At/edit-softat-report/${editDataID}/`, editData, {
                 headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` }
             });
             Swal.fire({
@@ -219,7 +223,7 @@ const CircleWiseStatus = () => {
                 title: "Done",
                 text: `Data Updated Successfully`,
             });
-            navigate('/tools/Integration/dashboard')
+            navigate('/tools/soft_at/circle_wise')
 
         } catch (error) {
             // console.log('error', error.response?.data || error.message);
@@ -338,6 +342,8 @@ const CircleWiseStatus = () => {
         { title: '5G RSI', field: 'RSI_5G' },
         { title: 'GPL', field: 'GPL' },
         { title: 'Pre/Post Check', field: 'Pre_Post_Check' },
+        { title: 'Combination', field: 'combination' },
+        { title: 'Upload Date', field: 'upload_date' },
         { title: 'SPOC NAME', field: 'spoc_name' },
         { title: 'Offering Type', field: 'offering_type' },
         { title: 'First Offering Date', field: 'first_offering_date' },
@@ -417,22 +423,63 @@ const CircleWiseStatus = () => {
                 <form onSubmit={handleUpdateData} style={{ width: '100%', marginTop: 10 }}>
 
                     <Grid container spacing={2}>
-                        {Object.keys(editData).map(key => (
-                            <Grid item xs={3} key={key}>
-                                <TextField
-                                    variant="outlined"
-                                    fullWidth
-                                    placeholder={key.replace(/_/g, ' ')}
-                                    label={key.replace(/_/g, ' ')}
-                                    name={key}
-                                    value={editData[key]}
-                                    onChange={handleChange}
-                                    size="small"
-                                    type={key.includes('Date') ? 'date' : 'text'}
-                                    InputLabelProps={key.includes('Date') ? { shrink: true } : {}}
-                                />
-                            </Grid>
-                        ))}
+                        {Object.keys(editData).map((key, index) => {
+                            if (index <= 56) {
+                                return (
+                                    <Grid item xs={3} key={key}>
+                                        <TextField
+                                            variant="outlined"
+                                            fullWidth
+                                            placeholder={key.replace(/_/g, ' ')}
+                                            label={key.replace(/_/g, ' ')}
+                                            name={key}
+                                            value={editData[key]}
+                                            onChange={handleChange}
+                                            size="small"
+                                            type={key.includes('Date') ? 'date' : 'text'}
+                                            disabled
+                                            InputLabelProps={key.includes('Date') ? { shrink: true } : {}}
+                                        />
+                                    </Grid>
+                                )
+                            }else{
+                                return (
+                                    <Grid item xs={3} key={key}>
+                                        <TextField
+                                            variant="outlined"
+                                            fullWidth
+                                            placeholder={key.replace(/_/g, ' ')}
+                                            label={key.replace(/_/g, ' ')}
+                                            name={key}
+                                            value={editData[key]}
+                                            onChange={handleChange}
+                                            size="small"
+                                            type={key.includes('Date') ? 'date' : 'text'}
+                                            InputLabelProps={key.includes('Date') ? { shrink: true } : {}}
+                                        />
+                                    </Grid>
+                                )
+                            }
+                        }
+
+                            // (
+                            //     <Grid item xs={3} key={key}>
+                            //         <TextField
+                            //             variant="outlined"
+                            //             fullWidth
+                            //             placeholder={key.replace(/_/g, ' ')}
+                            //             label={key.replace(/_/g, ' ')}
+                            //             name={key}
+                            //             value={editData[key]}
+                            //             onChange={handleChange}
+                            //             size="small"
+                            //             type={key.includes('Date') ? 'date' : 'text'}
+                            //             InputLabelProps={key.includes('Date') ? { shrink: true } : {}}
+                            //         />
+                            //     </Grid>
+                            // )
+
+                        )}
                         <Grid item xs={12}>
                             <Button type="submit" fullWidth variant="contained">Update</Button>
                         </Grid>
@@ -442,7 +489,7 @@ const CircleWiseStatus = () => {
         </Dialog>)
 
 
-    }, [open, editData])
+    }, [open, editData,handleChange])
 
     useEffect(() => {
 
@@ -476,7 +523,7 @@ const CircleWiseStatus = () => {
                         {
                             tooltip: 'Selected Rows download',
                             icon: () => <DownloadIcon color='error' fontSize='large' />,
-                            onClick: (evt, data) => {console.log('data', data)},
+                            onClick: (evt, data) => { console.log('data', data) },
                         }
                     ]}
 
@@ -496,6 +543,7 @@ const CircleWiseStatus = () => {
                             width: 'auto',
                             whiteSpace: 'nowrap'
                         },
+                        getRowId: row => row.unique_key,
 
                     }}
                 />

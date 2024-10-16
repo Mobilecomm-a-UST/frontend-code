@@ -396,6 +396,7 @@ const SoftAtStatus = () => {
                         bold: true,
                         size: 12,
                     }
+
                 }
 
                 if (rowNumber === 1 ) {
@@ -410,6 +411,7 @@ const SoftAtStatus = () => {
                         bold: true,
                         size: 12,
                     }
+                    cell.alignment = { vertical: 'middle', horizontal: 'left' }
                     cell.views = [{ state: 'frozen', ySplit: 1 }]
                 }
             })
@@ -471,7 +473,7 @@ const SoftAtStatus = () => {
             
             if (response) {
                 // console.log('response', response)
-                setJsonData(response?.data)
+                setJsonData(response?.data.data)
                 setOpen(true)
             }
         } catch (error) {
