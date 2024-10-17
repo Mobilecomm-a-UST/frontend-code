@@ -6,6 +6,7 @@ import { CsvBuilder } from 'filefy';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import { useParams } from 'react-router-dom';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { Dialog, DialogContent, IconButton, DialogTitle } from '@mui/material';
 import { ServerURL } from '../../../services/FetchNodeServices';
 import CloseIcon from '@mui/icons-material/Close';
@@ -285,8 +286,33 @@ const CircleWiseStatus = () => {
         // }
     }
 
+    const handleReset = async(rowData)=>{
+        axios.put(`${ServerURL}/Soft_At/reset-to-previous-status/${rowData.unique_key}/`, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` }, })
+        .then((res) => {
+            // console.log('Data reset successfully', res);
+            Swal.fire({
+                icon: "success",
+                title: "Reset",
+                text: `${res.data.message}`,
+            });
+            // const newData = listData.filter(item => item.id !== rowData.id);
+            // setListData(newData);
+            // console.log('Data deleted successfully');
+            navigate('/tools/soft_at/circle_wise')
+        })
+        .catch(error => {
+            // console.error('Error deleting data:', error);
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: `${error.response.data.message}`,
+            });
+        });
+    }
+
 
     const columnData = [
+        // { title: 'id', field: 'unique_key' },
         { title: 'Unique Key(Auto Generated)', field: 'unique_key' },
         { title: 'OEM', field: 'OEM' },
         { title: 'Integration Date', field: 'Integration_Date' },
@@ -372,7 +398,7 @@ const CircleWiseStatus = () => {
             title: 'Actions',
             field: 'actions',
             render: rowData => (<>
-                <IconButton aria-label="delete" title={'Edit'} size="large" onClick={() => { handleEdit(rowData) }}>
+                {/* <IconButton aria-label="delete" title={'Edit'} size="large" onClick={() => { handleEdit(rowData) }}>
                     <DriveFileRenameOutlineIcon
                         style={{ cursor: 'pointer' }}
                         color='success'
@@ -383,6 +409,11 @@ const CircleWiseStatus = () => {
                         style={{ cursor: 'pointer' }}
                         color='error'
                     />
+                </IconButton > */}
+
+                <IconButton aria-label="Reset Date" title={'Reset Date'} size="large" onClick={() => { handleReset(rowData) }}>
+                    <RestartAltIcon  style={{ cursor: 'pointer' }}
+                        color='error' />
                 </IconButton>
 
             </>
@@ -391,6 +422,12 @@ const CircleWiseStatus = () => {
         }
 
     ]
+
+    const listDataWithIds = listData.map((row, index) => ({
+        ...row,
+        unique_key: row.unique_key || `key-${index}`, // Auto-generate if not available
+        id: row.id || `row-${index}`  // Ensure id for tracking
+      }));
 
 
     const getStatus = () => {
@@ -426,7 +463,7 @@ const CircleWiseStatus = () => {
                         {Object.keys(editData).map((key, index) => {
                             if (index <= 56) {
                                 return (
-                                    <Grid item xs={3} key={key}>
+                                    <Grid item xs={3} key={index}>
                                         <TextField
                                             variant="outlined"
                                             fullWidth
@@ -434,7 +471,7 @@ const CircleWiseStatus = () => {
                                             label={key.replace(/_/g, ' ')}
                                             name={key}
                                             value={editData[key]}
-                                            onChange={handleChange}
+                                            // onChange={handleChange}
                                             size="small"
                                             type={key.includes('Date') ? 'date' : 'text'}
                                             disabled
@@ -444,7 +481,7 @@ const CircleWiseStatus = () => {
                                 )
                             }else{
                                 return (
-                                    <Grid item xs={3} key={key}>
+                                    <Grid item xs={3} key={index}>
                                         <TextField
                                             variant="outlined"
                                             fullWidth
@@ -462,22 +499,7 @@ const CircleWiseStatus = () => {
                             }
                         }
 
-                            // (
-                            //     <Grid item xs={3} key={key}>
-                            //         <TextField
-                            //             variant="outlined"
-                            //             fullWidth
-                            //             placeholder={key.replace(/_/g, ' ')}
-                            //             label={key.replace(/_/g, ' ')}
-                            //             name={key}
-                            //             value={editData[key]}
-                            //             onChange={handleChange}
-                            //             size="small"
-                            //             type={key.includes('Date') ? 'date' : 'text'}
-                            //             InputLabelProps={key.includes('Date') ? { shrink: true } : {}}
-                            //         />
-                            //     </Grid>
-                            // )
+                           
 
                         )}
                         <Grid item xs={12}>
@@ -489,7 +511,7 @@ const CircleWiseStatus = () => {
         </Dialog>)
 
 
-    }, [open, editData,handleChange])
+    }, [open, editData])
 
     useEffect(() => {
 
@@ -511,7 +533,7 @@ const CircleWiseStatus = () => {
                 <MaterialTable
                     title={'Soft AT Data'}
                     columns={columnData}
-                    data={listData}
+                    data={listDataWithIds}
                     onSelectionChange={(rows) => setSelectedRows(rows)}
                     // onRowClick={((evt, selectedRow) => console.log())}
                     actions={[
@@ -523,7 +545,7 @@ const CircleWiseStatus = () => {
                         {
                             tooltip: 'Selected Rows download',
                             icon: () => <DownloadIcon color='error' fontSize='large' />,
-                            onClick: (evt, data) => { console.log('data', data) },
+                            onClick: (evt, data) => {downloadExcel(data)},
                         }
                     ]}
 
