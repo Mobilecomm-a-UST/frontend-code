@@ -110,29 +110,60 @@ const AcceptanceSummary = () => {
                         </Breadcrumbs>
                     </div>
                     <Slide
-                    direction='left'
-                    in='true'
-                    // style={{ transformOrigin: '0 0 0' }}
-                    timeout={1000}
-                >
-                    <Paper sx={{ width: '99%', overflow: 'hidden' }}>
-                        <TableContainer sx={{ maxHeight: '77vh', width: '100%' }}>
-                            <Table stickyHeader >
-                                <TableHead style={{ fontSize: 18 }}>
-                                    <TableRow >
-                                        {/* <StyledTableCell align="center">KPI <CheckPicker data={kpi.map(item => ({ label: item, value: item }))} value={selectKpi} onChange={(value) => { setSelectKpi(value) }} size="sm" appearance="subtle" style={{ width: 40 }} /></StyledTableCell> */}
-                                        <StyledTableCell align="center">Probable Causes</StyledTableCell>
-                                        {/* <StyledTableCell align="center" >Data Source  <CheckPicker data={dataSource.map(item => ({ label: item, value: item }))} value={selectDataSource} onChange={(value) => { setSelectDataSource(value) }} size="sm" appearance="subtle" placeholder="Data Source" style={{ width: 100 }} /> </StyledTableCell> */}
-                                        {/* <StyledTableCell align="center">Tentative Counters  <CheckPicker data={tentative.map(item => ({ label: item, value: item }))} value={selectTentative} onChange={(value) => { setSelectTentative(value) }} size="sm" appearance="subtle" style={{ width: 25 }} /></StyledTableCell> */}
-                                        <StyledTableCell align="center">Condition Check</StyledTableCell>
-                                        <StyledTableCell align="center">Operator</StyledTableCell>
-                                        <StyledTableCell align="center">RCA</StyledTableCell>
-                                        <StyledTableCell align="center">Proposed Solution</StyledTableCell>
-                                        <StyledTableCell align="center">Action</StyledTableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {/* {data?.map((row) => (
+                        direction='left'
+                        in='true'
+                        // style={{ transformOrigin: '0 0 0' }}
+                        timeout={1000}
+                    >
+                        <Paper sx={{ width: '99%', overflow: 'hidden' }}>
+                            <Box sx={{ padding: 2, display: 'flex', justifyContent: 'space-between' }}>
+
+                            </Box>
+                            <TableContainer sx={{ maxHeight: '77vh', width: '100%' }}>
+                                <Table stickyHeader >
+                                    <TableHead style={{ fontSize: 18 }}>
+                                        <TableRow >
+                                            <StyledTableCell align="center">Action</StyledTableCell>
+                                            <StyledTableCell align="center">SR. No.</StyledTableCell>
+                                            <StyledTableCell align="center">Sub-SR. No.</StyledTableCell>
+                                            <StyledTableCell align="center">AT-SR. No.</StyledTableCell>
+                                            <StyledTableCell align="center">Offered Layer</StyledTableCell>
+                                            <StyledTableCell align="center">Site ID</StyledTableCell>
+                                            <StyledTableCell align="center">Circle</StyledTableCell>
+                                            <StyledTableCell align="center">Project</StyledTableCell>
+                                            <StyledTableCell align="center">Nominal Type</StyledTableCell>
+                                            <StyledTableCell align="center">RANTSP</StyledTableCell>
+                                            <StyledTableCell align="center">MWOEM</StyledTableCell>
+                                            <StyledTableCell align="center">MWTSP</StyledTableCell>
+                                            <StyledTableCell align="center">Installation Date</StyledTableCell>
+                                            <StyledTableCell align="center">Integration Date</StyledTableCell>
+                                            <StyledTableCell align="center">Physical AT status</StyledTableCell>
+                                            <StyledTableCell align="center">Physical Offered Date</StyledTableCell>
+                                            <StyledTableCell align="center">Physical AT Status Date</StyledTableCell>
+                                            <StyledTableCell align="center">Performance AT Status</StyledTableCell>
+                                            <StyledTableCell align="center">Performance AT Offerred Date</StyledTableCell>
+                                            <StyledTableCell align="center">Performance AT Status Date</StyledTableCell>
+                                            <StyledTableCell align="center">Soft AT Status</StyledTableCell>
+                                            <StyledTableCell align="center">Soft AT Offerred Date</StyledTableCell>
+                                            <StyledTableCell align="center">Soft AT Status Date</StyledTableCell>
+                                            <StyledTableCell align="center">Physical AT Assignment</StyledTableCell>
+                                            <StyledTableCell align="center">Soft AT Assignment</StyledTableCell>
+                                            <StyledTableCell align="center">Performance AT Assignment</StyledTableCell>
+                                            <StyledTableCell align="center">SCFT AT Assignment</StyledTableCell>
+                                      
+
+                                            {/* <StyledTableCell align="center">KPI <CheckPicker data={kpi.map(item => ({ label: item, value: item }))} value={selectKpi} onChange={(value) => { setSelectKpi(value) }} size="sm" appearance="subtle" style={{ width: 40 }} /></StyledTableCell> */}
+                                            {/* <StyledTableCell align="center">Probable Causes</StyledTableCell> */}
+                                            {/* <StyledTableCell align="center" >Data Source  <CheckPicker data={dataSource.map(item => ({ label: item, value: item }))} value={selectDataSource} onChange={(value) => { setSelectDataSource(value) }} size="sm" appearance="subtle" placeholder="Data Source" style={{ width: 100 }} /> </StyledTableCell> */}
+                                            {/* <StyledTableCell align="center">Tentative Counters  <CheckPicker data={tentative.map(item => ({ label: item, value: item }))} value={selectTentative} onChange={(value) => { setSelectTentative(value) }} size="sm" appearance="subtle" style={{ width: 25 }} /></StyledTableCell> */}
+                                            {/* <StyledTableCell align="center">Condition Check</StyledTableCell>
+                                            <StyledTableCell align="center">Operator</StyledTableCell>
+                                            <StyledTableCell align="center">RCA</StyledTableCell>
+                                            <StyledTableCell align="center">Proposed Solution</StyledTableCell> */}
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {/* {data?.map((row) => (
                                         <StyledTableRow
                                             key={row.id}
                                             className={classes.hover}
@@ -159,12 +190,12 @@ const AcceptanceSummary = () => {
                                             </StyledTableCell>
                                         </StyledTableRow>
                                     ))} */}
-                                    {/* {filterRCAData()} */}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    </Paper>
-                </Slide>
+                                        {/* {filterRCAData()} */}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        </Paper>
+                    </Slide>
                 </div>
             </Slide>
 
