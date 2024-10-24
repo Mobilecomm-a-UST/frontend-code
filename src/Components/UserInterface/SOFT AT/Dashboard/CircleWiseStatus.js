@@ -313,6 +313,32 @@ const CircleWiseStatus = () => {
 
     const columnData = [
         // { title: 'id', field: 'unique_key' },
+        {
+            title: 'Actions',
+            field: 'actions',
+            render: rowData => (<>
+                {/* <IconButton aria-label="delete" title={'Edit'} size="large" onClick={() => { handleEdit(rowData) }}>
+                    <DriveFileRenameOutlineIcon
+                        style={{ cursor: 'pointer' }}
+                        color='success'
+                    />
+                </IconButton>
+                <IconButton aria-label="delete" title={'Delete'} size="large" onClick={() => { handleDelete(rowData) }}>
+                    <DeleteOutlineIcon
+                        style={{ cursor: 'pointer' }}
+                        color='error'
+                    />
+                </IconButton > */}
+
+                <IconButton aria-label="Reset Date" title={'Reset Date'} size="large" onClick={() => { handleReset(rowData) }}>
+                    <RestartAltIcon  style={{ cursor: 'pointer' }}
+                        color='error' />
+                </IconButton>
+
+            </>
+
+            )
+        },
         { title: 'Unique Key(Auto Generated)', field: 'unique_key' },
         { title: 'OEM', field: 'OEM' },
         { title: 'Integration Date', field: 'Integration_Date' },
@@ -394,32 +420,7 @@ const CircleWiseStatus = () => {
         { title: 'Problem Statement in detail', field: 'problem_statement' },
         { title: 'Final Remarks', field: 'final_remarks' },
         { title: 'MS1', field: 'ms1' },
-        {
-            title: 'Actions',
-            field: 'actions',
-            render: rowData => (<>
-                {/* <IconButton aria-label="delete" title={'Edit'} size="large" onClick={() => { handleEdit(rowData) }}>
-                    <DriveFileRenameOutlineIcon
-                        style={{ cursor: 'pointer' }}
-                        color='success'
-                    />
-                </IconButton>
-                <IconButton aria-label="delete" title={'Delete'} size="large" onClick={() => { handleDelete(rowData) }}>
-                    <DeleteOutlineIcon
-                        style={{ cursor: 'pointer' }}
-                        color='error'
-                    />
-                </IconButton > */}
-
-                <IconButton aria-label="Reset Date" title={'Reset Date'} size="large" onClick={() => { handleReset(rowData) }}>
-                    <RestartAltIcon  style={{ cursor: 'pointer' }}
-                        color='error' />
-                </IconButton>
-
-            </>
-
-            )
-        }
+    
 
     ]
 
