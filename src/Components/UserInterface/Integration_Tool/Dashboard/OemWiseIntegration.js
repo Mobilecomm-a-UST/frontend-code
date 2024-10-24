@@ -309,6 +309,8 @@ const OemWiseIntegration = ({ onData }) => {
                                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>RECTIFICATION</th>
                                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>OPERATIONS</th>
                                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>OTHERS</th>
+                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>5G SECTOR ADDITION</th>
+                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>5G RELOCATION</th>
 
                                 </tr>
                             </thead>
@@ -330,6 +332,9 @@ const OemWiseIntegration = ({ onData }) => {
                                         <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'RECTIFICATION' })}>{item.RECTIFICATION}</th>
                                         <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'OPERATIONS' })}>{item.OPERATIONS}</th>
                                         <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'OTHERS' })}>{item.OTHERS}</th>
+                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'OTHERS' })}>{item.OTHERS}</th>
+                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'G5_SECTOR_ADDITION' })}>{item.G5_SECTOR_ADDITION}</th>
+                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'G5_RELOCATION' })}>{item.G5_RELOCATION}</th>
 
                                     </tr>
                                 ))}
