@@ -14,6 +14,7 @@ const UploadFile = lazy(() => import('./Upload/UploadFile'))
 const FinalDashboard = lazy(() => import('./Dashboard/FinalDashboard'))
 const ComanDashboard = lazy(() => import('./Dashboard/ComanDashboard'))
 const MDashboard = lazy(() => import('./MasterDashboard/MDashboard'))
+const TotalDataDashboard = lazy(() => import('./Dashboard/TotalDataDashboard'))
 
 
 const Integration = () => {
@@ -64,6 +65,7 @@ const Integration = () => {
                                 <Route element={<Integration_Tool />} path="/" />
                                 <Route element={<UploadFile />} path="/upload_file" />
                                 <Route element={<FinalDashboard />} path="/dashboard/*" />
+                                <Route element={<TotalDataDashboard />} path="/dashboard/total_count/:name" />
                                 <Route element={<ComanDashboard />} path="/dashboard/:name" />
                                 <Route element={<MDashboard />} path="/master_dashboard" />
 

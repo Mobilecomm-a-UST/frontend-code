@@ -656,7 +656,14 @@ const SoftAtStatus = () => {
                                             onChange={(event) => { SelectCircle(event) }}
                                             input={<OutlinedInput label="Tag" />}
                                             renderValue={(selected) => selected.join(', ')}
+                                            inputProps={{ 'aria-label': 'Without label' }}
                                             size="medium"
+                                            MenuProps={{PaperProps: {
+                                                style: {
+                                                  maxHeight: 48 * 4.5 + 8,
+                                                  width: 250,
+                                                },
+                                              }}}
                                         >
 
                                             {allcircle?.map((data, index) => (

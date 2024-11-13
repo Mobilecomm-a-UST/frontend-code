@@ -7,11 +7,10 @@ import axios from "axios"
 // const ServerURL = "http://192.168.0.146:8000"
 const ServerURL = "http://103.242.225.195:8000"
 // const ServerURL = "http://192.168.0.164:8000"
-// const ServerURL = "http://192.168.0.146:8000"
+// const ServerURL = "http://192.168.0.111:8000"
 // const ServerURL = "http://103.242.225.195:8000"
 // const ServerURL = "http://192.168.137.190:8001"
 // const ServerURL = "http://54.234.191.244"
-
 // const ServerURL = "http://13.233.231.179:80"
 // const ServerURL = "http://13.233.231.179:8000"
 // npm install --save chart.js react-chartjs-2

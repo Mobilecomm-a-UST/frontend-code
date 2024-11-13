@@ -30,6 +30,8 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import { InputPicker } from 'rsuite';
+import CheckPicker from 'rsuite/CheckPicker';
 
 
 
@@ -93,6 +95,30 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const AcceptanceSummary = () => {
+    const [atStatus,setAtStatus] = useState([])
+
+    const data = [
+        'Eugenia',
+        'Bryan',
+        'Linda',
+        'Nancy',
+        'Lloyd',
+        'Alice',
+        'Julia',
+        'Albert',
+        'Louisa',
+        'Lester',
+        'Lola',
+        'Lydia',
+        'Hal',
+        'Hannah',
+        'Harriet',
+        'Hattie',
+        'Hazel',
+        'Hilda'
+      ].map(item => ({ label: item, value: item }));
+
+
     return (
         <>
             <Slide
@@ -116,8 +142,15 @@ const AcceptanceSummary = () => {
                         timeout={1000}
                     >
                         <Paper sx={{ width: '99%', overflow: 'hidden' }}>
-                            <Box sx={{ padding: 2, display: 'flex', justifyContent: 'space-between' }}>
-
+                            <Box sx={{ padding: 1, display: 'flex', justifyContent: 'space-between' }}>
+                                    <InputPicker size="sm" placeholder="All Circle" data={data} style={{ maxWidth: '25vh' }} />      
+                                    <InputPicker size="sm" placeholder="SR Type" data={data} style={{ maxWidth: '25vh' }} />      
+                                    <InputPicker size="sm" placeholder="All TSP" data={data} style={{ maxWidth: '25vh' }} />      
+                                    <InputPicker size="sm" placeholder="All Project" data={data} style={{ maxWidth: '25vh' }} />      
+                                    <InputPicker size="sm" placeholder="Assignment Status" data={data} style={{ maxWidth: '25vh' }} />      
+                                    {/* <InputPicker size="sm" placeholder="Select AT Status" data={data} style={{ maxWidth: '25vh' }} />  */}
+                                    <CheckPicker data={data} placeholder="Select AT Status" value={atStatus} onChange={(value) => { setAtStatus(value) }} size="sm"  style={{ maxWidth: '25vh' }} />     
+                                    <InputPicker size="sm" placeholder="Select Date" data={data} style={{ maxWidth: '25vh' }} />      
                             </Box>
                             <TableContainer sx={{ maxHeight: '77vh', width: '100%' }}>
                                 <Table stickyHeader >

@@ -16,9 +16,10 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ViewsUnauthorizeIcon from '@rsuite/icons/ViewsUnauthorize';
 import AddOutlineIcon from '@rsuite/icons/AddOutline';
 import CheckOutlineIcon from '@rsuite/icons/CheckOutline';
-import McomTool from './McomTool';
+const McomTool = lazy(() => import('./McomTool'));
 const UploadData = lazy(() => import('./Upload/UploadData'));
 const AcceptanceSummary = lazy(() => import('./Dashboard/AcceptanceSummary'));
+const SiteDetails = lazy(()=>import('./Dashboard/SiteDetails'))
 
 
 const McomePhycical = () => {
@@ -132,9 +133,9 @@ const McomePhycical = () => {
                             <Routes>
                                 <Route element={<McomTool />} path="/" />
                                 <Route element={<UploadData />} path="/add_new_site" />
-                                <Route element={<AcceptanceSummary />} path="/acceptance_summary" />
+                                <Route element={<AcceptanceSummary />} path="/acceptance_summary/*" />
+                                <Route element={<SiteDetails />} path="/acceptance_summary/:id" />
                                
-
                             </Routes>
                         </Suspense>
                     </Grid>
