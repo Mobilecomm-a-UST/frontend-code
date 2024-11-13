@@ -14,6 +14,7 @@ import Swal from "sweetalert2";
 import TextField from '@mui/material/TextField';
 import { Grid ,Button} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux'
 
 
 
@@ -25,6 +26,7 @@ function toCamelCase(input) {
 }
 
 const ComanDashboard = () => {
+    const listDataa= useSelector(state=>state.IXtracker)
     const navigate = useNavigate();
     const [listData, setListData] = useState(JSON.parse(localStorage.getItem("integration_final_tracker")))
     const [editData, setEditData] = useState({    OEM: "",
@@ -89,7 +91,7 @@ const ComanDashboard = () => {
     const params = useParams()
 
 
-    console.log('table data', listData)
+    console.log('redux data handler', listDataa)
 
 
 

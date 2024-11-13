@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react'
+import React, { lazy, useEffect, Suspense } from 'react'
 import { useState } from 'react'
 import PageIcon from '@rsuite/icons/Page';
 import { Box } from '@mui/material'
@@ -9,10 +9,15 @@ import DashboardIcon from '@rsuite/icons/legacy/Dashboard';
 import FileUploadIcon from '@rsuite/icons/FileUpload';
 import { useNavigate } from 'react-router-dom'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import PhysicalAtTool from './PhysicalAtTool';
-import UploadPhysicalAt, { PhysicalAtStatus } from './Upload_Physical_AT/UploadPhysicalAt';
-import Dashoard from './Dashboard/Dashoard';
-import UploadPhysicalAtStatus from './Upload_Physical_AT/UploadPhysicalAtStatus';
+// import PhysicalAtTool from './PhysicalAtTool';
+// import UploadPhysicalAt from './Upload_Physical_AT/UploadPhysicalAt';
+// import Dashoard from './Dashboard/Dashoard';
+// import UploadPhysicalAtStatus from './Upload_Physical_AT/UploadPhysicalAtStatus';
+const UploadPhysicalAt = lazy(() => import('./Upload_Physical_AT/UploadPhysicalAt'))
+const PhysicalAtTool = lazy(() => import('./PhysicalAtTool'))
+const Dashoard = lazy(() => import('./Dashboard/Dashoard'))
+const UploadPhysicalAtStatus = lazy(() => import('./Upload_Physical_AT/UploadPhysicalAtStatus'))
+
 
 
 const Physical_At = () => {
@@ -83,16 +88,15 @@ useEffect(()=>{
             </div>
           </Grid>
           <Grid item xs={12} md={10}>
-
+          <Suspense fallback={<div>loading............</div>}>
             <Routes>
               <Route element={<PhysicalAtTool />} path="/" />
               <Route element={<UploadPhysicalAt />} path="/upload_physical_at/*" />
-              <Route element={<Dashoard />} path="/dashboard" />
+              <Route element={<Dashoard />} path="/dashboard/*" />
               <Route element={<UploadPhysicalAtStatus />} path="/upload_physical_at/status" />
 
-
-
             </Routes>
+          </Suspense>
           </Grid>
         </Grid>
       </Box>

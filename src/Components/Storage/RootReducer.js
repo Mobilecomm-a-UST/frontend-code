@@ -9,6 +9,7 @@ const initialState={
     linkpage:{},
     makekpitrend:{},
     ageingSiteList:{},
+    IXtracker:{},
 }
 
 export default function RootReducer(state=initialState,actions)
@@ -42,6 +43,10 @@ export default function RootReducer(state=initialState,actions)
         case 'SITE_LIST':
             state.ageingsitelist=actions.payload
             return({ageingsitelist:state.ageingsitelist})
+        
+        case 'IX_TRACKER':
+            state.IXtracker=actions.payload
+            return({IXtracker:state.IXtracker})
 
         default:
             return state

@@ -10,7 +10,11 @@ import { MemoDateWiseIntegration } from './DateWiseIntegration'
 import { MemoMonthWiseIntegration } from './MonthWiseIntegration'
 import { MemoOemWiseIntegration } from './OemWiseIntegration'
 import { MemoRangeWiseDashboard } from './RangeWiseDashboard';
+import { useLoadingDialog } from '../../../Hooks/LoadingDialog';
 import { useGet } from '../../../Hooks/GetApis';
+import { usePost } from '../../../Hooks/PostApis';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -33,6 +37,8 @@ const alphaBate = ['B', 'R', 'AH']
 const colorType = ['#B0EBB4', '#A0DEFF', '#FF9F66', '#ECB176', '#CDE8E5']
 
 const FinalDashboard = () => {
+    const dispatch = useDispatch();
+    const navigate=useNavigate();
     const [sheet1Date, setSheet1Date] = useState([])
     const [sheet1Data, setSheet1Data] = useState([])
 
@@ -47,6 +53,9 @@ const FinalDashboard = () => {
     const [sheet4Data, setSheet4Data] = useState([])
     const { makeGetRequest } = useGet()
     const [mdashboard, setMdashboard] = useState([])
+
+    const { loading, action } = useLoadingDialog();
+    const { makePostRequest } = usePost()
 
 
 
@@ -767,7 +776,10 @@ const FinalDashboard = () => {
             return `${day}-${month}-${year}`;
         }
         return (
-            <Box sx={{ height: 'auto', width: '32vh', padding: 1.5, borderRadius: 1.5, boxShadow: " rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px", backgroundColor: color, textAlign: 'center' }}>
+            <Box sx={{ height: 'auto', width: '32vh',cursor:'pointer', padding: 1.5, borderRadius: 1.5, boxShadow: " rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px", backgroundColor: color, textAlign: 'center' }}
+                     onClick={()=>{HandleDashboard(data.OEM)}}
+                     title={data.OEM}
+            >
                 <Box sx={{ fontWeight: 600, fontSize: '16px', color: "black", textAlign: 'left' }}>{data.OEM}</Box>
                 <Box sx={{ fontWeight: 600, fontSize: '24px', color: "black", fontFamily: 'cursive' }}>{data.record_count}</Box>
                 <Box sx={{ color: "black", textAlign: 'left' }}><span style={{ fontWeight: 600, fontSize: '14px' }}>From-</span>{convertDate(data.from_integration_date)}</Box>
@@ -775,6 +787,32 @@ const FinalDashboard = () => {
             </Box>
         );
     }, []);
+
+    const HandleDashboard = async (oem) => {
+            console.log('ssssss',oem)
+            action(true)
+            var formData = new FormData();
+            formData.append("oem", oem);
+       
+            const responce = await makePostRequest('IntegrationTracker/oem_wise_integration_data/', formData)
+            if (responce) {
+                // console.log('responce', responce)
+                // setMainDataT2(responce)
+                action(false)
+                // localStorage.removeItem("integration_final_tracker");
+                // localStorage.setItem("integration_final_tracker", JSON.stringify(responce.table_data));
+                dispatch({ type: 'IX_TRACKER', payload: {responce} })
+                navigate(`/tools/Integration/dashboard/total_count/${oem}`)
+                // console.log('response data in huawia site id' , response)
+                // window.open(`${window.location.href}/${oem}` , "_blank")
+                
+                // setOpen(true)
+                // console.log('dfdiufhsdiuhf', responce)
+            }
+            else {
+                action(false)
+            }
+    }
 
 
 
@@ -791,7 +829,6 @@ const FinalDashboard = () => {
                 <div style={{ margin: 5, marginLeft: 10 }}>
                     <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
                         <Link underline="hover" href='/tools'>Tools</Link>
-
                         <Link underline="hover" href='/tools/Integration'>Integration</Link>
                         <Typography color='text.primary'>Dashboard</Typography>
                     </Breadcrumbs>
@@ -822,7 +859,7 @@ const FinalDashboard = () => {
                 </div>
                 <div style={{ padding: '5px', display: 'flex', justifyContent: 'space-evenly', flexWrap: "wrap", flexDirection: 'row', gap: 20 }}>
                     {mdashboard?.map((item, index) => index < 5 && (
-                        <Dashboard data={item} color={colorType[index]} />
+                        <Dashboard data={item} color={colorType[index]}  key={index} />
                     ))}
 
                 </div>
@@ -831,6 +868,7 @@ const FinalDashboard = () => {
                 <MemoMonthWiseIntegration onData={handleMonthWiseData} />
                 <MemoOemWiseIntegration onData={handleOemWiseData} />
             </div>
+            {loading}
         </>
     )
 }
