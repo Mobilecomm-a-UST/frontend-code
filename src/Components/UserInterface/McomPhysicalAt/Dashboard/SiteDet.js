@@ -10,15 +10,50 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, IconB
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import Paper from '@mui/material/Paper';
+import { last } from 'lodash';
 
 const SiteDet = () => {
   const [expanded, setExpanded] = useState(false);
-  const [hardware1, setHardware1] = useState([{id: Date.now(),BBU_Type: "",SM: ""}]);
+  const [hardware1, setHardware1] = useState([]);
+  const [hardware2, setHardware2] = useState([]);
+  const [hardwaretemp1, setHardwaretemp1] = useState({ BBU_Type: "", SM: "", RRU_Type: "", MIMO_Power_Configuration: "" });
+  const [isFocused, setIsFocused] = useState(true);
 
+  console.log('BBU type dataa', hardwaretemp1, hardware1)
 
   const addHardware1 = () => {
-    setHardware1([...hardware1, {id: Date.now(),BBU_Type: "",SM: ""}]);
+    let newRaw = { id: Date.now(), BBU_Type: hardwaretemp1.BBU_Type, SM: hardwaretemp1.SM };
+    setHardware1([...hardware1, newRaw]);
   }
+  const deleteHardware1 = () => {
+    let datalength = hardware1.length;
+    if (datalength > 0) {
+      let lastRow = hardware1[datalength - 1];
+      setHardware1(hardware1.filter(row => row.id !== lastRow.id));
+
+    } else {
+      alert('No data found')
+    }
+
+  }
+
+  const addHardware2 = () => {
+    let newRaw = { id: Date.now(), RRU_Type: hardwaretemp1.RRU_Type, MIMO_Power_Configuration: hardwaretemp1.MIMO_Power_Configuration };
+    setHardware2([...hardware2, newRaw]);
+  }
+
+  const deleteHardware2 = () => {
+    let datalength = hardware2.length;
+    if (datalength > 0) {
+      let lastRow = hardware2[datalength - 1];
+      setHardware2(hardware2.filter(row => row.id !== lastRow.id));
+
+    } else {
+      alert('No data found')
+    }
+
+  }
+
   const handleHardwareChange1 = (id, field, value) => {
     setHardware1(hardware1.map(row => row.id === id ? { ...row, [field]: value } : row));
   };
@@ -26,7 +61,11 @@ const SiteDet = () => {
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
-  const [isFocused, setIsFocused] = useState(true);
+
+  const handleInputChange = (field, value) => {
+    setHardwaretemp1({ ...hardwaretemp1, [field]: value });
+  };
+
 
   return (
     <div>
@@ -81,10 +120,18 @@ const SiteDet = () => {
                 </thead>
                 <tbody>
                   <tr>
-                    <td style={{ backgroundColor: '#eaf2b5', height: '20px', padding: '3px', border: '1px solid black', textAlign: 'left' }}></td>
-                    <td style={{ backgroundColor: '#eaf2b5', height: '20px', padding: '3px', border: '1px solid black', textAlign: 'left' }}></td>
                     <td style={{ backgroundColor: '#eaf2b5', height: '20px', padding: '3px', border: '1px solid black', textAlign: 'left' }}>
-                      <IconButton color="error" size='small' aria-label="delete" title='Delete'>
+                      {hardware1?.map((item, index) => (
+                        <span key={index}>{item.BBU_Type}/</span>
+                      ))}
+                    </td>
+                    <td style={{ backgroundColor: '#eaf2b5', height: '20px', padding: '3px', border: '1px solid black', textAlign: 'left' }}>
+                      {hardware1?.map((item, index) => (
+                        <span key={index}>{item.SM}/</span>
+                      ))}
+                    </td>
+                    <td style={{ backgroundColor: '#eaf2b5', height: '20px', padding: '3px', border: '1px solid black', textAlign: 'left' }}>
+                      <IconButton color="error" size='small' aria-label="delete" title='Delete' onClick={deleteHardware1}>
                         <DeleteIcon />
                       </IconButton></td>
                   </tr>
@@ -96,7 +143,8 @@ const SiteDet = () => {
                         fullWidth
                         placeholder="Select"
                         select
-                        // onChange={(e) => handleInputChange( 'bbuType', e.target.value)}
+                        value={hardwaretemp1.BBU_Type}
+                        onChange={(e) => handleInputChange('BBU_Type', e.target.value)}
                       >
                         <MenuItem value="Indoor">Indoor</MenuItem>
                         <MenuItem value="Outdoor">Outdoor</MenuItem>
@@ -110,11 +158,13 @@ const SiteDet = () => {
                         variant="outlined"
                         size="small"
                         fullWidth
+                        value={hardwaretemp1.SM}
+                        onChange={(e) => handleInputChange('SM', e.target.value)}
                       />
                     </td>
                     <td style={{ textAlign: 'center', padding: '8px', border: '1px solid black', textAlign: 'left' }}>
 
-                      <IconButton color="error" size='small' aria-label="add" title='Add' onClick={handleHardwareChange1}>
+                      <IconButton color="error" size='small' aria-label="add" title='Add' onClick={addHardware1}>
                         <AddIcon />
                       </IconButton>
                     </td>
@@ -123,40 +173,66 @@ const SiteDet = () => {
               </table>
 
               {/* RRU Type Section */}
-              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', border: '1px solid black', marginBottom: '10px' }}>
                 <thead>
                   <tr>
-                    <th style={{ backgroundColor: '#f8d7da', color: 'brown', fontWeight: 'bold', padding: '8px', border: '1px solid #ddd' }}>RRU Type (Model -Band)</th>
-                    <th style={{ backgroundColor: '#f8d7da', color: 'brown', fontWeight: 'bold', padding: '8px', border: '1px solid #ddd' }}>MMIMO Power configuration</th>
-                    <th style={{ backgroundColor: '#f8d7da', color: 'brown', fontWeight: 'bold', padding: '8px', border: '1px solid #ddd' }}>Action</th>
+                    <th style={{ backgroundColor: '#f8d7da', color: 'brown', fontWeight: 'bold', padding: '3px', border: '1px solid black', textAlign: 'left' }} >RRU Type (Model -Band)</th>
+                    <th style={{ backgroundColor: '#f8d7da', color: 'brown', fontWeight: 'bold', padding: '3px', border: '1px solid black', textAlign: 'left' }} >MMIMO Power configuration</th>
+                    <th style={{ backgroundColor: '#f8d7da', color: 'brown', fontWeight: 'bold', padding: '3px', border: '1px solid black', textAlign: 'left' }} >Action</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td colSpan="2" style={{ backgroundColor: '#eaf2b5', height: '20px', border: '1px solid #ddd' }}></td>
-                    <td style={{ backgroundColor: '#eaf2b5', height: '20px', border: '1px solid #ddd' }}></td>
+                    <td style={{ backgroundColor: '#eaf2b5', height: '20px', padding: '3px', border: '1px solid black', textAlign: 'left' }}>
+                      {hardware2?.map((item, index) => (
+                        <span key={index}>{item.RRU_Type}/</span>
+                      ))}
+                    </td>
+                    <td style={{ backgroundColor: '#eaf2b5', height: '20px', padding: '3px', border: '1px solid black', textAlign: 'left' }}>
+                      {hardware2?.map((item, index) => (
+                        <span key={index}>{item.MIMO_Power_Configuration}/</span>
+                      ))}
+                    </td>
+                    <td style={{ backgroundColor: '#eaf2b5', height: '20px', padding: '3px', border: '1px solid black', textAlign: 'left' }}>
+                      <IconButton color="error" aria-label="delete" size='small' title='Delete' onClick={deleteHardware2}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </td>
                   </tr>
                   <tr>
-                    <td style={{ padding: '8px', border: '1px solid #ddd' }}>
+                    <td style={{ padding: '8px', border: '1px solid black' }}>
+                      <TextField
+                        variant="outlined"
+                        size="small"
+                        value={hardwaretemp1.RRU_Type}
+                        onChange={(e) => handleInputChange('RRU_Type', e.target.value)}
+                        fullWidth
+                      />
+                    </td>
+                    <td style={{ padding: '8px', border: '1px solid black' }}>
                       <TextField
                         variant="outlined"
                         size="small"
                         fullWidth
                         placeholder="Select"
-                      />
+                        select
+                        value={hardwaretemp1.MIMO_Power_Configuration}
+                        onChange={(e) => handleInputChange('MIMO_Power_Configuration', e.target.value)}
+                      >
+                        <MenuItem value="1T/1R">1T/1R</MenuItem>
+                        <MenuItem value="2T/2R">2T/2R</MenuItem>
+                        <MenuItem value="4T/4R">4T/4R</MenuItem>
+                        <MenuItem value="8T/8R">8T/8R</MenuItem>
+                        <MenuItem value="4T4R/2T2R">4T4R/2T2R</MenuItem>
+                        <MenuItem value="32T/32R">32T/32R</MenuItem>
+                        <MenuItem value="64T/64R">64T/64R</MenuItem>
+                        <MenuItem value="NA">NA</MenuItem>
+                      </TextField>
+
                     </td>
-                    <td style={{ padding: '8px', border: '1px solid #ddd' }}>
-                      <TextField
-                        variant="outlined"
-                        size="small"
-                        fullWidth
-                      />
-                    </td>
-                    <td style={{ textAlign: 'center', padding: '8px', border: '1px solid #ddd' }}>
-                      <IconButton color="error" aria-label="delete">
-                        <DeleteIcon />
-                      </IconButton>
-                      <IconButton color="error" aria-label="add">
+                    <td style={{ padding: '8px', border: '1px solid black' }}>
+
+                      <IconButton color="error" aria-label="add" size='small' title='Add' onClick={addHardware2}>
                         <AddIcon />
                       </IconButton>
                     </td>

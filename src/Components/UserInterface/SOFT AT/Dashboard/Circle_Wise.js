@@ -50,6 +50,10 @@ const Circle_Wise = () => {
   const [alarmOpen, setAlarmOpen] = useState(false)
   const [hiperAlarmBucket, setHiperAlarmBucket] = useState([])
   const [bucketTempData, setBucketTempData] = useState([])
+  const [circleWiseData, setCircleWiseData] = useState([])
+  const [pendingSiteData, setPendingSiteData] = useState([])
+  const [alarmBucketData, setAlarmBucketData] = useState([])
+  const [ageingCircleData, setAgeingCircleData] = useState([])
   const [open, setOpen] = useState(false)
   const classes = useStyles()
   const [latestDate, setLatestDate] = useState('')
@@ -58,12 +62,14 @@ const Circle_Wise = () => {
   const { makePostRequest } = usePost()
   var displayMonth = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-  const circleWiseData = [];
-  const PendingSiteData = [];
-  const alarmBucketData = [];
-  const ageingCircleData = [];
+  // const circleWiseData = [];
+  // const PendingSiteData = [];
+  // const alarmBucketData = [];
+  // const ageingCircleData = [];
   const years = [];
 
+
+  console.log('sadasdasda',circleWiseData,pendingSiteData,alarmBucketData,ageingCircleData)
 
   const currentYear = new Date().getFullYear();
   for (let year = currentYear; year >= currentYear - 10; year--) {
@@ -163,10 +169,10 @@ const Circle_Wise = () => {
     if (tableData != null) {
       Object.keys(tableData)?.map((item) => {
         arr.push({ ...tableData[item], circle: item });
-        circleWiseData.push({ ...tableData[item], circle: item });
+        // circleWiseData.push({ ...tableData[item], circle: item });
       });
     }
-
+    setCircleWiseData(arr);
 
     // console.log('fhgfghgfhgh',arr)
 
@@ -259,115 +265,7 @@ const Circle_Wise = () => {
   }
   const MemoRTData = useMemo(() => RTData(), [tableData]);
   // ********* EXPORT DATA IN EXCEL FORMET **********
-  const handleExport = () => {
-
-
-    // let table1 = [{
-    //   A:"Circle",
-    //   B:"Accepted",
-    //   C:"Dismantle",
-    //   D:"Need to be Offer",
-    //   E:"Offered",
-    //   F:"Rejected",
-    //   G:"Pending",
-    //   H:"Total"
-
-    // }]
-
-    // circleWiseData.forEach((row)=>
-    // {
-    //   table1.push({
-    //     A: row.circle,
-    //     B: row.Accepted,
-    //     C: row.Dismantle,
-    //     D: row.Need_to_be_offer,
-    //     E: row.offered,
-    //     F: row.Rejected,
-    //     G: row.Pending,
-    //     H: row.Total
-    //   })
-    // })
-
-    // let table2 = [{
-    //   A1:"Status",
-    //   B1:"Circle Team",
-    //   C1:"Circle / NOC Team",
-    //   D1:"Circle / Media Team",
-    //   E1:"NOC Team",
-    //   F1:"Grand Total",
-
-    // }]
-    // PendingSiteData.forEach((row)=>
-    // {
-    //   table2.push({
-    //     A1: row.status,
-    //     B1: row.Circle_Team,
-    //     C1: row.Circle_Team_NOC_Team,
-    //     D1: row.circle_Team_Media_team,
-    //     E1: row.NOC_Team,
-    //     F1: row.Total
-    //   })
-    // })
-
-    // let table3 =[{
-    //   A:"Row Labels",
-    //   B:"Count of Alarm Bucket"
-    // }]
-    // alarmBucketData.forEach((row)=>
-    // {
-    //   table3.push({
-    //     A: row.row_labels,
-    //     B: row.Count_of_Alarm_Bucket,
-    //   })
-    // })
-
-    // let table4 =[{
-    //   A:"Circle",
-    //   B:"0-15",
-    //   C:"16-30",
-    //   D:"31-60",
-    //   E:"61-90",
-    //   F:"GT-90",
-    //   G:"Total"
-    // }]
-    // ageingCircleData.forEach((row)=>
-    // {
-    //   table4.push({
-    //     A: row.circle,
-    //     B: row.ageing_0_15,
-    //     C: row.ageing_16_30,
-    //     D: row.ageing_31_60,
-    //     E: row.ageing_61_90,
-    //     F: row.ageing_GT90,
-    //     G: row.Total
-    //   })
-    // })
-
-    // table1 = [{D:"CIRCLE WISE AT SOFT-AT"}].concat(table1)
-
-    // table2 = [{A1:"PENDING SITE AT SOFT-AT"}].concat(table2)
-
-    // table3 = [{A:"ALARM BUCKET AT SOFT-AT"}].concat(table3)
-
-    // table4 = [{A:"Ageing ( Circle Wise ) AT SOFT-AT"}].concat(table4)
-
-    // const workBook = XLSX.utils.book_new()
-    // const workSheet = XLSX.utils.json_to_sheet(table1)
-    // const workSheet1 = XLSX.utils.json_to_sheet(table2)
-    // const workSheet2 = XLSX.utils.json_to_sheet(table3)
-    // const workSheet3 = XLSX.utils.json_to_sheet(table4)
-    //  XLSX.utils.book_append_sheet(workBook,workSheet,'Circle-wise')
-    //  XLSX.utils.book_append_sheet(workBook,workSheet1,'Pending-site')
-    //  XLSX.utils.book_append_sheet(workBook,workSheet2,'Alarm-bucket')
-    //  XLSX.utils.book_append_sheet(workBook,workSheet3,'Ageing')
-
-    // // Buffer
-    // let buf = XLSX.write(workBook,{bookType:"xlsx",type:"buffer"})
-    // // Binary string
-    // XLSX.write(workBook,{bookType:"xlsx",type:"binary"})
-    // // Download
-    // XLSX.writeFile(workBook,"soft_AT.xlsx")
-
+  const handleExport = async() => {
 
     const workbook = new ExcelJS.Workbook();
     const sheet = workbook.addWorksheet("Circle-wise", { properties: { tabColor: { argb: 'f1948a' } } })
@@ -381,9 +279,10 @@ const Circle_Wise = () => {
     sheet.columns = [
       { header: 'Circle', key: 'circle', width: 10 },
       { header: 'Accepted', key: 'Accepted', width: 15 },
-      // { header: 'Dismantle', key: 'Dismantle', width: 15 },
+      { header: 'Dismantle', key: 'Dismantle', width: 15 },
       { header: 'Need to be Offer', key: 'Need_to_be_offer', width: 20 },
-      // { header: 'Offered', key: 'offered', width: 15 },
+      { header: 'Not Offered', key: 'NOT_OFFERED', width: 20 },
+      { header: 'Offered', key: 'Offered', width: 15 },
       { header: 'Rejected', key: 'Rejected', width: 15 },
       { header: 'Pending', key: 'Pending', width: 15 },
       { header: 'Total', key: 'Total', width: 10 }
@@ -413,38 +312,40 @@ const Circle_Wise = () => {
       { header: 'Total', key: 'Total', width: 15 }
     ]
 
-    circleWiseData?.map(item => {
+   await circleWiseData?.map(item => {
+      // console.log('sdsada', item)
       sheet.addRow({
         circle: item?.circle,
         Accepted: item?.Accepted,
-        // Dismantle: item?.Dismantle,
+        Dismantle: item?.Dismantle,
         Need_to_be_offer: item?.Need_to_be_offer,
-        // offered: item?.offered,
+        NOT_OFFERED: item?.NOT_OFFERED,
+        Offered: item?.Offered,
         Rejected: item?.Rejected,
         Pending: item?.Pending,
-        Total: item?.Total,
+        Total: item?.Total
       })
     })
-    PendingSiteData?.map(item => {
-      console.log('qqqaawww', item)
+   await pendingSiteData?.map(item => {
+      // console.log('qqqaawww', item)
       sheet1.addRow({
         status: item?.status,
         Circle_Team: item?.Circle_Team,
         Circle_Team_NOC_Team: item?.Circle_Team_NOC_Team,
-        // circle_Team_Media_team: item?.circle_Team_Media_team,
+        circle_Team_Media_team: item?.circle_Team_Media_team,
         NOC_Team: item?.NOC_Team,
-        Total: item?.Total,
+        Total: item?.Total
 
       })
     })
-    alarmBucketData?.map(item => {
+  await  alarmBucketData?.map(item => {
       sheet2.addRow({
         row_labels: item?.row_labels,
-        Count_of_Alarm_Bucket: item?.Count_of_Alarm_Bucket,
+        Count_of_Alarm_Bucket: item?.Count_of_Alarm_Bucket
       })
     })
 
-    ageingCircleData?.map(item => {
+   await ageingCircleData?.map(item => {
       sheet3.addRow({
         circle: item?.circle,
         ageing_0_15: item?.ageing_0_15,
@@ -453,12 +354,12 @@ const Circle_Wise = () => {
         ageing_61_90: item?.ageing_61_90,
         ageing_GT90: item?.ageing_GT90,
         ageing_GT120: item?.ageing_GT120,
-        Total: item?.Total,
+        Total: item?.Total
       })
     })
 
     ///__________ STYLING IN EXCEL TABLE ______________ ///
-    sheet.eachRow((row, rowNumber) => {
+   await sheet.eachRow((row, rowNumber) => {
       const rows = sheet.getColumn(1);
       const rowsCount = rows['_worksheet']['_rows'].length;
       row.eachCell((cell) => {
@@ -497,7 +398,7 @@ const Circle_Wise = () => {
         }
       })
     })
-    sheet1.eachRow((row, rowNumber) => {
+   await sheet1.eachRow((row, rowNumber) => {
       const rows = sheet1.getColumn(1);
       const rowsCount = rows['_worksheet']['_rows'].length;
       row.eachCell((cell) => {
@@ -536,7 +437,7 @@ const Circle_Wise = () => {
         }
       })
     })
-    sheet2.eachRow((row, rowNumber) => {
+   await sheet2.eachRow((row, rowNumber) => {
       const rows = sheet2.getColumn(1);
       const rowsCount = rows['_worksheet']['_rows'].length;
       row.eachCell((cell) => {
@@ -575,7 +476,7 @@ const Circle_Wise = () => {
         }
       })
     })
-    sheet3.eachRow((row, rowNumber) => {
+   await sheet3.eachRow((row, rowNumber) => {
       const rows = sheet3.getColumn(1);
       const rowsCount = rows['_worksheet']['_rows'].length;
       row.eachCell((cell) => {
@@ -615,7 +516,7 @@ const Circle_Wise = () => {
       })
     })
 
-    workbook.xlsx.writeBuffer().then(item => {
+  await workbook.xlsx.writeBuffer().then(item => {
       const blob = new Blob([item], {
         type: "application/vnd.openxmlformats-officedocument.spreadsheet.sheet"
       })
@@ -648,11 +549,13 @@ const Circle_Wise = () => {
   const tablePendingData = () => {
     var arr = [];
     if (pendingData != null) {
-      Object.keys(pendingData)?.map((item) => {
+     Object.keys(pendingData)?.map((item) => {
         arr.push({ ...pendingData[item], status: item });
-        PendingSiteData.push({ ...pendingData[item], status: item });
+        // PendingSiteData.push({ ...pendingData[item], status: item });
       });
     }
+    setPendingSiteData(arr)
+
     return arr?.map((item, index) => {
       if (item.status == 'Total') {
         return (
@@ -739,9 +642,10 @@ const Circle_Wise = () => {
     if (alarmBucket != null) {
       Object.keys(alarmBucket)?.map((item, index) => {
         arr.push({ ...alarmBucket[item], row_labels: item });
-        alarmBucketData.push({ ...alarmBucket[item], row_labels: item });
+        // alarmBucketData.push({ ...alarmBucket[item], row_labels: item });
       });
     }
+    setAlarmBucketData(arr);
     return arr.map((item, index) => {
       if (item.row_labels == 'Grand Total') {
         return (
@@ -800,9 +704,10 @@ const Circle_Wise = () => {
     if (ageingData != null) {
       Object.keys(ageingData)?.map((item) => {
         arr.push({ ...ageingData[item], circle: item });
-        ageingCircleData.push({ ...ageingData[item], circle: item });
+        // ageingCircleData.push({ ...ageingData[item], circle: item });
       });
     }
+    setAgeingCircleData(arr);
     return arr?.map((item, index) => {
       if (item.circle == 'Total') {
         return (
