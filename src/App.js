@@ -134,7 +134,7 @@ function App() {
             } />
             <Route path="/tools/file_merge" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={File_Merge} allowedUserTypes={['admin']} userType={userType} />
+                <ProtectedRoute element={File_Merge} allowedUserTypes={['admin','quality']} userType={userType} />
               </Suspense>
             } />
             <Route path="/tools/schedular/*" element={
