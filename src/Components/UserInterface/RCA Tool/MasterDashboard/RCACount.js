@@ -336,12 +336,8 @@ const RCACount = ({ data }) => {
       setRcaName(Object.keys(rcaCounts))
       setRcaValue(Object.values(rcaCounts))
 
-      console.log('RAC DATA', 'CIRCLE', 'AP', Object.keys(rcaCounts))
+      // console.log('RAC DATA', 'CIRCLE', 'AP', Object.keys(rcaCounts))
       // let filterCircleERAB = _.filter(data.Data, { circle: item , KPI :'MV_ERAB_Setup_Success_Rate'});
-
-
-
-
       // })
     }
   }, [data,selectCircle])

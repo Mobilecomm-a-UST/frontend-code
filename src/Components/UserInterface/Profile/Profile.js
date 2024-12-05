@@ -27,7 +27,7 @@ const Profile = () => {
     const response = await getData(`profile/${userName}/`);
 
     // setProfileData(response.data);
-    console.log("11111111", response.data[0].Image);
+    // console.log("11111111", response.data[0].Image);
     setEmployeeName(response.data[0].Employee_Name);
     setEmpCode(response.data[0].Employee_Code);
     setEmail(response.data[0].Email);

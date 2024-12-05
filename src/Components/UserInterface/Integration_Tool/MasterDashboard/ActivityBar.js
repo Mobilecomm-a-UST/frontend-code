@@ -427,7 +427,6 @@ const ActivityBar = () => {
       }
     },
     watermark: {
-
       image: `${ServerURL}/media/assets/logo-new.png`,
       x: 50,
       y: 50,
@@ -510,6 +509,21 @@ const ActivityBar = () => {
     )
   }, [open])
 
+  const handleDownloadChart = ()=>{
+    if (chartRef.current) {
+      const chart = chartRef.current;
+      try {
+        const imageURL = chart.toBase64Image(); // Convert to Base64 image
+        const link = document.createElement('a');
+        link.href = imageURL;
+        link.download = 'chart.png';
+        link.click();
+      } catch (error) {
+        console.error('Error exporting chart:', error);
+      }
+    }
+  }
+
   useEffect(() => {
     // console.log('aaaa')
     filterData()
@@ -582,6 +596,9 @@ const ActivityBar = () => {
         <div>
           <Button color="primary" endIcon={<LaunchIcon />} onClick={() => { setOpen(true) }}>Full screen</Button>
         </div>
+        {/* <div>
+          <Button color="primary" endIcon={<LaunchIcon />} onClick={() => {handleDownloadChart()}}>Download</Button>
+        </div> */}
       </div>
       <div style={{ display: graphType ? 'inherit' : 'none', filter: 'drop-shadow(rgba(0, 0, 0, 0.34) 0px 3px 3px)', width: "800px", height: 400 }}>
         <Line

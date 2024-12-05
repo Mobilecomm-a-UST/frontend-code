@@ -5,7 +5,10 @@ import { useNavigate } from 'react-router-dom';
 import { useGet } from '../../../Hooks/GetApis'
 import { useQuery } from '@tanstack/react-query';
 import { useLoadingDialog } from '../../../Hooks/LoadingDialog';
+import RcaOutput from './RcaOutput';
 import FileDownload from './FileDownload';
+
+import { CsvBuilder } from 'filefy';
 
 const Generate_rca = () => {
     const colorType = ['#B0EBB4', '#A0DEFF', '#FF9F66', '#ECB176', '#CDE8E5']
@@ -34,6 +37,8 @@ const Generate_rca = () => {
 
 
     // console.log('data' , data)
+
+
 
 
     const Dashboard = useCallback(({ datas, color }) => {
@@ -77,6 +82,9 @@ const Generate_rca = () => {
             </div>
             <Box sx={{ marginTop: 4 }}>
                 <FileDownload />
+            </Box>
+            <Box sx={{ marginTop: 4 }}>
+                <RcaOutput />
             </Box>
 
         </div>

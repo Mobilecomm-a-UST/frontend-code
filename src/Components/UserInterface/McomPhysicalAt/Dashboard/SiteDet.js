@@ -346,7 +346,7 @@ const SiteDet = () => {
           <Grid container rowSpacing={2} columnSpacing={2} direction={{ xs: "column", sm: "column", md: "row" }} >
             <Grid item xs={3}>
               <TextField label="Date of AT Offered / Reoffered" variant="outlined" type='date' size="small" fullWidth
-                autoFocus
+                InputLabelProps={{shrink:true}}
 
               />
             </Grid>

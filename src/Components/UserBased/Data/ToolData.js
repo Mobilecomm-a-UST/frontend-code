@@ -142,7 +142,7 @@ const ToolData = [
         title: 'This is a file merge tool<',
         icons: SingleSourceIcon,
         link: '/tools/file_merge',
-        groupBy:['admin']
+        groupBy:['admin','quality']
     },
     {
         id: 15,
@@ -187,7 +187,7 @@ const ToolData = [
     // },
     {
         id: 22,
-        name: 'RCA',
+        name: 'RCA Genie',
         title: 'This is a RCA Tool',
         icons: TreeIcon,
         link:  '/tools/rca',
@@ -200,6 +200,16 @@ const ToolData = [
         icons: DocPassIcon,
         link: '/tools/IX_Tracker',
         groupBy:['quality','IX_reader']
+
+    }
+    ,
+    {
+        id: 24,
+        name: 'Mcom Physical AT',
+        title: 'This is a IX Tracker Tool',
+        icons: CellTowerIcon,
+        link: '/tools/mcom_physical_at',
+        groupBy:['soft_at_team', 'admin']
 
     }
     ,

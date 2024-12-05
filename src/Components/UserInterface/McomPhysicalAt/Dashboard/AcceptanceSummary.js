@@ -30,10 +30,11 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+
 import { InputPicker } from 'rsuite';
 import CheckPicker from 'rsuite/CheckPicker';
-
-
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import { usePost } from "../../../Hooks/PostApis";
 
 
 
@@ -94,8 +95,41 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 }));
 
+
+
 const AcceptanceSummary = () => {
-    const [atStatus,setAtStatus] = useState([])
+    const [atStatus, setAtStatus] = useState([])
+    const [open, setOpen] = useState(false)
+    const [formData, setFormData] = useState({
+        "sr_no": "",
+        "sub_sr_no": "",
+        "at_sr_no": "",
+        "offered_layer": "",
+        "site_id": "",
+        "circle": "",
+        "project": "",
+        "nominal_type": "",
+        "rantsp": "",
+        "mwoem": "",
+        "mwtsp": "",
+        "installation_date": "",
+        "integration_date": "",
+        "physical_at_status": "",
+        "physical_offered_date": "",
+        "physical_at_status_date": "",
+        "performance_at_status": "",
+        "performance_at_offered_date": "",
+        "performance_at_status_date": "",
+        "soft_at_status": "",
+        "soft_at_offered_date": "",
+        "soft_at_status_date": "",
+        "physical_at_assignment": "",
+        "soft_at_assignment": "",
+        "performance_at_assignment": "",
+        "scft_at_assignment": ""
+    })
+    const {makePostRequest} = usePost()
+
 
     const data = [
         'Eugenia',
@@ -116,8 +150,134 @@ const AcceptanceSummary = () => {
         'Hattie',
         'Hazel',
         'Hilda'
-      ].map(item => ({ label: item, value: item }));
+    ].map(item => ({ label: item, value: item }));
 
+
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        });
+    }
+
+    const handleUpdateData = async(e) => {
+        e.preventDefault()
+
+        
+        const response = await makePostRequest('Physical_At/add-main-table-data/', formData )
+        console.log('responce data' ,  response )
+
+        console.log('asdadad',e)
+    }
+
+    const handleClose =()=>{
+        setOpen(false)
+        setFormData(
+            {
+                "sr_no": "",
+                "sub_sr_no": "",
+                "at_sr_no": "",
+                "offered_layer": "",
+                "site_id": "",
+                "circle": "",
+                "project": "",
+                "nominal_type": "",
+                "rantsp": "",
+                "mwoem": "",
+                "mwtsp": "",
+                "installation_date": "",
+                "integration_date": "",
+                "physical_at_status": "",
+                "physical_offered_date": "",
+                "physical_at_status_date": "",
+                "performance_at_status": "",
+                "performance_at_offered_date": "",
+                "performance_at_status_date": "",
+                "soft_at_status": "",
+                "soft_at_offered_date": "",
+                "soft_at_status_date": "",
+                "physical_at_assignment": "",
+                "soft_at_assignment": "",
+                "performance_at_assignment": "",
+                "scft_at_assignment": ""
+            }
+        )
+    }
+
+
+    const AddSiteListDialogBox = useCallback(() => {
+        return (
+            <Dialog
+                open={open}
+                fullWidth
+                maxWidth='lg'
+                BackdropProps={{
+                    style: { backgroundColor: 'rgba(0, 0, 0, 0.5)', backdropFilter: 'blur(3px)' },
+                }}
+            >
+                <DialogTitle>
+                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                        <div> Add New Site</div>
+                        <div>
+                            <IconButton aria-label="delete" size="small" title="Close" onClick={() => { handleClose(); }}>
+                                <CloseIcon fontSize="inherit" />
+                            </IconButton></div>
+                    </div>
+
+                </DialogTitle>
+                <DialogContent>
+                    <form onSubmit={handleUpdateData} style={{ width: '100%', marginTop: 10 }}>
+
+                        <Grid container spacing={2}>
+                            {Object.keys(formData).map((key,index) => {
+                                
+                                if(index < 10){
+                                    return(
+                                        <Grid item xs={3} key={key}>
+                                            <TextField
+                                                variant="outlined"
+                                                fullWidth
+                                                placeholder={key.replace(/_/g, ' ')}
+                                                label={key.replace(/_/g, ' ')}
+                                                name={key}
+                                                // required
+                                                value={formData[key]}
+                                                onChange={handleChange}
+                                                size="small"
+                                                type={key.includes('date') ? 'date' : 'text'}
+                                                InputLabelProps={key.includes('date') ? { shrink: true } : {}}
+                                            />
+                                        </Grid>
+                                    )
+                                }else{
+                                    return(
+                                        <Grid item xs={3} key={key}>
+                                            <TextField
+                                                variant="outlined"
+                                                fullWidth
+                                                placeholder={key.replace(/_/g, ' ')}
+                                                label={key.replace(/_/g, ' ')}
+                                                name={key}
+                                                value={formData[key]}
+                                                onChange={handleChange}
+                                                size="small"
+                                                type={key.includes('date') ? 'date' : 'text'}
+                                                InputLabelProps={key.includes('date') ? { shrink: true } : {}}
+                                            />
+                                        </Grid>
+                                    )
+                                }
+                            })}
+                            <Grid item xs={12}>
+                                <Button type="submit" fullWidth variant="contained">Add Data</Button>
+                            </Grid>
+                        </Grid>
+                    </form>
+                </DialogContent>
+            </Dialog>
+        )
+
+    }, [open,formData])
 
     return (
         <>
@@ -135,6 +295,9 @@ const AcceptanceSummary = () => {
                             <Typography color='text.primary'>Acceptance Summary</Typography>
                         </Breadcrumbs>
                     </div>
+                    <div style={{ textAlign: 'right', margin: 5, marginLeft: 10 }}>
+                        <Button variant="outlined" endIcon={<AddCircleOutlineIcon />} onClick={() => { setOpen(true) }}>Add new Site</Button>
+                    </div>
                     <Slide
                         direction='left'
                         in='true'
@@ -143,14 +306,14 @@ const AcceptanceSummary = () => {
                     >
                         <Paper sx={{ width: '99%', overflow: 'hidden' }}>
                             <Box sx={{ padding: 1, display: 'flex', justifyContent: 'space-between' }}>
-                                    <InputPicker size="sm" placeholder="All Circle" data={data} style={{ maxWidth: '25vh' }} />      
-                                    <InputPicker size="sm" placeholder="SR Type" data={data} style={{ maxWidth: '25vh' }} />      
-                                    <InputPicker size="sm" placeholder="All TSP" data={data} style={{ maxWidth: '25vh' }} />      
-                                    <InputPicker size="sm" placeholder="All Project" data={data} style={{ maxWidth: '25vh' }} />      
-                                    <InputPicker size="sm" placeholder="Assignment Status" data={data} style={{ maxWidth: '25vh' }} />      
-                                    {/* <InputPicker size="sm" placeholder="Select AT Status" data={data} style={{ maxWidth: '25vh' }} />  */}
-                                    <CheckPicker data={data} placeholder="Select AT Status" value={atStatus} onChange={(value) => { setAtStatus(value) }} size="sm"  style={{ maxWidth: '25vh' }} />     
-                                    <InputPicker size="sm" placeholder="Select Date" data={data} style={{ maxWidth: '25vh' }} />      
+                                <InputPicker size="sm" placeholder="All Circle" data={data} style={{ maxWidth: '25vh' }} />
+                                <InputPicker size="sm" placeholder="SR Type" data={data} style={{ maxWidth: '25vh' }} />
+                                <InputPicker size="sm" placeholder="All TSP" data={data} style={{ maxWidth: '25vh' }} />
+                                <InputPicker size="sm" placeholder="All Project" data={data} style={{ maxWidth: '25vh' }} />
+                                <InputPicker size="sm" placeholder="Assignment Status" data={data} style={{ maxWidth: '25vh' }} />
+                                {/* <InputPicker size="sm" placeholder="Select AT Status" data={data} style={{ maxWidth: '25vh' }} />  */}
+                                <CheckPicker data={data} placeholder="Select AT Status" value={atStatus} onChange={(value) => { setAtStatus(value) }} size="sm" style={{ maxWidth: '25vh' }} />
+                                <InputPicker size="sm" placeholder="Select Date" data={data} style={{ maxWidth: '25vh' }} />
                             </Box>
                             <TableContainer sx={{ maxHeight: '77vh', width: '100%' }}>
                                 <Table stickyHeader >
@@ -183,7 +346,7 @@ const AcceptanceSummary = () => {
                                             <StyledTableCell align="center">Soft AT Assignment</StyledTableCell>
                                             <StyledTableCell align="center">Performance AT Assignment</StyledTableCell>
                                             <StyledTableCell align="center">SCFT AT Assignment</StyledTableCell>
-                                      
+
 
                                             {/* <StyledTableCell align="center">KPI <CheckPicker data={kpi.map(item => ({ label: item, value: item }))} value={selectKpi} onChange={(value) => { setSelectKpi(value) }} size="sm" appearance="subtle" style={{ width: 40 }} /></StyledTableCell> */}
                                             {/* <StyledTableCell align="center">Probable Causes</StyledTableCell> */}
@@ -231,7 +394,7 @@ const AcceptanceSummary = () => {
                     </Slide>
                 </div>
             </Slide>
-
+            {AddSiteListDialogBox()}
         </>
 
     )
