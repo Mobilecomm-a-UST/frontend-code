@@ -165,7 +165,7 @@ const RcaOutput = () => {
 
     useEffect(() => {
         const dayBefor = new Date();
-        dayBefor.setDate(dayBefor.getDate() - 3);
+        dayBefor.setDate(dayBefor.getDate() - 1);
         let newDate = dayBefor.getFullYear() + '-' + ('0' + (dayBefor.getMonth() + 1)).slice(-2) + '-' + ('0' + dayBefor.getDate()).slice(-2);
         // console.log('dayBefor', newDate)
 
@@ -188,7 +188,7 @@ const RcaOutput = () => {
 
                     </div>
                     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-                        <TableContainer id="scrollableTable" sx={{ maxHeight: '77vh', width: '100%' }}>
+                        <TableContainer  sx={{ maxHeight: '77vh', width: '100%' , overflowY: 'auto'}}>
                             <InfiniteScroll
                                 dataLength={visibleData.length} // Current number of items rendered
                                 next={loadMoreData} // Load more data on scroll
@@ -197,7 +197,7 @@ const RcaOutput = () => {
                                 endMessage={<p style={{ textAlign: 'center' }}>No more data to display</p>}
                                 scrollableTarget="scrollableTable" // Use TableContainer as scroll target
                             >
-                                <Table stickyHeader >
+                                <Table stickyHeader  id="scrollableTable">
                                     <TableHead style={{ fontSize: 18 }}>
                                         <TableRow >
                                             <StyledTableCell align="center">Circle <CheckPicker data={circleData.map(item => ({ label: item, value: item }))} value={selectedCircle} onChange={(value) => { setSelectedCircle(value) }} size="sm" appearance="subtle" style={{ width: 40 }} /></StyledTableCell>

@@ -17,7 +17,7 @@ import LaunchIcon from '@mui/icons-material/Launch';
 import Dialog from '@mui/material/Dialog';
 import { useStyles } from '../../ToolsCss';
 import Slide from '@mui/material/Slide';
-import _ from 'lodash';
+import _, { set } from 'lodash';
 import KPICount from './KPICount';
 import RCACount from './RCACount';
 
@@ -40,28 +40,53 @@ const CountOkNotOK = () => {
     const [open, setOpen] = useState(false)
     const [okCount, setOkCount] = useState([])
     const [notOkCount, setNotOkCount] = useState([])
-    const [date, setDate] = useState('2024-08-01')
-    const { isPending, isFetching, isError, data, refetch } = useQuery({
-        queryKey: ['Master_RCA_Dashboard'],
-        queryFn: async () => {
-            action(isPending)
-            var formData = new FormData()
-            formData.append('date', date)
-            const res = await makePostRequest("RCA_TOOL/RCA_Table_output/", formData);
-            if (res) {
-                action(false)
-                handleCount(res.Data)
-                console.log(res)
-                return res;
-            }
-            else {
-                action(false)
-            }
-        },
-        staleTime: 100000,
-        refetchOnReconnect: false,
-    })
+    const [sumOkNotokCount,setSumOkNotokCount] = useState([])
+    const [date, setDate] = useState('')
+    const [data , setData] = useState([])
+    // const { isPending, isFetching, isError, data, refetch } = useQuery({
+    //     queryKey: ['Master_RCA_Dashboard'],
+    //     queryFn: async () => {
+    //         action(isFetching)
+    //         var formData = new FormData()
+    //         formData.append('date', date)
+    //         const res = await makePostRequest("RCA_TOOL/RCA_Table_output/", formData);
+    //         console.log('dfdfsdfsdf',res)
+    //         if (res) {
+    //             action(false)
+    //             handleCount(res.Data)
+    //             setDate(res.date)
+    //             return res;
+    //         }
+    //         else {
+    //             action(false)
+    //         }
+    //     },
+    //     staleTime: 100000,
+    //     refetchOnReconnect: false,
+    // })
+
+    const handleFetchData = async(event)=>{
+        action(true)
+        var formData = new FormData()
+        formData.append('date', event||'')
+        const res = await makePostRequest("RCA_TOOL/RCA_Table_output/", formData);
+        console.log('dfdfsdfsdf',res)
+        if (res) {
+            action(false)
+            setData(res)
+            handleCount(res.Data)
+            setDate(res.date)
+            // return res;
+        }
+        else {
+            action(false)
+        }
+    }
+
     let delayed;
+
+    // console.log('asd',isFetching,isPending,)
+
 
     const handleCount = (data) => {
         CIRCLE.map((item) => {
@@ -81,6 +106,7 @@ const CountOkNotOK = () => {
 
             setOkCount((prev) => [...prev, ok])
             setNotOkCount((prev) => [...prev, notOk])
+            setSumOkNotokCount((prev)=>[...prev, ok+notOk])
 
             // console.log('circle', item, ok, notOk)
 
@@ -90,8 +116,9 @@ const CountOkNotOK = () => {
 const handleDateChange = async(e) => {
     setOkCount([])
     setNotOkCount([])
+    setSumOkNotokCount([])
     await setDate(e.target.value)
-    await refetch()
+    await handleFetchData(e.target.value)
 }
 
     // TOGGAL BUTTON..........
@@ -128,6 +155,19 @@ const handleDateChange = async(e) => {
                 color: 'red',
                 fill: false,
                 tension: 0.4
+            },
+            {
+                label: 'Sum of OK & NOT OK',
+                data: sumOkNotokCount,
+                borderColor: 'black',
+                backgroundColor: ['rgb(126, 24, 145,0.5)'],
+                borderWidth: 1,
+                borderRadius: 1,
+                cursor: 'pointer',
+                color: 'red',
+                fill: true,
+                tension: 0.4,
+                type:'bar'
             }
         ]
     }
@@ -157,6 +197,19 @@ const handleDateChange = async(e) => {
                 color: 'red',
                 fill: true,
                 tension: 0.4
+            },
+            {
+                label: 'Sum of OK & NOT OK',
+                data: sumOkNotokCount,
+                borderColor: '#7E1891',
+                // backgroundColor: ['rgb(223, 211, 195)'],
+                borderWidth: 3,
+                borderRadius: 1,
+                cursor: 'pointer',
+                color: 'red',
+                fill: false,
+                tension: 0.4,
+                type:'line'
             }
         ]
     }
@@ -186,7 +239,7 @@ const handleDateChange = async(e) => {
             },
             title: {
                 display: true,
-                text: `Count of OK and NOT OK`,
+                text: `Count of OK (${_.sum(okCount)}) and NOT OK (${_.sum(notOkCount)})`,
                 font: {
                     size: 16,
                     weight: 'bold'
@@ -377,27 +430,29 @@ const handleDateChange = async(e) => {
     }, [open])
 
     useEffect(() => {
-        if (data) {
+        // if (data) {
 
-            CIRCLE.map((item) => {
-                let ok = 0;
-                let notOk = 0;
+        //     CIRCLE.map((item) => {
+        //         let ok = 0;
+        //         let notOk = 0;
 
-                let filterCircle = _.filter(data.Data, { circle: item });
-                filterCircle.map((items) => {
-                    if (items.check_condition === 'OK') {
-                        ok = ok + 1
-                        // console.log('ok')
-                    } else {
-                        notOk = notOk + 1
-                        // console.log('not ok')
-                    }
-                })
+        //         let filterCircle = _.filter(data.Data, { circle: item });
+        //         filterCircle.map((items) => {
+        //             if (items.check_condition === 'OK') {
+        //                 ok = ok + 1
+        //                 // console.log('ok')
+        //             } else {
+        //                 notOk = notOk + 1
+        //                 // console.log('not ok')
+        //             }
+        //         })
 
-                setOkCount((prev) => [...prev, ok])
-                setNotOkCount((prev) => [...prev, notOk])
-            })
-        }
+        //         setOkCount((prev) => [...prev, ok])
+        //         setNotOkCount((prev) => [...prev, notOk])
+        //         setSumOkNotokCount((prev)=>[...prev, ok+notOk])
+        //     })
+        // }
+        handleFetchData()
     }, [])
 
   return (

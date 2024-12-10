@@ -29,6 +29,7 @@ const ZeroPayload = lazy(() => import('./Trend/ZeroPayload'));
 const DayWisePayload = lazy(() => import('./Trend/DayWisePayload'));
 const WeekWisePayload = lazy(() => import('./Trend/WeekWisePayload'))
 const RaiseTicket = lazy(()=>import('./TroubleTicket/RaiseTicket'))
+const RaiseTicket2 = lazy(()=>import('./TroubleTicket/RaiseTicket2'))
 
 
 const Rca = () => {
@@ -74,11 +75,11 @@ const Rca = () => {
                                             <Nav.Item eventKey='5-2' placement="rightStart" onClick={() => navigate('/tools/rca/zero_payload')}>
                                                 Zero Payload
                                             </Nav.Item>
-                                            <Nav.Item eventKey='5-3' placement="rightStart" onClick={() => navigate('/tools/rca/day_wise_payload')}>
-                                                Day Wise Payload
+                                            <Nav.Item eventKey='5-3' placement="rightStart" onClick={() => navigate('/tools/rca/day_wise_payload_variation')}>
+                                                Day Wise Payload Dip
                                             </Nav.Item>
-                                            <Nav.Item eventKey='5-4' placement="rightStart" onClick={() => navigate('/tools/rca/week_wise_payload')}>
-                                                Week Wise Payload
+                                            <Nav.Item eventKey='5-4' placement="rightStart" onClick={() => navigate('/tools/rca/week_wise_payload_variation')}>
+                                                Week Wise Payload Dip
                                             </Nav.Item>
                                         </Nav.Menu>
 
@@ -133,9 +134,10 @@ const Rca = () => {
                                 <Route element={<OverallSummary />} path="/overall_summary" />
                                 <Route element={<LteKpiTrend />} path="/lte_kpi_trend" />
                                 <Route element={<ZeroPayload />} path="/zero_payload" />
-                                <Route element={<DayWisePayload />} path="/day_wise_payload" />
-                                <Route element={<WeekWisePayload />} path="/week_wise_payload" />
-                                <Route element={<RaiseTicket />} path="/raise_ticket" />
+                                <Route element={<DayWisePayload />} path="/day_wise_payload_variation" />
+                                <Route element={<WeekWisePayload />} path="/week_wise_payload_variation" />
+                                {/* <Route element={<RaiseTicket />} path="/raise_ticket" /> */}
+                                <Route element={<RaiseTicket2 />} path="/raise_ticket" />
                             </Routes>
                         </Suspense>
                     </Grid>
