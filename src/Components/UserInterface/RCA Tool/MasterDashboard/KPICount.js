@@ -39,6 +39,7 @@ const KPICount = ({data}) => {
     const [notOkCount, setNotOkCount] = useState([])
     const [rrcKpi, setRrcKpi] = useState([])
     const [erabKpi, setErabKpi] = useState([])
+    const [volumegb,setVolumegb] = useState([])
     // const { isPending, isFetching, isError, data, refetch } = useQuery({
     //     queryKey: ['Master_RCA_Dashboard'],
     //     queryFn: async () => {
@@ -122,6 +123,17 @@ const KPICount = ({data}) => {
                 color: 'red',
                 fill: false,
                 tension: 0.4
+            },
+            {
+                label: 'Volume GB',
+                data: volumegb,
+                borderColor: 'rgb(110, 172, 218)',
+                backgroundColor: ['rgb(110, 172, 218)'],
+                borderWidth: 3,
+                borderRadius: 5,
+                color: 'red',
+                fill: false,
+                tension: 0.4
             }
         ]
     }
@@ -145,6 +157,18 @@ const KPICount = ({data}) => {
                 data: erabKpi,
                 borderColor: 'black',
                 backgroundColor: ['rgb(110, 172, 218)'],
+                borderWidth: 1,
+                borderRadius: 1,
+                cursor: 'pointer',
+                color: 'red',
+                fill: true,
+                tension: 0.4
+            },
+            {
+                label: 'Volume GB',
+                data: volumegb,
+                borderColor: 'black',
+                backgroundColor: ['rgb(133, 169, 143)'],
                 borderWidth: 1,
                 borderRadius: 1,
                 cursor: 'pointer',
@@ -373,15 +397,18 @@ const KPICount = ({data}) => {
     useEffect(() => {
         setErabKpi([]);
         setRrcKpi([]);
+        setVolumegb([])
         if (data) {
             CIRCLE.map((item) => {
                 // let ok = 0;
                 let rrc = 0;
                 let erab = 0;
+                let volumeGb = 0
                 let filterCircleRRC = _.filter(data.Data, { circle: item , KPI :'MV_RRC_Setup_Success_Rate'});
                 let filterCircleERAB = _.filter(data.Data, { circle: item , KPI :'MV_ERAB_Setup_Success_Rate'});
+                let filterCircleVolumeGb = _.filter(data.Data, { circle: item , KPI :'MV_4G_Data_Volume_GB_N'});
 
-                // console.log('kpi data is',filterCircleRRC)
+                console.log('kpi data is',filterCircleVolumeGb)
                 filterCircleRRC.map((items) => {
                     if (items.check_condition !== 'OK') {                    
                         rrc = rrc + 1
@@ -392,10 +419,15 @@ const KPICount = ({data}) => {
                         erab = erab + 1
                     }
                 })
+                filterCircleVolumeGb.map((items) => {
+                    if (items.check_condition !== 'OK') {
+                        volumeGb = volumeGb + 1
+                    }
+                })
                 // console.log('kpi data is',rrc,erab)
                 setRrcKpi((prev) => [...prev, rrc])
                 setErabKpi((prev) => [...prev, erab])
-
+                setVolumegb((prev) => [...prev, volumeGb])
                 // setOkCount((prev) => [...prev, ok])
                 // setNotOkCount((prev) => [...prev, notOk])
             })

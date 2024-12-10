@@ -124,16 +124,16 @@ const RaiseTicket = () => {
             action(true)
             const response = await makePostRequest(`Zero_Count_Rna_Payload_Tool/ticket_status_open_close/${ticketDipForm.ticket_id}/`, ticketDipForm);
 
-            // console.log('on clicke update : ', response);
+            console.log('on clicke update : ', response);
 
             if (response.Status) {
                 setPayloadStatus(false);
                 handleTotalData();
-                Swal.fire({
-                    icon: "success",
-                    title: "Done",
-                    text: 'Data updated successfuly',
-                });
+                // Swal.fire({
+                //     icon: "success",
+                //     title: "Done",
+                //     text: 'Data updated successfuly',
+                // });
 
             }
         } catch (error) {
@@ -573,7 +573,7 @@ const RaiseTicket = () => {
         if (toggalButton) {
             action(true)
             const responce = await makeGetRequest('Zero_Count_Rna_Payload_Tool/get_ticket_status_data/')
-            // console.log('toggal button', responce)
+            console.log('toggal button', responce)
             if (responce) {
                 action(false)
                 setTotalTable(responce.data)
@@ -585,7 +585,7 @@ const RaiseTicket = () => {
                 // setCurrentDate(responce.current_date)
                 // setPreviousDate(responce.previous_date)
                 // setTotalOpen(true)
-                console.log('sat', responce)
+                // console.log('sat', responce)
             }
             else {
                 action(false)
@@ -951,14 +951,15 @@ const RaiseTicket = () => {
                                     <TextField
                                         variant="outlined"
                                         fullWidth
+                                        required
                                         placeholder="Ownership"
                                         label="Ownership"
                                         name="Ownership"
                                         value={ticketDipForm.Ownership}
                                         onChange={handleChange}
-                                        InputProps={{
-                                            readOnly: true,
-                                        }}
+                                        // InputProps={{
+                                        //     readOnly: true,
+                                        // }}
                                         size="small"
                                         type='text'
                                     />
