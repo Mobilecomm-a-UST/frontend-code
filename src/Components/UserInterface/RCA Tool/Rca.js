@@ -84,8 +84,8 @@ const Rca = () => {
                                         </Nav.Menu>
 
                                         <Nav.Menu eventKey="6" placement='rightStart' title="Trouble Ticket" icon={<ViewsAuthorizeIcon size="3em" />}>
-                                            <Nav.Item eventKey='6-1' placement="rightStart" onClick={() => navigate('/tools/rca/raise_ticket')}>
-                                                Raise Ticket
+                                            <Nav.Item eventKey='6-1' placement="rightStart" onClick={() => navigate('/tools/rca/ticket')}>
+                                                Ticket
                                             </Nav.Item>
                                         </Nav.Menu>
 
@@ -137,7 +137,7 @@ const Rca = () => {
                                 <Route element={<DayWisePayload />} path="/day_wise_payload_variation" />
                                 <Route element={<WeekWisePayload />} path="/week_wise_payload_variation" />
                                 {/* <Route element={<RaiseTicket />} path="/raise_ticket" /> */}
-                                <Route element={<RaiseTicket2 />} path="/raise_ticket" />
+                                <Route element={<RaiseTicket2 />} path="/ticket" />
                             </Routes>
                         </Suspense>
                     </Grid>

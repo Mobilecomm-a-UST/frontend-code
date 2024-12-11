@@ -412,10 +412,11 @@ const handleSubmit = async (e) => {
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{index + 1}</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.ticket_id}</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.Circle}</th>
+                <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.Site_ID}</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.Short_name}</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{handleDateFormets(item.Date)}</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{handleDateFormets(item.Open_Date)}</th>
-                <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{CalculateDaysBetweenDates(item.Date, item.Open_Date)}</th>
+                <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item?.aging}</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.priority}</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap', cursor: 'pointer', color: item.Status == 'OPEN' ? 'red' : 'green' }} className={classes.hover} onClick={() => { handleSetDataTicket(item) }}>{item.Status == 'nan' ? '' : item.Status}</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.Remarks == 'nan' ? '' : item.Remarks}</th>
@@ -423,7 +424,6 @@ const handleSubmit = async (e) => {
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.category == 'nan' ? '' : item.category}</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.RCA == 'nan' ? '' : item.RCA}</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.Circle_Spoc}</th>
-                <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.Site_ID}</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.Pre_Remarks == 'nan' ? '' : item.Pre_Remarks}</th>
             </tr>
         ))
@@ -610,15 +610,15 @@ const handleSubmit = async (e) => {
                                     <TextField
                                         variant="outlined"
                                         fullWidth
-                                        required
+                                        // required
                                         placeholder="Ownership"
                                         label="Ownership"
                                         name="Ownership"
                                         value={ticketDipForm.Ownership}
                                         onChange={handleChange}
-                                        // InputProps={{
-                                        //     readOnly: true,
-                                        // }}
+                                        InputProps={{
+                                            readOnly: false,
+                                        }}
                                         size="small"
                                         type='text'
                                     />
@@ -763,6 +763,8 @@ const handleSubmit = async (e) => {
                                         <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>S.No.</th>
                                         <th style={{ padding: '1px 70px 1px 1px', whiteSpace: 'nowrap' }}>Ticket ID <CheckPicker data={payloadTicketId.map(item => ({ label: item, value: item }))} value={selectTicketId} onChange={(value) => { setSelectTicketId(value) }} size="sm" appearance="default" placeholder="" style={{ width: 10 }} /></th>
                                         <th style={{ padding: '1px 60px 1px 2px', whiteSpace: 'nowrap' }} >Circle <CheckPicker data={payloadCircle.map(item => ({ label: item, value: item }))} value={selectCircle} onChange={(value) => { setSelectCircle(value) }} size="sm" appearance="default" style={{ width: 20 }} /> </th>
+                                        <th style={{ padding: '1px 60px 1px 2px', whiteSpace: 'nowrap' }}>Site ID <CheckPicker data={payloadSiteID.map(item => ({ label: item, value: item }))} value={selectSiteID} onChange={(value) => { setSelectSiteID(value) }} size="sm" appearance="default" style={{ width: 20 }} /></th>
+
                                         <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Cell Name</th>
                                         <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Date</th>
                                         <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Open Date</th>
@@ -774,7 +776,6 @@ const handleSubmit = async (e) => {
                                         <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Category</th>
                                         <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Auto RCA</th>
                                         <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Circle Spoc</th>
-                                        <th style={{ padding: '1px 60px 1px 2px', whiteSpace: 'nowrap' }}>Site ID <CheckPicker data={payloadSiteID.map(item => ({ label: item, value: item }))} value={selectSiteID} onChange={(value) => { setSelectSiteID(value) }} size="sm" appearance="default" style={{ width: 20 }} /></th>
                                         <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Pre Remarks</th>
 
                                     </tr>
