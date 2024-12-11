@@ -166,7 +166,7 @@ const ToolData = [
         title: 'This is a Zero RNA Payload',
         icons: CombinationIcon,
         link:  '/tools/zero_RNA_payload',
-        groupBy:['quality','admin']
+        groupBy:['admin']
 
     },
     {

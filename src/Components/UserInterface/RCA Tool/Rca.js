@@ -28,8 +28,8 @@ const LteKpiTrend = lazy(() => import('./Trend/LteKpiTrend'));
 const ZeroPayload = lazy(() => import('./Trend/ZeroPayload'));
 const DayWisePayload = lazy(() => import('./Trend/DayWisePayload'));
 const WeekWisePayload = lazy(() => import('./Trend/WeekWisePayload'))
-const RaiseTicket = lazy(()=>import('./TroubleTicket/RaiseTicket'))
-const RaiseTicket2 = lazy(()=>import('./TroubleTicket/RaiseTicket2'))
+const RaiseTicket = lazy(() => import('./TroubleTicket/RaiseTicket'))
+const RaiseTicket2 = lazy(() => import('./TroubleTicket/RaiseTicket2'))
 
 
 const Rca = () => {
@@ -37,6 +37,9 @@ const Rca = () => {
     const [expanded, setExpanded] = useState(true);
     const [activeKey, setActiveKey] = useState();
     const navigate = useNavigate()
+    const userType = (JSON.parse(localStorage.getItem('user_type'))?.split(","))
+
+    console.log('user type data', !userType.includes('Circle_Rno'))
 
     useEffect(() => {
         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
@@ -93,7 +96,7 @@ const Rca = () => {
                                             Generate RCA
                                         </Nav.Item>
 
-                                        <Nav.Menu eventKey="1" placement="rightStart" title="Threshold Data" icon={<DashboardIcon size="3em" />}>
+                                        {(!userType.includes('Circle_Rno')) ? (<Nav.Menu eventKey="1" placement="rightStart" title="Threshold Data" icon={<DashboardIcon size="3em" />}>
                                             <Nav.Item eventKey="1-1" placement="rightStart" onClick={() => navigate('/tools/rca/kpi_table')}>
                                                 KPI Table
                                             </Nav.Item>
@@ -101,8 +104,10 @@ const Rca = () => {
                                                 RCA Table
                                             </Nav.Item>
                                         </Nav.Menu>
+                                        ) : null}
 
-                                        <Nav.Menu eventKey="2" placement="rightStart" title="Upload Data" icon={<FileUploadIcon size="3em" />}>
+
+                                        {(!userType.includes('Circle_Rno')) ? (<Nav.Menu eventKey="2" placement="rightStart" title="Upload Data" icon={<FileUploadIcon size="3em" />}>
                                             <Nav.Item eventKey="2-1" placement="rightStart" onClick={() => navigate('/tools/rca/daily_4G_kpi')}>
                                                 Daily 4G KPI
                                             </Nav.Item>
@@ -112,7 +117,9 @@ const Rca = () => {
                                             <Nav.Item eventKey="2-3" placement="rightStart" onClick={() => navigate('/tools/rca/alarm_files')}>
                                                 Alarm File
                                             </Nav.Item>
-                                        </Nav.Menu>
+                                        </Nav.Menu>) : null}
+
+
                                     </Nav>
                                 </Sidenav.Body>
 
@@ -123,11 +130,12 @@ const Rca = () => {
                         <Suspense fallback={<div>Loading...</div>}>
                             <Routes>
                                 <Route element={<Rca_tool />} path="/" />
-                                <Route element={<Kpi_Data />} path="/kpi_table" />
-                                <Route element={<Rca_data />} path="/rca_table" />
-                                <Route element={<Daily4G_KPI />} path="/daily_4G_kpi" />
-                                <Route element={<TentativeCounter />} path="/tentative_counter" />
-                                <Route element={<AlarmFiles />} path="/alarm_files" />
+                               
+                                {!userType.includes('Circle_Rno') &&  <Route element={<Rca_data />} path="/rca_table" />}
+                                {!userType.includes('Circle_Rno') &&   <Route element={<Kpi_Data />} path="/kpi_table" />}
+                                {!userType.includes('Circle_Rno') && <Route element={<Daily4G_KPI />} path="/daily_4G_kpi" />}
+                                {!userType.includes('Circle_Rno') && <Route element={<TentativeCounter />} path="/tentative_counter" />}
+                                {!userType.includes('Circle_Rno') && <Route element={<AlarmFiles />} path="/alarm_files" />}
                                 <Route element={<Generate_rca />} path="/generate_rca" />
                                 <Route element={<MDashboard />} path="/master_dashboard" />
                                 <Route element={<TicketDashboard />} path="/ticket_dashboard" />

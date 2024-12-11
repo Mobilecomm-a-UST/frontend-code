@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { Box,  Breadcrumbs, Link, Typography, IconButton } from "@mui/material";
+import { Box, Breadcrumbs, Link, Typography, IconButton } from "@mui/material";
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { useNavigate } from 'react-router-dom';
 import { useGet } from '../../../Hooks/GetApis'
@@ -15,6 +15,7 @@ const Generate_rca = () => {
     const { makeGetRequest } = useGet();
     const navigate = useNavigate();
     const { loading, action } = useLoadingDialog();
+    const userType = (JSON.parse(localStorage.getItem('user_type'))?.split(","))
     const { data, isPending } = useQuery({
         queryKey: ['rca_generate_date'],
         queryFn: async () => {
@@ -80,9 +81,10 @@ const Generate_rca = () => {
                 ))}
 
             </div>
-            <Box sx={{ marginTop: 4 }}>
+            {!userType.includes('Circle_Rno') && <Box sx={{ marginTop: 4 }}>
                 <FileDownload />
-            </Box>
+            </Box>}
+
             <Box sx={{ marginTop: 4 }}>
                 <RcaOutput />
             </Box>
