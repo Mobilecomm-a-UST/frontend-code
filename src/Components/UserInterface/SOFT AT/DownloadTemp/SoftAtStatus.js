@@ -266,7 +266,7 @@ const SoftAtStatus = () => {
                 sheet.addRow({
                     unique_key: item.unique_key,
                     OEM: item.OEM,
-                    Integration_Date: item.Integration_Date,
+                    Integration_Date: new Date( item.Integration_Date),
                     CIRCLE: item.CIRCLE,
                     Activity_Name: item.Activity_Name,
                     Site_ID: item.Site_ID,

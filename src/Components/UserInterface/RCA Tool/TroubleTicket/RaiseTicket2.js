@@ -29,6 +29,7 @@ import { ServerURL } from '../../../services/FetchNodeServices';
 import CheckPicker from 'rsuite/CheckPicker';
 import Switch from '@mui/material/Switch';
 import Swal from 'sweetalert2';
+import Chip from '@mui/material/Chip';
 import axios from 'axios';
 
 const RaiseTicket2 = () => {
@@ -129,53 +130,68 @@ const RaiseTicket2 = () => {
     // };
 
 
+    const handleSubmit2 = async()=>{
+        try {
+            const response = await axios.post(`${ServerURL}/Zero_Count_Rna_Payload_Tool/ticket_status_open_close/${ticketDipForm.ticket_id}/`,ticketDipForm,
+                {
+                    headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}`}
+                  }
+            );
+    
+            if (response && response.data && response.data.Status) {
+                setPayloadStatus(false); // Update payload status
+                fetchTableData2(); // Fetch updated table data
+            } else {
+                
+                throw new Error('Invalid response data'); // Trigger error handling for unexpected responses
+            }
+        } catch (error) {
+            console.error('Error occurred:', error); // Log error for debugging
+            action(false); // Stop processing state
+            setPayloadStatus(false); // Reset payload status
+    
+            // Swal.fire({
+            //     icon: 'error',
+            //     title: 'Error',
+            //     text: error.response?.data?.message , // Display error message from server or fallback
+            // });
+            let errorMessage = 'An error occurred.';
+            if (error.response?.data) {
+                const errorDetails = Object.entries(error.response.data.message)
+                    .map(([key, value]) => `${key}: ${value}`)
+                    .join('\n');
+                console.error('Error Details:', errorDetails); // Print key-value pairs in the console
+                errorMessage = errorDetails; // Use formatted key-value pairs as the error message
+            }
+    
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: errorMessage,
+            });
+        } finally {
+            // action(false); // Ensure loading state is stopped in any case
+        }
+    }
+
 
 const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent default form submission behavior
 
-    action(true); // Start processing
+    // action(true); // Start processing
+Swal.fire({
+  title: "Do you want to save the changes?",
+//   showDenyButton: true,
+  showCancelButton: true,
+  confirmButtonText: "Save",
+}).then((result) => {
+  /* Read more about isConfirmed, isDenied below */
+  if (result.isConfirmed) {
+    handleSubmit2();
+  }
+})
 
-    try {
-        const response = await axios.post(`${ServerURL}/Zero_Count_Rna_Payload_Tool/ticket_status_open_close/${ticketDipForm.ticket_id}/`,ticketDipForm,
-            {
-                headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}`}
-              }
-        );
-
-        if (response && response.data && response.data.Status) {
-            setPayloadStatus(false); // Update payload status
-            fetchTableData2(); // Fetch updated table data
-        } else {
-            
-            throw new Error('Invalid response data'); // Trigger error handling for unexpected responses
-        }
-    } catch (error) {
-        console.error('Error occurred:', error); // Log error for debugging
-        action(false); // Stop processing state
-        setPayloadStatus(false); // Reset payload status
-
-        // Swal.fire({
-        //     icon: 'error',
-        //     title: 'Error',
-        //     text: error.response?.data?.message , // Display error message from server or fallback
-        // });
-        let errorMessage = 'An error occurred.';
-        if (error.response?.data) {
-            const errorDetails = Object.entries(error.response.data.message)
-                .map(([key, value]) => `${key}: ${value}`)
-                .join('\n');
-            console.error('Error Details:', errorDetails); // Print key-value pairs in the console
-            errorMessage = errorDetails; // Use formatted key-value pairs as the error message
-        }
-
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: errorMessage,
-        });
-    } finally {
-        // action(false); // Ensure loading state is stopped in any case
-    }
+  
 };
 
 
@@ -183,7 +199,7 @@ const handleSubmit = async (e) => {
     const fetchTableData2 = async () => {
         action(true)
         const responce = await makeGetRequest('Zero_Count_Rna_Payload_Tool/get_ticket_status_data/')
-        console.log('toggal button', responce)
+        console.log('toggal button 2', responce)
         if (responce) {
             action(false)
             setTotalTable(responce.data)
@@ -418,7 +434,7 @@ const handleSubmit = async (e) => {
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{handleDateFormets(item.Open_Date)}</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item?.aging}</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.priority}</th>
-                <th style={{ padding: '1px 5px', whiteSpace: 'nowrap', cursor: 'pointer', color: item.Status == 'OPEN' ? 'red' : 'green' }} className={classes.hover} onClick={() => { handleSetDataTicket(item) }}>{item.Status == 'nan' ? '' : item.Status}</th>
+                <th style={{ padding: '1px 5px', whiteSpace: 'nowrap', cursor: 'pointer', fontWeigth: 500, color: item.Status == 'OPEN' ? 'red' : 'green' }} className={classes.hover} onClick={() => { handleSetDataTicket(item) }}>{item.Status == 'nan' ? '' :( <Chip label={item.Status} color="error" variant="outlined" size="small" />) }</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.Remarks == 'nan' ? '' : item.Remarks}</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.Ownership == 'nan' ? '' : item.Ownership}</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.category == 'nan' ? '' : item.category}</th>
