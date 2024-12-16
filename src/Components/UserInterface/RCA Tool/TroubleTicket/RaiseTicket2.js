@@ -49,6 +49,8 @@ const RaiseTicket2 = () => {
     const [selectPriority, setSelectPriority] = useState([])
     const [payloadStatusData, setPayloadStatusData] = useState([])
     const [selectStatusData, setSelectStatusData] = useState([])
+    const [payloadOpenDate,setPayloadOpenDate] = useState([])
+    const [selectOpenDate,setSelectOpenDate] = useState([])
     const [totalTable, setTotalTable] = useState([])
     const [ticketDipForm, setTicketDipForm] = useState({
         Circle: "",
@@ -232,7 +234,7 @@ const RaiseTicket2 = () => {
             setPayloadSiteID(_.uniq(_.map(responce.data, 'Site_ID')))
             setPayloadTicketId(_.uniq(_.map(responce.data, 'ticket_id')))
             setPayloadPriority(_.uniq(_.map(responce.data, 'priority')))
-            setPayloadStatusData(_.uniq(_.map(responce.data, 'Status')))
+            setPayloadOpenDate(_.uniq(_.map(responce.data, 'Open_Date')))
             // setCurrentDate(responce.current_date)
             // setPreviousDate(responce.previous_date)
             // setTotalOpen(true)
@@ -441,10 +443,10 @@ const RaiseTicket2 = () => {
             const siteIdMatch = selectSiteID.length === 0 || _.includes(selectSiteID, item.Site_ID);
             const ticketMatch = selectTicketId.length === 0 || _.includes(selectTicketId, item.ticket_id);
             const priorityMatch = selectPriority.length === 0 || _.includes(selectPriority, item.priority);
-            const statusMatch = selectStatusData.length === 0 || _.includes(selectStatusData, item.Status)
+            const openDateMatch = selectOpenDate.length === 0 || _.includes(selectOpenDate,item.Open_Date);
 
 
-            return circleMatch && siteIdMatch && ticketMatch && priorityMatch && statusMatch;
+            return circleMatch && siteIdMatch && ticketMatch && priorityMatch && openDateMatch;
         });
         return filteredData?.map((item, index) => (
             <tr key={index} className={classes.hover} style={{ textAlign: "center", fontWeigth: 700 }}>
@@ -477,7 +479,7 @@ const RaiseTicket2 = () => {
             </tr>
         ))
 
-    }, [selectCircle, selectSiteID, selectTicketId, selectPriority, selectStatusData, totalTable])
+    }, [selectCircle, selectSiteID, selectTicketId, selectPriority, selectOpenDate, totalTable])
 
     const handleFormDialog = useCallback(() => {
         return (
@@ -828,11 +830,11 @@ const RaiseTicket2 = () => {
                                         <th style={{ padding: '1px 60px 1px 2px', whiteSpace: 'nowrap' }}>Site ID <CheckPicker data={payloadSiteID.map(item => ({ label: item, value: item }))} value={selectSiteID} onChange={(value) => { setSelectSiteID(value) }} size="sm" appearance="default" style={{ width: 20 }} /></th>
 
                                         <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Cell Name</th>
-                                        <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Date</th>
-                                        <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Open Date</th>
+                                        <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Current Date</th>
+                                        <th style={{ padding: '1px 60px 1px 2px', whiteSpace: 'nowrap' }}>Open Date <CheckPicker data={payloadOpenDate.map(item => ({ label: handleDateFormets(item), value: item }))} value={selectOpenDate} onChange={(value) => { setSelectOpenDate(value) }} size="sm" appearance="default" style={{ width: 20 }} /></th>
                                         <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Aging</th>
                                         <th style={{ padding: '1px 60px 1px 2px', whiteSpace: 'nowrap' }}>Priority <CheckPicker data={payloadPriority.map(item => ({ label: item, value: item }))} value={selectPriority} onChange={(value) => { setSelectPriority(value) }} size="sm" appearance="default" style={{ width: 20 }} /></th>
-                                        <th style={{ padding: '1px 60px 1px 2px', whiteSpace: 'nowrap' }}>Status <CheckPicker data={payloadStatusData.map(item => ({ label: item, value: item }))} value={selectStatusData} onChange={(value) => { setSelectStatusData(value) }} size="sm" appearance="default" style={{ width: 20 }} /></th>
+                                        <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Status </th>
                                         {/* <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Remarks</th> */}
                                         <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Ownership</th>
                                         <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Category</th>
