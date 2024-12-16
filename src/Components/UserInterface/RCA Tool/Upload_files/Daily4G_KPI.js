@@ -16,12 +16,12 @@ import { usePost } from "../../../Hooks/PostApis";
 import CloseIcon from '@mui/icons-material/Close';
 
 const Daily4G_KPI = () => {
-    const { makePostRequest, cancelRequest } = usePost()
+    const { makePostRequest, cancelRequest,error,isLoading} = usePost()
     const [rawKpiFile, setRawKpiFile] = useState({ filename: "", bytes: "" })
     const [open, setOpen] = useState(false);
     const [tableDialog, setTableDialog] = useState(false)
     const [rawShow, setRawShow] = useState(false)
-    const [error, setError] = useState([])
+    // const [error, setError] = useState([])
     const [fileData, setFileData] = useState()
     const rawKpiLength = rawKpiFile.filename.length
     const classes = OverAllCss()
@@ -44,7 +44,7 @@ const Daily4G_KPI = () => {
 
         if (rawKpiLength > 0) {
 
-            setOpen(true)
+            setOpen(isLoading)
             var formData = new FormData();
             formData.append("4G_raw", rawKpiFile.bytes);
             const response = await makePostRequest('RCA_TOOL/Daily_RAW_KPI_4G/', formData)
@@ -99,42 +99,42 @@ const Daily4G_KPI = () => {
     },[cancelRequest, open])
 
     // display responce table data...............
-    const displayTable = () => {
-        return (
-            <Dialog
-                open={tableDialog}
-                fullWidth
-                maxWidth={'md'}
-            >
-                <DialogTitle><span style={{ color: 'red' }}>Record of the below employee could't be saved , because of below remarks</span><span style={{ float: 'right' }}><IconButton onClick={() => setTableDialog(false)}><CloseIcon></CloseIcon></IconButton></span></DialogTitle>
-                <DialogContent>
-                    <table border="3" style={{ width: "100%", border: "2px solid" }}>
-                        <thead border="3">
-                            <tr >
-                                <th>Employee Code</th>
-                                <th>Required Fields</th>
-                                <th>Remarks</th>
-                            </tr>
-                        </thead>
-                        <tbody align="center">
-                            {
-                                error?.map((item, index) => (
-                                    <tr key={index} className={classes.tableRow}>
-                                        <td>{item.emp_code.toUpperCase()}</td>
-                                        <td>{item.invalid_fields?.map(item => item + ' , ')}</td>
-                                        <td>{item.remarks}</td>
-                                    </tr>
-                                ))
-                            }
+    // const displayTable = () => {
+    //     return (
+    //         <Dialog
+    //             open={tableDialog}
+    //             fullWidth
+    //             maxWidth={'md'}
+    //         >
+    //             <DialogTitle><span style={{ color: 'red' }}>Record of the below employee could't be saved , because of below remarks</span><span style={{ float: 'right' }}><IconButton onClick={() => setTableDialog(false)}><CloseIcon></CloseIcon></IconButton></span></DialogTitle>
+    //             <DialogContent>
+    //                 <table border="3" style={{ width: "100%", border: "2px solid" }}>
+    //                     <thead border="3">
+    //                         <tr >
+    //                             <th>Employee Code</th>
+    //                             <th>Required Fields</th>
+    //                             <th>Remarks</th>
+    //                         </tr>
+    //                     </thead>
+    //                     <tbody align="center">
+    //                         {
+    //                             error?.map((item, index) => (
+    //                                 <tr key={index} className={classes.tableRow}>
+    //                                     <td>{item.emp_code.toUpperCase()}</td>
+    //                                     <td>{item.invalid_fields?.map(item => item + ' , ')}</td>
+    //                                     <td>{item.remarks}</td>
+    //                                 </tr>
+    //                             ))
+    //                         }
 
-                        </tbody>
-                    </table>
+    //                     </tbody>
+    //                 </table>
 
-                </DialogContent>
+    //             </DialogContent>
 
-            </Dialog>
-        )
-    }
+    //         </Dialog>
+    //     )
+    // }
 
     const handleCancel = () => {
         setRawKpiFile({ filename: "", bytes: "" })
