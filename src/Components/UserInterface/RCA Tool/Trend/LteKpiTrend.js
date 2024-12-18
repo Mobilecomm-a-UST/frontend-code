@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Box} from "@mui/material";
+import { Box } from "@mui/material";
 import Tooltip from '@mui/material/Tooltip';
 import { useNavigate } from 'react-router-dom';
 import IconButton from '@mui/material/IconButton';
@@ -15,7 +15,8 @@ import { useLoadingDialog } from '../../../Hooks/LoadingDialog';
 import { useQuery } from '@tanstack/react-query';
 import { saveAs } from 'file-saver';
 import _ from 'lodash';
-import {ServerURL} from '../../../services/FetchNodeServices'
+import { CsvBuilder } from 'filefy';
+import { ServerURL } from '../../../services/FetchNodeServices'
 
 
 
@@ -49,7 +50,7 @@ const LteKpiTrend = () => {
     })
 
 
-    // console.log('res', data)
+    console.log('res', data)
 
     const fetchedQueryData = () => {
         // setMainData(data.data)
@@ -74,6 +75,288 @@ const LteKpiTrend = () => {
     }
 
 
+    const columnData = [
+        { title: 'Circle', field: 'Circle' },
+        { title: 'Short_name', field: 'Short_name' },
+        { title: 'site_ID', field: 'site_ID' },
+        { title: 'OEM_GGSN', field: 'OEM_GGSN' },
+        { title: 'ms1_Date', field: 'ms1_Date' },
+        { title: 'project', field: 'project' },
+        { title: 'MV_Freq_Band', field: 'MV_Freq_Band' },
+        { title: 'Week-2', field: 'MV_4G_Data_Volume_GB_week_2' },
+        { title: 'Week-1', field: 'MV_4G_Data_Volume_GB_week_1' },
+        { title: `${data?.dates[0]}`, field: 'MV_4G_Data_Volume_GB_date_1' },
+        { title: `${data?.dates[1]}`, field: 'MV_4G_Data_Volume_GB_date_2' },
+        { title: `${data?.dates[2]}`, field: 'MV_4G_Data_Volume_GB_date_3' },
+        { title: `${data?.dates[3]}`, field: 'MV_4G_Data_Volume_GB_date_4' },
+        { title: `${data?.dates[4]}`, field: 'MV_4G_Data_Volume_GB_date_5' },
+        { title: `${data?.dates[5]}`, field: 'MV_4G_Data_Volume_GB_date_6' },
+        { title: `${data?.dates[6]}`, field: 'MV_4G_Data_Volume_GB_date_7' },
+        { title: `${data?.dates[7]}`, field: 'MV_4G_Data_Volume_GB_date_8' },
+        { title: 'Week-2', field: 'MV_Radio_NW_Availability_week_2' },
+        { title: 'Week-1', field: 'MV_Radio_NW_Availability_week_1' },
+        // { title: `${data?.dates[0]}`, field: 'MV_Radio_NW_Availability_date_1' },
+        // { title: `${data?.dates[1]}`, field: 'MV_Radio_NW_Availability_date_2' },
+        // { title: `${data?.dates[2]}`, field: 'MV_Radio_NW_Availability_date_3' },
+        { title: `${data?.dates[3]}`, field: 'MV_Radio_NW_Availability_date_4' },
+        { title: `${data?.dates[4]}`, field: 'MV_Radio_NW_Availability_date_5' },
+        { title: `${data?.dates[5]}`, field: 'MV_Radio_NW_Availability_date_6' },
+        { title: `${data?.dates[6]}`, field: 'MV_Radio_NW_Availability_date_7' },
+        { title: `${data?.dates[7]}`, field: 'MV_Radio_NW_Availability_date_8' },
+        { title: 'Week-2', field: 'MV_VoLTE_raffic_week_2' },
+        { title: 'Week-1', field: 'MV_VoLTE_raffic_week_1' },
+        // { title: `${data?.dates[0]}`, field: 'MV_VoLTE_raffic_date_1' },
+        // { title: `${data?.dates[1]}`, field: 'MV_VoLTE_raffic_date_2' },
+        // { title: `${data?.dates[2]}`, field: 'MV_VoLTE_raffic_date_3' },
+        { title: `${data?.dates[3]}`, field: 'MV_VoLTE_raffic_date_4' },
+        { title: `${data?.dates[4]}`, field: 'MV_VoLTE_raffic_date_5' },
+        { title: `${data?.dates[5]}`, field: 'MV_VoLTE_raffic_date_6' },
+        { title: `${data?.dates[6]}`, field: 'MV_VoLTE_raffic_date_7' },
+        { title: `${data?.dates[7]}`, field: 'MV_VoLTE_raffic_date_8' },
+        { title: 'Week-2', field: 'MV_DL_User_Throughput_Kbps_week_2' },
+        { title: 'Week-1', field: 'MV_DL_User_Throughput_Kbps_week_1' },
+        // { title: `${data?.dates[0]}`, field: 'MV_DL_User_Throughput_Kbps_date_1' },
+        // { title: `${data?.dates[1]}`, field: 'MV_DL_User_Throughput_Kbps_date_2' },
+        // { title: `${data?.dates[2]}`, field: 'MV_DL_User_Throughput_Kbps_date_3' },
+        { title: `${data?.dates[3]}`, field: 'MV_DL_User_Throughput_Kbps_date_4' },
+        { title: `${data?.dates[4]}`, field: 'MV_DL_User_Throughput_Kbps_date_5' },
+        { title: `${data?.dates[5]}`, field: 'MV_DL_User_Throughput_Kbps_date_6' },
+        { title: `${data?.dates[6]}`, field: 'MV_DL_User_Throughput_Kbps_date_7' },
+        { title: `${data?.dates[7]}`, field: 'MV_DL_User_Throughput_Kbps_date_8' },
+        { title: 'Week-2', field: 'MV_UL_User_Throughput_Kbps_week_2' },
+        { title: 'Week-1', field: 'MV_UL_User_Throughput_Kbps_week_1' },
+        // { title: `${data?.dates[0]}`, field: 'MV_DL_User_Throughput_Kbps_date_1' },
+        // { title: `${data?.dates[1]}`, field: 'MV_DL_User_Throughput_Kbps_date_2' },
+        // { title: `${data?.dates[2]}`, field: 'MV_DL_User_Throughput_Kbps_date_3' },
+        { title: `${data?.dates[3]}`, field: 'MV_UL_User_Throughput_Kbps_date_4' },
+        { title: `${data?.dates[4]}`, field: 'MV_UL_User_Throughput_Kbps_date_5' },
+        { title: `${data?.dates[5]}`, field: 'MV_UL_User_Throughput_Kbps_date_6' },
+        { title: `${data?.dates[6]}`, field: 'MV_UL_User_Throughput_Kbps_date_7' },
+        { title: `${data?.dates[7]}`, field: 'MV_UL_User_Throughput_Kbps_date_8' },
+        { title: 'Week-2', field: 'MV_E_UTRAN_Average_CQI_week_2' },
+        { title: 'Week-1', field: 'MV_E_UTRAN_Average_CQI_week_1' },
+        // { title: `${data?.dates[0]}`, field: 'MV_E_UTRAN_Average_CQI_date_1' },
+        // { title: `${data?.dates[1]}`, field: 'MV_E_UTRAN_Average_CQI_date_2' },
+        // { title: `${data?.dates[2]}`, field: 'MV_E_UTRAN_Average_CQI_date_3' },
+        { title: `${data?.dates[3]}`, field: 'MV_E_UTRAN_Average_CQI_date_4' },
+        { title: `${data?.dates[4]}`, field: 'MV_E_UTRAN_Average_CQI_date_5' },
+        { title: `${data?.dates[5]}`, field: 'MV_E_UTRAN_Average_CQI_date_6' },
+        { title: `${data?.dates[6]}`, field: 'MV_E_UTRAN_Average_CQI_date_7' },
+        { title: `${data?.dates[7]}`, field: 'MV_E_UTRAN_Average_CQI_date_8' },
+        { title: 'Week-2', field: 'UL_RSSI_week_2' },
+        { title: 'Week-1', field: 'UL_RSSI_week_1' },
+        // { title: `${data?.dates[0]}`, field: 'UL_RSSI_date_1' },
+        // { title: `${data?.dates[1]}`, field: 'UL_RSSI_date_2' },
+        // { title: `${data?.dates[2]}`, field: 'UL_RSSI_date_3' },
+        { title: `${data?.dates[3]}`, field: 'UL_RSSI_date_4' },
+        { title: `${data?.dates[4]}`, field: 'UL_RSSI_date_5' },
+        { title: `${data?.dates[5]}`, field: 'UL_RSSI_date_6' },
+        { title: `${data?.dates[6]}`, field: 'UL_RSSI_date_7' },
+        { title: `${data?.dates[7]}`, field: 'UL_RSSI_date_8' },
+        { title: 'Week-2', field: 'MV_Average_number_of_used_DL_PRBs_week_2' },
+        { title: 'Week-1', field: 'MV_Average_number_of_used_DL_PRBs_week_1' },
+        // { title: `${data?.dates[0]}`, field: 'MV_Average_number_of_used_DL_PRBs_date_1' },
+        // { title: `${data?.dates[1]}`, field: 'MV_Average_number_of_used_DL_PRBs_date_2' },
+        // { title: `${data?.dates[2]}`, field: 'MV_Average_number_of_used_DL_PRBs_date_3' },
+        { title: `${data?.dates[3]}`, field: 'MV_Average_number_of_used_DL_PRBs_date_4' },
+        { title: `${data?.dates[4]}`, field: 'MV_Average_number_of_used_DL_PRBs_date_5' },
+        { title: `${data?.dates[5]}`, field: 'MV_Average_number_of_used_DL_PRBs_date_6' },
+        { title: `${data?.dates[6]}`, field: 'MV_Average_number_of_used_DL_PRBs_date_7' },
+        { title: `${data?.dates[7]}`, field: 'MV_Average_number_of_used_DL_PRBs_date_8' },
+        { title: 'Week-2', field: 'MV_RRC_Setup_Success_Rate_week_2' },
+        { title: 'Week-1', field: 'MV_RRC_Setup_Success_Rate_week_1' },
+        // { title: `${data?.dates[0]}`, field: 'MV_RRC_Setup_Success_Rate_date_1' },
+        // { title: `${data?.dates[1]}`, field: 'MV_RRC_Setup_Success_Rate_date_2' },
+        // { title: `${data?.dates[2]}`, field: 'MV_RRC_Setup_Success_Rate_date_3' },
+        { title: `${data?.dates[3]}`, field: 'MV_RRC_Setup_Success_Rate_date_4' },
+        { title: `${data?.dates[4]}`, field: 'MV_RRC_Setup_Success_Rate_date_5' },
+        { title: `${data?.dates[5]}`, field: 'MV_RRC_Setup_Success_Rate_date_6' },
+        { title: `${data?.dates[6]}`, field: 'MV_RRC_Setup_Success_Rate_date_7' },
+        { title: `${data?.dates[7]}`, field: 'MV_RRC_Setup_Success_Rate_date_8' },
+        { title: 'Week-2', field: 'MV_ERAB_Setup_Success_Rate_week_2' },
+        { title: 'Week-1', field: 'MV_ERAB_Setup_Success_Rate_week_1' },
+        // { title: `${data?.dates[0]}`, field: 'MV_ERAB_Setup_Success_Rate_date_1' },
+        // { title: `${data?.dates[1]}`, field: 'MV_ERAB_Setup_Success_Rate_date_2' },
+        // { title: `${data?.dates[2]}`, field: 'MV_ERAB_Setup_Success_Rate_date_3' },
+        { title: `${data?.dates[3]}`, field: 'MV_ERAB_Setup_Success_Rate_date_4' },
+        { title: `${data?.dates[4]}`, field: 'MV_ERAB_Setup_Success_Rate_date_5' },
+        { title: `${data?.dates[5]}`, field: 'MV_ERAB_Setup_Success_Rate_date_6' },
+        { title: `${data?.dates[6]}`, field: 'MV_ERAB_Setup_Success_Rate_date_7' },
+        { title: `${data?.dates[7]}`, field: 'MV_ERAB_Setup_Success_Rate_date_8' },
+        { title: 'Week-2', field: 'MV_PS_Drop_Call_Rate_week_2' },
+        { title: 'Week-1', field: 'MV_PS_Drop_Call_Rate_week_1' },
+        // { title: `${data?.dates[0]}`, field: 'MV_PS_Drop_Call_Rate_date_1' },
+        // { title: `${data?.dates[1]}`, field: 'MV_PS_Drop_Call_Rate_date_2' },
+        // { title: `${data?.dates[2]}`, field: 'MV_PS_Drop_Call_Rate_date_3' },
+        { title: `${data?.dates[3]}`, field: 'MV_PS_Drop_Call_Rate_date_4' },
+        { title: `${data?.dates[4]}`, field: 'MV_PS_Drop_Call_Rate_date_5' },
+        { title: `${data?.dates[5]}`, field: 'MV_PS_Drop_Call_Rate_date_6' },
+        { title: `${data?.dates[6]}`, field: 'MV_PS_Drop_Call_Rate_date_7' },
+        { title: `${data?.dates[7]}`, field: 'MV_PS_Drop_Call_Rate_date_8' },
+        { title: 'Week-2', field: 'MV_Max_Connecteda_User_week_2' },
+        { title: 'Week-1', field: 'MV_Max_Connecteda_User_week_1' },
+        // { title: `${data?.dates[0]}`, field: 'MV_Max_Connecteda_User_date_1' },
+        // { title: `${data?.dates[1]}`, field: 'MV_Max_Connecteda_User_date_2' },
+        // { title: `${data?.dates[2]}`, field: 'MV_Max_Connecteda_User_date_3' },
+        { title: `${data?.dates[3]}`, field: 'MV_Max_Connecteda_User_date_4' },
+        { title: `${data?.dates[4]}`, field: 'MV_Max_Connecteda_User_date_5' },
+        { title: `${data?.dates[5]}`, field: 'MV_Max_Connecteda_User_date_6' },
+        { title: `${data?.dates[6]}`, field: 'MV_Max_Connecteda_User_date_7' },
+        { title: `${data?.dates[7]}`, field: 'MV_Max_Connecteda_User_date_8' },
+        { title: 'Week-2', field: 'MV_PUCCH_SINR_week_2' },
+        { title: 'Week-1', field: 'MV_PUCCH_SINR_week_1' },
+        // { title: `${data?.dates[0]}`, field: 'MV_PUCCH_SINR_date_1' },
+        // { title: `${data?.dates[1]}`, field: 'MV_PUCCH_SINR_date_2' },
+        // { title: `${data?.dates[2]}`, field: 'MV_PUCCH_SINR_date_3' },
+        { title: `${data?.dates[3]}`, field: 'MV_PUCCH_SINR_date_4' },
+        { title: `${data?.dates[4]}`, field: 'MV_PUCCH_SINR_date_5' },
+        { title: `${data?.dates[5]}`, field: 'MV_PUCCH_SINR_date_6' },
+        { title: `${data?.dates[6]}`, field: 'MV_PUCCH_SINR_date_7' },
+        { title: `${data?.dates[7]}`, field: 'MV_PUCCH_SINR_date_8' },
+        { title: 'Week-2', field: 'MV_Average_UE_Distance_KM_week_2' },
+        { title: 'Week-1', field: 'MV_Average_UE_Distance_KM_week_1' },
+        // { title: `${data?.dates[0]}`, field: 'MV_Average_UE_Distance_KM_date_1' },
+        // { title: `${data?.dates[1]}`, field: 'MV_Average_UE_Distance_KM_date_2' },
+        // { title: `${data?.dates[2]}`, field: 'MV_Average_UE_Distance_KM_date_3' },
+        { title: `${data?.dates[3]}`, field: 'MV_Average_UE_Distance_KM_date_4' },
+        { title: `${data?.dates[4]}`, field: 'MV_Average_UE_Distance_KM_date_5' },
+        { title: `${data?.dates[5]}`, field: 'MV_Average_UE_Distance_KM_date_6' },
+        { title: `${data?.dates[6]}`, field: 'MV_Average_UE_Distance_KM_date_7' },
+        { title: `${data?.dates[7]}`, field: 'MV_Average_UE_Distance_KM_date_8' },
+        { title: 'Week-2', field: 'MV_PS_handover_success_rate_LTE_INTER_SYSTEM_week_2' },
+        { title: 'Week-1', field: 'MV_PS_handover_success_rate_LTE_INTER_SYSTEM_week_1' },
+        // { title: `${data?.dates[0]}`, field: 'MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_1' },
+        // { title: `${data?.dates[1]}`, field: 'MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_2' },
+        // { title: `${data?.dates[2]}`, field: 'MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_3' },
+        { title: `${data?.dates[3]}`, field: 'MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_4' },
+        { title: `${data?.dates[4]}`, field: 'MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_5' },
+        { title: `${data?.dates[5]}`, field: 'MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_6' },
+        { title: `${data?.dates[6]}`, field: 'MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_7' },
+        { title: `${data?.dates[7]}`, field: 'MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_8' },
+        { title: 'Week-2', field: 'MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_week_2' },
+        { title: 'Week-1', field: 'MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_week_1' },
+        // { title: `${data?.dates[0]}`, field: 'MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_1' },
+        // { title: `${data?.dates[1]}`, field: 'MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_2' },
+        // { title: `${data?.dates[2]}`, field: 'MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_3' },
+        { title: `${data?.dates[3]}`, field: 'MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_date_4' },
+        { title: `${data?.dates[4]}`, field: 'MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_date_5' },
+        { title: `${data?.dates[5]}`, field: 'MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_date_6' },
+        { title: `${data?.dates[6]}`, field: 'MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_date_7' },
+        { title: `${data?.dates[7]}`, field: 'MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_date_8' },
+        { title: 'Week-2', field: 'UL_RSSI_Nokia_RSSI_SINR_week_2' },
+        { title: 'Week-1', field: 'UL_RSSI_Nokia_RSSI_SINR_week_1' },
+        // { title: `${data?.dates[0]}`, field: 'UL_RSSI_Nokia_RSSI_SINR_date_1' },
+        // { title: `${data?.dates[1]}`, field: 'UL_RSSI_Nokia_RSSI_SINR_date_2' },
+        // { title: `${data?.dates[2]}`, field: 'UL_RSSI_Nokia_RSSI_SINR_date_3' },
+        { title: `${data?.dates[3]}`, field: 'UL_RSSI_Nokia_RSSI_SINR_date_4' },
+        { title: `${data?.dates[4]}`, field: 'UL_RSSI_Nokia_RSSI_SINR_date_5' },
+        { title: `${data?.dates[5]}`, field: 'UL_RSSI_Nokia_RSSI_SINR_date_6' },
+        { title: `${data?.dates[6]}`, field: 'UL_RSSI_Nokia_RSSI_SINR_date_7' },
+        { title: `${data?.dates[7]}`, field: 'UL_RSSI_Nokia_RSSI_SINR_date_8' },
+        { title: 'Week-2', field: 'MV_VoLTE_DCR_week_2' },
+        { title: 'Week-1', field: 'MV_VoLTE_DCR_week_1' },
+        // { title: `${data?.dates[0]}`, field: 'MV_VoLTE_DCR_date_1' },
+        // { title: `${data?.dates[1]}`, field: 'MV_VoLTE_DCR_date_2' },
+        // { title: `${data?.dates[2]}`, field: 'MV_VoLTE_DCR_date_3' },
+        { title: `${data?.dates[3]}`, field: 'MV_VoLTE_DCR_date_4' },
+        { title: `${data?.dates[4]}`, field: 'MV_VoLTE_DCR_date_5' },
+        { title: `${data?.dates[5]}`, field: 'MV_VoLTE_DCR_date_6' },
+        { title: `${data?.dates[6]}`, field: 'MV_VoLTE_DCR_date_7' },
+        { title: `${data?.dates[7]}`, field: 'MV_VoLTE_DCR_date_8' },
+        { title: 'Week-2', field: 'MV_Packet_Loss_DL_week_2' },
+        { title: 'Week-1', field: 'MV_Packet_Loss_DL_week_1' },
+        // { title: `${data?.dates[0]}`, field: 'MV_Packet_Loss_DL_date_1' },
+        // { title: `${data?.dates[1]}`, field: 'MV_Packet_Loss_DL_date_2' },
+        // { title: `${data?.dates[2]}`, field: 'MV_Packet_Loss_DL_date_3' },
+        { title: `${data?.dates[3]}`, field: 'MV_Packet_Loss_DL_date_4' },
+        { title: `${data?.dates[4]}`, field: 'MV_Packet_Loss_DL_date_5' },
+        { title: `${data?.dates[5]}`, field: 'MV_Packet_Loss_DL_date_6' },
+        { title: `${data?.dates[6]}`, field: 'MV_Packet_Loss_DL_date_7' },
+        { title: `${data?.dates[7]}`, field: 'MV_Packet_Loss_DL_date_8' },
+        { title: 'Week-2', field: 'MV_Packet_Loss_UL_week_2' },
+        { title: 'Week-1', field: 'MV_Packet_Loss_UL_week_1' },
+        // { title: `${data?.dates[0]}`, field: 'MV_Packet_Loss_UL_date_1' },
+        // { title: `${data?.dates[1]}`, field: 'MV_Packet_Loss_UL_date_2' },
+        // { title: `${data?.dates[2]}`, field: 'MV_Packet_Loss_UL_date_3' },
+        { title: `${data?.dates[3]}`, field: 'MV_Packet_Loss_UL_date_4' },
+        { title: `${data?.dates[4]}`, field: 'MV_Packet_Loss_UL_date_5' },
+        { title: `${data?.dates[5]}`, field: 'MV_Packet_Loss_UL_date_6' },
+        { title: `${data?.dates[6]}`, field: 'MV_Packet_Loss_UL_date_7' },
+        { title: `${data?.dates[7]}`, field: 'MV_Packet_Loss_UL_date_8' },
+        { title: 'Week-2', field: 'PS_InterF_HOSR_week_2' },
+        { title: 'Week-1', field: 'PS_InterF_HOSR_week_1' },
+        // { title: `${data?.dates[0]}`, field: 'PS_InterF_HOSR_date_1' },
+        // { title: `${data?.dates[1]}`, field: 'PS_InterF_HOSR_date_2' },
+        // { title: `${data?.dates[2]}`, field: 'PS_InterF_HOSR_date_3' },
+        { title: `${data?.dates[3]}`, field: 'PS_InterF_HOSR_date_4' },
+        { title: `${data?.dates[4]}`, field: 'PS_InterF_HOSR_date_5' },
+        { title: `${data?.dates[5]}`, field: 'PS_InterF_HOSR_date_6' },
+        { title: `${data?.dates[6]}`, field: 'PS_InterF_HOSR_date_7' },
+        { title: `${data?.dates[7]}`, field: 'PS_InterF_HOSR_date_8' },
+        { title: 'Week-2', field: 'PS_IntraF_HOSR_week_2' },
+        { title: 'Week-1', field: 'PS_IntraF_HOSR_week_1' },
+        // { title: `${data?.dates[0]}`, field: 'PS_InterF_HOSR_date_1' },
+        // { title: `${data?.dates[1]}`, field: 'PS_InterF_HOSR_date_2' },
+        // { title: `${data?.dates[2]}`, field: 'PS_InterF_HOSR_date_3' },
+        { title: `${data?.dates[3]}`, field: 'PS_IntraF_HOSR_date_4' },
+        { title: `${data?.dates[4]}`, field: 'PS_IntraF_HOSR_date_5' },
+        { title: `${data?.dates[5]}`, field: 'PS_IntraF_HOSR_date_6' },
+        { title: `${data?.dates[6]}`, field: 'PS_IntraF_HOSR_date_7' },
+        { title: `${data?.dates[7]}`, field: 'PS_IntraF_HOSR_date_8' },
+        { title: 'Week-2', field: 'MV_RRC_Setup_Success_Rate_DENOM_week_2' },
+        { title: 'Week-1', field: 'MV_RRC_Setup_Success_Rate_DENOM_week_1' },
+        // { title: `${data?.dates[0]}`, field: 'PS_InterF_HOSR_date_1' },
+        // { title: `${data?.dates[1]}`, field: 'PS_InterF_HOSR_date_2' },
+        // { title: `${data?.dates[2]}`, field: 'PS_InterF_HOSR_date_3' },
+        { title: `${data?.dates[3]}`, field: 'MV_RRC_Setup_Success_Rate_DENOM_date_4' },
+        { title: `${data?.dates[4]}`, field: 'MV_RRC_Setup_Success_Rate_DENOM_date_5' },
+        { title: `${data?.dates[5]}`, field: 'MV_RRC_Setup_Success_Rate_DENOM_date_6' },
+        { title: `${data?.dates[6]}`, field: 'MV_RRC_Setup_Success_Rate_DENOM_date_7' },
+        { title: `${data?.dates[7]}`, field: 'MV_RRC_Setup_Success_Rate_DENOM_date_8' },
+        { title: 'Week-2', field: 'MV_CSFB_Redirection_Success_Rate_week_2' },
+        { title: 'Week-1', field: 'MV_CSFB_Redirection_Success_Rate_week_1' },
+        // { title: `${data?.dates[0]}`, field: 'PS_InterF_HOSR_date_1' },
+        // { title: `${data?.dates[1]}`, field: 'PS_InterF_HOSR_date_2' },
+        // { title: `${data?.dates[2]}`, field: 'PS_InterF_HOSR_date_3' },
+        { title: `${data?.dates[3]}`, field: 'MV_CSFB_Redirection_Success_Rate_date_4' },
+        { title: `${data?.dates[4]}`, field: 'MV_CSFB_Redirection_Success_Rate_date_5' },
+        { title: `${data?.dates[5]}`, field: 'MV_CSFB_Redirection_Success_Rate_date_6' },
+        { title: `${data?.dates[6]}`, field: 'MV_CSFB_Redirection_Success_Rate_date_7' },
+        { title: `${data?.dates[7]}`, field: 'MV_CSFB_Redirection_Success_Rate_date_8' },
+        { title: 'Week-2', field: 'VoLTE_Inter_Frequency_Handover_Success_Ratio_week_2' },
+        { title: 'Week-1', field: 'VoLTE_Inter_Frequency_Handover_Success_Ratio_week_1' },
+        // { title: `${data?.dates[0]}`, field: 'PS_InterF_HOSR_date_1' },
+        // { title: `${data?.dates[1]}`, field: 'PS_InterF_HOSR_date_2' },
+        // { title: `${data?.dates[2]}`, field: 'PS_InterF_HOSR_date_3' },
+        { title: `${data?.dates[3]}`, field: 'VoLTE_Inter_Frequency_Handover_Success_Ratio_date_4' },
+        { title: `${data?.dates[4]}`, field: 'VoLTE_Inter_Frequency_Handover_Success_Ratio_date_5' },
+        { title: `${data?.dates[5]}`, field: 'VoLTE_Inter_Frequency_Handover_Success_Ratio_date_6' },
+        { title: `${data?.dates[6]}`, field: 'VoLTE_Inter_Frequency_Handover_Success_Ratio_date_7' },
+        { title: `${data?.dates[7]}`, field: 'VoLTE_Inter_Frequency_Handover_Success_Ratio_date_8' },
+        { title: 'Week-2', field: 'VoLTE_Intra_LTE_Handover_Success_Ratio_week_2' },
+        { title: 'Week-1', field: 'VoLTE_Intra_LTE_Handover_Success_Ratio_week_1' },
+        // { title: `${data?.dates[0]}`, field: 'PS_InterF_HOSR_date_1' },
+        // { title: `${data?.dates[1]}`, field: 'PS_InterF_HOSR_date_2' },
+        // { title: `${data?.dates[2]}`, field: 'PS_InterF_HOSR_date_3' },
+        { title: `${data?.dates[3]}`, field: 'VoLTE_Intra_LTE_Handover_Success_Ratio_date_4' },
+        { title: `${data?.dates[4]}`, field: 'VoLTE_Intra_LTE_Handover_Success_Ratio_date_5' },
+        { title: `${data?.dates[5]}`, field: 'VoLTE_Intra_LTE_Handover_Success_Ratio_date_6' },
+        { title: `${data?.dates[6]}`, field: 'VoLTE_Intra_LTE_Handover_Success_Ratio_date_7' },
+        { title: `${data?.dates[7]}`, field: 'VoLTE_Intra_LTE_Handover_Success_Ratio_date_8' },
+        { title: 'Week-2', field: 'MV_UL_RSSI_dBm_PRB_week_2' },
+        { title: 'Week-1', field: 'MV_UL_RSSI_dBm_PRB_week_1' },
+        // { title: `${data?.dates[0]}`, field: 'PS_InterF_HOSR_date_1' },
+        // { title: `${data?.dates[1]}`, field: 'PS_InterF_HOSR_date_2' },
+        // { title: `${data?.dates[2]}`, field: 'PS_InterF_HOSR_date_3' },
+        { title: `${data?.dates[3]}`, field: 'MV_UL_RSSI_dBm_PRB_date_4' },
+        { title: `${data?.dates[4]}`, field: 'MV_UL_RSSI_dBm_PRB_date_5' },
+        { title: `${data?.dates[5]}`, field: 'MV_UL_RSSI_dBm_PRB_date_6' },
+        { title: `${data?.dates[6]}`, field: 'MV_UL_RSSI_dBm_PRB_date_7' },
+        { title: `${data?.dates[7]}`, field: 'MV_UL_RSSI_dBm_PRB_date_8' },
+
+      
+
+    ]
 
     // handleExport Range wise table in excel formet.........
     const handleExport = async () => {
@@ -845,541 +1128,7 @@ const LteKpiTrend = () => {
             })
         })
 
-        // const rows = data?.data;
-        // if (rows && Array.isArray(rows)) {
-        //     for (let i = 0; i < rows.length; i++) {
-        //         const item = rows[i];
-        //         sheet3.addRow({
-        //             Circle: item.Short_name ? (getCircleName(item?.Short_name)) : '',
-        //             Short_name: item?.Short_name,
-        //             site_ID: item?.site_ID,
-        //             OEM_GGSN: item?.OEM_GGSN,
-        //             ms1_Date: item?.ms1_Date,
-        //             project: item?.project,
-        //             MV_Freq_Band: item?.MV_Freq_Band,
-        //             MV_4G_Data_Volume_GB_week_2: item.MV_4G_Data_Volume_GB_week_2,
-        //             MV_4G_Data_Volume_GB_week_1: item.MV_4G_Data_Volume_GB_week_1,
-        //             MV_4G_Data_Volume_GB_date_1: item.MV_4G_Data_Volume_GB_date_1,
-        //             MV_4G_Data_Volume_GB_date_2: item.MV_4G_Data_Volume_GB_date_2,
-        //             MV_4G_Data_Volume_GB_date_3: item.MV_4G_Data_Volume_GB_date_3,
-        //             MV_4G_Data_Volume_GB_date_4: item.MV_4G_Data_Volume_GB_date_4,
-        //             MV_4G_Data_Volume_GB_date_5: item.MV_4G_Data_Volume_GB_date_5,
-        //             MV_4G_Data_Volume_GB_date_6: item.MV_4G_Data_Volume_GB_date_6,
-        //             MV_4G_Data_Volume_GB_date_7: item.MV_4G_Data_Volume_GB_date_7,
-        //             MV_4G_Data_Volume_GB_date_8: item.MV_4G_Data_Volume_GB_date_8,
-        //             MV_Radio_NW_Availability_week_2: item.MV_Radio_NW_Availability_week_2,
-        //             MV_Radio_NW_Availability_week_1: item.MV_Radio_NW_Availability_week_1,
-        //             MV_Radio_NW_Availability_date_1: item.MV_Radio_NW_Availability_date_1,
-        //             MV_Radio_NW_Availability_date_2: item.MV_Radio_NW_Availability_date_2,
-        //             MV_Radio_NW_Availability_date_3: item.MV_Radio_NW_Availability_date_3,
-        //             MV_Radio_NW_Availability_date_4: item.MV_Radio_NW_Availability_date_4,
-        //             MV_Radio_NW_Availability_date_5: item.MV_Radio_NW_Availability_date_5,
-        //             MV_Radio_NW_Availability_date_6: item.MV_Radio_NW_Availability_date_6,
-        //             MV_Radio_NW_Availability_date_7: item.MV_Radio_NW_Availability_date_7,
-        //             MV_Radio_NW_Availability_date_8: item.MV_Radio_NW_Availability_date_8,
-        //             MV_VoLTE_raffic_week_2: item.MV_VoLTE_raffic_week_2,
-        //             MV_VoLTE_raffic_week_1: item.MV_VoLTE_raffic_week_1,
-        //             MV_VoLTE_raffic_date_1: item.MV_VoLTE_raffic_date_1,
-        //             MV_VoLTE_raffic_date_2: item.MV_VoLTE_raffic_date_2,
-        //             MV_VoLTE_raffic_date_3: item.MV_VoLTE_raffic_date_3,
-        //             MV_VoLTE_raffic_date_4: item.MV_VoLTE_raffic_date_4,
-        //             MV_VoLTE_raffic_date_5: item.MV_VoLTE_raffic_date_5,
-        //             MV_VoLTE_raffic_date_6: item.MV_VoLTE_raffic_date_6,
-        //             MV_VoLTE_raffic_date_7: item.MV_VoLTE_raffic_date_7,
-        //             MV_VoLTE_raffic_date_8: item.MV_VoLTE_raffic_date_8,
 
-        //             MV_DL_User_Throughput_Kbps_week_2: item.MV_DL_User_Throughput_Kbps_week_2,
-        //             MV_DL_User_Throughput_Kbps_week_1: item.MV_DL_User_Throughput_Kbps_week_1,
-        //             MV_DL_User_Throughput_Kbps_date_1: item.MV_DL_User_Throughput_Kbps_date_1,
-        //             MV_DL_User_Throughput_Kbps_date_2: item.MV_DL_User_Throughput_Kbps_date_2,
-        //             MV_DL_User_Throughput_Kbps_date_3: item.MV_DL_User_Throughput_Kbps_date_3,
-        //             MV_DL_User_Throughput_Kbps_date_4: item.MV_DL_User_Throughput_Kbps_date_4,
-        //             MV_DL_User_Throughput_Kbps_date_5: item.MV_DL_User_Throughput_Kbps_date_5,
-        //             MV_DL_User_Throughput_Kbps_date_6: item.MV_DL_User_Throughput_Kbps_date_6,
-        //             MV_DL_User_Throughput_Kbps_date_7: item.MV_DL_User_Throughput_Kbps_date_7,
-        //             MV_DL_User_Throughput_Kbps_date_8: item.MV_DL_User_Throughput_Kbps_date_8,
-
-        //             MV_E_UTRAN_Average_CQI_week_2: item.MV_E_UTRAN_Average_CQI_week_2,
-        //             MV_E_UTRAN_Average_CQI_week_1: item.MV_E_UTRAN_Average_CQI_week_1,
-        //             MV_E_UTRAN_Average_CQI_date_1: item.MV_E_UTRAN_Average_CQI_date_1,
-        //             MV_E_UTRAN_Average_CQI_date_2: item.MV_E_UTRAN_Average_CQI_date_2,
-        //             MV_E_UTRAN_Average_CQI_date_3: item.MV_E_UTRAN_Average_CQI_date_3,
-        //             MV_E_UTRAN_Average_CQI_date_4: item.MV_E_UTRAN_Average_CQI_date_4,
-        //             MV_E_UTRAN_Average_CQI_date_5: item.MV_E_UTRAN_Average_CQI_date_5,
-        //             MV_E_UTRAN_Average_CQI_date_6: item.MV_E_UTRAN_Average_CQI_date_6,
-        //             MV_E_UTRAN_Average_CQI_date_7: item.MV_E_UTRAN_Average_CQI_date_7,
-        //             MV_E_UTRAN_Average_CQI_date_8: item.MV_E_UTRAN_Average_CQI_date_8,
-
-        //             UL_RSSI_week_2: item.UL_RSSI_week_2,
-        //             UL_RSSI_week_1: item.UL_RSSI_week_1,
-        //             UL_RSSI_date_1: item.UL_RSSI_date_1,
-        //             UL_RSSI_date_2: item.UL_RSSI_date_2,
-        //             UL_RSSI_date_3: item.UL_RSSI_date_3,
-        //             UL_RSSI_date_4: item.UL_RSSI_date_4,
-        //             UL_RSSI_date_5: item.UL_RSSI_date_5,
-        //             UL_RSSI_date_6: item.UL_RSSI_date_6,
-        //             UL_RSSI_date_7: item.UL_RSSI_date_7,
-        //             UL_RSSI_date_8: item.UL_RSSI_date_8,
-
-        //             MV_Average_number_of_used_DL_PRBs_week_2: item.MV_Average_number_of_used_DL_PRBs_week_2,
-        //             MV_Average_number_of_used_DL_PRBs_week_1: item.MV_Average_number_of_used_DL_PRBs_week_1,
-        //             MV_Average_number_of_used_DL_PRBs_date_1: item.MV_Average_number_of_used_DL_PRBs_date_1,
-        //             MV_Average_number_of_used_DL_PRBs_date_2: item.MV_Average_number_of_used_DL_PRBs_date_2,
-        //             MV_Average_number_of_used_DL_PRBs_date_3: item.MV_Average_number_of_used_DL_PRBs_date_3,
-        //             MV_Average_number_of_used_DL_PRBs_date_4: item.MV_Average_number_of_used_DL_PRBs_date_4,
-        //             MV_Average_number_of_used_DL_PRBs_date_5: item.MV_Average_number_of_used_DL_PRBs_date_5,
-        //             MV_Average_number_of_used_DL_PRBs_date_6: item.MV_Average_number_of_used_DL_PRBs_date_6,
-        //             MV_Average_number_of_used_DL_PRBs_date_7: item.MV_Average_number_of_used_DL_PRBs_date_7,
-        //             MV_Average_number_of_used_DL_PRBs_date_8: item.MV_Average_number_of_used_DL_PRBs_date_8,
-
-        //             MV_RRC_Setup_Success_Rate_week_2: item.MV_RRC_Setup_Success_Rate_week_2,
-        //             MV_RRC_Setup_Success_Rate_week_1: item.MV_RRC_Setup_Success_Rate_week_1,
-        //             MV_RRC_Setup_Success_Rate_date_1: item.MV_RRC_Setup_Success_Rate_date_1,
-        //             MV_RRC_Setup_Success_Rate_date_2: item.MV_RRC_Setup_Success_Rate_date_2,
-        //             MV_RRC_Setup_Success_Rate_date_3: item.MV_RRC_Setup_Success_Rate_date_3,
-        //             MV_RRC_Setup_Success_Rate_date_4: item.MV_RRC_Setup_Success_Rate_date_4,
-        //             MV_RRC_Setup_Success_Rate_date_5: item.MV_RRC_Setup_Success_Rate_date_5,
-        //             MV_RRC_Setup_Success_Rate_date_6: item.MV_RRC_Setup_Success_Rate_date_6,
-        //             MV_RRC_Setup_Success_Rate_date_7: item.MV_RRC_Setup_Success_Rate_date_7,
-        //             MV_RRC_Setup_Success_Rate_date_8: item.MV_RRC_Setup_Success_Rate_date_8,
-
-        //             MV_ERAB_Setup_Success_Rate_week_2: item.MV_ERAB_Setup_Success_Rate_week_2,
-        //             MV_ERAB_Setup_Success_Rate_week_1: item.MV_ERAB_Setup_Success_Rate_week_1,
-        //             MV_ERAB_Setup_Success_Rate_date_1: item.MV_ERAB_Setup_Success_Rate_date_1,
-        //             MV_ERAB_Setup_Success_Rate_date_2: item.MV_ERAB_Setup_Success_Rate_date_2,
-        //             MV_ERAB_Setup_Success_Rate_date_3: item.MV_ERAB_Setup_Success_Rate_date_3,
-        //             MV_ERAB_Setup_Success_Rate_date_4: item.MV_ERAB_Setup_Success_Rate_date_4,
-        //             MV_ERAB_Setup_Success_Rate_date_5: item.MV_ERAB_Setup_Success_Rate_date_5,
-        //             MV_ERAB_Setup_Success_Rate_date_6: item.MV_ERAB_Setup_Success_Rate_date_6,
-        //             MV_ERAB_Setup_Success_Rate_date_7: item.MV_ERAB_Setup_Success_Rate_date_7,
-        //             MV_ERAB_Setup_Success_Rate_date_8: item.MV_ERAB_Setup_Success_Rate_date_8,
-
-        //             MV_PS_Drop_Call_Rate_week_2: item.MV_PS_Drop_Call_Rate_week_2,
-        //             MV_PS_Drop_Call_Rate_week_1: item.MV_PS_Drop_Call_Rate_week_1,
-        //             MV_PS_Drop_Call_Rate_date_1: item.MV_PS_Drop_Call_Rate_date_1,
-        //             MV_PS_Drop_Call_Rate_date_2: item.MV_PS_Drop_Call_Rate_date_2,
-        //             MV_PS_Drop_Call_Rate_date_3: item.MV_PS_Drop_Call_Rate_date_3,
-        //             MV_PS_Drop_Call_Rate_date_4: item.MV_PS_Drop_Call_Rate_date_4,
-        //             MV_PS_Drop_Call_Rate_date_5: item.MV_PS_Drop_Call_Rate_date_5,
-        //             MV_PS_Drop_Call_Rate_date_6: item.MV_PS_Drop_Call_Rate_date_6,
-        //             MV_PS_Drop_Call_Rate_date_7: item.MV_PS_Drop_Call_Rate_date_7,
-        //             MV_PS_Drop_Call_Rate_date_8: item.MV_PS_Drop_Call_Rate_date_8,
-
-        //             MV_Max_Connecteda_User_week_2: item.MV_Max_Connecteda_User_week_2,
-        //             MV_Max_Connecteda_User_week_1: item.MV_Max_Connecteda_User_week_1,
-        //             MV_Max_Connecteda_User_date_1: item.MV_Max_Connecteda_User_date_1,
-        //             MV_Max_Connecteda_User_date_2: item.MV_Max_Connecteda_User_date_2,
-        //             MV_Max_Connecteda_User_date_3: item.MV_Max_Connecteda_User_date_3,
-        //             MV_Max_Connecteda_User_date_4: item.MV_Max_Connecteda_User_date_4,
-        //             MV_Max_Connecteda_User_date_5: item.MV_Max_Connecteda_User_date_5,
-        //             MV_Max_Connecteda_User_date_6: item.MV_Max_Connecteda_User_date_6,
-        //             MV_Max_Connecteda_User_date_7: item.MV_Max_Connecteda_User_date_7,
-        //             MV_Max_Connecteda_User_date_8: item.MV_Max_Connecteda_User_date_8,
-
-        //             MV_PUCCH_SINR_week_2: item.MV_PUCCH_SINR_week_2,
-        //             MV_PUCCH_SINR_week_1: item.MV_PUCCH_SINR_week_1,
-        //             MV_PUCCH_SINR_date_1: item.MV_PUCCH_SINR_date_1,
-        //             MV_PUCCH_SINR_date_2: item.MV_PUCCH_SINR_date_2,
-        //             MV_PUCCH_SINR_date_3: item.MV_PUCCH_SINR_date_3,
-        //             MV_PUCCH_SINR_date_4: item.MV_PUCCH_SINR_date_4,
-        //             MV_PUCCH_SINR_date_5: item.MV_PUCCH_SINR_date_5,
-        //             MV_PUCCH_SINR_date_6: item.MV_PUCCH_SINR_date_6,
-        //             MV_PUCCH_SINR_date_7: item.MV_PUCCH_SINR_date_7,
-        //             MV_PUCCH_SINR_date_8: item.MV_PUCCH_SINR_date_8,
-
-        //             MV_Average_UE_Distance_KM_week_2: item.MV_Average_UE_Distance_KM_week_2,
-        //             MV_Average_UE_Distance_KM_week_1: item.MV_Average_UE_Distance_KM_week_1,
-        //             MV_Average_UE_Distance_KM_date_1: item.MV_Average_UE_Distance_KM_date_1,
-        //             MV_Average_UE_Distance_KM_date_2: item.MV_Average_UE_Distance_KM_date_2,
-        //             MV_Average_UE_Distance_KM_date_3: item.MV_Average_UE_Distance_KM_date_3,
-        //             MV_Average_UE_Distance_KM_date_4: item.MV_Average_UE_Distance_KM_date_4,
-        //             MV_Average_UE_Distance_KM_date_5: item.MV_Average_UE_Distance_KM_date_5,
-        //             MV_Average_UE_Distance_KM_date_6: item.MV_Average_UE_Distance_KM_date_6,
-        //             MV_Average_UE_Distance_KM_date_7: item.MV_Average_UE_Distance_KM_date_7,
-        //             MV_Average_UE_Distance_KM_date_8: item.MV_Average_UE_Distance_KM_date_8,
-
-
-        //             MV_PS_handover_success_rate_LTE_INTER_SYSTEM_week_2: item.MV_PS_handover_success_rate_LTE_INTER_SYSTEM_week_2,
-        //             MV_PS_handover_success_rate_LTE_INTER_SYSTEM_week_1: item.MV_PS_handover_success_rate_LTE_INTER_SYSTEM_week_1,
-        //             MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_1: item.MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_1,
-        //             MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_2: item.MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_2,
-        //             MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_3: item.MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_3,
-        //             MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_4: item.MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_4,
-        //             MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_5: item.MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_5,
-        //             MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_6: item.MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_6,
-        //             MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_7: item.MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_7,
-        //             MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_8: item.MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_8,
-
-        //             MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_week_2: item.MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_week_2,
-        //             MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_week_1: item.MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_week_1,
-        //             MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_date_1: item.MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_date_1,
-        //             MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_date_2: item.MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_date_2,
-        //             MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_date_3: item.MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_date_3,
-        //             MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_date_4: item.MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_date_4,
-        //             MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_date_5: item.MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_date_5,
-        //             MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_date_6: item.MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_date_6,
-        //             MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_date_7: item.MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_date_7,
-        //             MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_date_8: item.MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_date_8,
-
-
-        //             UL_RSSI_Nokia_RSSI_SINR_week_2: item.UL_RSSI_Nokia_RSSI_SINR_week_2,
-        //             UL_RSSI_Nokia_RSSI_SINR_week_1: item.UL_RSSI_Nokia_RSSI_SINR_week_1,
-        //             UL_RSSI_Nokia_RSSI_SINR_date_1: item.UL_RSSI_Nokia_RSSI_SINR_date_1,
-        //             UL_RSSI_Nokia_RSSI_SINR_date_2: item.UL_RSSI_Nokia_RSSI_SINR_date_2,
-        //             UL_RSSI_Nokia_RSSI_SINR_date_3: item.UL_RSSI_Nokia_RSSI_SINR_date_3,
-        //             UL_RSSI_Nokia_RSSI_SINR_date_4: item.UL_RSSI_Nokia_RSSI_SINR_date_4,
-        //             UL_RSSI_Nokia_RSSI_SINR_date_5: item.UL_RSSI_Nokia_RSSI_SINR_date_5,
-        //             UL_RSSI_Nokia_RSSI_SINR_date_6: item.UL_RSSI_Nokia_RSSI_SINR_date_6,
-        //             UL_RSSI_Nokia_RSSI_SINR_date_7: item.UL_RSSI_Nokia_RSSI_SINR_date_7,
-        //             UL_RSSI_Nokia_RSSI_SINR_date_8: item.UL_RSSI_Nokia_RSSI_SINR_date_8,
-
-
-        //             MV_VoLTE_DCR_week_2: item.MV_VoLTE_DCR_week_2,
-        //             MV_VoLTE_DCR_week_1: item.MV_VoLTE_DCR_week_1,
-        //             MV_VoLTE_DCR_date_1: item.MV_VoLTE_DCR_date_1,
-        //             MV_VoLTE_DCR_date_2: item.MV_VoLTE_DCR_date_2,
-        //             MV_VoLTE_DCR_date_3: item.MV_VoLTE_DCR_date_3,
-        //             MV_VoLTE_DCR_date_4: item.MV_VoLTE_DCR_date_4,
-        //             MV_VoLTE_DCR_date_5: item.MV_VoLTE_DCR_date_5,
-        //             MV_VoLTE_DCR_date_6: item.MV_VoLTE_DCR_date_6,
-        //             MV_VoLTE_DCR_date_7: item.MV_VoLTE_DCR_date_7,
-        //             MV_VoLTE_DCR_date_8: item.MV_VoLTE_DCR_date_8,
-
-        //             MV_Packet_Loss_DL_week_2: item.MV_Packet_Loss_DL_week_2,
-        //             MV_Packet_Loss_DL_week_1: item.MV_Packet_Loss_DL_week_1,
-        //             MV_Packet_Loss_DL_date_1: item.MV_Packet_Loss_DL_date_1,
-        //             MV_Packet_Loss_DL_date_2: item.MV_Packet_Loss_DL_date_2,
-        //             MV_Packet_Loss_DL_date_3: item.MV_Packet_Loss_DL_date_3,
-        //             MV_Packet_Loss_DL_date_4: item.MV_Packet_Loss_DL_date_4,
-        //             MV_Packet_Loss_DL_date_5: item.MV_Packet_Loss_DL_date_5,
-        //             MV_Packet_Loss_DL_date_6: item.MV_Packet_Loss_DL_date_6,
-        //             MV_Packet_Loss_DL_date_7: item.MV_Packet_Loss_DL_date_7,
-        //             MV_Packet_Loss_DL_date_8: item.MV_Packet_Loss_DL_date_8,
-
-        //             MV_Packet_Loss_UL_week_2: item.MV_Packet_Loss_UL_week_2,
-        //             MV_Packet_Loss_UL_week_1: item.MV_Packet_Loss_UL_week_1,
-        //             MV_Packet_Loss_UL_date_1: item.MV_Packet_Loss_UL_date_1,
-        //             MV_Packet_Loss_UL_date_2: item.MV_Packet_Loss_UL_date_2,
-        //             MV_Packet_Loss_UL_date_3: item.MV_Packet_Loss_UL_date_3,
-        //             MV_Packet_Loss_UL_date_4: item.MV_Packet_Loss_UL_date_4,
-        //             MV_Packet_Loss_UL_date_5: item.MV_Packet_Loss_UL_date_5,
-        //             MV_Packet_Loss_UL_date_6: item.MV_Packet_Loss_UL_date_6,
-        //             MV_Packet_Loss_UL_date_7: item.MV_Packet_Loss_UL_date_7,
-        //             MV_Packet_Loss_UL_date_8: item.MV_Packet_Loss_UL_date_8,
-
-        //             PS_InterF_HOSR_week_2: item.PS_InterF_HOSR_week_2,
-        //             PS_InterF_HOSR_week_1: item.PS_InterF_HOSR_week_1,
-        //             PS_InterF_HOSR_date_1: item.PS_InterF_HOSR_date_1,
-        //             PS_InterF_HOSR_date_2: item.PS_InterF_HOSR_date_2,
-        //             PS_InterF_HOSR_date_3: item.PS_InterF_HOSR_date_3,
-        //             PS_InterF_HOSR_date_4: item.PS_InterF_HOSR_date_4,
-        //             PS_InterF_HOSR_date_5: item.PS_InterF_HOSR_date_5,
-        //             PS_InterF_HOSR_date_6: item.PS_InterF_HOSR_date_6,
-        //             PS_InterF_HOSR_date_7: item.PS_InterF_HOSR_date_7,
-        //             PS_InterF_HOSR_date_8: item.PS_InterF_HOSR_date_8,
-
-        //             PS_IntraF_HOSR_week_2: item.PS_IntraF_HOSR_week_2,
-        //             PS_IntraF_HOSR_week_1: item.PS_IntraF_HOSR_week_1,
-        //             PS_IntraF_HOSR_date_1: item.PS_IntraF_HOSR_date_1,
-        //             PS_IntraF_HOSR_date_2: item.PS_IntraF_HOSR_date_2,
-        //             PS_IntraF_HOSR_date_3: item.PS_IntraF_HOSR_date_3,
-        //             PS_IntraF_HOSR_date_4: item.PS_IntraF_HOSR_date_4,
-        //             PS_IntraF_HOSR_date_5: item.PS_IntraF_HOSR_date_5,
-        //             PS_IntraF_HOSR_date_6: item.PS_IntraF_HOSR_date_6,
-        //             PS_IntraF_HOSR_date_7: item.PS_IntraF_HOSR_date_7,
-        //             PS_IntraF_HOSR_date_8: item.PS_IntraF_HOSR_date_8,
-        //         });
-        //     }
-        // }
-
-
-
-        ///__________ STYLING IN EXCEL TABLE ______________ ///
-        // sheet3.eachRow({ includeEmpty: true }, (row, rowNumber) => {
-        //     const rows = sheet3.getColumn(1);
-        //     const rowsCount = rows['_worksheet']['_rows'].length;
-        //     row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
-        //         cell.alignment = { vertical: 'middle', horizontal: 'center' }
-        //         cell.border = {
-        //             top: { style: 'thin' },
-        //             left: { style: 'thin' },
-        //             bottom: { style: 'thin' },
-        //             right: { style: 'thin' }
-        //         }
-
-        //         if (rowNumber === 2) {
-        //             // First set the background of header row
-        //             cell.fill = {
-        //                 type: 'pattern',
-        //                 pattern: 'solid',
-        //                 fgColor: { argb: '223354' }
-        //             }
-        //             cell.font = {
-        //                 color: { argb: 'FFFFFF' },
-        //                 bold: true,
-        //                 size: 13,
-        //             }
-        //         }
-
-        //         if ((rowNumber === 1 && colNumber >= 8 && colNumber <= 17) || (rowNumber === 2 && colNumber >= 8 && colNumber <= 17)) {
-        //             cell.fill = {
-        //                 type: 'pattern',
-        //                 pattern: 'solid',
-        //                 fgColor: { argb: '595959' }
-        //             }
-        //             cell.font = {
-        //                 color: { argb: 'FFFFFF' },
-        //                 bold: true,
-        //                 size: 13,
-        //             }
-        //         }
-
-        //         if ((rowNumber === 1 && colNumber >= 18 && colNumber <= 27) || (rowNumber === 2 && colNumber >= 18 && colNumber <= 27)) {
-        //             cell.fill = {
-        //                 type: 'pattern',
-        //                 pattern: 'solid',
-        //                 fgColor: { argb: '538DD5' }
-        //             }
-        //             cell.font = {
-        //                 color: { argb: 'FFFFFF' },
-        //                 bold: true,
-        //                 size: 13,
-        //             }
-        //         }
-
-        //         if ((rowNumber === 1 && colNumber >= 28 && colNumber <= 37) || (rowNumber === 2 && colNumber >= 28 && colNumber <= 37)) {
-        //             cell.fill = {
-        //                 type: 'pattern',
-        //                 pattern: 'solid',
-        //                 fgColor: { argb: '366092' }
-        //             }
-        //             cell.font = {
-        //                 color: { argb: 'FFFFFF' },
-        //                 bold: true,
-        //                 size: 13,
-        //             }
-        //         }
-        //         if ((rowNumber === 1 && colNumber >= 38 && colNumber <= 47) || (rowNumber === 2 && colNumber >= 38 && colNumber <= 47)) {
-        //             cell.fill = {
-        //                 type: 'pattern',
-        //                 pattern: 'solid',
-        //                 fgColor: { argb: 'DA9694' }
-        //             }
-        //             cell.font = {
-        //                 color: { argb: 'FFFFFF' },
-        //                 bold: true,
-        //                 size: 13,
-        //             }
-        //         }
-        //         if ((rowNumber === 1 && colNumber >= 48 && colNumber <= 57) || (rowNumber === 2 && colNumber >= 48 && colNumber <= 57)) {
-        //             cell.fill = {
-        //                 type: 'pattern',
-        //                 pattern: 'solid',
-        //                 fgColor: { argb: '76933C' }
-        //             }
-        //             cell.font = {
-        //                 color: { argb: 'FFFFFF' },
-        //                 bold: true,
-        //                 size: 13,
-        //             }
-        //         }
-        //         if ((rowNumber === 1 && colNumber >= 58 && colNumber <= 67) || (rowNumber === 2 && colNumber >= 58 && colNumber <= 67)) {
-        //             cell.fill = {
-        //                 type: 'pattern',
-        //                 pattern: 'solid',
-        //                 fgColor: { argb: '60497A' }
-        //             }
-        //             cell.font = {
-        //                 color: { argb: 'FFFFFF' },
-        //                 bold: true,
-        //                 size: 13,
-        //             }
-        //         }
-        //         if ((rowNumber === 1 && colNumber >= 68 && colNumber <= 77) || (rowNumber === 2 && colNumber >= 68 && colNumber <= 77)) {
-        //             cell.fill = {
-        //                 type: 'pattern',
-        //                 pattern: 'solid',
-        //                 fgColor: { argb: '31869B' }
-        //             }
-        //             cell.font = {
-        //                 color: { argb: 'FFFFFF' },
-        //                 bold: true,
-        //                 size: 13,
-        //             }
-        //         }
-        //         if ((rowNumber === 1 && colNumber >= 78 && colNumber <= 87) || (rowNumber === 2 && colNumber >= 78 && colNumber <= 87)) {
-        //             cell.fill = {
-        //                 type: 'pattern',
-        //                 pattern: 'solid',
-        //                 fgColor: { argb: 'E26B0A' }
-        //             }
-        //             cell.font = {
-        //                 color: { argb: 'FFFFFF' },
-        //                 bold: true,
-        //                 size: 13,
-        //             }
-        //         }
-        //         if ((rowNumber === 1 && colNumber >= 88 && colNumber <= 97) || (rowNumber === 2 && colNumber >= 88 && colNumber <= 97)) {
-        //             cell.fill = {
-        //                 type: 'pattern',
-        //                 pattern: 'solid',
-        //                 fgColor: { argb: '948A54' }
-        //             }
-        //             cell.font = {
-        //                 color: { argb: 'FFFFFF' },
-        //                 bold: true,
-        //                 size: 13,
-        //             }
-        //         }
-        //         if ((rowNumber === 1 && colNumber >= 98 && colNumber <= 107) || (rowNumber === 2 && colNumber >= 98 && colNumber <= 107)) {
-        //             cell.fill = {
-        //                 type: 'pattern',
-        //                 pattern: 'solid',
-        //                 fgColor: { argb: '808080' }
-        //             }
-        //             cell.font = {
-        //                 color: { argb: 'FFFFFF' },
-        //                 bold: true,
-        //                 size: 13,
-        //             }
-        //         }
-        //         if ((rowNumber === 1 && colNumber >= 108 && colNumber <= 117) || (rowNumber === 2 && colNumber >= 108 && colNumber <= 117)) {
-        //             cell.fill = {
-        //                 type: 'pattern',
-        //                 pattern: 'solid',
-        //                 fgColor: { argb: '33CCCC' }
-        //             }
-        //             cell.font = {
-        //                 color: { argb: 'FFFFFF' },
-        //                 bold: true,
-        //                 size: 13,
-        //             }
-        //         }
-        //         if ((rowNumber === 1 && colNumber >= 118 && colNumber <= 127) || (rowNumber === 2 && colNumber >= 118 && colNumber <= 127)) {
-        //             cell.fill = {
-        //                 type: 'pattern',
-        //                 pattern: 'solid',
-        //                 fgColor: { argb: 'FF7C80' }
-        //             }
-        //             cell.font = {
-        //                 color: { argb: 'FFFFFF' },
-        //                 bold: true,
-        //                 size: 13,
-        //             }
-        //         }
-        //         if ((rowNumber === 1 && colNumber >= 128 && colNumber <= 137) || (rowNumber === 2 && colNumber >= 128 && colNumber <= 137)) {
-        //             cell.fill = {
-        //                 type: 'pattern',
-        //                 pattern: 'solid',
-        //                 fgColor: { argb: 'FF66CC' }
-        //             }
-        //             cell.font = {
-        //                 color: { argb: 'FFFFFF' },
-        //                 bold: true,
-        //                 size: 13,
-        //             }
-        //         }
-        //         if ((rowNumber === 1 && colNumber >= 138 && colNumber <= 147) || (rowNumber === 2 && colNumber >= 138 && colNumber <= 147)) {
-        //             cell.fill = {
-        //                 type: 'pattern',
-        //                 pattern: 'solid',
-        //                 fgColor: { argb: '669900' }
-        //             }
-        //             cell.font = {
-        //                 color: { argb: 'FFFFFF' },
-        //                 bold: true,
-        //                 size: 13,
-        //             }
-        //         }
-        //         if ((rowNumber === 1 && colNumber >= 148 && colNumber <= 157) || (rowNumber === 2 && colNumber >= 148 && colNumber <= 157)) {
-        //             cell.fill = {
-        //                 type: 'pattern',
-        //                 pattern: 'solid',
-        //                 fgColor: { argb: '538DD5' }
-        //             }
-        //             cell.font = {
-        //                 color: { argb: 'FFFFFF' },
-        //                 bold: true,
-        //                 size: 13,
-        //             }
-        //         }
-        //         if ((rowNumber === 1 && colNumber >= 158 && colNumber <= 167) || (rowNumber === 2 && colNumber >= 158 && colNumber <= 167)) {
-        //             cell.fill = {
-        //                 type: 'pattern',
-        //                 pattern: 'solid',
-        //                 fgColor: { argb: '963634' }
-        //             }
-        //             cell.font = {
-        //                 color: { argb: 'FFFFFF' },
-        //                 bold: true,
-        //                 size: 13,
-        //             }
-        //         }
-        //         if ((rowNumber === 1 && colNumber >= 168 && colNumber <= 177) || (rowNumber === 2 && colNumber >= 168 && colNumber <= 177)) {
-        //             cell.fill = {
-        //                 type: 'pattern',
-        //                 pattern: 'solid',
-        //                 fgColor: { argb: '215967' }
-        //             }
-        //             cell.font = {
-        //                 color: { argb: 'FFFFFF' },
-        //                 bold: true,
-        //                 size: 13,
-        //             }
-        //         }
-        //         if ((rowNumber === 1 && colNumber >= 178 && colNumber <= 187) || (rowNumber === 2 && colNumber >= 178 && colNumber <= 187)) {
-        //             cell.fill = {
-        //                 type: 'pattern',
-        //                 pattern: 'solid',
-        //                 fgColor: { argb: '974706' }
-        //             }
-        //             cell.font = {
-        //                 color: { argb: 'FFFFFF' },
-        //                 bold: true,
-        //                 size: 13,
-        //             }
-        //         }
-        //         if ((rowNumber === 1 && colNumber >= 188 && colNumber <= 197) || (rowNumber === 2 && colNumber >= 188 && colNumber <= 197)) {
-        //             cell.fill = {
-        //                 type: 'pattern',
-        //                 pattern: 'solid',
-        //                 fgColor: { argb: '538DD5' }
-        //             }
-        //             cell.font = {
-        //                 color: { argb: 'FFFFFF' },
-        //                 bold: true,
-        //                 size: 13,
-        //             }
-        //         }
-
-        //         if ((rowNumber === 1 && colNumber >= 198 && colNumber <= 207) || (rowNumber === 2 && colNumber >= 198 && colNumber <= 207)) {
-        //             cell.fill = {
-        //                 type: 'pattern',
-        //                 pattern: 'solid',
-        //                 fgColor: { argb: '948A54' }
-        //             }
-        //             cell.font = {
-        //                 color: { argb: 'FFFFFF' },
-        //                 bold: true,
-        //                 size: 13,
-        //             }
-        //         }
-        //         if ((rowNumber === 1 && colNumber >= 208 && colNumber <= 217) || (rowNumber === 2 && colNumber >= 208 && colNumber <= 217)) {
-        //             cell.fill = {
-        //                 type: 'pattern',
-        //                 pattern: 'solid',
-        //                 fgColor: { argb: '223354' }
-        //             }
-        //             cell.font = {
-        //                 color: { argb: 'FFFFFF' },
-        //                 bold: true,
-        //                 size: 13,
-        //             }
-        //         }
-        //         // cell.views = [{ state: 'frozen', ySplit: 1 }]
-
-        //     })
-        // })
 
 
 
@@ -1398,6 +1147,274 @@ const LteKpiTrend = () => {
         // action(false)
 
 
+    }
+
+    const handleExport1 = () => {
+        const multiHeaders = [
+            ['', '', '', '', '', '', '',
+                 'MV 4G Data Volume GB',
+                 'MV 4G Data Volume GB',
+                 'MV 4G Data Volume GB',
+                 'MV 4G Data Volume GB',
+                 'MV 4G Data Volume GB',
+                 'MV 4G Data Volume GB',
+                 'MV 4G Data Volume GB',
+                 'MV 4G Data Volume GB',
+                 'MV 4G Data Volume GB',
+                 'MV 4G Data Volume GB',
+                // 'MV Radio NW Availability',
+                // 'MV Radio NW Availability',
+                // 'MV Radio NW Availability',
+                'MV Radio NW Availability',
+                'MV Radio NW Availability',
+                'MV Radio NW Availability',
+                'MV Radio NW Availability',
+                'MV Radio NW Availability',
+                'MV Radio NW Availability',
+                'MV Radio NW Availability',
+                // 'MV VoLTE raffic',
+                // 'MV VoLTE raffic',
+                // 'MV VoLTE raffic',
+                'MV VoLTE raffic',
+                'MV VoLTE raffic',
+                'MV VoLTE raffic',
+                'MV VoLTE raffic',
+                'MV VoLTE raffic',
+                'MV VoLTE raffic',
+                'MV VoLTE raffic',
+                // 'MV DL User Throughtput Kbps',
+                // 'MV DL User Throughtput Kbps',
+                // 'MV DL User Throughtput Kbps',
+                'MV DL User Throughtput Kbps',
+                'MV DL User Throughtput Kbps',
+                'MV DL User Throughtput Kbps',
+                'MV DL User Throughtput Kbps',
+                'MV DL User Throughtput Kbps',
+                'MV DL User Throughtput Kbps',
+                'MV DL User Throughtput Kbps',
+                'MV_UL_User_Throughput_Kbps',
+                'MV_UL_User_Throughput_Kbps',
+                'MV_UL_User_Throughput_Kbps',
+                'MV_UL_User_Throughput_Kbps',
+                'MV_UL_User_Throughput_Kbps',
+                'MV_UL_User_Throughput_Kbps',
+                'MV_UL_User_Throughput_Kbps',
+                // 'MV EUTRAN Average CQI',
+                // 'MV EUTRAN Average CQI',
+                // 'MV EUTRAN Average CQI',
+                'MV EUTRAN Average CQI',
+                'MV EUTRAN Average CQI',
+                'MV EUTRAN Average CQI',
+                'MV EUTRAN Average CQI',
+                'MV EUTRAN Average CQI',
+                'MV EUTRAN Average CQI',
+                'MV EUTRAN Average CQI',
+                // 'UL RSSI',
+                // 'UL RSSI',
+                // 'UL RSSI',
+                'UL RSSI',
+                'UL RSSI',
+                'UL RSSI',
+                'UL RSSI',
+                'UL RSSI',
+                'UL RSSI',
+                'UL RSSI',
+                // 'MV Average Number Of Used DL PRBs',
+                // 'MV Average Number Of Used DL PRBs',
+                // 'MV Average Number Of Used DL PRBs',
+                'MV Average Number Of Used DL PRBs',
+                'MV Average Number Of Used DL PRBs',
+                'MV Average Number Of Used DL PRBs',
+                'MV Average Number Of Used DL PRBs',
+                'MV Average Number Of Used DL PRBs',
+                'MV Average Number Of Used DL PRBs',
+                'MV Average Number Of Used DL PRBs',
+                // 'MV RRC Setup Success Rate',
+                // 'MV RRC Setup Success Rate',
+                // 'MV RRC Setup Success Rate',
+                'MV RRC Setup Success Rate',
+                'MV RRC Setup Success Rate',
+                'MV RRC Setup Success Rate',
+                'MV RRC Setup Success Rate',
+                'MV RRC Setup Success Rate',
+                'MV RRC Setup Success Rate',
+                'MV RRC Setup Success Rate',
+                // 'MV ERAB Setup Success Rate',
+                // 'MV ERAB Setup Success Rate',
+                // 'MV ERAB Setup Success Rate',
+                'MV ERAB Setup Success Rate',
+                'MV ERAB Setup Success Rate',
+                'MV ERAB Setup Success Rate',
+                'MV ERAB Setup Success Rate',
+                'MV ERAB Setup Success Rate',
+                'MV ERAB Setup Success Rate',
+                'MV ERAB Setup Success Rate',
+                // 'MV PS Drop Call Rate',
+                // 'MV PS Drop Call Rate',
+                // 'MV PS Drop Call Rate',
+                'MV PS Drop Call Rate',
+                'MV PS Drop Call Rate',
+                'MV PS Drop Call Rate',
+                'MV PS Drop Call Rate',
+                'MV PS Drop Call Rate',
+                'MV PS Drop Call Rate',
+                'MV PS Drop Call Rate',
+                // 'MV Max Connecteda User',
+                // 'MV Max Connecteda User',
+                // 'MV Max Connecteda User',
+                'MV Max Connecteda User',
+                'MV Max Connecteda User',
+                'MV Max Connecteda User',
+                'MV Max Connecteda User',
+                'MV Max Connecteda User',
+                'MV Max Connecteda User',
+                'MV Max Connecteda User',
+                // 'MV PUCCH SINR',
+                // 'MV PUCCH SINR',
+                // 'MV PUCCH SINR',
+                'MV PUCCH SINR',
+                'MV PUCCH SINR',
+                'MV PUCCH SINR',
+                'MV PUCCH SINR',
+                'MV PUCCH SINR',
+                'MV PUCCH SINR',
+                'MV PUCCH SINR',
+                // 'MV Average UE_Distance KM',
+                // 'MV Average UE_Distance KM',
+                // 'MV Average UE_Distance KM',
+                'MV Average UE_Distance KM',
+                'MV Average UE_Distance KM',
+                'MV Average UE_Distance KM',
+                'MV Average UE_Distance KM',
+                'MV Average UE_Distance KM',
+                'MV Average UE_Distance KM',
+                'MV Average UE_Distance KM',
+                // 'MV PS handover success rate LTE INTER SYSTEM',
+                // 'MV PS handover success rate LTE INTER SYSTEM',
+                // 'MV PS handover success rate LTE INTER SYSTEM',
+                'MV PS handover success rate LTE INTER SYSTEM',
+                'MV PS handover success rate LTE INTER SYSTEM',
+                'MV PS handover success rate LTE INTER SYSTEM',
+                'MV PS handover success rate LTE INTER SYSTEM',
+                'MV PS handover success rate LTE INTER SYSTEM',
+                'MV PS handover success rate LTE INTER SYSTEM',
+                'MV PS handover success rate LTE INTER SYSTEM',
+
+                'MV PS handover success rate LTE INTRA SYSTEM',
+                'MV PS handover success rate LTE INTRA SYSTEM',
+                'MV PS handover success rate LTE INTRA SYSTEM',
+                'MV PS handover success rate LTE INTRA SYSTEM',
+                'MV PS handover success rate LTE INTRA SYSTEM',
+                'MV PS handover success rate LTE INTRA SYSTEM',
+                'MV PS handover success rate LTE INTRA SYSTEM',
+                
+                // 'UL_RSSI_Nokia_RSSI_SINR',
+                // 'UL_RSSI_Nokia_RSSI_SINR',
+                // 'UL_RSSI_Nokia_RSSI_SINR',
+                'UL_RSSI_Nokia_RSSI_SINR',
+                'UL_RSSI_Nokia_RSSI_SINR',
+                'UL_RSSI_Nokia_RSSI_SINR',
+                'UL_RSSI_Nokia_RSSI_SINR',
+                'UL_RSSI_Nokia_RSSI_SINR',
+                'UL_RSSI_Nokia_RSSI_SINR',
+                'UL_RSSI_Nokia_RSSI_SINR',
+                // 'MV_VoLTE_DCR',
+                // 'MV_VoLTE_DCR',
+                // 'MV_VoLTE_DCR',
+                'MV_VoLTE_DCR',
+                'MV_VoLTE_DCR',
+                'MV_VoLTE_DCR',
+                'MV_VoLTE_DCR',
+                'MV_VoLTE_DCR',
+                'MV_VoLTE_DCR',
+                'MV_VoLTE_DCR',
+                'MV_Packet_Loss_DL',
+                'MV_Packet_Loss_DL',
+                'MV_Packet_Loss_DL',
+                'MV_Packet_Loss_DL',
+                'MV_Packet_Loss_DL',
+                'MV_Packet_Loss_DL',
+                'MV_Packet_Loss_DL',
+                // 'MV_Packet_Loss_UL',
+                // 'MV_Packet_Loss_UL',
+                // 'MV_Packet_Loss_UL',
+                'MV_Packet_Loss_UL',
+                'MV_Packet_Loss_UL',
+                'MV_Packet_Loss_UL',
+                'MV_Packet_Loss_UL',
+                'MV_Packet_Loss_UL',
+                'MV_Packet_Loss_UL',
+                'MV_Packet_Loss_UL',
+                // 'PS_InterF_HOSR',
+                // 'PS_InterF_HOSR',
+                // 'PS_InterF_HOSR',
+                'PS_InterF_HOSR',
+                'PS_InterF_HOSR',
+                'PS_InterF_HOSR',
+                'PS_InterF_HOSR',
+                'PS_InterF_HOSR',
+                'PS_InterF_HOSR',
+                'PS_InterF_HOSR',
+                // 'PS_InterF_HOSR',
+                // 'PS_InterF_HOSR',
+                // 'PS_InterF_HOSR',
+                'PS_IntraF_HOSR',
+                'PS_IntraF_HOSR',
+                'PS_IntraF_HOSR',
+                'PS_IntraF_HOSR',
+                'PS_IntraF_HOSR',
+                'PS_IntraF_HOSR',
+                'PS_IntraF_HOSR',
+                'MV_RRC_Setup_Success_Rate_DENOM',
+                'MV_RRC_Setup_Success_Rate_DENOM',
+                'MV_RRC_Setup_Success_Rate_DENOM',
+                'MV_RRC_Setup_Success_Rate_DENOM',
+                'MV_RRC_Setup_Success_Rate_DENOM',
+                'MV_RRC_Setup_Success_Rate_DENOM',
+                'MV_RRC_Setup_Success_Rate_DENOM',
+                'MV_CSFB_Redirection_Success_Rate',
+                'MV_CSFB_Redirection_Success_Rate',
+                'MV_CSFB_Redirection_Success_Rate',
+                'MV_CSFB_Redirection_Success_Rate',
+                'MV_CSFB_Redirection_Success_Rate',
+                'MV_CSFB_Redirection_Success_Rate',
+                'MV_CSFB_Redirection_Success_Rate',
+                'VoLTE_Inter_Frequency_Handover_Success_Ratio',
+                'VoLTE_Inter_Frequency_Handover_Success_Ratio',
+                'VoLTE_Inter_Frequency_Handover_Success_Ratio',
+                'VoLTE_Inter_Frequency_Handover_Success_Ratio',
+                'VoLTE_Inter_Frequency_Handover_Success_Ratio',
+                'VoLTE_Inter_Frequency_Handover_Success_Ratio',
+                'VoLTE_Inter_Frequency_Handover_Success_Ratio',
+                'VoLTE_Intra_LTE_Handover_Success_Ratio',
+                'VoLTE_Intra_LTE_Handover_Success_Ratio',
+                'VoLTE_Intra_LTE_Handover_Success_Ratio',
+                'VoLTE_Intra_LTE_Handover_Success_Ratio',
+                'VoLTE_Intra_LTE_Handover_Success_Ratio',
+                'VoLTE_Intra_LTE_Handover_Success_Ratio',
+                'VoLTE_Intra_LTE_Handover_Success_Ratio',
+                'MV_UL_RSSI_dBm_PRB',
+                'MV_UL_RSSI_dBm_PRB',
+                'MV_UL_RSSI_dBm_PRB',
+                'MV_UL_RSSI_dBm_PRB',
+                'MV_UL_RSSI_dBm_PRB',
+                'MV_UL_RSSI_dBm_PRB',
+                'MV_UL_RSSI_dBm_PRB',
+            
+            ],
+            columnData.map(col => col.title) // Column headers
+        ];
+
+        // Map the row data
+        const dataRows = data?.data?.map(row => columnData.map(col => row[col.field]));
+
+        // Combine multi-headers and data rows
+        const combinedData = [...multiHeaders, ...dataRows];
+
+        // Export CSV
+        new CsvBuilder(`LTE_KPI_Trend.csv`)
+            .addRows(combinedData) // Add all combined rows
+            .exportFile();
     }
 
     const handleClose = () => {
@@ -1483,31 +1500,34 @@ const LteKpiTrend = () => {
 
 
     useEffect(() => {
-        if(data){
+        if (data) {
             setFileData(data.Download_Link)
         }
         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
     }, [])
-  return (
-    <>
-    <style>{"th{border:1px solid black;}"}</style>
-    <Slide direction="left" in='true' timeout={700} style={{ transformOrigin: '1 1 1' }}>
-        <div style={{ margin: 10 }}>
-            <div style={{ margin: 5, marginLeft: 10,display:'flex',justifyContent:'space-between',alignItems:'center' }}>
-                <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
-                    <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
-                    <Link underline="hover" onClick={() => { navigate('/tools/rca') }}>RCA Tool</Link>
-                    <Typography color='text.primary'>LTE KPI Trend</Typography>
-                </Breadcrumbs>
-                <Box style={{ float: 'right' }}>
-                    <Tooltip title="Export Excel">
-                        <IconButton type='download' href={link}>
-                            <DownloadIcon fontSize='medium' color='primary' />
-                        </IconButton>
-                    </Tooltip>
-                </Box>
-            </div>
-            {/* <div style={{ height: 'auto', width: '100%', margin: '5px 0px', border: '1px solid black', borderRadius: '10px', padding: '2px', display: 'flex' }}>
+    return (
+        <>
+            <style>{"th{border:1px solid black;}"}</style>
+            <Slide direction="left" in='true' timeout={700} style={{ transformOrigin: '1 1 1' }}>
+                <div style={{ margin: 10 }}>
+                    <div style={{ margin: 5, marginLeft: 10, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
+                            <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
+                            <Link underline="hover" onClick={() => { navigate('/tools/rca') }}>RCA Tool</Link>
+                            <Typography color='text.primary'>LTE KPI Trend</Typography>
+                        </Breadcrumbs>
+                        <Box style={{ float: 'right' }}>
+                            <Tooltip title="Export Excel">
+                                {/* <IconButton type='download' href={link}>
+                                    <DownloadIcon fontSize='medium' color='primary' />
+                                </IconButton> */}
+                                <IconButton type='download' onClick={handleExport1}>
+                                    <DownloadIcon fontSize='medium' color='primary' />
+                                </IconButton>
+                            </Tooltip>
+                        </Box>
+                    </div>
+                    {/* <div style={{ height: 'auto', width: '100%', margin: '5px 0px', border: '1px solid black', borderRadius: '10px', padding: '2px', display: 'flex' }}>
                 <Grid container spacing={1}>
                     <Grid item xs={10} style={{ display: "flex" }}>
                         <Box >
@@ -1534,415 +1554,405 @@ const LteKpiTrend = () => {
 
             </div> */}
 
-            {/* ************* 4G  TABLE DATA ************** */}
+                    {/* ************* 4G  TABLE DATA ************** */}
 
-            <Box >
+                    <Box >
 
-                <TableContainer sx={{ maxHeight: '80vh', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} component={Paper} ref={scrollableContainerRef} onScroll={handleScroll}>
+                        <TableContainer sx={{ maxHeight: '80vh', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} component={Paper} ref={scrollableContainerRef} onScroll={handleScroll}>
 
-                    <table style={{ width: "100%", border: "1px solid black", borderCollapse: 'collapse', overflow: 'auto' }} >
-                        {/* <tr>
+                            <table style={{ width: "100%", border: "1px solid black", borderCollapse: 'collapse', overflow: 'auto' }} >
+                                {/* <tr>
             <th colspan="8" style={{ fontSize: 24, backgroundColor: "#F1948A", color: "", }}>RANGE WISE</th>
         </tr> */}
-                        <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
-                            <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
-                                <th rowSpan='2' style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Circle</th>
-                                <th rowSpan='2' style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Cell Name</th>
-                                <th rowSpan='2' style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Site ID</th>
-                                <th rowSpan='2' style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>OEM</th>
-                                <th rowSpan='2' style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>MS1 Date</th>
-                                <th rowSpan='2' style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Project</th>
-                                <th rowSpan='2' style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Technology</th>
-                                <th colSpan='7' style={{ width: 150 }}>MV 4G Data Volume GB</th>
-                                <th colSpan='10'>MV Radio NW Availability</th>
-                                <th colSpan='10'>MV VoLTE Raffic</th>
-                                <th colSpan='10'>MV DL User Throughtput Kbps</th>
-                                <th colSpan='10'>MV EUTRAN Average CQI</th>
-                                <th colSpan='10'>UL RSSI</th>
-                                <th colSpan='10'>MV Average Number Of Used DL PRBs</th>
-                                <th colSpan='10'>MV RRC Setup Success Rate</th>
-                                <th colSpan='10'>MV ERAB Setup Success Rate</th>
-                                <th colSpan='10'>MV PS Drop Call Rate</th>
-                                <th colSpan='10'>MV Max Connecteda User</th>
-                                <th colSpan='10'>MV PUCCH SINR</th>
-                                <th colSpan='10'>MV Average UE_Distance KM</th>
-                                <th colSpan='10'>MV PS handover success rate LTE INTER SYSTEM</th>
-                                <th colSpan='10'>MV PS handover success rate LTE INTRA SYSTEM</th>
-                                <th colSpan='10'>UL_RSSI_Nokia_RSSI_SINR</th>
-                                <th colSpan='10'>MV_VoLTE_DCR</th>
-                                <th colSpan='10'>MV_Packet_Loss_DL</th>
-                                <th colSpan='10'>MV_Packet_Loss_UL</th>
-                                <th colSpan='10'>PS_InterF_HOSR</th>
-                                <th colSpan='10'>PS_IntraF_HOSR</th>
-                            </tr>
-                            <tr style={{ fontSize: 14, backgroundColor: "#223354", color: "white", }}>
-                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}> Week-2 </th>
-                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
-                                {data?.dates.map((date) => (
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
-                                ))}
-                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
-                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
-                                {data?.dates.map((date) => (
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
-                                ))}
-                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
-                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
-                                {data?.dates.map((date) => (
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
-                                ))}
-                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
-                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
-                                {data?.dates.map((date) => (
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
-                                ))}
-                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
-                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
-                                {data?.dates.map((date) => (
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
-                                ))}
-                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
-                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
-                                {data?.dates.map((date) => (
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
-                                ))}
-                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
-                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
-                                {data?.dates.map((date) => (
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
-                                ))}
-                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
-                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
-                                {data?.dates.map((date) => (
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
-                                ))}
-                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
-                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
-                                {data?.dates.map((date) => (
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
-                                ))}
-                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
-                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
-                                {data?.dates.map((date) => (
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
-                                ))}
-                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
-                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
-                                {data?.dates.map((date) => (
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
-                                ))}
-                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
-                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
-                                {data?.dates.map((date) => (
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
-                                ))}
+                                <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
+                                    <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
+                                        <th rowSpan='2' style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Circle</th>
+                                        <th rowSpan='2' style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Cell Name</th>
+                                        <th rowSpan='2' style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Site ID</th>
+                                        <th rowSpan='2' style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>OEM</th>
+                                        <th rowSpan='2' style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>MS1 Date</th>
+                                        <th rowSpan='2' style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Project</th>
+                                        <th rowSpan='2' style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Technology</th>
+                                        <th colSpan='7' style={{ width: 150 }}>MV 4G Data Volume GB</th>
+                                        <th colSpan='10'>MV Radio NW Availability</th>
+                                        <th colSpan='10'>MV VoLTE Raffic</th>
+                                        <th colSpan='10'>MV DL User Throughtput Kbps</th>
+                                        <th colSpan='10'>MV EUTRAN Average CQI</th>
+                                        <th colSpan='10'>UL RSSI</th>
+                                        <th colSpan='10'>MV Average Number Of Used DL PRBs</th>
+                                        <th colSpan='10'>MV RRC Setup Success Rate</th>
+                                        <th colSpan='10'>MV ERAB Setup Success Rate</th>
+                                        <th colSpan='10'>MV PS Drop Call Rate</th>
+                                        <th colSpan='10'>MV Max Connecteda User</th>
+                                        <th colSpan='10'>MV PUCCH SINR</th>
+                                        <th colSpan='10'>MV Average UE_Distance KM</th>
+                                        <th colSpan='10'>MV PS handover success rate LTE INTER SYSTEM</th>
+                                        <th colSpan='10'>MV PS handover success rate LTE INTRA SYSTEM</th>
+                                        <th colSpan='10'>UL_RSSI_Nokia_RSSI_SINR</th>
+                                        <th colSpan='10'>MV_VoLTE_DCR</th>
+                                        <th colSpan='10'>MV_Packet_Loss_DL</th>
+                                        <th colSpan='10'>MV_Packet_Loss_UL</th>
+                                        <th colSpan='10'>PS_InterF_HOSR</th>
+                                        <th colSpan='10'>PS_IntraF_HOSR</th>
+                                    </tr>
+                                    <tr style={{ fontSize: 14, backgroundColor: "#223354", color: "white", }}>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}> Week-2 </th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
+                                        {data?.dates.map((date) => (
+                                            <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
+                                        ))}
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
+                                        {data?.dates.map((date) => (
+                                            <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
+                                        ))}
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
+                                        {data?.dates.map((date) => (
+                                            <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
+                                        ))}
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
+                                        {data?.dates.map((date) => (
+                                            <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
+                                        ))}
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
+                                        {data?.dates.map((date) => (
+                                            <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
+                                        ))}
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
+                                        {data?.dates.map((date) => (
+                                            <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
+                                        ))}
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
+                                        {data?.dates.map((date) => (
+                                            <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
+                                        ))}
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
+                                        {data?.dates.map((date) => (
+                                            <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
+                                        ))}
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
+                                        {data?.dates.map((date) => (
+                                            <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
+                                        ))}
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
+                                        {data?.dates.map((date) => (
+                                            <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
+                                        ))}
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
+                                        {data?.dates.map((date) => (
+                                            <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
+                                        ))}
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
+                                        {data?.dates.map((date) => (
+                                            <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
+                                        ))}
 
-                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
-                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
-                                {data?.dates.map((date) => (
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
-                                ))}
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
+                                        {data?.dates.map((date) => (
+                                            <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
+                                        ))}
 
-                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
-                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
-                                {data?.dates.map((date) => (
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
-                                ))}
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
+                                        {data?.dates.map((date) => (
+                                            <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
+                                        ))}
 
-                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
-                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
-                                {data?.dates.map((date) => (
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
-                                ))}
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
+                                        {data?.dates.map((date) => (
+                                            <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
+                                        ))}
 
-                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
-                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
-                                {data?.dates.map((date) => (
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
-                                ))}
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
+                                        {data?.dates.map((date) => (
+                                            <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
+                                        ))}
 
-                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
-                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
-                                {data?.dates.map((date) => (
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
-                                ))}
-
-
-                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
-                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
-                                {data?.dates.map((date) => (
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
-                                ))}
-
-                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
-                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
-                                {data?.dates.map((date) => (
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
-                                ))}
-
-                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
-                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
-                                {data?.dates.map((date) => (
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
-                                ))}
-
-                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
-                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
-                                {data?.dates.map((date) => (
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
-                                ))}
-
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {data?.data.map((it, index) => index < scrollNo && (
-                                <tr key={index} style={{ textAlign: "center", fontWeigth: 700 }}>
-                                    <th >
-                                        {it?.Short_name ? getCircleName(it.Short_name) : ''}
-                                    </th>
-                                    <th >{it?.Short_name}</th>
-                                    <th >{it?.site_ID}</th>
-                                    <th >{it?.OEM_GGSN}</th>
-                                    <th >{it?.ms1_Date}</th>
-                                    <th >{it?.project}</th>
-                                    <th >{it?.MV_Freq_Band}</th>
-                                    <th >{it?.MV_4G_Data_Volume_GB_week_2}</th>
-                                    <th >{it?.MV_4G_Data_Volume_GB_week_1}</th>
-                                    <th >{it?.MV_4G_Data_Volume_GB_date_1}</th>
-                                    <th >{it?.MV_4G_Data_Volume_GB_date_2}</th>
-                                    <th >{it?.MV_4G_Data_Volume_GB_date_3}</th>
-                                    <th >{it?.MV_4G_Data_Volume_GB_date_4}</th>
-                                    <th >{it?.MV_4G_Data_Volume_GB_date_5}</th>
-                                    <th >{it?.MV_4G_Data_Volume_GB_date_6}</th>
-                                    <th >{it?.MV_4G_Data_Volume_GB_date_7}</th>
-                                    <th >{it?.MV_4G_Data_Volume_GB_date_8}</th>
-                                    <th >{it?.MV_Radio_NW_Availability_week_2}</th>
-                                    <th >{it?.MV_Radio_NW_Availability_week_1}</th>
-                                    <th >{it?.MV_Radio_NW_Availability_date_1}</th>
-                                    <th >{it?.MV_Radio_NW_Availability_date_2}</th>
-                                    <th >{it?.MV_Radio_NW_Availability_date_3}</th>
-                                    <th >{it?.MV_Radio_NW_Availability_date_4}</th>
-                                    <th >{it?.MV_Radio_NW_Availability_date_5}</th>
-                                    <th >{it?.MV_Radio_NW_Availability_date_6}</th>
-                                    <th >{it?.MV_Radio_NW_Availability_date_7}</th>
-                                    <th >{it?.MV_Radio_NW_Availability_date_8}</th>
-                                    <th >{it?.MV_VoLTE_raffic_week_2}</th>
-                                    <th >{it?.MV_VoLTE_raffic_week_1}</th>
-                                    <th >{it?.MV_VoLTE_raffic_date_1}</th>
-                                    <th >{it?.MV_VoLTE_raffic_date_2}</th>
-                                    <th >{it?.MV_VoLTE_raffic_date_3}</th>
-                                    <th >{it?.MV_VoLTE_raffic_date_4}</th>
-                                    <th >{it?.MV_VoLTE_raffic_date_5}</th>
-                                    <th >{it?.MV_VoLTE_raffic_date_6}</th>
-                                    <th >{it?.MV_VoLTE_raffic_date_7}</th>
-                                    <th >{it?.MV_VoLTE_raffic_date_8}</th>
-                                    <th >{it?.MV_DL_User_Throughput_Kbps_week_2}</th>
-                                    <th >{it?.MV_DL_User_Throughput_Kbps_week_1}</th>
-                                    <th >{it?.MV_DL_User_Throughput_Kbps_date_1}</th>
-                                    <th >{it?.MV_DL_User_Throughput_Kbps_date_2}</th>
-                                    <th >{it?.MV_DL_User_Throughput_Kbps_date_3}</th>
-                                    <th >{it?.MV_DL_User_Throughput_Kbps_date_4}</th>
-                                    <th >{it?.MV_DL_User_Throughput_Kbps_date_5}</th>
-                                    <th >{it?.MV_DL_User_Throughput_Kbps_date_6}</th>
-                                    <th >{it?.MV_DL_User_Throughput_Kbps_date_7}</th>
-                                    <th >{it?.MV_DL_User_Throughput_Kbps_date_8}</th>
-                                    <th >{it?.MV_E_UTRAN_Average_CQI_week_2}</th>
-                                    <th >{it?.MV_E_UTRAN_Average_CQI_week_1}</th>
-                                    <th >{it?.MV_E_UTRAN_Average_CQI_date_1}</th>
-                                    <th >{it?.MV_E_UTRAN_Average_CQI_date_2}</th>
-                                    <th >{it?.MV_E_UTRAN_Average_CQI_date_3}</th>
-                                    <th >{it?.MV_E_UTRAN_Average_CQI_date_4}</th>
-                                    <th >{it?.MV_E_UTRAN_Average_CQI_date_5}</th>
-                                    <th >{it?.MV_E_UTRAN_Average_CQI_date_6}</th>
-                                    <th >{it?.MV_E_UTRAN_Average_CQI_date_7}</th>
-                                    <th >{it?.MV_E_UTRAN_Average_CQI_date_8}</th>
-                                    <th >{it?.UL_RSSI_week_2}</th>
-                                    <th >{it?.UL_RSSI_week_1}</th>
-                                    <th >{it?.UL_RSSI_date_1}</th>
-                                    <th >{it?.UL_RSSI_date_2}</th>
-                                    <th >{it?.UL_RSSI_date_3}</th>
-                                    <th >{it?.UL_RSSI_date_4}</th>
-                                    <th >{it?.UL_RSSI_date_5}</th>
-                                    <th >{it?.UL_RSSI_date_6}</th>
-                                    <th >{it?.UL_RSSI_date_7}</th>
-                                    <th >{it?.UL_RSSI_date_8}</th>
-                                    <th >{it?.MV_Average_number_of_used_DL_PRBs_week_2}</th>
-                                    <th >{it?.MV_Average_number_of_used_DL_PRBs_week_1}</th>
-                                    <th >{it?.MV_Average_number_of_used_DL_PRBs_date_1}</th>
-                                    <th >{it?.MV_Average_number_of_used_DL_PRBs_date_2}</th>
-                                    <th >{it?.MV_Average_number_of_used_DL_PRBs_date_3}</th>
-                                    <th >{it?.MV_Average_number_of_used_DL_PRBs_date_4}</th>
-                                    <th >{it?.MV_Average_number_of_used_DL_PRBs_date_5}</th>
-                                    <th >{it?.MV_Average_number_of_used_DL_PRBs_date_6}</th>
-                                    <th >{it?.MV_Average_number_of_used_DL_PRBs_date_7}</th>
-                                    <th >{it?.MV_Average_number_of_used_DL_PRBs_date_8}</th>
-
-                                    <th >{it?.MV_RRC_Setup_Success_Rate_week_2}</th>
-                                    <th >{it?.MV_RRC_Setup_Success_Rate_week_1}</th>
-                                    <th >{it?.MV_RRC_Setup_Success_Rate_date_1}</th>
-                                    <th >{it?.MV_RRC_Setup_Success_Rate_date_2}</th>
-                                    <th >{it?.MV_RRC_Setup_Success_Rate_date_3}</th>
-                                    <th >{it?.MV_RRC_Setup_Success_Rate_date_4}</th>
-                                    <th >{it?.MV_RRC_Setup_Success_Rate_date_5}</th>
-                                    <th >{it?.MV_RRC_Setup_Success_Rate_date_6}</th>
-                                    <th >{it?.MV_RRC_Setup_Success_Rate_date_7}</th>
-                                    <th >{it?.MV_RRC_Setup_Success_Rate_date_8}</th>
-
-                                    <th >{it?.MV_ERAB_Setup_Success_Rate_week_2}</th>
-                                    <th >{it?.MV_ERAB_Setup_Success_Rate_week_1}</th>
-                                    <th >{it?.MV_ERAB_Setup_Success_Rate_date_1}</th>
-                                    <th >{it?.MV_ERAB_Setup_Success_Rate_date_2}</th>
-                                    <th >{it?.MV_ERAB_Setup_Success_Rate_date_3}</th>
-                                    <th >{it?.MV_ERAB_Setup_Success_Rate_date_4}</th>
-                                    <th >{it?.MV_ERAB_Setup_Success_Rate_date_5}</th>
-                                    <th >{it?.MV_ERAB_Setup_Success_Rate_date_6}</th>
-                                    <th >{it?.MV_ERAB_Setup_Success_Rate_date_7}</th>
-                                    <th >{it?.MV_ERAB_Setup_Success_Rate_date_8}</th>
-
-                                    <th >{it?.MV_PS_Drop_Call_Rate_week_2}</th>
-                                    <th >{it?.MV_PS_Drop_Call_Rate_week_1}</th>
-                                    <th >{it?.MV_PS_Drop_Call_Rate_date_1}</th>
-                                    <th >{it?.MV_PS_Drop_Call_Rate_date_2}</th>
-                                    <th >{it?.MV_PS_Drop_Call_Rate_date_3}</th>
-                                    <th >{it?.MV_PS_Drop_Call_Rate_date_4}</th>
-                                    <th >{it?.MV_PS_Drop_Call_Rate_date_5}</th>
-                                    <th >{it?.MV_PS_Drop_Call_Rate_date_6}</th>
-                                    <th >{it?.MV_PS_Drop_Call_Rate_date_7}</th>
-                                    <th >{it?.MV_PS_Drop_Call_Rate_date_8}</th>
-
-                                    <th >{it?.MV_Max_Connecteda_User_week_2}</th>
-                                    <th >{it?.MV_Max_Connecteda_User_week_1}</th>
-                                    <th >{it?.MV_Max_Connecteda_User_date_1}</th>
-                                    <th >{it?.MV_Max_Connecteda_User_date_2}</th>
-                                    <th >{it?.MV_Max_Connecteda_User_date_3}</th>
-                                    <th >{it?.MV_Max_Connecteda_User_date_4}</th>
-                                    <th >{it?.MV_Max_Connecteda_User_date_5}</th>
-                                    <th >{it?.MV_Max_Connecteda_User_date_6}</th>
-                                    <th >{it?.MV_Max_Connecteda_User_date_7}</th>
-                                    <th >{it?.MV_Max_Connecteda_User_date_8}</th>
-
-                                    <th >{it?.MV_PUCCH_SINR_week_2}</th>
-                                    <th >{it?.MV_PUCCH_SINR_week_1}</th>
-                                    <th >{it?.MV_PUCCH_SINR_date_1}</th>
-                                    <th >{it?.MV_PUCCH_SINR_date_2}</th>
-                                    <th >{it?.MV_PUCCH_SINR_date_3}</th>
-                                    <th >{it?.MV_PUCCH_SINR_date_4}</th>
-                                    <th >{it?.MV_PUCCH_SINR_date_5}</th>
-                                    <th >{it?.MV_PUCCH_SINR_date_6}</th>
-                                    <th >{it?.MV_PUCCH_SINR_date_7}</th>
-                                    <th >{it?.MV_PUCCH_SINR_date_8}</th>
-
-                                    <th >{it?.MV_Average_UE_Distance_KM_week_2}</th>
-                                    <th >{it?.MV_Average_UE_Distance_KM_week_1}</th>
-                                    <th >{it?.MV_Average_UE_Distance_KM_date_1}</th>
-                                    <th >{it?.MV_Average_UE_Distance_KM_date_2}</th>
-                                    <th >{it?.MV_Average_UE_Distance_KM_date_3}</th>
-                                    <th >{it?.MV_Average_UE_Distance_KM_date_4}</th>
-                                    <th >{it?.MV_Average_UE_Distance_KM_date_5}</th>
-                                    <th >{it?.MV_Average_UE_Distance_KM_date_6}</th>
-                                    <th >{it?.MV_Average_UE_Distance_KM_date_7}</th>
-                                    <th >{it?.MV_Average_UE_Distance_KM_date_8}</th>
-
-                                    <th >{it?.MV_PS_handover_success_rate_LTE_INTER_SYSTEM_week_2}</th>
-                                    <th >{it?.MV_PS_handover_success_rate_LTE_INTER_SYSTEM_week_1}</th>
-                                    <th >{it?.MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_1}</th>
-                                    <th >{it?.MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_2}</th>
-                                    <th >{it?.MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_3}</th>
-                                    <th >{it?.MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_4}</th>
-                                    <th >{it?.MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_5}</th>
-                                    <th >{it?.MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_6}</th>
-                                    <th >{it?.MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_7}</th>
-                                    <th >{it?.MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_8}</th>
-
-                                    <th >{it?.MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_week_2}</th>
-                                    <th >{it?.MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_week_1}</th>
-                                    <th >{it?.MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_date_1}</th>
-                                    <th >{it?.MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_date_2}</th>
-                                    <th >{it?.MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_date_3}</th>
-                                    <th >{it?.MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_date_4}</th>
-                                    <th >{it?.MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_date_5}</th>
-                                    <th >{it?.MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_date_6}</th>
-                                    <th >{it?.MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_date_7}</th>
-                                    <th >{it?.MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_date_8}</th>
-
-                                    <th >{it?.UL_RSSI_Nokia_RSSI_SINR_week_2}</th>
-                                    <th >{it?.UL_RSSI_Nokia_RSSI_SINR_week_1}</th>
-                                    <th >{it?.UL_RSSI_Nokia_RSSI_SINR_date_1}</th>
-                                    <th >{it?.UL_RSSI_Nokia_RSSI_SINR_date_2}</th>
-                                    <th >{it?.UL_RSSI_Nokia_RSSI_SINR_date_3}</th>
-                                    <th >{it?.UL_RSSI_Nokia_RSSI_SINR_date_4}</th>
-                                    <th >{it?.UL_RSSI_Nokia_RSSI_SINR_date_5}</th>
-                                    <th >{it?.UL_RSSI_Nokia_RSSI_SINR_date_6}</th>
-                                    <th >{it?.UL_RSSI_Nokia_RSSI_SINR_date_7}</th>
-                                    <th >{it?.UL_RSSI_Nokia_RSSI_SINR_date_8}</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
+                                        {data?.dates.map((date) => (
+                                            <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
+                                        ))}
 
 
-                                    <th >{it?.MV_VoLTE_DCR_week_2}</th>
-                                    <th >{it?.MV_VoLTE_DCR_week_1}</th>
-                                    <th >{it?.MV_VoLTE_DCR_date_1}</th>
-                                    <th >{it?.MV_VoLTE_DCR_date_2}</th>
-                                    <th >{it?.MV_VoLTE_DCR_date_3}</th>
-                                    <th >{it?.MV_VoLTE_DCR_date_4}</th>
-                                    <th >{it?.MV_VoLTE_DCR_date_5}</th>
-                                    <th >{it?.MV_VoLTE_DCR_date_6}</th>
-                                    <th >{it?.MV_VoLTE_DCR_date_7}</th>
-                                    <th >{it?.MV_VoLTE_DCR_date_8}</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
+                                        {data?.dates.map((date) => (
+                                            <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
+                                        ))}
+
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
+                                        {data?.dates.map((date) => (
+                                            <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
+                                        ))}
+
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
+                                        {data?.dates.map((date) => (
+                                            <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
+                                        ))}
+
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
+                                        {data?.dates.map((date) => (
+                                            <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
+                                        ))}
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {data?.data.map((it, index) => index < scrollNo && (
+                                        <tr key={index} style={{ textAlign: "center", fontWeigth: 700 }}>
+                                            <th >
+                                                {it?.Short_name ? getCircleName(it.Short_name) : ''}
+                                            </th>
+                                            <th >{it?.Short_name}</th>
+                                            <th >{it?.site_ID}</th>
+                                            <th >{it?.OEM_GGSN}</th>
+                                            <th >{it?.ms1_Date}</th>
+                                            <th >{it?.project}</th>
+                                            <th >{it?.MV_Freq_Band}</th>
+                                            <th >{it?.MV_4G_Data_Volume_GB_week_2}</th>
+                                            <th >{it?.MV_4G_Data_Volume_GB_week_1}</th>
+                                            <th >{it?.MV_4G_Data_Volume_GB_date_1}</th>
+                                            <th >{it?.MV_4G_Data_Volume_GB_date_2}</th>
+                                            <th >{it?.MV_4G_Data_Volume_GB_date_3}</th>
+                                            <th >{it?.MV_4G_Data_Volume_GB_date_4}</th>
+                                            <th >{it?.MV_4G_Data_Volume_GB_date_5}</th>
+                                            <th >{it?.MV_4G_Data_Volume_GB_date_6}</th>
+                                            <th >{it?.MV_4G_Data_Volume_GB_date_7}</th>
+                                            <th >{it?.MV_4G_Data_Volume_GB_date_8}</th>
+                                            <th >{it?.MV_Radio_NW_Availability_week_2}</th>
+                                            <th >{it?.MV_Radio_NW_Availability_week_1}</th>
+                                            <th >{it?.MV_Radio_NW_Availability_date_1}</th>
+                                            <th >{it?.MV_Radio_NW_Availability_date_2}</th>
+                                            <th >{it?.MV_Radio_NW_Availability_date_3}</th>
+                                            <th >{it?.MV_Radio_NW_Availability_date_4}</th>
+                                            <th >{it?.MV_Radio_NW_Availability_date_5}</th>
+                                            <th >{it?.MV_Radio_NW_Availability_date_6}</th>
+                                            <th >{it?.MV_Radio_NW_Availability_date_7}</th>
+                                            <th >{it?.MV_Radio_NW_Availability_date_8}</th>
+                                            <th >{it?.MV_VoLTE_raffic_week_2}</th>
+                                            <th >{it?.MV_VoLTE_raffic_week_1}</th>
+                                            <th >{it?.MV_VoLTE_raffic_date_1}</th>
+                                            <th >{it?.MV_VoLTE_raffic_date_2}</th>
+                                            <th >{it?.MV_VoLTE_raffic_date_3}</th>
+                                            <th >{it?.MV_VoLTE_raffic_date_4}</th>
+                                            <th >{it?.MV_VoLTE_raffic_date_5}</th>
+                                            <th >{it?.MV_VoLTE_raffic_date_6}</th>
+                                            <th >{it?.MV_VoLTE_raffic_date_7}</th>
+                                            <th >{it?.MV_VoLTE_raffic_date_8}</th>
+                                            <th >{it?.MV_DL_User_Throughput_Kbps_week_2}</th>
+                                            <th >{it?.MV_DL_User_Throughput_Kbps_week_1}</th>
+                                            <th >{it?.MV_DL_User_Throughput_Kbps_date_1}</th>
+                                            <th >{it?.MV_DL_User_Throughput_Kbps_date_2}</th>
+                                            <th >{it?.MV_DL_User_Throughput_Kbps_date_3}</th>
+                                            <th >{it?.MV_DL_User_Throughput_Kbps_date_4}</th>
+                                            <th >{it?.MV_DL_User_Throughput_Kbps_date_5}</th>
+                                            <th >{it?.MV_DL_User_Throughput_Kbps_date_6}</th>
+                                            <th >{it?.MV_DL_User_Throughput_Kbps_date_7}</th>
+                                            <th >{it?.MV_DL_User_Throughput_Kbps_date_8}</th>
+                                            <th >{it?.MV_E_UTRAN_Average_CQI_week_2}</th>
+                                            <th >{it?.MV_E_UTRAN_Average_CQI_week_1}</th>
+                                            <th >{it?.MV_E_UTRAN_Average_CQI_date_1}</th>
+                                            <th >{it?.MV_E_UTRAN_Average_CQI_date_2}</th>
+                                            <th >{it?.MV_E_UTRAN_Average_CQI_date_3}</th>
+                                            <th >{it?.MV_E_UTRAN_Average_CQI_date_4}</th>
+                                            <th >{it?.MV_E_UTRAN_Average_CQI_date_5}</th>
+                                            <th >{it?.MV_E_UTRAN_Average_CQI_date_6}</th>
+                                            <th >{it?.MV_E_UTRAN_Average_CQI_date_7}</th>
+                                            <th >{it?.MV_E_UTRAN_Average_CQI_date_8}</th>
+                                            <th >{it?.UL_RSSI_week_2}</th>
+                                            <th >{it?.UL_RSSI_week_1}</th>
+                                            <th >{it?.UL_RSSI_date_1}</th>
+                                            <th >{it?.UL_RSSI_date_2}</th>
+                                            <th >{it?.UL_RSSI_date_3}</th>
+                                            <th >{it?.UL_RSSI_date_4}</th>
+                                            <th >{it?.UL_RSSI_date_5}</th>
+                                            <th >{it?.UL_RSSI_date_6}</th>
+                                            <th >{it?.UL_RSSI_date_7}</th>
+                                            <th >{it?.UL_RSSI_date_8}</th>
+                                            <th >{it?.MV_Average_number_of_used_DL_PRBs_week_2}</th>
+                                            <th >{it?.MV_Average_number_of_used_DL_PRBs_week_1}</th>
+                                            <th >{it?.MV_Average_number_of_used_DL_PRBs_date_1}</th>
+                                            <th >{it?.MV_Average_number_of_used_DL_PRBs_date_2}</th>
+                                            <th >{it?.MV_Average_number_of_used_DL_PRBs_date_3}</th>
+                                            <th >{it?.MV_Average_number_of_used_DL_PRBs_date_4}</th>
+                                            <th >{it?.MV_Average_number_of_used_DL_PRBs_date_5}</th>
+                                            <th >{it?.MV_Average_number_of_used_DL_PRBs_date_6}</th>
+                                            <th >{it?.MV_Average_number_of_used_DL_PRBs_date_7}</th>
+                                            <th >{it?.MV_Average_number_of_used_DL_PRBs_date_8}</th>
+
+                                            <th >{it?.MV_RRC_Setup_Success_Rate_week_2}</th>
+                                            <th >{it?.MV_RRC_Setup_Success_Rate_week_1}</th>
+                                            <th >{it?.MV_RRC_Setup_Success_Rate_date_1}</th>
+                                            <th >{it?.MV_RRC_Setup_Success_Rate_date_2}</th>
+                                            <th >{it?.MV_RRC_Setup_Success_Rate_date_3}</th>
+                                            <th >{it?.MV_RRC_Setup_Success_Rate_date_4}</th>
+                                            <th >{it?.MV_RRC_Setup_Success_Rate_date_5}</th>
+                                            <th >{it?.MV_RRC_Setup_Success_Rate_date_6}</th>
+                                            <th >{it?.MV_RRC_Setup_Success_Rate_date_7}</th>
+                                            <th >{it?.MV_RRC_Setup_Success_Rate_date_8}</th>
+
+                                            <th >{it?.MV_ERAB_Setup_Success_Rate_week_2}</th>
+                                            <th >{it?.MV_ERAB_Setup_Success_Rate_week_1}</th>
+                                            <th >{it?.MV_ERAB_Setup_Success_Rate_date_1}</th>
+                                            <th >{it?.MV_ERAB_Setup_Success_Rate_date_2}</th>
+                                            <th >{it?.MV_ERAB_Setup_Success_Rate_date_3}</th>
+                                            <th >{it?.MV_ERAB_Setup_Success_Rate_date_4}</th>
+                                            <th >{it?.MV_ERAB_Setup_Success_Rate_date_5}</th>
+                                            <th >{it?.MV_ERAB_Setup_Success_Rate_date_6}</th>
+                                            <th >{it?.MV_ERAB_Setup_Success_Rate_date_7}</th>
+                                            <th >{it?.MV_ERAB_Setup_Success_Rate_date_8}</th>
+
+                                            <th >{it?.MV_PS_Drop_Call_Rate_week_2}</th>
+                                            <th >{it?.MV_PS_Drop_Call_Rate_week_1}</th>
+                                            <th >{it?.MV_PS_Drop_Call_Rate_date_1}</th>
+                                            <th >{it?.MV_PS_Drop_Call_Rate_date_2}</th>
+                                            <th >{it?.MV_PS_Drop_Call_Rate_date_3}</th>
+                                            <th >{it?.MV_PS_Drop_Call_Rate_date_4}</th>
+                                            <th >{it?.MV_PS_Drop_Call_Rate_date_5}</th>
+                                            <th >{it?.MV_PS_Drop_Call_Rate_date_6}</th>
+                                            <th >{it?.MV_PS_Drop_Call_Rate_date_7}</th>
+                                            <th >{it?.MV_PS_Drop_Call_Rate_date_8}</th>
+
+                                            <th >{it?.MV_Max_Connecteda_User_week_2}</th>
+                                            <th >{it?.MV_Max_Connecteda_User_week_1}</th>
+                                            <th >{it?.MV_Max_Connecteda_User_date_1}</th>
+                                            <th >{it?.MV_Max_Connecteda_User_date_2}</th>
+                                            <th >{it?.MV_Max_Connecteda_User_date_3}</th>
+                                            <th >{it?.MV_Max_Connecteda_User_date_4}</th>
+                                            <th >{it?.MV_Max_Connecteda_User_date_5}</th>
+                                            <th >{it?.MV_Max_Connecteda_User_date_6}</th>
+                                            <th >{it?.MV_Max_Connecteda_User_date_7}</th>
+                                            <th >{it?.MV_Max_Connecteda_User_date_8}</th>
+
+                                            <th >{it?.MV_PUCCH_SINR_week_2}</th>
+                                            <th >{it?.MV_PUCCH_SINR_week_1}</th>
+                                            <th >{it?.MV_PUCCH_SINR_date_1}</th>
+                                            <th >{it?.MV_PUCCH_SINR_date_2}</th>
+                                            <th >{it?.MV_PUCCH_SINR_date_3}</th>
+                                            <th >{it?.MV_PUCCH_SINR_date_4}</th>
+                                            <th >{it?.MV_PUCCH_SINR_date_5}</th>
+                                            <th >{it?.MV_PUCCH_SINR_date_6}</th>
+                                            <th >{it?.MV_PUCCH_SINR_date_7}</th>
+                                            <th >{it?.MV_PUCCH_SINR_date_8}</th>
+
+                                            <th >{it?.MV_Average_UE_Distance_KM_week_2}</th>
+                                            <th >{it?.MV_Average_UE_Distance_KM_week_1}</th>
+                                            <th >{it?.MV_Average_UE_Distance_KM_date_1}</th>
+                                            <th >{it?.MV_Average_UE_Distance_KM_date_2}</th>
+                                            <th >{it?.MV_Average_UE_Distance_KM_date_3}</th>
+                                            <th >{it?.MV_Average_UE_Distance_KM_date_4}</th>
+                                            <th >{it?.MV_Average_UE_Distance_KM_date_5}</th>
+                                            <th >{it?.MV_Average_UE_Distance_KM_date_6}</th>
+                                            <th >{it?.MV_Average_UE_Distance_KM_date_7}</th>
+                                            <th >{it?.MV_Average_UE_Distance_KM_date_8}</th>
+
+                                            <th >{it?.MV_PS_handover_success_rate_LTE_INTER_SYSTEM_week_2}</th>
+                                            <th >{it?.MV_PS_handover_success_rate_LTE_INTER_SYSTEM_week_1}</th>
+                                            <th >{it?.MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_1}</th>
+                                            <th >{it?.MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_2}</th>
+                                            <th >{it?.MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_3}</th>
+                                            <th >{it?.MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_4}</th>
+                                            <th >{it?.MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_5}</th>
+                                            <th >{it?.MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_6}</th>
+                                            <th >{it?.MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_7}</th>
+                                            <th >{it?.MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_8}</th>
+
+                                            <th >{it?.MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_week_2}</th>
+                                            <th >{it?.MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_week_1}</th>
+                                            <th >{it?.MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_date_1}</th>
+                                            <th >{it?.MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_date_2}</th>
+                                            <th >{it?.MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_date_3}</th>
+                                            <th >{it?.MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_date_4}</th>
+                                            <th >{it?.MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_date_5}</th>
+                                            <th >{it?.MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_date_6}</th>
+                                            <th >{it?.MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_date_7}</th>
+                                            <th >{it?.MV_PS_handover_success_rate_LTE_INTRA_SYSTEM_date_8}</th>
+
+                                            <th >{it?.UL_RSSI_Nokia_RSSI_SINR_week_2}</th>
+                                            <th >{it?.UL_RSSI_Nokia_RSSI_SINR_week_1}</th>
+                                            <th >{it?.UL_RSSI_Nokia_RSSI_SINR_date_1}</th>
+                                            <th >{it?.UL_RSSI_Nokia_RSSI_SINR_date_2}</th>
+                                            <th >{it?.UL_RSSI_Nokia_RSSI_SINR_date_3}</th>
+                                            <th >{it?.UL_RSSI_Nokia_RSSI_SINR_date_4}</th>
+                                            <th >{it?.UL_RSSI_Nokia_RSSI_SINR_date_5}</th>
+                                            <th >{it?.UL_RSSI_Nokia_RSSI_SINR_date_6}</th>
+                                            <th >{it?.UL_RSSI_Nokia_RSSI_SINR_date_7}</th>
+                                            <th >{it?.UL_RSSI_Nokia_RSSI_SINR_date_8}</th>
 
 
-                                    <th >{it?.MV_Packet_Loss_DL_week_2}</th>
-                                    <th >{it?.MV_Packet_Loss_DL_week_1}</th>
-                                    <th >{it?.MV_Packet_Loss_DL_date_1}</th>
-                                    <th >{it?.MV_Packet_Loss_DL_date_2}</th>
-                                    <th >{it?.MV_Packet_Loss_DL_date_3}</th>
-                                    <th >{it?.MV_Packet_Loss_DL_date_4}</th>
-                                    <th >{it?.MV_Packet_Loss_DL_date_5}</th>
-                                    <th >{it?.MV_Packet_Loss_DL_date_6}</th>
-                                    <th >{it?.MV_Packet_Loss_DL_date_7}</th>
-                                    <th >{it?.MV_Packet_Loss_DL_date_8}</th>
-
-                                    <th >{it?.MV_Packet_Loss_UL_week_2}</th>
-                                    <th >{it?.MV_Packet_Loss_UL_week_1}</th>
-                                    <th >{it?.MV_Packet_Loss_UL_date_1}</th>
-                                    <th >{it?.MV_Packet_Loss_UL_date_2}</th>
-                                    <th >{it?.MV_Packet_Loss_UL_date_3}</th>
-                                    <th >{it?.MV_Packet_Loss_UL_date_4}</th>
-                                    <th >{it?.MV_Packet_Loss_UL_date_5}</th>
-                                    <th >{it?.MV_Packet_Loss_UL_date_6}</th>
-                                    <th >{it?.MV_Packet_Loss_UL_date_7}</th>
-                                    <th >{it?.MV_Packet_Loss_UL_date_8}</th>
-
-                                    <th >{it?.PS_InterF_HOSR_week_2}</th>
-                                    <th >{it?.PS_InterF_HOSR_week_1}</th>
-                                    <th >{it?.PS_InterF_HOSR_date_1}</th>
-                                    <th >{it?.PS_InterF_HOSR_date_2}</th>
-                                    <th >{it?.PS_InterF_HOSR_date_3}</th>
-                                    <th >{it?.PS_InterF_HOSR_date_4}</th>
-                                    <th >{it?.PS_InterF_HOSR_date_5}</th>
-                                    <th >{it?.PS_InterF_HOSR_date_6}</th>
-                                    <th >{it?.PS_InterF_HOSR_date_7}</th>
-                                    <th >{it?.PS_InterF_HOSR_date_8}</th>
-
-                                    <th >{it?.PS_IntraF_HOSR_week_2}</th>
-                                    <th >{it?.PS_IntraF_HOSR_week_1}</th>
-                                    <th >{it?.PS_IntraF_HOSR_date_1}</th>
-                                    <th >{it?.PS_IntraF_HOSR_date_2}</th>
-                                    <th >{it?.PS_IntraF_HOSR_date_3}</th>
-                                    <th >{it?.PS_IntraF_HOSR_date_4}</th>
-                                    <th >{it?.PS_IntraF_HOSR_date_5}</th>
-                                    <th >{it?.PS_IntraF_HOSR_date_6}</th>
-                                    <th >{it?.PS_IntraF_HOSR_date_7}</th>
-                                    <th >{it?.PS_IntraF_HOSR_date_8}</th>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </TableContainer>
-            </Box>
-
-            {/* <button onClick={handleScroll}>onclick</button> */}
+                                            <th >{it?.MV_VoLTE_DCR_week_2}</th>
+                                            <th >{it?.MV_VoLTE_DCR_week_1}</th>
+                                            <th >{it?.MV_VoLTE_DCR_date_1}</th>
+                                            <th >{it?.MV_VoLTE_DCR_date_2}</th>
+                                            <th >{it?.MV_VoLTE_DCR_date_3}</th>
+                                            <th >{it?.MV_VoLTE_DCR_date_4}</th>
+                                            <th >{it?.MV_VoLTE_DCR_date_5}</th>
+                                            <th >{it?.MV_VoLTE_DCR_date_6}</th>
+                                            <th >{it?.MV_VoLTE_DCR_date_7}</th>
+                                            <th >{it?.MV_VoLTE_DCR_date_8}</th>
 
 
-            {/* ************* 2G  TABLE DATA **************
+                                            <th >{it?.MV_Packet_Loss_DL_week_2}</th>
+                                            <th >{it?.MV_Packet_Loss_DL_week_1}</th>
+                                            <th >{it?.MV_Packet_Loss_DL_date_1}</th>
+                                            <th >{it?.MV_Packet_Loss_DL_date_2}</th>
+                                            <th >{it?.MV_Packet_Loss_DL_date_3}</th>
+                                            <th >{it?.MV_Packet_Loss_DL_date_4}</th>
+                                            <th >{it?.MV_Packet_Loss_DL_date_5}</th>
+                                            <th >{it?.MV_Packet_Loss_DL_date_6}</th>
+                                            <th >{it?.MV_Packet_Loss_DL_date_7}</th>
+                                            <th >{it?.MV_Packet_Loss_DL_date_8}</th>
+
+                                            <th >{it?.MV_Packet_Loss_UL_week_2}</th>
+                                            <th >{it?.MV_Packet_Loss_UL_week_1}</th>
+                                            <th >{it?.MV_Packet_Loss_UL_date_1}</th>
+                                            <th >{it?.MV_Packet_Loss_UL_date_2}</th>
+                                            <th >{it?.MV_Packet_Loss_UL_date_3}</th>
+                                            <th >{it?.MV_Packet_Loss_UL_date_4}</th>
+                                            <th >{it?.MV_Packet_Loss_UL_date_5}</th>
+                                            <th >{it?.MV_Packet_Loss_UL_date_6}</th>
+                                            <th >{it?.MV_Packet_Loss_UL_date_7}</th>
+                                            <th >{it?.MV_Packet_Loss_UL_date_8}</th>
+
+                                            <th >{it?.PS_InterF_HOSR_week_2}</th>
+                                            <th >{it?.PS_InterF_HOSR_week_1}</th>
+                                            <th >{it?.PS_InterF_HOSR_date_1}</th>
+                                            <th >{it?.PS_InterF_HOSR_date_2}</th>
+                                            <th >{it?.PS_InterF_HOSR_date_3}</th>
+                                            <th >{it?.PS_InterF_HOSR_date_4}</th>
+                                            <th >{it?.PS_InterF_HOSR_date_5}</th>
+                                            <th >{it?.PS_InterF_HOSR_date_6}</th>
+                                            <th >{it?.PS_InterF_HOSR_date_7}</th>
+                                            <th >{it?.PS_InterF_HOSR_date_8}</th>
+
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </TableContainer>
+                    </Box>
+
+                    {/* <button onClick={handleScroll}>onclick</button> */}
+
+
+                    {/* ************* 2G  TABLE DATA **************
 
     <Box sx={{ marginTop:5}}>
 
@@ -2022,14 +2032,14 @@ const LteKpiTrend = () => {
         </TableContainer>
     </Box> */}
 
-        </div>
-    </Slide>
+                </div>
+            </Slide>
 
 
-    {/* {filterDialog()} */}
-    {loading}
-</>
-  )
+            {/* {filterDialog()} */}
+            {loading}
+        </>
+    )
 }
 
 export default LteKpiTrend
