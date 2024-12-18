@@ -78,11 +78,11 @@ const LteKpiTrend = () => {
     const columnData = [
         { title: 'Circle', field: 'Circle' },
         { title: 'Short_name', field: 'Short_name' },
-        { title: 'site_ID', field: 'site_ID' },
+        { title: 'site_ID', field: 'Site_ID' },
+        { title: 'INT Date', field: 'INT_Date' },
         { title: 'OEM_GGSN', field: 'OEM_GGSN' },
-        { title: 'ms1_Date', field: 'ms1_Date' },
-        { title: 'project', field: 'project' },
-        { title: 'MV_Freq_Band', field: 'MV_Freq_Band' },
+        { title: 'ECGI_4G', field: 'ECGI_4G' },
+
         { title: 'Week-2', field: 'MV_4G_Data_Volume_GB_week_2' },
         { title: 'Week-1', field: 'MV_4G_Data_Volume_GB_week_1' },
         { title: `${data?.dates[0]}`, field: 'MV_4G_Data_Volume_GB_date_1' },
@@ -1151,7 +1151,7 @@ const LteKpiTrend = () => {
 
     const handleExport1 = () => {
         const multiHeaders = [
-            ['', '', '', '', '', '', '',
+            ['', '', '', '', '', '', 
                  'MV 4G Data Volume GB',
                  'MV 4G Data Volume GB',
                  'MV 4G Data Volume GB',
@@ -1569,10 +1569,9 @@ const LteKpiTrend = () => {
                                         <th rowSpan='2' style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Circle</th>
                                         <th rowSpan='2' style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Cell Name</th>
                                         <th rowSpan='2' style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Site ID</th>
-                                        <th rowSpan='2' style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>OEM</th>
-                                        <th rowSpan='2' style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>MS1 Date</th>
-                                        <th rowSpan='2' style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Project</th>
-                                        <th rowSpan='2' style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Technology</th>
+                                        <th rowSpan='2' style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>INT Date</th>
+                                        <th rowSpan='2' style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>OEM_GGSN</th>
+                                        <th rowSpan='2' style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>ECGI_4G</th>
                                         <th colSpan='7' style={{ width: 150 }}>MV 4G Data Volume GB</th>
                                         <th colSpan='10'>MV Radio NW Availability</th>
                                         <th colSpan='10'>MV VoLTE Raffic</th>
@@ -1721,11 +1720,12 @@ const LteKpiTrend = () => {
                                                 {it?.Short_name ? getCircleName(it.Short_name) : ''}
                                             </th>
                                             <th >{it?.Short_name}</th>
-                                            <th >{it?.site_ID}</th>
+                                            <th >{it?.Site_ID}</th>
+                                            <th >{it?.INT_Date}</th>
                                             <th >{it?.OEM_GGSN}</th>
-                                            <th >{it?.ms1_Date}</th>
-                                            <th >{it?.project}</th>
-                                            <th >{it?.MV_Freq_Band}</th>
+                                            <th >{it?.ECGI_4G}</th>
+
+
                                             <th >{it?.MV_4G_Data_Volume_GB_week_2}</th>
                                             <th >{it?.MV_4G_Data_Volume_GB_week_1}</th>
                                             <th >{it?.MV_4G_Data_Volume_GB_date_1}</th>

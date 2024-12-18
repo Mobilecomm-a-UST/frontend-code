@@ -313,13 +313,14 @@ const RaiseTicket2 = () => {
         sheet3.getCell('D1').value = 'Date';
         sheet3.getCell('E1').value = 'Open Date';
         sheet3.getCell('F1').value = 'Aging';
-        sheet3.getCell('G1').value = 'Cell + Date';
-        sheet3.getCell('H1').value = 'Status';
-        sheet3.getCell('I1').value = 'Remarks';
-        sheet3.getCell('J1').value = 'Ownership';
-        sheet3.getCell('K1').value = 'Circle Spoc';
-        sheet3.getCell('L1').value = 'Site ID';
-        sheet3.getCell('M1').value = 'Pre Remarks';
+        sheet3.getCell('G1').value = 'Priority';
+        sheet3.getCell('H1').value = 'Cell + Date';
+        sheet3.getCell('I1').value = 'Status';
+        sheet3.getCell('J1').value = 'Remarks';
+        sheet3.getCell('K1').value = 'Ownership';
+        sheet3.getCell('L1').value = 'Circle Spoc';
+        sheet3.getCell('M1').value = 'Site ID';
+        sheet3.getCell('N1').value = 'Pre Remarks';
 
 
         sheet3.columns = [
@@ -329,9 +330,9 @@ const RaiseTicket2 = () => {
             { key: 'Date' },
             { key: 'Open_Date' },
             { key: 'Aging' },
+            { key: 'priority ' },
             { key: 'Unique_Id' },
             { key: 'Status' },
-            { key: 'Remarks' },
             { key: 'Ownership' },
             { key: 'Circle_Spoc' },
             { key: 'Site_ID' },
@@ -345,10 +346,10 @@ const RaiseTicket2 = () => {
                 Short_name: item.Short_name,
                 Date: item.Date,
                 Open_Date: item.Open_Date,
-                Aging: CalculateDaysBetweenDates(item.Date, item.Open_Date),
+                Aging: item.aging,
+                priority: item.priority,
                 Unique_Id: item.Unique_Id,
                 Status: (item.Status == 'nan' ? '' : item.Status),
-                Remarks: (item.Remarks == 'nan' ? '' : item.Remarks),
                 Ownership: (item.Ownership == 'nan' ? '' : item.Ownership),
                 Circle_Spoc: (item.Circle_Spoc == 'nan' ? '' : item.Circle_Spoc),
                 Site_ID: (item.Site_ID == 'nan' ? '' : item.Site_ID),
