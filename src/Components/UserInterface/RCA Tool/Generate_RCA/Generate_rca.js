@@ -81,9 +81,9 @@ const Generate_rca = () => {
                 ))}
 
             </div>
-            {!userType.includes('Circle_Rno') && <Box sx={{ marginTop: 4 }}>
+            {/* {!userType.includes('Circle_Rno') && <Box sx={{ marginTop: 4 }}>
                 <FileDownload />
-            </Box>}
+            </Box>} */}
 
             <Box sx={{ marginTop: 4 }}>
                 <RcaOutput />
