@@ -235,6 +235,7 @@ const RaiseTicket2 = () => {
             setPayloadTicketId(_.uniq(_.map(responce.data, 'ticket_id')))
             setPayloadPriority(_.uniq(_.map(responce.data, 'priority')))
             setPayloadOpenDate(_.uniq(_.map(responce.data, 'Open_Date')))
+            setPayloadStatusData(_.uniq(_.map(responce.data, 'Status')))
             // setCurrentDate(responce.current_date)
             // setPreviousDate(responce.previous_date)
             // setTotalOpen(true)
@@ -330,7 +331,7 @@ const RaiseTicket2 = () => {
             { key: 'Date' },
             { key: 'Open_Date' },
             { key: 'Aging' },
-            { key: 'priority ' },
+            { key: 'priority' },
             { key: 'Unique_Id' },
             { key: 'Status' },
             { key: 'Ownership' },
@@ -344,8 +345,8 @@ const RaiseTicket2 = () => {
                 ticket_id: item?.ticket_id,
                 Circle: item?.Circle,
                 Short_name: item.Short_name,
-                Date: item.Date,
-                Open_Date: item.Open_Date,
+                Date: handleDateFormets(item.Date),
+                Open_Date: handleDateFormets(item.Open_Date),
                 Aging: item.aging,
                 priority: item.priority,
                 Unique_Id: item.Unique_Id,
@@ -445,9 +446,10 @@ const RaiseTicket2 = () => {
             const ticketMatch = selectTicketId.length === 0 || _.includes(selectTicketId, item.ticket_id);
             const priorityMatch = selectPriority.length === 0 || _.includes(selectPriority, item.priority);
             const openDateMatch = selectOpenDate.length === 0 || _.includes(selectOpenDate,item.Open_Date);
+            const statusMatch = selectStatusData.length === 0 || _.includes(selectStatusData,item.Status)
 
 
-            return circleMatch && siteIdMatch && ticketMatch && priorityMatch && openDateMatch;
+            return circleMatch && siteIdMatch && ticketMatch && priorityMatch && openDateMatch && statusMatch;
         });
         return filteredData?.map((item, index) => (
             <tr key={index} className={classes.hover} style={{ textAlign: "center", fontWeigth: 700 }}>
@@ -460,7 +462,7 @@ const RaiseTicket2 = () => {
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{handleDateFormets(item.Open_Date)}</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item?.aging}</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.priority}</th>
-                <th style={{ padding: '1px 5px', whiteSpace: 'nowrap', cursor: 'pointer', fontWeigth: 500, color: item.Status == 'OPEN' ? 'red' : 'green' }} className={classes.hover} onClick={() => { handleSetDataTicket(item) }}>{item.Status == 'nan' ? '' : (<Chip label={item.Status} color="error" variant="outlined" size="small" />)}</th>
+                <th style={{ padding: '1px 5px', whiteSpace: 'nowrap', cursor: 'pointer', fontWeigth: 500, color: item.Status == 'OPEN' ? 'red' : 'green' }} className={classes.hover} onClick={item.Status === 'OPEN' ? () => handleSetDataTicket(item) : undefined}>{item.Status == 'nan' ? '' : (<Chip label={item.Status} color={item.Status=='OPEN'?'error':'success'} variant="outlined" size="small" />)}</th>
                 {/* <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.Remarks == 'nan' ? '' : item.Remarks}</th> */}
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.Ownership == 'nan' ? '' : item.Ownership}</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.category == 'nan' ? '' : item.category}</th>
@@ -480,7 +482,7 @@ const RaiseTicket2 = () => {
             </tr>
         ))
 
-    }, [selectCircle, selectSiteID, selectTicketId, selectPriority, selectOpenDate, totalTable])
+    }, [selectCircle, selectSiteID, selectTicketId, selectPriority, selectOpenDate, totalTable,selectStatusData])
 
     const handleFormDialog = useCallback(() => {
         return (
@@ -835,7 +837,7 @@ const RaiseTicket2 = () => {
                                         <th style={{ padding: '1px 60px 1px 2px', whiteSpace: 'nowrap' }}>Open Date <CheckPicker data={payloadOpenDate.map(item => ({ label: handleDateFormets(item), value: item }))} value={selectOpenDate} onChange={(value) => { setSelectOpenDate(value) }} size="sm" appearance="default" style={{ width: 20 }} /></th>
                                         <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Aging</th>
                                         <th style={{ padding: '1px 60px 1px 2px', whiteSpace: 'nowrap' }}>Priority <CheckPicker data={payloadPriority.map(item => ({ label: item, value: item }))} value={selectPriority} onChange={(value) => { setSelectPriority(value) }} size="sm" appearance="default" style={{ width: 20 }} /></th>
-                                        <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Status </th>
+                                        <th style={{ padding: '1px 60px 1px 2px', whiteSpace: 'nowrap' }}>Status <CheckPicker data={payloadStatusData.map(item => ({ label: item, value: item }))} value={selectStatusData} onChange={(value) => { setSelectStatusData(value) }} size="sm" appearance="default" style={{ width: 20 }} /></th>
                                         {/* <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Remarks</th> */}
                                         <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Ownership</th>
                                         <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Category</th>
