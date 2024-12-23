@@ -152,7 +152,7 @@ const File_Merge = () => {
                       <div style={{ float: "left" }}>
                         <Button variant="contained" component="label" color={pre.state ? "warning" : "primary"}>
                           select file
-                          <input type="file" required onChange={handlepre} accept=".csv" hidden multiple />
+                          <input type="file" required onChange={handlepre}   accept=".csv, .xls, .xlsx" hidden multiple />
                         </Button>
                       </div>
                       <div>  <span style={{ display: showPre ? 'inherit' : 'none', color: 'red', fontSize: '18px', fontWeight: 600 }}>This Field Is Required !</span> </div>

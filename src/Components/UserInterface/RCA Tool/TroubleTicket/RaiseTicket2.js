@@ -49,8 +49,8 @@ const RaiseTicket2 = () => {
     const [selectPriority, setSelectPriority] = useState([])
     const [payloadStatusData, setPayloadStatusData] = useState([])
     const [selectStatusData, setSelectStatusData] = useState([])
-    const [payloadOpenDate,setPayloadOpenDate] = useState([])
-    const [selectOpenDate,setSelectOpenDate] = useState([])
+    const [payloadOpenDate, setPayloadOpenDate] = useState([])
+    const [selectOpenDate, setSelectOpenDate] = useState([])
     const [totalTable, setTotalTable] = useState([])
     const [ticketDipForm, setTicketDipForm] = useState({
         Circle: "",
@@ -69,6 +69,7 @@ const RaiseTicket2 = () => {
         RCA: '',
         category: ''
     })
+    const [payloadStatusData2, setPayloadStatusData2] = useState()
     const [payloadStatus, setPayloadStatus] = useState(false)
 
 
@@ -266,6 +267,11 @@ const RaiseTicket2 = () => {
             RCA: item.RCA,
             category: item.category
         })
+        if(item.Status === 'CLOSE') {
+            setPayloadStatusData2(true)
+        }else{
+            setPayloadStatusData2(false)
+        }
         setPayloadStatus(true);
     }
 
@@ -414,27 +420,27 @@ const RaiseTicket2 = () => {
         })
     }
 
-    const formatDateTime=(inputDateTime)=>{
+    const formatDateTime = (inputDateTime) => {
         const date = new Date(inputDateTime);
 
         // Extract day, month, and year
         const day = String(date.getDate()).padStart(2, '0'); // Ensure 2 digits
         const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
         const year = date.getFullYear();
-      
+
         // Extract hours and minutes
         const hours = String(date.getHours()).padStart(2, '0');
         const minutes = String(date.getMinutes()).padStart(2, '0');
-      
+
         // Format date as dd-mm-yyyy
         const formattedDate = `${day}-${month}-${year}`;
-      
+
         // Format time as HH:MM
         const formattedTime = `${hours}:${minutes}`;
-      
+
         // return { date: formattedDate, time: formattedTime };
 
-        return(`Date=>${formattedDate} Time=>${formattedTime} `)
+        return (`Date=>${formattedDate} Time=>${formattedTime} `)
     }
 
 
@@ -445,8 +451,8 @@ const RaiseTicket2 = () => {
             const siteIdMatch = selectSiteID.length === 0 || _.includes(selectSiteID, item.Site_ID);
             const ticketMatch = selectTicketId.length === 0 || _.includes(selectTicketId, item.ticket_id);
             const priorityMatch = selectPriority.length === 0 || _.includes(selectPriority, item.priority);
-            const openDateMatch = selectOpenDate.length === 0 || _.includes(selectOpenDate,item.Open_Date);
-            const statusMatch = selectStatusData.length === 0 || _.includes(selectStatusData,item.Status)
+            const openDateMatch = selectOpenDate.length === 0 || _.includes(selectOpenDate, item.Open_Date);
+            const statusMatch = selectStatusData.length === 0 || _.includes(selectStatusData, item.Status)
 
 
             return circleMatch && siteIdMatch && ticketMatch && priorityMatch && openDateMatch && statusMatch;
@@ -462,27 +468,27 @@ const RaiseTicket2 = () => {
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{handleDateFormets(item.Open_Date)}</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item?.aging}</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.priority}</th>
-                <th style={{ padding: '1px 5px', whiteSpace: 'nowrap', cursor: 'pointer', fontWeigth: 500, color: item.Status == 'OPEN' ? 'red' : 'green' }} className={classes.hover} onClick={item.Status === 'OPEN' ? () => handleSetDataTicket(item) : undefined}>{item.Status == 'nan' ? '' : (<Chip label={item.Status} color={item.Status=='OPEN'?'error':'success'} variant="outlined" size="small" />)}</th>
+                <th style={{ padding: '1px 5px', whiteSpace: 'nowrap', cursor: 'pointer', fontWeigth: 500, color: item.Status == 'OPEN' ? 'red' : 'green' }} className={classes.hover} onClick={() => handleSetDataTicket(item)}>{item.Status == 'nan' ? '' : (<Chip label={item.Status} color={item.Status == 'OPEN' ? 'error' : 'success'} variant="outlined" size="small" />)}</th>
                 {/* <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.Remarks == 'nan' ? '' : item.Remarks}</th> */}
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.Ownership == 'nan' ? '' : item.Ownership}</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.category == 'nan' ? '' : item.category}</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.RCA == 'nan' ? '' : item.RCA}</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.Circle_Spoc}</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>
-                    {item?.Pre_Remarks  ? (
-                    item?.Pre_Remarks.map((key,index) => index < 1 && (
-                        <div key={key}>
-                            {formatDateTime(key.date)}:{key?.Remark}
-                        </div>
-                    ))
-                ) : (
-                    ''
-                )}
+                    {item?.Pre_Remarks ? (
+                        item?.Pre_Remarks.map((key, index) => index < 1 && (
+                            <div key={key}>
+                                {formatDateTime(key.date)}:{key?.Remark}
+                            </div>
+                        ))
+                    ) : (
+                        ''
+                    )}
                 </th>
             </tr>
         ))
 
-    }, [selectCircle, selectSiteID, selectTicketId, selectPriority, selectOpenDate, totalTable,selectStatusData])
+    }, [selectCircle, selectSiteID, selectTicketId, selectPriority, selectOpenDate, totalTable, selectStatusData])
 
     const handleFormDialog = useCallback(() => {
         return (
@@ -625,6 +631,7 @@ const RaiseTicket2 = () => {
                                             label="Status"
                                             onChange={handleChange}
                                             size='small'
+                                            inputProps={{ readOnly: ticketDipForm.Status === 'CLOSE' ? true : false }}
                                             fullWidth
                                         >
                                             <MenuItem value='OPEN'>Open</MenuItem>
@@ -757,10 +764,10 @@ const RaiseTicket2 = () => {
                                         placeholder="Pre Remarks"
                                         label="Pre Remarks"
                                         name="Pre_Remarks"
-                                        value={ticketDipForm.Pre_Remarks 
+                                        value={ticketDipForm.Pre_Remarks
                                             ? ticketDipForm.Pre_Remarks.map(item => `${formatDateTime(item?.date)}->${item?.Remark || ''}`).join('\n')
                                             : ''
-                                          }
+                                        }
                                         InputProps={{
                                             readOnly: true,
                                             style: {
@@ -768,14 +775,14 @@ const RaiseTicket2 = () => {
                                                 fontWeight: 'bold', // Text weight
                                                 whiteSpace: 'pre-wrap', // To handle newlines (\n) properly
                                                 fontSize: '14px', // Font size
-                                              },
+                                            },
                                         }}
                                         onChange={handleChange}
                                         size="small"
                                         type='text'
                                     />
                                 </Grid>
-                                <Grid item xs={12}>
+                                <Grid item xs={12} style={{ display: payloadStatusData2 ? 'none' : 'block' }}>
                                     <Button type='submit' size='sm' variant='outlined' fullWidth >Update</Button>
                                 </Grid>
 
