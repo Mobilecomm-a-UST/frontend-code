@@ -80,7 +80,7 @@ const SoftAtStatus = () => {
 
     var link = `${ServerURL}${fileData}`;
 
-    console.table(jsonData)
+    // console.table(jsonData)
 
         // Download Key and value
         const columnData = [
@@ -321,10 +321,22 @@ const SoftAtStatus = () => {
                     Pre_Post_Check: item.Pre_Post_Check,
                     spoc_name: item.spoc_name,
                     offering_type: item.offering_type,
-                    first_offering_date: item.first_offering_date === null? '' :new Date(item.first_offering_date),
+                    first_offering_date: item.first_offering_date === null? '' :new Date(item.first_offering_date).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "2-digit",
+                        day: "2-digit",
+                      }),
                     soft_at_status: item.soft_at_status,
-                    offering_date: item.offering_date === null? '' :new Date(item.offering_date),
-                    acceptance_rejection_date: item.acceptance_rejection_date === null? '' :new Date(item.acceptance_rejection_date),
+                    offering_date: item.offering_date === null? '' :new Date(item.offering_date).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "2-digit",
+                        day: "2-digit",
+                      }),
+                    acceptance_rejection_date: item.acceptance_rejection_date === null? '' :new Date(item.acceptance_rejection_date).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "2-digit",
+                        day: "2-digit",
+                      }),
                     alarm_bucket: item.alarm_bucket,
                     alarm_details: item.alarm_details,
                     final_responsibility: item.final_responsibility,
@@ -332,7 +344,11 @@ const SoftAtStatus = () => {
                     ubr_ms2_status: item.ubr_ms2_status,
                     ubr_link_id: item.ubr_link_id,
                     twamp_status: item.twamp_status,
-                    status_check_date: item.status_check_date === null? '' :new Date(item.status_check_date),
+                    status_check_date: item.status_check_date === null? '' :new Date(item.status_check_date).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "2-digit",
+                        day: "2-digit",
+                      }),
                     ageing_in_days: item.ageing_in_days,
                     actual_ageing: item.actual_ageing,
                     toco_partner: item.toco_partner,
