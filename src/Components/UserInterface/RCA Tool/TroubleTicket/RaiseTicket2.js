@@ -323,11 +323,10 @@ const RaiseTicket2 = () => {
         sheet3.getCell('G1').value = 'Priority';
         sheet3.getCell('H1').value = 'Cell + Date';
         sheet3.getCell('I1').value = 'Status';
-        sheet3.getCell('J1').value = 'Remarks';
-        sheet3.getCell('K1').value = 'Ownership';
-        sheet3.getCell('L1').value = 'Circle Spoc';
-        sheet3.getCell('M1').value = 'Site ID';
-        sheet3.getCell('N1').value = 'Pre Remarks';
+        sheet3.getCell('J1').value = 'Ownership';
+        sheet3.getCell('K1').value = 'Circle Spoc';
+        sheet3.getCell('L1').value = 'Site ID';
+        sheet3.getCell('M1').value = 'Pre Remarks';
 
 
         sheet3.columns = [
