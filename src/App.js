@@ -262,6 +262,10 @@ function App() {
 
         </Router>
 
+         <Box sx={{position:'fixed',bottom:0,width:'100%'}}><img src="./assets/santa gif.gif" width="15%" loading="lazy"/></Box>      
+         <Box sx={{position: 'fixed', bottom: 0, right: 10 ,textAlign:'right'}}><img src="./assets/christmas.gif" width="20%" loading="lazy"/></Box>      
+
+     
 
       </div>
     </QueryClientProvider>
