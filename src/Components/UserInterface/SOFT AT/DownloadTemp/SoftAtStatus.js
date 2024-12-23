@@ -80,7 +80,7 @@ const SoftAtStatus = () => {
 
     var link = `${ServerURL}${fileData}`;
 
-    // console.table(jsonData)
+    // console.log(jsonData.map(item => new Date(item.first_offering_date)))
 
         // Download Key and value
         const columnData = [
@@ -171,6 +171,13 @@ const SoftAtStatus = () => {
                 .addRows(jsonData.map(row => columnData.map(col => row[col.field])))
                 .exportFile();
         }
+
+        const adjustToUTC = (dateString) => {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            date.setMinutes(date.getMinutes() - date.getTimezoneOffset()); // Adjust to UTC
+            return date; // Return adjusted date
+          };
 
         const handleExportExcel = () => {
             const workbook = new ExcelJS.Workbook();
@@ -266,7 +273,7 @@ const SoftAtStatus = () => {
                 sheet.addRow({
                     unique_key: item.unique_key,
                     OEM: item.OEM,
-                    Integration_Date: new Date( item.Integration_Date) || null,
+                    Integration_Date: adjustToUTC( item.Integration_Date) || null,
                     CIRCLE: item.CIRCLE,
                     Activity_Name: item.Activity_Name,
                     Site_ID: item.Site_ID,
@@ -321,22 +328,10 @@ const SoftAtStatus = () => {
                     Pre_Post_Check: item.Pre_Post_Check,
                     spoc_name: item.spoc_name,
                     offering_type: item.offering_type,
-                    first_offering_date: item.first_offering_date === null? '' :new Date(item.first_offering_date).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "2-digit",
-                        day: "2-digit",
-                      }),
+                    first_offering_date: item.first_offering_date === null? '' :adjustToUTC(item.first_offering_date),
                     soft_at_status: item.soft_at_status,
-                    offering_date: item.offering_date === null? '' :new Date(item.offering_date).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "2-digit",
-                        day: "2-digit",
-                      }),
-                    acceptance_rejection_date: item.acceptance_rejection_date === null? '' :new Date(item.acceptance_rejection_date).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "2-digit",
-                        day: "2-digit",
-                      }),
+                    offering_date: item.offering_date === null? '' :adjustToUTC(item.offering_date),
+                    acceptance_rejection_date: item.acceptance_rejection_date === null? '' :adjustToUTC(item.acceptance_rejection_date),
                     alarm_bucket: item.alarm_bucket,
                     alarm_details: item.alarm_details,
                     final_responsibility: item.final_responsibility,
@@ -344,11 +339,7 @@ const SoftAtStatus = () => {
                     ubr_ms2_status: item.ubr_ms2_status,
                     ubr_link_id: item.ubr_link_id,
                     twamp_status: item.twamp_status,
-                    status_check_date: item.status_check_date === null? '' :new Date(item.status_check_date).toLocaleDateString("en-US", {
-                        year: "numeric",
-                        month: "2-digit",
-                        day: "2-digit",
-                      }),
+                    status_check_date: item.status_check_date === null? '' :adjustToUTC(item.status_check_date),
                     ageing_in_days: item.ageing_in_days,
                     actual_ageing: item.actual_ageing,
                     toco_partner: item.toco_partner,
