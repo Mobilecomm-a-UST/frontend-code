@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef, useCallback } from 'react'
 import { Chart as Chartjs } from 'chart.js/auto'
 import { Line, Bar } from 'react-chartjs-2';
 import Button from '@mui/material/Button';
+import { Box } from '@mui/material';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import zoomPlugin from 'chartjs-plugin-zoom';
 import ChartjsPluginWatermark from 'chartjs-plugin-watermark'
@@ -37,6 +38,7 @@ const monthNames = [" ",
   "November",
   "December"
 ];
+const colorType = ['#B0EBB4', '#A0DEFF', '#FF9F66', '#ECB176', '#CDE8E5']
 
 const ActivityBar = () => {
   const chartRef = useRef(null);
@@ -56,8 +58,9 @@ const ActivityBar = () => {
   const [month, setMonth] = useState('')
   const [year, setYear] = useState('')
   const [date, setDate] = useState('')
+  const [totalCount, setTotalCount] = useState([])
 
-  const [activityData, setActivityData] = useState()
+  const [activityData, setActivityData] = useState([])
   const { isPending, isFetching, isError, data, error, refetch } = useQuery({
     queryKey: ['Integration_month_wise'],
     queryFn: async () => {
@@ -65,26 +68,26 @@ const ActivityBar = () => {
       var formData = new FormData()
       formData.append('month', month)
       formData.append('year', year)
-       try {
-            const res = await makePostRequest("IntegrationTracker/monthwise-integration-data/", formData);
-            action(false);
+      try {
+        const res = await makePostRequest("IntegrationTracker/monthwise-integration-data/", formData);
+        action(false);
 
-            if (res) {
-                setMonth(res.latest_months);
-                setYear(res.latest_year);
-                setDate(`${res.latest_year[0]}-${res.latest_months[0] < 10 ? '0' + res.latest_months[0] : res.latest_months[0]}`);
-                setCircle(_.map(JSON.parse(res.table_data), 'cir'));
-                setActivityData(JSON.parse(res.table_data));
-                return res;
-            } else {
-                // Handle the case where res is falsy
-                return {};
-            }
-        } catch (error) {
-            action(false);
-            console.error('Error fetching data:', error);
-            return {}; // Return an empty object or some default value in case of error
+        if (res) {
+          setMonth(res.latest_months);
+          setYear(res.latest_year);
+          setDate(`${res.latest_year[0]}-${res.latest_months[0] < 10 ? '0' + res.latest_months[0] : res.latest_months[0]}`);
+          setCircle(_.map(JSON.parse(res.table_data), 'cir'));
+          setActivityData(JSON.parse(res.table_data));
+          return res;
+        } else {
+          // Handle the case where res is falsy
+          return {};
         }
+      } catch (error) {
+        action(false);
+        console.error('Error fetching data:', error);
+        return {}; // Return an empty object or some default value in case of error
+      }
     },
     staleTime: 100000,
     refetchOnReconnect: false,
@@ -92,7 +95,7 @@ const ActivityBar = () => {
   let delayed;
 
 
-
+  console.log('activityData',totalCount[0]?.activity);
   const handleMonthData = async (e) => {
     let tempData = e.split('-')
     await setMonth(tempData[1])
@@ -105,23 +108,40 @@ const ActivityBar = () => {
 
   const filterData = useCallback(() => {
     handleClear()
-    circle?.map((items)=>{
+    let totals = {
+      [`M1${selectActivity}`]: 0,
+      [`M2${selectActivity}`]: 0,
+      [`M3${selectActivity}`]: 0,
+      [`M4${selectActivity}`]: 0,
+      [`M5${selectActivity}`]: 0,
+      [`M6${selectActivity}`]: 0,
+    }
+
+    circle?.map((items) => {
       const tempcircle = _.filter(activityData, item => _.includes(items, item.cir))
       // console.log('circle filter ', tempcircle)
       // const temMonth = _.map(_.pickBy(tempcircle, (value, key) => key.includes('_OTHERS')), Number);
       // const temMonth = _.get(tempcircle[0], `M1${selectActivity}`)
-      setMonth1((prev)=> [...prev ,_.get(tempcircle[0],`M1${selectActivity}`)])
-      setMonth2((prev)=> [...prev ,_.get(tempcircle[0],`M2${selectActivity}`)])
-      setMonth3((prev)=> [...prev ,_.get(tempcircle[0],`M3${selectActivity}`)])
-      setMonth4((prev)=> [...prev ,_.get(tempcircle[0],`M4${selectActivity}`)])
-      setMonth5((prev)=> [...prev ,_.get(tempcircle[0],`M5${selectActivity}`)])
-      setMonth6((prev)=> [...prev ,_.get(tempcircle[0],`M6${selectActivity}`)])
+      setMonth1((prev) => [...prev, _.get(tempcircle[0], `M1${selectActivity}`)])
+      setMonth2((prev) => [...prev, _.get(tempcircle[0], `M2${selectActivity}`)])
+      setMonth3((prev) => [...prev, _.get(tempcircle[0], `M3${selectActivity}`)])
+      setMonth4((prev) => [...prev, _.get(tempcircle[0], `M4${selectActivity}`)])
+      setMonth5((prev) => [...prev, _.get(tempcircle[0], `M5${selectActivity}`)])
+      setMonth6((prev) => [...prev, _.get(tempcircle[0], `M6${selectActivity}`)])
       // console.log('temMonth', selectActivity, temMonth)
     })
 
-   
+    // console.log('month', activityData)
+    activityData?.forEach(item => {
+      for (let key in totals) {
+        totals[key] += Number(item[key]) || 0;
+      }
+    });
 
-  },[selectCircle,selectActivity,activityData])
+    // console.log('totals', totals
+    setTotalCount( Object.entries(totals).map(([key, value]) => ( {activity: key, count: value} )))
+
+  }, [selectCircle, selectActivity, activityData])
 
 
 
@@ -245,7 +265,7 @@ const ActivityBar = () => {
         tension: 0.4
       },
       {
-        label:  `${monthNames[month[4]]}-${year[4]}`,
+        label: `${monthNames[month[4]]}-${year[4]}`,
         data: month5,
         borderColor: 'black',
         backgroundColor: ['rgb(255, 177, 177)'],
@@ -258,7 +278,7 @@ const ActivityBar = () => {
       }
       ,
       {
-        label:`${monthNames[month[5]]}-${year[5]}`,
+        label: `${monthNames[month[5]]}-${year[5]}`,
         data: month6,
         borderColor: 'black',
         backgroundColor: ['rgb(0,76,156,0.8)'],
@@ -277,9 +297,9 @@ const ActivityBar = () => {
     // events: ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove'],
     maintainApectRatio: false,
     interaction: {
-        mode: 'index',
-        intersect: false,
-        // axis:'x',
+      mode: 'index',
+      intersect: false,
+      // axis:'x',
     },
     plugins: {
       // backgroundImageUrl:'https://www.msoutlook.info/pictures/bgconfidential.png',
@@ -427,7 +447,6 @@ const ActivityBar = () => {
       }
     },
     watermark: {
-
       image: `${ServerURL}/media/assets/logo-new.png`,
       x: 50,
       y: 50,
@@ -464,14 +483,14 @@ const ActivityBar = () => {
 
   }
 
- const handleClear = () => {
-   setMonth1([])
-   setMonth2([])
-   setMonth3([])
-   setMonth4([])
-   setMonth5([])
-   setMonth6([])
- }
+  const handleClear = () => {
+    setMonth1([])
+    setMonth2([])
+    setMonth3([])
+    setMonth4([])
+    setMonth5([])
+    setMonth6([])
+  }
 
 
 
@@ -510,10 +529,11 @@ const ActivityBar = () => {
     )
   }, [open])
 
+
   useEffect(() => {
     // console.log('aaaa')
     filterData()
-  },[filterData])
+  }, [filterData])
 
   useEffect(() => {
     if (data) {
@@ -527,7 +547,19 @@ const ActivityBar = () => {
     document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
   }, [])
 
-  return (
+  return (<>
+    <Box sx={{ display: 'flex', justifyContent: 'space-evenly', flexWrap: "wrap", flexDirection: 'row', gap: 1,marginBottom:2 }}>
+      {totalCount.length > 0 && totalCount.map((item, index) =>(
+          <Box sx={{ height: 'auto', width: '25vh', cursor: 'pointer', padding: 1.5, borderRadius: 1.5, boxShadow: " rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px", backgroundColor:`${colorType[index]}`, textAlign: 'center' }}>
+        <Box sx={{ fontWeight: 600, fontSize: '16px', color: "black", textAlign: 'left' }}>{`${monthNames[month[index]]}-${year[index]}`}</Box>
+        <Box sx={{ fontWeight: 600, fontSize: '24px', color: "black", fontFamily: 'cursive' }}>{item?.count}</Box>
+        <Box sx={{ color: "black", textAlign: 'left' }}>{item?.activity.replace(/^M\d_/, '').replace(/_/g, ' ')}</Box>
+        {/* // <Box sx={{ color: "black", textAlign: 'left' }}> <span style={{ fontWeight: 600 }}>To-</span>{convertDate(data.to_integration_date)}</Box> */}
+      </Box>
+      ))}
+    
+    </Box>
+
     <div style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', padding: 10, height: 'auto', width: "100%", borderRadius: 10, backgroundColor: "white", display: "flex", justifyContent: 'space-around', alignItems: 'center' }}>
       <div style={{ width: 200, height: 350, borderRadius: 5, padding: 10, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: "12px" }}>
         <div style={{ display: 'flex', alignItems: 'center', fontSize: '18px', fontWeight: 'bold', color: "black" }}><FilterAltIcon />FILTER DATA</div>
@@ -582,6 +614,9 @@ const ActivityBar = () => {
         <div>
           <Button color="primary" endIcon={<LaunchIcon />} onClick={() => { setOpen(true) }}>Full screen</Button>
         </div>
+        {/* <div>
+          <Button color="primary" endIcon={<LaunchIcon />} onClick={() => {handleDownloadChart()}}>Download</Button>
+        </div> */}
       </div>
       <div style={{ display: graphType ? 'inherit' : 'none', filter: 'drop-shadow(rgba(0, 0, 0, 0.34) 0px 3px 3px)', width: "800px", height: 400 }}>
         <Line
@@ -608,6 +643,8 @@ const ActivityBar = () => {
       {loading}
 
     </div>
+  </>
+
   )
 }
 
