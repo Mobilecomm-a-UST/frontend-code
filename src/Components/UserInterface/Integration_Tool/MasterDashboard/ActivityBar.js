@@ -17,6 +17,7 @@ import Slide from '@mui/material/Slide';
 import { usePost } from '../../../Hooks/PostApis';
 import { useLoadingDialog } from '../../../Hooks/LoadingDialog';
 import { useQuery } from '@tanstack/react-query';
+import CountUp from 'react-countup';
 import _ from 'lodash';
 
 
@@ -95,7 +96,7 @@ const ActivityBar = () => {
   let delayed;
 
 
-  console.log('activityData',totalCount[0]?.activity);
+  console.log('activityData',activityData ?? 0);
   const handleMonthData = async (e) => {
     let tempData = e.split('-')
     await setMonth(tempData[1])
@@ -552,7 +553,7 @@ const ActivityBar = () => {
       {totalCount.length > 0 && totalCount.map((item, index) =>(
           <Box sx={{ height: 'auto', width: '25vh', cursor: 'pointer', padding: 1.5, borderRadius: 1.5, boxShadow: " rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px", backgroundColor:`${colorType[index]}`, textAlign: 'center' }}>
         <Box sx={{ fontWeight: 600, fontSize: '16px', color: "black", textAlign: 'left' }}>{`${monthNames[month[index]]}-${year[index]}`}</Box>
-        <Box sx={{ fontWeight: 600, fontSize: '24px', color: "black", fontFamily: 'cursive' }}>{item?.count}</Box>
+        <Box sx={{ fontWeight: 600, fontSize: '24px', color: "black", fontFamily: 'cursive' }}><CountUp end={item?.count}  duration={6} /></Box>
         <Box sx={{ color: "black", textAlign: 'left' }}>{item?.activity.replace(/^M\d_/, '').replace(/_/g, ' ')}</Box>
         {/* // <Box sx={{ color: "black", textAlign: 'left' }}> <span style={{ fontWeight: 600 }}>To-</span>{convertDate(data.to_integration_date)}</Box> */}
       </Box>
@@ -591,6 +592,9 @@ const ActivityBar = () => {
             <option value={'_IDSC'}>IDSC</option>
             <option value={'_ODSC'}>ODSC</option>
             <option value={'_RECTIFICATION'}>RECTIFICATION</option>
+            <option value={'_5G_RELOCATION'}>5G RELOCATION</option>
+            <option value={'_5G_SECTOR_ADDITION'}>5G SECTOR ADDITION</option>
+            <option value={'_OPERATIONS'}>OPERATIONS</option>
             <option value={'_OTHERS'}>OTHER</option>
           </select>
         </div>
