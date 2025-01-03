@@ -15,6 +15,7 @@ import { useGet } from '../../../Hooks/GetApis';
 import { usePost } from '../../../Hooks/PostApis';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from "react-router-dom";
+import CountUp from 'react-countup';
 
 
 
@@ -781,7 +782,7 @@ const FinalDashboard = () => {
                      title={data.OEM}
             >
                 <Box sx={{ fontWeight: 600, fontSize: '16px', color: "black", textAlign: 'left' }}>{data.OEM}</Box>
-                <Box sx={{ fontWeight: 600, fontSize: '24px', color: "black", fontFamily: 'cursive' }}>{data.record_count}</Box>
+                <Box sx={{ fontWeight: 600, fontSize: '24px', color: "black", fontFamily: 'cursive' }}><CountUp end={data.record_count} duration={4} /> </Box>
                 <Box sx={{ color: "black", textAlign: 'left' }}><span style={{ fontWeight: 600, fontSize: '14px' }}>From-</span>{convertDate(data.from_integration_date)}</Box>
                 <Box sx={{ color: "black", textAlign: 'left' }}> <span style={{ fontWeight: 600 }}>To-</span>{convertDate(data.to_integration_date)}</Box>
             </Box>

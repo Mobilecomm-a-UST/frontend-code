@@ -31,6 +31,7 @@
     "multiselect-react-dropdown": "^2.0.25",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
+    "react-countup": "^6.5.3",
     "react-dom": "^18.2.0",
     "react-double-scrollbar": "^0.0.15",
     "react-hook-form": "^7.47.0",

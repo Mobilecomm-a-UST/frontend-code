@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react'
+import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react'
 import { Chart as Chartjs } from 'chart.js/auto'
 import { Line, Bar } from 'react-chartjs-2';
 import Button from '@mui/material/Button';
@@ -51,21 +51,23 @@ const TicketDashboard = () => {
   const [circle, setCircle] = useState([])
   const [fromDate, setFromDate] = useState('')
   const [toDate, setToDate] = useState('')
+  const [priority,setPriority] = useState('')
   const [tableData, setTableData] = useState([])
   const { isPending, isFetching, isError, data, error, refetch } = useQuery({
     queryKey: ['PayloadDip_MasterDashboard'],
     queryFn: async () => {
-      action(isPending)
+      action(true)
       var formData = new FormData()
       // formData.append('circle', '')
-      formData.append('to_date', toDate)
-      formData.append('from_date', fromDate)
+      formData.append('to_date', toDate);
+      formData.append('from_date', fromDate);
+      formData.append('priority', priority);
       try {
         const res = await makePostRequest("Zero_Count_Rna_Payload_Tool/circle_wise_open_close_dashboard/", formData);
         action(false);
 
         if (res) {
-          console.log('Payload Dip data res', res)
+          // console.log('Payload Dip data res', res)
           setFromDate(res.from_date)
           setToDate(res.to_date)
           setCircle(res.result.map(item => Object.keys(item)[0]))
@@ -342,11 +344,15 @@ const TicketDashboard = () => {
     await setFromDate(event.target.value);
     await refetch();
   };
-  const handleToDateChange = async (event) => {
+  const handleToDateChange =  async (event) => {
     await setToDate(event.target.value);
     await refetch();
   };
 
+
+  // const apiCalling =useMemo(()=>{
+  //     refetch();
+  // },[priority])
 
 
   // TOGGAL BUTTON..........
@@ -378,6 +384,7 @@ const TicketDashboard = () => {
           console.log('Value:', value);
 
           const tempData = data?.data.filter((item) => item.Circle === circle && item.Status === status)
+          console.log('tampData' , tempData)
 
           setTableData(tempData)
 
@@ -605,11 +612,11 @@ const TicketDashboard = () => {
                   <th style={{ padding: '5px 10px', whiteSpace: 'nowrap' }}>Site ID </th>
                   <th style={{ padding: '5px 10px', whiteSpace: 'nowrap' }}>Remarks</th>
                   <th style={{ padding: '5px 10px', whiteSpace: 'nowrap' }}>Ownership</th>
-                  <th style={{ padding: '5px 10px', whiteSpace: 'nowrap' }}>Pre Remarks</th>
+                  {/* <th style={{ padding: '5px 10px', whiteSpace: 'nowrap' }}>Pre Remarks</th> */}
                 </tr>
               </thead>
               <tbody>
-                {tableData && tableData.map((item, index) => (
+                {tableData && tableData?.map((item, index) => (
                   <tr key={index} className={classes.hover} style={{ textAlign: "center", fontWeigth: 700 }}>
                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{index + 1}</th>
                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.ticket_id}</th>
@@ -625,7 +632,7 @@ const TicketDashboard = () => {
                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Remarks == 'nan' ? '' : item.Remarks}</th>
                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Ownership == 'nan' ? '' : item.Ownership}</th>
 
-                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Pre_Remarks == 'nan' ? '' : item.Pre_Remarks}</th>
+                    {/* <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Pre_Remarks == 'nan' ? '' : item.Pre_Remarks}</th> */}
                   </tr>
                 ))}
               </tbody>
@@ -677,24 +684,16 @@ const TicketDashboard = () => {
           </select>
         </div> */}
         {/* select Activity */}
-        {/* <div>
-          <InputLabel style={{ fontSize: 15 }}>Select Activity</InputLabel>
-          <select style={{ width: 145, height: 25, borderRadius: 2 }} value={selectActivity} onChange={(e) => setSelectActivity(e.target.value)}>
-            <option selected value={'_DE_GROW'}>DE-GROW</option>
-            <option value={'_MACRO'}>MACRO</option>
-            <option value={'_RELOCATION'}>RELOCATION</option>
-            <option value={'_RET'}>RET</option>
-            <option value={'_ULS_HPSC'}>ULS-HPSC</option>
-            <option value={'_UPGRADE'}>UPGRADE</option>
-            <option value={'_FEMTO'}>FEMTO</option>
-            <option value={'_HT_INCREMENT'}>HT-INCREMENT</option>
-            <option value={'_IBS'}>IBS</option>
-            <option value={'_IDSC'}>IDSC</option>
-            <option value={'_ODSC'}>ODSC</option>
-            <option value={'_RECTIFICATION'}>RECTIFICATION</option>
-            <option value={'_OTHERS'}>OTHER</option>
+        <div>
+          <InputLabel style={{ fontSize: 15 }}>Select Priority</InputLabel>
+          <select style={{ width: 145, height: 25, borderRadius: 2 }} value={priority} onChange={(e) =>{ setPriority(e.target.value); refetch();}}>
+            <option selected value={''}>All</option>
+            <option selected value={'P0'}>P0</option>
+            <option value={'P1'}>P1</option>
+            <option value={'P2'}>P2</option>
+            <option value={'P3'}>P3</option>
           </select>
-        </div> */}
+        </div>
 
         {/* toggle button */}
         <div>
