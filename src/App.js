@@ -262,8 +262,8 @@ function App() {
 
         </Router>
 
-    <img src="./assets/santa gif.gif" width="18%" style={{position:'fixed',bottom:0,left:0}} loading="lazy"/>   
-        <img src="./assets/christmas.gif" width="9%" style={{position:'fixed',bottom:0,right:0}} loading="lazy"/>      
+    {/* <img src="./assets/santa gif.gif" width="18%" style={{position:'fixed',bottom:0,left:0}} loading="lazy"/>   
+        <img src="./assets/christmas.gif" width="9%" style={{position:'fixed',bottom:0,right:0}} loading="lazy"/>       */}
 
      
 
