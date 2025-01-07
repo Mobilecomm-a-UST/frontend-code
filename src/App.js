@@ -134,7 +134,7 @@ function App() {
             } />
             <Route path="/tools/file_merge" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={File_Merge} allowedUserTypes={['admin','quality']} userType={userType} />
+                <ProtectedRoute element={File_Merge} allowedUserTypes={['admin', 'quality']} userType={userType} />
               </Suspense>
             } />
             <Route path="/tools/schedular/*" element={
@@ -229,12 +229,12 @@ function App() {
             } />
             <Route path="/tools/Integration/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={Integration} allowedUserTypes={[ 'soft_at_team', 'admin', 'IX']} userType={userType} />
+                <ProtectedRoute element={Integration} allowedUserTypes={['soft_at_team', 'admin', 'IX']} userType={userType} />
               </Suspense>
             } />
             <Route path="/tools/IX_Tracker/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={IntegrationRead} allowedUserTypes={['quality','IX_reader']} userType={userType} />
+                <ProtectedRoute element={IntegrationRead} allowedUserTypes={['quality', 'IX_reader']} userType={userType} />
               </Suspense>
             } />
             <Route path="/tools/rca/*" element={
@@ -257,7 +257,7 @@ function App() {
                 <ProtectedRoute element={Nscripter} allowedUserTypes={['soft_at_team', 'admin']} userType={userType} />
               </Suspense>
             } />
-           
+
           </Routes>
 
         </Router>
