@@ -52,16 +52,17 @@ const TicketDashboard = () => {
   const [fromDate, setFromDate] = useState('')
   const [toDate, setToDate] = useState('')
   const [priority,setPriority] = useState('')
+  const [agingBucket,setAgingBucket] = useState('')
   const [tableData, setTableData] = useState([])
   const { isPending, isFetching, isError, data, error, refetch } = useQuery({
     queryKey: ['PayloadDip_MasterDashboard'],
     queryFn: async () => {
       action(true)
       var formData = new FormData()
-      // formData.append('circle', '')
       formData.append('to_date', toDate);
       formData.append('from_date', fromDate);
       formData.append('priority', priority);
+      formData.append('bucket', agingBucket);
       try {
         const res = await makePostRequest("Zero_Count_Rna_Payload_Tool/circle_wise_open_close_dashboard/", formData);
         action(false);
@@ -349,7 +350,15 @@ const TicketDashboard = () => {
     await refetch();
   };
 
+  const handlePiority = async (event) =>{
+    await setPriority(event.target.value);
+    await refetch();
+  }
 
+  const handleAging = async(event)=>{
+    await setAgingBucket(event.target.value)
+    await refetch();
+  }
   // const apiCalling =useMemo(()=>{
   //     refetch();
   // },[priority])
@@ -665,7 +674,7 @@ const TicketDashboard = () => {
                 </Breadcrumbs>
     </div>
     <div style={{ margin: 10, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', padding: 10, height: 'auto', width: "98%", borderRadius: 10, backgroundColor: "white", display: "flex", justifyContent: 'space-around', alignItems: 'center' }}>
-      <div style={{ width: 200, height: 350, borderRadius: 5, padding: 10, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: "12px" }}>
+      <div style={{ width: 200, height: 400, borderRadius: 5, padding: 10, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: "12px" }}>
         <div style={{ display: 'flex', alignItems: 'center', fontSize: '18px', fontWeight: 'bold', color: "black" }}><FilterAltIcon />FILTER DATA</div>
         {/* select month */}
         <div>
@@ -686,12 +695,22 @@ const TicketDashboard = () => {
         {/* select Activity */}
         <div>
           <InputLabel style={{ fontSize: 15 }}>Select Priority</InputLabel>
-          <select style={{ width: 145, height: 25, borderRadius: 2 }} value={priority} onChange={(e) =>{ setPriority(e.target.value); refetch();}}>
+          <select style={{ width: 145, height: 25, borderRadius: 2 }} value={priority} onChange={(e) =>handlePiority(e)}>
             <option selected value={''}>All</option>
             <option selected value={'P0'}>P0</option>
             <option value={'P1'}>P1</option>
             <option value={'P2'}>P2</option>
             <option value={'P3'}>P3</option>
+          </select>
+        </div>
+        <div>
+          <InputLabel style={{ fontSize: 15 }}>Select Aging</InputLabel>
+          <select style={{ width: 145, height: 25, borderRadius: 2 }} value={agingBucket} onChange={(e)=>handleAging(e)}>
+            <option selected value={''}>All</option>
+            <option selected value={'0-3'}>&lt; 3</option>
+            <option value={'>7'}>&gt; 7</option>
+            <option value={'3-7'}>3 to 7</option>
+            {/* <option value={'P3'}>P3</option> */}
           </select>
         </div>
 
@@ -715,7 +734,7 @@ const TicketDashboard = () => {
           <Button color="primary" endIcon={<LaunchIcon />} onClick={() => { setOpen(true) }}>Full screen</Button>
         </div>
       </div>
-      <div style={{ display: graphType ? 'inherit' : 'none', filter: 'drop-shadow(rgba(0, 0, 0, 0.34) 0px 3px 3px)', width: "800px", height: 400 }}>
+      <div style={{ display: graphType ? 'inherit' : 'none', filter: 'drop-shadow(rgba(0, 0, 0, 0.34) 0px 3px 3px)', width: "850px", height: 450 }}>
         <Line
           // style={{ width: "100%", height: 350 }}
           ref={chartRef}
@@ -725,7 +744,7 @@ const TicketDashboard = () => {
         >
         </Line>
       </div>
-      <div style={{ display: graphType ? 'none' : 'inherit', filter: 'drop-shadow(rgba(0, 0, 0, 0.34) 0px 3px 3px)', width: "80hv", height: 400 }}>
+      <div style={{ display: graphType ? 'none' : 'inherit', filter: 'drop-shadow(rgba(0, 0, 0, 0.34) 0px 3px 3px)', width: "80hv", height: 450 }}>
         <Bar
           // style={{ width: "100%", height: 400 }}
           ref={chartRef}
