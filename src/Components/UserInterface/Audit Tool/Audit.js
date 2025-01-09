@@ -92,13 +92,12 @@ const Audit = () => {
                 <Zoom in='true' timeout={500}>
 
                     <Box sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
-                        <Box style={{ marginLeft: 70 , marginBottom:5 }}>
+                        {/* <Box style={{ marginLeft: 70 , marginBottom:5 }}>
                             <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
                                 <Link underline="hover" onClick={()=>{ navigate('/tools')}}>Tools</Link>
-                                {/* <Link underline="hover" href='/trends'>Trend</Link> */}
                                 <Typography color='text.primary'>Audit Tools</Typography>
                             </Breadcrumbs>
-                        </Box>
+                        </Box> */}
                         <Box sx={{ width: '90%', marginLeft: 'auto', marginRight: 'auto' }}>
                             <Grid container rowSpacing={2} columnSpacing={1} direction={{ xs: "column", sm: "column", md: "row" }} style={{}}>
 
@@ -107,7 +106,7 @@ const Audit = () => {
                                         <div className={classes.centerIcon}><WavePointIcon /></div>
                                         <div >
                                             <div className={classes.center}  > FDD</div>
-                                            <div>This is a FDD tool</div>
+                                            {/* <div>This is a FDD tool</div> */}
                                         </div>
                                         {/* <span className={classes.center}>FILE MERGE</span> */}
                                     </Box>
@@ -117,7 +116,7 @@ const Audit = () => {
                                         <div className={classes.centerIcon}><TimeIcon /></div>
                                         <div >
                                             <div className={classes.center}>TDD</div>
-                                            <div>This is a TDD tool</div>
+                                            {/* <div>This is a TDD tool</div> */}
                                         </div>
                                         {/* <span className={classes.center}>SCHEDULER</span> */}
                                     </Box>
@@ -128,7 +127,7 @@ const Audit = () => {
                                         <div className={classes.centerIcon}><TimeIcon /></div>
                                         <div >
                                             <div className={classes.center}>2G Audit</div>
-                                            <div>This is a 2G Audit tool</div>
+                                            {/* <div>This is a 2G Audit tool</div> */}
                                         </div>
                                         {/* <span className={classes.center}>SCHEDULER</span> */}
                                     </Box>
