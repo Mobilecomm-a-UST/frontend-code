@@ -19,7 +19,7 @@ const Comperison = () => {
     const [gpl , setGpl]= useState({ filename: "", bytes: "" })
     const [fdd , setFdd] = useState({filename: "", bytes: "" })
     const [bsc , setBsc] = useState({filename: "", bytes: "" })
-    const [fileData, setFileData] = useState()
+    const [fileData, setFileData] = useState('')
     const [showFdd, setShowFdd] = useState(false)
     const [showGpl, setShowGpl] = useState(false)
     const [showBsc, setShowBsc] = useState(false)
@@ -69,9 +69,10 @@ const Comperison = () => {
           formData.append("2G_Dump", fdd.bytes);
           formData.append("BSC_SITE", bsc.bytes);
           formData.append("2G_GPL", gpl.bytes);
+          formData.append("circle", 'PNB');
 
           const response = await postData('AUDIT_TOOL/2G_AUDIT/', formData, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
-          console.log('response data', response)
+          // console.log('response data', response)
         //   sessionStorage.setItem('upload_performance_at_status', JSON.stringify(response.status_obj))
 
           if (response.status == true) {
@@ -151,13 +152,13 @@ const Comperison = () => {
                     <Link underline="hover" onClick={()=>{ navigate('/tools')}}>Tools</Link>
                     <Link underline="hover" onClick={()=>{ navigate('/tools/audit')}}>Audit Tools</Link>
                     <Link underline="hover" onClick={()=>{ navigate('/tools/audit/2G_audit')}}>2G Audit</Link>
-                    <Typography color='text.primary'>Comparison</Typography>
+                    <Typography color='text.primary'>Punjab</Typography>
                 </Breadcrumbs>
             </div>
             <Box className={classes.main_Box}>
                 <Box className={classes.Back_Box} sx={{ width: { md: '75%', xs: '100%' } }}>
                     <Box className={classes.Box_Hading} >
-                            Generat Comparison ( 2G Audit )
+                            Generat Comparison ( 2G Audit PB)
                     </Box>
                     <Stack spacing={2} sx={{ marginTop: "-40px" }} direction={'column'}>
                         <Box className={classes.Front_Box} >
@@ -222,7 +223,7 @@ const Comperison = () => {
                 </Box>
 
                 <Box sx={{ marginTop: 2 }}>
-                    <MemoTask />
+                                <MemoTask />
                 </Box>
 
             </Box>

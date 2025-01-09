@@ -8,7 +8,9 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AbTestIcon from '@rsuite/icons/AbTest';
 import Slide from '@mui/material/Slide';
 const G2Tool = lazy(() => import('./G2Tool'))
-const Comparison = lazy(() => import('./Comperison/Comperison'))
+const ComparisonHR = lazy(() => import('./ComperisonHR/Comperison'))
+const ComparisonKK = lazy(()=>import('./ComperisonKK/Comperison'))
+const ComparisonPB = lazy(()=>import('./ComperisonPB/Comperison'))
 
 const G2Audit = () => {
     const [expanded, setExpanded] = useState(true);
@@ -31,8 +33,16 @@ const G2Audit = () => {
                                         <Nav activeKey={activeKey} onSelect={setActiveKey} >
                                             <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>2G Audit</Nav>
 
-                                            <Nav.Item eventKey="1" placement="rightStart" icon={<AbTestIcon />} onClick={() => navigate('/tools/audit/2G_audit/comperison')} >
-                                                Comparison
+                                            <Nav.Item eventKey="1" placement="rightStart" icon={<AbTestIcon />} onClick={() => navigate('/tools/audit/2G_audit/haryana')} >
+                                            Haryana (HRY)
+                                            </Nav.Item>
+                                            
+                                            <Nav.Item eventKey="2" title='Kolkata' placement="rightStart" icon={<AbTestIcon />} onClick={() => navigate('/tools/audit/2G_audit/kolkata')} >
+                                            Kolkata (KOL)
+                                            </Nav.Item>
+
+                                            <Nav.Item eventKey="3" title='Kolkata' placement="rightStart" icon={<AbTestIcon />} onClick={() => navigate('/tools/audit/2G_audit/punjab')} >
+                                            Punjab (PB)
                                             </Nav.Item>
                                         </Nav>
                                     </Sidenav.Body>
@@ -45,7 +55,9 @@ const G2Audit = () => {
                         <Suspense fallback={<div>loading............</div>}>
                             <Routes>
                                 <Route element={<G2Tool/>} path="/" />
-                                <Route element={<Comparison />} path="/comperison" />
+                                <Route element={<ComparisonHR />} path="/haryana" />
+                                <Route element={<ComparisonKK />} path="/kolkata" />
+                                <Route element={<ComparisonPB />} path="/punjab" />
                             </Routes>
                         </Suspense>
                     </Grid>
