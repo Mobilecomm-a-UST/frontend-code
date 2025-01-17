@@ -100,6 +100,11 @@ const TicketDashboard = () => {
     return `${day}-${month}-${year}`
   }
 
+  const handleTotalCount = (arr) => {
+      let totalcount = arr.reduce((acc, item) => acc + item, 0);
+      return totalcount;
+  }
+
 
 
 
@@ -107,7 +112,7 @@ const TicketDashboard = () => {
     labels: circle,
     datasets: [
       {
-        label: 'OPEN',
+        label: `OPEN (${handleTotalCount(openPayloadDip)})`,
         data: openPayloadDip,
         borderColor: 'rgb(247, 44, 91)',
         backgroundColor: ['rgb(247, 44, 91)'],
@@ -117,7 +122,7 @@ const TicketDashboard = () => {
         tension: 0.4
       },
       {
-        label: 'CLOSE',
+        label: `CLOSE (${handleTotalCount(closePayloadDip)})`,
         data: closePayloadDip,
         borderColor: 'rgb(167, 212, 119)',
         backgroundColor: ['rgb(167, 212, 119)'],
@@ -134,7 +139,7 @@ const TicketDashboard = () => {
     labels: circle,
     datasets: [
       {
-        label: 'OPEN',
+        label: `OPEN (${handleTotalCount(openPayloadDip)})`,
         data: openPayloadDip,
         borderColor: 'black',
         backgroundColor: ['rgb(247, 44, 91,0.7)'],
@@ -145,7 +150,7 @@ const TicketDashboard = () => {
         tension: 0.4
       },
       {
-        label: 'CLOSE',
+        label: `CLOSE (${handleTotalCount(closePayloadDip)})`,
         data: closePayloadDip,
         borderColor: 'black',
         backgroundColor: ['rgb(167, 212, 119)'],
@@ -386,14 +391,14 @@ const TicketDashboard = () => {
           const firstPoint = points[0];
           const circle = chart.data.labels[firstPoint.index];
           const status = chart.data.datasets[firstPoint.datasetIndex].label;
-          const value = chart.data.datasets[firstPoint.datasetIndex].data[firstPoint.index];
+          // const value = chart.data.datasets[firstPoint.datasetIndex].data[firstPoint.index];
 
-          console.log('circle:', circle);
-          console.log('status:', status);
-          console.log('Value:', value);
+          // console.log('circle:', circle);
+          // console.log('status:', status);
+          // console.log('Value:', value);
 
-          const tempData = data?.data.filter((item) => item.Circle === circle && item.Status === status)
-          console.log('tampData' , tempData)
+          const tempData = data?.data.filter((item) => item.Circle === circle && item.Status === status.split(' ')[0])
+          // console.log('tampData' , tempData)
 
           setTableData(tempData)
 

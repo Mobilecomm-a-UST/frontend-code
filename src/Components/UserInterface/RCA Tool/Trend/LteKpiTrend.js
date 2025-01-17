@@ -1715,7 +1715,7 @@ const LteKpiTrend = () => {
                                 </thead>
                                 <tbody>
                                     {data?.data.map((it, index) => index < scrollNo && (
-                                        <tr key={index} style={{ textAlign: "center", fontWeigth: 700 }}>
+                                        <tr key={it.Site_ID+index} style={{ textAlign: "center", fontWeigth: 700 }}>
                                             <th >
                                                 {it?.Short_name ? getCircleName(it.Short_name) : ''}
                                             </th>

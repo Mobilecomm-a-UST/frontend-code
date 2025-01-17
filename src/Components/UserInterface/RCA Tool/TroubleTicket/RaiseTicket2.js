@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback,useRef } from 'react';
 import { Box, Grid, TextField, Button } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
 import Container from '@mui/material/Container'
@@ -20,14 +20,11 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { useGet } from '../../../Hooks/GetApis';
-import { usePost } from '../../../Hooks/PostApis';
 import { useLoadingDialog } from '../../../Hooks/LoadingDialog';
-import { useQuery } from '@tanstack/react-query';
 import { useStyles } from '../../ToolsCss'
 import _ from 'lodash';
 import { ServerURL } from '../../../services/FetchNodeServices';
 import CheckPicker from 'rsuite/CheckPicker';
-import Switch from '@mui/material/Switch';
 import Swal from 'sweetalert2';
 import Chip from '@mui/material/Chip';
 import axios from 'axios';
@@ -35,9 +32,9 @@ import axios from 'axios';
 const RaiseTicket2 = () => {
     const classes = useStyles()
     const navigate = useNavigate()
-    const [open, setOpen] = useState(false)
+    const scrollableContainerRef = useRef(null);
+    const [scrollNo, setScrollNo] = useState(50)
     const { makeGetRequest } = useGet()
-    const { makePostRequest } = usePost()
     const { loading, action } = useLoadingDialog();
     const [payloadCircle, setPayloadCircle] = useState([])
     const [selectCircle, setSelectCircle] = useState([])
@@ -51,6 +48,8 @@ const RaiseTicket2 = () => {
     const [selectStatusData, setSelectStatusData] = useState([])
     const [payloadOpenDate, setPayloadOpenDate] = useState([])
     const [selectOpenDate, setSelectOpenDate] = useState([])
+    const [payloadAging,setPayloadAging] = useState([])
+    const [selectAging, setSelectAging]=useState([])
     const [totalTable, setTotalTable] = useState([])
     const [ticketDipForm, setTicketDipForm] = useState({
         Circle: "",
@@ -67,7 +66,8 @@ const RaiseTicket2 = () => {
         aging: '',
         ticket_id: "",
         RCA: '',
-        category: ''
+        category: '',
+        rca_feedback: ''
     })
     const [payloadStatusData2, setPayloadStatusData2] = useState()
     const [payloadStatus, setPayloadStatus] = useState(false)
@@ -181,6 +181,10 @@ const RaiseTicket2 = () => {
     const handleSubmit = async (e) => {
         e.preventDefault(); // Prevent default form submission behavior
 
+        // let tempConform = window.confirm('Do you want to save the changes?');
+        // alert( tempConform );
+
+        // console.log('testin function ')
         // action(true); // Start processing
         Swal.fire({
             title: "Do you want to save the changes?",
@@ -211,6 +215,7 @@ const RaiseTicket2 = () => {
             setPayloadTicketId(_.uniq(_.map(responce.data, 'ticket_id')))
             setPayloadPriority(_.uniq(_.map(responce.data, 'priority')))
             setPayloadStatusData(_.uniq(_.map(responce.data, 'Status')))
+            setPayloadAging(_.uniq(_.map(responce.data, 'aging')))
             Swal.fire({
                 icon: "success",
                 title: "Done",
@@ -230,13 +235,14 @@ const RaiseTicket2 = () => {
         console.log('toggal button', responce)
         if (responce) {
             action(false)
-            setTotalTable(responce.data)
-            setPayloadCircle(_.uniq(_.map(responce.data, 'Circle')))
-            setPayloadSiteID(_.uniq(_.map(responce.data, 'Site_ID')))
-            setPayloadTicketId(_.uniq(_.map(responce.data, 'ticket_id')))
-            setPayloadPriority(_.uniq(_.map(responce.data, 'priority')))
-            setPayloadOpenDate(_.uniq(_.map(responce.data, 'Open_Date')))
-            setPayloadStatusData(_.uniq(_.map(responce.data, 'Status')))
+            await setTotalTable(responce.data)
+            await setPayloadCircle(_.uniq(_.map(responce.data, 'Circle')))
+            await setPayloadSiteID(_.uniq(_.map(responce.data, 'Site_ID')))
+            await setPayloadTicketId(_.uniq(_.map(responce.data, 'ticket_id')))
+            await setPayloadPriority(_.uniq(_.map(responce.data, 'priority')))
+            await setPayloadOpenDate(_.uniq(_.map(responce.data, 'Open_Date')))
+            await setPayloadStatusData(_.uniq(_.map(responce.data, 'Status')))
+            await setPayloadAging(_.uniq(_.map(responce.data, 'aging')))
             // setCurrentDate(responce.current_date)
             // setPreviousDate(responce.previous_date)
             // setTotalOpen(true)
@@ -265,7 +271,8 @@ const RaiseTicket2 = () => {
             aging: CalculateDaysBetweenDates(item.Date, item.Open_Date),
             ticket_id: item.ticket_id,
             RCA: item.RCA,
-            category: item.category
+            category: item.category,
+            rca_feedback: item.rca_feedback,
         })
         if(item.Status === 'CLOSE') {
             setPayloadStatusData2(true)
@@ -419,6 +426,7 @@ const RaiseTicket2 = () => {
         })
     }
 
+
     const formatDateTime = (inputDateTime) => {
         const date = new Date(inputDateTime);
 
@@ -450,14 +458,15 @@ const RaiseTicket2 = () => {
             const siteIdMatch = selectSiteID.length === 0 || _.includes(selectSiteID, item.Site_ID);
             const ticketMatch = selectTicketId.length === 0 || _.includes(selectTicketId, item.ticket_id);
             const priorityMatch = selectPriority.length === 0 || _.includes(selectPriority, item.priority);
-            const openDateMatch = selectOpenDate.length === 0 || _.includes(selectOpenDate, item.Open_Date);
-            const statusMatch = selectStatusData.length === 0 || _.includes(selectStatusData, item.Status)
+            const openDateMatch = selectOpenDate.length === 0 || _.includes(selectOpenDate, item.Open_Date);;
+            const agingMatch = selectAging.length === 0 || _.includes(selectAging, item.aging);
+            const statusMatch = selectStatusData.length === 0 || _.includes(selectStatusData, item.Status);
 
 
-            return circleMatch && siteIdMatch && ticketMatch && priorityMatch && openDateMatch && statusMatch;
+            return circleMatch && siteIdMatch && ticketMatch && priorityMatch && openDateMatch  && agingMatch && statusMatch;
         });
-        return filteredData?.map((item, index) => (
-            <tr key={index} className={classes.hover} style={{ textAlign: "center", fontWeigth: 700 }}>
+        return filteredData?.map((item, index) =>  index <= scrollNo &&(
+            <tr key={item.Circle+index} className={classes.hover} style={{ textAlign: "center", fontWeigth: 700 }}>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{index + 1}</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.ticket_id}</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.Circle}</th>
@@ -487,7 +496,7 @@ const RaiseTicket2 = () => {
             </tr>
         ))
 
-    }, [selectCircle, selectSiteID, selectTicketId, selectPriority, selectOpenDate, totalTable, selectStatusData])
+    }, [selectCircle, selectSiteID, selectTicketId, selectPriority, selectOpenDate, totalTable, selectStatusData,selectAging,scrollNo])
 
     const handleFormDialog = useCallback(() => {
         return (
@@ -497,7 +506,7 @@ const RaiseTicket2 = () => {
                 keepMounted
                 fullWidth
                 maxWidth={'md'}
-                style={{ zIndex: 10 }}
+                style={{ zIndex: 10,marginTop: '10px' }}
             >
                 <DialogTitle >Payload Dip Tracker
                     <span style={{ float: 'right' }}><IconButton size="large" onClick={() => { setPayloadStatus(false) }}><CloseIcon /></IconButton></span>
@@ -630,7 +639,7 @@ const RaiseTicket2 = () => {
                                             label="Status"
                                             onChange={handleChange}
                                             size='small'
-                                            inputProps={{ readOnly: ticketDipForm.Status === 'CLOSE' ? true : false }}
+                                            inputProps={{ readOnly: payloadStatusData2 ? true : false }}
                                             fullWidth
                                         >
                                             <MenuItem value='OPEN'>Open</MenuItem>
@@ -638,6 +647,26 @@ const RaiseTicket2 = () => {
                                         </Select>
                                     </FormControl>
                                 </Grid>
+                                {ticketDipForm.Status === 'CLOSE' && <Grid item xs={6}>
+                                <FormControl fullWidth required={ticketDipForm.Status === 'CLOSE' ? true : false}>
+                                        <InputLabel id="demo-simple-select-label">Is The RCA Usefull ?</InputLabel>
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            value={ticketDipForm.rca_feedback}
+                                            name='rca_feedback'
+                                            label="Is The RCA Usefull ?"
+                                            onChange={handleChange}
+                                            size='small'
+                                            
+                                            inputProps={{ readOnly: payloadStatusData2 ? true : false }}
+                                            fullWidth
+                                        >
+                                            <MenuItem value='true'>Yes</MenuItem>
+                                            <MenuItem value='false'>No</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                    </Grid>}
 
                                 <Grid item xs={6}>
                                     <TextField
@@ -649,6 +678,7 @@ const RaiseTicket2 = () => {
                                         name="Remarks"
                                         value={ticketDipForm.Remarks}
                                         onChange={handleChange}
+                                        inputProps={{ readOnly: payloadStatusData2 ? true : false }}
                                         size="small"
                                         type='text'
                                     />
@@ -662,6 +692,7 @@ const RaiseTicket2 = () => {
                                         name="RCA"
                                         value={ticketDipForm.RCA}
                                         onChange={handleChange}
+                                        inputProps={{ readOnly: payloadStatusData2 ? true : false }}
                                         size="small"
                                         type='text'
                                     />
@@ -676,9 +707,7 @@ const RaiseTicket2 = () => {
                                         name="Ownership"
                                         value={ticketDipForm.Ownership}
                                         onChange={handleChange}
-                                        InputProps={{
-                                            readOnly: false,
-                                        }}
+                                        inputProps={{ readOnly: payloadStatusData2 ? true : false }}
                                         size="small"
                                         type='text'
                                     />
@@ -699,7 +728,7 @@ const RaiseTicket2 = () => {
                                         size="small"
                                         type='text'
                                     /> */}
-                                    <FormControl fullWidth>
+                                    <FormControl fullWidth required>
                                         <InputLabel id="demo-simple-select-label">Category</InputLabel>
                                         <Select
                                             labelId="demo-simple-select-label"
@@ -708,6 +737,7 @@ const RaiseTicket2 = () => {
                                             name='category'
                                             label="Category"
                                             onChange={handleChange}
+                                            inputProps={{ readOnly: payloadStatusData2 ? true : false }}
                                             size='small'
                                             fullWidth
                                         >
@@ -794,6 +824,24 @@ const RaiseTicket2 = () => {
     }, [payloadStatus, ticketDipForm])
 
 
+    const handleScroll = () => {
+        console.log('scrolling')
+        const scrollableContainer = scrollableContainerRef.current;
+
+        // Calculate the distance between the bottom of the container and the bottom of the scrollable content
+        const distanceToBottom = scrollableContainer.scrollHeight - (scrollableContainer.scrollTop + scrollableContainer.clientHeight);
+
+        // Define a threshold to determine when the scrollbar is considered to be at the endpoint
+        const threshold = 50; // Adjust as needed
+
+        // Call your function when scrollbar is at the endpoint (within the threshold)
+        if (distanceToBottom <= threshold) {
+            // console.log('Scrollbar reached the endpoint!');
+            setScrollNo(scrollNo + 50)
+            // Call your function here
+        }
+    };
+
     useEffect(() => {
         fetchTableData();
 
@@ -829,7 +877,7 @@ const RaiseTicket2 = () => {
 
                     <Box sx={{ marginTop: 1 }}>
 
-                        <TableContainer sx={{ maxHeight: '80vh', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} component={Paper}>
+                        <TableContainer sx={{ maxHeight: '80vh', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} component={Paper} ref={scrollableContainerRef} onScroll={handleScroll}>
                             <table style={{ width: "100%", border: "1px solid black", borderCollapse: 'collapse', overflow: 'auto' }} >
                                 <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
@@ -841,7 +889,7 @@ const RaiseTicket2 = () => {
                                         <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Cell Name</th>
                                         <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Current Date</th>
                                         <th style={{ padding: '1px 60px 1px 2px', whiteSpace: 'nowrap' }}>Open Date <CheckPicker data={payloadOpenDate.map(item => ({ label: handleDateFormets(item), value: item }))} value={selectOpenDate} onChange={(value) => { setSelectOpenDate(value) }} size="sm" appearance="default" style={{ width: 20 }} /></th>
-                                        <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Aging</th>
+                                        <th style={{ padding: '1px 60px 1px 2px', whiteSpace: 'nowrap' }}>Aging <CheckPicker data={payloadAging.map(item => ({ label: item, value: item }))} value={selectAging} onChange={(value) => { setSelectAging(value) }} size="sm" appearance="default" style={{ width: 20 }} /></th>
                                         <th style={{ padding: '1px 60px 1px 2px', whiteSpace: 'nowrap' }}>Priority <CheckPicker data={payloadPriority.map(item => ({ label: item, value: item }))} value={selectPriority} onChange={(value) => { setSelectPriority(value) }} size="sm" appearance="default" style={{ width: 20 }} /></th>
                                         <th style={{ padding: '1px 60px 1px 2px', whiteSpace: 'nowrap' }}>Status <CheckPicker data={payloadStatusData.map(item => ({ label: item, value: item }))} value={selectStatusData} onChange={(value) => { setSelectStatusData(value) }} size="sm" appearance="default" style={{ width: 20 }} /></th>
                                         {/* <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Remarks</th> */}
