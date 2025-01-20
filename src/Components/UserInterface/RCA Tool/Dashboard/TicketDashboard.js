@@ -189,7 +189,7 @@ const TicketDashboard = () => {
       },
       title: {
         display: true,
-        text: `Payload Dip Status ( ${handleDateFormat(fromDate)} ~ ${handleDateFormat(toDate)} )`,
+        text: `Payload Dip Status ( ${handleDateFormat(fromDate)} ~ ${handleDateFormat(toDate)} ) Total : ${handleTotalCount(openPayloadDip) + handleTotalCount(closePayloadDip)} ${priority?'/ Priority : ' +priority:''} ${agingBucket?'/ Aging : ' +agingBucket:''}`,
         font: {
           size: 16,
           weight: 'bold'

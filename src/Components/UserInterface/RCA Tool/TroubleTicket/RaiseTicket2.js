@@ -313,42 +313,42 @@ const RaiseTicket2 = () => {
     const handleExportPaylodDipData = () => {
         const workbook = new ExcelJS.Workbook();
         const sheet3 = workbook.addWorksheet("Paylod Dip", { properties: { tabColor: { argb: 'f1948a' } } })
-        // sheet.properties.defaultRowHeight = 20;
-        // sheet.properties.showGridLines = '#58D68D';
-        // sheet3.mergeCells('A1:A2');
-        // sheet3.mergeCells('B1:B2');
-        // sheet3.mergeCells('C1:D1');
-        // sheet3.mergeCells('F1:F2');
-        // sheet3.mergeCells('G1:G2');
+  
 
         sheet3.getCell('A1').value = 'Ticket ID';
         sheet3.getCell('B1').value = 'Circle';
-        sheet3.getCell('C1').value = 'Cell Name';
-        sheet3.getCell('D1').value = 'Date';
-        sheet3.getCell('E1').value = 'Open Date';
-        sheet3.getCell('F1').value = 'Aging';
-        sheet3.getCell('G1').value = 'Priority';
-        sheet3.getCell('H1').value = 'Cell + Date';
-        sheet3.getCell('I1').value = 'Status';
-        sheet3.getCell('J1').value = 'Ownership';
-        sheet3.getCell('K1').value = 'Circle Spoc';
-        sheet3.getCell('L1').value = 'Site ID';
-        sheet3.getCell('M1').value = 'Pre Remarks';
+        sheet3.getCell('C1').value = 'Site ID';
+        sheet3.getCell('D1').value = 'Cell Name';
+        sheet3.getCell('E1').value = 'Current Date';
+        sheet3.getCell('F1').value = 'Open Date';
+        sheet3.getCell('G1').value = 'Aging';
+        sheet3.getCell('H1').value = 'Priority';
+        sheet3.getCell('I1').value = 'Cell + Date';
+        sheet3.getCell('J1').value = 'Status';
+        sheet3.getCell('K1').value = 'Ownership';
+        sheet3.getCell('L1').value = 'Category';
+        sheet3.getCell('M1').value = 'Auto RCA';
+        sheet3.getCell('N1').value = 'Circle Spoc';
+        sheet3.getCell('O1').value = 'RCA Feedback';
+        sheet3.getCell('P1').value = 'Pre Remarks';
 
 
         sheet3.columns = [
             { key: 'ticket_id' },
             { key: 'Circle' },
+            { key: 'Site_ID' },
             { key: 'Short_name' },
             { key: 'Date' },
             { key: 'Open_Date' },
-            { key: 'Aging' },
+            { key: 'aging' },
             { key: 'priority' },
             { key: 'Unique_Id' },
             { key: 'Status' },
             { key: 'Ownership' },
+            { key: 'category' },
+            { key: 'RCA' },
             { key: 'Circle_Spoc' },
-            { key: 'Site_ID' },
+            { key: 'rca_feedback' },
             { key: 'Pre_Remarks' }
         ]
 
@@ -356,16 +356,19 @@ const RaiseTicket2 = () => {
             sheet3.addRow({
                 ticket_id: item?.ticket_id,
                 Circle: item?.Circle,
+                Site_ID: (item.Site_ID == 'nan' ? '' : item.Site_ID),
                 Short_name: item.Short_name,
                 Date: handleDateFormets(item.Date),
                 Open_Date: handleDateFormets(item.Open_Date),
-                Aging: item.aging,
+                aging: item.aging,
                 priority: item.priority,
                 Unique_Id: item.Unique_Id,
                 Status: (item.Status == 'nan' ? '' : item.Status),
                 Ownership: (item.Ownership == 'nan' ? '' : item.Ownership),
+                category: (item.category == 'nan' ? '' : item.category),
+                RCA: (item.RCA == 'nan' ? '' : item.RCA),
                 Circle_Spoc: (item.Circle_Spoc == 'nan' ? '' : item.Circle_Spoc),
-                Site_ID: (item.Site_ID == 'nan' ? '' : item.Site_ID),
+                rca_feedback: (item.rca_feedback == 'nan' ? '' : item.rca_feedback),
                 Pre_Remarks: (item.Pre_Remarks == 'nan' ? '' : item.Pre_Remarks),
             })
         })
@@ -482,6 +485,7 @@ const RaiseTicket2 = () => {
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.category == 'nan' ? '' : item.category}</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.RCA == 'nan' ? '' : item.RCA}</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.Circle_Spoc}</th>
+                <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.rca_feedback}</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>
                     {item?.Pre_Remarks ? (
                         item?.Pre_Remarks.map((key, index) => index < 1 && (
@@ -897,6 +901,7 @@ const RaiseTicket2 = () => {
                                         <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Category</th>
                                         <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Auto RCA</th>
                                         <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Circle Spoc</th>
+                                        <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>RCA Feedback</th>
                                         <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Pre Remarks</th>
 
                                     </tr>

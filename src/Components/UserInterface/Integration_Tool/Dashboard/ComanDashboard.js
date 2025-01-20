@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import MaterialTable from '@material-table/core'
-import { postData } from '../../../services/FetchNodeServices';
+// import { postData } from '../../../services/FetchNodeServices';
 import DownloadIcon from '@mui/icons-material/Download';
 import { CsvBuilder } from 'filefy';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
-import { useParams } from 'react-router-dom';
+// import { useParams } from 'react-router-dom';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { Dialog, DialogContent, IconButton ,DialogTitle} from '@mui/material';
 import { ServerURL } from '../../../services/FetchNodeServices';
@@ -83,12 +83,15 @@ const ComanDashboard = () => {
         TRX_Count: "",
         Technology_SIWA: "",
         BCF:'',
-        BSC_NAME:''})
+        BSC_NAME:'',
+        CRQ:'',
+        Customer_Approval:'',
+        })
     const [editDataID , setEditDataID] = useState('')
     const [open, setOpen] = useState(false)
     const [status, setStatus] = useState()
     const [selectedRows, setSelectedRows] = useState()
-    const params = useParams()
+    // const params = useParams()
 
 
     console.log('redux data handler', listDataa)
@@ -158,6 +161,8 @@ const ComanDashboard = () => {
             GPL: rowData.GPL,
             Pre_Post_Check: rowData.Pre_Post_Check,
             CTR_STATUS: rowData.CTR_STATUS,
+            CRQ: rowData.CRQ,
+            Customer_Approval: rowData.Customer_Approval
           })
         setEditDataID(rowData.id)
         setOpen(true)
@@ -299,6 +304,8 @@ const ComanDashboard = () => {
         { title: '5G RSI', field: 'RSI_5G' },
         { title: 'GPL', field: 'GPL' },
         { title: 'Pre/Post Check', field: 'Pre_Post_Check' },
+        { title: 'CRQ', field: 'CRQ' },
+        { title: 'Customer Approval', field: 'Customer_Approval' },
         {
             title: 'Actions',
             field: 'actions',
@@ -327,7 +334,7 @@ const ComanDashboard = () => {
     const getStatus = () => {
         var arr = []
         listData?.map((item) => {
-            console.log('status oem', item.AT_STATUS)
+            // console.log('status oem', item.AT_STATUS)
             arr.push(item.AT_STATUS)
         })
         setStatus(`( ${[...new Set(arr)]} )`);
