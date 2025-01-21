@@ -18,7 +18,6 @@ import Slide from '@mui/material/Slide';
 import { useStyles } from '../../ToolsCss';
 import { usePost } from '../../../Hooks/PostApis';
 import { useLoadingDialog } from '../../../Hooks/LoadingDialog';
-import { useQuery } from '@tanstack/react-query';
 import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
@@ -28,17 +27,21 @@ import Tooltip from '@mui/material/Tooltip';
 import { Breadcrumbs, Link, Typography } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-
+import CheckPicker from 'rsuite/CheckPicker';
 import * as ExcelJS from 'exceljs'
 import { DialogContent } from '@mui/material';
+import { DatePicker } from 'rsuite';
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="down" timeout={2500} style={{ transformOrigin: '0 0 0' }} mountOnEnter unmountOnExit ref={ref} {...props} />;
 });
 
+const agingdata = ['< 3', '3 to 7', '> 7'];
+const prioritydata = ['P1', 'P2', 'P3'];
+
 const TicketDashboard = () => {
-    const chartRef = useRef(null);
+  const chartRef = useRef(null);
   const classes = useStyles()
   const navigate = useNavigate()
   const [graphType, setGraphType] = useState(false);
@@ -51,45 +54,79 @@ const TicketDashboard = () => {
   const [circle, setCircle] = useState([])
   const [fromDate, setFromDate] = useState('')
   const [toDate, setToDate] = useState('')
-  const [priority,setPriority] = useState('')
-  const [agingBucket,setAgingBucket] = useState('')
+  const [priority, setPriority] = useState([])
+  const [agingBucket, setAgingBucket] = useState([])
   const [tableData, setTableData] = useState([])
-  const { isPending, isFetching, isError, data, error, refetch } = useQuery({
-    queryKey: ['PayloadDip_MasterDashboard'],
-    queryFn: async () => {
-      action(true)
-      var formData = new FormData()
-      formData.append('to_date', toDate);
-      formData.append('from_date', fromDate);
-      formData.append('priority', priority);
-      formData.append('bucket', agingBucket);
-      try {
-        const res = await makePostRequest("Zero_Count_Rna_Payload_Tool/circle_wise_open_close_dashboard/", formData);
-        action(false);
+  const [allData, setAllData] = useState([])
+  // const { isPending, isFetching, isError, data, error, refetch } = useQuery({
+  //   queryKey: ['PayloadDip_MasterDashboard'],
+  //   queryFn: async () => {
+  //     action(true)
+  //     var formData = new FormData()
+  //     formData.append('to_date', toDate);
+  //     formData.append('from_date', fromDate);
+  //     formData.append('priority', priority);
+  //     formData.append('bucket', agingBucket);
+  //     try {
+  //       const res = await makePostRequest("Zero_Count_Rna_Payload_Tool/circle_wise_open_close_dashboard/", formData);
+  //       action(false);
 
-        if (res) {
-          // console.log('Payload Dip data res', res)
-          setFromDate(res.from_date)
-          setToDate(res.to_date)
-          setCircle(res.result.map(item => Object.keys(item)[0]))
-          setOpenPayloadDip(res.result.map(item => Object.values(item)[0].OPEN))
-          setClosePayloadDip(res.result.map(item => Object.values(item)[0].CLOSE))
-          return res;
-        } else {
-          // Handle the case where res is falsy
-          return {};
-        }
-      } catch (error) {
-        action(false);
-        console.error('Error fetching data:', error);
-        return {}; // Return an empty object or some default value in case of error
-      }
-    },
-    staleTime: 100000,
-    refetchOnReconnect: false,
-  })
+  //       if (res) {
+  //         // console.log('Payload Dip data res', res)
+  //         setFromDate(res.from_date)
+  //         setToDate(res.to_date)
+  //         setCircle(res.result.map(item => Object.keys(item)[0]))
+  //         setOpenPayloadDip(res.result.map(item => Object.values(item)[0].OPEN))
+  //         setClosePayloadDip(res.result.map(item => Object.values(item)[0].CLOSE))
+  //         return res;
+  //       } else {
+  //         // Handle the case where res is falsy
+  //         return {};
+  //       }
+  //     } catch (error) {
+  //       action(false);
+  //       console.error('Error fetching data:', error);
+  //       return {}; // Return an empty object or some default value in case of error
+  //     }
+  //   },
+  //   staleTime: 100000,
+  //   refetchOnReconnect: false,
+  // })
   let delayed;
 
+
+  const fetchDashboardData = useCallback(async () => {
+    action(true)
+    var formData = new FormData()
+    formData.append('to_date', toDate);
+    formData.append('from_date', fromDate);
+    formData.append('priority', priority);
+    formData.append('bucket', agingBucket);
+    try {
+      const res = await makePostRequest("Zero_Count_Rna_Payload_Tool/circle_wise_open_close_dashboard/", formData);
+      action(false);
+
+      if (res) {
+        // console.log('Payload Dip data res', res)
+        setFromDate(res.from_date)
+        setToDate(res.to_date)
+        setCircle(res.result.map(item => Object.keys(item)[0]))
+        setOpenPayloadDip(res.result.map(item => Object.values(item)[0].OPEN))
+        setClosePayloadDip(res.result.map(item => Object.values(item)[0].CLOSE))
+        setAllData(res.data)
+        // return res;
+        console.log(res)
+      } else {
+        // Handle the case where res is falsy
+        // return {};
+        console.log('error')
+      }
+    } catch (error) {
+      action(false);
+      console.error('Error fetching data:', error);
+      return {}; // Return an empty object or some default value in case of error
+    }
+  }, [fromDate, toDate, priority, agingBucket]);
 
   const handleDateFormat = (event) => {
     let date = new Date(event);
@@ -101,8 +138,8 @@ const TicketDashboard = () => {
   }
 
   const handleTotalCount = (arr) => {
-      let totalcount = arr.reduce((acc, item) => acc + item, 0);
-      return totalcount;
+    let totalcount = arr.reduce((acc, item) => acc + item, 0);
+    return totalcount;
   }
 
 
@@ -189,7 +226,7 @@ const TicketDashboard = () => {
       },
       title: {
         display: true,
-        text: `Payload Dip Status ( ${handleDateFormat(fromDate)} ~ ${handleDateFormat(toDate)} ) Total : ${handleTotalCount(openPayloadDip) + handleTotalCount(closePayloadDip)} ${priority?'/ Priority : ' +priority:''} ${agingBucket?'/ Aging : ' +agingBucket:''}`,
+        text: `Payload Dip Status ( ${handleDateFormat(fromDate)} ~ ${handleDateFormat(toDate)} ) Total : ${handleTotalCount(openPayloadDip) + handleTotalCount(closePayloadDip)} ${priority.length>0 ? '/ Priority : ' + priority : ''} ${agingBucket.length > 0 ? '/ Aging : ' + agingBucket : ''}`,
         font: {
           size: 16,
           weight: 'bold'
@@ -228,70 +265,7 @@ const TicketDashboard = () => {
           mode: 'x'
         },
       },
-      // tooltip: {
-      //     displayColors: false,
-      //     backgroundColor: 'white',
-      //     borderColor: 'black',
-      //     borderWidth: '1',
-      //     padding: 10,
-      //     bodyColor: 'black',
-      //     bodyFont: {
-      //         size: '14'
-      //     },
-      //     bodyAlign: 'left',
-      //     footerAlign: 'right',
-      //     titleColor: 'black',
-      //     titleFont: {
-      //         weight: 'bold',
-      //         size: '15'
-      //     },
-      //     yAlign: 'bottom',
-      //     xAlign: 'center',
-      //     callbacks: {
-      //         // labelColor: function(context) {
-      //         //     return {
-      //         //         borderColor: 'rgb(0, 0, 255)',
-      //         //         backgroundColor: 'rgb(255, 0, 0)',
-      //         //         borderWidth: 2,
-      //         //         borderDash: [2, 2],
-      //         //         borderRadius: 2,
-      //         //     };
-      //         // },
-      //         // labelTextColor: function(context) {
-      //         //     return '#543453';
-      //         // },
-      //         label: ((tooltipItem) => {
-      //             // console.log(tooltipItem.dataset.label,":",tooltipItem.formattedValue)
 
-      //         })
-      //     },
-      //     // external: function(context) {
-      //     //     const tooltipModel = context.tooltip;
-      //     //     const canvas = context.chart.canvas;
-
-      //     //     canvas.onclick = function(event) {
-      //     //         if (tooltipModel.opacity === 0) {
-      //     //             return;
-      //     //         }
-
-      //     //         const rect = canvas.getBoundingClientRect();
-      //     //         const tooltipPosition = {
-      //     //             x: event.clientX - rect.left,
-      //     //             y: event.clientY - rect.top
-      //     //         };
-
-      //     //         if (
-      //     //             tooltipPosition.x >= tooltipModel.caretX - tooltipModel.width / 2 &&
-      //     //             tooltipPosition.x <= tooltipModel.caretX + tooltipModel.width / 2 &&
-      //     //             tooltipPosition.y >= tooltipModel.caretY - tooltipModel.height / 2 &&
-      //     //             tooltipPosition.y <= tooltipModel.caretY + tooltipModel.height / 2
-      //     //         ) {
-      //     //             console.log('You clicked on the tooltip for', tooltipModel.dataPoints[0]);
-      //     //         }
-      //     //     };
-      //     // }
-
-      // },
 
     },
     scales: {
@@ -346,27 +320,7 @@ const TicketDashboard = () => {
     },
   }
 
-  const handleFromDateChange = async (event) => {
-    await setFromDate(event.target.value);
-    await refetch();
-  };
-  const handleToDateChange =  async (event) => {
-    await setToDate(event.target.value);
-    await refetch();
-  };
 
-  const handlePiority = async (event) =>{
-    await setPriority(event.target.value);
-    await refetch();
-  }
-
-  const handleAging = async(event)=>{
-    await setAgingBucket(event.target.value)
-    await refetch();
-  }
-  // const apiCalling =useMemo(()=>{
-  //     refetch();
-  // },[priority])
 
 
   // TOGGAL BUTTON..........
@@ -397,38 +351,14 @@ const TicketDashboard = () => {
           // console.log('status:', status);
           // console.log('Value:', value);
 
-          const tempData = data?.data.filter((item) => item.Circle === circle && item.Status === status.split(' ')[0])
+          const tempData = allData?.filter((item) => item.Circle === circle && item.Status === status.split(' ')[0])
           // console.log('tampData' , tempData)
 
           setTableData(tempData)
 
           setOpen2(true)
-          // setBarData({circle:label,oem:datasetLabel,month:month,year:year})
 
-          // const ClickDataGet = async () => {
-          //     action(true)
-          //     var formData = new FormData();
-          //     formData.append("circle", label);
-          //     formData.append("oem", datasetLabel.toUpperCase());
-          //     formData.append("month", month);
-          //     formData.append("year", year);
 
-          //     const responce = await makePostRequest('IntegrationTracker/hyperlink-monthly-oemwise-integration-data/', formData)
-          //     if (responce) {
-
-          //         action(false)
-          //         // console.log('hyperlink data', JSON.parse(responce.table_data))
-          //         setActivity_Name(datasetLabel.toUpperCase())
-          //         setBarData(JSON.parse(responce.table_data))
-          //         setBarDialogOpen(true)
-          //     }
-          //     else {
-          //         action(false)
-          //     }
-          // }
-
-          // ClickDataGet()
-          // You can perform further actions with the retrieved data here
         }
       };
     }
@@ -658,114 +588,111 @@ const TicketDashboard = () => {
   }, [open2])
 
   useEffect(() => {
-    if (data) {
-      setFromDate(data.from_date)
-      setToDate(data.to_date)
-      setCircle(data.result.map(item => Object.keys(item)[0]))
-      setOpenPayloadDip(data.result.map(item => Object.values(item)[0].OPEN))
-      setClosePayloadDip(data.result.map(item => Object.values(item)[0].CLOSE))
-    }
+    fetchDashboardData();
 
     document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
-  }, [])
+  }, [fetchDashboardData])
   return (
     <>
-    <style>{"th{border:1px solid black;}"}</style>
-    <div style={{margin:10}}>
-    <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
-                    <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
-                    <Link underline="hover" onClick={()=>{ navigate('/tools/rca')}}>RCA Tool</Link>
-                    <Typography color='text.primary'>Ticket Dashboard</Typography>
-                </Breadcrumbs>
-    </div>
-    <div style={{ margin: 10, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', padding: 10, height: 'auto', width: "98%", borderRadius: 10, backgroundColor: "white", display: "flex", justifyContent: 'space-around', alignItems: 'center' }}>
-      <div style={{ width: 200, height: 400, borderRadius: 5, padding: 10, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: "12px" }}>
-        <div style={{ display: 'flex', alignItems: 'center', fontSize: '18px', fontWeight: 'bold', color: "black" }}><FilterAltIcon />FILTER DATA</div>
-        {/* select month */}
-        <div>
-          <InputLabel style={{ fontSize: 15 }}>Select From Date</InputLabel>
-          <input type='date' value={fromDate} onChange={handleFromDateChange} />
-        </div>
-        <div>
-          <InputLabel style={{ fontSize: 15 }}>Select To Date</InputLabel>
-          <input type='date' value={toDate} onChange={handleToDateChange} />
-        </div>
-        {/* select circle */}
-        {/* <div>
+      <style>{"th{border:1px solid black;}"}</style>
+      <div style={{ margin: 10 }}>
+        <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
+          <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
+          <Link underline="hover" onClick={() => { navigate('/tools/rca') }}>RCA Tool</Link>
+          <Typography color='text.primary'>Ticket Dashboard</Typography>
+        </Breadcrumbs>
+      </div>
+      <div style={{ margin: 10, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', padding: 10, height: 'auto', width: "98%", borderRadius: 10, backgroundColor: "white", display: "flex", justifyContent: 'space-around', alignItems: 'center' }}>
+        <div style={{ width: 200, height: 400, borderRadius: 5, padding: 10, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: "12px" }}>
+          <div style={{ display: 'flex', alignItems: 'center', fontSize: '18px', fontWeight: 'bold', color: "black" }}><FilterAltIcon />FILTER DATA</div>
+          {/* select month */}
+          <div>
+            <InputLabel style={{ fontSize: 15 }}>Select From Date</InputLabel>
+            <input type='date' value={fromDate} onChange={(e) => setFromDate(e.target.value)} />
+          </div>
+          <div>
+            <InputLabel style={{ fontSize: 15 }}>Select To Date</InputLabel>
+            <input type='date' value={toDate} onChange={(e) => setToDate(e.target.value)} />
+            {/* <DatePicker value={toDate? toDate: new Date()}  onChange={(e) => console.log(e)} /> */}
+          </div>
+          {/* select circle */}
+          {/* <div>
           <InputLabel style={{ fontSize: 15 }}>Select Circle</InputLabel>
           <select style={{ width: 145, height: 25, borderRadius: 2 }} value={selectCircle} onChange={(e) => setSelectCircle(e.target.value)}>
             {circle?.map((item, index) => <option key={index} >{item}</option>)}
           </select>
         </div> */}
-        {/* select Activity */}
-        <div>
-          <InputLabel style={{ fontSize: 15 }}>Select Priority</InputLabel>
-          <select style={{ width: 145, height: 25, borderRadius: 2 }} value={priority} onChange={(e) =>handlePiority(e)}>
-            <option selected value={''}>All</option>
-            <option selected value={'P0'}>P0</option>
-            <option value={'P1'}>P1</option>
-            <option value={'P2'}>P2</option>
-            <option value={'P3'}>P3</option>
-          </select>
-        </div>
-        <div>
-          <InputLabel style={{ fontSize: 15 }}>Select Aging</InputLabel>
-          <select style={{ width: 145, height: 25, borderRadius: 2 }} value={agingBucket} onChange={(e)=>handleAging(e)}>
+          {/* select Activity */}
+          <div>
+            {/* <InputLabel style={{ fontSize: 15 }}>Select Priority</InputLabel> */}
+            {/* <select style={{ width: 145, height: 25, borderRadius: 2 }} value={priority} >
+              <option selected value={''}>All</option>
+              <option selected value={'P0'}>P0</option>
+              <option value={'P1'}>P1</option>
+              <option value={'P2'}>P2</option>
+              <option value={'P3'}>P3</option>
+            </select> */}
+
+            <CheckPicker label="Priority" data={prioritydata.map(item => ({ label: item, value: item }))} value={priority} onChange={(value) => { setPriority(value) }} size="sm" appearance="default" placeholder="" style={{width:130}}/>
+          </div>
+          <div>
+            {/* <InputLabel style={{ fontSize: 15 }}>Select Aging</InputLabel> */}
+            {/* <select style={{ width: 145, height: 25, borderRadius: 2 }} value={agingBucket} onChange={(e)=>handleAging(e)}>
             <option selected value={''}>All</option>
             <option selected value={'0-3'}>&lt; 3</option>
-            <option value={'>7'}>&gt; 7</option>
             <option value={'3-7'}>3 to 7</option>
-            {/* <option value={'P3'}>P3</option> */}
-          </select>
+            <option value={'>7'}>&gt; 7</option>
+          </select> */}
+            <CheckPicker label="Aging" data={agingdata.map(item => ({ label: item, value: item }))} value={agingBucket} onChange={(value) => { setAgingBucket(value) }} size="sm" appearance="default" placeholder="" style={{width:130}}/>
+          </div>
+
+          {/* toggle button */}
+          <div>
+            <ToggleButtonGroup
+              size="small"
+              color="primary"
+              value={graphType}
+              exclusive
+              onChange={handleChange}
+              aria-label="Platform"
+
+            >
+              <ToggleButton value={true}>Line</ToggleButton>
+              <ToggleButton value={false}>Bar</ToggleButton>
+            </ToggleButtonGroup>
+          </div>
+          {/* full screen button */}
+          <div>
+            <Button color="primary" endIcon={<LaunchIcon />} onClick={() => { setOpen(true) }}>Full screen</Button>
+          </div>
         </div>
-
-        {/* toggle button */}
-        <div>
-          <ToggleButtonGroup
-            size="small"
-            color="primary"
-            value={graphType}
-            exclusive
-            onChange={handleChange}
-            aria-label="Platform"
-
+        <div style={{ display: graphType ? 'inherit' : 'none', filter: 'drop-shadow(rgba(0, 0, 0, 0.34) 0px 3px 3px)', width: "850px", height: 450 }}>
+          <Line
+            // style={{ width: "100%", height: 350 }}
+            ref={chartRef}
+            data={data1}
+            options={options}
+            plugins={[ChartDataLabels, zoomPlugin, ChartjsPluginWatermark]}
           >
-            <ToggleButton value={true}>Line</ToggleButton>
-            <ToggleButton value={false}>Bar</ToggleButton>
-          </ToggleButtonGroup>
+          </Line>
         </div>
-        {/* full screen button */}
-        <div>
-          <Button color="primary" endIcon={<LaunchIcon />} onClick={() => { setOpen(true) }}>Full screen</Button>
+        <div style={{ display: graphType ? 'none' : 'inherit', filter: 'drop-shadow(rgba(0, 0, 0, 0.34) 0px 3px 3px)', width: "80hv", height: 450 }}>
+          <Bar
+            // style={{ width: "100%", height: 400 }}
+            ref={chartRef}
+            data={data2}
+            options={options}
+            plugins={[ChartDataLabels, zoomPlugin, ChartjsPluginWatermark]}
+          >
+          </Bar>
         </div>
-      </div>
-      <div style={{ display: graphType ? 'inherit' : 'none', filter: 'drop-shadow(rgba(0, 0, 0, 0.34) 0px 3px 3px)', width: "850px", height: 450 }}>
-        <Line
-          // style={{ width: "100%", height: 350 }}
-          ref={chartRef}
-          data={data1}
-          options={options}
-          plugins={[ChartDataLabels, zoomPlugin, ChartjsPluginWatermark]}
-        >
-        </Line>
-      </div>
-      <div style={{ display: graphType ? 'none' : 'inherit', filter: 'drop-shadow(rgba(0, 0, 0, 0.34) 0px 3px 3px)', width: "80hv", height: 450 }}>
-        <Bar
-          // style={{ width: "100%", height: 400 }}
-          ref={chartRef}
-          data={data2}
-          options={options}
-          plugins={[ChartDataLabels, zoomPlugin, ChartjsPluginWatermark]}
-        >
-        </Bar>
-      </div>
 
-      {handleDialogBox()}
-      {handleTableDialogBox()}
-      {loading}
+        {handleDialogBox()}
+        {handleTableDialogBox()}
+        {loading}
 
-    </div>
-  </>
+      </div>
+    </>
   )
 }
 

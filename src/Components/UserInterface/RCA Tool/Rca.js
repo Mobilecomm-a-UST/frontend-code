@@ -75,8 +75,8 @@ const Rca = () => {
                                             <Nav.Item eventKey='5-1' placement="rightStart" onClick={() => navigate('/tools/rca/lte_kpi_trend')}>
                                                 LTE KPI Trend
                                             </Nav.Item>
-                                            <Nav.Item eventKey='5-2' placement="rightStart" onClick={() => navigate('/tools/rca/zero_payload')}>
-                                                Zero Payload
+                                            <Nav.Item eventKey='5-2' placement="rightStart" onClick={() => navigate('/tools/rca/sleeping_cell')}>
+                                                Sleeping Cell
                                             </Nav.Item>
                                             <Nav.Item eventKey='5-3' placement="rightStart" onClick={() => navigate('/tools/rca/day_wise_payload_variation')}>
                                                 Day Wise Payload Dip
@@ -141,7 +141,7 @@ const Rca = () => {
                                 <Route element={<TicketDashboard />} path="/ticket_dashboard" />
                                 <Route element={<OverallSummary />} path="/overall_summary" />
                                 <Route element={<LteKpiTrend />} path="/lte_kpi_trend" />
-                                <Route element={<ZeroPayload />} path="/zero_payload" />
+                                <Route element={<ZeroPayload />} path="/sleeping_cell" />
                                 <Route element={<DayWisePayload />} path="/day_wise_payload_variation" />
                                 <Route element={<WeekWisePayload />} path="/week_wise_payload_variation" />
                                 {/* <Route element={<RaiseTicket />} path="/raise_ticket" /> */}
