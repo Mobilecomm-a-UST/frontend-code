@@ -173,6 +173,8 @@ const ComanDashboard = () => {
         { title: '5G RSI', field: 'RSI_5G' },
         { title: 'GPL', field: 'GPL' },
         { title: 'Pre/Post Check', field: 'Pre_Post_Check' },
+        { title: 'CRQ', field: 'CRQ' },
+        { title: 'Customer Approval', field: 'Customer_Approval' },
         // {
         //     title: 'Actions',
         //     field: 'actions',

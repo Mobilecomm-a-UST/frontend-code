@@ -372,7 +372,7 @@ const ZeroPayload = () => {
                             <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
 
                             <Link underline="hover" onClick={() => { navigate('/tools/rca') }}>RCA Tool</Link>
-                            <Typography color='text.primary'>Zero Payload</Typography>
+                            <Typography color='text.primary'>Sleeping Cell</Typography>
                         </Breadcrumbs>
                         <Box style={{ float: 'right' }}>
                             <Tooltip title="Export Excel">
@@ -418,7 +418,7 @@ const ZeroPayload = () => {
                                 <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
                                         <th rowSpan='2' style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Circle</th>
-                                        <th colSpan={8} style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Zero Payload 100 RNA</th>
+                                        <th colSpan={8} style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Sleeping Cell</th>
 
                                     </tr>
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
