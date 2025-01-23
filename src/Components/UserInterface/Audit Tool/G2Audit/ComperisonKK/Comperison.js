@@ -158,7 +158,7 @@ const Comperison = () => {
             <Box className={classes.main_Box}>
                 <Box className={classes.Back_Box} sx={{ width: { md: '75%', xs: '100%' } }}>
                     <Box className={classes.Box_Hading} >
-                            Generat Comparison ( 2G Audit KK)
+                            Generat Comparison ( 2G Audit KOL)
                     </Box>
                     <Stack spacing={2} sx={{ marginTop: "-40px" }} direction={'column'}>
                         <Box className={classes.Front_Box} >

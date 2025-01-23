@@ -37,6 +37,7 @@ const Task = () => {
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>App Name    </th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>User     </th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>Task ID   </th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>Circle</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>Status  </th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>
                                            File Download
@@ -45,11 +46,12 @@ const Task = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {data?.map((item,index) => (
+                                    {data?.filter((item)=>item.circle === 'KOL').map((item,index) => (
                                         <tr className={classes.hover} key={index} style={{ textAlign: "center", fontWeigth: 700 }}>
                                              <th  >{item.app_name}</th>
                                              <th  >{item.user}</th>
                                              <th  >{item.task_id}</th>
+                                             <th  >{item.circle}</th>
                                              <th  >{item.status}</th>
                                              <th  ><a type='download' href={`${ServerURL}/${item.file_link}`}>{item.file_link?<Button>Download</Button>:''}</a></th>
                                         </tr>

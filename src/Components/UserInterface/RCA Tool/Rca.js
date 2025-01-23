@@ -30,6 +30,7 @@ const DayWisePayload = lazy(() => import('./Trend/DayWisePayload'));
 const WeekWisePayload = lazy(() => import('./Trend/WeekWisePayload'))
 const RaiseTicket = lazy(() => import('./TroubleTicket/RaiseTicket'))
 const RaiseTicket2 = lazy(() => import('./TroubleTicket/RaiseTicket2'))
+const MailData = lazy(()=> import('./Kpi_table/MailData'))
 
 
 const Rca = () => {
@@ -103,6 +104,9 @@ const Rca = () => {
                                             <Nav.Item eventKey="1-2" placement="rightStart" onClick={() => navigate('/tools/rca/rca_table')}>
                                                 RCA Table
                                             </Nav.Item>
+                                            <Nav.Item eventKey="1-3" placement="rightStart" onClick={() => navigate('/tools/rca/escalation_mail')}>
+                                                    Escalation Mail
+                                            </Nav.Item>
                                         </Nav.Menu>
                                         ) : null}
 
@@ -146,6 +150,7 @@ const Rca = () => {
                                 <Route element={<WeekWisePayload />} path="/week_wise_payload_variation" />
                                 {/* <Route element={<RaiseTicket />} path="/raise_ticket" /> */}
                                 <Route element={<RaiseTicket2 />} path="/ticket" />
+                                <Route element={<MailData/>} path="/escalation_mail" />
                             </Routes>
                         </Suspense>
                     </Grid>
