@@ -30,7 +30,7 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import CheckPicker from 'rsuite/CheckPicker';
 import * as ExcelJS from 'exceljs'
 import { DialogContent } from '@mui/material';
-import { DatePicker } from 'rsuite';
+
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -56,6 +56,9 @@ const TicketDashboard = () => {
   const [toDate, setToDate] = useState('')
   const [priority, setPriority] = useState([])
   const [agingBucket, setAgingBucket] = useState([])
+  const [minAging, setMinAging] = useState('')
+  const [maxAging, setMaxAging] = useState('')
+  const [maxAgingValue, setMaxAgingValue] = useState('')
   const [tableData, setTableData] = useState([])
   const [allData, setAllData] = useState([])
   // const { isPending, isFetching, isError, data, error, refetch } = useQuery({
@@ -101,15 +104,21 @@ const TicketDashboard = () => {
     formData.append('to_date', toDate);
     formData.append('from_date', fromDate);
     formData.append('priority', priority);
-    formData.append('bucket', agingBucket);
+    formData.append('min_ageing', minAging);
+    formData.append('max_ageing', maxAging);
     try {
       const res = await makePostRequest("Zero_Count_Rna_Payload_Tool/circle_wise_open_close_dashboard/", formData);
       action(false);
 
       if (res) {
         // console.log('Payload Dip data res', res)
-        setFromDate(res.from_date)
-        setToDate(res.to_date)
+        setFromDate(res.from_date);
+        setToDate(res.to_date);
+        setMinAging(res.min_ageing);
+        setMaxAging(res.max_ageing);
+        if (!maxAgingValue) {
+          setMaxAgingValue(res.max_ageing);
+        }
         setCircle(res.result.map(item => Object.keys(item)[0]))
         setOpenPayloadDip(res.result.map(item => Object.values(item)[0].OPEN))
         setClosePayloadDip(res.result.map(item => Object.values(item)[0].CLOSE))
@@ -126,7 +135,7 @@ const TicketDashboard = () => {
       console.error('Error fetching data:', error);
       return {}; // Return an empty object or some default value in case of error
     }
-  }, [fromDate, toDate, priority, agingBucket]);
+  }, [fromDate, toDate, priority, minAging, maxAging]);
 
   const handleDateFormat = (event) => {
     let date = new Date(event);
@@ -226,7 +235,7 @@ const TicketDashboard = () => {
       },
       title: {
         display: true,
-        text: `Payload Dip Status ( ${handleDateFormat(fromDate)} ~ ${handleDateFormat(toDate)} ) Total : ${handleTotalCount(openPayloadDip) + handleTotalCount(closePayloadDip)} ${priority.length>0 ? '/ Priority : ' + priority : ''} ${agingBucket.length > 0 ? '/ Aging : ' + agingBucket : ''}`,
+        text: `Payload Dip Status ( ${handleDateFormat(fromDate)} ~ ${handleDateFormat(toDate)} ) Total : ${handleTotalCount(openPayloadDip) + handleTotalCount(closePayloadDip)} ${priority.length > 0 ? '/ Priority : ' + priority : ''} ${agingBucket.length > 0 ? '/ Aging : ' + agingBucket : ''}`,
         font: {
           size: 16,
           weight: 'bold'
@@ -603,7 +612,7 @@ const TicketDashboard = () => {
         </Breadcrumbs>
       </div>
       <div style={{ margin: 10, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', padding: 10, height: 'auto', width: "98%", borderRadius: 10, backgroundColor: "white", display: "flex", justifyContent: 'space-around', alignItems: 'center' }}>
-        <div style={{ width: 200, height: 400, borderRadius: 5, padding: 10, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: "12px" }}>
+        <div style={{ width: '30vh', height: 400, borderRadius: 5, padding: 5, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: "12px" }}>
           <div style={{ display: 'flex', alignItems: 'center', fontSize: '18px', fontWeight: 'bold', color: "black" }}><FilterAltIcon />FILTER DATA</div>
           {/* select month */}
           <div>
@@ -622,6 +631,38 @@ const TicketDashboard = () => {
             {circle?.map((item, index) => <option key={index} >{item}</option>)}
           </select>
         </div> */}
+          <div>
+            <InputLabel style={{ fontSize: 15 }}>Select Aging</InputLabel>
+            {/* <select style={{ width: '50%', height: 25, borderRadius: 2 }} value={agingBucket} >
+            <option selected value={''}>All</option>
+            <option selected value={'0-3'}>&lt; 3</option>
+            <option value={'3-7'}>3 to 7</option>
+            <option value={'>7'}>&gt; 7</option>
+          </select> */}
+            <div style={{ width: 125, height: 25, borderRadius: 2, border: '1px solid black', display: 'flex', justifyContent: "space-between", placeItems: 'center' }}>
+              <div>
+                <select className={classes.custom_select} value={minAging} onChange={(e)=>setMinAging(e.target.value)}>
+                  {Array.from({ length: maxAgingValue+1 }, (_, index) => (
+                    <option key={index} value={index}>
+                      {index}
+                    </option>
+                  ))}
+
+                </select>
+              </div>
+              <div>To</div>
+              <div>
+                <select className={classes.custom_select} value={maxAging} onChange={(e)=>setMaxAging(e.target.value)}>
+                  {Array.from({ length: maxAgingValue+1 }, (_, index) => (
+                    <option key={index} value={index}>
+                      {index}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            {/* <CheckPicker label="Aging" data={agingdata.map(item => ({ label: item, value: item }))} value={agingBucket} onChange={(value) => { setAgingBucket(value) }} size="sm" appearance="default" placeholder="" style={{width:130}}/> */}
+          </div>
           {/* select Activity */}
           <div>
             {/* <InputLabel style={{ fontSize: 15 }}>Select Priority</InputLabel> */}
@@ -633,18 +674,9 @@ const TicketDashboard = () => {
               <option value={'P3'}>P3</option>
             </select> */}
 
-            <CheckPicker label="Priority" data={prioritydata.map(item => ({ label: item, value: item }))} value={priority} onChange={(value) => { setPriority(value) }} size="sm" appearance="default" placeholder="" style={{width:130}}/>
+            <CheckPicker label="Priority" data={prioritydata.map(item => ({ label: item, value: item }))} value={priority} onChange={(value) => { setPriority(value) }} size="sm" appearance="default" placeholder="" style={{ width: 130 }} />
           </div>
-          <div>
-            {/* <InputLabel style={{ fontSize: 15 }}>Select Aging</InputLabel> */}
-            {/* <select style={{ width: 145, height: 25, borderRadius: 2 }} value={agingBucket} onChange={(e)=>handleAging(e)}>
-            <option selected value={''}>All</option>
-            <option selected value={'0-3'}>&lt; 3</option>
-            <option value={'3-7'}>3 to 7</option>
-            <option value={'>7'}>&gt; 7</option>
-          </select> */}
-            <CheckPicker label="Aging" data={agingdata.map(item => ({ label: item, value: item }))} value={agingBucket} onChange={(value) => { setAgingBucket(value) }} size="sm" appearance="default" placeholder="" style={{width:130}}/>
-          </div>
+
 
           {/* toggle button */}
           <div>
@@ -687,7 +719,7 @@ const TicketDashboard = () => {
           </Bar>
         </div>
 
-        {handleDialogBox()}
+        {open && handleDialogBox()}
         {handleTableDialogBox()}
         {loading}
 
