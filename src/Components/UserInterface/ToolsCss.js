@@ -82,6 +82,14 @@
           color:'black',
           fontWeight:'bold',
         }
-    }
+    },
+    custom_select: {
+        border:'none',
+        width:'45px',
+        "& option":{
+             height: '30px',
+             width:'100px'
+        }
+      }
 
 });

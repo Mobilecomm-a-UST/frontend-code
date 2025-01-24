@@ -17,8 +17,12 @@ import Slide from '@mui/material/Slide';
 import IconButton from '@mui/material/IconButton';
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import EditIcon from '@mui/icons-material/Edit';
-import { getData } from '../../../../services/FetchNodeServices';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { getData,ServerURL } from '../../../../services/FetchNodeServices';
+import Swal from "sweetalert2";
 import { useStyles } from '../../../ToolsCss';
+import axios from 'axios';
+
 
 
 
@@ -49,17 +53,96 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
-const Level1 = ({heading,API}) => {
-    const [tableData,setTableData] = useState([]);
-      const classes = useStyles();
-    console.log('level1')
+const Level1 = ({ heading, API }) => {
+    const [tableData, setTableData] = useState([]);
+    const [formData, setFormData] = useState({
+        circle: '',
+        person_name: '',
+        email: '',
+        id:'',
+    })
+    const [editDataId, setEditDataID] = useState()
+    const [add, setAdd] = useState(false)
+    const [edit, setEdit] = useState(false)
+    const classes = useStyles();
+
     const fetchData = async () => {
         const response = await getData(`${API}`);
-        if(response){
+        if (response) {
             setTableData(response)
         }
         console.log(response)
 
+    }
+
+    const handleEdit = (tabData) => {
+        setFormData({
+            circle:tabData.circle,
+            person_name:tabData.person_name,
+            email:tabData.email,
+            id:tabData.id,
+        })
+        setEditDataID(tabData.id)
+        setEdit(true)
+    }
+
+    const handleUpdateData = async (e) => {
+        e.preventDefault()
+        const response = await axios.put(`${ServerURL}/RCA_TOOL/kpi-tables/${editDataId}/`, formData,
+            {
+                headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` }
+            }
+        );
+        if (response.status === 200) {
+            Swal.fire({
+                icon: "success",
+                title: "Done",
+                text: `Data Updated Successfully`,
+            });
+            setEdit(false)
+            handleCloser()
+            // refetch();
+        }
+        else {
+            setEdit(false)
+            handleCloser()
+            // refetch();
+        }
+    }
+
+    const handleDelete = async (id) => {
+        try {
+            // Make the DELETE request
+            const response = await axios.delete(`${ServerURL}/RCA_TOOL/kpi-tables/${id}/`,
+                {
+                    headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` }
+                }
+            );
+            // console.log('Deleted successfully:', response);
+
+            if (response.status === 204) {
+                Swal.fire({
+                    icon: "success",
+                    title: "Done",
+                    text: `Data Deleted Successfully`,
+                });
+
+                // refetch();
+            }
+        } catch (error) {
+            // Handle error
+            alert('Error deleting data:' + error);
+        }
+    }
+
+    const handleCloser = () => {
+        setFormData({
+            KPI: '',
+            operator: '',
+            threshold_value: ''
+        })
+        setEdit(false)
+        setEditDataID()
     }
 
     useEffect(() => {
@@ -67,29 +150,29 @@ const Level1 = ({heading,API}) => {
     }, [])
 
     return (
-        <div style={{margin:'10px'}}>
-               <div style={{ height: 'auto', width: '100%', margin: '5px 0px', boxShadow: 'rgba(0, 0, 0, 0.5) 0px 3px 8px', backgroundColor: 'white', borderRadius: '10px', padding: '1px' }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-                        <Box >
-                            <Tooltip title="Add List" color='primary'>
-                                <IconButton color='primary' >
-                                    <PlaylistAddIcon fontSize='medium' color='primary' />
-                                </IconButton>
-                            </Tooltip>
-                        </Box>
-                        <Box>
-                        <h3>{heading}</h3>
-                        </Box>
-
-                        <Box style={{ float: 'right', display: 'flex' }}>
-                            <Tooltip title="Export Excel">
-                                <IconButton >
-                                    <DownloadIcon fontSize='medium' color='primary' />
-                                </IconButton>
-                            </Tooltip>
-                        </Box>
+        <div style={{ margin: '10px' }}>
+            <div style={{ height: 'auto', width: '100%', margin: '5px 0px', boxShadow: 'rgba(0, 0, 0, 0.5) 0px 3px 8px', backgroundColor: 'white', borderRadius: '10px', padding: '1px' }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Box >
+                        <Tooltip title="Add List" color='primary'>
+                            <IconButton color='primary' >
+                                <PlaylistAddIcon fontSize='medium' color='primary' />
+                            </IconButton>
+                        </Tooltip>
                     </Box>
-                </div>
+                    <Box>
+                        <h3>{heading}</h3>
+                    </Box>
+
+                    <Box style={{ float: 'right', display: 'flex' }}>
+                        <Tooltip title="Export Excel">
+                            <IconButton >
+                                <DownloadIcon fontSize='medium' color='primary' />
+                            </IconButton>
+                        </Tooltip>
+                    </Box>
+                </Box>
+            </div>
             <Slide
                 direction='left'
                 in='true'
@@ -110,28 +193,28 @@ const Level1 = ({heading,API}) => {
                             </TableHead>
                             <TableBody>
                                 {tableData?.map((row) => (
-                                        <StyledTableRow
-                                            key={row.id}
-                                            className={classes.hover}
-                                        >   
-                                            <StyledTableCell align="center">{row.id}</StyledTableCell>
-                                            <StyledTableCell align="center">{row.circle}</StyledTableCell>
-                                            <StyledTableCell align="center">{row.person_name}</StyledTableCell>
-                                            <StyledTableCell align="center">{row.email}</StyledTableCell>
-                                            <StyledTableCell align="center" style={{ borderRight: "2px solid black", display: 'flex', flex: 'row', justifyContent: 'space-evenly' }}>
-                                                {/* <Tooltip title="Edit" color='primary'>
-                                                    <IconButton color="primary" onClick={() => { handleEdit(row) }}>
-                                                        <EditIcon fontSize='medium' />
-                                                    </IconButton>
-                                                </Tooltip>
-                                                <Tooltip title="Delete">
-                                                    <IconButton color="error" onClick={() => { handleDelete(row.id) }}>
-                                                        <DeleteIcon fontSize='medium' />
-                                                    </IconButton>
-                                                </Tooltip> */}
-                                            </StyledTableCell>
-                                        </StyledTableRow>
-                                    ))}
+                                    <StyledTableRow
+                                        key={row.id}
+                                        className={classes.hover}
+                                    >
+                                        <StyledTableCell align="center">{row.id}</StyledTableCell>
+                                        <StyledTableCell align="center">{row.circle}</StyledTableCell>
+                                        <StyledTableCell align="center">{row.person_name}</StyledTableCell>
+                                        <StyledTableCell align="center">{row.email}</StyledTableCell>
+                                        <StyledTableCell align="center" style={{ borderRight: "2px solid black", display: 'flex', flex: 'row', justifyContent: 'space-evenly' }}>
+                                            <Tooltip title="Edit" color='primary'>
+                                                <IconButton color="primary" onClick={() => { handleEdit(row) }}>
+                                                    <EditIcon fontSize='medium' />
+                                                </IconButton>
+                                            </Tooltip>
+                                            <Tooltip title="Delete">
+                                                <IconButton color="error" onClick={() => { handleDelete(row.id) }}>
+                                                    <DeleteIcon fontSize='medium' />
+                                                </IconButton>
+                                            </Tooltip>
+                                        </StyledTableCell>
+                                    </StyledTableRow>
+                                ))}
                                 {/* {filterRCAData()} */}
                             </TableBody>
                         </Table>
