@@ -183,6 +183,8 @@ const Kpi_Data = () => {
         }
     }
 
+    
+
     const handleEditDialog = useCallback(() => {
         return (
             <Dialog
@@ -427,7 +429,7 @@ const Kpi_Data = () => {
                     </Paper>
                 </Slide>
                 <MemoAdd_Kpi open={add} handleClick={handleClick} handleFetch={refetch} />
-                {handleEditDialog()}
+                {edit && handleEditDialog()}
                 {loading}
             </div>
         </>
