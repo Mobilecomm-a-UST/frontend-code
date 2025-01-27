@@ -311,6 +311,7 @@ const OemWiseIntegration = ({ onData }) => {
                                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>OTHERS</th>
                                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>5G SECTOR ADDITION</th>
                                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>5G RELOCATION</th>
+                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>TRAFFIC SHIFTING</th>
 
                                 </tr>
                             </thead>
@@ -332,9 +333,9 @@ const OemWiseIntegration = ({ onData }) => {
                                         <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'RECTIFICATION' })}>{item.RECTIFICATION}</th>
                                         <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'OPERATIONS' })}>{item.OPERATIONS}</th>
                                         <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'OTHERS' })}>{item.OTHERS}</th>
-                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'OTHERS' })}>{item.OTHERS}</th>
-                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'G5_SECTOR_ADDITION' })}>{item.G5_SECTOR_ADDITION}</th>
-                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'G5_RELOCATION' })}>{item.G5_RELOCATION}</th>
+                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'G5_SECTOR_ADDITION' })}>{item['5G SECTOR ADDITION']}</th>
+                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'G5_RELOCATION' })}>{item['5G RELOCATION']}</th>
+                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'TRAFFIC_SHIFTING' })}>{item.TRAFFIC_SHIFTING}</th>
 
                                     </tr>
                                 ))}
