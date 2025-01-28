@@ -33,7 +33,7 @@ const monthNames = [" ",
     "November",
     "December"
 ];
-const alphaBate = ['B', 's', 'AI']
+const alphaBate = ['B', 'S', 'AJ']
 
 const colorType = ['#B0EBB4', '#A0DEFF', '#FF9F66', '#ECB176', '#CDE8E5']
 
@@ -190,8 +190,8 @@ const FinalDashboard = () => {
 
         sheet2.mergeCells('A1:A2');
         sheet2.mergeCells('B1:R1');
-        sheet2.mergeCells('S1:AH1');
-        sheet2.mergeCells('AI1:AX1');
+        sheet2.mergeCells('S1:AI1');
+        sheet2.mergeCells('AJ1:AZ1');
 
         sheet2.getCell('A1').value = 'Circle';
         {
