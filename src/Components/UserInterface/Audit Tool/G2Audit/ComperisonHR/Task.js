@@ -46,7 +46,7 @@ const Task = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {data?.filter((item)=>item.circle === 'HR').map((item,index) => (
+                                    {data?.filter((item)=>item.circle === 'HRY').map((item,index) => (
                                         <tr className={classes.hover} key={index} style={{ textAlign: "center", fontWeigth: 700 }}>
                                              <th  >{item.app_name}</th>
                                              <th  >{item.user}</th>
