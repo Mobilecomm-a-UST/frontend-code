@@ -16,11 +16,11 @@ const MailData = () => {
 
   return (
     <div>
-     {text &&  <Level1 heading={'Level 1'} API={'data/level1/'} />} 
-     {text &&  <Level1 heading={'Level 2'} API={'data/level2/'} />} 
-     {text &&  <Level1 heading={'Level 3'} API={'data/level3/'} />} 
-     {text &&  <Level1 heading={'Level 4'} API={'data/level4/'} />} 
-     {text && <Thershold/>}
+     {text &&  <Level1 heading={'Level 1'} API={'Zero_Count_Rna_Payload_Tool/data/level1/'} />} 
+     {text &&  <Level1 heading={'Level 2'} API={'Zero_Count_Rna_Payload_Tool/data/level2/'} />} 
+     {text &&  <Level1 heading={'Level 3'} API={'Zero_Count_Rna_Payload_Tool/data/level3/'} />} 
+     {text &&  <Level1 heading={'Level 4'} API={'Zero_Count_Rna_Payload_Tool/data/level4/'} />} 
+     {text && <Thershold heading={'Threshold Values'} API={'Zero_Count_Rna_Payload_Tool/data/thershold/'} />}
 
 
         
