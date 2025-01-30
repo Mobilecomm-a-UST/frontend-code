@@ -38,7 +38,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const agingdata = ['< 3', '3 to 7', '> 7'];
-const prioritydata = ['P1', 'P2', 'P3'];
+const prioritydata = ['P0','P1', 'P2', 'P3'];
 
 const TicketDashboard = () => {
   const chartRef = useRef(null);
