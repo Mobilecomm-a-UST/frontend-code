@@ -8,13 +8,15 @@ import AppSelectIcon from '@rsuite/icons/AppSelect';
 import { useNavigate } from 'react-router-dom';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import FileUploadIcon from '@rsuite/icons/FileUpload';
+import ConversionIcon from '@rsuite/icons/Conversion';
 
 const Integration_Tool = lazy(() => import('./Integration_Tool'))
 const UploadFile = lazy(() => import('./Upload/UploadFile'))
 const FinalDashboard = lazy(() => import('./Dashboard/FinalDashboard'))
 const ComanDashboard = lazy(() => import('./Dashboard/ComanDashboard'))
 const MDashboard = lazy(() => import('./MasterDashboard/MDashboard'))
-const TotalDataDashboard = lazy(() => import('./Dashboard/TotalDataDashboard'))
+const TotalDataDashboard = lazy(() => import('./Dashboard/TotalDataDashboard'));
+const Relocation = lazy(()=>import('./Relocation/Relocation'))
 
 
 const Integration = () => {
@@ -50,6 +52,9 @@ const Integration = () => {
                                         <Nav.Item eventKey="3" placement="rightStart" icon={<FileUploadIcon />} onClick={() => navigate('/tools/Integration/upload_file')} >
                                             Upload File
                                         </Nav.Item>
+                                        <Nav.Item eventKey="4" placement="rightStart" icon={<ConversionIcon />} onClick={() => navigate('/tools/Integration/relocation')} >
+                                            Relocation
+                                        </Nav.Item>
 
 
 
@@ -68,6 +73,7 @@ const Integration = () => {
                                 <Route element={<TotalDataDashboard />} path="/dashboard/total_count/:name" />
                                 <Route element={<ComanDashboard />} path="/dashboard/:name" />
                                 <Route element={<MDashboard />} path="/master_dashboard" />
+                                <Route element={<Relocation />} path="/relocation" />
 
                             </Routes>
                         </Suspense>

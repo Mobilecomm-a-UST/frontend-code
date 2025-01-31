@@ -51,6 +51,8 @@ const RaiseTicket2 = () => {
     const [payloadAging,setPayloadAging] = useState([])
     const [selectAging, setSelectAging]=useState([])
     const [totalTable, setTotalTable] = useState([])
+    const [ticketType,setTicketType] = useState([])
+    const [selectTicketType, setSelectTicketType] = useState([])
     const [ticketDipForm, setTicketDipForm] = useState({
         Circle: "",
         Circle_Spoc: "",
@@ -216,6 +218,7 @@ const RaiseTicket2 = () => {
             setPayloadPriority(_.uniq(_.map(responce.data, 'priority')))
             setPayloadStatusData(_.uniq(_.map(responce.data, 'Status')))
             setPayloadAging(_.uniq(_.map(responce.data, 'aging')))
+            setTicketType(_.uniq(_.map(responce.data , 'ticket_type')))
             Swal.fire({
                 icon: "success",
                 title: "Done",
@@ -243,6 +246,7 @@ const RaiseTicket2 = () => {
             await setPayloadOpenDate(_.uniq(_.map(responce.data, 'Open_Date')))
             await setPayloadStatusData(_.uniq(_.map(responce.data, 'Status')))
             await setPayloadAging(_.uniq(_.map(responce.data, 'aging')))
+            await  setTicketType(_.uniq(_.map(responce.data , 'ticket_type')))
             // setCurrentDate(responce.current_date)
             // setPreviousDate(responce.previous_date)
             // setTotalOpen(true)
@@ -464,13 +468,15 @@ const RaiseTicket2 = () => {
             const openDateMatch = selectOpenDate.length === 0 || _.includes(selectOpenDate, item.Open_Date);;
             const agingMatch = selectAging.length === 0 || _.includes(selectAging, item.aging);
             const statusMatch = selectStatusData.length === 0 || _.includes(selectStatusData, item.Status);
+            const ticketTypeMatch = selectTicketType.length === 0 || _.includes(selectTicketType, item.ticket_type)
 
 
-            return circleMatch && siteIdMatch && ticketMatch && priorityMatch && openDateMatch  && agingMatch && statusMatch;
+            return circleMatch && siteIdMatch && ticketMatch && priorityMatch && openDateMatch  && agingMatch && statusMatch && ticketTypeMatch;
         });
         return filteredData?.map((item, index) =>  index <= scrollNo &&(
             <tr key={item.Circle+index} className={classes.hover} style={{ textAlign: "center", fontWeigth: 700 }}>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{index + 1}</th>
+                <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.ticket_type}</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.ticket_id}</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.Circle}</th>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{item.Site_ID}</th>
@@ -500,7 +506,7 @@ const RaiseTicket2 = () => {
             </tr>
         ))
 
-    }, [selectCircle, selectSiteID, selectTicketId, selectPriority, selectOpenDate, totalTable, selectStatusData,selectAging,scrollNo])
+    }, [selectCircle, selectSiteID, selectTicketId, selectPriority, selectOpenDate, totalTable, selectStatusData,selectAging,selectTicketType,scrollNo])
 
     const handleFormDialog = useCallback(() => {
         return (
@@ -829,7 +835,7 @@ const RaiseTicket2 = () => {
 
 
     const handleScroll = () => {
-        console.log('scrolling')
+        // console.log('scrolling')
         const scrollableContainer = scrollableContainerRef.current;
 
         // Calculate the distance between the bottom of the container and the bottom of the scrollable content
@@ -886,6 +892,7 @@ const RaiseTicket2 = () => {
                                 <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
                                         <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>S.No.</th>
+                                        <th style={{ padding: '1px 70px 1px 1px', whiteSpace: 'nowrap' }}>Ticket Type <CheckPicker data={ticketType.map(item => ({ label: item, value: item }))} value={selectTicketType} onChange={(value) => { setSelectTicketType(value) }} size="sm" appearance="default" placeholder="" style={{ width: 10 }} /></th>
                                         <th style={{ padding: '1px 70px 1px 1px', whiteSpace: 'nowrap' }}>Ticket ID <CheckPicker data={payloadTicketId.map(item => ({ label: item, value: item }))} value={selectTicketId} onChange={(value) => { setSelectTicketId(value) }} size="sm" appearance="default" placeholder="" style={{ width: 10 }} /></th>
                                         <th style={{ padding: '1px 60px 1px 2px', whiteSpace: 'nowrap' }} >Circle <CheckPicker data={payloadCircle.map(item => ({ label: item, value: item }))} value={selectCircle} onChange={(value) => { setSelectCircle(value) }} size="sm" appearance="default" style={{ width: 20 }} /> </th>
                                         <th style={{ padding: '1px 60px 1px 2px', whiteSpace: 'nowrap' }}>Site ID <CheckPicker data={payloadSiteID.map(item => ({ label: item, value: item }))} value={selectSiteID} onChange={(value) => { setSelectSiteID(value) }} size="sm" appearance="default" style={{ width: 20 }} /></th>
