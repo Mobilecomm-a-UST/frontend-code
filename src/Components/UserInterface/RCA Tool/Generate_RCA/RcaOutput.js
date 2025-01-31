@@ -3,7 +3,6 @@ import { usePost } from '../../../Hooks/PostApis';
 import { useLoadingDialog } from '../../../Hooks/LoadingDialog';
 import { styled } from '@mui/material/styles';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { FixedSizeList } from 'react-window'; // Import react-window
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
@@ -18,6 +17,10 @@ import { useStyles } from '../../ToolsCss';
 import { CsvBuilder } from 'filefy';
 import DownloadIcon from '@mui/icons-material/Download';
 import { IconButton } from '@mui/material';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 
 
@@ -84,8 +87,9 @@ const RcaOutput = () => {
     const [rcaData, setRcaData] = useState([])
     const [visibleData, setVisibleData] = useState([]); // Data currently rendered
     const [itemsPerLoad, setItemsPerLoad] = useState(50);
-    const [circleData,  setCircleData] = useState([])
-    const [selectedCircle , setSelectedCircle] = useState([])
+    const [circleData, setCircleData] = useState([])
+    const [selectedCircle, setSelectedCircle] = useState([])
+    const [kpiName,setKpiName] = useState('MV_RRC_Setup_Success_Rate')
     const { makePostRequest } = usePost()
     const { action, loading } = useLoadingDialog()
 
@@ -96,13 +100,14 @@ const RcaOutput = () => {
         action(true)
         const formData = new FormData();
         formData.append('date', date)
+        formData.append('kpi_name' , kpiName)
         const responce = await makePostRequest("RCA_TOOL/rca-dashboard/", formData)
         if (responce) {
             action(false)
             console.log('responce', responce)
             setRcaData(responce?.table_data)
             setVisibleData(responce.table_data.slice(0, itemsPerLoad));
-            setCircleData( _.uniq(_.map(responce?.table_data, 'circle')))
+            setCircleData(_.uniq(_.map(responce?.table_data, 'circle')))
             // console.log('filter data', _.uniq(_.map(responce?.table_data, 'circle'))) // Show initial data
 
             // setMdashboard(JSON.parse(responce.table_data))
@@ -125,34 +130,35 @@ const RcaOutput = () => {
         { title: 'RCA', field: 'RCA' },
         { title: 'Proposed Solution', field: 'Proposed_Solution' },
         { title: 'History Alarms', field: 'history_alarms' },
-       
+
     ]
 
-    const handleExport=()=>{
+    const handleExport = () => {
         var csvBuilder = new CsvBuilder(`Generate_rca_output.csv`)
-        .setColumns(columnData.map(item => item.title))
-        .addRows(rcaData.map(row => columnData.map(col => row[col.field])))
-        .exportFile();
+            .setColumns(columnData.map(item => item.title))
+            .addRows(rcaData.map(row => columnData.map(col => row[col.field])))
+            .exportFile();
     }
 
 
     const Row = ({ index, style }) => {
         const row = rcaData[index];
+
         return (
-          <TableRow key={index} style={style} className={classes.hover}>
-            <StyledTableCell align="center">{row.circle}</StyledTableCell>
-            <StyledTableCell align="center">{row.Cell_name}</StyledTableCell>
-            <StyledTableCell align="center">{row.KPI}</StyledTableCell>
-            <StyledTableCell align="center">{row.cell_value}</StyledTableCell>
-            <StyledTableCell align="center">{row.threshold_value}</StyledTableCell>
-            <StyledTableCell align="center">{row.check_condition}</StyledTableCell>
-            <StyledTableCell align="center">{row.RCA}</StyledTableCell>
-            <StyledTableCell align="center">{row.Proposed_Solution}</StyledTableCell>
-            <StyledTableCell align="center">{row.history_alarms}</StyledTableCell>
-          </TableRow>
+            <TableRow key={index} style={style} className={classes.hover}>
+                <StyledTableCell align="center">{row.circle}</StyledTableCell>
+                <StyledTableCell align="center">{row.Cell_name}</StyledTableCell>
+                <StyledTableCell align="center">{row.KPI}</StyledTableCell>
+                <StyledTableCell align="center">{row.cell_value}</StyledTableCell>
+                <StyledTableCell align="center">{row.threshold_value}</StyledTableCell>
+                <StyledTableCell align="center">{row.check_condition}</StyledTableCell>
+                <StyledTableCell align="center">{row.RCA}</StyledTableCell>
+                <StyledTableCell align="center">{row.Proposed_Solution}</StyledTableCell>
+                <StyledTableCell align="center">{row.history_alarms}</StyledTableCell>
+            </TableRow>
         );
-      };
-    
+    };
+
 
     // Load more data on scroll
     const loadMoreData = () => {
@@ -170,7 +176,7 @@ const RcaOutput = () => {
         // console.log('dayBefor', newDate)
 
         fetchDashboardData(newDate)
-    }, [])
+    }, [kpiName])
 
     return (
         <>
@@ -180,11 +186,28 @@ const RcaOutput = () => {
                 // style={{ transformOrigin: '0 0 0' }}
                 timeout={1000}
             >
-            <div>
-                    <div>
+                <div>
+                    <div style={{display:"flex",justifyContent:"space-between"}}>
                         <IconButton color='primary' onClick={handleExport} title='Export in csv'>
                             <DownloadIcon />
                         </IconButton>
+                   
+                            <FormControl sx={{ m: 1, width: 'auto' ,minWidth:200}} size="small">
+                                <InputLabel id="demo-simple-select-label">KPI</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    value={kpiName}
+                                    label="KPI"
+                                    onChange={(e)=>setKpiName(e.target.value)}
+                                >
+                                    <MenuItem value={'MV_RRC_Setup_Success_Rate'}>MV_RRC_Setup_Success_Rate</MenuItem>
+                                    <MenuItem value={'MV_ERAB_Setup_Success_Rate'}>MV_ERAB_Setup_Success_Rate</MenuItem>
+                                    <MenuItem value={'MV_4G_Data_Volume_GB'}>MV_4G_Data_Volume_GB</MenuItem>
+                                </Select>
+                            </FormControl>
+
+                  
 
                     </div>
                     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
@@ -200,7 +223,10 @@ const RcaOutput = () => {
                                 <Table stickyHeader >
                                     <TableHead style={{ fontSize: 18 }}>
                                         <TableRow >
-                                            <StyledTableCell align="center">Circle <CheckPicker data={circleData.map(item => ({ label: item, value: item }))} value={selectedCircle} onChange={(value) => { setSelectedCircle(value) }} size="sm" appearance="subtle" style={{ width: 40 }} /></StyledTableCell>
+                                            <StyledTableCell align="center">Circle 
+                                                {/* <CheckPicker data={circleData.map(item => ({ label: item, value: item }))} value={selectedCircle} onChange={(value) => { setSelectedCircle(value) }} size="sm" appearance="subtle" style={{ width: 40 }} /> */}
+
+                                                </StyledTableCell>
                                             <StyledTableCell align="center">Cell Name</StyledTableCell>
                                             <StyledTableCell align="center" >KPI</StyledTableCell>
                                             <StyledTableCell align="center">Cell Value</StyledTableCell>
@@ -234,8 +260,8 @@ const RcaOutput = () => {
                             </InfiniteScroll>
                         </TableContainer>
                     </Paper>
-            </div>
-                
+                </div>
+
             </Slide>
             {loading}
         </>

@@ -31,6 +31,7 @@ const WeekWisePayload = lazy(() => import('./Trend/WeekWisePayload'))
 const RaiseTicket = lazy(() => import('./TroubleTicket/RaiseTicket'))
 const RaiseTicket2 = lazy(() => import('./TroubleTicket/RaiseTicket2'))
 const MailData = lazy(()=> import('./Kpi_table/MailData'))
+const Graphs = lazy(()=>import('./Dashboard/Graphs'))
 
 
 const Rca = () => {
@@ -142,7 +143,7 @@ const Rca = () => {
                                 {!userType.includes('Circle_Rno') && <Route element={<AlarmFiles />} path="/alarm_files" />}
                                 <Route element={<Generate_rca />} path="/generate_rca" />
                                 <Route element={<MDashboard />} path="/master_dashboard" />
-                                <Route element={<TicketDashboard />} path="/ticket_dashboard" />
+                                <Route element={<Graphs />} path="/ticket_dashboard" />
                                 <Route element={<OverallSummary />} path="/overall_summary" />
                                 <Route element={<LteKpiTrend />} path="/lte_kpi_trend" />
                                 <Route element={<ZeroPayload />} path="/sleeping_cell" />

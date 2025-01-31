@@ -38,7 +38,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const agingdata = ['< 3', '3 to 7', '> 7'];
-const prioritydata = ['P0','P1', 'P2', 'P3'];
+const prioritydata = ['P0','P1', 'P2'];
 
 const TicketDashboard = () => {
   const chartRef = useRef(null);
@@ -106,6 +106,7 @@ const TicketDashboard = () => {
     formData.append('priority', priority);
     formData.append('min_ageing', minAging);
     formData.append('max_ageing', maxAging);
+    formData.append('ticket_type', 'Payload');
     try {
       const res = await makePostRequest("Zero_Count_Rna_Payload_Tool/circle_wise_open_close_dashboard/", formData);
       action(false);
@@ -160,8 +161,8 @@ const TicketDashboard = () => {
       {
         label: `OPEN (${handleTotalCount(openPayloadDip)})`,
         data: openPayloadDip,
-        borderColor: 'rgb(247, 44, 91)',
-        backgroundColor: ['rgb(247, 44, 91)'],
+        borderColor: '#016E75',
+        backgroundColor: ['#016E75'],
         borderWidth: 3,
         borderRadius: 5,
         fill: false,
@@ -170,8 +171,8 @@ const TicketDashboard = () => {
       {
         label: `CLOSE (${handleTotalCount(closePayloadDip)})`,
         data: closePayloadDip,
-        borderColor: 'rgb(167, 212, 119)',
-        backgroundColor: ['rgb(167, 212, 119)'],
+        borderColor: '#881E87',
+        backgroundColor: ['#881E87'],
         borderWidth: 3,
         borderRadius: 5,
         color: 'red',
@@ -188,7 +189,7 @@ const TicketDashboard = () => {
         label: `OPEN (${handleTotalCount(openPayloadDip)})`,
         data: openPayloadDip,
         borderColor: 'black',
-        backgroundColor: ['rgb(247, 44, 91,0.7)'],
+        backgroundColor: ['#006E74'],
         borderWidth: 0.5,
         borderRadius: 1,
         cursor: 'pointer',
@@ -199,7 +200,7 @@ const TicketDashboard = () => {
         label: `CLOSE (${handleTotalCount(closePayloadDip)})`,
         data: closePayloadDip,
         borderColor: 'black',
-        backgroundColor: ['rgb(167, 212, 119)'],
+        backgroundColor: ['#881E87'],
         borderWidth: 0.5,
         borderRadius: 1,
         cursor: 'pointer',
@@ -612,7 +613,7 @@ const TicketDashboard = () => {
         </Breadcrumbs>
       </div>
       <div style={{ margin: 10, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', padding: 10, height: 'auto', width: "98%", borderRadius: 10, backgroundColor: "white", display: "flex", justifyContent: 'space-around', alignItems: 'center' }}>
-        <div style={{ width: '30vh', height: 400, borderRadius: 5, padding: 5, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: "12px" }}>
+        <div style={{ width: '30vh', height: 400, borderRadius: 5, padding: 5, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: "12px",backgroundColor:'rgb(247,247,241)' }}>
           <div style={{ display: 'flex', alignItems: 'center', fontSize: '18px', fontWeight: 'bold', color: "black" }}><FilterAltIcon />FILTER DATA</div>
           {/* select month */}
           <div>
