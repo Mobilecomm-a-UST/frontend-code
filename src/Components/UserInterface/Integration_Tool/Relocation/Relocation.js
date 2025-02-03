@@ -26,7 +26,7 @@ const Relocation = () => {
     const fetchApiData = async () => {
         // const formData = new FormData()
         action(true)
-        let responce = await getData('tracker/')
+        let responce = await getData('IntegrationTracker/relocation/tracker/');
         if(responce){
             action(false)
             console.log('responce  data' , responce)
