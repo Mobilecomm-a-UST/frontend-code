@@ -86,6 +86,10 @@ const ComanDashboard = () => {
         BSC_NAME:'',
         CRQ:'',
         Customer_Approval:'',
+        Allocated_Tech:'',
+        Deployed_Tech:'',
+        Old_Site_ID:'',
+        Old_Site_Tech:''
         })
     const [editDataID , setEditDataID] = useState('')
     const [open, setOpen] = useState(false)
@@ -162,7 +166,11 @@ const ComanDashboard = () => {
             Pre_Post_Check: rowData.Pre_Post_Check,
             CTR_STATUS: rowData.CTR_STATUS,
             CRQ: rowData.CRQ,
-            Customer_Approval: rowData.Customer_Approval
+            Customer_Approval: rowData.Customer_Approval,
+            Allocated_Tech: rowData.Allocated_Tech,
+            Deployed_Tech: rowData.Deployed_Tech,
+            Old_Site_ID: rowData.Old_Site_ID,
+            Old_Site_Tech: rowData.Old_Site_Tech
           })
         setEditDataID(rowData.id)
         setOpen(true)
@@ -306,6 +314,10 @@ const ComanDashboard = () => {
         { title: 'Pre/Post Check', field: 'Pre_Post_Check' },
         { title: 'CRQ', field: 'CRQ' },
         { title: 'Customer Approval', field: 'Customer_Approval' },
+        { title: 'Allocated Tech.', field: 'Allocated_Tech' },
+        { title: 'Deployed Tech.', field: 'Deployed_Tech' },
+        { title: 'Old Site ID', field: 'Old_Site_ID' },
+        { title: 'Old Site Tech', field: 'Old_Site_Tech' },
         {
             title: 'Actions',
             field: 'actions',
