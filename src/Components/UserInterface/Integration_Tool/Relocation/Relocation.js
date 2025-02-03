@@ -51,13 +51,13 @@ const Relocation = () => {
         { title: 'Allocated Technology (as per DP)', field: 'allocated_technology' },
         { title: 'Deployed Technology', field: 'deployed_technology' },
         { title: 'Deviation', field: 'deviation' },
-        { title: 'No of Deviated Tech.', field: 'no_of_deviated_tech' },
+        { title: 'Deviated Tech.', field: 'no_of_deviated_tech' },
         { title: 'Old Site Locked Date', field: 'old_site_locked_date' },
         { title: 'New Site Unlock Date', field: 'new_site_unlock_date' },
         { title: 'Old Site Traffic', field: 'old_site_traffic' },
         { title: 'Existing Traffic', field: 'existing_traffic' },
-        { title: 'Old Site Admin Status (RNA)', field: 'old_site_admin_status' },
-        { title: 'New Site Admin Status (RNA)', field: 'new_site_admin_status' },
+        // { title: 'Old Site Admin Status (RNA)', field: 'old_site_admin_status' },
+        // { title: 'New Site Admin Status (RNA)', field: 'new_site_admin_status' },
         { title: 'Both Sites Unlocked', field: 'both_site_unlocked' },
         { title: 'Both Sites Locked', field: 'both_site_locked' },
         { title: 'Pre <3 Mbps', field: 'pre_less_than_3_mbps' },
@@ -93,6 +93,7 @@ const Relocation = () => {
 
 
     useEffect(() => {
+         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
         fetchApiData();
 
     }, [])
@@ -103,7 +104,7 @@ const Relocation = () => {
                 <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
                     <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
                     <Link underline="hover" onClick={() => { navigate('/tools/Integration') }}>IX Tracker Tool</Link>
-                    <Typography color='text.primary'>Relocation</Typography>
+                    <Typography color='text.primary'>Relocation Dashboard</Typography>
                 </Breadcrumbs>
                 <div style={{float:'right'}}>
                     <IconButton color='primary' onClick={handleExport} title='Export in csv'>
@@ -126,13 +127,13 @@ const Relocation = () => {
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Allocated Technology(As Per DP)</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Deployed Technology</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Deviation</th>
-                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>No. of Deviated Tech.</th>
+                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Deviated Tech.</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Old Site Locked Date</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>New Site Unlock Date</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Old Site Traffic</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Existing Traffic</th>
-                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Old Site Admin Status (RNA)</th>
-                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>New Site Admin Status (RNA)</th>
+                                    {/* <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Old Site Admin Status (RNA)</th>
+                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>New Site Admin Status (RNA)</th> */}
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Both Site Unlocked</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Both Site Locked</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Pre &lt;3 Mbps</th>
@@ -157,8 +158,8 @@ const Relocation = () => {
                                         <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.new_site_unlock_date}</th>
                                         <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.old_site_traffic}</th>
                                         <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.existing_traffic}</th>
-                                        <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.old_site_admin_status}</th>
-                                        <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.new_site_admin_status}</th>
+                                        {/* <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.old_site_admin_status}</th>
+                                        <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.new_site_admin_status}</th> */}
                                         <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.both_site_unlocked}</th>
                                         <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.both_site_locked}</th>
                                         <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.pre_less_than_3_mbps}</th>

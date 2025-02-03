@@ -17,6 +17,8 @@ const ComanDashboard = lazy(() => import('./Dashboard/ComanDashboard'))
 const MDashboard = lazy(() => import('./MasterDashboard/MDashboard'))
 const TotalDataDashboard = lazy(() => import('./Dashboard/TotalDataDashboard'));
 const Relocation = lazy(()=>import('./Relocation/Relocation'))
+const RelocationUpload = lazy(()=>import('./Relocation/RelocationUpload'))
+
 
 
 const Integration = () => {
@@ -28,6 +30,8 @@ const Integration = () => {
     useEffect(() => {
         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
     }, [])
+
+    // onClick={() => navigate('/tools/Integration/relocation')} 
     return (
         <>
 
@@ -52,9 +56,14 @@ const Integration = () => {
                                         <Nav.Item eventKey="3" placement="rightStart" icon={<FileUploadIcon />} onClick={() => navigate('/tools/Integration/upload_file')} >
                                             Upload File
                                         </Nav.Item>
-                                        <Nav.Item eventKey="4" placement="rightStart" icon={<ConversionIcon />} onClick={() => navigate('/tools/Integration/relocation')} >
-                                            Relocation
-                                        </Nav.Item>
+                                        <Nav.Menu eventKey="4" placement="rightStart" icon={<ConversionIcon />} title="Relocation" > 
+                                            <Nav.Item eventKey="4-1" placement="rightStart" onClick={() => navigate('/tools/Integration/relocation_dashboard')}>
+                                                Dashboard  
+                                            </Nav.Item>
+                                            <Nav.Item eventKey="4-2" placement="rightStart" onClick={() => navigate('/tools/Integration/relocation_uploadfile')}>
+                                                Upload File  
+                                            </Nav.Item>
+                                        </Nav.Menu>
 
 
 
@@ -73,7 +82,8 @@ const Integration = () => {
                                 <Route element={<TotalDataDashboard />} path="/dashboard/total_count/:name" />
                                 <Route element={<ComanDashboard />} path="/dashboard/:name" />
                                 <Route element={<MDashboard />} path="/master_dashboard" />
-                                <Route element={<Relocation />} path="/relocation" />
+                                <Route element={<Relocation />} path="/relocation_dashboard" />
+                                <Route element={<RelocationUpload />} path="/relocation_uploadfile" />
 
                             </Routes>
                         </Suspense>
