@@ -35,7 +35,9 @@ const getData = async (url) => {
 
 const postData = async (url, body, token ) => {
   try {
-    var response = await axios.post(`${ServerURL}/${url}`, body, token)
+    var response = await axios.post(`${ServerURL}/${url}`, body, {
+      headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` }
+    })
     var result = await response.data
     return (result)
   }
