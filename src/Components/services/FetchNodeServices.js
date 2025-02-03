@@ -8,7 +8,7 @@ import axios from "axios"
 // const ServerURL = "http://103.242.225.195:8000"
 // const ServerURL = "http://192.168.0.164:8000"
 // const ServerURL = "http://192.168.0.10:8000"
-const ServerURL = "http://103.242.225.195:8000"
+const ServerURL = "http://103.242.225.195:8000";
 // const ServerURL = "http://192.168.137.190:8001"
 // const ServerURL = "http://54.234.191.244"
 // const ServerURL = "http://13.233.231.179:80"
@@ -34,16 +34,13 @@ const getData = async (url) => {
 
 
 const postData = async (url, body, token ) => {
-
   try {
-
     var response = await axios.post(`${ServerURL}/${url}`, body, token)
     var result = await response.data
     return (result)
   }
   catch (error) {
     console.log(error)
-
     return (false)
   }
 }

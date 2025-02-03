@@ -24,6 +24,10 @@ import DialogContent from '@mui/material/DialogContent';
 import CloseIcon from '@mui/icons-material/Close';
 import TextField from '@mui/material/TextField';
 import AddIcon from '@mui/icons-material/Add';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 import { useStyles } from '../../../ToolsCss';
 import axios from 'axios';
 
@@ -40,8 +44,8 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     },
     [`&.${tableCellClasses.body}`]: {
         fontSize: 12,
-        padding: 2,
-        height:14
+        padding: 1,
+        // height:20
     },
 }));
 
@@ -58,6 +62,9 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
+
+const circleItem = ['AP', 'RJ', 'JK', 'DL', 'UE', 'UPE', 'MH', 'MU', 'MP', 'BH', 'WB', 'PB', 'HR', 'OD', 'JH', 'KO', 'TN', 'CH', 'KK', 'UW']
+
 const Level1 = ({ heading, API }) => {
     const [tableData, setTableData] = useState([]);
     const [formData, setFormData] = useState({
@@ -81,6 +88,7 @@ const Level1 = ({ heading, API }) => {
         const response = await getData(`${API}`);
         if (response) {
             setTableData(response)
+            console.log('circle' ,response.map(item=>item.circle))
         }
         console.log(response)
     }
@@ -123,18 +131,21 @@ const Level1 = ({ heading, API }) => {
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
 
-                            <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    placeholder="Circle"
-                                    label="Circle"
-                                    name="circle"
-                                    value={formData.circle}
-                                    onChange={handleChange}
-                                    size="small"
-                                    type='text'
-                                />
+                            <FormControl fullWidth size="small">
+                                    <InputLabel id="demo-simple-select-label">Circle</InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        value={formData.circle}
+                                        label="Circle"
+                                        name='circle'
+                                        onChange={handleChange}
+                                    >
+                                      {circleItem.map((item,index)=>(
+                                        <MenuItem key={item} value={item}>{item}</MenuItem>
+                                      ))}
+                                    </Select>
+                                </FormControl>
                             </Grid>
                             <Grid item xs={6}>
 
@@ -201,18 +212,21 @@ const Level1 = ({ heading, API }) => {
                         <Grid container spacing={2}>
                             <Grid item xs={12}>
 
-                            <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    placeholder="Circle"
-                                    label="Circle"
-                                    name="circle"
-                                    value={formData.circle}
-                                    onChange={handleChange}
-                                    size="small"
-                                    type='text'
-                                />
+                                 <FormControl fullWidth size="small">
+                                    <InputLabel id="demo-simple-select-label">Circle</InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        value={formData.circle}
+                                        label="Circle"
+                                        name='circle'
+                                        onChange={handleChange}
+                                    >
+                                      {circleItem.map((item,index)=>(
+                                        <MenuItem key={item} value={item}>{item}</MenuItem>
+                                      ))}
+                                    </Select>
+                                </FormControl>
                             </Grid>
                             <Grid item xs={6}>
 
@@ -369,7 +383,7 @@ const Level1 = ({ heading, API }) => {
                 timeout={1000}
             >
                 <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-                    <TableContainer sx={{ maxHeight: 500, width: '100%' }}>
+                    <TableContainer sx={{ maxHeight: 450, width: '100%' }}>
                         <Table stickyHeader >
                             <TableHead style={{ fontSize: 18 }}>
                                 <TableRow >
@@ -390,7 +404,7 @@ const Level1 = ({ heading, API }) => {
                                         <StyledTableCell align="center">{row.circle}</StyledTableCell>
                                         <StyledTableCell align="center">{row.person_name}</StyledTableCell>
                                         <StyledTableCell align="center">{row.email}</StyledTableCell>
-                                        <StyledTableCell align="center" style={{ borderRight: "2px solid black", display: 'flex', flex: 'row', justifyContent: 'space-evenly' }}>
+                                        <StyledTableCell  style={{ borderRight: "2px solid black", display: 'flex', flex: 'row', justifyContent: 'space-evenly' }}>
                                             <Tooltip title="Edit" color='primary'>
                                                 <IconButton color="primary" onClick={() => { handleEdit(row) }}>
                                                     <EditIcon fontSize='small' />

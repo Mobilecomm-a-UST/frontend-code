@@ -24,6 +24,10 @@ import DialogContent from '@mui/material/DialogContent';
 import CloseIcon from '@mui/icons-material/Close';
 import TextField from '@mui/material/TextField';
 import AddIcon from '@mui/icons-material/Add';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 import { useStyles } from '../../../ToolsCss';
 import axios from 'axios';
 
@@ -31,18 +35,18 @@ import axios from 'axios';
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: '#223354',
-    color: theme.palette.common.white,
-    whiteSpace: 'nowrap',
-    width: theme.palette.common.auto,
-    padding: 4,
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 12,
-    padding: 2,
-    height: 14
-  },
+    [`&.${tableCellClasses.head}`]: {
+        backgroundColor: '#223354',
+        color: theme.palette.common.white,
+        whiteSpace: 'nowrap',
+        width: theme.palette.common.auto,
+        padding: 4,
+    },
+    [`&.${tableCellClasses.body}`]: {
+        fontSize: 12,
+        padding: 1,
+        // height:20
+    },
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -128,7 +132,7 @@ const Thershold = ({ heading, API }) => {
           <form onSubmit={handleAddData} style={{ width: '100%', marginTop: 20 }}>
             <Grid container spacing={2}>
               <Grid item xs={6}>
-
+{/* 
                 <TextField
                   variant="outlined"
                   required
@@ -140,7 +144,25 @@ const Thershold = ({ heading, API }) => {
                   onChange={handleChange}
                   size="small"
                   type='text'
-                />
+                /> */}
+                                            <FormControl fullWidth size="small">
+                                    <InputLabel id="demo-simple-select-label">Priority</InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        value={formData.priority}
+                                        label="Priority"
+                                        name='priority'
+                                        placeholder='Select Priority'
+                                        onChange={handleChange}
+                                    >
+                                
+                                        <MenuItem value={'P0'}>P0</MenuItem>
+                                        <MenuItem value={'P1'}>P1</MenuItem>
+                                        <MenuItem value={'P2'}>P2</MenuItem>
+                               
+                                    </Select>
+                                </FormControl>
               </Grid>
               <Grid item xs={6}>
 
@@ -235,18 +257,24 @@ const Thershold = ({ heading, API }) => {
             <Grid container spacing={2}>
               <Grid item xs={6}>
 
-                <TextField
-                  variant="outlined"
-                  required
-                  fullWidth
-                  placeholder="Priority"
-                  label="Piority"
-                  name="priority"
-                  value={formData.priority}
-                  onChange={handleChange}
-                  size="small"
-                  type='text'
-                />
+              <FormControl fullWidth size="small">
+                                    <InputLabel id="demo-simple-select-label">Priority</InputLabel>
+                                    <Select
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        value={formData.priority}
+                                        label="Priority"
+                                        name='priority'
+                                        placeholder='Select Priority'
+                                        onChange={handleChange}
+                                    >
+                                
+                                        <MenuItem value={'P0'}>P0</MenuItem>
+                                        <MenuItem value={'P1'}>P1</MenuItem>
+                                        <MenuItem value={'P2'}>P2</MenuItem>
+                               
+                                    </Select>
+                                </FormControl>
               </Grid>
               <Grid item xs={6}>
 
@@ -442,7 +470,7 @@ const Thershold = ({ heading, API }) => {
         timeout={1000}
       >
         <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-          <TableContainer sx={{ maxHeight: 500, width: '100%' }}>
+          <TableContainer sx={{ maxHeight: 450, width: '100%' }}>
             <Table stickyHeader >
               <TableHead style={{ fontSize: 18 }}>
                 <TableRow >
