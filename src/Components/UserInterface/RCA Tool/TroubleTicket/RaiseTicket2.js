@@ -752,6 +752,8 @@ const RaiseTicket2 = () => {
                                             fullWidth
                                         >
                                             <MenuItem value='RNA issue'>RNA Issue</MenuItem>
+                                            <MenuItem value='RNA issue'>MS2 Done</MenuItem>
+                                            <MenuItem value='RNA issue'>Others</MenuItem>
                                             <MenuItem value='HW issue'>HW Issue</MenuItem>
                                             <MenuItem value='Tx issue'>Tx Issue</MenuItem>
                                             <MenuItem value='Quality alarm'>Quality Alarm</MenuItem>
@@ -762,6 +764,8 @@ const RaiseTicket2 = () => {
                                             <MenuItem value='New layer /Sector coming in site'>New layer /Sector coming in site</MenuItem>
                                             <MenuItem value='New site / Sector come in neighobur'>New site / Sector come in neighobur</MenuItem>
                                             <MenuItem value='Soft optimization planned'>Soft optimization planned</MenuItem>
+                                            <MenuItem value='MS2 Done'>MS2 Done</MenuItem>
+                                            <MenuItem value='Others'>Others</MenuItem>
                                         </Select>
                                     </FormControl>
                                 </Grid>
@@ -890,7 +894,7 @@ const RaiseTicket2 = () => {
                         <TableContainer sx={{ maxHeight: '80vh', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} component={Paper} ref={scrollableContainerRef} onScroll={handleScroll}>
                             <table style={{ width: "100%", border: "1px solid black", borderCollapse: 'collapse', overflow: 'auto' }} >
                                 <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
-                                    <tr style={{ fontSize: 15, backgroundColor: "rgb(0, 110, 116)", color: "white", border: '1px solid white' }}>
+                                    <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
                                         <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>S.No.</th>
                                         <th style={{ padding: '1px 70px 1px 1px', whiteSpace: 'nowrap' }}>Ticket Type <CheckPicker data={ticketType.map(item => ({ label: item, value: item }))} value={selectTicketType} onChange={(value) => { setSelectTicketType(value) }} size="sm" appearance="default" placeholder="" style={{ width: 10 }} /></th>
                                         <th style={{ padding: '1px 70px 1px 1px', whiteSpace: 'nowrap' }}>Ticket ID <CheckPicker data={payloadTicketId.map(item => ({ label: item, value: item }))} value={selectTicketId} onChange={(value) => { setSelectTicketId(value) }} size="sm" appearance="default" placeholder="" style={{ width: 10 }} /></th>
