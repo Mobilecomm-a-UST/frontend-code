@@ -1,7 +1,5 @@
 import React from 'react'
 import { useEffect, useRef, useState } from 'react'
-import Tilt from 'react-parallax-tilt';
-import Grow from '@mui/material/Grow';
 import { Breadcrumbs, Link, Typography } from "@mui/material";
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { useNavigate } from 'react-router-dom';
@@ -126,8 +124,10 @@ const Relocation = () => {
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Old Site Technology</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Allocated Technology(As Per DP)</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Deployed Technology</th>
-                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Deviation</th>
-                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Deviated Tech.</th>
+                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Deviation (Allocated Vs Deployed)</th>
+                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Deviated Tech. (Allocated Vs Deployed)</th>
+                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Deviation (Old Vs Deployed)</th>
+                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Deviated Tech. (Old Vs Deployed)</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Old Site Locked Date</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>New Site Unlock Date</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Old Site Traffic Fixed</th>
@@ -139,6 +139,7 @@ const Relocation = () => {
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Both Site Locked</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Pre &lt;3 Mbps</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Current &lt;3Mbps</th>
+                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Payload Dip</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -153,8 +154,10 @@ const Relocation = () => {
                                         <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.old_site_technology}</th>
                                         <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.allocated_technology}</th>
                                         <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.deployed_technology}</th>
-                                        <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.deviation}</th>
-                                        <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.no_of_deviated_tech}</th>
+                                        <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.allocated_vs_deployed_tech_deviation}</th>
+                                        <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.allocated_vs_deployed_tech}</th>
+                                        <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.old_vs_deployed_tech_deviation}</th>
+                                        <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.old_vs_deployed_tech}</th>
                                         <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.old_site_locked_date}</th>
                                         <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.new_site_unlock_date}</th>
                                         <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.old_site_traffic_fixed}</th>
@@ -166,6 +169,7 @@ const Relocation = () => {
                                         <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.both_site_locked}</th>
                                         <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.pre_less_than_3_mbps}</th>
                                         <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.current_less_than_3_mbps}</th>
+                                        <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.payload_dip}</th>
 
                                     </tr>
                                 ))}
