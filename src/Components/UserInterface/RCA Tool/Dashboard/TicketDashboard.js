@@ -61,6 +61,7 @@ const TicketDashboard = () => {
   const [maxAgingValue, setMaxAgingValue] = useState('')
   const [tableData, setTableData] = useState([])
   const [allData, setAllData] = useState([])
+  const [minDate,setMinDate] = useState('')
   // const { isPending, isFetching, isError, data, error, refetch } = useQuery({
   //   queryKey: ['PayloadDip_MasterDashboard'],
   //   queryFn: async () => {
@@ -119,6 +120,7 @@ const TicketDashboard = () => {
         setMaxAging(res.max_ageing);
         if (!maxAgingValue) {
           setMaxAgingValue(res.max_ageing);
+          setMinDate(res.from_date)
         }
         setCircle(res.result.map(item => Object.keys(item)[0]))
         setOpenPayloadDip(res.result.map(item => Object.values(item)[0].OPEN))
@@ -161,8 +163,8 @@ const TicketDashboard = () => {
       {
         label: `OPEN (${handleTotalCount(openPayloadDip)})`,
         data: openPayloadDip,
-        borderColor: '#016E75',
-        backgroundColor: ['#016E75'],
+        borderColor: '#881E87',
+        backgroundColor: ['#881E87'],
         borderWidth: 3,
         borderRadius: 5,
         fill: false,
@@ -171,8 +173,8 @@ const TicketDashboard = () => {
       {
         label: `CLOSE (${handleTotalCount(closePayloadDip)})`,
         data: closePayloadDip,
-        borderColor: '#881E87',
-        backgroundColor: ['#881E87'],
+        borderColor: '#006E74',
+        backgroundColor: ['#006E74'],
         borderWidth: 3,
         borderRadius: 5,
         color: 'red',
@@ -189,7 +191,7 @@ const TicketDashboard = () => {
         label: `OPEN (${handleTotalCount(openPayloadDip)})`,
         data: openPayloadDip,
         borderColor: 'black',
-        backgroundColor: ['#006E74'],
+        backgroundColor: ['rgb(136, 30, 135,0.7)'],
         borderWidth: 0.5,
         borderRadius: 1,
         cursor: 'pointer',
@@ -200,7 +202,7 @@ const TicketDashboard = () => {
         label: `CLOSE (${handleTotalCount(closePayloadDip)})`,
         data: closePayloadDip,
         borderColor: 'black',
-        backgroundColor: ['#881E87'],
+        backgroundColor: ['rgb(0, 110, 116,0.7)'],
         borderWidth: 0.5,
         borderRadius: 1,
         cursor: 'pointer',
@@ -618,11 +620,11 @@ const TicketDashboard = () => {
           {/* select month */}
           <div>
             <InputLabel style={{ fontSize: 15 }}>Select From Date</InputLabel>
-            <input type='date' value={fromDate} onChange={(e) => setFromDate(e.target.value)} />
-          </div>
+            <input type='date' value={fromDate} min={minDate} onChange={(e) => setFromDate(e.target.value)}  />
+          </div> 
           <div>
             <InputLabel style={{ fontSize: 15 }}>Select To Date</InputLabel>
-            <input type='date' value={toDate} onChange={(e) => setToDate(e.target.value)} />
+            <input type='date' value={toDate} onChange={(e) => setToDate(e.target.value)}  />
             {/* <DatePicker value={toDate? toDate: new Date()}  onChange={(e) => console.log(e)} /> */}
           </div>
           {/* select circle */}

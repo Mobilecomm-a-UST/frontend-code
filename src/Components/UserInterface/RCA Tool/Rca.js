@@ -30,8 +30,8 @@ const DayWisePayload = lazy(() => import('./Trend/DayWisePayload'));
 const WeekWisePayload = lazy(() => import('./Trend/WeekWisePayload'))
 const RaiseTicket = lazy(() => import('./TroubleTicket/RaiseTicket'))
 const RaiseTicket2 = lazy(() => import('./TroubleTicket/RaiseTicket2'))
-const MailData = lazy(()=> import('./Kpi_table/MailData'))
-const Graphs = lazy(()=>import('./Dashboard/Graphs'))
+const MailData = lazy(() => import('./Kpi_table/MailData'))
+const Graphs = lazy(() => import('./Dashboard/Graphs'))
 
 
 const Rca = () => {
@@ -60,9 +60,9 @@ const Rca = () => {
                                     <Nav activeKey={activeKey} onSelect={setActiveKey} >
                                         <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 18 }}>RCA Genie</Nav>
 
-                                        <Nav.Item eventKey="0" placement="rightStart" icon={<AppSelectIcon size="3em" />} onClick={() => navigate('/tools/rca/master_dashboard')}>
+                                        {/* <Nav.Item eventKey="0" placement="rightStart" icon={<AppSelectIcon size="3em" />} onClick={() => navigate('/tools/rca/master_dashboard')}>
                                             Master Dashboard
-                                        </Nav.Item>
+                                        </Nav.Item> */}
 
                                         <Nav.Menu eventKey="4" placement="rightStart" title="Dashboard" icon={<DashboardIcon size="3em" />}>
                                             <Nav.Item eventKey='4-1' placement="rightStart" onClick={() => navigate('/tools/rca/ticket_dashboard')}>
@@ -106,7 +106,7 @@ const Rca = () => {
                                                 RCA Table
                                             </Nav.Item>
                                             <Nav.Item eventKey="1-3" placement="rightStart" onClick={() => navigate('/tools/rca/escalation_mail')}>
-                                                    Escalation Mail
+                                                Escalation Mail
                                             </Nav.Item>
                                         </Nav.Menu>
                                         ) : null}
@@ -135,14 +135,15 @@ const Rca = () => {
                         <Suspense fallback={<div>Loading...</div>}>
                             <Routes>
                                 <Route element={<Rca_tool />} path="/" />
-                               
-                                {!userType.includes('Circle_Rno') &&  <Route element={<Rca_data />} path="/rca_table" />}
-                                {!userType.includes('Circle_Rno') &&   <Route element={<Kpi_Data />} path="/kpi_table" />}
+
+                                {!userType.includes('Circle_Rno') && <Route element={<Rca_data />} path="/rca_table" />}
+                                {!userType.includes('Circle_Rno') && <Route element={<Kpi_Data />} path="/kpi_table" />}
                                 {!userType.includes('Circle_Rno') && <Route element={<Daily4G_KPI />} path="/daily_4G_kpi" />}
                                 {!userType.includes('Circle_Rno') && <Route element={<TentativeCounter />} path="/tentative_counter" />}
                                 {!userType.includes('Circle_Rno') && <Route element={<AlarmFiles />} path="/alarm_files" />}
+                                {!userType.includes('Circle_Rno') && <Route element={<MailData />} path="/escalation_mail" />}
                                 <Route element={<Generate_rca />} path="/generate_rca" />
-                                <Route element={<MDashboard />} path="/master_dashboard" />
+                                {/* <Route element={<MDashboard />} path="/master_dashboard" /> */}
                                 <Route element={<Graphs />} path="/ticket_dashboard" />
                                 <Route element={<OverallSummary />} path="/overall_summary" />
                                 <Route element={<LteKpiTrend />} path="/lte_kpi_trend" />
@@ -151,7 +152,7 @@ const Rca = () => {
                                 <Route element={<WeekWisePayload />} path="/week_wise_payload_variation" />
                                 {/* <Route element={<RaiseTicket />} path="/raise_ticket" /> */}
                                 <Route element={<RaiseTicket2 />} path="/ticket" />
-                                <Route element={<MailData/>} path="/escalation_mail" />
+
                             </Routes>
                         </Suspense>
                     </Grid>

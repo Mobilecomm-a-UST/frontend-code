@@ -130,7 +130,8 @@ const Relocation = () => {
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Deviated Tech.</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Old Site Locked Date</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>New Site Unlock Date</th>
-                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Old Site Traffic</th>
+                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Old Site Traffic Fixed</th>
+                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Old Site Traffic Variable</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Existing Traffic</th>
                                     {/* <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Old Site Admin Status (RNA)</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>New Site Admin Status (RNA)</th> */}
@@ -156,7 +157,8 @@ const Relocation = () => {
                                         <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.no_of_deviated_tech}</th>
                                         <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.old_site_locked_date}</th>
                                         <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.new_site_unlock_date}</th>
-                                        <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.old_site_traffic}</th>
+                                        <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.old_site_traffic_fixed}</th>
+                                        <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.old_site_traffic_variable}</th>
                                         <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.existing_traffic}</th>
                                         {/* <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.old_site_admin_status}</th>
                                         <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.new_site_admin_status}</th> */}
