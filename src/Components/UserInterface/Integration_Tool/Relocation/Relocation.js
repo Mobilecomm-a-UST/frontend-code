@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { useEffect, useRef, useState } from 'react'
 import { Breadcrumbs, Link, Typography } from "@mui/material";
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
@@ -11,31 +11,46 @@ import { getData } from '../../../services/FetchNodeServices';
 import { useLoadingDialog } from '../../../Hooks/LoadingDialog';
 import { useStyles } from '../../ToolsCss';
 import { CsvBuilder } from 'filefy';
+import SiteLockUnlockForm from './SiteLockUnlockForm';
+import CheckPicker from 'rsuite/CheckPicker';
+import _, { set } from 'lodash';
+
 
 const Relocation = () => {
     const navigate = useNavigate();
-    const {loading,action} = useLoadingDialog();
-    const {classes}  = useStyles();
+    const { loading, action } = useLoadingDialog();
+    const classes = useStyles();
     const scrollableContainerRef = useRef(null);
-    const [tableData , setTableData] = useState([]);
+    const [tableData, setTableData] = useState([]);
     const [scrollNo, setScrollNo] = useState(50)
+    const [tempRawData, setTempRawData] = useState('');
+    const [open, setOpen] = useState(false);
+    const [circleData, setCircleData] = useState([]);
+    const [selectCircle, setSelectCircle] = useState([]);
+    const [newSiteId, setNewSiteId] = useState([]);
+    const [oldSiteId, setOldSiteId] = useState([]);
+    const [selectNewSiteId, setSelectNewSiteId] = useState([]);
+    const [selectOldSiteId, setSelectOldSiteId] = useState([]);
+
 
 
     const fetchApiData = async () => {
         // const formData = new FormData()
         action(true)
         let responce = await getData('IntegrationTracker/relocation/tracker/');
-        if(responce){
+        if (responce) {
             action(false)
-            console.log('responce  data' , responce)
+            console.log('responce  data', responce)
             setTableData(responce)
+            // setPayloadCircle(_.uniq(_.map(responce.data, 'Circle')))
+            setCircleData(_.uniq(_.map(responce, 'circle')))
+            setOldSiteId(_.uniq(_.map(responce, 'old_site_id')))
+            setNewSiteId(_.uniq(_.map(responce, 'new_site_id')))
 
-        }else{
+        } else {
             action(false)
 
         }
-
-
     }
 
     const columnData = [
@@ -48,8 +63,12 @@ const Relocation = () => {
         { title: 'Old Site Technology', field: 'old_site_technology' },
         { title: 'Allocated Technology (as per DP)', field: 'allocated_technology' },
         { title: 'Deployed Technology', field: 'deployed_technology' },
-        { title: 'Deviation', field: 'deviation' },
-        { title: 'Deviated Tech.', field: 'no_of_deviated_tech' },
+        { title: 'Deviation Status (Allocated Vs Deployed)', field: 'allocated_vs_deployed_tech_deviation' },
+        { title: 'Deviated Tech. (Allocated Vs Deployed)', field: 'allocated_vs_deployed_tech' },
+        // 
+        { title: 'Deviation Status (Old Vs Deployed)', field: 'old_vs_deployed_tech_deviation' },
+        { title: 'Deviated Tech. (Old Vs Deployed)', field: 'old_vs_deployed_tech' },
+        // 
         { title: 'Old Site Locked Date', field: 'old_site_locked_date' },
         { title: 'New Site Unlock Date', field: 'new_site_unlock_date' },
         { title: 'Old Site Traffic', field: 'old_site_traffic' },
@@ -61,14 +80,14 @@ const Relocation = () => {
         { title: 'Pre <3 Mbps', field: 'pre_less_than_3_mbps' },
         { title: 'Current <3 Mbps', field: 'current_less_than_3_mbps' }
     ];
-    
 
 
-    const handleExport=()=>{
+
+    const handleExport = () => {
         var csvBuilder = new CsvBuilder(`Relocation_Tracker.csv`)
-        .setColumns(columnData.map(item => item.title))
-        .addRows(tableData.map(row => columnData.map(col => row[col.field])))
-        .exportFile();
+            .setColumns(columnData.map(item => item.title))
+            .addRows(tableData.map(row => columnData.map(col => row[col.field])))
+            .exportFile();
     }
 
     const handleScroll = () => {
@@ -89,9 +108,108 @@ const Relocation = () => {
         }
     };
 
+    const handleRowClick = (rowData) => {
+        console.log('Row clicked:', rowData);
+        if (rowData.value === 'old') {
+            setTempRawData({ id: rowData.id, hading: 'Old Site Locked & Unlocked Date', getApi: 'get_old_site_locked_unlocked_date', postApi: 'old_site_locked_unlocked_date' });
+            setOpen(true)
+        } else {
+            setTempRawData({ id: rowData.id, hading: 'New Site Locked & Unlocked Date', getApi: 'get_new_site_locked_unlocked_date', postApi: 'New_site_locked_unlocked_date' });
+            setOpen(true)
+        }
+
+    };
+
+    const FilterTableData = useCallback(() => {
+
+        let filteredData = _.filter(tableData, item => {
+
+            const circleMatch = selectCircle.length === 0 || _.includes(selectCircle, item.circle);
+            const oldSiteIdMatch = selectOldSiteId.length === 0 || _.includes(selectOldSiteId, item.old_site_id);
+            const newSiteIdMatch = selectNewSiteId.length === 0 || _.includes(selectNewSiteId, item.new_site_id);
+
+            return circleMatch && oldSiteIdMatch && newSiteIdMatch;
+        });
+
+    const getLockFormate =(data)=>{
+        let statusData = data?.map(item => item.status).at(-1);
+        let tempDate  = data?.map(item=>item.created_at).at(-1);
+        let formattedDate = new Date(tempDate).toLocaleString('en-IN', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true, // For AM/PM format
+            timeZone: 'Asia/Kolkata' // Ensure the correct timezone
+        });
+
+
+
+        // console.log(statusData , tempDate )
+        if(statusData && formattedDate){
+             return (`${statusData} (${formattedDate})`)
+        }else{
+            return ''
+        }
+       
+
+    }
+
+
+        // console.log('filter data' , filteredData.map(item=>item.))
+
+
+        return filteredData?.map((item, index) => (
+            <tr key={item.circle + index} style={{ textAlign: "center", fontWeigth: 700 }}>
+                <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{index + 1}</th>
+                <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.circle}</th>
+                <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.old_site_id}</th>
+                <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.new_site_id}</th>
+                <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.integration_date}</th>
+                <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.ms1_date}</th>
+                <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.old_site_technology}</th>
+                <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.allocated_technology}</th>
+                <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.deployed_technology}</th>
+                <th style={{ whiteSpace: 'nowrap', border: '1px solid black',color:item.allocated_vs_deployed_tech_deviation==='Yes'?'red':'green' }}>{item.allocated_vs_deployed_tech_deviation}</th>
+                <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.allocated_vs_deployed_tech}</th>
+                <th style={{ whiteSpace: 'nowrap', border: '1px solid black',color:item.old_vs_deployed_tech_deviation==='Yes'?'red':'green' }}>{item.old_vs_deployed_tech_deviation}</th>
+                <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.old_vs_deployed_tech}</th>
+                <th style={{ whiteSpace: 'nowrap', border: '1px solid black', cursor: 'pointer' }}
+                    className={classes.hover}
+                    onClick={() => { handleRowClick({ id: item.id, value: 'old' }) }}>
+                     {getLockFormate(item.old_site_locked_unlocked_date)}
+                </th>
+                <th style={{ whiteSpace: '  nowrap', border: '1px solid black', cursor: 'pointer' }}
+                    className={classes.hover}
+                    onClick={() => { handleRowClick({ id: item.id, value: 'new' }) }}>
+                    {/* {item.new_site_locked_unlocked_date?.map(item => item.status).at(-1)}
+                    {item.new_site_locked_unlocked_date?.map(item => item.created_at).at(-1)} */}
+                    {getLockFormate(item.new_site_locked_unlocked_date)}
+                </th>
+                <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.old_site_traffic_fixed}</th>
+                <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.old_site_traffic_variable}</th>
+                <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.existing_traffic}</th>
+                {/* <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.old_site_admin_status}</th>
+                                        <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.new_site_admin_status}</th> */}
+                <th style={{ whiteSpace: 'nowrap', border: '1px solid black',color:item.both_site_unlocked==='Yes'?'red':'green' }}>{item.both_site_unlocked}</th>
+                <th style={{ whiteSpace: 'nowrap', border: '1px solid black',color:item.both_site_locked==='Yes'?'red':'green' }}>{item.both_site_locked}</th>
+                <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.pre_less_than_3_mbps}</th>
+                <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.current_less_than_3_mbps}</th>
+                <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.payload_dip}</th>
+            </tr>
+        ))
+    }, [selectCircle, selectNewSiteId, selectOldSiteId, tableData])
+
+    const handleClose = () => {
+        setOpen(false);
+        setTempRawData('');
+        // fetchApiData();
+    };
+
 
     useEffect(() => {
-         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
+        document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
         fetchApiData();
 
     }, [])
@@ -104,35 +222,35 @@ const Relocation = () => {
                     <Link underline="hover" onClick={() => { navigate('/tools/Integration') }}>IX Tracker Tool</Link>
                     <Typography color='text.primary'>Relocation Dashboard</Typography>
                 </Breadcrumbs>
-                <div style={{float:'right'}}>
+                <div style={{ float: 'right' }}>
                     <IconButton color='primary' onClick={handleExport} title='Export in csv'>
-                            <DownloadIcon />
-                        </IconButton>
+                        <DownloadIcon />
+                    </IconButton>
                 </div>
 
                 <div >
-                    <TableContainer sx={{ maxHeight: '80vh', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} component={Paper} ref={scrollableContainerRef} onScroll={handleScroll}>
+                    <TableContainer sx={{ maxHeight: '80vh', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} component={Paper} >
                         <table style={{ width: "100%", border: "1px solid black", borderCollapse: 'collapse', overflow: 'auto' }} >
                             <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
                                 <tr style={{ fontSize: 14, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Sr. No.</th>
-                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Circle</th>
-                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Old Site Id</th>
-                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>New Site Id</th>
+                                    <th style={{ padding: '1px 70px 1px 1px', whiteSpace: 'nowrap' }}>Circle <CheckPicker data={circleData.map(item => ({ label: item, value: item }))} value={selectCircle} onChange={(value) => { setSelectCircle(value) }} size="sm" appearance="default" placeholder="" style={{ width: 10 }} /> </th>
+                                    <th style={{ padding: '1px 70px 1px 1px', whiteSpace: 'nowrap' }}>Old Site Id <CheckPicker data={oldSiteId.map(item => ({ label: item, value: item }))} value={selectOldSiteId} onChange={(value) => { setSelectOldSiteId(value) }} size="sm" appearance="default" placeholder="" style={{ width: 10 }} /></th>
+                                    <th style={{ padding: '1px 70px 1px 1px', whiteSpace: 'nowrap' }}>New Site Id <CheckPicker data={newSiteId.map(item => ({ label: item, value: item }))} value={selectNewSiteId} onChange={(value) => { setSelectNewSiteId(value) }} size="sm" appearance="default" placeholder="" style={{ width: 10 }} /></th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Integration Date</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>MS1 Date</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Old Site Technology</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Allocated Technology(As Per DP)</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Deployed Technology</th>
-                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Deviation (Allocated Vs Deployed)</th>
+                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Deviation Status (Allocated Vs Deployed)</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Deviated Tech. (Allocated Vs Deployed)</th>
-                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Deviation (Old Vs Deployed)</th>
+                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Deviation Status (Old Vs Deployed)</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Deviated Tech. (Old Vs Deployed)</th>
-                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Old Site Locked Date</th>
-                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>New Site Unlock Date</th>
+                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Old Site Locked-Unlocked Date</th>
+                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>New Site Locked-Unlocked Date</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Old Site Traffic Fixed</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Old Site Traffic Variable</th>
-                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Existing Traffic</th>
+                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Latest Traffic</th>
                                     {/* <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Old Site Admin Status (RNA)</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>New Site Admin Status (RNA)</th> */}
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Both Site Unlocked</th>
@@ -143,7 +261,7 @@ const Relocation = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {tableData?.map((item,index) => (
+                                {/* {tableData?.map((item,index) => (
                                     <tr  style={{ textAlign: "center",border:'1px solid black', fontWeigth: 700 }}>
                                         <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{index+1}</th>
                                         <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.circle}</th>
@@ -158,13 +276,11 @@ const Relocation = () => {
                                         <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.allocated_vs_deployed_tech}</th>
                                         <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.old_vs_deployed_tech_deviation}</th>
                                         <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.old_vs_deployed_tech}</th>
-                                        <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.old_site_locked_date}</th>
-                                        <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.new_site_unlock_date}</th>
+                                        <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }} onClick={()=>{handleRowClick({id:item.id,value:'old'})}}>{item.old_site_locked_date}</th>
+                                        <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }} onClick={()=>{handleRowClick({id:item.id,value:'new'})}}>{item.new_site_unlock_date}</th>
                                         <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.old_site_traffic_fixed}</th>
                                         <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.old_site_traffic_variable}</th>
                                         <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.existing_traffic}</th>
-                                        {/* <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.old_site_admin_status}</th>
-                                        <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.new_site_admin_status}</th> */}
                                         <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.both_site_unlocked}</th>
                                         <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.both_site_locked}</th>
                                         <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.pre_less_than_3_mbps}</th>
@@ -172,13 +288,16 @@ const Relocation = () => {
                                         <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.payload_dip}</th>
 
                                     </tr>
-                                ))}
+                                ))} */}
+
+                                {FilterTableData()}
 
                             </tbody>
                         </table>
                     </TableContainer>
                 </div>
             </div>
+            {open && <SiteLockUnlockForm data={tempRawData} open={open} handleClose={handleClose} updateTableData={fetchApiData}/>}
             {loading}
         </>
     )

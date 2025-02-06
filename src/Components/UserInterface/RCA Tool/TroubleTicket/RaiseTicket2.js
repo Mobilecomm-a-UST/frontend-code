@@ -752,8 +752,6 @@ const RaiseTicket2 = () => {
                                             fullWidth
                                         >
                                             <MenuItem value='RNA issue'>RNA Issue</MenuItem>
-                                            <MenuItem value='RNA issue'>MS2 Done</MenuItem>
-                                            <MenuItem value='RNA issue'>Others</MenuItem>
                                             <MenuItem value='HW issue'>HW Issue</MenuItem>
                                             <MenuItem value='Tx issue'>Tx Issue</MenuItem>
                                             <MenuItem value='Quality alarm'>Quality Alarm</MenuItem>
