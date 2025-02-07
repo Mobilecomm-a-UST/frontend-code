@@ -208,7 +208,7 @@ const RaiseTicket2 = () => {
     const fetchTableData2 = async () => {
         action(true)
         const responce = await makeGetRequest('Zero_Count_Rna_Payload_Tool/get_ticket_status_data/')
-        console.log('toggal button 2', responce)
+        // console.log('toggal button 2', responce)
         if (responce) {
             action(false)
             setTotalTable(responce.data)
@@ -459,6 +459,7 @@ const RaiseTicket2 = () => {
 
 
     const FilterPayloadDipData = useCallback(() => {
+        // setScrollNo(50)
         let filteredData = _.filter(totalTable, item => {
 
             const circleMatch = selectCircle.length === 0 || _.includes(selectCircle, item.Circle);
@@ -473,6 +474,10 @@ const RaiseTicket2 = () => {
 
             return circleMatch && siteIdMatch && ticketMatch && priorityMatch && openDateMatch  && agingMatch && statusMatch && ticketTypeMatch;
         });
+        
+
+        console.log('filter table data' , filteredData , 'indexing scrolling' , scrollNo)
+
         return filteredData?.map((item, index) =>  index <= scrollNo &&(
             <tr key={item.Circle+index} className={classes.hover} style={{ textAlign: "center", fontWeigth: 700 }}>
                 <th style={{ padding: '1px 5px', whiteSpace: 'nowrap' }}>{index + 1}</th>
