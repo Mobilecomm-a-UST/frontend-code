@@ -298,7 +298,7 @@ const TicketDashboard = () => {
         },
         ticks: {
           // forces step size to be 50 units
-          stepSize: 1,
+          stepSize: 10,
           // color:'white'
         },
         // stacked: true

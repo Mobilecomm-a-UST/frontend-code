@@ -161,7 +161,7 @@ const Relocation = () => {
 
 
         return filteredData?.map((item, index) => (
-            <tr key={item.circle + index} style={{ textAlign: "center", fontWeigth: 700 }}>
+            <tr key={item.circle + index}       className={classes.hover}  style={{ textAlign: "center", fontWeigth: 700 }}>
                 <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{index + 1}</th>
                 <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.circle}</th>
                 <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.old_site_id}</th>
@@ -196,7 +196,7 @@ const Relocation = () => {
                 <th style={{ whiteSpace: 'nowrap', border: '1px solid black',color:item.both_site_locked==='Yes'?'red':'green' }}>{item.both_site_locked}</th>
                 <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.pre_less_than_3_mbps}</th>
                 <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.current_less_than_3_mbps}</th>
-                <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.payload_dip}</th>
+                <th style={{ whiteSpace: 'nowrap', border: '1px solid black',color:item.payload_dip==='Yes'?'red':'green' }}>{item.payload_dip}</th>
             </tr>
         ))
     }, [selectCircle, selectNewSiteId, selectOldSiteId, tableData])
@@ -249,7 +249,7 @@ const Relocation = () => {
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Old Site Locked-Unlocked Date</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>New Site Locked-Unlocked Date</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Old Site Traffic Fixed</th>
-                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Old Site Traffic Variable</th>
+                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Old Site Latest Traffic</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Latest Traffic</th>
                                     {/* <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Old Site Admin Status (RNA)</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>New Site Admin Status (RNA)</th> */}
