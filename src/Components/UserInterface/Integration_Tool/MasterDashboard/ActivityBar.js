@@ -441,7 +441,7 @@ const ActivityBar = () => {
         },
         ticks: {
           // forces step size to be 50 units
-          stepSize: 1,
+          stepSize: 5,
           // color:'white'
         },
         // stacked: true

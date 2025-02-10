@@ -182,6 +182,10 @@ const RangeWiseDashboard = ({ onData }) => {
         { title: 'Pre/Post Check', field: 'Pre_Post_Check' },
         { title: 'CRQ', field: 'CRQ' },
         { title: 'Customer Approval', field: 'Customer_Approval' },
+        { title: 'Allocated Tech.', field: 'Allocated_Tech' },
+        { title: 'Deployed Tech.', field: 'Deployed_Tech' },
+        { title: 'Old Site ID', field: 'Old_Site_ID' },
+        { title: 'Old Site Tech', field: 'Old_Site_Tech' },
 
     ]
     // handleExport Range wise table in excel formet.........
