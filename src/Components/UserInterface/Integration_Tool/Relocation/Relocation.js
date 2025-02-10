@@ -78,7 +78,8 @@ const Relocation = () => {
         { title: 'Both Sites Unlocked', field: 'both_site_unlocked' },
         { title: 'Both Sites Locked', field: 'both_site_locked' },
         { title: 'Pre <3 Mbps', field: 'pre_less_than_3_mbps' },
-        { title: 'Current <3 Mbps', field: 'current_less_than_3_mbps' }
+        { title: 'Current <3 Mbps', field: 'current_less_than_3_mbps' },
+        { title: 'Payload Dip', field: 'payload_dip' },
     ];
 
 
