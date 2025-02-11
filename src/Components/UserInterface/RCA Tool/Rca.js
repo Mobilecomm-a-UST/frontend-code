@@ -98,7 +98,7 @@ const Rca = () => {
                                             Generate RCA
                                         </Nav.Item>
 
-                                        {(!userType.includes('Circle_Rno')) ? (<Nav.Menu eventKey="1" placement="rightStart" title="Threshold Data" icon={<DashboardIcon size="3em" />}>
+                                        {/* {(!userType.includes('Circle_Rno')) ? (<Nav.Menu eventKey="1" placement="rightStart" title="Threshold Data" icon={<DashboardIcon size="3em" />}>
                                             <Nav.Item eventKey="1-1" placement="rightStart" onClick={() => navigate('/tools/rca/kpi_table')}>
                                                 KPI Table
                                             </Nav.Item>
@@ -109,7 +109,7 @@ const Rca = () => {
                                                 Escalation Mail
                                             </Nav.Item>
                                         </Nav.Menu>
-                                        ) : null}
+                                        ) : null} */}
 
 
                                         {(!userType.includes('Circle_Rno')) ? (<Nav.Menu eventKey="2" placement="rightStart" title="Upload Data" icon={<FileUploadIcon size="3em" />}>
@@ -136,12 +136,12 @@ const Rca = () => {
                             <Routes>
                                 <Route element={<Rca_tool />} path="/" />
 
-                                {!userType.includes('Circle_Rno') && <Route element={<Rca_data />} path="/rca_table" />}
-                                {!userType.includes('Circle_Rno') && <Route element={<Kpi_Data />} path="/kpi_table" />}
+                                {/* {!userType.includes('Circle_Rno') && <Route element={<Rca_data />} path="/rca_table" />} */}
+                                {/* {!userType.includes('Circle_Rno') && <Route element={<Kpi_Data />} path="/kpi_table" />} */}
                                 {!userType.includes('Circle_Rno') && <Route element={<Daily4G_KPI />} path="/daily_4G_kpi" />}
                                 {!userType.includes('Circle_Rno') && <Route element={<TentativeCounter />} path="/tentative_counter" />}
                                 {!userType.includes('Circle_Rno') && <Route element={<AlarmFiles />} path="/alarm_files" />}
-                                {!userType.includes('Circle_Rno') && <Route element={<MailData />} path="/escalation_mail" />}
+                                {/* {!userType.includes('Circle_Rno') && <Route element={<MailData />} path="/escalation_mail" />} */}
                                 <Route element={<Generate_rca />} path="/generate_rca" />
                                 {/* <Route element={<MDashboard />} path="/master_dashboard" /> */}
                                 <Route element={<Graphs />} path="/ticket_dashboard" />
