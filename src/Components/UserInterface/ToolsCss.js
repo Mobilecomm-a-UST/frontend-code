@@ -90,6 +90,23 @@
              height: '30px',
              width:'100px'
         }
-      }
+      },
+
+    blink: {
+        animation: "$blinkEffect 1s infinite"
+    },
+    "@keyframes blinkEffect": {
+        "0%": { backgroundColor: "#ffcccc" }, // Light Red
+        "50%": { backgroundColor: "#fff" },   // White
+        "100%": { backgroundColor: "#ffcccc" } // Light Red
+    },
+    blink1:{
+        animation: "$blinkEffect1 1s infinite"
+    },
+    "@keyframes blinkEffect1": {
+        "0%": { backgroundColor: "#FFD95F" }, // Light yellow
+        "50%": { backgroundColor: "#fff" },   // White
+        "100%": { backgroundColor: "#FFD95F" } // Light Red
+    },
 
 });
