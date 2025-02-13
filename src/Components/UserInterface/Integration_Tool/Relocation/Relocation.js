@@ -14,6 +14,7 @@ import { CsvBuilder } from 'filefy';
 import SiteLockUnlockForm from './SiteLockUnlockForm';
 import CheckPicker from 'rsuite/CheckPicker';
 import _, { set } from 'lodash';
+import CircleIcon from '@mui/icons-material/Circle';
 
 
 const Relocation = () => {
@@ -261,7 +262,11 @@ const Relocation = () => {
                     <Link underline="hover" onClick={() => { navigate('/tools/Integration') }}>IX Tracker Tool</Link>
                     <Typography color='text.primary'>Relocation Dashboard</Typography>
                 </Breadcrumbs>
-                <div style={{ float: 'right' }}>
+                <div style={{ float: 'right', display: 'flex', alignItems: 'center',gap:'10px' }}>
+                    <span ><CircleIcon style={{ color: '#FFD95F' }} size='small'/> </span>
+                    <span style={{fontWeight:'bold',color:'black',fontSize:16}}>Deviation Status (Allocated Vs Deployed)</span>
+                    <span ><CircleIcon style={{ color: '#ffcccc' }} size='small'/> </span>
+                    <span style={{fontWeight:'bold',color:'black',fontSize:16}}>Old vs New Site Locked-Unlocked Date</span>
                     <IconButton color='primary' onClick={handleExport} title='Export in csv'>
                         <DownloadIcon />
                     </IconButton>
