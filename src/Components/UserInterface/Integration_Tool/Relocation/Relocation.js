@@ -31,8 +31,10 @@ const Relocation = () => {
     const [oldSiteId, setOldSiteId] = useState([]);
     const [selectNewSiteId, setSelectNewSiteId] = useState([]);
     const [selectOldSiteId, setSelectOldSiteId] = useState([]);
+    const [handleColor, setHandleColor] = useState(false);
 
 
+    // console.log('color data' , handleColor)
 
     const fetchApiData = async () => {
         // const formData = new FormData()
@@ -54,7 +56,7 @@ const Relocation = () => {
     }
 
     const columnData = [
-        { title: 'S.No', field: 'index' },
+        // { title: 'S.No', field: 'index' },
         { title: 'Circle', field: 'circle' },
         { title: 'Old Site ID', field: 'old_site_id' },
         { title: 'New Site ID', field: 'new_site_id' },
@@ -69,10 +71,12 @@ const Relocation = () => {
         { title: 'Deviation Status (Old Vs Deployed)', field: 'old_vs_deployed_tech_deviation' },
         { title: 'Deviated Tech. (Old Vs Deployed)', field: 'old_vs_deployed_tech' },
         // 
-        { title: 'Old Site Locked Date', field: 'old_site_locked_date' },
-        { title: 'New Site Unlock Date', field: 'new_site_unlock_date' },
-        { title: 'Old Site Traffic', field: 'old_site_traffic' },
-        { title: 'Existing Traffic', field: 'existing_traffic' },
+        { title: 'Old Site Locked-Unlocked Date', field: 'old_site_locked_unlocked_date' },
+        { title: 'New Site Locked-Unlocked Date', field: 'new_site_locked_unlocked_date' },
+
+        { title: 'Old Site Traffic Fixed', field: 'old_site_traffic_fixed' },
+        { title: 'Old Site Latest Traffic', field: 'old_site_traffic_variable' },
+        { title: 'Latest Traffic', field: 'existing_traffic' },
         // { title: 'Old Site Admin Status (RNA)', field: 'old_site_admin_status' },
         // { title: 'New Site Admin Status (RNA)', field: 'new_site_admin_status' },
         { title: 'Both Sites Unlocked', field: 'both_site_unlocked' },
@@ -87,8 +91,36 @@ const Relocation = () => {
     const handleExport = () => {
         var csvBuilder = new CsvBuilder(`Relocation_Tracker.csv`)
             .setColumns(columnData.map(item => item.title))
-            .addRows(tableData.map(row => columnData.map(col => row[col.field])))
+            .addRows(tableData.map(row => columnData.map(col =>{
+                if (col.field === 'old_site_locked_unlocked_date' || col.field === 'new_site_locked_unlocked_date'){
+                    return getLockFormate(row[col.field]) 
+                }
+                else{
+                    return row[col.field]
+                } 
+            })))
             .exportFile();
+    }
+
+    const getLockFormate =(data)=>{
+        let statusData = data?.map(item => item.status).at(-1);
+        let tempDate  = data?.map(item=>item.created_at).at(-1);
+        let formattedDate = new Date(tempDate).toLocaleString('en-IN', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true, // For AM/PM format
+            timeZone: 'Asia/Kolkata' // Ensure the correct timezone
+        });
+        // console.log(statusData , tempDate )
+        if(statusData && formattedDate){
+             return (`${statusData} (${formattedDate})`)
+        }else{
+            return ''
+        }
+       
     }
 
     const handleScroll = () => {
@@ -132,29 +164,21 @@ const Relocation = () => {
             return circleMatch && oldSiteIdMatch && newSiteIdMatch;
         });
 
-    const getLockFormate =(data)=>{
-        let statusData = data?.map(item => item.status).at(-1);
-        let tempDate  = data?.map(item=>item.created_at).at(-1);
-        let formattedDate = new Date(tempDate).toLocaleString('en-IN', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: true, // For AM/PM format
-            timeZone: 'Asia/Kolkata' // Ensure the correct timezone
-        });
 
 
-
-        // console.log(statusData , tempDate )
-        if(statusData && formattedDate){
-             return (`${statusData} (${formattedDate})`)
-        }else{
-            return ''
+    const colorChange = (data)=>{
+        if(data.allocated_vs_deployed_tech_deviation === 'Yes'){
+            // return '#A9B5DF'
+            return classes.blink1
+            // return false
         }
-       
-
+    
+        if(data.both_site_unlocked === 'Yes' || data.both_site_locked === 'Yes'){
+            // return '#FFC0CB'
+            return classes.blink
+            // return true
+        }
+        return ''
     }
 
 
@@ -162,7 +186,12 @@ const Relocation = () => {
 
 
         return filteredData?.map((item, index) => (
-            <tr key={item.circle + index}       className={classes.hover}  style={{ textAlign: "center", fontWeigth: 700 }}>
+            <tr key={item.circle + index}    
+            // className={`${classes.hover} ${colorChange(item)?classes.blink:''}`}   
+            className={`${classes.hover} ${colorChange(item)}`}   
+             style={{ textAlign: "center", fontWeigth: 700}}
+            //  onClick={() => handleRowClick({ id: item.id })},backgroundColor:handleColor?colorChange(item):''
+            >
                 <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{index + 1}</th>
                 <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.circle}</th>
                 <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.old_site_id}</th>
@@ -178,12 +207,15 @@ const Relocation = () => {
                 <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.old_vs_deployed_tech}</th>
                 <th style={{ whiteSpace: 'nowrap', border: '1px solid black', cursor: 'pointer' }}
                     className={classes.hover}
-                    onClick={() => { handleRowClick({ id: item.id, value: 'old' }) }}>
+                    data-value="old"
+                    onClick={() => { handleRowClick({ id: item.id, value: 'old' }) }}
+                    >
                      {getLockFormate(item.old_site_locked_unlocked_date)}
                 </th>
                 <th style={{ whiteSpace: '  nowrap', border: '1px solid black', cursor: 'pointer' }}
                     className={classes.hover}
-                    onClick={() => { handleRowClick({ id: item.id, value: 'new' }) }}>
+                    onClick={() => { handleRowClick({ id: item.id, value: 'new' }) }}
+                    >
                     {/* {item.new_site_locked_unlocked_date?.map(item => item.status).at(-1)}
                     {item.new_site_locked_unlocked_date?.map(item => item.created_at).at(-1)} */}
                     {getLockFormate(item.new_site_locked_unlocked_date)}
@@ -200,7 +232,7 @@ const Relocation = () => {
                 <th style={{ whiteSpace: 'nowrap', border: '1px solid black',color:item.payload_dip==='Yes'?'red':'green' }}>{item.payload_dip}</th>
             </tr>
         ))
-    }, [selectCircle, selectNewSiteId, selectOldSiteId, tableData])
+    }, [selectCircle, selectNewSiteId, selectOldSiteId, tableData,handleColor])
 
     const handleClose = () => {
         setOpen(false);
@@ -210,8 +242,14 @@ const Relocation = () => {
 
 
     useEffect(() => {
+        // const intervalId = setInterval(() => {
+        //     setHandleColor(prev => !prev)
+        // }, 500);
+        // Cleanup function to clear interval when component unmounts
         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
         fetchApiData();
+ 
+        // return () => clearInterval(intervalId);
 
     }, [])
 

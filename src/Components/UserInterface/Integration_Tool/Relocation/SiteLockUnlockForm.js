@@ -74,7 +74,7 @@ const SiteLockUnlockForm = ({ data, open, handleClose ,updateTableData}) => {
     useEffect(() => {
 
         fetchData()
-    }, [data]);
+    }, []);
     return (
         <>
             <Dialog
