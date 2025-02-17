@@ -8,11 +8,14 @@ import AppSelectIcon from '@rsuite/icons/AppSelect';
 import { useNavigate } from 'react-router-dom';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import FileUploadIcon from '@rsuite/icons/FileUpload';
+import ConversionIcon from '@rsuite/icons/Conversion';
 
 const Integration_Tool = lazy(() => import('./Integration_Tool'))
 const FinalDashboard = lazy(() => import('./Dashboard/FinalDashboard'))
 const ComanDashboard = lazy(() => import('./Dashboard/ComanDashboard'))
 const MDashboard = lazy(() => import('./MasterDashboard/MDashboard'))
+const Relocation = lazy(()=>import('./Relocation/Relocation'))
+// const RelocationUpload = lazy(()=>import('./Relocation/RelocationUpload'))
 
 
 const IntegrationRead = () => {
@@ -44,6 +47,12 @@ const IntegrationRead = () => {
                                         <Nav.Item eventKey="2" placement="rightStart" icon={<DashboardIcon />} onClick={() => navigate('/tools/IX_Tracker/dashboard')}>
                                             Dashboard
                                         </Nav.Item>
+                                        <Nav.Menu eventKey="4" placement="rightStart" icon={<ConversionIcon />} title="Relocation" > 
+                                            <Nav.Item eventKey="4-1" placement="rightStart" onClick={() => navigate('/tools/IX_Tracker/relocation_dashboard')}>
+                                                Dashboard  
+                                            </Nav.Item>
+                                        
+                                        </Nav.Menu>
                                     </Nav>
                                 </Sidenav.Body>
 
@@ -57,7 +66,7 @@ const IntegrationRead = () => {
                                 <Route element={<FinalDashboard />} path="/dashboard/*" />
                                 <Route element={<ComanDashboard />} path="/dashboard/:name" />
                                 <Route element={<MDashboard />} path="/master_dashboard" />
-
+                                <Route element={<Relocation />} path="/relocation_dashboard" />
                             </Routes>
                         </Suspense>
                     </Grid>
