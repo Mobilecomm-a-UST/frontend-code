@@ -14,8 +14,12 @@ import { CsvBuilder } from 'filefy';
 import SiteLockUnlockForm from './SiteLockUnlockForm';
 import CheckPicker from 'rsuite/CheckPicker';
 import _, { set } from 'lodash';
+import CircleIcon from '@mui/icons-material/Circle';
+import * as ExcelJS from 'exceljs'
 
 
+
+const YesNoData = ['Yes', 'No']
 const Relocation = () => {
     const navigate = useNavigate();
     const { loading, action } = useLoadingDialog();
@@ -32,6 +36,12 @@ const Relocation = () => {
     const [selectNewSiteId, setSelectNewSiteId] = useState([]);
     const [selectOldSiteId, setSelectOldSiteId] = useState([]);
     const [handleColor, setHandleColor] = useState(false);
+    const [devStatus, setDevStatus] = useState([])
+    const [devStatus1, setDevStatus1] = useState([])
+    const [bothSiteLock, setBothSiteLock] = useState([])
+    const [bothSiteUnlock, setBothSiteUnlock] = useState([])
+    const [payloadDip, setPayloadDip] = useState([])
+
 
 
     // console.log('color data' , handleColor)
@@ -42,7 +52,7 @@ const Relocation = () => {
         let responce = await getData('IntegrationTracker/relocation/tracker/');
         if (responce) {
             action(false)
-            console.log('responce  data', responce)
+            // console.log('responce  data', responce)
             setTableData(responce)
             // setPayloadCircle(_.uniq(_.map(responce.data, 'Circle')))
             setCircleData(_.uniq(_.map(responce, 'circle')))
@@ -87,24 +97,124 @@ const Relocation = () => {
     ];
 
 
+    const handleExportInExcel = () => {
+        const workbook = new ExcelJS.Workbook()
+        const sheet1 = workbook.addWorksheet('Relocation', { properties: { tabColor: { argb: 'B0EBB4' } } })
+        sheet1.columns = columnData.map((col) => ({
+            header: col.title,
+            key: col.field,
+            width: 25, // Adjust column width as needed
+        }));
+        tableData?.forEach((row) => {
+            const formattedRow = {};
+            columnData.forEach((col) => {
+                if (col.field === "old_site_locked_unlocked_date" || col.field === "new_site_locked_unlocked_date") {
+                    formattedRow[col.field] = getLockFormate(row[col.field]); // Apply custom formatting
+                } else {
+                    formattedRow[col.field] = row[col.field]; // Default value
+                }
+            });
+
+            // Add Row to Sheet
+            const excelRow = sheet1.addRow(formattedRow);
+
+            // Apply Conditional Styling - If allocated_vs_deployed_tech_deviation === "Yes", highlight row
+            if (row.allocated_vs_deployed_tech_deviation === "Yes") {
+                excelRow.eachCell({ includeEmpty: true },(cell) => {
+                    cell.alignment = { vertical: 'middle', horizontal: 'center' };
+                    cell.fill = {
+                        type: "pattern",
+                        pattern: "solid",
+                        fgColor: { argb: "FFFF99" }, // Light Yellow
+                    };
+                });
+            }
+            if (row.both_site_unlocked === "Yes" || row.both_site_locked === "Yes") {
+                excelRow.eachCell({ includeEmpty: true },(cell) => {
+                    cell.alignment = { vertical: 'middle', horizontal: 'center' };
+                    cell.fill = {
+                        type: "pattern",
+                        pattern: "solid",
+                        fgColor: { argb: "ffcccc" }, // Light Yellow
+                    };
+                });
+            }
+
+        });
+
+
+
+        // Apply Header Styling
+        // sheet1.getRow(1).eachCell((cell) => {
+        //     cell.font = { bold: true, color: { argb: "FFFFFF" } }; // White text
+        //     cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "007BFF" } }; // Blue background
+        //     cell.alignment = { vertical: "middle", horizontal: "center" };
+        //     cell.border = {
+        //         top: { style: 'thin' },
+        //         left: { style: 'thin' },
+        //         bottom: { style: 'thin' },
+        //         right: { style: 'thin' }
+        //     }
+        // });
+        sheet1.eachRow({ includeEmpty: true }, (row, rowNumber) => {
+            row.eachCell({ includeEmpty: true }, (cell) => {
+                cell.alignment = { vertical: 'middle', horizontal: 'center' }
+                cell.border = {
+                    top: { style: 'thin' },
+                    left: { style: 'thin' },
+                    bottom: { style: 'thin' },
+                    right: { style: 'thin' }
+                }
+                if (rowNumber === 1 ) {
+                    // First set the background of header row
+                    cell.fill = {
+                        type: 'pattern',
+                        pattern: 'solid',
+                        fgColor: { argb: '223354' }
+                    }
+                    cell.font = {
+                        color: { argb: 'FFFFFF' },
+                        bold: true,
+                        size: 12,
+                    }
+                    cell.views = [{ state: 'frozen', ySplit: 1 }]
+                }
+            })
+        })
+
+        workbook.xlsx.writeBuffer().then(item => {
+            const blob = new Blob([item], {
+                type: "application/vnd.openxmlformats-officedocument.spreadsheet.sheet"
+            })
+            const url = window.URL.createObjectURL(blob);
+            const anchor = document.createElement('a');
+            anchor.href = url;
+            anchor.download = "Relocation_Tracker.xlsx";
+            anchor.click();
+            window.URL.revokeObjectURL(url);
+        })
+
+
+    }
+
 
     const handleExport = () => {
         var csvBuilder = new CsvBuilder(`Relocation_Tracker.csv`)
             .setColumns(columnData.map(item => item.title))
-            .addRows(tableData.map(row => columnData.map(col =>{
-                if (col.field === 'old_site_locked_unlocked_date' || col.field === 'new_site_locked_unlocked_date'){
-                    return getLockFormate(row[col.field]) 
+            .addRows(tableData.map(row => columnData.map(col => {
+                if (col.field === 'old_site_locked_unlocked_date' || col.field === 'new_site_locked_unlocked_date') {
+                    return getLockFormate(row[col.field])
                 }
-                else{
+                else {
                     return row[col.field]
-                } 
+                }
             })))
             .exportFile();
     }
 
-    const getLockFormate =(data)=>{
+    const getLockFormate = (data) => {
         let statusData = data?.map(item => item.status).at(-1);
-        let tempDate  = data?.map(item=>item.created_at).at(-1);
+        let tempDate = data?.map(item => item.created_at).at(-1);
         let formattedDate = new Date(tempDate).toLocaleString('en-IN', {
             year: 'numeric',
             month: '2-digit',
@@ -115,12 +225,12 @@ const Relocation = () => {
             timeZone: 'Asia/Kolkata' // Ensure the correct timezone
         });
         // console.log(statusData , tempDate )
-        if(statusData && formattedDate){
-             return (`${statusData} (${formattedDate})`)
-        }else{
+        if (statusData && formattedDate) {
+            return (`${statusData} (${formattedDate})`)
+        } else {
             return ''
         }
-       
+
     }
 
     const handleScroll = () => {
@@ -142,7 +252,9 @@ const Relocation = () => {
     };
 
     const handleRowClick = (rowData) => {
-        console.log('Row clicked:', rowData);
+        // console.log('Row clicked:', rowData);  e.stopPropagation();
+        rowData.events.stopPropagation();
+
         if (rowData.value === 'old') {
             setTempRawData({ id: rowData.id, hading: 'Old Site Locked & Unlocked Date', getApi: 'get_old_site_locked_unlocked_date', postApi: 'old_site_locked_unlocked_date' });
             setOpen(true)
@@ -153,6 +265,11 @@ const Relocation = () => {
 
     };
 
+
+    const checkClickFunction = (data) => {
+        console.log('clicked', data)
+    }
+
     const FilterTableData = useCallback(() => {
 
         let filteredData = _.filter(tableData, item => {
@@ -160,37 +277,44 @@ const Relocation = () => {
             const circleMatch = selectCircle.length === 0 || _.includes(selectCircle, item.circle);
             const oldSiteIdMatch = selectOldSiteId.length === 0 || _.includes(selectOldSiteId, item.old_site_id);
             const newSiteIdMatch = selectNewSiteId.length === 0 || _.includes(selectNewSiteId, item.new_site_id);
+            const devStatusMatch = devStatus.length === 0 || _.includes(devStatus, item.allocated_vs_deployed_tech_deviation);
+            const devStatusMatch1 = devStatus1.length === 0 || _.includes(devStatus1, item.old_vs_deployed_tech_deviation);
+            const bothSiteLockMatch = bothSiteLock.length === 0 || _.includes(bothSiteLock, item.both_site_locked);
+            const bothSiteUnlockMatch = bothSiteUnlock.length === 0 || _.includes(bothSiteUnlock, item.both_site_unlocked);
+            const payloadDipMatch = payloadDip.length === 0 || _.includes(payloadDip, item.payload_dip);
 
-            return circleMatch && oldSiteIdMatch && newSiteIdMatch;
+
+            return circleMatch && oldSiteIdMatch && newSiteIdMatch && devStatusMatch && devStatusMatch1 && bothSiteLockMatch && bothSiteUnlockMatch && payloadDipMatch;
         });
 
 
 
-    const colorChange = (data)=>{
-        if(data.allocated_vs_deployed_tech_deviation === 'Yes'){
-            // return '#A9B5DF'
-            return classes.blink1
-            // return false
+        const colorChange = (data) => {
+            if (data.allocated_vs_deployed_tech_deviation === 'Yes') {
+                // return '#A9B5DF'
+                return classes.blink1
+                // return false
+            }
+
+            if (data.both_site_unlocked === 'Yes' || data.both_site_locked === 'Yes') {
+                // return '#FFC0CB'
+                return classes.blink
+                // return true
+            }
+            return ''
         }
-    
-        if(data.both_site_unlocked === 'Yes' || data.both_site_locked === 'Yes'){
-            // return '#FFC0CB'
-            return classes.blink
-            // return true
-        }
-        return ''
-    }
 
 
         // console.log('filter data' , filteredData.map(item=>item.))
 
 
         return filteredData?.map((item, index) => (
-            <tr key={item.circle + index}    
-            // className={`${classes.hover} ${colorChange(item)?classes.blink:''}`}   
-            className={`${classes.hover} ${colorChange(item)}`}   
-             style={{ textAlign: "center", fontWeigth: 700}}
-            //  onClick={() => handleRowClick({ id: item.id })},backgroundColor:handleColor?colorChange(item):''
+            <tr key={item.circle + index}
+                // className={`${classes.hover} ${colorChange(item)?classes.blink:''}`}   
+                className={`${classes.hover} ${colorChange(item)}`}
+                style={{ textAlign: "center", fontWeigth: 700 }}
+                //  onClick={() => handleRowClick({ id: item.id })},backgroundColor:handleColor?colorChange(item):''
+                onClick={() => checkClickFunction({ id: item.id })}
             >
                 <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{index + 1}</th>
                 <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.circle}</th>
@@ -201,21 +325,21 @@ const Relocation = () => {
                 <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.old_site_technology}</th>
                 <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.allocated_technology}</th>
                 <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.deployed_technology}</th>
-                <th style={{ whiteSpace: 'nowrap', border: '1px solid black',color:item.allocated_vs_deployed_tech_deviation==='Yes'?'red':'green' }}>{item.allocated_vs_deployed_tech_deviation}</th>
+                <th style={{ whiteSpace: 'nowrap', border: '1px solid black', color: item.allocated_vs_deployed_tech_deviation === 'Yes' ? 'red' : 'green' }}>{item.allocated_vs_deployed_tech_deviation}</th>
                 <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.allocated_vs_deployed_tech}</th>
-                <th style={{ whiteSpace: 'nowrap', border: '1px solid black',color:item.old_vs_deployed_tech_deviation==='Yes'?'red':'green' }}>{item.old_vs_deployed_tech_deviation}</th>
+                <th style={{ whiteSpace: 'nowrap', border: '1px solid black', color: item.old_vs_deployed_tech_deviation === 'Yes' ? 'red' : 'green' }}>{item.old_vs_deployed_tech_deviation}</th>
                 <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.old_vs_deployed_tech}</th>
                 <th style={{ whiteSpace: 'nowrap', border: '1px solid black', cursor: 'pointer' }}
                     className={classes.hover}
                     data-value="old"
-                    onClick={() => { handleRowClick({ id: item.id, value: 'old' }) }}
-                    >
-                     {getLockFormate(item.old_site_locked_unlocked_date)}
+                    onClick={(e) => { handleRowClick({ id: item.id, value: 'old', events: e }) }}
+                >
+                    {getLockFormate(item.old_site_locked_unlocked_date)}
                 </th>
                 <th style={{ whiteSpace: '  nowrap', border: '1px solid black', cursor: 'pointer' }}
                     className={classes.hover}
-                    onClick={() => { handleRowClick({ id: item.id, value: 'new' }) }}
-                    >
+                    onClick={(e) => { handleRowClick({ id: item.id, value: 'new', events: e }) }}
+                >
                     {/* {item.new_site_locked_unlocked_date?.map(item => item.status).at(-1)}
                     {item.new_site_locked_unlocked_date?.map(item => item.created_at).at(-1)} */}
                     {getLockFormate(item.new_site_locked_unlocked_date)}
@@ -225,14 +349,14 @@ const Relocation = () => {
                 <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.existing_traffic}</th>
                 {/* <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.old_site_admin_status}</th>
                                         <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.new_site_admin_status}</th> */}
-                <th style={{ whiteSpace: 'nowrap', border: '1px solid black',color:item.both_site_unlocked==='Yes'?'red':'green' }}>{item.both_site_unlocked}</th>
-                <th style={{ whiteSpace: 'nowrap', border: '1px solid black',color:item.both_site_locked==='Yes'?'red':'green' }}>{item.both_site_locked}</th>
+                <th style={{ whiteSpace: 'nowrap', border: '1px solid black', color: item.both_site_unlocked === 'Yes' ? 'red' : 'green' }}>{item.both_site_unlocked}</th>
+                <th style={{ whiteSpace: 'nowrap', border: '1px solid black', color: item.both_site_locked === 'Yes' ? 'red' : 'green' }}>{item.both_site_locked}</th>
                 <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.pre_less_than_3_mbps}</th>
                 <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.current_less_than_3_mbps}</th>
-                <th style={{ whiteSpace: 'nowrap', border: '1px solid black',color:item.payload_dip==='Yes'?'red':'green' }}>{item.payload_dip}</th>
+                <th style={{ whiteSpace: 'nowrap', border: '1px solid black', color: item.payload_dip === 'Yes' ? 'red' : 'green' }}>{item.payload_dip}</th>
             </tr>
         ))
-    }, [selectCircle, selectNewSiteId, selectOldSiteId, tableData,handleColor])
+    }, [selectCircle, selectNewSiteId, selectOldSiteId, tableData, handleColor, devStatus, devStatus1, bothSiteLock, bothSiteUnlock, payloadDip])
 
     const handleClose = () => {
         setOpen(false);
@@ -248,7 +372,7 @@ const Relocation = () => {
         // Cleanup function to clear interval when component unmounts
         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
         fetchApiData();
- 
+
         // return () => clearInterval(intervalId);
 
     }, [])
@@ -261,8 +385,12 @@ const Relocation = () => {
                     <Link underline="hover" onClick={() => { navigate('/tools/Integration') }}>IX Tracker Tool</Link>
                     <Typography color='text.primary'>Relocation Dashboard</Typography>
                 </Breadcrumbs>
-                <div style={{ float: 'right' }}>
-                    <IconButton color='primary' onClick={handleExport} title='Export in csv'>
+                <div style={{ float: 'right', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <span ><CircleIcon style={{ color: '#FFD95F' }} size='small' /> </span>
+                    <span style={{ fontWeight: 'bold', color: 'black', fontSize: 16 }}>Deviation Status (Allocated Vs Deployed)</span>
+                    <span ><CircleIcon style={{ color: '#ffcccc' }} size='small' /> </span>
+                    <span style={{ fontWeight: 'bold', color: 'black', fontSize: 16 }}>Old vs New Site Locked-Unlocked Date</span>
+                    <IconButton color='primary' onClick={handleExportInExcel} title='Export in Excel'>
                         <DownloadIcon />
                     </IconButton>
                 </div>
@@ -281,9 +409,9 @@ const Relocation = () => {
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Old Site Technology</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Allocated Technology(As Per DP)</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Deployed Technology</th>
-                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Deviation Status (Allocated Vs Deployed)</th>
+                                    <th style={{ padding: '1px 70px 1px 1px', whiteSpace: 'nowrap' }}>Deviation Status (Allocated Vs Deployed) <CheckPicker data={YesNoData.map(item => ({ label: item, value: item }))} value={devStatus} onChange={(value) => { setDevStatus(value) }} size="sm" appearance="default" placeholder="" style={{ width: 10 }} /></th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Deviated Tech. (Allocated Vs Deployed)</th>
-                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Deviation Status (Old Vs Deployed)</th>
+                                    <th style={{ padding: '1px 70px 1px 1px', whiteSpace: 'nowrap' }}>Deviation Status (Old Vs Deployed) <CheckPicker data={YesNoData.map(item => ({ label: item, value: item }))} value={devStatus1} onChange={(value) => { setDevStatus1(value) }} size="sm" appearance="default" placeholder="" style={{ width: 10 }} /></th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Deviated Tech. (Old Vs Deployed)</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Old Site Locked-Unlocked Date</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>New Site Locked-Unlocked Date</th>
@@ -292,11 +420,11 @@ const Relocation = () => {
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Latest Traffic</th>
                                     {/* <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Old Site Admin Status (RNA)</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>New Site Admin Status (RNA)</th> */}
-                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Both Site Unlocked</th>
-                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Both Site Locked</th>
+                                    <th style={{ padding: '1px 70px 1px 1px', whiteSpace: 'nowrap' }}>Both Site Unlocked <CheckPicker data={YesNoData.map(item => ({ label: item, value: item }))} value={bothSiteUnlock} onChange={(value) => { setBothSiteUnlock(value) }} size="sm" appearance="default" placeholder="" style={{ width: 10 }} /></th>
+                                    <th style={{ padding: '1px 70px 1px 1px', whiteSpace: 'nowrap' }}>Both Site Locked <CheckPicker data={YesNoData.map(item => ({ label: item, value: item }))} value={bothSiteLock} onChange={(value) => { setBothSiteLock(value) }} size="sm" appearance="default" placeholder="" style={{ width: 10 }} /></th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Pre &lt;3 Mbps</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Current &lt;3Mbps</th>
-                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Payload Dip</th>
+                                    <th style={{ padding: '1px 70px 1px 1px', whiteSpace: 'nowrap' }}>Payload Dip <CheckPicker data={YesNoData.map(item => ({ label: item, value: item }))} value={payloadDip} onChange={(value) => { setPayloadDip(value) }} size="sm" appearance="default" placeholder="" style={{ width: 10 }} /></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -336,7 +464,7 @@ const Relocation = () => {
                     </TableContainer>
                 </div>
             </div>
-            {open && <SiteLockUnlockForm data={tempRawData} open={open} handleClose={handleClose} updateTableData={fetchApiData}/>}
+            {open && <SiteLockUnlockForm data={tempRawData} open={open} handleClose={handleClose} updateTableData={fetchApiData} />}
             {loading}
         </>
     )
