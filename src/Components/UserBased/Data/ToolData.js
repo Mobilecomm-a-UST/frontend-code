@@ -20,6 +20,7 @@ import SingleSourceIcon from '@rsuite/icons/SingleSource';
 import BlockIcon from '@rsuite/icons/Block';
 import TreeIcon from '@rsuite/icons/Tree';
 import ParagraphIcon from '@rsuite/icons/Paragraph';
+import NoticeIcon from '@rsuite/icons/Notice';
 import { groupBy } from 'lodash';
 
 // const userType =  ['admin','quality','central','soft_at','circle']
@@ -211,22 +212,21 @@ const ToolData = [
         link: '/tools/mcom_physical_at',
         groupBy:['soft_at_team', 'admin']
 
-    }
-    ,
-    {
-        id: 24,
-        name: 'Mcom Physical AT',
-        title: 'This is a IX Tracker Tool',
-        icons: CellTowerIcon,
-        link: '/tools/mcom_physical_at',
-        groupBy:['soft_at_team', 'admin']
-
     },{
         id: 25,
         name: 'NOM Scriptor',
         title: 'This is a IX Tracker Tool',
         icons: ParagraphIcon,
         link: '/tools/nomenclature_scriptor',
+        groupBy:['soft_at_team', 'admin']
+
+    },
+    ,{
+        id: 26,
+        name: 'DMA',
+        title: 'This is a DMA Tool',
+        icons: NoticeIcon,
+        link: '/tools/dma',
         groupBy:['soft_at_team', 'admin']
 
     }

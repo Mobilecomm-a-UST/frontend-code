@@ -44,6 +44,7 @@ const IntegrationRead = lazy(() => import('./Components/UserInterface/Integratio
 const SoftAtTem = lazy(() => import('./Components/UserInterface/SoftAt Temp/SoftAT'));
 const McomePhycical = lazy(() => import('./Components/UserInterface/McomPhysicalAt/McomePhycical'))
 const Nscripter = lazy(() => import('./Components/UserInterface/Nomenclature Scripter/Nscripter'));
+const Dma = lazy(() => import('./Components/UserInterface/DailyMonetringAlarm/Dma'));
 
 const queryClient = new QueryClient()
 
@@ -255,6 +256,11 @@ function App() {
             <Route path="/tools/nomenclature_scriptor/*" element={
               <Suspense fallback={<div>Loading...</div>}>
                 <ProtectedRoute element={Nscripter} allowedUserTypes={['soft_at_team', 'admin']} userType={userType} />
+              </Suspense>
+            } />
+             <Route path="/tools/dma/*" element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProtectedRoute element={Dma} allowedUserTypes={['soft_at_team', 'admin']} userType={userType} />
               </Suspense>
             } />
 
