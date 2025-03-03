@@ -319,25 +319,27 @@ const RaiseTicket2 = () => {
         const sheet3 = workbook.addWorksheet("Paylod Dip", { properties: { tabColor: { argb: 'f1948a' } } })
   
 
-        sheet3.getCell('A1').value = 'Ticket ID';
-        sheet3.getCell('B1').value = 'Circle';
-        sheet3.getCell('C1').value = 'Site ID';
-        sheet3.getCell('D1').value = 'Cell Name';
-        sheet3.getCell('E1').value = 'Current Date';
-        sheet3.getCell('F1').value = 'Open Date';
-        sheet3.getCell('G1').value = 'Aging';
-        sheet3.getCell('H1').value = 'Priority';
-        sheet3.getCell('I1').value = 'Cell + Date';
-        sheet3.getCell('J1').value = 'Status';
-        sheet3.getCell('K1').value = 'Ownership';
-        sheet3.getCell('L1').value = 'Category';
-        sheet3.getCell('M1').value = 'Auto RCA';
-        sheet3.getCell('N1').value = 'Circle Spoc';
-        sheet3.getCell('O1').value = 'RCA Feedback';
-        sheet3.getCell('P1').value = 'Pre Remarks';
+        sheet3.getCell('A1').value = 'Ticket Type';
+        sheet3.getCell('B1').value = 'Ticket ID';
+        sheet3.getCell('C1').value = 'Circle';
+        sheet3.getCell('D1').value = 'Site ID';
+        sheet3.getCell('E1').value = 'Cell Name';
+        sheet3.getCell('F1').value = 'Current Date';
+        sheet3.getCell('G1').value = 'Open Date';
+        sheet3.getCell('H1').value = 'Aging';
+        sheet3.getCell('I1').value = 'Priority';
+        sheet3.getCell('J1').value = 'Cell + Date';
+        sheet3.getCell('K1').value = 'Status';
+        sheet3.getCell('L1').value = 'Ownership';
+        sheet3.getCell('M1').value = 'Category';
+        sheet3.getCell('N1').value = 'Auto RCA';
+        sheet3.getCell('O1').value = 'Circle Spoc';
+        sheet3.getCell('P1').value = 'RCA Feedback';
+        sheet3.getCell('Q1').value = 'Pre Remarks';
 
 
         sheet3.columns = [
+            { key: 'ticket_type' },
             { key: 'ticket_id' },
             { key: 'Circle' },
             { key: 'Site_ID' },
@@ -358,6 +360,7 @@ const RaiseTicket2 = () => {
 
         totalTable?.map(item => {
             sheet3.addRow({
+                ticket_type: item?.ticket_type,
                 ticket_id: item?.ticket_id,
                 Circle: item?.Circle,
                 Site_ID: (item.Site_ID == 'nan' ? '' : item.Site_ID),
