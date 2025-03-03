@@ -16,7 +16,7 @@ const Make5G = () => {
   const [make4GFiles, setMake4GFiles] = useState([])
   const [show4G, setShow4G] = useState(false)
   const [fileData, setFileData] = useState()
-  const [download, setDownload] = useState(false);
+  const [download, setDownload] = useState(true);
   const {loading,action} = useLoadingDialog()
   const navigate = useNavigate()
   const classes = OverAllCss()
@@ -138,8 +138,8 @@ const Make5G = () => {
             </Stack>
           </Box>
         </Box>
-        <Box sx={{ display: download ? 'block' : 'none' }}>
-          <a download href={link}><Button variant="outlined" onClick='' startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />} sx={{ marginTop: "10px", width: "auto" }}><span style={{ fontFamily: "Poppins", fontSize: "22px", fontWeight: 800, textTransform: "none", textDecorationLine: "none" }}>Download 5G Alarm</span></Button></a>
+        <Box sx={{ display: download ? 'block' : 'none',textAlign:'center' }}>
+          <a download href={fileData}><Button variant="outlined" onClick='' startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />} sx={{ marginTop: "10px", width: "auto" }}><span style={{ fontFamily: "Poppins", fontSize: "22px", fontWeight: 800, textTransform: "none", textDecorationLine: "none" }}>Download 5G Alarm</span></Button></a>
         </Box>
       </Box>
     </Slide>

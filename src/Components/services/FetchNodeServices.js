@@ -6,7 +6,7 @@ import axios from "axios"
 // const ServerURL = "http://192.168.1.16:8001"
 // const ServerURL = "http://192.168.0.146:8000"
 // const ServerURL = "http://103.242.225.195:8000"
-// const ServerURL = "http://192.168.0.164:8000"
+// const ServerURL = "http://192.168.0.44:8000"
 // const ServerURL = "http://192.168.0.10:8000"
 const ServerURL = "http://103.242.225.195:8000";
 // const ServerURL = "http://192.168.137.190:8001"
@@ -30,6 +30,19 @@ const getData = async (url) => {
   }
 }
 
+const putData = async (url, body) => {
+  try {
+    var response = await axios.put(`${ServerURL}/${url}`, body, {
+      headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` }
+    })
+    var result = await response.data
+    return (result)
+  }
+  catch (error) {
+    console.log(error)
+    return (false)
+  }
+}
 
 
 
@@ -72,4 +85,4 @@ const postData = async (url, body, token ) => {
 
 
 
-export { ServerURL, postData, postDatas, getData }
+export { ServerURL, postData, postDatas, getData, putData }
