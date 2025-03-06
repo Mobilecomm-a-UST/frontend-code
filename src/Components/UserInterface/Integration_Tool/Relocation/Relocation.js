@@ -78,8 +78,7 @@ const Relocation = () => {
         { title: 'OEM', field: 'OEM' },
         { title: 'MO Name', field: 'mo_name' },
         { title: 'No. of BBU', field: 'no_of_BBUs' },
-        { title: 'MS1 Date', field: 'ms1_date' },
-        { title: 'MS2 Done', field: 'ms2' },
+
         { title: 'Old Site Technology', field: 'old_site_technology' },
         { title: 'Allocated Technology (as per DP)', field: 'allocated_technology' },
         { title: 'Deployed Technology', field: 'deployed_technology' },
@@ -101,6 +100,8 @@ const Relocation = () => {
         { title: 'Both Sites Locked', field: 'both_site_locked' },
         { title: 'Pre <3 Mbps', field: 'pre_less_than_3_mbps' },
         { title: 'Current <3 Mbps', field: 'current_less_than_3_mbps' },
+        { title: 'MS1 Date', field: 'ms1_date' },
+        { title: 'MS2 Status', field: 'ms2' },
         { title: 'Payload Dip', field: 'payload_dip' },
     ];
 
@@ -509,7 +510,7 @@ const Relocation = () => {
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Current &lt;3Mbps</th>
                                     <th style={{ padding: '1px 70px 1px 1px', whiteSpace: 'nowrap' }}>Payload Dip <CheckPicker data={YesNoData.map(item => ({ label: item, value: item }))} value={payloadDip} onChange={(value) => { setPayloadDip(value) }} size="sm" appearance="default" placeholder="" style={{ width: 10 }} /></th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>MS1 Date</th>
-                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>MS2 Date</th>
+                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>MS2 Status</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Remarks</th>
 
                                 </tr>

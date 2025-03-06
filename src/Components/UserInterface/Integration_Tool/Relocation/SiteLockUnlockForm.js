@@ -15,7 +15,200 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import Checkbox from '@mui/material/Checkbox';
+import ListItemText from '@mui/material/ListItemText';
+import { useCallback } from 'react';
 
+
+const CircleWiseData = [
+    {
+        "id": 1,
+        "circle": "AP",
+        "approver_name": [
+            "Sai Teja",
+            "Remesh Thota",
+            "Krishna Khant Verma",
+            "Saurabh Rathore"
+        ]
+    },
+    {
+        "id": 2,
+        "circle": "JRK",
+        "approver_name": [
+            "Avnish Mishra",
+            "OM",
+            "Vidya",
+            "Sonu Sharma",
+            "Saurabh Rathore"
+        ]
+    },
+    {
+        "id": 3,
+        "circle": "BIH",
+        "approver_name": [
+            "Sonu Singh",
+            "Deepak",
+            "Sonu Sharma",
+            "Saurabh Rathore"
+        ]
+    },
+    {
+        "id": 4,
+        "circle": "CH",
+        "approver_name": [
+            "Bharateeshwaran",
+            "Prakashpandi",
+            "Shubham Gupta",
+            "Nilesh Jain",
+            "Saurabh Rathore"
+        ]
+    },
+    {
+        "id": 5,
+        "circle": "DL",
+        "approver_name": [
+            "Nishant Sharma",
+            "Rajesh Gupta",
+            "Krishna Kant Verma",
+            "Saurabh Rathore"
+        ]
+    },
+    {
+        "id": 6,
+        "circle": "HR",
+        "approver_name": [
+            "Manoj Kumar [ZTE]",
+            "Shivam Pandey [Ericsson]",
+            "Aman",
+            "Tarun Rakecha",
+            "Saurabh Rathore"
+        ]
+    },
+    {
+        "id": 8,
+        "circle": "ROTN",
+        "approver_name": [
+            "Bharateeshwaran",
+            "Prakashpandi",
+            "Shubham Gupta",
+            "Nilesh Jain",
+            "Saurabh Rathore"
+        ]
+    },
+    {
+        "id": 9,
+        "circle": "PB",
+        "approver_name": [
+            "Manoj Kumar [ZTE]",
+            "Himanshu Lokhande [Samsung]",
+            "Aman",
+            "Tarun Rakecha",
+            "Saurabh Rathore"
+        ]
+    },
+    {
+        "id": 10,
+        "circle": "RAJ",
+        "approver_name": [
+            "Rahul Charak",
+            "Hemant Sharma",
+            "Krishna Kant Verma",
+            "Saurabh Rathore"
+        ]
+    },
+    {
+        "id": 11,
+        "circle": "UPW",
+        "approver_name": [
+            "Rajan Agrawal",
+            "Praval Joshi",
+            "Shubham Gupta",
+            "Saurabh Rathore"
+        ]
+    },
+    {
+        "id": 12,
+        "circle": "UPE",
+        "approver_name": [
+            "Rakesh Dubey",
+            "Onkar Soni",
+            "Manish Singh",
+            "Nilesh Jain",
+            "Saurabh Rathore"
+        ]
+    },
+    {
+        "id": 13,
+        "circle": "JK",
+        "approver_name": [
+            "Rohit Bansal",
+            "Manik Mahajan",
+            "Krishna Kant Verma",
+            "Saurabh Rathore"
+        ]
+    },
+    {
+        "id": 14,
+        "circle": "ROB",
+        "approver_name": [
+            "Masud Rana",
+            "Pankaj",
+            "Sonu Sharma",
+            "Saurabh Rathore"
+        ]
+    },
+    {
+        "id": 15,
+        "circle": "KK",
+        "approver_name": [
+            "Khadir Valli",
+            "Shubham Gupta",
+            "Saurabh Rathore"
+        ]
+    },
+    {
+        "id": 16,
+        "circle": "OR",
+        "approver_name": [
+            "Manish Chobisa",
+            "Jayadeba",
+            "Sonu Sharma",
+            "Saurabh Rathore"
+        ]
+    },
+    {
+        "id": 17,
+        "circle": "MUM",
+        "approver_name": [
+            "Bharat Kamble",
+            "Sai Raj",
+            "Aman Kashyap",
+            "Nilesh Jain",
+            "Saurabh Rathore"
+        ]
+    },
+    {
+        "id": 18,
+        "circle": "KOL",
+        "approver_name": [
+            "Masud Rana",
+            "Pankaj",
+            "Sonu Sharma",
+            "Saurabh Rathore"
+        ]
+    },
+    {
+        "id": 19,
+        "circle": "MP",
+        "approver_name": [
+            "Shashikant Jaiswal",
+            "Amit Sharma",
+            "Nilesh Jain",
+            "Saurabh Rathore"
+        ]
+    }
+]
+const TechnologyList = ["L900", "L1800", "L2100", "G900", "G1800", "G2100", "2G", "5G", "RET"]
 
 const SiteLockUnlockForm = ({ data, open, handleClose, updateTableData }) => {
     const classes = useStyles();
@@ -25,7 +218,7 @@ const SiteLockUnlockForm = ({ data, open, handleClose, updateTableData }) => {
     const [approvedByValue, setApprovedByValue] = useState([]);
     const [purpuse, setPurpose] = useState('');
     const [status, setStatus] = useState('');
-    const [technology, setTechnology] = useState('');
+    const [technology, setTechnology] = useState([]);
     const userName = JSON.parse(localStorage.getItem("userID"))
     console.log('data of form', data, open)
 
@@ -36,21 +229,16 @@ const SiteLockUnlockForm = ({ data, open, handleClose, updateTableData }) => {
         let formData = new FormData()
         formData.append('Relocation_id', data?.id)
         let responce = await postData(`IntegrationTracker/${data.getApi}/`, formData);
-        let response1 = await getData(`IntegrationTracker/get_approval/`);
 
-        if (response1) {
-            response1 = response1?.filter((item) => item.circle === data?.circle);
-            setApprovedByValue(response1[0]['approver_name'])
-        }
 
-        // console.log('responce1', response1[0]['approver_name'])
         if (responce) {
             action(false)
             setTableData(responce?.data)
         } else {
             action(false)
+            handleClose();
         }
-        console.log('responce', responce)
+        // console.log('responce', responce)
     }
 
 
@@ -61,7 +249,7 @@ const SiteLockUnlockForm = ({ data, open, handleClose, updateTableData }) => {
         formData.append('Relocation_id', data?.id)
         formData.append('circle', data?.circle)
         formData.append('OEM', data?.oem)
-        formData.append('Technology', technology)
+        formData.append('Technology', technology.join("+"))
         formData.append('no_of_BBUs', data?.noofbbu)
         formData.append('approval_given_by', approvedBy)
         formData.append('purpose', purpuse)
@@ -85,9 +273,21 @@ const SiteLockUnlockForm = ({ data, open, handleClose, updateTableData }) => {
 
     }
 
+    const handleChangeTachnology = useCallback((event) => {
+        const {
+            target: { value },
+        } = event;
+        setTechnology(
+            // On autofill we get a stringified value.
+            typeof value === 'string' ? value.split(',') : value,
+        );
+    },[])
+
     useEffect(() => {
 
         fetchData()
+        let response1 = CircleWiseData?.filter((item) => item.circle === data?.circle);
+        setApprovedByValue(response1[0]['approver_name'])
     }, []);
     return (
         <>
@@ -157,23 +357,23 @@ const SiteLockUnlockForm = ({ data, open, handleClose, updateTableData }) => {
                                     /> */}
                                         <FormControl fullWidth required>
                                             <InputLabel >Technology</InputLabel>
-                                            <Select
-                                                value={technology}
+                                            <Select 
                                                 label="Technology"
-                                                onChange={(e) => setTechnology(e.target.value)}
+                                                value={technology}
+                                                onChange={handleChangeTachnology}
                                                 size='small'
                                                 multiple
                                                 fullWidth
+                                                renderValue={(selected) => selected.join(', ')}
+                                            // MenuProps={MenuProps}
                                             >
-                                                <MenuItem value='L900'>L900</MenuItem>
-                                                <MenuItem value='L1800'>L1800</MenuItem>
-                                                <MenuItem value='L2100'>L2100</MenuItem>
-                                                <MenuItem value='G900'>G900</MenuItem>
-                                                <MenuItem value='G1800'>G1800</MenuItem>
-                                                <MenuItem value='G2100'>G2100</MenuItem>
-                                                <MenuItem value='2G'>2G </MenuItem>
-                                                <MenuItem value='5G'>5G</MenuItem>
-                                                <MenuItem value='RET '>RET</MenuItem>
+
+                                                {TechnologyList?.map((name) => (
+                                                    <MenuItem key={name} value={name}>
+                                                        <Checkbox checked={technology.includes(name)} />
+                                                        <ListItemText primary={name} />
+                                                    </MenuItem>
+                                                ))}
                                             </Select>
                                         </FormControl>
                                     </Grid>
