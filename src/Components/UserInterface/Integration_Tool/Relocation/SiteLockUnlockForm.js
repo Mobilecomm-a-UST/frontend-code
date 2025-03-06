@@ -5,7 +5,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import TableContainer from '@mui/material/TableContainer';
 import Paper from '@mui/material/Paper';
 import { useStyles } from '../../ToolsCss';
-import { postData,getData } from '../../../services/FetchNodeServices';
+import { postData, getData } from '../../../services/FetchNodeServices';
 import Swal from 'sweetalert2';
 import { Box, Grid, TextField, Button } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
@@ -14,10 +14,203 @@ import { useLoadingDialog } from '../../../Hooks/LoadingDialog';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';        
+import Select from '@mui/material/Select';
+import Checkbox from '@mui/material/Checkbox';
+import ListItemText from '@mui/material/ListItemText';
+import { useCallback } from 'react';
 
 
-const SiteLockUnlockForm = ({ data, open, handleClose ,updateTableData}) => {
+const CircleWiseData = [
+    {
+        "id": 1,
+        "circle": "AP",
+        "approver_name": [
+            "Sai Teja",
+            "Remesh Thota",
+            "Krishna Khant Verma",
+            "Saurabh Rathore"
+        ]
+    },
+    {
+        "id": 2,
+        "circle": "JRK",
+        "approver_name": [
+            "Avnish Mishra",
+            "OM",
+            "Vidya",
+            "Sonu Sharma",
+            "Saurabh Rathore"
+        ]
+    },
+    {
+        "id": 3,
+        "circle": "BIH",
+        "approver_name": [
+            "Sonu Singh",
+            "Deepak",
+            "Sonu Sharma",
+            "Saurabh Rathore"
+        ]
+    },
+    {
+        "id": 4,
+        "circle": "CH",
+        "approver_name": [
+            "Bharateeshwaran",
+            "Prakashpandi",
+            "Shubham Gupta",
+            "Nilesh Jain",
+            "Saurabh Rathore"
+        ]
+    },
+    {
+        "id": 5,
+        "circle": "DL",
+        "approver_name": [
+            "Nishant Sharma",
+            "Rajesh Gupta",
+            "Krishna Kant Verma",
+            "Saurabh Rathore"
+        ]
+    },
+    {
+        "id": 6,
+        "circle": "HR",
+        "approver_name": [
+            "Manoj Kumar [ZTE]",
+            "Shivam Pandey [Ericsson]",
+            "Aman",
+            "Tarun Rakecha",
+            "Saurabh Rathore"
+        ]
+    },
+    {
+        "id": 8,
+        "circle": "ROTN",
+        "approver_name": [
+            "Bharateeshwaran",
+            "Prakashpandi",
+            "Shubham Gupta",
+            "Nilesh Jain",
+            "Saurabh Rathore"
+        ]
+    },
+    {
+        "id": 9,
+        "circle": "PB",
+        "approver_name": [
+            "Manoj Kumar [ZTE]",
+            "Himanshu Lokhande [Samsung]",
+            "Aman",
+            "Tarun Rakecha",
+            "Saurabh Rathore"
+        ]
+    },
+    {
+        "id": 10,
+        "circle": "RAJ",
+        "approver_name": [
+            "Rahul Charak",
+            "Hemant Sharma",
+            "Krishna Kant Verma",
+            "Saurabh Rathore"
+        ]
+    },
+    {
+        "id": 11,
+        "circle": "UPW",
+        "approver_name": [
+            "Rajan Agrawal",
+            "Praval Joshi",
+            "Shubham Gupta",
+            "Saurabh Rathore"
+        ]
+    },
+    {
+        "id": 12,
+        "circle": "UPE",
+        "approver_name": [
+            "Rakesh Dubey",
+            "Onkar Soni",
+            "Manish Singh",
+            "Nilesh Jain",
+            "Saurabh Rathore"
+        ]
+    },
+    {
+        "id": 13,
+        "circle": "JK",
+        "approver_name": [
+            "Rohit Bansal",
+            "Manik Mahajan",
+            "Krishna Kant Verma",
+            "Saurabh Rathore"
+        ]
+    },
+    {
+        "id": 14,
+        "circle": "ROB",
+        "approver_name": [
+            "Masud Rana",
+            "Pankaj",
+            "Sonu Sharma",
+            "Saurabh Rathore"
+        ]
+    },
+    {
+        "id": 15,
+        "circle": "KK",
+        "approver_name": [
+            "Khadir Valli",
+            "Shubham Gupta",
+            "Saurabh Rathore"
+        ]
+    },
+    {
+        "id": 16,
+        "circle": "OR",
+        "approver_name": [
+            "Manish Chobisa",
+            "Jayadeba",
+            "Sonu Sharma",
+            "Saurabh Rathore"
+        ]
+    },
+    {
+        "id": 17,
+        "circle": "MUM",
+        "approver_name": [
+            "Bharat Kamble",
+            "Sai Raj",
+            "Aman Kashyap",
+            "Nilesh Jain",
+            "Saurabh Rathore"
+        ]
+    },
+    {
+        "id": 18,
+        "circle": "KOL",
+        "approver_name": [
+            "Masud Rana",
+            "Pankaj",
+            "Sonu Sharma",
+            "Saurabh Rathore"
+        ]
+    },
+    {
+        "id": 19,
+        "circle": "MP",
+        "approver_name": [
+            "Shashikant Jaiswal",
+            "Amit Sharma",
+            "Nilesh Jain",
+            "Saurabh Rathore"
+        ]
+    }
+]
+const TechnologyList = ["L900", "L1800", "L2100", "G900", "G1800", "G2100", "2G", "5G", "RET"]
+
+const SiteLockUnlockForm = ({ data, open, handleClose, updateTableData }) => {
     const classes = useStyles();
     const { loading, action } = useLoadingDialog();
     const [tableData, setTableData] = useState([]);
@@ -25,7 +218,7 @@ const SiteLockUnlockForm = ({ data, open, handleClose ,updateTableData}) => {
     const [approvedByValue, setApprovedByValue] = useState([]);
     const [purpuse, setPurpose] = useState('');
     const [status, setStatus] = useState('');
-    const [technology, setTechnology] = useState('');
+    const [technology, setTechnology] = useState([]);
     const userName = JSON.parse(localStorage.getItem("userID"))
     console.log('data of form', data, open)
 
@@ -36,17 +229,16 @@ const SiteLockUnlockForm = ({ data, open, handleClose ,updateTableData}) => {
         let formData = new FormData()
         formData.append('Relocation_id', data?.id)
         let responce = await postData(`IntegrationTracker/${data.getApi}/`, formData);
-        let response1 = await getData(`IntegrationTracker/get_approval/`);
-        response1 = response1.filter((item) => item.circle === data?.circle);
-        setApprovedByValue(response1[0]['approver_name'])
-        console.log('responce1', response1[0]['approver_name'])
+
+
         if (responce) {
             action(false)
             setTableData(responce?.data)
         } else {
             action(false)
+            handleClose();
         }
-        console.log('responce', responce)
+        // console.log('responce', responce)
     }
 
 
@@ -57,7 +249,7 @@ const SiteLockUnlockForm = ({ data, open, handleClose ,updateTableData}) => {
         formData.append('Relocation_id', data?.id)
         formData.append('circle', data?.circle)
         formData.append('OEM', data?.oem)
-        formData.append('Technology', technology)
+        formData.append('Technology', technology.join("+"))
         formData.append('no_of_BBUs', data?.noofbbu)
         formData.append('approval_given_by', approvedBy)
         formData.append('purpose', purpuse)
@@ -74,16 +266,28 @@ const SiteLockUnlockForm = ({ data, open, handleClose ,updateTableData}) => {
                 timer: 1500
             })
             // handleClose()
-            
-        fetchData()
-        updateTableData()
+
+            fetchData()
+            updateTableData()
         }
 
     }
 
+    const handleChangeTachnology = useCallback((event) => {
+        const {
+            target: { value },
+        } = event;
+        setTechnology(
+            // On autofill we get a stringified value.
+            typeof value === 'string' ? value.split(',') : value,
+        );
+    },[])
+
     useEffect(() => {
 
         fetchData()
+        let response1 = CircleWiseData?.filter((item) => item.circle === data?.circle);
+        setApprovedByValue(response1[0]['approver_name'])
     }, []);
     return (
         <>
@@ -100,47 +304,47 @@ const SiteLockUnlockForm = ({ data, open, handleClose ,updateTableData}) => {
                 </DialogTitle>
                 <DialogContent dividers>
                     <Box>
-                        <Box style={{ padding: '10px',marginBottom:'10px', border:'1px solid black', borderRadius:'10px' }}>
+                        <Box style={{ padding: '10px', marginBottom: '10px', border: '1px solid black', borderRadius: '10px' }}>
                             <form onSubmit={handleSubmit}>
-                            <Grid container spacing={2} display={'flex'} justifyContent={'center'} alignItems={'center'}>
-                            <Grid item xs={3}>
-                                    <TextField
-                                        id="outlined-basic"
-                                        label="Circle"
-                                        variant="outlined"
-                                        fullWidth
-                                        required
-                                        value={data?.circle}
-                                        size='small'
-                                        inputProps={{ readOnly: true }}
-                                    />
-                                </Grid>
-                                <Grid item xs={3}>
-                                    <TextField
-                                        id="outlined-basic"
-                                        label="OEM"
-                                        variant="outlined"
-                                        fullWidth
-                                        required
-                                        value={data?.oem}
-                                        size='small'
-                                        inputProps={{ readOnly: true }}
-                                    />
-                                </Grid>
-                                <Grid item xs={3}>
-                                    <TextField
-                                        id="outlined-basic"
-                                        label="No. Of BBUs"
-                                        variant="outlined"
-                                        fullWidth
-                                        required
-                                        value={data?.noofbbu}
-                                        size='small'
-                                        inputProps={{ readOnly: true }}
-                                    />
-                                </Grid>
-                                <Grid item xs={3}>
-                                    <TextField
+                                <Grid container spacing={2} display={'flex'} justifyContent={'center'} alignItems={'center'}>
+                                    <Grid item xs={3}>
+                                        <TextField
+                                            id="outlined-basic"
+                                            label="Circle"
+                                            variant="outlined"
+                                            fullWidth
+                                            required
+                                            value={data?.circle}
+                                            size='small'
+                                            inputProps={{ readOnly: true }}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                        <TextField
+                                            id="outlined-basic"
+                                            label="OEM"
+                                            variant="outlined"
+                                            fullWidth
+                                            required
+                                            value={data?.oem}
+                                            size='small'
+                                            inputProps={{ readOnly: true }}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                        <TextField
+                                            id="outlined-basic"
+                                            label="No. Of BBUs"
+                                            variant="outlined"
+                                            fullWidth
+                                            required
+                                            value={data?.noofbbu}
+                                            size='small'
+                                            inputProps={{ readOnly: true }}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                        {/* <TextField
                                         id="outlined-basic"
                                         label="Technology"
                                         variant="outlined"
@@ -150,22 +354,43 @@ const SiteLockUnlockForm = ({ data, open, handleClose ,updateTableData}) => {
                                         onChange={(e) => setTechnology(e.target.value)}
                                         size='small'
                                         // inputProps={{ readOnly: true }}
-                                    />
-                                </Grid>
-                                <Grid item xs={3}>
-                                    <TextField
-                                        id="outlined-basic"
-                                        label="Site Locked By"
-                                        variant="outlined"
-                                        fullWidth
-                                        required
-                                        value={userName?.split('@')[0].replace('.', ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
-                                        size='small'
-                                        inputProps={{ readOnly: true }}
-                                    />
-                                </Grid>
-                                <Grid item xs={3}>
-                                    {/* <TextField
+                                    /> */}
+                                        <FormControl fullWidth required>
+                                            <InputLabel >Technology</InputLabel>
+                                            <Select 
+                                                label="Technology"
+                                                value={technology}
+                                                onChange={handleChangeTachnology}
+                                                size='small'
+                                                multiple
+                                                fullWidth
+                                                renderValue={(selected) => selected.join(', ')}
+                                            // MenuProps={MenuProps}
+                                            >
+
+                                                {TechnologyList?.map((name) => (
+                                                    <MenuItem key={name} value={name}>
+                                                        <Checkbox checked={technology.includes(name)} />
+                                                        <ListItemText primary={name} />
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                        <TextField
+                                            id="outlined-basic"
+                                            label="Site Locked By"
+                                            variant="outlined"
+                                            fullWidth
+                                            required
+                                            value={userName?.split('@')[0].replace('.', ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                                            size='small'
+                                            inputProps={{ readOnly: true }}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={3}>
+                                        {/* <TextField
                                         id="outlined-basic"
                                         label="Purpose"
                                         variant="outlined"
@@ -175,25 +400,25 @@ const SiteLockUnlockForm = ({ data, open, handleClose ,updateTableData}) => {
                                         onChange={(e) => setPurpose(e.target.value)}
                                         size='small'
                                     /> */}
-                                     <FormControl fullWidth required>
-                                        <InputLabel >Purpose</InputLabel>
-                                        <Select
-                                            value={purpuse}
-                                            label="Purpose"
-                                            onChange={(e) => {setPurpose(e.target.value); {e.target.value === 'EMF' ? setApprovedBy('No Need To Approve') : setApprovedBy('')}}}
-                                            size='small'
-                                            fullWidth
-                                        >
-                                            <MenuItem value='EMF'>EMF</MenuItem>
-                                            <MenuItem value='SCFT'>SCFT</MenuItem>
-                                            <MenuItem value='MS1'>MS1</MenuItem>
-                                            <MenuItem value='Others'>Others</MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                </Grid> 
-                          
-                                <Grid item xs={3}>
-                                    {/* <TextField
+                                        <FormControl fullWidth required>
+                                            <InputLabel >Purpose</InputLabel>
+                                            <Select
+                                                value={purpuse}
+                                                label="Purpose"
+                                                onChange={(e) => { setPurpose(e.target.value); { e.target.value === 'EMF' ? setApprovedBy('No Need To Approve') : setApprovedBy('') } }}
+                                                size='small'
+                                                fullWidth
+                                            >
+                                                <MenuItem value='EMF'>EMF</MenuItem>
+                                                <MenuItem value='SCFT'>SCFT</MenuItem>
+                                                <MenuItem value='MS1'>MS1</MenuItem>
+                                                <MenuItem value='Others'>Others</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </Grid>
+
+                                    <Grid item xs={3}>
+                                        {/* <TextField
                                         id="outlined-basic"
                                         label="Approval Given By"
                                         variant="outlined"
@@ -203,43 +428,43 @@ const SiteLockUnlockForm = ({ data, open, handleClose ,updateTableData}) => {
                                         onChange={(e) => setApprovedBy(e.target.value)}
                                         size='small'
                                     /> */}
-                                     <FormControl fullWidth required>
-                                        <InputLabel >Approval Given By</InputLabel>
-                                        <Select
-                                            value={approvedBy}
-                                            label="Approval Given By"
-                                            onChange={(e) => setApprovedBy(e.target.value)}
-                                            size='small'
-                                            fullWidth
-                                        >
-                                            <MenuItem value='No Need To Approve'>No Need To Approve</MenuItem>
-                                            {approvedByValue?.map((item,index)=>(
-                                                <MenuItem key={index} value={item}>{item}</MenuItem>
-                                            ))}
-                                        </Select>
-                                    </FormControl>
+                                        <FormControl fullWidth required>
+                                            <InputLabel >Approval Given By</InputLabel>
+                                            <Select
+                                                value={approvedBy}
+                                                label="Approval Given By"
+                                                onChange={(e) => setApprovedBy(e.target.value)}
+                                                size='small'
+                                                fullWidth
+                                            >
+                                                <MenuItem value='No Need To Approve'>No Need To Approve</MenuItem>
+                                                {approvedByValue?.map((item, index) => (
+                                                    <MenuItem key={index} value={item}>{item}</MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                    </Grid>
+
+                                    <Grid item xs={3}>
+                                        <FormControl fullWidth required>
+                                            <InputLabel >Status</InputLabel>
+                                            <Select
+                                                value={status}
+                                                label="Status"
+                                                onChange={(e) => setStatus(e.target.value)}
+                                                size='small'
+                                                fullWidth
+                                            >
+                                                <MenuItem value='Locked'>Locked</MenuItem>
+                                                <MenuItem value='Unlocked'>Unlocked</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </Grid>
+
+                                    <Grid item xs={3} textAlign={'center'}>
+                                        <Button size='small' fullWidth type='submit' variant="contained" >Add</Button>
+                                    </Grid>
                                 </Grid>
-                                 
-                                <Grid item xs={3}>
-                                <FormControl fullWidth required>
-                                        <InputLabel >Status</InputLabel>
-                                        <Select
-                                            value={status}
-                                            label="Status"
-                                            onChange={(e) => setStatus(e.target.value)}
-                                            size='small'
-                                            fullWidth
-                                        >
-                                            <MenuItem value='Locked'>Locked</MenuItem>
-                                            <MenuItem value='Unlocked'>Unlocked</MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                </Grid> 
-                                
-                                 <Grid item xs={3} textAlign={'center'}>
-                                  <Button size='small' fullWidth type='submit' variant="contained" >Add</Button>
-                                </Grid>
-                            </Grid>
                             </form>
                         </Box>
                         <TableContainer sx={{ maxHeight: '80vh', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} component={Paper} >
@@ -260,8 +485,8 @@ const SiteLockUnlockForm = ({ data, open, handleClose ,updateTableData}) => {
                                 </thead>
                                 <tbody>
                                     {tableData?.map((item, index) => (
-                                        <tr style={{ textAlign: "center", border: '1px solid black', fontWeigth: 700 }} key={index+ item?.created_at} >
-                                            <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{index+1}</th>
+                                        <tr style={{ textAlign: "center", border: '1px solid black', fontWeigth: 700 }} key={index + item?.created_at} >
+                                            <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{index + 1}</th>
                                             <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item?.circle}</th>
                                             <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item?.OEM}</th>
                                             <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item?.Technology}</th>
@@ -279,7 +504,7 @@ const SiteLockUnlockForm = ({ data, open, handleClose ,updateTableData}) => {
                     </Box>
                 </DialogContent>
             </Dialog>
-            <loading />
+            {loading}
         </>
     )
 }

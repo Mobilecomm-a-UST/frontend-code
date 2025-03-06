@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { useEffect, useRef, useState } from 'react'
 import { Breadcrumbs, Link, Typography } from "@mui/material";
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
@@ -78,8 +78,7 @@ const Relocation = () => {
         { title: 'OEM', field: 'OEM' },
         { title: 'MO Name', field: 'mo_name' },
         { title: 'No. of BBU', field: 'no_of_BBUs' },
-        { title: 'MS1 Date', field: 'ms1_date' },
-        { title: 'MS2 Done', field: 'ms2' },
+
         { title: 'Old Site Technology', field: 'old_site_technology' },
         { title: 'Allocated Technology (as per DP)', field: 'allocated_technology' },
         { title: 'Deployed Technology', field: 'deployed_technology' },
@@ -101,6 +100,8 @@ const Relocation = () => {
         { title: 'Both Sites Locked', field: 'both_site_locked' },
         { title: 'Pre <3 Mbps', field: 'pre_less_than_3_mbps' },
         { title: 'Current <3 Mbps', field: 'current_less_than_3_mbps' },
+        { title: 'MS1 Date', field: 'ms1_date' },
+        { title: 'MS2 Status', field: 'ms2' },
         { title: 'Payload Dip', field: 'payload_dip' },
     ];
 
@@ -259,19 +260,32 @@ const Relocation = () => {
         }
     };
 
-    const handleRowClick = ({ rowData, events, value }) => {
-        // console.log('Row clicked:', rowData);  e.stopPropagation();
+    const handleRowClick = useCallback(({ rowData, events, values }) => {
         events.stopPropagation();
-
-        if (value === 'old') {
-            setTempRawData({ id: rowData.id, circle: rowData.circle, oem: rowData.OEM, noofbbu: rowData.no_of_BBUs, hading: 'Old Site Locked & Unlocked Date', getApi: 'get_old_site_locked_unlocked_date', postApi: 'old_site_locked_unlocked_date' });
-            setOpen(true)
+        if (values === 'old') {
+            setTempRawData({
+                id: rowData.id,
+                circle: rowData.circle,
+                oem: rowData.OEM,
+                noofbbu: rowData.no_of_BBUs,
+                hading: 'Old Site Locked & Unlocked Date',
+                getApi: 'get_old_site_locked_unlocked_date',
+                postApi: 'old_site_locked_unlocked_date'
+            });
         } else {
-            setTempRawData({ id: rowData.id, circle: rowData.circle, oem: rowData.OEM, noofbbu: rowData.no_of_BBUs, hading: 'New Site Locked & Unlocked Date', getApi: 'get_new_site_locked_unlocked_date', postApi: 'New_site_locked_unlocked_date' });
-            setOpen(true)
+            setTempRawData({
+                id: rowData.id,
+                circle: rowData.circle,
+                oem: rowData.OEM,
+                noofbbu: rowData.no_of_BBUs,
+                hading: 'New Site Locked & Unlocked Date',
+                getApi: 'get_new_site_locked_unlocked_date',
+                postApi: 'New_site_locked_unlocked_date'
+            });
         }
-
-    };
+        setOpen(true);
+    }, []);
+    
 
 
     const checkClickFunction = async (e, item) => {
@@ -304,9 +318,9 @@ const Relocation = () => {
 
 
 
-    const FilterTableData = useCallback(() => {
+    const FilterTableData = useMemo(() => {
 
-        let filteredData = _.filter(tableData, item => {
+        let filteredData = redData?tableData.filter(item =>  item.both_site_unlocked === 'Yes' || item.both_site_locked === 'Yes'):_.filter(tableData, item => {
 
             const circleMatch = selectCircle.length === 0 || _.includes(selectCircle, item.circle);
             const oldSiteIdMatch = selectOldSiteId.length === 0 || _.includes(selectOldSiteId, item.old_site_id);
@@ -316,8 +330,6 @@ const Relocation = () => {
             const bothSiteLockMatch = bothSiteLock.length === 0 || _.includes(bothSiteLock, item.both_site_locked);
             const bothSiteUnlockMatch = bothSiteUnlock.length === 0 || _.includes(bothSiteUnlock, item.both_site_unlocked);
             const payloadDipMatch = payloadDip.length === 0 || _.includes(payloadDip, item.payload_dip);
-
-
 
             return circleMatch && oldSiteIdMatch && newSiteIdMatch && devStatusMatch && devStatusMatch1 && bothSiteLockMatch && bothSiteUnlockMatch && payloadDipMatch;
         });
@@ -339,8 +351,10 @@ const Relocation = () => {
             return ''
         }
 
+        // const filterRedColor = filteredData.filter(item =>  item.both_site_unlocked === 'Yes' || item.both_site_locked === 'Yes')
 
-        // console.log('filter data' , filteredData.map(item=>item.))
+
+        console.log('filter data' , filteredData)
 
 
         return filteredData?.map((item, index) => (
@@ -359,8 +373,7 @@ const Relocation = () => {
                 <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.OEM}</th>
                 <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.mo_name}</th>
                 <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.no_of_BBUs}</th>
-                <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.ms1_date}</th>
-                <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.ms2}</th>
+
                 <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.old_site_technology}</th>
                 <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.allocated_technology}</th>
                 <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.deployed_technology}</th>
@@ -371,13 +384,13 @@ const Relocation = () => {
                 <th style={{ whiteSpace: 'nowrap', border: '1px solid black', cursor: 'pointer' }}
                     className={classes.hover}
                     data-value="old"
-                    onClick={(e) => { handleRowClick({ rowData: item, value: 'old', events: e }) }}
+                    onClick={(e) => { handleRowClick({ rowData: item, values: 'old', events: e }) }}
                 >
                     {getLockFormate(item.old_site_locked_unlocked_date)}
                 </th>
                 <th style={{ whiteSpace: '  nowrap', border: '1px solid black', cursor: 'pointer' }}
                     className={classes.hover}
-                    onClick={(e) => { handleRowClick({ rowData: item, value: 'new', events: e }) }}
+                    onClick={(e) => { handleRowClick({ rowData: item, values: 'new', events: e }) }}
                 >
                     {/* {item.new_site_locked_unlocked_date?.map(item => item.status).at(-1)}
                     {item.new_site_locked_unlocked_date?.map(item => item.created_at).at(-1)} */}
@@ -392,44 +405,45 @@ const Relocation = () => {
                 <th style={{ whiteSpace: 'nowrap', border: '1px solid black', color: item.both_site_locked === 'Yes' ? 'red' : 'green' }}>{item.both_site_locked}</th>
                 <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.pre_less_than_3_mbps}</th>
                 <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.current_less_than_3_mbps}</th>
-
                 <th style={{ whiteSpace: 'nowrap', border: '1px solid black', color: item.payload_dip === 'Yes' ? 'red' : 'green' }}>{item.payload_dip}</th>
+                <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.ms1_date}</th>
+                <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item.ms2}</th>
                 <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>
                     {item.Remark ? item.Remark : <form onSubmit={(e) => { checkClickFunction(e, item) }}>
                         <input type='text' name='remark' value={remarkText[item.id] || ""} onChange={(e) => setRemarkText({ ...remarkText, [item.id]: e.target.value })} placeholder='Add Remark' style={{ border: 'none', outline: 'none', width: 200 }} className={`${colorChange(item)}`} />
                     </form>}
-
                 </th>
             </tr>
         ))
-    }, [selectCircle, selectNewSiteId, selectOldSiteId, tableData, handleColor, devStatus, devStatus1, bothSiteLock, bothSiteUnlock, payloadDip, remarkText])
+    }, [selectCircle, selectNewSiteId, selectOldSiteId, tableData, handleColor, devStatus, devStatus1, bothSiteLock, bothSiteUnlock, payloadDip, remarkText,redData])
 
-    const handleClose = () => {
+    const handleClose = useCallback(() => {
         setOpen(false);
         setTempRawData('');
         // fetchApiData();
-    };
+    },[]);
 
 
     useEffect(() => {
         if (yellowData) {
             setDevStatus(['Yes'])
+            setRedData(false)
         }
         else {
             setDevStatus([])
         }
     }, [yellowData])
 
-    useEffect(() => {
-        if (redData) {
-            setBothSiteUnlock(['Yes']);
-            setBothSiteLock(['Yes']);
-        }
-        else {
-            setBothSiteUnlock([]);
-            setBothSiteLock([]);
-        }
-    },[redData])
+    // useEffect(() => {
+    //     if (redData) {
+    //         setBothSiteUnlock(['Yes']);
+    //         setBothSiteLock(['Yes']);
+    //     }
+    //     else {
+    //         setBothSiteUnlock([]);
+    //         setBothSiteLock([]);
+    //     }
+    // },[redData])
 
 
     useEffect(() => {
@@ -456,7 +470,7 @@ const Relocation = () => {
                     <span ><CircleIcon style={{ color: '#FFD95F' }} size='small' /> </span>
                     <span style={{ fontWeight: 'bold', color: 'black', fontSize: 16, cursor: 'pointer', backgroundColor: yellowData ? '#FFD95F' : '' }} onClick={() => setYellowData(!yellowData)} >Deviation Status (Allocated Vs Deployed)</span>
                     <span ><CircleIcon style={{ color: '#ffcccc' }} size='small' /> </span>
-                    <span style={{ fontWeight: 'bold', color: 'black', fontSize: 16,cursor:'pointer', backgroundColor: redData ? '#ffcccc' : '' }} onClick={() => setRedData(!redData)}>Old vs New Site Locked-Unlocked Date</span>
+                    <span style={{ fontWeight: 'bold', color: 'black', fontSize: 16,cursor:'pointer', backgroundColor: redData ? '#ffcccc' : '' }} onClick={() => { setRedData(!redData);}}>Old vs New Site Locked-Unlocked Date</span>
                     <IconButton color='primary' onClick={handleExportInExcel} title='Export in Excel'>
                         <DownloadIcon />
                     </IconButton>
@@ -475,8 +489,7 @@ const Relocation = () => {
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>OEM</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>MO Name</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>No. of BBUs</th>
-                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>MS1 Date</th>
-                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>MS2 Done</th>
+
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Old Site Technology</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Allocated Technology(As Per DP)</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Deployed Technology</th>
@@ -496,41 +509,16 @@ const Relocation = () => {
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Pre &lt;3 Mbps</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Current &lt;3Mbps</th>
                                     <th style={{ padding: '1px 70px 1px 1px', whiteSpace: 'nowrap' }}>Payload Dip <CheckPicker data={YesNoData.map(item => ({ label: item, value: item }))} value={payloadDip} onChange={(value) => { setPayloadDip(value) }} size="sm" appearance="default" placeholder="" style={{ width: 10 }} /></th>
+                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>MS1 Date</th>
+                                    <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>MS2 Status</th>
                                     <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Remarks</th>
 
                                 </tr>
                             </thead>
                             <tbody>
-                                {/* {tableData?.map((item,index) => (
-                                    <tr  style={{ textAlign: "center",border:'1px solid black', fontWeigth: 700 }}>
-                                        <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{index+1}</th>
-                                        <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.circle}</th>
-                                        <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.old_site_id}</th>
-                                        <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.new_site_id}</th>
-                                        <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.integration_date}</th>
-                                        <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.ms1_date}</th>
-                                        <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.old_site_technology}</th>
-                                        <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.allocated_technology}</th>
-                                        <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.deployed_technology}</th>
-                                        <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.allocated_vs_deployed_tech_deviation}</th>
-                                        <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.allocated_vs_deployed_tech}</th>
-                                        <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.old_vs_deployed_tech_deviation}</th>
-                                        <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.old_vs_deployed_tech}</th>
-                                        <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }} onClick={()=>{handleRowClick({id:item.id,value:'old'})}}>{item.old_site_locked_date}</th>
-                                        <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }} onClick={()=>{handleRowClick({id:item.id,value:'new'})}}>{item.new_site_unlock_date}</th>
-                                        <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.old_site_traffic_fixed}</th>
-                                        <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.old_site_traffic_variable}</th>
-                                        <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.existing_traffic}</th>
-                                        <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.both_site_unlocked}</th>
-                                        <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.both_site_locked}</th>
-                                        <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.pre_less_than_3_mbps}</th>
-                                        <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.current_less_than_3_mbps}</th>
-                                        <th style={{  whiteSpace: 'nowrap',border:'1px solid black' }}>{item.payload_dip}</th>
+                             
 
-                                    </tr>
-                                ))} */}
-
-                                {FilterTableData()}
+                                {FilterTableData}
 
                             </tbody>
                         </table>
