@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback,useRef } from 'react';
+import React, { useState, useEffect, useCallback,useRef,useMemo } from 'react';
 import { Box, Grid, TextField, Button } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
 import Container from '@mui/material/Container'
@@ -315,6 +315,7 @@ const RaiseTicket2 = () => {
 
 
     const handleExportPaylodDipData = () => {
+
         const workbook = new ExcelJS.Workbook();
         const sheet3 = workbook.addWorksheet("Paylod Dip", { properties: { tabColor: { argb: 'f1948a' } } })
   
@@ -461,7 +462,7 @@ const RaiseTicket2 = () => {
     }
 
 
-    const FilterPayloadDipData = useCallback(() => {
+    const FilterPayloadDipData = useMemo(() => {
         // setScrollNo(50)
         let filteredData = _.filter(totalTable, item => {
 
@@ -941,7 +942,7 @@ const RaiseTicket2 = () => {
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{item.Pre_Remarks == 'nan' ? '' : item.Pre_Remarks}</th>
                                     </tr>
                                 ))} */}
-                                    {FilterPayloadDipData()}
+                                    {FilterPayloadDipData}
                                 </tbody>
                             </table>
                         </TableContainer>
