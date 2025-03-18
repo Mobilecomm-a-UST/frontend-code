@@ -206,6 +206,16 @@ const CircleWiseData = [
             "Nilesh Jain",
             "Saurabh Rathore"
         ]
+    },
+    {
+        "id": 20,
+        "circle": "WB",
+        "approver_name": [
+            "Masud Rana",
+            "Pankaj",
+            "Sonu Sharma",
+            "Saurabh Rathore"
+        ]
     }
 ]
 const TechnologyList = ["L900", "L1800", "L2100", "G900", "G1800", "G2100", "2G", "5G", "RET"]
@@ -224,7 +234,7 @@ const SiteLockUnlockForm = ({ data, open, handleClose, updateTableData }) => {
 
 
 
-    const fetchData = async () => {
+    const fetchData =  useCallback(async () => {
         action(true)
         let formData = new FormData()
         formData.append('Relocation_id', data?.id)
@@ -236,10 +246,10 @@ const SiteLockUnlockForm = ({ data, open, handleClose, updateTableData }) => {
             setTableData(responce?.data)
         } else {
             action(false)
-            handleClose();
+            // handleClose();
         }
         // console.log('responce', responce)
-    }
+    },[])
 
 
     const handleSubmit = async (e) => {
@@ -283,12 +293,15 @@ const SiteLockUnlockForm = ({ data, open, handleClose, updateTableData }) => {
         );
     },[])
 
+
+
     useEffect(() => {
 
         fetchData()
         let response1 = CircleWiseData?.filter((item) => item.circle === data?.circle);
-        setApprovedByValue(response1[0]['approver_name'])
-    }, []);
+        {response1?.length > 0 && setApprovedByValue(response1[0]['approver_name'])}
+        // setApprovedByValue(response1[0]['approver_name'] || "")
+    }, [fetchData]);
     return (
         <>
             <Dialog

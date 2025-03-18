@@ -48,7 +48,7 @@ const Relocation = () => {
 
 
 
-    console.log('color data', devStatus)
+    // console.log('color data', devStatus)
 
     const fetchApiData = async () => {
         // const formData = new FormData()
@@ -354,7 +354,7 @@ const Relocation = () => {
         // const filterRedColor = filteredData.filter(item =>  item.both_site_unlocked === 'Yes' || item.both_site_locked === 'Yes')
 
 
-        console.log('filter data' , filteredData)
+        // console.log('filter data' , filteredData)
 
 
         return filteredData?.map((item, index) => (
