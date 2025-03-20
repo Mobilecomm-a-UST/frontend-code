@@ -211,9 +211,63 @@ const CircleWiseData = [
         "id": 20,
         "circle": "WB",
         "approver_name": [
+            "Manish Chobisa",
+            "Jayadeba",
+            "Sonu Sharma",
+            "Saurabh Rathore"
+        ]
+    },
+    {
+        "id": 21,
+        "circle": "ORI",
+        "approver_name": [
             "Masud Rana",
             "Pankaj",
             "Sonu Sharma",
+            "Saurabh Rathore"
+        ]
+    },
+    {
+        "id": 22,
+        "circle": "CHN",
+        "approver_name": [
+            "Bharateeshwaran",
+            "Prakashpandi",
+            "Shubham Gupta",
+            "Nilesh Jain",
+            "Saurabh Rathore"
+        ]
+    },
+    {
+        "id": 23,
+        "circle": "PUN",
+        "approver_name": [
+            "Manoj Kumar [ZTE]",
+            "Himanshu Lokhande [Samsung]",
+            "Aman",
+            "Tarun Rakecha",
+            "Saurabh Rathore"
+        ]
+    }
+    ,
+    {
+        "id": 24,
+        "circle": "DEL",
+        "approver_name": [
+            "Nishant Sharma",
+            "Rajesh Gupta",
+            "Krishna Kant Verma",
+            "Saurabh Rathore"
+        ]
+    } ,
+    {
+        "id": 25,
+        "circle": "HRY",
+        "approver_name": [
+            "Manoj Kumar [ZTE]",
+            "Shivam Pandey [Ericsson]",
+            "Aman",
+            "Tarun Rakecha",
             "Saurabh Rathore"
         ]
     }
@@ -230,7 +284,7 @@ const SiteLockUnlockForm = ({ data, open, handleClose, updateTableData }) => {
     const [status, setStatus] = useState('');
     const [technology, setTechnology] = useState([]);
     const userName = JSON.parse(localStorage.getItem("userID"))
-    console.log('data of form', data, open)
+    // console.log('data of form', data, open)
 
 
 
