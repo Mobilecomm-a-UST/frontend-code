@@ -59,9 +59,9 @@ const Integration = () => {
                                             Upload File
                                         </Nav.Item>
                                         <Nav.Menu eventKey="4" placement="rightStart" icon={<ConversionIcon />} title="Relocation" >
-                                            <Nav.Item eventKey="4-1" placement="rightStart" onClick={() => navigate('/tools/Integration/relocation_charts')}>
+                                            {/* <Nav.Item eventKey="4-1" placement="rightStart" onClick={() => navigate('/tools/Integration/relocation_charts')}>
                                                 Master Dashboard
-                                            </Nav.Item>
+                                            </Nav.Item> */}
                                             <Nav.Item eventKey="4-2" placement="rightStart" onClick={() => navigate('/tools/Integration/relocation_master_table')}>
                                                 Master Table
                                             </Nav.Item>
@@ -92,7 +92,7 @@ const Integration = () => {
                                 <Route element={<MDashboard />} path="/master_dashboard" />
                                 <Route element={<Relocation />} path="/relocation_dashboard" />
                                 <Route element={<RelocationUpload />} path="/relocation_uploadfile" />
-                                <Route element={<ChartDashboard />} path="/relocation_charts" />
+                                {/* <Route element={<ChartDashboard />} path="/relocation_charts" /> */}
                                 <Route element={<MasterTable />} path="/relocation_master_table" />
 
                             </Routes>

@@ -108,5 +108,8 @@
         "50%": { backgroundColor: "#fff" },   // White
         "100%": { backgroundColor: "#FFD95F" } // Light Red
     },
+    unblink:{
+        backgroundColor: "#fff"
+    }
 
 });
