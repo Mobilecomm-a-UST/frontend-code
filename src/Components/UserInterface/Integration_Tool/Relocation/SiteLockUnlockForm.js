@@ -283,6 +283,7 @@ const SiteLockUnlockForm = ({ data, open, handleClose, updateTableData }) => {
     const [purpuse, setPurpose] = useState('');
     const [status, setStatus] = useState('');
     const [technology, setTechnology] = useState([]);
+    const [remark, setRemark] = useState('');
     const userName = JSON.parse(localStorage.getItem("userID"))
     // console.log('data of form', data, open)
 
@@ -318,6 +319,7 @@ const SiteLockUnlockForm = ({ data, open, handleClose, updateTableData }) => {
         formData.append('approval_given_by', approvedBy)
         formData.append('purpose', purpuse)
         formData.append('status', status)
+        formData.append('remark', remark)
         formData.append('site_locked_by', userName?.split('@')[0].replace('.', ' ').split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '))
         let responce = await postData(`IntegrationTracker/${data?.postApi}/`, formData);
         if (responce) {
@@ -527,6 +529,19 @@ const SiteLockUnlockForm = ({ data, open, handleClose, updateTableData }) => {
                                             </Select>
                                         </FormControl>
                                     </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            id="outlined-basic"
+                                            label="Remarks"
+                                            variant="outlined"
+                                            fullWidth
+                                            required
+                                            value={remark}
+                                            onChange={(e) => setRemark(e.target.value)}
+                                            size='small'
+                                            // inputProps={{ readOnly: true }}
+                                        />
+                                    </Grid>
 
                                     <Grid item xs={3} textAlign={'center'}>
                                         <Button size='small' fullWidth type='submit' variant="contained" >Add</Button>
@@ -548,6 +563,7 @@ const SiteLockUnlockForm = ({ data, open, handleClose, updateTableData }) => {
                                         <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Approval Given By</th>
                                         <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Purpose</th>
                                         <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Status</th>
+                                        <th style={{ padding: '1px 10px', whiteSpace: 'nowrap' }}>Remarks</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -563,6 +579,7 @@ const SiteLockUnlockForm = ({ data, open, handleClose, updateTableData }) => {
                                             <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item?.approval_given_by}</th>
                                             <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item?.purpose}</th>
                                             <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item?.status}</th>
+                                            <th style={{ whiteSpace: 'nowrap', border: '1px solid black' }}>{item?.remark}</th>
                                         </tr>
                                     ))}
                                 </tbody>
