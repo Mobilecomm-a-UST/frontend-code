@@ -91,7 +91,7 @@ const Make5G = () => {
     <div style={{ margin: 5, marginLeft: 10 }}>
       <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
         <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
-        <Link underline="hover" onClick={() => { navigate('/tools/dma') }}>DMA Tool</Link>
+        <Link underline="hover" onClick={() => { navigate('/tools/dma') }}>DSA Tool</Link>
         <Typography color='text.primary'>Make 5G Alarm</Typography>
       </Breadcrumbs>
     </div>

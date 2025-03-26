@@ -12,6 +12,7 @@ import { postDatas,getData } from "../services/FetchNodeServices";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import {setEncreptedData } from "../utils/localstorage";
 // import axios from "../services/Instance";
 // import { Token } from "@mui/icons-material";
 
@@ -43,7 +44,7 @@ const handleChange = (e) => {
 const handleCallApp=async()=>{
 const responce = await getData('get_user_circle')
 // console.log('user type' , responce)
-localStorage.setItem("user_type", JSON.stringify(responce.user_catagory));
+setEncreptedData("user_type", responce.user_catagory);
 }
 
 const handleSubmit = async(e) => {
@@ -56,8 +57,10 @@ const handleSubmit = async(e) => {
     // console.log('token ' , document.cookie(''))
     if (response) {
       // setTokan(response)
-      localStorage.setItem("tokenKey", JSON.stringify(response.token));
-      localStorage.setItem("userID", JSON.stringify(formData.username));
+      setEncreptedData("tokenKey", response.token);
+      // localStorage.setItem("tokenKey", JSON.stringify(response.token));
+
+      setEncreptedData("userID", formData.username);
       Swal.fire({
         icon: "success",
         title: "Done",

@@ -26,6 +26,7 @@ import { ServerURL } from '../services/FetchNodeServices'
 import ToolsIcon from '@rsuite/icons/Tools';
 import InfoIcon from '@mui/icons-material/Info';
 import { getData } from "../services/FetchNodeServices";
+import { getDecreyptedData } from "../utils/localstorage";
 
 
 
@@ -39,10 +40,11 @@ export default function Home() {
   // const [dashboard, setDashboard] = React.useState(null);
   // const open = Boolean(dashboard);
   const chackToken = localStorage.getItem("tokenKey")
-  const userName = JSON.parse(localStorage.getItem("userID"))
+  const userName = getDecreyptedData("userID")
+  // const userName = JSON.parse(localStorage.getItem("userID"))
   const location = useLocation()
 
-  //  console.log('tttttttttttttttt' ,JSON.parse(localStorage.getItem("tokenKey")).refresh )
+  //  console.log('tttttttttttttttt' ,userName )
   const fetchProfileData = async () => {
     const response = await getData(`profile/${userName}/`);
 

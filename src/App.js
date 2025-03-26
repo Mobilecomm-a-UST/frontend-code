@@ -8,6 +8,7 @@ import Home from "./Components/UserInterface/Home";
 import HomePage from "./Components/UserInterface/HomePage";
 import LoginPage from "./Components/UserInterface/LoginPage";
 import Tools from "./Components/UserInterface/Tools";
+import { getDecreyptedData } from "./Components/utils/localstorage";
 
 const ViewSite = lazy(() => import('./Components/UserInterface/DPR/ViewSite'));
 const Dpr = lazy(() => import('./Components/UserInterface/DPR/Dpr'))
@@ -64,7 +65,7 @@ function App() {
 
   const ProtectedRoute = ({ element: Component, allowedUserTypes, userType, ...rest }) => {
     // console.log(allowedUserTypes, userType,allowedUserTypes.includes(userType))
-    const userTypes = (JSON.parse(localStorage.getItem('user_type'))?.split(","))
+    const userTypes = (getDecreyptedData('user_type')?.split(","))
     return userTypes?.some(type => allowedUserTypes?.some(group => group.toLowerCase() === type.toLowerCase())) ? (
       <Component {...rest} />
     ) : <Navigate to="/error" />
@@ -72,7 +73,7 @@ function App() {
 
 
   useEffect(() => {
-    setUserType(JSON.parse(localStorage.getItem('user_type'))?.split(","))
+    setUserType(getDecreyptedData('user_type')?.split(","))
   }, [])
 
 

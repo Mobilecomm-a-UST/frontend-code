@@ -7,6 +7,7 @@ import Zoom from '@mui/material/Zoom';
 import PcIcon from '@rsuite/icons/Pc';
 import DocPassIcon from '@rsuite/icons/DocPass';
 import ToolData from '../UserBased/Data/ToolData';
+import { getDecreyptedData } from '../utils/localstorage';
 
 // import DocPassIcon from '@rsuite/icons/DocPass';
 
@@ -19,14 +20,14 @@ export default function Tools() {
   const dispatch = useDispatch()
   const classes = useStyles()
   const navigate = useNavigate()
-  const chackToken = localStorage.getItem("tokenKey")
+  const chackToken = getDecreyptedData("tokenKey")
 
   //  navigator.geolocation.getCurrentPosition((item)=>{
   //    console.log('ggggggggg', window.location.href ,item.coords  )
   //   })
 
   // const userType = JSON.parse(localStorage.getItem('user_type'))
-  const userType = (JSON.parse(localStorage.getItem('user_type'))?.split(","))
+  const userType = (getDecreyptedData('user_type')?.split(","))
 
   const linker = window.location.pathname;
 
