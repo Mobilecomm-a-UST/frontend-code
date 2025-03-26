@@ -1,4 +1,5 @@
 import axios from "axios"
+import { getDecreyptedData } from "../utils/localstorage";
 
 
 // const ServerURL = "http://192.168.0.29:8001"
@@ -20,7 +21,8 @@ const ServerURL = "http://103.242.225.195:8000";
 const getData = async (url) => {
   try {
     var response = await fetch(`${ServerURL}/${url}`, {
-      headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` }
+      // headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` }
+      headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
     })
     var result = await response.json()
     return (result)
@@ -33,7 +35,7 @@ const getData = async (url) => {
 const putData = async (url, body) => {
   try {
     var response = await axios.put(`${ServerURL}/${url}`, body, {
-      headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` }
+      headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
     })
     var result = await response.data
     return (result)
@@ -49,7 +51,7 @@ const putData = async (url, body) => {
 const postData = async (url, body, token ) => {
   try {
     var response = await axios.post(`${ServerURL}/${url}`, body, {
-      headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` }
+      headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
     })
     var result = await response.data
     return (result)
