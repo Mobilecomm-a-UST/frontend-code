@@ -62,7 +62,7 @@ const UploadFile = () => {
             formData.append("file", rawKpiFile.bytes);  
             try {
                 const response = await postData( `IntegrationTracker/upload/`, formData);
-                var result = await response.data
+                var result = await response
                 setOpen(false);
                 setError(result.error_rows)
                 Swal.fire({
