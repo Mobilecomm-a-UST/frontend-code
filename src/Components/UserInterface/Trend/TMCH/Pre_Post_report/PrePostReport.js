@@ -91,9 +91,7 @@ export default function PrePostReport() {
     formData.append("mapping", mapping.bytes);
 
 
-    const response = await postData('Original_trend/tnch/pre_post_upload_7/', formData, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` }
-
-    ,signal:abortSignal })
+    const response = await postData('Original_trend/tnch/pre_post_upload_7/', formData)
     dispatch({ type: 'PRE_POST_REPORT', payload: { response } })
     sessionStorage.setItem('prepost', JSON.stringify(response));
     console.log('response data', response)

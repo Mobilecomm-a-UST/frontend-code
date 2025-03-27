@@ -22,6 +22,7 @@ import Zoom from '@mui/material/Zoom';
 import Multiselect from "multiselect-react-dropdown";
 import DownloadIcon from '@mui/icons-material/Download';
 import * as ExcelJS from 'exceljs'
+import { setEncreptedData } from '../../../utils/localstorage';
 
 // import * as XlsxPopulate from 'xlsx-populate/browser/xlsx-populate'
 
@@ -162,7 +163,7 @@ const Dashboard = () => {
         formData.append("circle", data[0])
         formData.append("ageing", data[1])
         const response = await postData('Performance_AT/site_list_request_handler/', formData)
-        localStorage.setItem("site_list", JSON.stringify({ 'list': response.site_list, 'circle': data[0], 'ageing': data[1] }));
+        setEncreptedData("site_list",{ 'list': response.site_list, 'circle': data[0], 'ageing': data[1] });
         console.log('show ageing data', response)
         setAgeingSiteList(response.site_list)
         window.open(`${window.location.href}/site_list`, "_blank")

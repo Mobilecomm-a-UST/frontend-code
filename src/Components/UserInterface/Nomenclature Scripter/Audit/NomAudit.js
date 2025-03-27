@@ -195,7 +195,7 @@ const NomAudit = () => {
 
             formData.append('circle', selectCircle)
 
-            const response = await postData('NOM_AUDIT/pre_post_audit_process/', formData, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
+            const response = await postData('NOM_AUDIT/pre_post_audit_process/', formData)
 
             console.log('response data', response.pre_post_json)
 

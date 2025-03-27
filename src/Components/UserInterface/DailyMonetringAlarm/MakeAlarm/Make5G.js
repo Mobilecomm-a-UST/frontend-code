@@ -38,7 +38,7 @@ const Make5G = () => {
         formData.append(`log_files`, make4GFiles[i]);
       }
 
-      const response = await postData('api/upload_5g/', formData, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
+      const response = await postData('api/upload_5g/', formData)
 
       console.log('response data', response)
 

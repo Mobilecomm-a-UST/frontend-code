@@ -15,6 +15,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { styled } from "@mui/material/styles";
 import { Form, useNavigate } from "react-router-dom";
 import swal from "sweetalert2";
+import { getDecreyptedData } from "../../utils/localstorage";
 
 
 const ProfileSetting = () => {
@@ -33,7 +34,7 @@ const ProfileSetting = () => {
   const [backendUpload, setBackendUpload] = useState();
   const navigate = useNavigate();
   //   const [profileData, setProfileData] = useState();
-  const userName = JSON.parse(localStorage.getItem("userID"));
+  const userName = getDecreyptedData("userID");
 
   const handleChange = (event) => {
     setGender(event.target.value);

@@ -42,7 +42,7 @@ const UploadData = () => {
             var formData = new FormData();
             formData.append("planned_site_file", softAt.bytes);
 
-            const response = await postData('nomenclature_scriptor/generate_script', formData, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
+            const response = await postData('nomenclature_scriptor/generate_script', formData)
          
 
             if (response.status === true) {

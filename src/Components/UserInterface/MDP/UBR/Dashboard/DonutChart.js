@@ -42,7 +42,7 @@ const DonutChart = () => {
         formData.append("CIRCLE", circle)
         formData.append("COMPATITOR", selectVendor)
         formData.append("DONE_COUNT", 'False')
-        const response = await postData('MDP/project_comparision/', formData, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
+        const response = await postData('MDP/project_comparision/', formData)
         console.log('q1111111',response.data)
         var datas = response.data
 
@@ -60,7 +60,7 @@ const DonutChart = () => {
         formData.append("CIRCLE", circle)
         formData.append("COMPATITOR", selectVendor)
         formData.append("DONE_COUNT", 'True')
-        const response = await postData('MDP/project_comparision/', formData, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
+        const response = await postData('MDP/project_comparision/', formData)
         // console.log('qsssssssssssssssss',response.data)
         var datas = response.data
 
@@ -82,7 +82,7 @@ const DonutChart = () => {
         formData.append("CIRCLE", props)
         formData.append("COMPATITOR", selectVendor)
         formData.append("DONE_COUNT", 'False')
-        const response = await postData('MDP/project_comparision/', formData, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
+        const response = await postData('MDP/project_comparision/', formData)
         console.log('q1111111',response.data)
         var datas = response.data
 
@@ -100,7 +100,7 @@ const DonutChart = () => {
         formData.append("CIRCLE", props)
         formData.append("COMPATITOR", selectVendor)
         formData.append("DONE_COUNT", 'True')
-        const response = await postData('MDP/project_comparision/', formData, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
+        const response = await postData('MDP/project_comparision/', formData)
         // console.log('qsssssssssssssssss',response.data)
         var datas = response.data
 
@@ -122,7 +122,7 @@ const DonutChart = () => {
         formData.append("CIRCLE", circle)
         formData.append("COMPATITOR", props)
         formData.append("DONE_COUNT", 'False')
-        const response = await postData('MDP/project_comparision/', formData, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
+        const response = await postData('MDP/project_comparision/', formData)
         console.log('q1111111',response.data)
         var datas = response.data
 
@@ -140,7 +140,7 @@ const DonutChart = () => {
         formData.append("CIRCLE", circle)
         formData.append("COMPATITOR", props)
         formData.append("DONE_COUNT", 'True')
-        const response = await postData('MDP/project_comparision/', formData, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
+        const response = await postData('MDP/project_comparision/', formData)
         // console.log('qsssssssssssssssss',response.data)
         var datas = response.data
 
@@ -163,7 +163,7 @@ const DonutChart = () => {
         formData.append("CIRCLE", circle)
         formData.append("COMPATITOR", selectVendor)
         formData.append("DONE_COUNT", 'False')
-        const response = await postData('MDP/project_comparision/', formData, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
+        const response = await postData('MDP/project_comparision/', formData)
         console.log('q1111111',response.data)
         var datas = response.data
 
@@ -181,7 +181,7 @@ const DonutChart = () => {
         formData.append("CIRCLE", circle)
         formData.append("COMPATITOR", selectVendor)
         formData.append("DONE_COUNT", 'True')
-        const response = await postData('MDP/project_comparision/', formData, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
+        const response = await postData('MDP/project_comparision/', formData)
         // console.log('qsssssssssssssssss',response.data)
         var datas = response.data
 

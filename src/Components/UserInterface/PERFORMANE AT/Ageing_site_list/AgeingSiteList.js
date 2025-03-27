@@ -1,8 +1,9 @@
 import React from 'react'
 import {useEffect}from 'react'
+import { getDecreyptedData } from '../../../utils/localstorage'
 
 const AgeingSiteList = () => {
-  const listData = JSON.parse(localStorage.getItem("site_list"))
+  const listData = getDecreyptedData("site_list")
   const site_list = listData.list
   console.log('ataa', listData.list)
   useEffect(()=>{

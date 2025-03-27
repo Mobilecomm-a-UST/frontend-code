@@ -104,7 +104,7 @@ const Dashboard = () => {
     }
 
     const handleDelete = async (props) => {
-        const response = await postData(`equipmentInventory/delete_equipment_inventry/${props}`, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
+        const response = await postData(`equipmentInventory/delete_equipment_inventry/${props}`)
         // console.log(response)
         if (response.status === true) {
 
@@ -128,7 +128,7 @@ const Dashboard = () => {
         formData.append("Capacity", capacity);
         formData.append("MAX_POWER", maxPower);
         formData.append("Remarks", remark);
-        const response = await postData(`equipmentInventory/update_equipment_inventry/${id}`, formData, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
+        const response = await postData(`equipmentInventory/update_equipment_inventry/${id}`, formData)
         console.log('update data', response)
         if (response.status === true) {
             setOpen(false)
@@ -153,7 +153,7 @@ const Dashboard = () => {
         formData.append("Capacity", capacity);
         formData.append("MAX_POWER", maxPower);
         formData.append("Remarks", remark);
-        const response = await postData('equipmentInventory/create_equipment_inventry/', formData, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
+        const response = await postData('equipmentInventory/create_equipment_inventry/', formData)
         console.log('response data', response)
         // sessionStorage.setItem('upload_soft_at_status', JSON.stringify(response.status_obj))
 

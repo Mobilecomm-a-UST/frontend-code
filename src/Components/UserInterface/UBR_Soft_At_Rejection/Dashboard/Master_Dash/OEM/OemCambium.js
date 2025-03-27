@@ -3,6 +3,7 @@ import MaterialTable from '@material-table/core'
 import { postData } from '../../../../../services/FetchNodeServices';
 import DownloadIcon from '@mui/icons-material/Download';
 import { CsvBuilder } from 'filefy';
+import { getDecreyptedData,setEncreptedData } from '../../../../../utils/localstorage';
 
 
 
@@ -13,7 +14,7 @@ function toCamelCase(input) {
   }
 
 const OemCambium = () => {
-    const listData = JSON.parse(localStorage.getItem("oem_data"))
+    const listData = getDecreyptedData("oem_data")
     const [status, setStatus] = useState()
     const [selectedRows, setSelectedRows] = useState()
 
@@ -27,7 +28,7 @@ const OemCambium = () => {
         formData.append('status', rowData.AT_STATUS)
 
         const response = await postData('softat_rej/site_wise_view', formData)
-        localStorage.setItem("2G_site_ID", JSON.stringify(response.data));
+        setEncreptedData("2G_site_ID", response.data);
         // console.log('response data in huawia site id' , response)
         window.open(`${window.location.href}/site_id_2G`, "_blank")
 

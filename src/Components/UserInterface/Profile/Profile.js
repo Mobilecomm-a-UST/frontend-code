@@ -6,9 +6,10 @@ import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import Typography from "@mui/material/Typography";
 import EditIcon from "@mui/icons-material/Edit";
+import { getDecreyptedData } from "../../utils/localstorage";
 
 const Profile = () => {
-  const userName = JSON.parse(localStorage.getItem("userID"));
+  const userName = getDecreyptedData("userID");
   const [gender, setGender] = useState("");
   const [employeeName, setEmployeeName] = useState("");
   const [empCode, setEmpCode] = useState("");

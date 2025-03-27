@@ -54,7 +54,7 @@ const Comperison = () => {
           var formData = new FormData();
           formData.append("monthly_report_file", mdpFile.bytes);
 
-          const response = await postData('MDP/upload/', formData, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
+          const response = await postData('MDP/upload/', formData)
           // console.log('response data', response)
         //   sessionStorage.setItem('upload_performance_at_status', JSON.stringify(response.status_obj))
 

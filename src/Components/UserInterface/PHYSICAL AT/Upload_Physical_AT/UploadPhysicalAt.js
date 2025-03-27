@@ -43,7 +43,7 @@ const UploadPhysicalAt = () => {
       var formData = new FormData();
       formData.append("Physical_At_Report_file", physical.bytes);
       formData.append("upload_date", pdate);
-      const response = await postData('Physical_At/upload/', formData, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
+      const response = await postData('Physical_At/upload/', formData)
       console.log('response data', response)
       sessionStorage.setItem('upload_physical_at_status', JSON.stringify(response.status_obj))
 

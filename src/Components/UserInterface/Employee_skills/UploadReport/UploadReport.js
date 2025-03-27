@@ -162,7 +162,7 @@ const UploadReport = () => {
 
     useEffect(() => {
         const fetchDownloadTemp = async () => {
-            const res = await getData('employee_skills/template/', { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
+            const res = await getData('employee_skills/template/')
 
             if (res) {
                 setFileData(res.file_url)

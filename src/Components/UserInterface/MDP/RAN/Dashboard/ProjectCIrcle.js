@@ -37,7 +37,7 @@ const ProjectCIrcle = () => {
         formData.append("COMPATITOR", vendor)
         formData.append("DONE_COUNT", 'True')
         formData.append("MONTH", months)
-        const response = await postData('MDP/projectWise_circle_comparision_pichart/', formData, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
+        const response = await postData('MDP/projectWise_circle_comparision_pichart/', formData)
         console.log("project Circle", response.data)
     }
 

@@ -9,12 +9,13 @@ import { Breadcrumbs, Link, Typography } from "@mui/material";
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import WavePointIcon from '@rsuite/icons/WavePoint';
 import TimeIcon from '@rsuite/icons/Time';
+import { getDecreyptedData } from '../../utils/localstorage'
 
 const Audit = () => {
     const dispatch = useDispatch()
     const classes = useStyles()
     const navigate = useNavigate()
-    const chackToken = localStorage.getItem("tokenKey")
+    const chackToken = getDecreyptedData("tokenKey")
 
     // console.log('ggggggggg', window.location.href)
     const linker = window.location.pathname;

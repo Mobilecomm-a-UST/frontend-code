@@ -22,6 +22,7 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
+import { getDecreyptedData } from "../../../utils/localstorage";
 // import FormLabel from '@mui/material/FormLabel';
 
 
@@ -99,7 +100,7 @@ const UploadMdp = () => {
     const [typeShow, setTypeShow] = useState(false)
     const [fileData, setFileData] = useState()
     const [fileData1, setFileData1] = useState()
-    const CirclesArray = (JSON.parse(localStorage.getItem("Circle"))?.split(','))
+    const CirclesArray = (getDecreyptedData("Circle")?.split(','))
     const tempCircleArray = []
     const rawKpiLength = rawKpiFile.filename.length
     const classes = OverAllCss()
@@ -232,8 +233,8 @@ const UploadMdp = () => {
 
     useEffect(() => {
         const fetchDownloadTemp = async () => {
-            const res = await getData('MDP/template/projection', { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
-            const res1 = await getData('MDP/template/actual', { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
+            const res = await getData('MDP/template/projection')
+            const res1 = await getData('MDP/template/actual')
             if (res) {
                 setFileData(res.file_url)
             }

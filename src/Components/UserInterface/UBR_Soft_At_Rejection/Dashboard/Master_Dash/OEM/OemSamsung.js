@@ -3,6 +3,7 @@ import MaterialTable from '@material-table/core'
 import DownloadIcon from '@mui/icons-material/Download';
 import { CsvBuilder } from 'filefy';
 import { postData } from '../../../../../services/FetchNodeServices';
+import { getDecreyptedData,setEncreptedData } from '../../../../../utils/localstorage';
 
 
 function toCamelCase(input) {
@@ -10,7 +11,7 @@ function toCamelCase(input) {
   }
 
 const OemSamsung = () => {
-    const listData = JSON.parse(localStorage.getItem("oem_data"))
+    const listData = getDecreyptedData("oem_data")
     const [selectedRows, setSelectedRows] = useState()
     const [status , setStatus] = useState()
 
@@ -24,7 +25,7 @@ const OemSamsung = () => {
         formData.append('status', rowData.AT_STATUS)
 
         const response = await postData('softat_rej/site_wise_view', formData)
-        localStorage.setItem("2G_site_ID", JSON.stringify(response.data));
+        setEncreptedData("2G_site_ID", response.data);
         window.open(`${window.location.href}/site_id_2G`, "_blank")
       };
 

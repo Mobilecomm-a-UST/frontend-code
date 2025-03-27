@@ -142,7 +142,7 @@ const Mcomms = () => {
         formData.append("card", hCard)
         formData.append("count", Object.values(hCount))
         formData.append("input_xl", mcommFile.bytes)
-        const response = await postData('Scriptor/upload/', formData, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
+        const response = await postData('Scriptor/upload/', formData)
         console.log(response)
         setFileData(response.Xml_script_url)
         if (response.status == true) {

@@ -32,7 +32,7 @@ const Tables = () => {
     const formData = new FormData();
     formData.append('circle', circle)
     formData.append('MONTH', month);
-    const response = await postData('MDP/pro_wise_partners_rank/', formData, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
+    const response = await postData('MDP/pro_wise_partners_rank/', formData)
     const data = JSON.parse(response.data)
     setAllData(data)
 
