@@ -59,9 +59,9 @@ const UploadFile = () => {
 
             setOpen(true)
             var formData = new FormData();
-            formData.append("file", rawKpiFile.bytes);
+            formData.append("file", rawKpiFile.bytes);  
             try {
-                const response = await postData(`${ServerURL}/IntegrationTracker/upload/`, formData);
+                const response = await postData( `IntegrationTracker/upload/`, formData);
                 var result = await response.data
                 setOpen(false);
                 setError(result.error_rows)

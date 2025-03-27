@@ -15,6 +15,7 @@ import Swal from "sweetalert2";
 import TextField from '@mui/material/TextField';
 import { Grid, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { getDecreyptedData } from '../../../utils/localstorage';
 
 
 
@@ -24,7 +25,7 @@ function toCamelCase(input) {
 
 const CircleWiseStatus = () => {
     const navigate = useNavigate();
-    const [listData, setListData] = useState(JSON.parse(localStorage.getItem("softat_hyperlink_data")))
+    const [listData, setListData] = useState(getDecreyptedData("softat_hyperlink_data"))
     const [editData, setEditData] = useState({
         unique_key: '',
         OEM: '',
@@ -217,7 +218,7 @@ const CircleWiseStatus = () => {
         e.preventDefault()
         try {
             const response = await axios.put(`${ServerURL}/Soft_At/edit-softat-report/${editDataID}/`, editData, {
-                headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` }
+                headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
             });
             Swal.fire({
                 icon: "success",
@@ -241,7 +242,7 @@ const CircleWiseStatus = () => {
 
 
     const handleDelete = async (rowData) => {
-        axios.delete(`${ServerURL}/IntegrationTracker/delete-integration-record/${rowData.id}/`, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` }, })
+        axios.delete(`${ServerURL}/IntegrationTracker/delete-integration-record/${rowData.id}/`, { headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }, })
             .then((res) => {
                 // console.log('Data deleted successfully', res);
                 Swal.fire({
@@ -287,7 +288,7 @@ const CircleWiseStatus = () => {
     }
 
     const handleReset = async(rowData)=>{
-        axios.put(`${ServerURL}/Soft_At/reset-to-previous-status/${rowData.unique_key}/`, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` }, })
+        axios.put(`${ServerURL}/Soft_At/reset-to-previous-status/${rowData.unique_key}/`, { headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }, })
         .then((res) => {
             // console.log('Data reset successfully', res);
             Swal.fire({
