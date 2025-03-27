@@ -36,7 +36,7 @@ import { ServerURL } from '../../../services/FetchNodeServices';
 import axios from 'axios';
 import Swal from "sweetalert2";
 import _ from 'lodash';
-import SearchIcon from '@mui/icons-material/Search';
+import { getDecreyptedData } from '../../../utils/localstorage';
 import CheckPicker from 'rsuite/CheckPicker';
 
 
@@ -129,7 +129,7 @@ const Kpi_Data = () => {
             // Make the DELETE request
             const response = await axios.delete(`${ServerURL}/RCA_TOOL/kpi-tables/${id}/`,
                 {
-                    headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` }
+                    headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
                 }
             );
             // console.log('Deleted successfully:', response);
@@ -163,7 +163,7 @@ const Kpi_Data = () => {
         e.preventDefault()
         const response = await axios.put(`${ServerURL}/RCA_TOOL/kpi-tables/${editDataId}/`, formData,
             {
-                headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` }
+                headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
             }
         );
         if (response.status === 200) {

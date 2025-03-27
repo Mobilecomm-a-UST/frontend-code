@@ -9,6 +9,7 @@ import { IconButton } from '@mui/material';
 import { ServerURL } from '../../../services/FetchNodeServices';
 import axios from 'axios';
 import Swal from "sweetalert2";
+import { getDecreyptedData } from '../../../utils/localstorage';
 
 
 
@@ -19,7 +20,7 @@ function toCamelCase(input) {
 }
 
 const ComanDashboard = () => {
-    const [listData, setListData] = useState(JSON.parse(localStorage.getItem("integration_final_tracker")))
+    const [listData, setListData] = useState(getDecreyptedData("integration_final_tracker"))
     const [status, setStatus] = useState()
     const [selectedRows, setSelectedRows] = useState()
     const params = useParams()
@@ -37,7 +38,7 @@ const ComanDashboard = () => {
         formData.append('status', rowData.AT_STATUS)
 
         const response = await postData('softat_rej/site_wise_view', formData)
-        localStorage.setItem("2G_site_ID", JSON.stringify(response.data));
+        getDecreyptedData("2G_site_ID", response.data);
         // console.log('response data in huawia site id' , response)
         window.open(`${window.location.href}/site_id_2G`, "_blank")
 
@@ -65,7 +66,7 @@ const ComanDashboard = () => {
     }
 
     const handleDelete = async (rowData) => {
-        axios.delete(`${ServerURL}/IntegrationTracker/delete-integration-record/${rowData.id}/`,{ headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}`},})
+        axios.delete(`${ServerURL}/IntegrationTracker/delete-integration-record/${rowData.id}/`,{ headers: { Authorization: `token ${getDecreyptedData("tokenKey")}`},})
         .then((res) => {
             console.log('Data deleted successfully',res);
             Swal.fire({

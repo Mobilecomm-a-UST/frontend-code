@@ -40,6 +40,7 @@ import _ from 'lodash';
 import SearchIcon from '@mui/icons-material/Search';
 import CheckPicker from 'rsuite/CheckPicker';
 import Payload_data from './Payload_Table/Payload_data';
+import { getDecreyptedData } from '../../../utils/localstorage';
 
 // import { SelectPicker } from 'rsuite';
 
@@ -201,7 +202,7 @@ const Rca_data = () => {
             // Make the DELETE request
             const response = await axios.delete(`${ServerURL}/RCA_TOOL/rca-tables/${id}/`,
                 {
-                    headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` }
+                    headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
                 }
             );
             // console.log('Deleted successfully:', response);
@@ -240,7 +241,7 @@ const Rca_data = () => {
         e.preventDefault()
         const response = await axios.put(`${ServerURL}/RCA_TOOL/rca-tables/${editDataId}/`, formData,
             {
-                headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` }
+                headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
             }
         );
         if (response.status === 200) {

@@ -510,6 +510,7 @@ const OemBar = () => {
             setMonth(data.month)
             setYear(data.year)
             setDate(`${data.year}-${data.month < 10 ? '0' + data.month : data.month}`)
+            console.log('test data',JSON.parse(data.table_data))
         }
         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
     }, [])

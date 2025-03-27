@@ -15,6 +15,7 @@ import TextField from '@mui/material/TextField';
 import { Grid ,Button} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux'
+import { getDecreyptedData } from '../../../utils/localstorage';
 
 
 
@@ -28,7 +29,7 @@ function toCamelCase(input) {
 const ComanDashboard = () => {
     const listDataa= useSelector(state=>state.IXtracker)
     const navigate = useNavigate();
-    const [listData, setListData] = useState(JSON.parse(localStorage.getItem("integration_final_tracker")))
+    const [listData, setListData] = useState(getDecreyptedData("integration_final_tracker"))
     const [editData, setEditData] = useState({    OEM: "",
         Activity_Name: "",
         Activity_Mode: "",
@@ -180,7 +181,7 @@ const ComanDashboard = () => {
         e.preventDefault()
         try {
             const response = await axios.put(`${ServerURL}/IntegrationTracker/edit-integration-record/${editDataID}/`, editData, {
-                headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` }
+                headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
             });
             Swal.fire({
                 icon: "success",
@@ -204,7 +205,7 @@ const ComanDashboard = () => {
 
 
     const handleDelete = async (rowData) => {
-        axios.delete(`${ServerURL}/IntegrationTracker/delete-integration-record/${rowData.id}/`,{ headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}`},})
+        axios.delete(`${ServerURL}/IntegrationTracker/delete-integration-record/${rowData.id}/`,{ headers: { Authorization: `token ${getDecreyptedData("tokenKey")}`},})
         .then((res) => {
             console.log('Data deleted successfully',res);
             Swal.fire({

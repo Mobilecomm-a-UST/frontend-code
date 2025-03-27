@@ -3,7 +3,7 @@ import { Box, Button, Stack, Breadcrumbs, Link, Typography,IconButton } from "@m
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import UploadIcon from '@mui/icons-material/Upload';
 import DoDisturbIcon from '@mui/icons-material/DoDisturb';
-import { getData, ServerURL } from "../../../services/FetchNodeServices";
+import { getData, ServerURL,postData } from "../../../services/FetchNodeServices";
 import Tooltip from '@mui/material/Tooltip';
 import Swal from "sweetalert2";
 import Dialog from '@mui/material/Dialog';
@@ -19,6 +19,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 import DownloadIcon from '@mui/icons-material/Download';
 import { usePost } from "../../../Hooks/PostApis";
+import { getDecreyptedData } from "../../../utils/localstorage";
 
 const UploadFile = () => {
     const { makePostRequest, cancelRequest } = usePost()
@@ -60,9 +61,7 @@ const UploadFile = () => {
             var formData = new FormData();
             formData.append("file", rawKpiFile.bytes);
             try {
-                const response = await axios.post(`${ServerURL}/IntegrationTracker/upload/`, formData, {
-                  headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}`},
-                });
+                const response = await postData(`${ServerURL}/IntegrationTracker/upload/`, formData);
                 var result = await response.data
                 setOpen(false);
                 setError(result.error_rows)

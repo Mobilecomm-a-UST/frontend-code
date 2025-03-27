@@ -63,7 +63,7 @@ const FinalDashboard = () => {
     // const MemoizedDateWiseData = useMemo(() => {DateWiseIntegration})
 
 
-    console.log('girraj',sheet2Date)
+    // console.log('girraj',sheet2Date)
 
     const handleDateWiseData = useCallback((data) => {
         //    console.log('date Wise',data)
@@ -814,7 +814,7 @@ const FinalDashboard = () => {
     }, []);
 
     const HandleDashboard = async (oem) => {
-            console.log('ssssss',oem)
+            // console.log('ssssss',oem)
             action(true)
             var formData = new FormData();
             formData.append("oem", oem);
@@ -886,7 +886,6 @@ const FinalDashboard = () => {
                     {mdashboard?.map((item, index) => index < 5 && (
                         <Dashboard data={item} color={colorType[index]}  key={index} />
                     ))}
-
                 </div>
                 <MemoDateWiseIntegration onData={handleDateWiseData} />
                 <MemoRangeWiseDashboard onData={handleRangeWiseData} />
