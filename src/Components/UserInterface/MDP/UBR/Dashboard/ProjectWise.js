@@ -77,7 +77,7 @@ const ProjectWise = () => {
         formData.append("CIRCLE", circle)
         formData.append("Partner", selectVendor)
         formData.append("DONE_COUNT", status)
-        const response = await postData('MDP/UBR/project_comparision/', formData, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
+        const response = await postData('MDP/UBR/project_comparision/', formData)
         // console.log('qsssssssssssssssss@@@@@@', response)
 
         const overAll = response.overall_data
@@ -139,7 +139,7 @@ const ProjectWise = () => {
         formData.append("CIRCLE", props)
         formData.append("Partner", selectVendor)
         formData.append("DONE_COUNT", status)
-        const response = await postData('MDP/UBR/project_comparision/', formData, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
+        const response = await postData('MDP/UBR/project_comparision/', formData)
         // console.log('qsssssssssssssssss', response)
         const overAll = response.overall_data
 
@@ -200,7 +200,7 @@ const ProjectWise = () => {
         formData.append("CIRCLE", circle)
         formData.append("Partner", props)
         formData.append("DONE_COUNT", status)
-        const response = await postData('MDP/UBR/project_comparision/', formData, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
+        const response = await postData('MDP/UBR/project_comparision/', formData)
         // console.log('qsssssssssssssssss',response.data,"MONTH", month)
         const overAll = response.overall_data
 

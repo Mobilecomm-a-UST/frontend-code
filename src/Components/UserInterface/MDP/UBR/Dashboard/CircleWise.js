@@ -56,7 +56,7 @@ const CircleWise = (propes) => {
         const formData = new FormData();
         formData.append("project", project)
         formData.append("circle", circle)
-        const response = await postData('MDP/UBR/all_data/', formData, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
+        const response = await postData('MDP/UBR/all_data/', formData)
         // console.log("project Circle data %%%%%%%%%%%%%%", response);
 
         const airtelData = response.airtel_bucket
@@ -175,7 +175,7 @@ const CircleWise = (propes) => {
         const formData = new FormData();
         formData.append("project", project)
         formData.append("circle", props)
-        const response = await postData('MDP/UBR/all_data/', formData, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
+        const response = await postData('MDP/UBR/all_data/', formData)
         // console.log("project Circle data............", response)
 
         const airtelData = response.airtel_bucket
@@ -294,7 +294,7 @@ const CircleWise = (propes) => {
         const formData = new FormData();
         formData.append("project", props)
         formData.append("circle", circle)
-        const response = await postData('MDP/UBR/all_data/', formData, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
+        const response = await postData('MDP/UBR/all_data/', formData)
         // console.log("project ------ data ", response.data)
         // console.log("project Circle data %%%%%%%%%%%%%%", response);
 

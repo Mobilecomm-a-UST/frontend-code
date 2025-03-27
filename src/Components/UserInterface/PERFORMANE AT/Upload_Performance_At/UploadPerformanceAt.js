@@ -52,7 +52,7 @@ const UploadPerformanceAt = () => {
       var formData = new FormData();
       formData.append("performance_At_Report_file", performance.bytes);
       formData.append("upload_date", pdate);
-      const response = await postData('Performance_AT/upload/', formData, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
+      const response = await postData('Performance_AT/upload/', formData)
       console.log('response data', response)
       sessionStorage.setItem('upload_performance_at_status', JSON.stringify(response.status_obj))
 

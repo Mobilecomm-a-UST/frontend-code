@@ -64,7 +64,7 @@ const File_Merge = () => {
         formData.append(`files_${i}`, pre.bytes[i]);
       }
 
-      const response = await postData('merge_file/excel', formData, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
+      const response = await postData('merge_file/excel', formData)
       console.log('response data', response)
       setFileData(response.Download_url1)
 

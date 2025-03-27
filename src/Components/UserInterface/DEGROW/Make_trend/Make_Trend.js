@@ -124,7 +124,7 @@ const Make_Trend = () => {
         formData.append(`post_${i}`, post.bytes[i]);
       }
       formData.append('additional_inputs', additional.bytes)
-      const response = await postData('Degrow/makeTrend/', formData, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
+      const response = await postData('Degrow/makeTrend/', formData)
       console.log('response data', response)
       setFileData(response.Download_url)
 

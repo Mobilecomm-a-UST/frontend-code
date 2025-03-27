@@ -27,6 +27,7 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import * as ExcelJS from 'exceljs'
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table';
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
+import { setEncreptedData } from '../../../../utils/localstorage';
 
 const Master_Dashbord = () => {
     const [todayDate, setTodayDate] = useState()
@@ -304,7 +305,7 @@ const Master_Dashbord = () => {
 
         console.log('responce data ssssssss', response)
         if (response) {
-            localStorage.setItem("oem_data", JSON.stringify(response.data));
+            setEncreptedData("oem_data", response.data);
             window.open(`${window.location.href}/${data.oem}`, "_blank")
         }
 
@@ -321,9 +322,9 @@ const Master_Dashbord = () => {
 
         const response = await postData('UBR_Soft_Phy_AT/oem_wise_site_details_master_dashbord', formData)
 
-        console.log('responce data ssssssss', response)
+        // console.log('responce data ssssssss', response)
         if (response) {
-            localStorage.setItem("oem_data", JSON.stringify(response.data));
+            setEncreptedData("oem_data", response.data);
             window.open(`${window.location.href}/${data.oem}`, "_blank")
         }
 

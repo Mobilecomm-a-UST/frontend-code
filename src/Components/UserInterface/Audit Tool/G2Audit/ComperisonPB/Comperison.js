@@ -71,7 +71,7 @@ const Comperison = () => {
           formData.append("2G_GPL", gpl.bytes);
           formData.append("circle", 'PNB');
 
-          const response = await postData('AUDIT_TOOL/2G_AUDIT/', formData, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
+          const response = await postData('AUDIT_TOOL/2G_AUDIT/', formData)
           // console.log('response data', response)
         //   sessionStorage.setItem('upload_performance_at_status', JSON.stringify(response.status_obj))
 

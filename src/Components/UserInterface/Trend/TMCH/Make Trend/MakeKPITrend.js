@@ -202,10 +202,7 @@ function MakeKPITrend() {
       formData.append("to_date", tdate);
 
 
-      const response = await postData('Original_trend/tnch/KpiTrend/?check=True', formData, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` }
-
-
-      ,signal:abortSignal })
+      const response = await postData('Original_trend/tnch/KpiTrend/?check=True', formData)
       dispatch({ type: 'PRE_POST_REPORT', payload: { response } })
       setIntegratSite(response.integrated_sites)
       setUnintegratSite(response.not_avalilable_sites)
@@ -255,7 +252,7 @@ function MakeKPITrend() {
       formData.append("to_date", tdate);
 
 
-      const response = await postData('Original_trend/tnch/KpiTrend/?check=False', formData, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
+      const response = await postData('Original_trend/tnch/KpiTrend/?check=False', formData)
       sessionStorage.setItem('makekpitrend', JSON.stringify(response));
       console.log('response processing data:', response)
 

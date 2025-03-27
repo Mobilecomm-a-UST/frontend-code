@@ -42,7 +42,7 @@ const UploadData = () => {
           var formData = new FormData();
           formData.append("equi_file", mdpFile.bytes);
 
-          const response = await postData('equpment_table/', formData, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
+          const response = await postData('equpment_table/', formData)
           console.log('response data', response)
         //   sessionStorage.setItem('upload_performance_at_status', JSON.stringify(response.status_obj))
 

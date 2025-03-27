@@ -104,7 +104,7 @@ const Upload_post_kpi = () => {
     var formData = new FormData();
     formData.append("file", kpiFile.bytes);
     formData.append("upload_date", uploadDate);
-    const response = await postData('Original_trend/tnch/raw_kpi_upload/',formData, {headers: {Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` }})
+    const response = await postData('Original_trend/tnch/raw_kpi_upload/',formData)
 
      console.log('response data',response)
 

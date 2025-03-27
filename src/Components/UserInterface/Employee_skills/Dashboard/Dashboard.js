@@ -47,6 +47,7 @@ import { useStyles } from '../../ToolsCss';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import RateReviewIcon from '@mui/icons-material/RateReview';
+import { getDecreyptedData } from '../../../utils/localstorage';
 
 
 
@@ -212,7 +213,7 @@ const Working_Sta = [
     "Maternity Leave"
 ]
 
-const CirclesArray = (JSON.parse(localStorage.getItem("Circle"))?.split(','))
+const CirclesArray = (getDecreyptedData("Circle")?.split(','))
 
 function getStyles(name, personName, theme) {
     return {
@@ -552,7 +553,7 @@ const Dashboard = () => {
                 // Make the DELETE request
                 const response = await axios.delete(`${ServerURL}/employee_skills/employee-skill-table/${userId}/${deleteRemark}/`,
                     {
-                        headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` }
+                        headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
                     }
                 );
                 // console.log('Deleted successfully:', response);
