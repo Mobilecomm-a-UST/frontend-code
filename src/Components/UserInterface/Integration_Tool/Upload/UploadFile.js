@@ -167,7 +167,7 @@ const UploadFile = () => {
 
     useEffect(() => {
         const fetchDownloadTemp = async () => {
-            const res = await getData('IntegrationTracker/template/', { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
+            const res = await getData('IntegrationTracker/template/', { headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` } })
             // console.log('temp. download link' , res)
             if (res) {
                 setFileData(res.file_url)

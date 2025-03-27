@@ -18,6 +18,8 @@ import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import ListItemText from '@mui/material/ListItemText';
 import { useCallback } from 'react';
+import { getDecreyptedData } from '../../../utils/localstorage';
+
 
 
 const CircleWiseData = [
@@ -284,7 +286,7 @@ const SiteLockUnlockForm = ({ data, open, handleClose, updateTableData }) => {
     const [status, setStatus] = useState('');
     const [technology, setTechnology] = useState([]);
     const [remark, setRemark] = useState('');
-    const userName = JSON.parse(localStorage.getItem("userID"))
+    const userName = getDecreyptedData("userID")
     // console.log('data of form', data, open)
 
 
