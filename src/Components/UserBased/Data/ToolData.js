@@ -8,11 +8,9 @@ import FunnelStepsIcon from '@rsuite/icons/FunnelSteps';
 import PcIcon from '@rsuite/icons/Pc';
 import WavePointIcon from '@rsuite/icons/WavePoint';
 import DocPassIcon from '@rsuite/icons/DocPass';
-import MoreIcon from '@rsuite/icons/More';
 import CalendarIcon from '@rsuite/icons/Calendar';
 import PageIcon from '@rsuite/icons/Page';
 import ThreeColumnsIcon from '@rsuite/icons/ThreeColumns';
-import OperatePeopleIcon from '@rsuite/icons/OperatePeople';
 import RelatedMapIcon from '@rsuite/icons/RelatedMap';
 import CombinationIcon from '@rsuite/icons/Combination';
 import TimeIcon from '@rsuite/icons/Time';
@@ -223,7 +221,7 @@ const ToolData = [
     },
     ,{
         id: 26,
-        name: 'DMA',
+        name: 'DSA',
         title: 'This is a DMA Tool',
         icons: NoticeIcon,
         link: '/tools/dma',

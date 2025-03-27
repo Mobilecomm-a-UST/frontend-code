@@ -79,8 +79,8 @@ const Upload_Soft_AT = () => {
       var formData = new FormData();
       formData.append("soft_at_status", softAt.bytes);
       formData.append("upload_date", pdate);
-      const response = await postData('Soft_At/upload/', formData, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` } })
-      console.log('response data', response)
+      const response = await postData('Soft_At/upload/', formData )
+      // console.log('response data', response)
       // sessionStorage.setItem('upload_soft_at_status', JSON.stringify(response.status_obj))
 
       if (response.status == true) {

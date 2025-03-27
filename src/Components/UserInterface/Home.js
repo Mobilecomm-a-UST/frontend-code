@@ -30,6 +30,7 @@ import { getDecreyptedData } from "../utils/localstorage";
 
 
 
+
 export default function Home() {
 
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -39,7 +40,7 @@ export default function Home() {
   const navigate = useNavigate();
   // const [dashboard, setDashboard] = React.useState(null);
   // const open = Boolean(dashboard);
-  const chackToken = localStorage.getItem("tokenKey")
+  const chackToken =getDecreyptedData("tokenKey")
   const userName = getDecreyptedData("userID")
   // const userName = JSON.parse(localStorage.getItem("userID"))
   const location = useLocation()

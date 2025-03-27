@@ -134,7 +134,7 @@ const Upload_RNA_2G = () => {
 
     useEffect(()=>{
       const fetchDownloadTemp=async()=>{
-        const res = await getData('Zero_Count_Rna_Payload_Tool/template', { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` }})
+        const res = await getData('Zero_Count_Rna_Payload_Tool/template')
 
         if(res){
           setFileData(res.download_4G)

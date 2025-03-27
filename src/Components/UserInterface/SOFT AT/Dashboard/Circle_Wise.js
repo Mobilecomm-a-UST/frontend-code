@@ -27,6 +27,7 @@ import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
 import { useLoadingDialog } from '../../../Hooks/LoadingDialog';
 import { useQuery } from '@tanstack/react-query';
 import { usePost } from '../../../Hooks/PostApis';
+import { setEncreptedData } from '../../../utils/localstorage';
 
 const project_wise = ['Relocation', 'New Tower', 'Upgrade', 'ULS']
 
@@ -121,7 +122,7 @@ const Circle_Wise = () => {
     const response = await makePostRequest('Soft_At/hyperlink-circle-wise-dashboard/', formData)
     if(response){
       action(false)
-      localStorage.setItem("softat_hyperlink_data", JSON.stringify(response.data));
+      setEncreptedData("softat_hyperlink_data",response.data);
       window.open(`${window.location.href}/${eventdata.type}`, "_blank")
     }
     else{
