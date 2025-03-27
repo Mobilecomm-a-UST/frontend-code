@@ -39,6 +39,7 @@ import { MemoAdd_Rca } from './Add_Payload';
 import _ from 'lodash';
 import SearchIcon from '@mui/icons-material/Search';
 import CheckPicker from 'rsuite/CheckPicker';
+import { getDecreyptedData } from '../../../../utils/localstorage';
 
 // import { SelectPicker } from 'rsuite';
 
@@ -202,7 +203,7 @@ const Payload_data = (props) => {
             // Make the DELETE request
             const response = await axios.delete(`${ServerURL}/RCA_TOOL/rca_payload_tables/${id}/`,
                 {
-                    headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` }
+                    headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
                 }
             );
             // console.log('Deleted successfully:', response);
@@ -241,7 +242,7 @@ const Payload_data = (props) => {
         e.preventDefault()
         const response = await axios.put(`${ServerURL}/RCA_TOOL/rca_payload_tables/${editDataId}/`, formData,
             {
-                headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` }
+                headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
             }
         );
         if (response.status === 200) {

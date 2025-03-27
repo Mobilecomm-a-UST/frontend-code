@@ -28,6 +28,7 @@ import CheckPicker from 'rsuite/CheckPicker';
 import Swal from 'sweetalert2';
 import Chip from '@mui/material/Chip';
 import axios from 'axios';
+import { getDecreyptedData } from '../../../utils/localstorage';
 
 const RaiseTicket2 = () => {
     const classes = useStyles()
@@ -139,7 +140,7 @@ const RaiseTicket2 = () => {
         try {
             const response = await axios.post(`${ServerURL}/Zero_Count_Rna_Payload_Tool/ticket_status_open_close/${ticketDipForm.ticket_id}/`, ticketDipForm,
                 {
-                    headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` }
+                    headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
                 }
             );
 

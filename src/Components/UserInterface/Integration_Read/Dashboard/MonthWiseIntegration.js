@@ -18,6 +18,7 @@ import { CsvBuilder } from 'filefy';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import DownloadIcon from '@mui/icons-material/Download';
+import { setEncreptedData } from '../../../utils/localstorage';
 
 
 
@@ -221,7 +222,7 @@ const MonthWiseIntegration = ({ onData }) => {
             // console.log('aaaaa', responce)
             // setMainDataT2(responce)
             action(false)
-            localStorage.setItem("integration_final_tracker", JSON.stringify(responce));
+            setEncreptedData("integration_final_tracker",responce);
             // console.log('response data in huawia site id' , response)
             window.open(`${window.location.href}/${props.activity}`, "_blank")
 

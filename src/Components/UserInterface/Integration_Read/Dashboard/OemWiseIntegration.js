@@ -21,6 +21,7 @@ import { useStyles } from '../../ToolsCss'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { setEncreptedData } from '../../../utils/localstorage';
 
 
 
@@ -263,7 +264,7 @@ const OemWiseIntegration = ({ onData }) => {
             console.log('responce', responce)
             // setMainDataT2(responce)
             action(false)
-            localStorage.setItem("integration_final_tracker", JSON.stringify(responce));
+            setEncreptedData("integration_final_tracker", responce);
             // console.log('response data in huawia site id' , response)
             window.open(`${window.location.href}/${props.activity}`, "_blank")
             // setOpen(true)

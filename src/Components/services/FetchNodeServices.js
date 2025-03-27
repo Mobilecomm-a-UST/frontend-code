@@ -48,7 +48,7 @@ const putData = async (url, body) => {
 
 
 
-const postData = async (url, body, token ) => {
+const postData = async (url, body ) => {
   try {
     var response = await axios.post(`${ServerURL}/${url}`, body, {
       headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }

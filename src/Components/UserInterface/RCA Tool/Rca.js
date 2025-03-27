@@ -11,6 +11,8 @@ import GearIcon from '@rsuite/icons/Gear';
 import AppSelectIcon from '@rsuite/icons/AppSelect';
 import TrendIcon from '@rsuite/icons/Trend';
 import ViewsAuthorizeIcon from '@rsuite/icons/ViewsAuthorize';
+import { getDecreyptedData } from '../../utils/localstorage';
+
 
 
 
@@ -34,12 +36,13 @@ const MailData = lazy(() => import('./Kpi_table/MailData'))
 const Graphs = lazy(() => import('./Dashboard/Graphs'))
 
 
+
 const Rca = () => {
 
     const [expanded, setExpanded] = useState(true);
     const [activeKey, setActiveKey] = useState();
     const navigate = useNavigate()
-    const userType = (JSON.parse(localStorage.getItem('user_type'))?.split(","))
+    const userType = (getDecreyptedData('user_type')?.split(","))
 
     console.log('user type data', !userType.includes('Circle_Rno'))
 

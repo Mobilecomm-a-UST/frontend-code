@@ -19,6 +19,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useStyles } from '../../ToolsCss'
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
+import { setEncreptedData } from '../../../utils/localstorage';
 
 const RangeWiseDashboard = ({ onData }) => {
     const classes = useStyles()
@@ -258,7 +259,7 @@ const RangeWiseDashboard = ({ onData }) => {
             // console.log('responce', responce)
             // setMainDataT2(responce)
             action(false)
-            localStorage.setItem("integration_final_tracker", JSON.stringify(responce.data));
+            setEncreptedData("integration_final_tracker", responce.data);
             // console.log('response data in huawia site id' , response)
             window.open(`${window.location.href}/${props.activity}`, "_blank")
             // setOpen(true)

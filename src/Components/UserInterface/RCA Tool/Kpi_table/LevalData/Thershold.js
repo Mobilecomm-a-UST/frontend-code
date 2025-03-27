@@ -30,6 +30,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import { useStyles } from '../../../ToolsCss';
 import axios from 'axios';
+import { getDecreyptedData } from '../../../../utils/localstorage';
 
 
 
@@ -347,7 +348,7 @@ const Thershold = ({ heading, API }) => {
     e.preventDefault()
     const response = await axios.put(`${ServerURL}/${API}${editDataId}/`, formData,
       {
-        headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` }
+        headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
       }
     );
     if (response.status === 200) {
@@ -391,7 +392,7 @@ const Thershold = ({ heading, API }) => {
       // Make the DELETE request
       const response = await axios.delete(`${ServerURL}/${API}${id}/`,
         {
-          headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` }
+          headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
         }
       );
       // console.log('Deleted successfully:', response);

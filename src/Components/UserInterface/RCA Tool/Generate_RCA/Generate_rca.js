@@ -7,6 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useLoadingDialog } from '../../../Hooks/LoadingDialog';
 import RcaOutput from './RcaOutput';
 import FileDownload from './FileDownload';
+import { getDecreyptedData } from '../../../utils/localstorage';
 
 import { CsvBuilder } from 'filefy';
 
@@ -15,7 +16,7 @@ const Generate_rca = () => {
     const { makeGetRequest } = useGet();
     const navigate = useNavigate();
     const { loading, action } = useLoadingDialog();
-    const userType = (JSON.parse(localStorage.getItem('user_type'))?.split(","))
+    const userType = (getDecreyptedData('user_type')?.split(","))
     const { data, isPending } = useQuery({
         queryKey: ['rca_generate_date'],
         queryFn: async () => {

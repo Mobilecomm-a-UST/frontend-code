@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 // const ServerURL = "http://192.168.0.5:8001"
 import { ServerURL } from "../services/FetchNodeServices";
+import { getDecreyptedData } from "../utils/localstorage";
 
 export const useGet = (options) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -28,7 +29,7 @@ export const useGet = (options) => {
       const response = await axios.get(`${ServerURL}/${url}`, {
         ...options,
         cancelToken: source.token,
-        headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}`},
+        headers: { Authorization: `token ${getDecreyptedData("tokenKey")}`},
       });
             // setResponse(response);
       var result = await response.data
