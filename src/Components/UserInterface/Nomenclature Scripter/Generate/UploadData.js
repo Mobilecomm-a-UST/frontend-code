@@ -17,7 +17,7 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 const UploadData = () => {
     const [softAt, setSoftAt] = useState({ filename: "", bytes: "" })
     const [pdate, setPdate] = useState()
-    const [fileData, setFileData] = useState()
+    const [fileData, setFileData] = useState('')
     const [show, setShow] = useState(false)
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
@@ -43,7 +43,7 @@ const UploadData = () => {
             formData.append("planned_site_file", softAt.bytes);
 
             const response = await postData('nomenclature_scriptor/generate_script', formData)
-         
+
 
             if (response.status === true) {
                 setOpen(false)
@@ -54,7 +54,7 @@ const UploadData = () => {
                 });
                 // navigate('status')
                 setOpen(true)
-                setFileData(response.Download_url)
+                setFileData(response.download_url)
 
             } else {
                 setOpen(false)
@@ -134,7 +134,7 @@ const UploadData = () => {
                         <Box className={classes.main_Box}>
                             <Box className={classes.Back_Box} sx={{ width: { md: '75%', xs: '100%' } }}>
                                 <Box className={classes.Box_Hading} >
-                                     Generate Nomenclature Script
+                                    Generate Nomenclature Script
                                 </Box>
                                 <Stack spacing={2} sx={{ marginTop: "-40px" }} direction={'column'}>
                                     <Box className={classes.Front_Box} >
@@ -164,7 +164,10 @@ const UploadData = () => {
 
                                 </Stack>
                             </Box>
-                            {/* <a download href={link}><Button variant="outlined" onClick='' startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />} sx={{ marginTop: "10px", width: "auto" }}><span style={{ fontFamily: "Poppins", fontSize: "22px", fontWeight: 800, textTransform: "none", textDecorationLine: "none" }}>Download Temp</span></Button></a> */}
+                            <Box sx={{ display: fileData.length> 0 ? 'block' : 'none' }}>
+                                <a download href={link}><Button variant="outlined" onClick='' startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />} sx={{ marginTop: "10px", width: "auto" }}><span style={{ fontFamily: "Poppins", fontSize: "22px", fontWeight: 800, textTransform: "none", textDecorationLine: "none" }}>Download Temp</span></Button></a>
+                            </Box>
+
                         </Box>
                         {loadingDialog()}
                     </Box>
