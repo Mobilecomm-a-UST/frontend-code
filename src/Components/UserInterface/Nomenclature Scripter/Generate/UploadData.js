@@ -42,10 +42,11 @@ const UploadData = () => {
             var formData = new FormData();
             formData.append("planned_site_file", softAt.bytes);
 
-            const response = await postData('nomenclature_scriptor/generate_script', formData)
+            const response = await postData('NOM_AUDIT/generate_site_scripts/', formData)
 
 
-            if (response.status === true) {
+
+            if (response) {
                 setOpen(false)
                 Swal.fire({
                     icon: "success",
@@ -53,7 +54,6 @@ const UploadData = () => {
                     text: `${response.message}`,
                 });
                 // navigate('status')
-                setOpen(true)
                 setFileData(response.download_url)
 
             } else {
