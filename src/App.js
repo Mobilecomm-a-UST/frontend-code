@@ -46,6 +46,7 @@ const SoftAtTem = lazy(() => import('./Components/UserInterface/SoftAt Temp/Soft
 const McomePhycical = lazy(() => import('./Components/UserInterface/McomPhysicalAt/McomePhycical'))
 const Nscripter = lazy(() => import('./Components/UserInterface/Nomenclature Scripter/Nscripter'));
 const Dma = lazy(() => import('./Components/UserInterface/DailyMonetringAlarm/Dma'));
+const Gpl = lazy(() => import('./Components/UserInterface/GPL_Audit/GPL'));
 
 const queryClient = new QueryClient()
 
@@ -264,6 +265,12 @@ function App() {
                 <ProtectedRoute element={Dma} allowedUserTypes={['soft_at_team', 'admin']} userType={userType} />
               </Suspense>
             } />
+             <Route path="/tools/gpl_audit/*" element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProtectedRoute element={Gpl} allowedUserTypes={[ 'admin']} userType={userType} />
+              </Suspense>
+            } />
+
 
           </Routes>
 

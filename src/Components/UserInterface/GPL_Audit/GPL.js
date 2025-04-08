@@ -1,5 +1,3 @@
-
-
 import React, { useEffect, Suspense, lazy } from 'react'
 import { useState } from 'react'
 import PageIcon from '@rsuite/icons/Page';
@@ -18,13 +16,10 @@ import AddOutlineIcon from '@rsuite/icons/AddOutline';
 import DocPassIcon from '@rsuite/icons/DocPass';
 import CheckOutlineIcon from '@rsuite/icons/CheckOutline';
 import ChangeListIcon from '@rsuite/icons/ChangeList';
-const NscripterTool = lazy(() => import('./NscripterTool'))
-const UploadData = lazy(() => import('./Generate/UploadData'))
-const NomAudit = lazy(() => import('./Audit/NomAudit'))
-const NscripterDashboard = lazy(() => import('./Audit/Dashboard'))
+const GplTool = lazy(() => import('./GplTool'));
+const GenerateGpl = lazy(() => import('./Generate/GenerateGpl'));
 
-
-const Nscripter = () => {
+const GPL = () => {
     const [expanded, setExpanded] = useState(true);
     const [activeKey, setActiveKey] = useState();
     const [states, setStates] = useState(60)
@@ -64,20 +59,20 @@ const Nscripter = () => {
                                     <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle">
                                         <Sidenav.Body>
                                             <Nav activeKey={activeKey} onSelect={setActiveKey} style={{ width: 'auto', minHeight: "670px", height: "100hv", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
-                                                <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>Nomenclature Scriptor</Nav>
-                                                <Nav.Item eventKey="2" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/nomenclature_scriptor/generate_script'); show(); setMenuButton(true) }}>
-                                                Genetate Script
-                                            </Nav.Item>
-                                            <Nav.Menu eventKey="3" placement="rightStart" title="NOM Audit" icon={<DocPassIcon />}>
-                                                <Nav.Item eventKey="3-1" placement="rightStart"  onClick={() => { navigate('/tools/nomenclature_scriptor/nom_audit_dashboard'); show(); setMenuButton(true) }}>
-                                                    Dashboard
+                                                <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>GPL Audit</Nav>
+                                                <Nav.Item eventKey="2" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/gpl_audit/generate_script'); show(); setMenuButton(true) }}>
+                                                    Genetate Script
                                                 </Nav.Item>
-                                                <Nav.Item eventKey="3-2" placement="rightStart"  onClick={() => { navigate('/tools/nomenclature_scriptor/nom_audit'); show(); setMenuButton(true) }}>
-                                                    Pre-Post Audit
-                                                </Nav.Item>
-                                            </Nav.Menu>
+                                                {/* <Nav.Menu eventKey="3" placement="rightStart" title="NOM Audit" icon={<DocPassIcon />}>
+                                                    <Nav.Item eventKey="3-1" placement="rightStart" onClick={() => { navigate('/tools/nomenclature_scriptor/nom_audit_dashboard'); show(); setMenuButton(true) }}>
+                                                        Dashboard
+                                                    </Nav.Item>
+                                                    <Nav.Item eventKey="3-2" placement="rightStart" onClick={() => { navigate('/tools/nomenclature_scriptor/nom_audit'); show(); setMenuButton(true) }}>
+                                                        Pre-Post Audit
+                                                    </Nav.Item>
+                                                </Nav.Menu> */}
 
-                                               
+
                                             </Nav>
                                         </Sidenav.Body>
 
@@ -92,33 +87,25 @@ const Nscripter = () => {
                                 <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
                                     <Sidenav.Body>
                                         <Nav activeKey={activeKey} onSelect={setActiveKey} >
-                                            <Nav style={{ fontWeight: 500, color: 'white', textAlign: 'center', fontSize: 20 }}>Nomenclature Scriptor</Nav>
+                                            <Nav style={{ fontWeight: 500, color: 'white', textAlign: 'center', fontSize: 20 }}>GPL Audit</Nav>
                                             {/* <Nav.Menu eventKey="1" placement="rightStart" title="Acceptance" icon={<CheckOutlineIcon size="3em" />}>
                                                 <Nav.Item eventKey="1-1" onClick={() => { navigate('/tools/mcom_physical_at/acceptance_summary'); show(); setMenuButton(true) }} >
                                                     Acceptance Summary
                                                 </Nav.Item>
                                             </Nav.Menu> */}
-                                            <Nav.Item eventKey="2" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/nomenclature_scriptor/generate_script'); show(); setMenuButton(true) }}>
+                                            <Nav.Item eventKey="2" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/gpl_audit/generate_script'); show(); setMenuButton(true) }}>
                                                 Genetate Script
                                             </Nav.Item>
-                                            <Nav.Menu eventKey="3" placement="rightStart" title="NOM Audit" icon={<DocPassIcon />}>
-                                                <Nav.Item eventKey="3-1" placement="rightStart"  onClick={() => { navigate('/tools/nomenclature_scriptor/nom_audit_dashboard'); show(); setMenuButton(true) }}>
+                                            {/* <Nav.Menu eventKey="3" placement="rightStart" title="NOM Audit" icon={<DocPassIcon />}>
+                                                <Nav.Item eventKey="3-1" placement="rightStart" onClick={() => { navigate('/tools/nomenclature_scriptor/nom_audit_dashboard'); show(); setMenuButton(true) }}>
                                                     Dashboard
                                                 </Nav.Item>
-                                                <Nav.Item eventKey="3-2" placement="rightStart"  onClick={() => { navigate('/tools/nomenclature_scriptor/nom_audit'); show(); setMenuButton(true) }}>
+                                                <Nav.Item eventKey="3-2" placement="rightStart" onClick={() => { navigate('/tools/nomenclature_scriptor/nom_audit'); show(); setMenuButton(true) }}>
                                                     Pre-Post Audit
                                                 </Nav.Item>
-                                            </Nav.Menu>
+                                            </Nav.Menu> */}
 
-                                            {/* <Nav.Item eventKey="3" placement="rightStart" icon={<PageIcon />} onClick={() => { navigate('/tools/soft_at/view_report'); show(); setMenuButton(true) }}>
-                                                View Report
-                                            </Nav.Item>
-                                            <Nav.Item eventKey="4" placement="rightStart" icon={<FileDownloadIcon />} onClick={() => { navigate('/tools/soft_at/download_template'); show(); setMenuButton(true) }}>
-                                                Download Template
-                                            </Nav.Item> */}
-                                            {/* <Nav.Item eventKey="4" placement="rightStart" icon={<ViewsUnauthorizeIcon />} onClick={() => { navigate('/tools/soft_at/rejected_report'); show(); setMenuButton(true) }}>
-                        Rejected Report
-                      </Nav.Item> */}
+                                           
                                         </Nav>
                                     </Sidenav.Body>
 
@@ -131,10 +118,9 @@ const Nscripter = () => {
 
                         <Suspense fallback={<div>loading............</div>}>
                             <Routes>
-                                <Route element={<NscripterTool />} path="/" />
-                                <Route element={<UploadData />} path="/generate_script" />
-                                <Route element={<NomAudit />} path="/nom_audit" />
-                                <Route element={<NscripterDashboard />} path="/nom_audit_dashboard" />
+                                <Route element={<GplTool />} path="/" />
+                                <Route element={<GenerateGpl />} path="/generate_script" />
+                             
 
 
                             </Routes>
@@ -146,4 +132,4 @@ const Nscripter = () => {
     )
 }
 
-export default Nscripter
+export default GPL

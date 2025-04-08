@@ -19,6 +19,7 @@ import BlockIcon from '@rsuite/icons/Block';
 import TreeIcon from '@rsuite/icons/Tree';
 import ParagraphIcon from '@rsuite/icons/Paragraph';
 import NoticeIcon from '@rsuite/icons/Notice';
+import ModelIcon from '@rsuite/icons/Model';
 import { groupBy } from 'lodash';
 
 // const userType =  ['admin','quality','central','soft_at','circle']
@@ -226,7 +227,14 @@ const ToolData = [
         icons: NoticeIcon,
         link: '/tools/dma',
         groupBy:['soft_at_team', 'admin']
-
+    }
+    ,{
+        id: 27,
+        name: 'GPL Audit',
+        title: 'This is a GPL Tool',
+        icons: ModelIcon,
+        link: '/tools/gpl_audit',
+        groupBy:['admin']
     }
 
 
