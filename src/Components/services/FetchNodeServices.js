@@ -14,7 +14,7 @@ const ServerURL = "http://103.242.225.195:8000";
 // const ServerURL = "http://54.234.191.244"
 // const ServerURL = "http://13.233.231.179:80"
 // const ServerURL = "http://13.233.231.179:8000"
-// npm install --save chart.js react-chartjs-2
+
 
 
 

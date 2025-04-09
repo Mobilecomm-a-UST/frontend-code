@@ -18,6 +18,7 @@ import CheckOutlineIcon from '@rsuite/icons/CheckOutline';
 import ChangeListIcon from '@rsuite/icons/ChangeList';
 const GplTool = lazy(() => import('./GplTool'));
 const GenerateGpl = lazy(() => import('./Generate/GenerateGpl'));
+const TestingGpl = lazy(() => import('./Generate/GenrateGplState'))
 
 const GPL = () => {
     const [expanded, setExpanded] = useState(true);
@@ -63,6 +64,9 @@ const GPL = () => {
                                                 <Nav.Item eventKey="2" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/gpl_audit/generate_script'); show(); setMenuButton(true) }}>
                                                     Genetate Script
                                                 </Nav.Item>
+                                                <Nav.Item eventKey="3" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/gpl_audit/testing_gpl'); show(); setMenuButton(true) }}>
+                                                    Testing
+                                                </Nav.Item>
                                                 {/* <Nav.Menu eventKey="3" placement="rightStart" title="NOM Audit" icon={<DocPassIcon />}>
                                                     <Nav.Item eventKey="3-1" placement="rightStart" onClick={() => { navigate('/tools/nomenclature_scriptor/nom_audit_dashboard'); show(); setMenuButton(true) }}>
                                                         Dashboard
@@ -96,6 +100,9 @@ const GPL = () => {
                                             <Nav.Item eventKey="2" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/gpl_audit/generate_script'); show(); setMenuButton(true) }}>
                                                 Genetate Script
                                             </Nav.Item>
+                                            <Nav.Item eventKey="3" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/gpl_audit/testing_gpl'); show(); setMenuButton(true) }}>
+                                                Testing
+                                            </Nav.Item>
                                             {/* <Nav.Menu eventKey="3" placement="rightStart" title="NOM Audit" icon={<DocPassIcon />}>
                                                 <Nav.Item eventKey="3-1" placement="rightStart" onClick={() => { navigate('/tools/nomenclature_scriptor/nom_audit_dashboard'); show(); setMenuButton(true) }}>
                                                     Dashboard
@@ -105,7 +112,7 @@ const GPL = () => {
                                                 </Nav.Item>
                                             </Nav.Menu> */}
 
-                                           
+
                                         </Nav>
                                     </Sidenav.Body>
 
@@ -120,7 +127,8 @@ const GPL = () => {
                             <Routes>
                                 <Route element={<GplTool />} path="/" />
                                 <Route element={<GenerateGpl />} path="/generate_script" />
-                             
+                                <Route element={<TestingGpl />} path="/testing_gpl" />
+
 
 
                             </Routes>

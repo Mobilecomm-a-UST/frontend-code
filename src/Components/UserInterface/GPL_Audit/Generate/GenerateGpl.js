@@ -242,7 +242,7 @@ const GenerateGpl = () => {
 
                                     {selectService === 'GPL PRE AUDIT' && <Box className={classes.Front_Box} >
                                         <div className={classes.Front_Box_Hading}>
-                                            Select Gpl Pre Audit File:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{ }</span>
+                                            Select Gpl Pre Logs File:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{ }</span>
                                         </div>
                                         <div className={classes.Front_Box_Select_Button} >
                                             <div style={{ float: "left" }}>
@@ -277,7 +277,7 @@ const GenerateGpl = () => {
 
                                         <Box className={classes.Front_Box} >
                                             <div className={classes.Front_Box_Hading}>
-                                                Select Post Audit File:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{softAt.filename}</span>
+                                                Select Post Logs Audit File:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{softAt.filename}</span>
                                             </div>
                                             <div className={classes.Front_Box_Select_Button} >
                                                 <div style={{ float: "left" }}>
