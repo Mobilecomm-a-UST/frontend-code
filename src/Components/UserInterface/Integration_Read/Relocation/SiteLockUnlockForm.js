@@ -18,6 +18,8 @@ import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import ListItemText from '@mui/material/ListItemText';
 import { useCallback } from 'react';
+import { getDecreyptedData } from '../../../utils/localstorage';
+
 
 
 const CircleWiseData = [
@@ -144,7 +146,8 @@ const CircleWiseData = [
             "Rohit Bansal",
             "Manik Mahajan",
             "Krishna Kant Verma",
-            "Saurabh Rathore"
+            "Saurabh Rathore",
+            "Nikhil Singla"
         ]
     },
     {
@@ -170,7 +173,7 @@ const CircleWiseData = [
         "id": 16,
         "circle": "OR",
         "approver_name": [
-            "Manish Chobisa",
+            "Sarthak Pashayat",
             "Jayadeba",
             "Sonu Sharma",
             "Saurabh Rathore"
@@ -201,7 +204,7 @@ const CircleWiseData = [
         "id": 19,
         "circle": "MP",
         "approver_name": [
-            "Shashikant Jaiswal",
+            "Manish Chobisa",
             "Amit Sharma",
             "Nilesh Jain",
             "Saurabh Rathore"
@@ -221,8 +224,8 @@ const CircleWiseData = [
         "id": 21,
         "circle": "ORI",
         "approver_name": [
-            "Masud Rana",
-            "Pankaj",
+            "Jayadeba",
+            "Sarthak Pashaya",
             "Sonu Sharma",
             "Saurabh Rathore"
         ]
@@ -272,7 +275,7 @@ const CircleWiseData = [
         ]
     }
 ]
-const TechnologyList = ["L900", "L1800", "L2100", "G900", "G1800", "G2100", "2G", "5G", "RET"]
+const TechnologyList = ["L900", "L1800", "L2100", "G900", "G1800", "L2300",'L850', "2G", "5G", "RET"]
 
 const SiteLockUnlockForm = ({ data, open, handleClose, updateTableData }) => {
     const classes = useStyles();
@@ -284,7 +287,7 @@ const SiteLockUnlockForm = ({ data, open, handleClose, updateTableData }) => {
     const [status, setStatus] = useState('');
     const [technology, setTechnology] = useState([]);
     const [remark, setRemark] = useState('');
-    const userName = JSON.parse(localStorage.getItem("userID"))
+    const userName = getDecreyptedData("userID")
     // console.log('data of form', data, open)
 
 
