@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useMemo } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Breadcrumbs, Link, Typography } from "@mui/material";
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { Box, Grid } from "@mui/material";
@@ -10,7 +10,12 @@ import { MemoDateWiseIntegration } from './DateWiseIntegration'
 import { MemoMonthWiseIntegration } from './MonthWiseIntegration'
 import { MemoOemWiseIntegration } from './OemWiseIntegration'
 import { MemoRangeWiseDashboard } from './RangeWiseDashboard';
+import { useLoadingDialog } from '../../../Hooks/LoadingDialog';
 import { useGet } from '../../../Hooks/GetApis';
+import { usePost } from '../../../Hooks/PostApis';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from "react-router-dom";
+import CountUp from 'react-countup';
 
 
 
@@ -33,6 +38,8 @@ const alphaBate = ['B', 'P', 'AD']
 const colorType = ['#B0EBB4', '#A0DEFF', '#FF9F66', '#ECB176', '#CDE8E5']
 
 const FinalDashboard = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [sheet1Date, setSheet1Date] = useState([])
     const [sheet1Data, setSheet1Data] = useState([])
 
@@ -47,13 +54,10 @@ const FinalDashboard = () => {
     const [sheet4Data, setSheet4Data] = useState([])
     const { makeGetRequest } = useGet()
     const [mdashboard, setMdashboard] = useState([])
+    const { loading, action } = useLoadingDialog();
+    const { makePostRequest } = usePost()
 
 
-
-    // const MemoizedDateWiseData = useMemo(() => {DateWiseIntegration})
-
-
-    // console.log('girraj')
 
     const handleDateWiseData = useCallback((data) => {
         //    console.log('date Wise',data)
@@ -68,7 +72,6 @@ const FinalDashboard = () => {
     }, []);
 
     const ShortDate = (months, years) => {
-
         const result = [];
 
         for (let i = 0; i < Math.min(months.length, years.length); i++) {
@@ -77,8 +80,6 @@ const FinalDashboard = () => {
                 year: years[i]
             });
         }
-        // console.log('result ', result)
-
         setSheet2Date(result)
     }
 
@@ -175,11 +176,11 @@ const FinalDashboard = () => {
 
         sheet2.getCell('A1').value = 'Circle';
         {
-            sheet2Date?.map((item, index) =>  {
-                if(index < 3){
+            sheet2Date?.map((item, index) => {
+                if (index < 3) {
                     sheet2.getCell(`${alphaBate[index]}1`).value = `${monthNames[item.month]}-${item.year}`;
                 }
-                
+
             })
         }
         // sheet2.getCell('B1').value = `${sheet1Date[0]}`;
@@ -330,7 +331,7 @@ const FinalDashboard = () => {
                 D1_ODSC: Number(item?.D1_ODSC),
                 D1_RECTIFICATION: Number(item?.D1_RECTIFICATION),
                 D1_5G_SECTOR_ADDITION: Number(item?.D1_5G_SECTOR_ADDITION),
-            
+
                 D2_DE_GROW: Number(item?.D2_DE_GROW),
                 D2_MACRO: Number(item?.D2_MACRO),
                 D2_OTHERS: Number(item?.D2_OTHERS),
@@ -345,7 +346,7 @@ const FinalDashboard = () => {
                 D2_ODSC: Number(item?.D2_ODSC),
                 D2_RECTIFICATION: Number(item?.D2_RECTIFICATION),
                 D2_5G_SECTOR_ADDITION: Number(item?.D2_5G_SECTOR_ADDITION),
-            
+
                 D3_DE_GROW: Number(item?.D3_DE_GROW),
                 D3_MACRO: Number(item?.D3_MACRO),
                 D3_OTHERS: Number(item?.D3_OTHERS),
@@ -431,7 +432,7 @@ const FinalDashboard = () => {
                 M1_ODSC: Number(item?.M1_ODSC),
                 M1_RECTIFICATION: Number(item?.M1_RECTIFICATION),
                 M1_5G_SECTOR_ADDITION: Number(item?.M1_5G_SECTOR_ADDITION),
-            
+
                 M2_DE_GROW: Number(item?.M2_DE_GROW),
                 M2_MACRO: Number(item?.M2_MACRO),
                 M2_OTHERS: Number(item?.M2_OTHERS),
@@ -446,7 +447,7 @@ const FinalDashboard = () => {
                 M2_ODSC: Number(item?.M2_ODSC),
                 M2_RECTIFICATION: Number(item?.M2_RECTIFICATION),
                 M2_5G_SECTOR_ADDITION: Number(item?.M2_5G_SECTOR_ADDITION),
-            
+
                 M3_DE_GROW: Number(item?.M3_DE_GROW),
                 M3_MACRO: Number(item?.M3_MACRO),
                 M3_OTHERS: Number(item?.M3_OTHERS),
@@ -706,6 +707,23 @@ const FinalDashboard = () => {
 
     }
 
+    const HandleDashboard = async (oem) => {
+        // console.log('ssssss',oem)
+        action(true)
+        var formData = new FormData();
+        formData.append("oem", oem);
+
+        const responce = await makePostRequest('IntegrationTracker/oem_wise_integration_data/', formData)
+        if (responce) {
+            action(false)
+            dispatch({ type: 'IX_TRACKER', payload: { responce } })
+            navigate(`/tools/IX_Tracker/dashboard/total_count/${oem}`)
+        }
+        else {
+            action(false)
+        }
+    }
+
     const fetchDashboardData = async () => {
         const responce = await makeGetRequest("IntegrationTracker/overall-record-summary/")
         if (responce) {
@@ -724,9 +742,12 @@ const FinalDashboard = () => {
             return `${day}-${month}-${year}`;
         }
         return (
-            <Box sx={{ height: 'auto', width: '32vh', padding: 1.5, borderRadius: 1.5, boxShadow: " rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px", backgroundColor: color, textAlign: 'center' }}>
+            <Box sx={{ height: 'auto', width: '32vh', padding: 1.5, borderRadius: 1.5, boxShadow: " rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px", backgroundColor: color, textAlign: 'center',cursor:'pointer' }}
+                onClick={() => { HandleDashboard(data.OEM) }}
+                title={data.OEM}
+            >
                 <Box sx={{ fontWeight: 600, fontSize: '16px', color: "black", textAlign: 'left' }}>{data.OEM}</Box>
-                <Box sx={{ fontWeight: 600, fontSize: '24px', color: "black", fontFamily: 'cursive' }}>{data.record_count}</Box>
+                <Box sx={{ fontWeight: 600, fontSize: '24px', color: "black", fontFamily: 'cursive' }}><CountUp end={data.record_count} duration={4} /> </Box>
                 <Box sx={{ color: "black", textAlign: 'left' }}><span style={{ fontWeight: 600, fontSize: '14px' }}>From-</span>{convertDate(data.from_integration_date)}</Box>
                 <Box sx={{ color: "black", textAlign: 'left' }}> <span style={{ fontWeight: 600 }}>To-</span>{convertDate(data.to_integration_date)}</Box>
             </Box>
@@ -779,7 +800,7 @@ const FinalDashboard = () => {
                 </div>
                 <div style={{ padding: '5px', display: 'flex', justifyContent: 'space-evenly', flexWrap: "wrap", flexDirection: 'row', gap: 20 }}>
                     {mdashboard?.map((item, index) => index < 5 && (
-                        <Dashboard data={item} color={colorType[index]} />
+                        <Dashboard data={item} color={colorType[index]} key={index} />
                     ))}
 
                 </div>
@@ -788,6 +809,7 @@ const FinalDashboard = () => {
                 <MemoMonthWiseIntegration onData={handleMonthWiseData} />
                 <MemoOemWiseIntegration onData={handleOemWiseData} />
             </div>
+            {loading}
         </>
     )
 }

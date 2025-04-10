@@ -14,8 +14,10 @@ const Integration_Tool = lazy(() => import('./Integration_Tool'))
 const FinalDashboard = lazy(() => import('./Dashboard/FinalDashboard'))
 const ComanDashboard = lazy(() => import('./Dashboard/ComanDashboard'))
 const MDashboard = lazy(() => import('./MasterDashboard/MDashboard'))
-const Relocation = lazy(()=>import('./Relocation/Relocation'))
+const Relocation = lazy(() => import('./Relocation/Relocation'))
+const MasterTable = lazy(() => import('./Relocation/MasterTable'))
 // const RelocationUpload = lazy(()=>import('./Relocation/RelocationUpload'))
+const TotalDataDashboard = lazy(() => import('./Dashboard/TotalDataDashboard'));
 
 
 const IntegrationRead = () => {
@@ -47,11 +49,14 @@ const IntegrationRead = () => {
                                         <Nav.Item eventKey="2" placement="rightStart" icon={<DashboardIcon />} onClick={() => navigate('/tools/IX_Tracker/dashboard')}>
                                             Dashboard
                                         </Nav.Item>
-                                        <Nav.Menu eventKey="4" placement="rightStart" icon={<ConversionIcon />} title="Relocation" > 
-                                            <Nav.Item eventKey="4-1" placement="rightStart" onClick={() => navigate('/tools/IX_Tracker/relocation_dashboard')}>
-                                                Dashboard  
+                                        <Nav.Menu eventKey="4" placement="rightStart" icon={<ConversionIcon />} title="Relocation" >
+                                            <Nav.Item eventKey="4-2" placement="rightStart" onClick={() => navigate('/tools/IX_Tracker/relocation_master_table')}>
+                                                Master Table
                                             </Nav.Item>
-                                        
+                                            <Nav.Item eventKey="4-1" placement="rightStart" onClick={() => navigate('/tools/IX_Tracker/relocation_dashboard')}>
+                                                Dashboard
+                                            </Nav.Item>
+
                                         </Nav.Menu>
                                     </Nav>
                                 </Sidenav.Body>
@@ -65,8 +70,10 @@ const IntegrationRead = () => {
                                 <Route element={<Integration_Tool />} path="/" />
                                 <Route element={<FinalDashboard />} path="/dashboard/*" />
                                 <Route element={<ComanDashboard />} path="/dashboard/:name" />
+                                 <Route element={<TotalDataDashboard />} path="/dashboard/total_count/:name" />
                                 <Route element={<MDashboard />} path="/master_dashboard" />
                                 <Route element={<Relocation />} path="/relocation_dashboard" />
+                                <Route element={<MasterTable />} path="/relocation_master_table" />
                             </Routes>
                         </Suspense>
                     </Grid>
