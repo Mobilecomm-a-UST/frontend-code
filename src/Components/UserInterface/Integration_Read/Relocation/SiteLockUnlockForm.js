@@ -484,7 +484,7 @@ const SiteLockUnlockForm = ({ data, open, handleClose, updateTableData }) => {
                                                 <MenuItem value='EMF'>EMF</MenuItem>
                                                 <MenuItem value='SCFT'>SCFT</MenuItem>
                                                 <MenuItem value='MS1'>MS1</MenuItem>
-                                                <MenuItem value='Others'>Others</MenuItem>
+                                                <MenuItem value='others'>Others</MenuItem>
                                             </Select>
                                         </FormControl>
                                     </Grid>
