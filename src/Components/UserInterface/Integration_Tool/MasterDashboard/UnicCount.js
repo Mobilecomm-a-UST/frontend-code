@@ -65,25 +65,12 @@ const UnicCount = () => {
     const chartRef = useRef(null);
     const [graphType, setGraphType] = useState(false);
     const [open, setOpen] = useState(false)
-    const { makePostRequest } = usePost()
+    const { makePostRequest, cancelRequest } = usePost()
     const { loading, action } = useLoadingDialog();
     const [circle, setCircle] = useState(['ORI', 'AP', 'UPW', 'RAJ', 'BIH', 'UPE', 'KK', 'KOL', 'JRK', 'WB', 'HRY', 'ROTN', 'PUN', 'MP', 'MUM', 'DEL', 'JK', 'CHN'])
     const [selectCircle, setSelectCircle] = useState('AP')
     const [selectActivity, setSelectActivity] = useState('_DE_GROW')
-    const [degrow, setDegrow] = useState([])
-    const [macro, setMacro] = useState([])
-    const [other, setOther] = useState([]);
-    const [relocation, setRelocation] = useState([]);
-    const [ret, setRet] = useState([]);
-    const [ulshpsc, setUlshpsc] = useState([]);
-    const [upgrade, setUpgrade] = useState([]);
-    const [femto, setFemto] = useState([]);
-    const [htincrement, setHtincrement] = useState([]);
-    const [ibs, setIbs] = useState([]);
-    const [idsc, setIdsc] = useState([]);
-    const [odsc, setOdsc] = useState([]);
-    const [rectifiction, setRectifiction] = useState([]);
-    const [g5sector, setG5sector] = useState([]);
+
     const [month, setMonth] = useState('')
     const [year, setYear] = useState('')
     const [date, setDate] = useState('')
@@ -448,6 +435,9 @@ const UnicCount = () => {
             setActivityData(data.download_data)
         }
         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
+        return()=>{
+            cancelRequest();
+        }
     }, [])
 
     return (

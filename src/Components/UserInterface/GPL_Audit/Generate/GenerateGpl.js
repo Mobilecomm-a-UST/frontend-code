@@ -67,7 +67,7 @@ const GenerateGpl = () => {
                 }
             } else if (gplPreAuditFiles.length > 0) {
                 for (let i = 0; i < gplPreAuditFiles.length; i++) {
-                    // console.log('pre files' , preFiles[i])
+                    // console.log('pre files' , preFiles[i])           
                     formData.append(`pre_log_files`, gplPreAuditFiles[i]);
                 }
             } else if (fileLength > 0) {
@@ -216,12 +216,10 @@ const GenerateGpl = () => {
                                                     {circleArray.map((item, index) => (
                                                         <MenuItem value={item} key={index}>{item}</MenuItem>
                                                     ))}
-
                                                 </Select>
                                             </FormControl>
                                             <div>  <span style={{ display: show ? 'inherit' : 'none', color: 'red', fontSize: '18px', fontWeight: 600 }}>This Field Is Required !</span> </div>
                                         </Box>
-
                                     </Box>
 
                                     {selectService === 'SCRIPT GENERATOR' && <Box className={classes.Front_Box} >

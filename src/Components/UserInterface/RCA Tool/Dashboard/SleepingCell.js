@@ -48,7 +48,7 @@ const SleepingCell = () => {
     const [graphType, setGraphType] = useState(false);
     const [open, setOpen] = useState(false)
     const [open2, setOpen2] = useState(false)
-    const { makePostRequest } = usePost()
+    const { makePostRequest,cancelRequest } = usePost()
     const { loading, action } = useLoadingDialog();
     const [openPayloadDip, setOpenPayloadDip] = useState([])
     const [closePayloadDip, setClosePayloadDip] = useState([])
@@ -602,7 +602,10 @@ const SleepingCell = () => {
       fetchDashboardData();
   
       document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
+    
     }, [fetchDashboardData])
+
+  
 
   return (
        <>

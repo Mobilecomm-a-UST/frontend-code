@@ -7,17 +7,25 @@ import Slide from '@mui/material/Slide';
 import UploadIcon from '@mui/icons-material/Upload';
 import DoDisturbIcon from '@mui/icons-material/DoDisturb';
 import Swal from "sweetalert2";
-import { postData,ServerURL } from "../../../services/FetchNodeServices";
+import { postData, ServerURL } from "../../../services/FetchNodeServices";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import OverAllCss from "../../../csss/OverAllCss";
 import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
 
+
+const circleArray = ['AP', 'CH', 'KK', 'DL', 'HR', 'RJ', 'JK', 'WB', 'OD', 'MU', 'TNCH', 'UE', 'BH', 'UW', 'MP', 'PB', 'KO', 'WB', 'JH']
 const Make4G = () => {
   const [make4GFiles, setMake4GFiles] = useState([])
+    const [selectCircle, setSelectCircle] = useState('')
   const [show4G, setShow4G] = useState(false)
+   const [show, setShow] = useState(false)
   const [fileData, setFileData] = useState()
   const [download, setDownload] = useState(false);
-  const {loading,action} = useLoadingDialog()
+  const { loading, action } = useLoadingDialog()
   const navigate = useNavigate()
   const classes = OverAllCss()
   const link = `${ServerURL}${fileData}`;
@@ -30,9 +38,11 @@ const Make4G = () => {
 
 
   const handleSubmit = async () => {
-    if (make4GFiles.length > 0) {
+    if (make4GFiles.length > 0 && selectCircle !== '') {
       action(true)
       var formData = new FormData();
+
+        formData.append('circle', selectCircle)
       for (let i = 0; i < make4GFiles.length; i++) {
         // console.log('pre files' , preFiles[i])
         formData.append(`log_files`, make4GFiles[i]);
@@ -40,7 +50,7 @@ const Make4G = () => {
 
       const response = await postData('api/upload_4g/', formData)
 
-      console.log('response data', response)
+      // console.log('response data', response)
 
 
       if (response.status === true) {
@@ -73,19 +83,25 @@ const Make4G = () => {
       } else {
         setShow4G(false)
       }
-
-
+      if (selectCircle === '') {
+        setShow(true)
+      } else {
+        setShow(false)
+      }
     }
   }
 
   const handleCancel = () => {
     setMake4GFiles([])
+    setSelectCircle('')
+    setShow4G(false)
+    setShow4G(false)
   }
 
-    useEffect(() => {
-          document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
-  
-      }, [])
+  useEffect(() => {
+    document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
+
+  }, [])
 
   return (
     <>
@@ -109,6 +125,28 @@ const Make4G = () => {
                 Generate 4G Alarm
               </Box>
               <Stack spacing={2} sx={{ marginTop: "-40px" }} direction={'column'}>
+                <Box className={classes.Front_Box}>
+                  <Box className={classes.Front_Box_Hading}>
+                    Select Circle
+                  </Box>
+                  <Box className={classes.Front_Box_Select_Button} >
+                    <FormControl sx={{ minWidth: 150 }}>
+                      <InputLabel id="demo-simple-select-label">Select Circle</InputLabel>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={selectCircle}
+                        label="Select Circle"
+                        onChange={(event) => { setSelectCircle(event.target.value); setShow(false) }}
+                      >
+                        {circleArray.map((item, index) => (
+                          <MenuItem value={item} key={index}>{item}</MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                    <div>  <span style={{ display: show ? 'inherit' : 'none', color: 'red', fontSize: '18px', fontWeight: 600 }}>This Field Is Required !</span> </div>
+                  </Box>
+                </Box>
                 <Box className={classes.Front_Box} >
                   <div className={classes.Front_Box_Hading}>
                     Select 4G Logs Files:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{ }</span>
@@ -139,7 +177,7 @@ const Make4G = () => {
               </Stack>
             </Box>
           </Box>
-           <Box sx={{ display: download ? 'block' : 'none',textAlign:'center' }}>
+          <Box sx={{ display: download ? 'block' : 'none', textAlign: 'center' }}>
             <a download href={fileData}><Button variant="outlined" onClick='' startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />} sx={{ marginTop: "10px", width: "auto" }}><span style={{ fontFamily: "Poppins", fontSize: "22px", fontWeight: 800, textTransform: "none", textDecorationLine: "none" }}>Download 4G Alarm</span></Button></a>
           </Box>
         </Box>
