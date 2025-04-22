@@ -43,7 +43,7 @@ const OemBar = () => {
     const chartRef = useRef(null);
     const [graphType, setGraphType] = useState(false);
     const [open, setOpen] = useState(false)
-    const { makePostRequest } = usePost()
+    const { makePostRequest,cancelRequest } = usePost()
     const { loading, action } = useLoadingDialog();
     const [circle, setCircle] = useState([])
     const [ericsson, setEricsson] = useState([])
@@ -513,6 +513,9 @@ const OemBar = () => {
             console.log('test data',JSON.parse(data.table_data))
         }
         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
+        return () => {
+            cancelRequest();
+        }
     }, [])
 
 

@@ -17,7 +17,7 @@ export const useGet = (options) => {
 
   const skip = `page_size=50`
 
-  const makeGetRequest = async (url,tokens) => {
+  const makeGetRequest = async (url) => {
     setIsLoading(true);
     setError(null);
     setResponse(null);
