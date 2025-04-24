@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { lazy, useEffect ,Suspense} from 'react'
 import { useState } from 'react'
 import { Grid } from '@mui/material'
 import { Sidenav, Nav } from 'rsuite';
@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import TrendBox from '../TrendBox';
 import Kpi4G from './MakeKPI(old)/Kpi4G';
+const Degrow =  lazy(() => import('./Degrow/Degrow'))
 
 const KTKTrend = () => {
     const [expanded, setExpanded] = useState(true);
@@ -35,6 +36,7 @@ const KTKTrend = () => {
                                 </Nav.Item>
                             </Nav.Menu> */}
                             <Nav.Item eventKey='2' icon={<FileUploadIcon />} onClick={()=>navigate('/trends/ktk/make_kpi_trend_old')}>Make Trend(Old)</Nav.Item>
+                            <Nav.Item eventKey='3' icon={<FileUploadIcon />} onClick={()=>navigate('/trends/ktk/make_degrow')}>Make Degrow</Nav.Item>
                         </Nav>
                     </Sidenav.Body>
 
@@ -42,14 +44,15 @@ const KTKTrend = () => {
             </div>
         </Grid>
         <Grid item xs={10}>
-            <div >
+            <Suspense fallback={<div>loading............</div>}>
                 <Routes>
                     <Route element={<TrendBox data={'KTK'} />} path="/" />
                     <Route element={<Kpi4G/>} path="/make_kpi_trend_old" />
+                    <Route element={<Degrow/>} path="/make_degrow" />
 
                 </Routes>
 
-            </div>
+            </Suspense>
 
         </Grid>
     </Grid>
