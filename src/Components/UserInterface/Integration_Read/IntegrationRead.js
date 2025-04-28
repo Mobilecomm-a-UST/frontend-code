@@ -9,6 +9,8 @@ import { useNavigate } from 'react-router-dom';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import FileUploadIcon from '@rsuite/icons/FileUpload';
 import ConversionIcon from '@rsuite/icons/Conversion';
+import { getDecreyptedData } from '../../utils/localstorage';
+import { use } from 'react';
 
 const Integration_Tool = lazy(() => import('./Integration_Tool'))
 const FinalDashboard = lazy(() => import('./Dashboard/FinalDashboard'))
@@ -16,7 +18,7 @@ const ComanDashboard = lazy(() => import('./Dashboard/ComanDashboard'))
 const MDashboard = lazy(() => import('./MasterDashboard/MDashboard'))
 const Relocation = lazy(() => import('./Relocation/Relocation'))
 const MasterTable = lazy(() => import('./Relocation/MasterTable'))
-// const RelocationUpload = lazy(()=>import('./Relocation/RelocationUpload'))
+const RelocationUpload = lazy(()=>import('./Relocation/RelocationUpload'))
 const TotalDataDashboard = lazy(() => import('./Dashboard/TotalDataDashboard'));
 
 
@@ -25,6 +27,7 @@ const IntegrationRead = () => {
     const [activeKey, setActiveKey] = useState();
     const [states, setStates] = useState([])
     const navigate = useNavigate()
+    const userType = (getDecreyptedData('user_type')?.split(","))
 
     useEffect(() => {
         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
@@ -56,7 +59,9 @@ const IntegrationRead = () => {
                                             <Nav.Item eventKey="4-1" placement="rightStart" onClick={() => navigate('/tools/IX_Tracker/relocation_dashboard')}>
                                                 Dashboard
                                             </Nav.Item>
-
+                                            {userType?.includes('Quality-s') && <Nav.Item eventKey="4-3" placement="rightStart" onClick={() => navigate('/tools/IX_Tracker/relocation_upload')}>
+                                                Upload File</Nav.Item>}
+                                       
                                         </Nav.Menu>
                                     </Nav>
                                 </Sidenav.Body>
@@ -70,10 +75,11 @@ const IntegrationRead = () => {
                                 <Route element={<Integration_Tool />} path="/" />
                                 <Route element={<FinalDashboard />} path="/dashboard/*" />
                                 <Route element={<ComanDashboard />} path="/dashboard/:name" />
-                                 <Route element={<TotalDataDashboard />} path="/dashboard/total_count/:name" />
+                                <Route element={<TotalDataDashboard />} path="/dashboard/total_count/:name" />
                                 <Route element={<MDashboard />} path="/master_dashboard" />
                                 <Route element={<Relocation />} path="/relocation_dashboard" />
                                 <Route element={<MasterTable />} path="/relocation_master_table" />
+                                {userType?.includes('Quality-s') && <Route element={<RelocationUpload />} path="/relocation_upload" />}
                             </Routes>
                         </Suspense>
                     </Grid>

@@ -31,7 +31,7 @@ const ToolData = [
         title: 'This is a trend tool',
         icons: TrendIcon,
         link: '/trends',
-        groupBy:['quality','admin']
+        groupBy:['quality','admin','quality-s']
     },
     {
         id: 1,
@@ -82,7 +82,7 @@ const ToolData = [
         title: 'This is a PERFORMANCE AT tool',
         icons: WavePointIcon,
         link: '/tools/performance_at',
-        groupBy:['quality','admin']
+        groupBy:['quality','admin','quality-s']
     },
     {
         id: 7,
@@ -90,7 +90,7 @@ const ToolData = [
         title: 'This is a WPR tool',
         icons: FunnelStepsIcon,
         link:'/tools/wpr',
-        groupBy:['quality','admin']
+        groupBy:['quality','admin','quality-s']
     },
     {
         id: 8,
@@ -123,7 +123,7 @@ const ToolData = [
         title: 'This is a AUDIT tool',
         icons: DocPassIcon,
         link: '/tools/audit',
-        groupBy:['quality','admin']
+        groupBy:['quality','admin','quality-s']
 
     },
     {
@@ -142,7 +142,7 @@ const ToolData = [
         title: 'This is a file merge tool<',
         icons: SingleSourceIcon,
         link: '/tools/file_merge',
-        groupBy:['admin','quality']
+        groupBy:['admin','quality','quality-s']
     },
     {
         id: 15,
@@ -175,7 +175,7 @@ const ToolData = [
         title: 'This is a CATS Tracker',
         icons: RelatedMapIcon,
         link:  '/tools/cats_tracker',
-        groupBy:['quality','admin']
+        groupBy:['quality','admin','quality-s']
 
     },
     // {
@@ -191,7 +191,7 @@ const ToolData = [
         title: 'This is a RCA Tool',
         icons: TreeIcon,
         link:  '/tools/rca',
-        groupBy:['quality','admin']
+        groupBy:['quality','admin','quality-s']
     },
     {
         id: 23,
@@ -199,7 +199,7 @@ const ToolData = [
         title: 'This is a IX Tracker Tool',
         icons: DocPassIcon,
         link: '/tools/IX_Tracker',
-        groupBy:['quality','IX_reader']
+        groupBy:['quality','IX_reader','quality-s']
 
     }
     ,

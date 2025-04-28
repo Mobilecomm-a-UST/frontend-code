@@ -102,7 +102,7 @@ function App() {
             } />
             <Route path="/trends/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={Trends} allowedUserTypes={['quality', 'admin']} userType={userType} />
+                <ProtectedRoute element={Trends} allowedUserTypes={['quality', 'admin','quality-s']} userType={userType} />
               </Suspense>
             } />
             <Route path="/tools/vendor/*" element={
@@ -122,12 +122,12 @@ function App() {
             } />
             <Route path="/tools/performance_at/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={Performance_At} allowedUserTypes={['quality', 'admin']} userType={userType} />
+                <ProtectedRoute element={Performance_At} allowedUserTypes={['quality', 'admin','quality-s']} userType={userType} />
               </Suspense>
             } />
             <Route path="/tools/wpr/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={Wpr} allowedUserTypes={['quality', 'admin']} userType={userType} />
+                <ProtectedRoute element={Wpr} allowedUserTypes={['quality', 'admin','quality-s']} userType={userType} />
               </Suspense>
             } />
             <Route path="/tools/de-grow/*" element={
@@ -137,7 +137,7 @@ function App() {
             } />
             <Route path="/tools/file_merge" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={File_Merge} allowedUserTypes={['admin', 'quality']} userType={userType} />
+                <ProtectedRoute element={File_Merge} allowedUserTypes={['admin', 'quality','quality-s']} userType={userType} />
               </Suspense>
             } />
             <Route path="/tools/schedular/*" element={
@@ -162,7 +162,7 @@ function App() {
             } />
             <Route path="/tools/cats_tracker/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={CatsTracker} allowedUserTypes={['quality', 'admin']} userType={userType} />
+                <ProtectedRoute element={CatsTracker} allowedUserTypes={['quality', 'admin','quality-s']} userType={userType} />
               </Suspense>
             } />
             <Route path="/tools/inventory/*" element={
@@ -172,27 +172,27 @@ function App() {
             } />
             <Route path="/tools/zero_RNA_payload/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={Zero_rna} allowedUserTypes={['quality', 'admin']} userType={userType} />
+                <ProtectedRoute element={Zero_rna} allowedUserTypes={['quality', 'admin','quality-s']} userType={userType} />
               </Suspense>
             } />
             <Route path="/tools/audit/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={Audit} allowedUserTypes={['quality', 'admin']} userType={userType} />
+                <ProtectedRoute element={Audit} allowedUserTypes={['quality', 'admin','quality-s']} userType={userType} />
               </Suspense>
             } />
             <Route path="/tools/audit/FDD/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={FDD} allowedUserTypes={['quality', 'admin']} userType={userType} />
+                <ProtectedRoute element={FDD} allowedUserTypes={['quality', 'admin','quality-s']} userType={userType} />
               </Suspense>
             } />
             <Route path="/tools/audit/TDD/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={TDD} allowedUserTypes={['quality', 'admin']} userType={userType} />
+                <ProtectedRoute element={TDD} allowedUserTypes={['quality', 'admin','quality-s']} userType={userType} />
               </Suspense>
             } />
             <Route path="/tools/audit/2G_audit/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={G2Audit} allowedUserTypes={['quality', 'admin']} userType={userType} />
+                <ProtectedRoute element={G2Audit} allowedUserTypes={['quality', 'admin','quality-s']} userType={userType} />
               </Suspense>
             } />
             <Route path="/tools/mdp/*" element={
@@ -237,12 +237,12 @@ function App() {
             } />
             <Route path="/tools/IX_Tracker/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={IntegrationRead} allowedUserTypes={['quality', 'IX_reader']} userType={userType} />
+                <ProtectedRoute element={IntegrationRead} allowedUserTypes={['quality', 'IX_reader','quality-s']} userType={userType} />
               </Suspense>
             } />
             <Route path="/tools/rca/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={Rca} allowedUserTypes={['quality', 'admin']} userType={userType} />
+                <ProtectedRoute element={Rca} allowedUserTypes={['quality', 'admin','quality-s']} userType={userType} />
               </Suspense>
             } />
             <Route path="/tools/softAt/*" element={

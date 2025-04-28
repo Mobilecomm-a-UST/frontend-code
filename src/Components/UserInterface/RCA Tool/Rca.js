@@ -8,7 +8,6 @@ import FileUploadIcon from '@rsuite/icons/FileUpload';
 import { useNavigate } from 'react-router-dom'
 import { Routes, Route } from "react-router-dom";
 import GearIcon from '@rsuite/icons/Gear';
-import AppSelectIcon from '@rsuite/icons/AppSelect';
 import TrendIcon from '@rsuite/icons/Trend';
 import ViewsAuthorizeIcon from '@rsuite/icons/ViewsAuthorize';
 import { getDecreyptedData } from '../../utils/localstorage';
