@@ -139,18 +139,18 @@ const Degrow = () => {
     formData.append("site_list", pre_post_File.bytes);
 
     // const response = await postData('trend/kol_degrow/makeKpiTrend/degrow/',formData, {headers: {Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` },signal:abortSignal})
-    const response = await makePostRequest('trend/ktk/ktk_pre_post',FormData)
+    const response = await makePostRequest('trend/ktk/makeKpiTrend/pre_post/',formData)
 
      console.log('response data',response)
 
-    if (response.Status == true) {
-    setFileData(response.download_url)
+    if (response) {
+    setFileData(response.download_path)
     setOpen(false);
     setDlink(true);
       Swal.fire({
         icon: "success",
         title: "Done",
-        text: `${response.Message}`,
+        text: `${response.message}`,
       });
 
 
@@ -296,7 +296,7 @@ else{
                     </Box>
                 </Box>
                 <Box style={{ display: dlink ? "inherit" : "none" }}>
-                    <a download href={link}><Button variant="outlined" onClick='' startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />} sx={{ marginTop: "10px", width: "auto" }}><span style={{ fontFamily: "Poppins", fontSize: "22px", fontWeight: 800, textTransform: "none", textDecorationLine: "none" }}>Download KPI Trend</span></Button></a>
+                    <a download href={fileData}><Button variant="outlined" onClick='' startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />} sx={{ marginTop: "10px", width: "auto" }}><span style={{ fontFamily: "Poppins", fontSize: "22px", fontWeight: 800, textTransform: "none", textDecorationLine: "none" }}>Download KPI Trend</span></Button></a>
                 </Box>
 
 
