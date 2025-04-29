@@ -48,7 +48,7 @@ const Make4G = () => {
         formData.append(`log_files`, make4GFiles[i]);
       }
 
-      const response = await postData('api/upload_4g/', formData)
+      const response = await postData('universal_alarm/upload_4g/', formData)
 
       // console.log('response data', response)
 
