@@ -9,8 +9,8 @@ import { getDecreyptedData } from "../utils/localstorage";
 // const ServerURL = "http://103.242.225.195:8000"
 // const ServerURL = "http://192.168.0.44:8001"
 // const ServerURL = "http://192.168.0.10:8000"
-// const ServerURL = "http://103.242.225.195:8000";    
-const ServerURL = "http://127.0.0.1:8000"
+const ServerURL = "http://103.242.225.195:8000";    
+// const ServerURL = "http://10.24.428.222:8000"
 // const ServerURL = "http://54.234.191.244"
 // const ServerURL = "http://13.233.231.179:80"
 // const ServerURL = "http://13.233.231.179:8000"

@@ -14,7 +14,7 @@ import FileUploadIcon from '@rsuite/icons/FileUpload';
 import { useNavigate } from 'react-router-dom'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import SoftAtTool from './SoftAtTool'
-import ViewsUnauthorizeIcon from '@rsuite/icons/ViewsUnauthorize';
+import CheckOutlineIcon from '@rsuite/icons/CheckOutline';
 import Upload_Soft_AT from './Upload_Soft_AT/Upload_Soft_AT'
 import Upload_Soft_AT_Status from './Upload_Soft_AT/Upload_Soft_AT_Status'
 import PendingSites from './Dashboard/PendingSites'
@@ -29,6 +29,10 @@ const SoftAtStatusTemplate = lazy(() => import('./DownloadTemp/SoftAtStatus'));
 const SIVATemplate = lazy(() => import('./DownloadTemp/SiwaTemp'));
 const SoftAtOffering = lazy(() => import('./DownloadTemp/SoftAtOffering'));
 const CircleWiseStatus = lazy(() => import('./Dashboard/CircleWiseStatus'));
+const EricssonChecklist = lazy(() => import('./EricssonStatus/Checklist'))
+const EricssonSummary = lazy(() => import('./EricssonStatus/Summary'))
+const NokiaChecklist = lazy(() => import('./NokiaStatus/Checklist'))
+const NokiaSummary = lazy(() => import('./NokiaStatus/Summary'))
 
 
 
@@ -54,15 +58,15 @@ const SoftAT = () => {
   }
 
 
- useEffect(()=>{
-  document.title=`${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/',' | ').toUpperCase()}`
+  useEffect(() => {
+    document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
 
- },[])
+  }, [])
 
   return (
     <>
 
-      <Box style={{marginTop:states,transition:'all 1s ease'}} >
+      <Box style={{ marginTop: states, transition: 'all 1s ease' }} >
 
         <Grid container spacing={2}>
           <Grid item xs={0} md={2} sx={{}}>
@@ -93,9 +97,19 @@ const SoftAT = () => {
                         <Nav.Item eventKey="3" placement="rightStart" icon={<PageIcon />} onClick={() => { navigate('/tools/soft_at/view_report'); show(); setMenuButton(true) }}>
                           View Report
                         </Nav.Item>
-                        <Nav.Item eventKey="4" placement="rightStart" icon={<FileDownloadIcon />} onClick={() => { navigate('/tools/soft_at/download_template'); show(); setMenuButton(true) }}>
-                        Download Template
-                      </Nav.Item>
+                        <Nav.Menu eventKey="4" title="Download Template" placement="rightStart" icon={<FileDownloadIcon />} >
+                          <Nav.Item eventKey="4-1" onClick={() => { navigate('/tools/soft_at/download_soft_at_status_template'); show(); setMenuButton(true) }}>Soft-AT Status</Nav.Item>
+                          <Nav.Item eventKey="4-2" onClick={() => { navigate('/tools/soft_at/download_siwa_template'); show(); setMenuButton(true) }}>SIWA Template</Nav.Item>
+                          <Nav.Item eventKey="4-3" onClick={() => { navigate('/tools/soft_at/download_soft_at_offering_template'); show(); setMenuButton(true) }}>Soft-AT Offering</Nav.Item>
+                        </Nav.Menu>
+                        <Nav.Menu eventKey="5" title="Ericsson Status" placement="rightStart" icon={<CheckOutlineIcon />} >
+                          <Nav.Item eventKey='5-1' onClick={() => { navigate('/tools/soft_at/ericsson_checklist'); show(); setMenuButton(true) }} >Checklist</Nav.Item>
+                          <Nav.Item eventKey='5-2' onClick={() => { navigate('/tools/soft_at/ericsson_summary'); show(); setMenuButton(true) }} >Summary</Nav.Item>
+                        </Nav.Menu>
+                        <Nav.Menu eventKey="6" title="Nokia Status" placement="rightStart" icon={<CheckOutlineIcon />} >
+                          <Nav.Item eventKey='6-1' onClick={() => { navigate('/tools/soft_at/nokia_checklist'); show(); setMenuButton(true) }} >Checklist</Nav.Item>
+                          <Nav.Item eventKey='6-2' onClick={() => { navigate('/tools/soft_at/nokia_summary'); show(); setMenuButton(true) }} >Summary</Nav.Item>
+                        </Nav.Menu>
                         {/* <Nav.Item eventKey="4" placement="rightStart" icon={<ViewsUnauthorizeIcon />} onClick={() => { navigate('/tools/soft_at/rejected_report'); show(); setMenuButton(true) }}>
                         Rejected Report
                       </Nav.Item> */}
@@ -109,8 +123,8 @@ const SoftAT = () => {
             </Box>
             {/* THIS VIEW FOR PC  */}
             <Box sx={{ display: { xs: 'none', md: 'inherit' } }} >
-              <Box sx={{ position:'fixed',width: '16.5%'}} >
-                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight:"670px",height:"100vh",backgroundColor:"#223354",marginTop:8,borderRadius:10 }}>
+              <Box sx={{ position: 'fixed', width: '16.5%' }} >
+                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
                   <Sidenav.Body>
                     <Nav activeKey={activeKey} onSelect={setActiveKey} >
                       <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>Soft AT TOOL</Nav>
@@ -131,14 +145,20 @@ const SoftAT = () => {
                       <Nav.Item eventKey="3" placement="rightStart" icon={<PageIcon />} onClick={() => { navigate('/tools/soft_at/view_report'); show(); setMenuButton(true) }}>
                         View Report
                       </Nav.Item>
-                      <Nav.Menu eventKey="4" title="Download Template" placement="rightStart"  icon={<FileDownloadIcon />} >
-                          <Nav.Item eventKey="4-1" onClick={() => { navigate('/tools/soft_at/download_soft_at_status_template'); show(); setMenuButton(true) }}>Soft-AT Status</Nav.Item>
-                          <Nav.Item eventKey="4-2" onClick={() => { navigate('/tools/soft_at/download_siwa_template'); show(); setMenuButton(true) }}>SIWA Template</Nav.Item>
-                          <Nav.Item eventKey="4-3" onClick={() => { navigate('/tools/soft_at/download_soft_at_offering_template'); show(); setMenuButton(true) }}>Soft-AT Offering</Nav.Item>
+                      <Nav.Menu eventKey="4" title="Download Template" placement="rightStart" icon={<FileDownloadIcon />} >
+                        <Nav.Item eventKey="4-1" onClick={() => { navigate('/tools/soft_at/download_soft_at_status_template'); show(); setMenuButton(true) }}>Soft-AT Status</Nav.Item>
+                        <Nav.Item eventKey="4-2" onClick={() => { navigate('/tools/soft_at/download_siwa_template'); show(); setMenuButton(true) }}>SIWA Template</Nav.Item>
+                        <Nav.Item eventKey="4-3" onClick={() => { navigate('/tools/soft_at/download_soft_at_offering_template'); show(); setMenuButton(true) }}>Soft-AT Offering</Nav.Item>
                       </Nav.Menu>
-                      {/* <Nav.Item eventKey="4" placement="rightStart" icon={<ViewsUnauthorizeIcon />} onClick={() => { navigate('/tools/soft_at/rejected_report'); show(); setMenuButton(true) }}>
-                        Rejected Report
-                      </Nav.Item> */}
+                      <Nav.Menu eventKey="5" title="Ericsson Status" placement="rightStart" icon={<CheckOutlineIcon />} >
+                        <Nav.Item eventKey='5-1' onClick={() => { navigate('/tools/soft_at/ericsson_checklist'); show(); setMenuButton(true) }} >Checklist</Nav.Item>
+                        <Nav.Item eventKey='5-2' onClick={() => { navigate('/tools/soft_at/ericsson_summary'); show(); setMenuButton(true) }} >Summary</Nav.Item>
+                      </Nav.Menu>
+                      <Nav.Menu eventKey="6" title="Nokia Status" placement="rightStart" icon={<CheckOutlineIcon />} >
+                        <Nav.Item eventKey='6-1' onClick={() => { navigate('/tools/soft_at/nokia_checklist'); show(); setMenuButton(true) }} >Checklist</Nav.Item>
+                        <Nav.Item eventKey='6-2' onClick={() => { navigate('/tools/soft_at/nokia_summary'); show(); setMenuButton(true) }} >Summary</Nav.Item>
+                      </Nav.Menu>
+
                     </Nav>
                   </Sidenav.Body>
 
@@ -165,6 +185,10 @@ const SoftAT = () => {
                 <Route element={<SoftAtStatusTemplate />} path='/download_soft_at_status_template' />
                 <Route element={<SIVATemplate />} path='/download_siwa_template' />
                 <Route element={<SoftAtOffering />} path='/download_soft_at_offering_template' />
+                <Route element={<EricssonChecklist />} path='/ericsson_checklist' />
+                <Route element={<EricssonSummary />} path='/ericsson_summary' />
+                <Route element={<NokiaChecklist />} path='/nokia_checklist' />
+                <Route element={<NokiaSummary />} path='/nokia_summary' />
 
               </Routes>
             </Suspense>
