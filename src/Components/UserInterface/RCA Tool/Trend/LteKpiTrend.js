@@ -123,6 +123,16 @@ const LteKpiTrend = () => {
         { title: `${data?.dates[5]}`, field: 'MV_DL_User_Throughput_Kbps_date_6' },
         { title: `${data?.dates[6]}`, field: 'MV_DL_User_Throughput_Kbps_date_7' },
         { title: `${data?.dates[7]}`, field: 'MV_DL_User_Throughput_Kbps_date_8' },
+        { title: 'Week-2', field: 'MV_DL_User_Throughput_Kbps_CUBH_week_2' },
+        { title: 'Week-1', field: 'MV_DL_User_Throughput_Kbps_CUBH_week_1' },
+        // { title: `${data?.dates[0]}`, field: 'MV_DL_User_Throughput_Kbps_date_1' },
+        // { title: `${data?.dates[1]}`, field: 'MV_DL_User_Throughput_Kbps_date_2' },
+        // { title: `${data?.dates[2]}`, field: 'MV_DL_User_Throughput_Kbps_date_3' },
+        { title: `${data?.dates[3]}`, field: 'MV_DL_User_Throughput_Kbps_CUBH_date_4' },
+        { title: `${data?.dates[4]}`, field: 'MV_DL_User_Throughput_Kbps_CUBH_date_5' },
+        { title: `${data?.dates[5]}`, field: 'MV_DL_User_Throughput_Kbps_CUBH_date_6' },
+        { title: `${data?.dates[6]}`, field: 'MV_DL_User_Throughput_Kbps_CUBH_date_7' },
+        { title: `${data?.dates[7]}`, field: 'MV_DL_User_Throughput_Kbps_CUBH_date_8' },
         { title: 'Week-2', field: 'MV_UL_User_Throughput_Kbps_week_2' },
         { title: 'Week-1', field: 'MV_UL_User_Throughput_Kbps_week_1' },
         // { title: `${data?.dates[0]}`, field: 'MV_DL_User_Throughput_Kbps_date_1' },
@@ -223,6 +233,17 @@ const LteKpiTrend = () => {
         { title: `${data?.dates[5]}`, field: 'MV_Average_UE_Distance_KM_date_6' },
         { title: `${data?.dates[6]}`, field: 'MV_Average_UE_Distance_KM_date_7' },
         { title: `${data?.dates[7]}`, field: 'MV_Average_UE_Distance_KM_date_8' },
+
+        { title: 'Week-2', field: 'Sams_Average_UE_Distance_KM_week_2' },
+        { title: 'Week-1', field: 'Sams_Average_UE_Distance_KM_week_1' },
+        // { title: `${data?.dates[0]}`, field: 'MV_Average_UE_Distance_KM_date_1' },
+        // { title: `${data?.dates[1]}`, field: 'MV_Average_UE_Distance_KM_date_2' },
+        // { title: `${data?.dates[2]}`, field: 'MV_Average_UE_Distance_KM_date_3' },
+        { title: `${data?.dates[3]}`, field: 'Sams_Average_UE_Distance_KM_date_4' },
+        { title: `${data?.dates[4]}`, field: 'Sams_Average_UE_Distance_KM_date_5' },
+        { title: `${data?.dates[5]}`, field: 'Sams_Average_UE_Distance_KM_date_6' },
+        { title: `${data?.dates[6]}`, field: 'Sams_Average_UE_Distance_KM_date_7' },
+        { title: `${data?.dates[7]}`, field: 'Sams_Average_UE_Distance_KM_date_8' },
         { title: 'Week-2', field: 'MV_PS_handover_success_rate_LTE_INTER_SYSTEM_week_2' },
         { title: 'Week-1', field: 'MV_PS_handover_success_rate_LTE_INTER_SYSTEM_week_1' },
         // { title: `${data?.dates[0]}`, field: 'MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_1' },
@@ -354,7 +375,38 @@ const LteKpiTrend = () => {
         { title: `${data?.dates[6]}`, field: 'MV_UL_RSSI_dBm_PRB_date_7' },
         { title: `${data?.dates[7]}`, field: 'MV_UL_RSSI_dBm_PRB_date_8' },
 
-      
+        { title: 'Week-2', field: 'MV_VoLTE_Packet_Loss_UL_CBBH_week_2' },
+        { title: 'Week-1', field: 'MV_VoLTE_Packet_Loss_UL_CBBH_week_1' },
+        // { title: `${data?.dates[0]}`, field: 'PS_InterF_HOSR_date_1' },
+        // { title: `${data?.dates[1]}`, field: 'PS_InterF_HOSR_date_2' },
+        // { title: `${data?.dates[2]}`, field: 'PS_InterF_HOSR_date_3' },
+        { title: `${data?.dates[3]}`, field: 'MV_VoLTE_Packet_Loss_UL_CBBH_date_4' },
+        { title: `${data?.dates[4]}`, field: 'MV_VoLTE_Packet_Loss_UL_CBBH_date_5' },
+        { title: `${data?.dates[5]}`, field: 'MV_VoLTE_Packet_Loss_UL_CBBH_date_6' },
+        { title: `${data?.dates[6]}`, field: 'MV_VoLTE_Packet_Loss_UL_CBBH_date_7' },
+        { title: `${data?.dates[7]}`, field: 'MV_VoLTE_Packet_Loss_UL_CBBH_date_8' },
+          { title: 'Week-2', field: 'MV_VoLTE_Packet_Loss_DL_CBBH_week_2' },
+        { title: 'Week-1', field: 'MV_VoLTE_Packet_Loss_DL_CBBH_week_1' },
+        // { title: `${data?.dates[0]}`, field: 'PS_InterF_HOSR_date_1' },
+        // { title: `${data?.dates[1]}`, field: 'PS_InterF_HOSR_date_2' },
+        // { title: `${data?.dates[2]}`, field: 'PS_InterF_HOSR_date_3' },
+        { title: `${data?.dates[3]}`, field: 'MV_VoLTE_Packet_Loss_DL_CBBH_date_4' },
+        { title: `${data?.dates[4]}`, field: 'MV_VoLTE_Packet_Loss_DL_CBBH_date_5' },
+        { title: `${data?.dates[5]}`, field: 'MV_VoLTE_Packet_Loss_DL_CBBH_date_6' },
+        { title: `${data?.dates[6]}`, field: 'MV_VoLTE_Packet_Loss_DL_CBBH_date_7' },
+        { title: `${data?.dates[7]}`, field: 'MV_VoLTE_Packet_Loss_DL_CBBH_date_8' },
+          { title: 'Week-2', field: 'MV_CSFB_Redirection_Success_Rate_week_2' },
+        { title: 'Week-1', field: 'MV_CSFB_Redirection_Success_Rate_week_1' },
+        // { title: `${data?.dates[0]}`, field: 'PS_InterF_HOSR_date_1' },
+        // { title: `${data?.dates[1]}`, field: 'PS_InterF_HOSR_date_2' },
+        // { title: `${data?.dates[2]}`, field: 'PS_InterF_HOSR_date_3' },
+        { title: `${data?.dates[3]}`, field: 'MV_CSFB_Redirection_Success_Rate_date_4' },
+        { title: `${data?.dates[4]}`, field: 'MV_CSFB_Redirection_Success_Rate_date_5' },
+        { title: `${data?.dates[5]}`, field: 'MV_CSFB_Redirection_Success_Rate_date_6' },
+        { title: `${data?.dates[6]}`, field: 'MV_CSFB_Redirection_Success_Rate_date_7' },
+        { title: `${data?.dates[7]}`, field: 'MV_CSFB_Redirection_Success_Rate_date_8' },
+
+
 
     ]
 
@@ -1151,17 +1203,17 @@ const LteKpiTrend = () => {
 
     const handleExport1 = () => {
         const multiHeaders = [
-            ['', '', '', '', '', '', 
-                 'MV 4G Data Volume GB',
-                 'MV 4G Data Volume GB',
-                 'MV 4G Data Volume GB',
-                 'MV 4G Data Volume GB',
-                 'MV 4G Data Volume GB',
-                 'MV 4G Data Volume GB',
-                 'MV 4G Data Volume GB',
-                 'MV 4G Data Volume GB',
-                 'MV 4G Data Volume GB',
-                 'MV 4G Data Volume GB',
+            ['', '', '', '', '', '',
+                'MV 4G Data Volume GB',
+                'MV 4G Data Volume GB',
+                'MV 4G Data Volume GB',
+                'MV 4G Data Volume GB',
+                'MV 4G Data Volume GB',
+                'MV 4G Data Volume GB',
+                'MV 4G Data Volume GB',
+                'MV 4G Data Volume GB',
+                'MV 4G Data Volume GB',
+                'MV 4G Data Volume GB',
                 // 'MV Radio NW Availability',
                 // 'MV Radio NW Availability',
                 // 'MV Radio NW Availability',
@@ -1192,6 +1244,15 @@ const LteKpiTrend = () => {
                 'MV DL User Throughtput Kbps',
                 'MV DL User Throughtput Kbps',
                 'MV DL User Throughtput Kbps',
+
+                'MV DL User Throughput Kbps CUBH',
+                'MV DL User Throughput Kbps CUBH',
+                'MV DL User Throughput Kbps CUBH',
+                'MV DL User Throughput Kbps CUBH',
+                'MV DL User Throughput Kbps CUBH',
+                'MV DL User Throughput Kbps CUBH',
+                'MV DL User Throughput Kbps CUBH',
+
                 'MV_UL_User_Throughput_Kbps',
                 'MV_UL_User_Throughput_Kbps',
                 'MV_UL_User_Throughput_Kbps',
@@ -1289,6 +1350,14 @@ const LteKpiTrend = () => {
                 'MV Average UE_Distance KM',
                 'MV Average UE_Distance KM',
                 'MV Average UE_Distance KM',
+
+                'Sams Average UE Distance KM',
+                'Sams Average UE Distance KM',
+                'Sams Average UE Distance KM',
+                'Sams Average UE Distance KM',
+                'Sams Average UE Distance KM',
+                'Sams Average UE Distance KM',
+                'Sams Average UE Distance KM',
                 // 'MV PS handover success rate LTE INTER SYSTEM',
                 // 'MV PS handover success rate LTE INTER SYSTEM',
                 // 'MV PS handover success rate LTE INTER SYSTEM',
@@ -1307,7 +1376,7 @@ const LteKpiTrend = () => {
                 'MV PS handover success rate LTE INTRA SYSTEM',
                 'MV PS handover success rate LTE INTRA SYSTEM',
                 'MV PS handover success rate LTE INTRA SYSTEM',
-                
+
                 // 'UL_RSSI_Nokia_RSSI_SINR',
                 // 'UL_RSSI_Nokia_RSSI_SINR',
                 // 'UL_RSSI_Nokia_RSSI_SINR',
@@ -1400,7 +1469,31 @@ const LteKpiTrend = () => {
                 'MV_UL_RSSI_dBm_PRB',
                 'MV_UL_RSSI_dBm_PRB',
                 'MV_UL_RSSI_dBm_PRB',
-            
+
+                'MV_VoLTE_Packet_Loss_UL_CBBH',
+                'MV_VoLTE_Packet_Loss_UL_CBBH',
+                'MV_VoLTE_Packet_Loss_UL_CBBH',
+                'MV_VoLTE_Packet_Loss_UL_CBBH',
+                'MV_VoLTE_Packet_Loss_UL_CBBH',
+                'MV_VoLTE_Packet_Loss_UL_CBBH',
+                'MV_VoLTE_Packet_Loss_UL_CBBH',
+
+                'MV_VoLTE_Packet_Loss_DL_CBBH',
+                'MV_VoLTE_Packet_Loss_DL_CBBH',
+                'MV_VoLTE_Packet_Loss_DL_CBBH',
+                'MV_VoLTE_Packet_Loss_DL_CBBH',
+                'MV_VoLTE_Packet_Loss_DL_CBBH',
+                'MV_VoLTE_Packet_Loss_DL_CBBH',
+                'MV_VoLTE_Packet_Loss_DL_CBBH',
+
+                'MV_CSFB_Redirection_Success_Rate',
+                'MV_CSFB_Redirection_Success_Rate',
+                'MV_CSFB_Redirection_Success_Rate',
+                'MV_CSFB_Redirection_Success_Rate',
+                'MV_CSFB_Redirection_Success_Rate',
+                'MV_CSFB_Redirection_Success_Rate',
+                'MV_CSFB_Redirection_Success_Rate',
+
             ],
             columnData.map(col => col.title) // Column headers
         ];
@@ -1576,6 +1669,7 @@ const LteKpiTrend = () => {
                                         <th colSpan='10'>MV Radio NW Availability</th>
                                         <th colSpan='10'>MV VoLTE Raffic</th>
                                         <th colSpan='10'>MV DL User Throughtput Kbps</th>
+                                        <th colSpan='10'>MV DL User Throughput Kbps CUBH</th>
                                         <th colSpan='10'>MV EUTRAN Average CQI</th>
                                         <th colSpan='10'>UL RSSI</th>
                                         <th colSpan='10'>MV Average Number Of Used DL PRBs</th>
@@ -1585,126 +1679,164 @@ const LteKpiTrend = () => {
                                         <th colSpan='10'>MV Max Connecteda User</th>
                                         <th colSpan='10'>MV PUCCH SINR</th>
                                         <th colSpan='10'>MV Average UE_Distance KM</th>
+                                        <th colSpan='10'>Sams Average UE Distance KM</th>
                                         <th colSpan='10'>MV PS handover success rate LTE INTER SYSTEM</th>
                                         <th colSpan='10'>MV PS handover success rate LTE INTRA SYSTEM</th>
                                         <th colSpan='10'>UL_RSSI_Nokia_RSSI_SINR</th>
                                         <th colSpan='10'>MV_VoLTE_DCR</th>
+                                        <th colSpan='10'>MV VoLTE Packet Loss UL CBBH</th>
+                                        <th colSpan='10'>MV VoLTE Packet Loss DL CBBH</th>
                                         <th colSpan='10'>MV_Packet_Loss_DL</th>
                                         <th colSpan='10'>MV_Packet_Loss_UL</th>
                                         <th colSpan='10'>PS_InterF_HOSR</th>
-                                        <th colSpan='10'>PS_IntraF_HOSR</th>
+                                        <th colSpan='10'>MV_CSFB_Redirection_Success_Rate</th>
                                     </tr>
                                     <tr style={{ fontSize: 14, backgroundColor: "#223354", color: "white", }}>
+                                        {/* MV 4G Data Volume GB */}
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}> Week-2 </th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
                                         {data?.dates.map((date) => (
                                             <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
                                         ))}
+                                        {/* MV Radio NW Availability */}
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
                                         {data?.dates.map((date) => (
                                             <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
                                         ))}
+                                        {/* MV VoLTE Raffic */}
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
                                         {data?.dates.map((date) => (
                                             <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
                                         ))}
+                                        {/* MV DL User Throughtput Kbps */}
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
                                         {data?.dates.map((date) => (
                                             <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
                                         ))}
+                                        {/* MV DL User Throughput Kbps CUBH */}
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
                                         {data?.dates.map((date) => (
                                             <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
                                         ))}
+                                        {/* MV EUTRAN Average CQI */}
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
                                         {data?.dates.map((date) => (
                                             <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
                                         ))}
+                                        {/* UL RSSI */}
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
                                         {data?.dates.map((date) => (
                                             <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
                                         ))}
+                                        {/* MV Average Number Of Used DL PRBs */}
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
                                         {data?.dates.map((date) => (
                                             <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
                                         ))}
+                                        {/* MV RRC Setup Success Rate */}
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
                                         {data?.dates.map((date) => (
                                             <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
                                         ))}
+                                        {/* MV ERAB Setup Success Rate */}
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
                                         {data?.dates.map((date) => (
                                             <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
                                         ))}
+                                        {/* MV PS Drop Call Rate */}
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
                                         {data?.dates.map((date) => (
                                             <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
                                         ))}
+                                        {/* MV Max Connecteda User */}
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
                                         {data?.dates.map((date) => (
                                             <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
                                         ))}
-
+                                        {/* MV PUCCH SINR */}
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
                                         {data?.dates.map((date) => (
                                             <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
                                         ))}
-
+                                        {/* MV Average UE_Distance KM */}
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
                                         {data?.dates.map((date) => (
                                             <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
                                         ))}
-
+                                        {/* Sams Average UE Distance KM */}
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
                                         {data?.dates.map((date) => (
                                             <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
                                         ))}
-
+                                        {/* MV PS handover success rate LTE INTER SYSTEM */}
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
                                         {data?.dates.map((date) => (
                                             <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
                                         ))}
-
+                                        {/*MV PS handover success rate LTE INTRA SYSTEM */}
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
                                         {data?.dates.map((date) => (
                                             <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
                                         ))}
-
-
+                                        {/* UL_RSSI_Nokia_RSSI_SINR */}
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
                                         {data?.dates.map((date) => (
                                             <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
                                         ))}
-
+                                        {/* MV_VoLTE_DCR */}
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
                                         {data?.dates.map((date) => (
                                             <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
                                         ))}
-
+                                        {/* MV_VoLTE_Packet_Loss_UL_CBBH */}
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
                                         {data?.dates.map((date) => (
                                             <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
                                         ))}
-
+                                        {/* MV_VoLTE_Packet_Loss_DL_CBBH */}
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
+                                        {data?.dates.map((date) => (
+                                            <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
+                                        ))}
+                                        {/* MV_Packet_Loss_DL */}
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
+                                        {data?.dates.map((date) => (
+                                            <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
+                                        ))}
+                                        {/* MV_Packet_Loss_UL */}
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
+                                        {data?.dates.map((date) => (
+                                            <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
+                                        ))}
+                                        {/* PS_InterF_HOSR */}
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
+                                        {data?.dates.map((date) => (
+                                            <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
+                                        ))}
+                                        {/* MV_CSFB_Redirection_Success_Rate */}
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
                                         {data?.dates.map((date) => (
@@ -1715,7 +1847,7 @@ const LteKpiTrend = () => {
                                 </thead>
                                 <tbody>
                                     {data?.data.map((it, index) => index < scrollNo && (
-                                        <tr key={it.Site_ID+index} style={{ textAlign: "center", fontWeigth: 700 }}>
+                                        <tr key={it.Site_ID + index} style={{ textAlign: "center", fontWeigth: 700 }}>
                                             <th >
                                                 {it?.Short_name ? getCircleName(it.Short_name) : ''}
                                             </th>
@@ -1766,6 +1898,18 @@ const LteKpiTrend = () => {
                                             <th >{it?.MV_DL_User_Throughput_Kbps_date_6}</th>
                                             <th >{it?.MV_DL_User_Throughput_Kbps_date_7}</th>
                                             <th >{it?.MV_DL_User_Throughput_Kbps_date_8}</th>
+
+                                            <th>{it?.MV_DL_User_Throughput_Kbps_CUBH_week_2}</th>
+                                            <th >{it?.MV_DL_User_Throughput_Kbps_CUBH_week_1}</th>
+                                            <th >{it?.MV_DL_User_Throughput_Kbps_CUBH_date_1}</th>
+                                            <th >{it?.MV_DL_User_Throughput_Kbps_CUBH_date_2}</th>
+                                            <th >{it?.MV_DL_User_Throughput_Kbps_CUBH_date_3}</th>
+                                            <th >{it?.MV_DL_User_Throughput_Kbps_CUBH_date_4}</th>
+                                            <th >{it?.MV_DL_User_Throughput_Kbps_CUBH_date_5}</th>
+                                            <th >{it?.MV_DL_User_Throughput_Kbps_CUBH_date_6}</th>
+                                            <th >{it?.MV_DL_User_Throughput_Kbps_CUBH_date_7}</th>
+                                            <th >{it?.MV_DL_User_Throughput_Kbps_CUBH_date_8}</th>
+
                                             <th >{it?.MV_E_UTRAN_Average_CQI_week_2}</th>
                                             <th >{it?.MV_E_UTRAN_Average_CQI_week_1}</th>
                                             <th >{it?.MV_E_UTRAN_Average_CQI_date_1}</th>
@@ -1863,6 +2007,19 @@ const LteKpiTrend = () => {
                                             <th >{it?.MV_Average_UE_Distance_KM_date_7}</th>
                                             <th >{it?.MV_Average_UE_Distance_KM_date_8}</th>
 
+
+                                            <th >{it?.Sams_Average_UE_Distance_KM_week_2}</th>
+                                            <th >{it?.Sams_Average_UE_Distance_KM_week_1}</th>
+                                            <th >{it?.Sams_Average_UE_Distance_KM_date_1}</th>
+                                            <th >{it?.Sams_Average_UE_Distance_KM_date_2}</th>
+                                            <th >{it?.Sams_Average_UE_Distance_KM_date_3}</th>
+                                            <th >{it?.Sams_Average_UE_Distance_KM_date_4}</th>
+                                            <th >{it?.Sams_Average_UE_Distance_KM_date_5}</th>
+                                            <th >{it?.Sams_Average_UE_Distance_KM_date_6}</th>
+                                            <th >{it?.Sams_Average_UE_Distance_KM_date_7}</th>
+                                            <th >{it?.Sams_Average_UE_Distance_KM_date_8}</th>
+
+
                                             <th >{it?.MV_PS_handover_success_rate_LTE_INTER_SYSTEM_week_2}</th>
                                             <th >{it?.MV_PS_handover_success_rate_LTE_INTER_SYSTEM_week_1}</th>
                                             <th >{it?.MV_PS_handover_success_rate_LTE_INTER_SYSTEM_date_1}</th>
@@ -1908,6 +2065,28 @@ const LteKpiTrend = () => {
                                             <th >{it?.MV_VoLTE_DCR_date_7}</th>
                                             <th >{it?.MV_VoLTE_DCR_date_8}</th>
 
+                                            <th >{it?.MV_VoLTE_Packet_Loss_UL_CBBH_week_2}</th>
+                                            <th >{it?.MV_VoLTE_Packet_Loss_UL_CBBH_week_1}</th>
+                                            <th >{it?.MV_VoLTE_Packet_Loss_UL_CBBH_date_1}</th>
+                                            <th >{it?.MV_VoLTE_Packet_Loss_UL_CBBH_date_2}</th>
+                                            <th >{it?.MV_VoLTE_Packet_Loss_UL_CBBH_date_3}</th>
+                                            <th >{it?.MV_VoLTE_Packet_Loss_UL_CBBH_date_4}</th>
+                                            <th >{it?.MV_VoLTE_Packet_Loss_UL_CBBH_date_5}</th>
+                                            <th >{it?.MV_VoLTE_Packet_Loss_UL_CBBH_date_6}</th>
+                                            <th >{it?.MV_VoLTE_Packet_Loss_UL_CBBH_date_7}</th>
+                                            <th >{it?.MV_VoLTE_Packet_Loss_UL_CBBH_date_8}</th>
+
+                                            <th >{it?.MV_VoLTE_Packet_Loss_DL_CBBH_week_2}</th>
+                                            <th >{it?.MV_VoLTE_Packet_Loss_DL_CBBH_week_1}</th>
+                                            <th >{it?.MV_VoLTE_Packet_Loss_DL_CBBH_date_1}</th>
+                                            <th >{it?.MV_VoLTE_Packet_Loss_DL_CBBH_date_2}</th>
+                                            <th >{it?.MV_VoLTE_Packet_Loss_DL_CBBH_date_3}</th>
+                                            <th >{it?.MV_VoLTE_Packet_Loss_DL_CBBH_date_4}</th>
+                                            <th >{it?.MV_VoLTE_Packet_Loss_DL_CBBH_date_5}</th>
+                                            <th >{it?.MV_VoLTE_Packet_Loss_DL_CBBH_date_6}</th>
+                                            <th >{it?.MV_VoLTE_Packet_Loss_DL_CBBH_date_7}</th>
+                                            <th >{it?.MV_VoLTE_Packet_Loss_DL_CBBH_date_8}</th>
+
 
                                             <th >{it?.MV_Packet_Loss_DL_week_2}</th>
                                             <th >{it?.MV_Packet_Loss_DL_week_1}</th>
@@ -1941,6 +2120,18 @@ const LteKpiTrend = () => {
                                             <th >{it?.PS_InterF_HOSR_date_6}</th>
                                             <th >{it?.PS_InterF_HOSR_date_7}</th>
                                             <th >{it?.PS_InterF_HOSR_date_8}</th>
+
+
+                                            <th >{it?.MV_CSFB_Redirection_Success_Rate_week_2}</th>
+                                            <th >{it?.MV_CSFB_Redirection_Success_Rate_week_1}</th>
+                                            <th >{it?.MV_CSFB_Redirection_Success_Rate_date_1}</th>
+                                            <th >{it?.MV_CSFB_Redirection_Success_Rate_date_2}</th>
+                                            <th >{it?.MV_CSFB_Redirection_Success_Rate_date_3}</th>
+                                            <th >{it?.MV_CSFB_Redirection_Success_Rate_date_4}</th>
+                                            <th >{it?.MV_CSFB_Redirection_Success_Rate_date_5}</th>
+                                            <th >{it?.MV_CSFB_Redirection_Success_Rate_date_6}</th>
+                                            <th >{it?.MV_CSFB_Redirection_Success_Rate_date_7}</th>
+                                            <th >{it?.MV_CSFB_Redirection_Success_Rate_date_8}</th>
 
                                         </tr>
                                     ))}
