@@ -11,88 +11,111 @@ import { postData, ServerURL } from "../../../services/FetchNodeServices";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import OverAllCss from "../../../csss/OverAllCss";
 import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
+
+
+
+
+const projectArray = ['NT','ULS','Upgrade','Relocation'];
+const circleArray = ['AP', 'CH', 'KK', 'DL', 'HR', 'RJ', 'JK', 'WB', 'OD', 'MU', 'TN', 'UE', 'BH', 'UW', 'MP', 'PB', 'KO', 'WB', 'JH']
 
 const Checklist = () => {
     const [make4GFiles, setMake4GFiles] = useState([])
-        const [selectCircle, setSelectCircle] = useState('')
-        const [show4G, setShow4G] = useState(false)
-        const [show, setShow] = useState(false)
-        const [fileData, setFileData] = useState()
-        const [download, setDownload] = useState(false);
-        const { loading, action } = useLoadingDialog()
-        const navigate = useNavigate()
-        const classes = OverAllCss()
-        const link = `${ServerURL}${fileData}`;
-    
-    
-        const handle4GFileSelection = (event) => {
-    
-            setMake4GFiles(event.target.files)
-        }
-    
-    
-        const handleSubmit = async () => {
-            if (make4GFiles.length > 0 ) {
-                action(true)
-                var formData = new FormData();
-    
-                for (let i = 0; i < make4GFiles.length; i++) {
-                    // console.log('pre files' , preFiles[i])
-                    formData.append(`files`, make4GFiles[i]);
-                }
-    
-                const response = await postData('Soft_AT_Checklist_Ericsson/soft_at_checkpoint/', formData)
-    
-                // console.log('response data', response)
-    
-    
-                if (response.status === true) {
-                    action(false)
-                    setDownload(true)
-    
-                    setFileData(response.download_url)
-                    Swal.fire({
-                        icon: "success",
-                        title: "Done",
-                        text: `${response.message}`,
-                    });
-                    // console.log('sssssssssssssssssssss', response)
-    
-    
-    
-                } else {
-                    action(false)
-    
-                    Swal.fire({
-                        icon: "error",
-                        title: "Oops...",
-                        text: `${response.message}`,
-                    });
-                }
+    const [selectCircle, setSelectCircle] = useState('')
+    const [selectProject , setSelectProject] = useState('')
+    const [show4G, setShow4G] = useState(false)
+    const [show, setShow] = useState(false)
+    const [showCircle, setShowCircle] = useState(false)
+    const [showProject, setShowProject] = useState(false)
+    const [fileData, setFileData] = useState()
+    const [download, setDownload] = useState(false);
+    const { loading, action } = useLoadingDialog()
+    const navigate = useNavigate()
+    const classes = OverAllCss()
+    const link = `${ServerURL}${fileData}`;
+
+
+    const handle4GFileSelection = (event) => {
+
+        setMake4GFiles(event.target.files)
+    }
+
+
+    const handleSubmit = async () => {
+        if (make4GFiles.length > 0 && selectCircle !== '' && selectProject !== '') {
+            action(true)
+            var formData = new FormData();
+            formData.append('circle_name', selectCircle)
+            formData.append('project_type', selectProject)
+
+            for (let i = 0; i < make4GFiles.length; i++) {
+                formData.append(`xml_files`, make4GFiles[i]);
             }
-            else {
-                if (make4GFiles.length === 0) {
-                    setShow4G(true)
-                } else {
-                    setShow4G(false)
-                }
+
+            const response = await postData('soft_at_nokia/process-xml/', formData)
+
+            // console.log('response data', response)
+
+
+            if (response.status === true) {
+                action(false)
+                setDownload(true)
+
+                setFileData(response.download_link)
+                Swal.fire({
+                    icon: "success",
+                    title: "Done",
+                    text: `${response.message}`,
+                });
                
+            } else {
+                action(false)
+
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: `${response.message}`,
+                });
             }
         }
-    
-        const handleCancel = () => {
-            setMake4GFiles([])
-    
-            setShow4G(false)
-       
+        else {
+            if (make4GFiles.length === 0) {
+                setShow4G(true)
+            } else {
+                setShow4G(false)
+            }
+            if(selectCircle === ''){
+                setShowCircle(true)
+            }else{
+                setShowCircle(false)
+            }
+            if(selectProject === ''){
+                setShowProject(true)
+            }else{
+                setShowProject(false)
+            }
+
         }
-    
-        useEffect(() => {
-            document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
-    
-        }, [])
-  return (
-   <>
+    }
+
+    const handleCancel = () => {
+        setMake4GFiles([])
+        setSelectCircle('')
+        setSelectProject('')
+
+        setShow4G(false)
+
+    }
+
+    useEffect(() => {
+        document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
+
+    }, [])
+    return (
+        <>
             <div style={{ margin: 5, marginLeft: 10 }}>
                 <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
                     <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
@@ -113,16 +136,61 @@ const Checklist = () => {
                                 Create Nokia Soft-At Checklist
                             </Box>
                             <Stack spacing={2} sx={{ marginTop: "-40px" }} direction={'column'}>
-                        
+                                <Box className={classes.Front_Box}>
+                                    <Box className={classes.Front_Box_Hading}>
+                                        Select Circle
+                                    </Box>
+                                    <Box className={classes.Front_Box_Select_Button} >
+                                        <FormControl sx={{ minWidth: 150 }}>
+                                            <InputLabel id="demo-simple-select-label">Select Circle</InputLabel>
+                                            <Select
+                                                labelId="demo-simple-select-label"
+                                                id="demo-simple-select"
+                                                value={selectCircle}
+                                                label="Select Circle"
+                                                onChange={(event) => { setSelectCircle(event.target.value); setShowCircle(false) }}
+                                            >
+                                                {circleArray.map((item, index) => (
+                                                    <MenuItem value={item} key={index}>{item}</MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                        <div>  <span style={{ display: showCircle ? 'inherit' : 'none', color: 'red', fontSize: '18px', fontWeight: 600 }}>This Field Is Required !</span> </div>
+                                    </Box>
+                                </Box>
+
+                                <Box className={classes.Front_Box}>
+                                    <Box className={classes.Front_Box_Hading}>
+                                        Select Project
+                                    </Box>
+                                    <Box className={classes.Front_Box_Select_Button} >
+                                        <FormControl sx={{ minWidth: 150 }}>
+                                            <InputLabel id="demo-simple-select-label">Select Project</InputLabel>
+                                            <Select
+                                                labelId="demo-simple-select-label"
+                                                id="demo-simple-select"
+                                                value={selectProject}
+                                                label="Select Project"
+                                                onChange={(event) => { setSelectProject(event.target.value); setShowProject(false) }}
+                                            >
+                                                {projectArray.map((item, index) => (
+                                                    <MenuItem value={item} key={index}>{item}</MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                        <div>  <span style={{ display: showProject ? 'inherit' : 'none', color: 'red', fontSize: '18px', fontWeight: 600 }}>This Field Is Required !</span> </div>
+                                    </Box>
+                                </Box>
+
                                 <Box className={classes.Front_Box} >
                                     <div className={classes.Front_Box_Hading}>
-                                        Select Logs Files:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{ }</span>
+                                        Select XML Files:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{ }</span>
                                     </div>
                                     <div className={classes.Front_Box_Select_Button} >
                                         <div style={{ float: "left" }}>
                                             <Button variant="contained" component="label" color={make4GFiles.length > 0 ? "warning" : "primary"}>
                                                 select file
-                                                <input required hidden accept=".log" multiple type="file"
+                                                <input required hidden accept=".xml,txt" multiple type="file"
                                                     // webkitdirectory="true"
                                                     // directory="true"
                                                     onChange={(e) => { handle4GFileSelection(e); setShow4G(false); }} />
@@ -151,7 +219,7 @@ const Checklist = () => {
             </Slide>
             {loading}
         </>
-  )
+    )
 }
 
 export default Checklist
