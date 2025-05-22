@@ -33,6 +33,7 @@ const EricssonChecklist = lazy(() => import('./EricssonStatus/Checklist'))
 const EricssonSummary = lazy(() => import('./EricssonStatus/Summary'))
 const NokiaChecklist = lazy(() => import('./NokiaStatus/Checklist'))
 const NokiaSummary = lazy(() => import('./NokiaStatus/Summary'))
+const NokiaChecklistTable = lazy(()=> import('./NokiaStatus/ChecklistEditor'))
 
 
 
@@ -108,7 +109,8 @@ const SoftAT = () => {
                         </Nav.Menu>
                         <Nav.Menu eventKey="6" title="Nokia Status" placement="rightStart" icon={<CheckOutlineIcon />} >
                           <Nav.Item eventKey='6-1' onClick={() => { navigate('/tools/soft_at/nokia_checklist'); show(); setMenuButton(true) }} >Checklist</Nav.Item>
-                          <Nav.Item eventKey='6-2' onClick={() => { navigate('/tools/soft_at/nokia_summary'); show(); setMenuButton(true) }} >Summary</Nav.Item>
+                          <Nav.Item eventKey='6-2' onClick={() => { navigate('/tools/soft_at/nokia_checklist_table'); show(); setMenuButton(true) }} >Checklist Table</Nav.Item>
+                          <Nav.Item eventKey='6-3' onClick={() => { navigate('/tools/soft_at/nokia_summary'); show(); setMenuButton(true) }} >Summary</Nav.Item>
                         </Nav.Menu>
                         {/* <Nav.Item eventKey="4" placement="rightStart" icon={<ViewsUnauthorizeIcon />} onClick={() => { navigate('/tools/soft_at/rejected_report'); show(); setMenuButton(true) }}>
                         Rejected Report
@@ -156,7 +158,8 @@ const SoftAT = () => {
                       </Nav.Menu>
                       <Nav.Menu eventKey="6" title="Nokia Status" placement="rightStart" icon={<CheckOutlineIcon />} >
                         <Nav.Item eventKey='6-1' onClick={() => { navigate('/tools/soft_at/nokia_checklist'); show(); setMenuButton(true) }} >Checklist</Nav.Item>
-                        <Nav.Item eventKey='6-2' onClick={() => { navigate('/tools/soft_at/nokia_summary'); show(); setMenuButton(true) }} >Summary</Nav.Item>
+                        <Nav.Item eventKey='6-2' onClick={() => { navigate('/tools/soft_at/nokia_checklist_table'); show(); setMenuButton(true) }} >Checklist Table</Nav.Item>
+                        <Nav.Item eventKey='6-3' onClick={() => { navigate('/tools/soft_at/nokia_summary'); show(); setMenuButton(true) }} >Summary</Nav.Item>
                       </Nav.Menu>
 
                     </Nav>
@@ -189,6 +192,7 @@ const SoftAT = () => {
                 <Route element={<EricssonSummary />} path='/ericsson_summary' />
                 <Route element={<NokiaChecklist />} path='/nokia_checklist' />
                 <Route element={<NokiaSummary />} path='/nokia_summary' />
+                <Route element={<NokiaChecklistTable />} path='/nokia_checklist_table' />
 
               </Routes>
             </Suspense>
