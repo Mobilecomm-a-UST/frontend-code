@@ -291,11 +291,9 @@ const ChecklistEditor = () => {
                 <DialogContent dividers={'paper'}>
                     <form onSubmit={handleUpdateData} style={{ width: '100%', marginTop: 20 }}>
                         <Grid container spacing={2}>
-
                             <Grid item xs={6}>
                                 <TextField
                                     variant="outlined"
-
                                     fullWidth
                                     placeholder="Probable Causes"
                                     label="Probable Causes"

@@ -54,7 +54,7 @@ const RangeWiseDashboard = ({ onData }) => {
                 setFromDate(res.date_range[0])
                 setToDate(res.date_range[1])
                 setTableData(JSON.parse(res.table_data))
-                // console.log(JSON.parse(res.table_data))
+                console.log('range wise data',JSON.parse(res.table_data))
                 onData(res);
                 return res;
             }
