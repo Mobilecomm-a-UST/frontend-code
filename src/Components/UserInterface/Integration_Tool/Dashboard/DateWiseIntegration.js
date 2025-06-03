@@ -53,7 +53,7 @@ const DateWiseIntegration = ({ onData }) => {
                 action(false)
                 ShortDate(res.latest_dates)
                 setTableData(JSON.parse(res.table_data))
-                // console.log('date wise data',JSON.parse(res.table_data))
+                console.log('date wise data',JSON.parse(res.table_data))
                 onData(res);
                 return res;
             }
