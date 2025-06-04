@@ -21,7 +21,7 @@ import { useStyles } from '../../ToolsCss'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { setEncreptedData,getDecreyptedData } from '../../../utils/localstorage';
+import { setEncreptedData, getDecreyptedData } from '../../../utils/localstorage';
 
 
 
@@ -29,7 +29,6 @@ import { setEncreptedData,getDecreyptedData } from '../../../utils/localstorage'
 const DateWiseIntegration = ({ onData }) => {
     const classes = useStyles()
     const [open, setOpen] = useState(false)
-    const { response, makeGetRequest } = useGet()
     const { makePostRequest } = usePost()
     const { loading, action } = useLoadingDialog();
     const [mainDataT2, setMainDataT2] = useState([])
@@ -53,7 +52,7 @@ const DateWiseIntegration = ({ onData }) => {
                 action(false)
                 ShortDate(res.latest_dates)
                 setTableData(JSON.parse(res.table_data))
-                console.log('date wise data',JSON.parse(res.table_data))
+                console.log('date wise data', JSON.parse(res.table_data))
                 onData(res);
                 return res;
             }
@@ -68,7 +67,7 @@ const DateWiseIntegration = ({ onData }) => {
 
     // console.log('date wise dashboard')
 
-    const ChangeDateFormate=(dates)=>{
+    const ChangeDateFormate = (dates) => {
 
         if (dates && typeof dates === 'string') {
             // console.log('date', dates.split('-'));
@@ -96,9 +95,12 @@ const DateWiseIntegration = ({ onData }) => {
             D1_ODSC: 0,
             D1_RECTIFICATION: 0,
             D1_OPERATIONS: 0,
-            D1_5G_SECTOR_ADDITION:0,
-            D1_5G_RELOCATION:0,
-            D1_TRAFFIC_SHIFTING:0,
+            D1_RRU_UPGRADE: 0,
+            D1_5G_BW_UPGRADE: 0,
+            D1_5G_RRU_SWAP: 0,
+            D1_5G_SECTOR_ADDITION: 0,
+            D1_5G_RELOCATION: 0,
+            D1_TRAFFIC_SHIFTING: 0,
             D2_DE_GROW: 0,
             D2_MACRO: 0,
             D2_OTHERS: 0,
@@ -113,9 +115,12 @@ const DateWiseIntegration = ({ onData }) => {
             D2_ODSC: 0,
             D2_RECTIFICATION: 0,
             D2_OPERATIONS: 0,
-            D2_5G_SECTOR_ADDITION:0,
-            D2_5G_RELOCATION:0,
-            D2_TRAFFIC_SHIFTING:0,
+            D2_RRU_UPGRADE: 0,
+            D2_5G_BW_UPGRADE: 0,
+            D2_5G_RRU_SWAP: 0,
+            D2_5G_SECTOR_ADDITION: 0,
+            D2_5G_RELOCATION: 0,
+            D2_TRAFFIC_SHIFTING: 0,
             D3_DE_GROW: 0,
             D3_MACRO: 0,
             D3_OTHERS: 0,
@@ -130,9 +135,13 @@ const DateWiseIntegration = ({ onData }) => {
             D3_ODSC: 0,
             D3_RECTIFICATION: 0,
             D3_OPREATIONS: 0,
-            D3_5G_SECTOR_ADDITION:0,
-            D3_5G_RELOCATION:0,
-            D3_TRAFFIC_SHIFTING:0
+            D3_RRU_UPGRADE: 0,
+            D3_5G_BW_UPGRADE: 0,
+            D3_5G_RRU_SWAP: 0,
+            D3_5G_SECTOR_ADDITION: 0,
+            D3_5G_RELOCATION: 0,
+            D3_TRAFFIC_SHIFTING: 0,
+
         };
 
         datass.forEach(item => {
@@ -173,7 +182,7 @@ const DateWiseIntegration = ({ onData }) => {
         { title: 'Activity Name', field: 'Activity_Name' },
         { title: 'Site ID', field: 'Site_ID' },
         { title: 'MO NAME', field: 'MO_NAME' },
-       
+
         { title: 'LNBTS ID', field: 'LNBTS_ID' },
         { title: 'Technology (SIWA)', field: 'Technology_SIWA' },
         { title: 'OSS Details', field: 'OSS_Details' },
@@ -399,9 +408,9 @@ const DateWiseIntegration = ({ onData }) => {
                                 <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
                                         <th rowSpan='2' style={{ padding: '5px 20px', whiteSpace: 'nowrap', position: 'sticky', left: 0, top: 0, backgroundColor: '#223354' }}>CIRCLE</th>
-                                        <th colSpan='17' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#2F75B5' }}>{ChangeDateFormate(dateArray[2])}</th>
-                                        <th colSpan='17' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: "#DD761C" }}>{ChangeDateFormate(dateArray[1])}</th>
-                                        <th colSpan='17' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#03AED2' }}>{ChangeDateFormate(dateArray[0])}</th>
+                                        <th colSpan='20' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#2F75B5' }}>{ChangeDateFormate(dateArray[2])}</th>
+                                        <th colSpan='20' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: "#DD761C" }}>{ChangeDateFormate(dateArray[1])}</th>
+                                        <th colSpan='20' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#03AED2' }}>{ChangeDateFormate(dateArray[0])}</th>
                                     </tr>
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>DE-GROW     </th>
@@ -418,6 +427,9 @@ const DateWiseIntegration = ({ onData }) => {
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>ODSC          </th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>RECTIFICATION</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>OPERATIONS</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>RRU UPGRADE</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>5G BW UPGRADE</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>5G RRU SWAP</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>5G SECTOR ADDITION</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>5G RELOCATION</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>TRAFFIC SHIFTING</th>
@@ -436,6 +448,9 @@ const DateWiseIntegration = ({ onData }) => {
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>ODSC</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>RECTIFICATION</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>OPERATIONS</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>RRU UPGRADE</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>5G BW UPGRADE</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>5G RRU SWAP</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>5G SECTOR ADDITION</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>5G RELOCATION</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>TRAFFIC SHIFTING</th>
@@ -455,6 +470,9 @@ const DateWiseIntegration = ({ onData }) => {
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>ODSC</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>RECTIFICATION</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>OPERATIONS</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>RRU UPGRADE</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>5G BW UPGRADE</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>5G RRU SWAP</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>5G SECTOR ADDITION</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>5G RELOCATION</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>TRAFFIC SHIFTING</th>
@@ -479,7 +497,10 @@ const DateWiseIntegration = ({ onData }) => {
                                                 <th style={{ cursor: 'pointer', backgroundColor: it.D1_IDSC > 0 ? '#FEEFAD' : '' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: 'IDSC' })}>{it?.D1_IDSC}</th>
                                                 <th style={{ cursor: 'pointer', backgroundColor: it.D1_ODSC > 0 ? '#FEEFAD' : '' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: 'ODSC' })}>{it?.D1_ODSC}</th>
                                                 <th style={{ cursor: 'pointer', backgroundColor: it.D1_RECTIFICATION > 0 ? '#FEEFAD' : '' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: 'RECTIFICATION' })}>{it?.D1_RECTIFICATION}</th>
-                                                <th style={{ cursor: 'pointer', backgroundColor: it.D1_RECTIFICATION > 0 ? '#FEEFAD' : '' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: 'OPERATIONS' })}>{it?.D1_OPERATIONS}</th>
+                                                <th style={{ cursor: 'pointer', backgroundColor: it.D1_OPERATIONS > 0 ? '#FEEFAD' : '' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: 'OPERATIONS' })}>{it?.D1_OPERATIONS || 0}</th>
+                                                <th style={{ cursor: 'pointer', backgroundColor: it.D1_RRU_UPGRADE > 0 ? '#FEEFAD' : '' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: 'RRU UPGRADE' })}>{it?.D1_RRU_UPGRADE || 0}</th>
+                                                <th style={{ cursor: 'pointer', backgroundColor: it.D1_5G_BW_UPGRADE > 0 ? '#FEEFAD' : '' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: '5G BW UPGRADE' })}>{it?.D1_5G_BW_UPGRADE || 0}</th>
+                                                <th style={{ cursor: 'pointer', backgroundColor: it.D1_5G_RRU_SWAP > 0 ? '#FEEFAD' : '' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: '5G RRU SWAP' })}>{it?.D1_5G_RRU_SWAP || 0}</th>
                                                 <th style={{ cursor: 'pointer', backgroundColor: it.D1_5G_SECTOR_ADDITION > 0 ? '#FEEFAD' : '' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: '5G SECTOR ADDITION' })}>{it?.D1_5G_SECTOR_ADDITION}</th>
                                                 <th style={{ cursor: 'pointer', backgroundColor: it.D1_5G_RELOCATION > 0 ? '#FEEFAD' : '' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: '5G RELOCATION' })}>{it?.D1_5G_RELOCATION}</th>
                                                 <th style={{ cursor: 'pointer', backgroundColor: it.D1_TRAFFIC_SHIFTING > 0 ? '#FEEFAD' : '' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: 'TRAFFIC SHIFTING' })}>{it?.D1_TRAFFIC_SHIFTING}</th>
@@ -497,7 +518,10 @@ const DateWiseIntegration = ({ onData }) => {
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D2_IDSC > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: 'IDSC' })}>{it?.D2_IDSC}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D2_ODSC > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: 'ODSC' })}>{it?.D2_ODSC}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D2_RECTIFICATION > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: 'RECTIFICATION' })}>{it?.D2_RECTIFICATION}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D2_RECTIFICATION > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: 'OPERATIONS' })}>{it?.D2_OPERATIONS}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D2_OPERATIONS > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: 'OPERATIONS' })}>{it?.D2_OPERATIONS || 0}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D2_RRU_UPGRADE > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: 'RRU UPGRADE' })}>{it?.D2_RRU_UPGRADE || 0}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D2_5G_BW_UPGRADE > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: '5G BW UPGRADE' })}>{it?.D2_5G_BW_UPGRADE  || 0}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D2_5G_RRU_SWAP > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: '5G RRU SWAP' })}>{it?.D2_5G_RRU_SWAP || 0}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D2_5G_SECTOR_ADDITION > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: '5G SECTOR ADDITION' })}>{it?.D2_5G_SECTOR_ADDITION}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D2_5G_RELOCATION > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: '5G RELOCATION' })}>{it?.D2_5G_RELOCATION}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D2_TRAFFIC_SHIFTING > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: 'TRAFFIC SHIFTING' })}>{it?.D2_TRAFFIC_SHIFTING}</th>
@@ -516,6 +540,9 @@ const DateWiseIntegration = ({ onData }) => {
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D3_ODSC > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[0], circle: it?.cir, activity: 'ODSC' })}>{it?.D3_ODSC}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D3_RECTIFICATION > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[0], circle: it?.cir, activity: 'RECTIFICATION' })}>{it?.D3_RECTIFICATION}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D3_OPREATIONS > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[0], circle: it?.cir, activity: 'OPERATIONS' })}>{it?.D3_OPREATIONS || 0}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D3_RRU_UPGRADE > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[0], circle: it?.cir, activity: 'RRU UPGRADE' })}>{it?.D3_RRU_UPGRADE || 0}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D3_5G_BW_UPGRADE > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[0], circle: it?.cir, activity: '5G BW UPGRADE' })}>{it?.D3_5G_BW_UPGRADE || 0}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D3_5G_RRU_SWAP > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[0], circle: it?.cir, activity: '5G RRU SWAP' })}>{it?.D3_5G_RRU_SWAP || 0}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D3_5G_SECTOR_ADDITION > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[0], circle: it?.cir, activity: '5G SECTOR ADDITION' })}>{it?.D3_5G_SECTOR_ADDITION}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D3_5G_RELOCATION > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[0], circle: it?.cir, activity: '5G RELOCATION' })}>{it?.D3_5G_RELOCATION}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D3_TRAFFIC_SHIFTING > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[0], circle: it?.cir, activity: 'TRAFFIC SHIFTING' })}>{it?.D3_TRAFFIC_SHIFTING}</th>

@@ -17,9 +17,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
-import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import StepLabel from '@mui/material/StepLabel';
+
 
 const steps = ['GPL PRE AUDIT', 'GPL PRE POST AUDIT', 'SCRIPT GENERATOR'];
 const circleArray = ['AP', 'CH', 'KK', 'DL', 'HR', 'RJ', 'JK', 'WB', 'OD', 'MU', 'TN', 'UE', 'BH', 'UW', 'MP', 'PB', 'KO', 'WB', 'JH']

@@ -232,10 +232,10 @@ const ToolData = [
     }
     ,{
         id: 27,
-        name: 'GPL Audit',
-        title: 'This is a GPL Tool',
+        name: 'MNIT',
+        title: 'This is a MNI Tool',
         icons: ModelIcon,
-        link: '/tools/gpl_audit',
+        link: '/tools/mobile_network_integration',
         groupBy:['admin']
     } ,{
         id: 27,
