@@ -96,6 +96,9 @@ const MonthWiseIntegration = ({ onData }) => {
             M1_ODSC: 0,
             M1_RECTIFICATION: 0,
             M1_OPERATIONS: 0,
+            M1_RRU_UPGRADE: 0,
+            M1_5G_BW_UPGRADE: 0,
+            M1_5G_RRU_SWAP: 0,
             M1_5G_SECTOR_ADDITION: 0,
             M1_5G_RELOCATION: 0,
             M1_TRAFFIC_SHIFTING:0,
@@ -113,6 +116,9 @@ const MonthWiseIntegration = ({ onData }) => {
             M2_ODSC: 0,
             M2_RECTIFICATION: 0,
             M2_OPERATIONS: 0,
+            M2_RRU_UPGRADE: 0,
+            M2_5G_BW_UPGRADE: 0,
+            M2_5G_RRU_SWAP: 0,
             M2_5G_SECTOR_ADDITION: 0,
             M2_5G_RELOCATION:0,
             M2_TRAFFIC_SHIFTING:0,
@@ -130,6 +136,9 @@ const MonthWiseIntegration = ({ onData }) => {
             M3_ODSC: 0,
             M3_RECTIFICATION: 0,
             M3_OPERATIONS: 0,
+            M3_RRU_UPGRADE: 0,
+            M3_5G_BW_UPGRADE: 0,
+            M3_5G_RRU_SWAP: 0,
             M3_5G_SECTOR_ADDITION: 0,
             M3_5G_RELOCATION:0,
             M3_TRAFFIC_SHIFTING:0
@@ -399,7 +408,7 @@ const MonthWiseIntegration = ({ onData }) => {
                                         <th colSpan='7' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: "#DD761C" }}>{monthArray[1]}</th>
                                         <th colSpan='7' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#03AED2' }}>{monthArray[0]}</th> */}
                                         {monthArray?.map((item, index) => index < 3 && (
-                                            <th colSpan='17' key={index} style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: headerColor[index] }}>{monthNames[item.month]}-{item.year}</th>
+                                            <th colSpan='20' key={index} style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: headerColor[index] }}>{monthNames[item.month]}-{item.year}</th>
                                         ))}
                                     </tr>
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
@@ -417,6 +426,9 @@ const MonthWiseIntegration = ({ onData }) => {
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>ODSC</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>RECTIFICATION</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>OPERATIONS</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>RRU UPGRADE</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>5G BW UPGRADE</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>5G RRU SWAP</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>5G SECTOR ADDITION</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>5G RELOCATION</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>TRAFFIC SHIFTING</th>
@@ -435,6 +447,9 @@ const MonthWiseIntegration = ({ onData }) => {
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>ODSC</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>RECTIFICATION</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>OPERATIONS</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>RRU UPGRADE</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>5G BW UPGRADE</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>5G RRU SWAP</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>5G SECTOR ADDITION</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>5G RELOCATION</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>TRAFFIC SHIFTING</th>
@@ -453,6 +468,9 @@ const MonthWiseIntegration = ({ onData }) => {
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>ODSC</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>RECTIFICATION</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>OPERATIONS</th>
+                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>RRU UPGRADE</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>5G BW UPGRADE</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>5G RRU SWAP</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>5G SECTOR ADDITION</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>5G RELOCATION</th>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>TRAFFIC SHIFTING</th>
@@ -478,6 +496,9 @@ const MonthWiseIntegration = ({ onData }) => {
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'ODSC' })}>{it?.M1_ODSC}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'RECTIFICATION' })}>{it?.M1_RECTIFICATION}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'OPERATIONS' })}>{it?.M1_OPERATIONS}</th>
+                                                 <th className={classes.hover} style={{ cursor: 'pointer'}} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'RRU UPGRADE' })}>{it?.M1_RRU_UPGRADE || 0}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer'}} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: '5G BW UPGRADE' })}>{it?.M1_5G_BW_UPGRADE  || 0}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer'}} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: '5G RRU SWAP' })}>{it?.M1_5G_RRU_SWAP || 0}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: '5G SECTOR ADDITION' })}>{it?.M1_5G_SECTOR_ADDITION}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: '5G RELOCATION' })}>{it?.M1_5G_RELOCATION}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'TRAFFIC SHIFTING' })}>{it?.M1_TRAFFIC_SHIFTING}</th>
@@ -496,6 +517,9 @@ const MonthWiseIntegration = ({ onData }) => {
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: 'ODSC' })}>{it?.M2_ODSC}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: 'RECTIFICATION' })}>{it?.M2_RECTIFICATION}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: 'OPERATIONS' })}>{it?.M2_OPERATIONS}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer'}} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: 'RRU UPGRADE' })}>{it?.M2_RRU_UPGRADE || 0}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer'}} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: '5G BW UPGRADE' })}>{it?.M2_5G_BW_UPGRADE  || 0}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer'}} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: '5G RRU SWAP' })}>{it?.M2_5G_RRU_SWAP || 0}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: '5G SECTOR ADDITION' })}>{it?.M2_5G_SECTOR_ADDITION}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: '5G RELOCATION' })}>{it?.M2_5G_RELOCATION}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: 'TRAFFIC SHIFTING' })}>{it?.M2_TRAFFIC_SHIFTING}</th>
@@ -514,6 +538,9 @@ const MonthWiseIntegration = ({ onData }) => {
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: 'ODSC' })}>{it?.M3_ODSC}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: 'RECTIFICATION' })}>{it?.M3_RECTIFICATION}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: 'OPERATIONS' })}>{it?.M3_OPERATIONS}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer'}} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: 'RRU UPGRADE' })}>{it?.M3_RRU_UPGRADE || 0}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer'}} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: '5G BW UPGRADE' })}>{it?.M3_5G_BW_UPGRADE  || 0}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer'}} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: '5G RRU SWAP' })}>{it?.M3_5G_RRU_SWAP || 0}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: '5G SECTOR ADDITION' })}>{it?.M3_5G_SECTOR_ADDITION}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: '5G RELOCATION' })}>{it?.M3_5G_RELOCATION}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: 'TRAFFIC SHIFTING' })}>{it?.M3_TRAFFIC_SHIFTING}</th>

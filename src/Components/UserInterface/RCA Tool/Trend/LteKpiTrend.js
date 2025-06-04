@@ -50,7 +50,7 @@ const LteKpiTrend = () => {
     })
 
 
-    // console.log('res', data)
+    console.log('res', data)
 
     const fetchedQueryData = () => {
         // setMainData(data.data)
@@ -96,6 +96,14 @@ const LteKpiTrend = () => {
         { title: 'INT Date', field: 'INT_Date' },
         { title: 'OEM_GGSN', field: 'OEM_GGSN' },
         { title: 'ECGI_4G', field: 'ECGI_4G' },
+        // MV_Radio_NW_Availability
+        { title: 'Week-2', field: 'MV_Radio_NW_Availability_week_2' },
+        { title: 'Week-1', field: 'MV_Radio_NW_Availability_week_1' },
+        { title: `${(data?.dates?.[3])}`, field: 'MV_Radio_NW_Availability_date_4' },
+        { title: `${(data?.dates?.[4])}`, field: 'MV_Radio_NW_Availability_date_5' },
+        { title: `${(data?.dates?.[5])}`, field: 'MV_Radio_NW_Availability_date_6' },
+        { title: `${(data?.dates?.[6])}`, field: 'MV_Radio_NW_Availability_date_7' },
+        { title: `${(data?.dates?.[7])}`, field: 'MV_Radio_NW_Availability_date_8' },
         // MV_4G_Data_Volume_GB
         { title: 'Week-2', field: 'MV_4G_Data_Volume_GB_week_2' },
         { title: 'Week-1', field: 'MV_4G_Data_Volume_GB_week_1' },
@@ -321,7 +329,7 @@ const LteKpiTrend = () => {
         { title: `${(data?.dates?.[6])}`, field: 'MV_Packet_Loss_UL_date_7' },
         { title: `${(data?.dates?.[7])}`, field: 'MV_Packet_Loss_UL_date_8' },
         // MV_CSFB_Redirection_Success_Rate
-        { title: 'Week-2', field: 'MV_CSFB_Redirection_Success_Rate_week_2' },
+        { title: 'Week-2', field: 'MV_CSFB_Redirection_Success_Rate_week_2' },//MV_CSFB_Redirection_Success_Rate_week_2
         { title: 'Week-1', field: 'MV_CSFB_Redirection_Success_Rate_week_1' },
         { title: `${(data?.dates?.[3])}`, field: 'MV_CSFB_Redirection_Success_Rate_date_4' },
         { title: `${(data?.dates?.[4])}`, field: 'MV_CSFB_Redirection_Success_Rate_date_5' },
@@ -1342,6 +1350,7 @@ const LteKpiTrend = () => {
             columnData.map(col => col.title) // Column headers
         ];
 
+        console.log('array data' , multiHeaders)
         // Map the row data
         const dataRows = data?.data?.map(row => columnData.map(col => row[col.field]));
 

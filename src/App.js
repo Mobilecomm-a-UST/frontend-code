@@ -266,7 +266,7 @@ function App() {
                 <ProtectedRoute element={Dma} allowedUserTypes={['soft_at_team', 'admin']} userType={userType} />
               </Suspense>
             } />
-            <Route path="/tools/gpl_audit/*" element={
+            <Route path="/tools/mobile_network_integration/*" element={
               <Suspense fallback={<div>Loading...</div>}>
                 <ProtectedRoute element={Gpl} allowedUserTypes={['admin']} userType={userType} />
               </Suspense>
