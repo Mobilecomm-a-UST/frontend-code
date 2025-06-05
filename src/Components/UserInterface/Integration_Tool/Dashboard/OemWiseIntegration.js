@@ -264,7 +264,7 @@ const OemWiseIntegration = ({ onData }) => {
             console.log('responce', responce)
             // setMainDataT2(responce)
             action(false)
-            setEncreptedData("integration_final_tracker",responce);
+            setEncreptedData("integration_final_tracker", responce);
             // console.log('response data in huawia site id' , response)
             window.open(`${window.location.href}/${props.activity}`, "_blank")
             // setOpen(true)
@@ -310,6 +310,9 @@ const OemWiseIntegration = ({ onData }) => {
                                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>RECTIFICATION</th>
                                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>OPERATIONS</th>
                                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>OTHERS</th>
+                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>RRU UPGRADE</th>
+                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>5G BW UPGRADE</th>
+                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>5G RRU SWAP</th>
                                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>5G SECTOR ADDITION</th>
                                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>5G RELOCATION</th>
                                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>TRAFFIC SHIFTING</th>
@@ -334,6 +337,9 @@ const OemWiseIntegration = ({ onData }) => {
                                         <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'RECTIFICATION' })}>{item.RECTIFICATION}</th>
                                         <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'OPERATIONS' })}>{item.OPERATIONS}</th>
                                         <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'OTHERS' })}>{item.OTHERS}</th>
+                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'RRU UPGRADE' })}>{it['RRU UPGRADE'] || 0}</th>
+                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: '5G BW UPGRADE' })}>{it['5G BW UPGRADE'] || 0}</th>
+                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: '5G RRU SWAP' })}>{it['5G RRU SWAP'] || 0}</th>
                                         <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'G5_SECTOR_ADDITION' })}>{item['5G SECTOR ADDITION']}</th>
                                         <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'G5_RELOCATION' })}>{item['5G RELOCATION']}</th>
                                         <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'TRAFFIC_SHIFTING' })}>{item.TRAFFIC_SHIFTING}</th>
@@ -392,7 +398,7 @@ const OemWiseIntegration = ({ onData }) => {
                     {/* ************* 2G  TABLE DATA ************** */}
                     <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', alignContent: 'center' }}>
                         <Box style={{ fontSize: 20, fontWeight: 'bold' }}>
-                        Monthly OEM Wise Dashboard
+                            Monthly OEM Wise Dashboard
                         </Box>
                         <Box>
                             <LocalizationProvider dateAdapter={AdapterDayjs} >
@@ -409,7 +415,7 @@ const OemWiseIntegration = ({ onData }) => {
 
                                 <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
-                                    <th colSpan={6} style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{monthNames[month]}-{year}</th>
+                                        <th colSpan={6} style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{monthNames[month]}-{year}</th>
                                     </tr>
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>CIRCLE</th>
@@ -422,7 +428,7 @@ const OemWiseIntegration = ({ onData }) => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {tableData?.map((it,index) => {
+                                    {tableData?.map((it, index) => {
                                         return (
                                             <tr className={classes.hover} style={{ textAlign: "center", fontWeigth: 700 }} key={index}>
                                                 <th >{it?.cir}</th>
@@ -456,4 +462,4 @@ const OemWiseIntegration = ({ onData }) => {
     )
 }
 
-export const MemoOemWiseIntegration= React.memo(OemWiseIntegration)
+export const MemoOemWiseIntegration = React.memo(OemWiseIntegration)
