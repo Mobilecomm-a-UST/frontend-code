@@ -36,6 +36,7 @@ import { ServerURL } from '../../../services/FetchNodeServices';
 import axios from 'axios';
 import Swal from "sweetalert2";
 // import { MemoAdd_Rca } from './Add_Rca';
+import AddCheckListData from './AddCheckListData';
 import _ from 'lodash';
 import SearchIcon from '@mui/icons-material/Search';
 import CheckPicker from 'rsuite/CheckPicker';
@@ -117,16 +118,16 @@ const ChecklistEditor = () => {
 
     })
     const { isPending, data, refetch } = useQuery({
-        queryKey: ['RCA_TABLE_DATA'],
+        queryKey: ['SOFT_AT_Nokia_Checklist'],
         queryFn: async () => {
             action(isPending)
-            const res = await makeGetRequest("RCA_TOOL/rca-tables/");
+            const res = await makeGetRequest("soft_at_nokia/get/");
             if (res) {
                 action(false)
-                // console.log('RCA table data', res)
-                setKpi(_.uniq(_.map(res, 'KPI')))
-                setDataSource(_.uniq(_.map(res, 'Data_source')))
-                setTentative(_.uniq(_.map(res, 'Tentative_counters')))
+                console.log('soft at nokia data', res)
+                // setKpi(_.uniq(_.map(res, 'KPI')))
+                // setDataSource(_.uniq(_.map(res, 'Data_source')))
+                // setTentative(_.uniq(_.map(res, 'Tentative_counters')))
                 // console.log('sssssssaa', _.uniq(_.map(res, 'RCA')))
 
                 return _.sortBy(res, ['KPI'])
@@ -143,7 +144,7 @@ const ChecklistEditor = () => {
         queryFn: async () => {
             const res = await makeGetRequest("RCA_TOOL/unique_kpi/");
             if (res) {
-                console.log('unique kpi', res)
+                // console.log('unique kpi', res)
                 return res;
             }
 
@@ -334,9 +335,9 @@ const ChecklistEditor = () => {
                 key={index}
                 className={classes.hover}
             >
-                <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{row.KPI}</StyledTableCell>
-                <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{row.Probable_causes}</StyledTableCell>
-                <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{row.Data_source}</StyledTableCell>
+                <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{row.psth}</StyledTableCell>
+                <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{row.parameter_name}</StyledTableCell>
+                <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{row.expected_value}</StyledTableCell>
 
                 <StyledTableCell align="center" style={{ borderRight: "2px solid black", display: 'flex', flex: 'row', justifyContent: 'space-evenly' }}>
                     <Tooltip title="Edit" color='primary'>
@@ -429,7 +430,7 @@ const ChecklistEditor = () => {
                 <Box sx={{ marginTop: 5 }}>
                     {/* <Payload_data /> */}
                 </Box>
-                {/* <MemoAdd_Rca open={add} handleClick={handleClick} handleFetch={refetch} /> */}
+                <AddCheckListData open={add} handleClick={handleClick} handleFetch={refetch} />
                 {loading}
             </div>
 
