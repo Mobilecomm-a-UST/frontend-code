@@ -95,16 +95,16 @@ const Add_Rca = (props) => {
             KPI: event.currentTarget.getAttribute('data-value'),
         })
         setAnchorEl(null);
-      };
+    };
 
-      const handleCategoryChange2 = (event) => {
+    const handleCategoryChange2 = (event) => {
         // setCategory(event.currentTarget.getAttribute('data-value'));
         setFormData({
             ...formData,
-            Tentative_counters : event.currentTarget.getAttribute('data-value'),
+            Tentative_counters: event.currentTarget.getAttribute('data-value'),
         })
         setAnchorE2(null);
-      };
+    };
 
 
     const handleChange = (e) => {
@@ -151,13 +151,13 @@ const Add_Rca = (props) => {
         }
     }
 
- const handleAddCounters = () => {
-    setFormData({
-        ...formData,
-        Tentative_counters: searchTerm
-    })
-    handleClose2();
- }
+    const handleAddCounters = () => {
+        setFormData({
+            ...formData,
+            Tentative_counters: searchTerm
+        })
+        handleClose2();
+    }
 
 
 
@@ -175,7 +175,7 @@ const Add_Rca = (props) => {
                     <Box style={{ display: 'flex', justifyContent: 'center', alignItem: 'center' }}><Box><AddIcon fontSize='medium' /></Box><Box>ADD NEW RCA DATA</Box></Box>
                     <Box >
                         <Tooltip title="Cancel">
-                            <IconButton onClick={()=>{props.handleClick(); handleClose()}}>
+                            <IconButton onClick={() => { props.handleClick(); handleClose() }}>
                                 <CloseIcon fontSize='medium' color='default' />
                             </IconButton>
                         </Tooltip>
@@ -367,7 +367,7 @@ const Add_Rca = (props) => {
 
 
                                             <List>
-                                                { filteredCategories2?.length > 0 ? filteredCategories2?.map((item, index) => (
+                                                {filteredCategories2?.length > 0 ? filteredCategories2?.map((item, index) => (
                                                     <ListItem
                                                         button
                                                         key={index}
@@ -376,7 +376,7 @@ const Add_Rca = (props) => {
                                                     >
                                                         <ListItemText primary={item} />
                                                     </ListItem>
-                                                )): <Button variant='contained' onClick={handleAddCounters}>Add Counters</Button>}
+                                                )) : <Button variant='contained' onClick={handleAddCounters}>Add Counters</Button>}
                                             </List>
                                         </Box>
                                     </Popover>

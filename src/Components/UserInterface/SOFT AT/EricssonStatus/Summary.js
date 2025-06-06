@@ -41,7 +41,7 @@ const Summary = () => {
                 formData.append(`files`, make4GFiles[i]);
             }
 
-            const response = await postData('Soft_AT_Checklist_Ericsson/soft_at_checkpoint/', formData)
+            const response = await postData('soft_at_status/extract_data/', formData)
 
             // console.log('response data', response)
 
@@ -122,7 +122,7 @@ const Summary = () => {
                                         <div style={{ float: "left" }}>
                                             <Button variant="contained" component="label" color={make4GFiles.length > 0 ? "warning" : "primary"}>
                                                 select file
-                                                <input required hidden accept=".txt" multiple type="file"
+                                                <input required hidden accept=".log,.txt" multiple type="file"
                                                     // webkitdirectory="true"
                                                     // directory="true"
                                                     onChange={(e) => { handle4GFileSelection(e); setShow4G(false); }} />
