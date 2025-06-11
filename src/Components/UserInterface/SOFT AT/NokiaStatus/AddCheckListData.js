@@ -52,13 +52,13 @@ const AddCheckListData = (props) => {
             var formData = new FormData();
             // console.log('pre files' , preFiles[i])
             formData.append(`excel_file`, make4GFiles.bytes);
-            const response = await postData('soft_at_nokia/upload-excel/', formData)
+            const response = await postData(`soft_at_nokia/${props.api}/`, formData)
             // console.log('response data', response)
-
             if (response) {
                 action(false)
+                props.handleClick();
+                props.handleFetch();
                 // setDownload(true)
-
                 // setFileData(response.download_url)
                 Swal.fire({
                     icon: "success",
@@ -66,9 +66,6 @@ const AddCheckListData = (props) => {
                     text: `${response.message}`,
                 });
                 // console.log('sssssssssssssssssssss', response)
-
-
-
             } else {
                 action(false)
 
@@ -91,9 +88,7 @@ const AddCheckListData = (props) => {
 
     const handleCancel = () => {
         setMake4GFiles({ filename: "", bytes: "" })
-
         setShow4G(false)
-
     }
 
 
@@ -109,7 +104,7 @@ const AddCheckListData = (props) => {
                 style={{zIndex: 2}}
             >
                 <DialogTitle style={{ borderBottom: '1px solid black', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <Box style={{ display: 'flex', justifyContent: 'center', alignItem: 'center' }}><Box><AddIcon fontSize='medium' /></Box><Box>ADD NEW RCA DATA</Box></Box>
+                    <Box style={{ display: 'flex', justifyContent: 'center', alignItem: 'center' }}><Box><AddIcon fontSize='medium' /></Box><Box>ADD {props.name} DATA</Box></Box>
                     <Box >
                         <Tooltip title="Cancel">
                             <IconButton onClick={() => { props.handleClick() }}>

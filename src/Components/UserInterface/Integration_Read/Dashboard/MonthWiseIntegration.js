@@ -81,7 +81,7 @@ const MonthWiseIntegration = ({ onData }) => {
 
 
     const calculateColumnTotals = (datass) => {
-        const totals = {
+       const totals = {
             M1_DE_GROW: 0,
             M1_MACRO: 0,
             M1_OTHERS: 0,
@@ -95,7 +95,13 @@ const MonthWiseIntegration = ({ onData }) => {
             M1_IDSC: 0,
             M1_ODSC: 0,
             M1_RECTIFICATION: 0,
+            M1_OPERATIONS: 0,
+            M1_RRU_UPGRADE: 0,
+            M1_5G_BW_UPGRADE: 0,
+            M1_5G_RRU_SWAP: 0,
             M1_5G_SECTOR_ADDITION: 0,
+            M1_5G_RELOCATION: 0,
+            M1_TRAFFIC_SHIFTING:0,
             M2_DE_GROW: 0,
             M2_MACRO: 0,
             M2_OTHERS: 0,
@@ -109,7 +115,13 @@ const MonthWiseIntegration = ({ onData }) => {
             M2_IDSC: 0,
             M2_ODSC: 0,
             M2_RECTIFICATION: 0,
+            M2_OPERATIONS: 0,
+            M2_RRU_UPGRADE: 0,
+            M2_5G_BW_UPGRADE: 0,
+            M2_5G_RRU_SWAP: 0,
             M2_5G_SECTOR_ADDITION: 0,
+            M2_5G_RELOCATION:0,
+            M2_TRAFFIC_SHIFTING:0,
             M3_DE_GROW: 0,
             M3_MACRO: 0,
             M3_OTHERS: 0,
@@ -123,7 +135,13 @@ const MonthWiseIntegration = ({ onData }) => {
             M3_IDSC: 0,
             M3_ODSC: 0,
             M3_RECTIFICATION: 0,
+            M3_OPERATIONS: 0,
+            M3_RRU_UPGRADE: 0,
+            M3_5G_BW_UPGRADE: 0,
+            M3_5G_RRU_SWAP: 0,
             M3_5G_SECTOR_ADDITION: 0,
+            M3_5G_RELOCATION:0,
+            M3_TRAFFIC_SHIFTING:0
 
         };
 
@@ -379,130 +397,166 @@ const MonthWiseIntegration = ({ onData }) => {
                     <Box sx={{ marginTop: 0 }}>
 
                         <TableContainer sx={{ maxHeight: 540, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} component={Paper}>
-
-                            <table style={{ width: "100%", border: "1px solid black", borderCollapse: 'collapse', overflow: 'auto' }} >
-
-                                <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
-                                    <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
-                                        <th rowSpan='2' style={{ padding: '5px 20px', whiteSpace: 'nowrap', position: 'sticky', left: 0, top: 0, backgroundColor: '#223354' }}>CIRCLE</th>
-                                        {/* <th colSpan='7' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#2F75B5' }}>{monthArray[2]}</th>
-                                        <th colSpan='7' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: "#DD761C" }}>{monthArray[1]}</th>
-                                        <th colSpan='7' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#03AED2' }}>{monthArray[0]}</th> */}
-                                        {monthArray?.map((item, index) => index < 3 && (
-                                            <th colSpan='14' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: headerColor[index] }}>{monthNames[item.month]}-{item.year}</th>
-                                        ))}
-                                    </tr>
-                                    <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>DE-GROW</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>MACRO</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>OTHER</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>RELOCATION</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>RET</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>ULS-HPSC</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>UPGRADE</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>FEMTO</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>HT-INCREMENT</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>IBS</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>IDSC</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>ODSC</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>RECTIFICATION</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>5G SECTOR ADDITION</th>
-
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: "#FF9933" }}>DE-GROW</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: "#FF9933" }}>MACRO</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: "#FF9933" }}>OTHER</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: "#FF9933" }}>RELOCATION</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: "#FF9933" }}>RET</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: "#FF9933" }}>ULS-HPSC</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: "#FF9933" }}>UPGRADE</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>FEMTO</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>HT-INCREMENT</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>IBS</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>IDSC</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>ODSC</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>RECTIFICATION</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>5G SECTOR ADDITION</th>
-
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>DE-GROW</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>MACRO</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>OTHER</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>RELOCATION</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>RET</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>ULS-HPSC</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>UPGRADE</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>FEMTO</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>HT-INCREMENT</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>IBS</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>IDSC</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>ODSC</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>RECTIFICATION</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>5G SECTOR ADDITION</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {tableData?.map((it) => {
-                                        return (
-                                            <tr className={classes.hover} style={{ textAlign: "center", fontWeigth: 700 }}>
-                                                <th style={{ position: 'sticky', left: 0, top: 0, backgroundColor: 'rgb(197 214 246)', color: 'black' }}>{it?.cir}</th>
-
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'DE-GROW' })}>{it?.M1_DE_GROW}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'MACRO' })}>{it?.M1_MACRO}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'OTHERS' })}>{it?.M1_OTHERS}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'RELOCATION' })}>{it?.M1_RELOCATION}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'RET' })}>{it?.M1_RET}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'ULS_HPSC' })}>{it?.M1_ULS_HPSC}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'UPGRADE' })}>{it?.M1_UPGRADE}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'FEMTO' })}>{it?.M1_FEMTO}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'HT INCREMENT' })}>{it?.M1_HT_INCREMENT}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'IBS' })}>{it?.M1_IBS}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'IDSC' })}>{it?.M1_IDSC}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'ODSC' })}>{it?.M1_ODSC}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'RECTIFICATION' })}>{it?.M1_RECTIFICATION}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: '5G SECTOR ADDITION' })}>{it?.M1_5G_SECTOR_ADDITION}</th>
-
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: 'DE-GROW' })}>{it?.M2_DE_GROW}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: 'MACRO' })}>{it?.M2_MACRO}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: 'OTHERS' })}>{it?.M2_OTHERS}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: 'RELOCATION' })}>{it?.M2_RELOCATION}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: 'RET' })}>{it?.M2_RET}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: 'ULS_HPSC' })}>{it?.M2_ULS_HPSC}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: 'UPGRADE' })}>{it?.M2_UPGRADE}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: 'FEMTO' })}>{it?.M2_FEMTO}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: 'HT INCREMENT' })}>{it?.M2_HT_INCREMENT}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: 'IBS' })}>{it?.M2_IBS}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: 'IDSC' })}>{it?.M2_IDSC}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: 'ODSC' })}>{it?.M2_ODSC}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: 'RECTIFICATION' })}>{it?.M2_RECTIFICATION}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: '5G SECTOR ADDITION' })}>{it?.M2_5G_SECTOR_ADDITION}</th>
-
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: 'DE-GROW' })}>{it?.M3_DE_GROW}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: 'MACRO' })}>{it?.M3_MACRO}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: 'OTHERS' })}>{it?.M3_OTHERS}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: 'RELOCATION' })}>{it?.M3_RELOCATION}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: 'RET' })}>{it?.M3_RET}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: 'ULS_HPSC' })}>{it?.M3_ULS_HPSC}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: 'UPGRADE' })}>{it?.M3_UPGRADE}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: 'FEMTO' })}>{it?.M3_FEMTO}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: 'HT INCREMENT' })}>{it?.M3_HT_INCREMENT}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: 'IBS' })}>{it?.M3_IBS}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: 'IDSC' })}>{it?.M3_IDSC}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: 'ODSC' })}>{it?.M3_ODSC}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: 'RECTIFICATION' })}>{it?.M3_RECTIFICATION}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: '5G SECTOR ADDITION' })}>{it?.M3_5G_SECTOR_ADDITION}</th>
-
-                                            </tr>
-                                        )
-                                    }
-                                    )}
-                                    <tr style={{ textAlign: "center", fontWeigth: 700, backgroundColor: '#B0EBB4', color: '#000000', fontSize: 17 }}>
-                                        <th style={{ position: 'sticky', left: 0, top: 0, backgroundColor: '#B0EBB4' }}>Total</th>
-                                        {totals && Object.keys(totals).map((key) => (
-                                            <th key={key}>{totals[key]}</th>
-                                        ))}
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </TableContainer>
+                       
+                                                   <table style={{ width: "100%", border: "1px solid black", borderCollapse: 'collapse', overflow: 'auto' }} >
+                       
+                                                       <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
+                                                           <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
+                                                               <th rowSpan='2' style={{ padding: '5px 20px', whiteSpace: 'nowrap', position: 'sticky', left: 0, top: 0, backgroundColor: '#223354' }}>CIRCLE</th>
+                                                               {/* <th colSpan='7' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#2F75B5' }}>{monthArray[2]}</th>
+                                                               <th colSpan='7' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: "#DD761C" }}>{monthArray[1]}</th>
+                                                               <th colSpan='7' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#03AED2' }}>{monthArray[0]}</th> */}
+                                                               {monthArray?.map((item, index) => index < 3 && (
+                                                                   <th colSpan='20' key={index} style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: headerColor[index] }}>{monthNames[item.month]}-{item.year}</th>
+                                                               ))}
+                                                           </tr>
+                                                           <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>DE-GROW</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>MACRO</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>OTHER</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>RELOCATION</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>RET</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>ULS-HPSC</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>UPGRADE</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>FEMTO</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>HT-INCREMENT</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>IBS</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>IDSC</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>ODSC</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>RECTIFICATION</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>OPERATIONS</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>RRU UPGRADE</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>5G BW UPGRADE</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>5G RRU SWAP</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>5G SECTOR ADDITION</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>5G RELOCATION</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>TRAFFIC SHIFTING</th>
+                       
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: "#FF9933" }}>DE-GROW</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: "#FF9933" }}>MACRO</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: "#FF9933" }}>OTHER</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: "#FF9933" }}>RELOCATION</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: "#FF9933" }}>RET</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: "#FF9933" }}>ULS-HPSC</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: "#FF9933" }}>UPGRADE</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>FEMTO</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>HT-INCREMENT</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>IBS</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>IDSC</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>ODSC</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>RECTIFICATION</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>OPERATIONS</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>RRU UPGRADE</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>5G BW UPGRADE</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>5G RRU SWAP</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>5G SECTOR ADDITION</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>5G RELOCATION</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>TRAFFIC SHIFTING</th>
+                       
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>DE-GROW</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>MACRO</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>OTHER</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>RELOCATION</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>RET</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>ULS-HPSC</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>UPGRADE</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>FEMTO</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>HT-INCREMENT</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>IBS</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>IDSC</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>ODSC</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>RECTIFICATION</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>OPERATIONS</th>
+                                                                <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>RRU UPGRADE</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>5G BW UPGRADE</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>5G RRU SWAP</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>5G SECTOR ADDITION</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>5G RELOCATION</th>
+                                                               <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>TRAFFIC SHIFTING</th>
+                                                           </tr>
+                                                       </thead>
+                                                       <tbody>
+                                                           {tableData?.map((it) => {
+                                                               return (
+                                                                   <tr className={classes.hover} style={{ textAlign: "center", fontWeigth: 700 }}>
+                                                                       <th style={{ position: 'sticky', left: 0, top: 0, backgroundColor: 'rgb(197 214 246)', color: 'black' }}>{it?.cir}</th>
+                       
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'DE-GROW' })}>{it?.M1_DE_GROW}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'MACRO' })}>{it?.M1_MACRO}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'OTHERS' })}>{it?.M1_OTHERS}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'RELOCATION' })}>{it?.M1_RELOCATION}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'RET' })}>{it?.M1_RET}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'ULS_HPSC' })}>{it?.M1_ULS_HPSC}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'UPGRADE' })}>{it?.M1_UPGRADE}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'FEMTO' })}>{it?.M1_FEMTO}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'HT INCREMENT' })}>{it?.M1_HT_INCREMENT}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'IBS' })}>{it?.M1_IBS}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'IDSC' })}>{it?.M1_IDSC}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'ODSC' })}>{it?.M1_ODSC}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'RECTIFICATION' })}>{it?.M1_RECTIFICATION}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'OPERATIONS' })}>{it?.M1_OPERATIONS}</th>
+                                                                        <th className={classes.hover} style={{ cursor: 'pointer'}} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'RRU UPGRADE' })}>{it?.M1_RRU_UPGRADE || 0}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer'}} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: '5G BW UPGRADE' })}>{it?.M1_5G_BW_UPGRADE  || 0}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer'}} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: '5G RRU SWAP' })}>{it?.M1_5G_RRU_SWAP || 0}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: '5G SECTOR ADDITION' })}>{it?.M1_5G_SECTOR_ADDITION}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: '5G RELOCATION' })}>{it?.M1_5G_RELOCATION}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'TRAFFIC SHIFTING' })}>{it?.M1_TRAFFIC_SHIFTING}</th>
+                       
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: 'DE-GROW' })}>{it?.M2_DE_GROW}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: 'MACRO' })}>{it?.M2_MACRO}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: 'OTHERS' })}>{it?.M2_OTHERS}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: 'RELOCATION' })}>{it?.M2_RELOCATION}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: 'RET' })}>{it?.M2_RET}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: 'ULS_HPSC' })}>{it?.M2_ULS_HPSC}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: 'UPGRADE' })}>{it?.M2_UPGRADE}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: 'FEMTO' })}>{it?.M2_FEMTO}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: 'HT INCREMENT' })}>{it?.M2_HT_INCREMENT}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: 'IBS' })}>{it?.M2_IBS}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: 'IDSC' })}>{it?.M2_IDSC}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: 'ODSC' })}>{it?.M2_ODSC}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: 'RECTIFICATION' })}>{it?.M2_RECTIFICATION}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: 'OPERATIONS' })}>{it?.M2_OPERATIONS}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer'}} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: 'RRU UPGRADE' })}>{it?.M2_RRU_UPGRADE || 0}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer'}} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: '5G BW UPGRADE' })}>{it?.M2_5G_BW_UPGRADE  || 0}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer'}} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: '5G RRU SWAP' })}>{it?.M2_5G_RRU_SWAP || 0}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: '5G SECTOR ADDITION' })}>{it?.M2_5G_SECTOR_ADDITION}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: '5G RELOCATION' })}>{it?.M2_5G_RELOCATION}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: 'TRAFFIC SHIFTING' })}>{it?.M2_TRAFFIC_SHIFTING}</th>
+                       
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: 'DE-GROW' })}>{it?.M3_DE_GROW}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: 'MACRO' })}>{it?.M3_MACRO}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: 'OTHERS' })}>{it?.M3_OTHERS}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: 'RELOCATION' })}>{it?.M3_RELOCATION}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: 'RET' })}>{it?.M3_RET}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: 'ULS_HPSC' })}>{it?.M3_ULS_HPSC}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: 'UPGRADE' })}>{it?.M3_UPGRADE}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: 'FEMTO' })}>{it?.M3_FEMTO}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: 'HT INCREMENT' })}>{it?.M3_HT_INCREMENT}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: 'IBS' })}>{it?.M3_IBS}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: 'IDSC' })}>{it?.M3_IDSC}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: 'ODSC' })}>{it?.M3_ODSC}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: 'RECTIFICATION' })}>{it?.M3_RECTIFICATION}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: 'OPERATIONS' })}>{it?.M3_OPERATIONS}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer'}} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: 'RRU UPGRADE' })}>{it?.M3_RRU_UPGRADE || 0}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer'}} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: '5G BW UPGRADE' })}>{it?.M3_5G_BW_UPGRADE  || 0}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer'}} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: '5G RRU SWAP' })}>{it?.M3_5G_RRU_SWAP || 0}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: '5G SECTOR ADDITION' })}>{it?.M3_5G_SECTOR_ADDITION}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: '5G RELOCATION' })}>{it?.M3_5G_RELOCATION}</th>
+                                                                       <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: 'TRAFFIC SHIFTING' })}>{it?.M3_TRAFFIC_SHIFTING}</th>
+                       
+                                                                   </tr>
+                                                               )
+                                                           }
+                                                           )}
+                                                           <tr style={{ textAlign: "center", fontWeigth: 700, backgroundColor: '#B0EBB4', color: '#000000', fontSize: 17 }}>
+                                                               <th style={{ position: 'sticky', left: 0, top: 0, backgroundColor: '#B0EBB4' }}>Total</th>
+                                                               {totals && Object.keys(totals).map((key) => (
+                                                                   <th key={key}>{totals[key]}</th>
+                                                               ))}
+                                                           </tr>
+                                                       </tbody>
+                                                   </table>
+                                               </TableContainer>
                     </Box>
 
                 </div>

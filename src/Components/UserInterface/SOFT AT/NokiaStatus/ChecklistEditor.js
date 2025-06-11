@@ -24,10 +24,6 @@ import DialogContent from '@mui/material/DialogContent';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
 import TextField from '@mui/material/TextField';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 import { useGet } from '../../../Hooks/GetApis';
 import { useLoadingDialog } from '../../../Hooks/LoadingDialog';
 import { useStyles } from '../../ToolsCss';
@@ -38,7 +34,6 @@ import Swal from "sweetalert2";
 // import { MemoAdd_Rca } from './Add_Rca';
 import AddCheckListData from './AddCheckListData';
 import _ from 'lodash';
-import SearchIcon from '@mui/icons-material/Search';
 import CheckPicker from 'rsuite/CheckPicker';
 // import Payload_data from './Payload_Table/Payload_data';
 import { getDecreyptedData } from '../../../utils/localstorage';
@@ -105,12 +100,11 @@ const ChecklistEditor = () => {
     const [editDataId, setEditDataID] = useState()
     const [searchTerm, setSearchTerm] = useState('');//
     const [anchorE1, setAnchorE1] = useState(null);//
-    const [kpi, setKpi] = useState([]);//for unique kpi from database
-    const [selectKpi, setSelectKpi] = useState([]);
-    const [dataSource, setDataSource] = useState([]);//for unique data source from database
-    const [selectDataSource, setSelectDataSource] = useState([]);
-    const [tentative, setTentative] = useState([]);//for unique tentative counters from database
-    const [selectTentative, setSelectTentative] = useState([]);
+    const [perametrer, setPerameter] = useState([]);//for unique perameter from database
+    const [selectPerameter, setSelectPerameter] = useState([]);
+    const [expected , setExpected] = useState([]);//for unique perameter from database
+    const [selectExpected, setSelectExpected] = useState([]);
+
     const [formData, setFormData] = useState({
         path: '',
         parameter_name: '',
@@ -121,16 +115,15 @@ const ChecklistEditor = () => {
         queryKey: ['SOFT_AT_Nokia_Checklist'],
         queryFn: async () => {
             action(isPending)
-            const res = await makeGetRequest("soft_at_nokia/get/");
+            const res = await makeGetRequest("Soft_AT_Checklist_Nokia/get/");
             if (res) {
                 action(false)
                 console.log('soft at nokia data', res)
-                // setKpi(_.uniq(_.map(res, 'KPI')))
-                // setDataSource(_.uniq(_.map(res, 'Data_source')))
-                // setTentative(_.uniq(_.map(res, 'Tentative_counters')))
+                setExpected(_.uniq(_.map(res, 'expected_value')))
+                setPerameter(_.uniq(_.map(res, 'parameter_name')))
                 // console.log('sssssssaa', _.uniq(_.map(res, 'RCA')))
 
-                return _.sortBy(res, ['KPI'])
+                return res
             }
             else {
                 action(false)
@@ -139,29 +132,9 @@ const ChecklistEditor = () => {
         staleTime: 100000,
         refetchOnReconnect: false,
     })
-    const unique = useQuery({
-        queryKey: ['UNIQUE_KPI'],
-        queryFn: async () => {
-            const res = await makeGetRequest("RCA_TOOL/unique_kpi/");
-            if (res) {
-                // console.log('unique kpi', res)
-                return res;
-            }
+   
 
-        },
-        staleTime: 100000,
-        refetchOnReconnect: false,
-    })
-
-    const [filteredCategories, setFilteredCategories] = useState(unique.data?.tentative_counters);
     const open2 = Boolean(anchorE1);
-    const handleSearchChange = (event) => {
-        const value = event.target.value;
-        setSearchTerm(value);
-        setFilteredCategories(
-            unique.data?.tentative_counters.filter(category => category.toLowerCase().includes(value.toLowerCase()))
-        );
-    };
     const handleOpen2 = (event) => {
         console.log('check data in  tentative counters', event.currentTarget)
         setAnchorE1(event.currentTarget);
@@ -292,14 +265,43 @@ const ChecklistEditor = () => {
                 <DialogContent dividers={'paper'}>
                     <form onSubmit={handleUpdateData} style={{ width: '100%', marginTop: 20 }}>
                         <Grid container spacing={2}>
-                            <Grid item xs={6}>
+                            <Grid item xs={12}>
                                 <TextField
                                     variant="outlined"
                                     fullWidth
-                                    placeholder="Probable Causes"
-                                    label="Probable Causes"
-                                    name="Probable_causes"
-                                    value={formData.Probable_causes}
+                                    placeholder="Path"
+                                    label="Path"
+                                    name="path"
+                                    value={formData.path}
+                                    onChange={handleChange}
+                                    multiline
+                                    maxRows={4}
+                                    size="small"
+                                    type='text'
+                                />
+                            </Grid>
+                             <Grid item xs={6}>
+                                <TextField
+                                    variant="outlined"
+                                    fullWidth
+                                    placeholder="Parameter Name"
+                                    label="Parameter Name"
+                                    name="parameter_name"
+                                    value={formData.parameter_name}
+                                    onChange={handleChange}
+                                    multiline
+                                    maxRows={4}
+                                    size="small"
+                                    type='text'
+                                />
+                            </Grid> <Grid item xs={6}>
+                                <TextField
+                                    variant="outlined"
+                                    fullWidth
+                                    placeholder="Expected Value"
+                                    label="Expected Value"
+                                    name="expected_value"
+                                    value={formData.expected_value}
                                     onChange={handleChange}
                                     multiline
                                     maxRows={4}
@@ -310,24 +312,23 @@ const ChecklistEditor = () => {
 
 
                             <Grid item xs={12}>
-                                <Button type="submit" fullWidth variant="contained">Update</Button>
+                                <Button type="submit" fullWidth variant="contained" >Update</Button>
                             </Grid>
                         </Grid>
                     </form>
                 </DialogContent>
             </Dialog>
         )
-    }, [edit, formData, anchorE1, searchTerm, open2, filteredCategories])
+    }, [edit, formData, anchorE1, searchTerm, open2])
 
     const filterRCAData = useCallback(() => {
 
         let filteredData = _.filter(data, item => {
-
-            const kpiMatch = selectKpi.length === 0 || _.includes(selectKpi, item.KPI);
-            const dataSourceMatch = selectDataSource.length === 0 || _.includes(selectDataSource, item.Data_source);
-            const tentativeMatch = selectTentative.length === 0 || _.includes(selectTentative, item.Tentative_counters);
-
-            return kpiMatch && dataSourceMatch && tentativeMatch;
+            const perameterMatch = selectPerameter.length === 0 || _.includes(selectPerameter, item.parameter_name);
+            const expectedMatch = selectExpected.length === 0 || _.includes(selectExpected, item.expected_value);
+          
+            return perameterMatch && expectedMatch;
+         
         });
 
         return filteredData?.map((row, index) => (
@@ -335,11 +336,11 @@ const ChecklistEditor = () => {
                 key={index}
                 className={classes.hover}
             >
-                <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{row.psth}</StyledTableCell>
+                <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{row.path}</StyledTableCell>
                 <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{row.parameter_name}</StyledTableCell>
                 <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{row.expected_value}</StyledTableCell>
 
-                <StyledTableCell align="center" style={{ borderRight: "2px solid black", display: 'flex', flex: 'row', justifyContent: 'space-evenly' }}>
+                {/* <StyledTableCell align="center" style={{ borderRight: "2px solid black", display: 'flex', flex: 'row', justifyContent: 'space-evenly' }}>
                     <Tooltip title="Edit" color='primary'>
                         <IconButton color="primary" onClick={() => { handleEdit(row) }}>
                             <EditIcon fontSize='medium' />
@@ -350,17 +351,17 @@ const ChecklistEditor = () => {
                             <DeleteIcon fontSize='medium' />
                         </IconButton>
                     </Tooltip>
-                </StyledTableCell>
+                </StyledTableCell> */}
             </StyledTableRow>
         ))
 
-    }, [selectDataSource, selectKpi, selectTentative, data])
+    }, [ data,selectPerameter,selectExpected])
 
     useEffect(() => {
         if (data) {
-            setKpi(_.uniq(_.map(data, 'KPI')))
-            setDataSource(_.uniq(_.map(data, 'Data_source')))
-            setTentative(_.uniq(_.map(data, 'Tentative_counters')))
+                 setExpected(_.uniq(_.map(data, 'expected_value')))
+                setPerameter(_.uniq(_.map(data, 'parameter_name')))
+
         }
         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
     }, [])
@@ -410,10 +411,10 @@ const ChecklistEditor = () => {
                             <Table stickyHeader >
                                 <TableHead style={{ fontSize: 18 }}>
                                     <TableRow >
-                                        <StyledTableCell align="center">Path <CheckPicker data={kpi.map(item => ({ label: item, value: item }))} value={selectKpi} onChange={(value) => { setSelectKpi(value) }} size="sm" appearance="subtle" style={{ width: 40 }} /></StyledTableCell>
-                                        <StyledTableCell align="center">Parameter Name</StyledTableCell>
-                                        <StyledTableCell align="center" >Expected Value  <CheckPicker data={dataSource.map(item => ({ label: item, value: item }))} value={selectDataSource} onChange={(value) => { setSelectDataSource(value) }} size="sm" appearance="subtle" placeholder="Data Source" style={{ width: 100 }} /> </StyledTableCell>
-                                        <StyledTableCell align="center">Action</StyledTableCell>
+                                        <StyledTableCell align="center">Path </StyledTableCell>
+                                        <StyledTableCell align="center">Parameter Name <CheckPicker data={perametrer.map(item => ({ label: item, value: item }))} value={selectPerameter} onChange={(value) => { setSelectPerameter(value) }} size="sm" appearance="subtle" style={{ width: 40 }} /></StyledTableCell>
+                                        <StyledTableCell align="center" >Expected Value  <CheckPicker data={expected.map(item => ({ label: item, value: item }))} value={selectExpected} onChange={(value) => { setSelectExpected(value) }} size="sm" appearance="subtle" placeholder="Expected Value" style={{ width: 100 }} /> </StyledTableCell>
+                                        {/* <StyledTableCell align="center">Action</StyledTableCell> */}
 
                                     </TableRow>
                                 </TableHead>
@@ -430,7 +431,7 @@ const ChecklistEditor = () => {
                 <Box sx={{ marginTop: 5 }}>
                     {/* <Payload_data /> */}
                 </Box>
-                <AddCheckListData open={add} handleClick={handleClick} handleFetch={refetch} />
+                <AddCheckListData open={add} handleClick={handleClick} handleFetch={refetch} name='CHECKLIST' api="upload-excel" />
                 {loading}
             </div>
 

@@ -55,7 +55,7 @@ const Checklist = () => {
                 formData.append(`xml_files`, make4GFiles[i]);
             }
 
-            const response = await postData('soft_at_nokia/process-xml/', formData)
+            const response = await postData('Soft_AT_Checklist_Nokia/process-xml/', formData)
 
             // console.log('response data', response)
 

@@ -20,7 +20,7 @@ const GplTool = lazy(() => import('./GplTool'));
 const GenerateGpl = lazy(() => import('./Generate/GenerateGpl'));
 const Gplauditparse = lazy(() => import('./GplAuditParse/GAP'))
 const GplPrePostAudit = lazy(() => import('./GplPrePostAudit/GPPA'));
-const ScriptGenerator = lazy(() => import('./ScriptGenerater/ScriptGen'));
+const ScriptGenerator = lazy(() => import('./ScriptGenerator/ScriptGen'));
 const TestingGpl = lazy(() => import('./Generate/GenrateGplState'))
 
 const GPL = () => {
