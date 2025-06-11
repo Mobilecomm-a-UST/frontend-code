@@ -52,7 +52,7 @@ const AddCheckListData = (props) => {
             var formData = new FormData();
             // console.log('pre files' , preFiles[i])
             formData.append(`excel_file`, make4GFiles.bytes);
-            const response = await postData(`soft_at_nokia/${props.api}/`, formData)
+            const response = await postData(`Soft_AT_Checklist_Nokia/${props.api}/`, formData)
             // console.log('response data', response)
             if (response) {
                 action(false)
