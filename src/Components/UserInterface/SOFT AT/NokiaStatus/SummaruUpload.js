@@ -17,60 +17,56 @@ import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 
 
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
 
-
-const projectArray = ['NT','ULS','Upgrade','Relocation'];
-const circleArray = ['AP', 'CH', 'KK', 'DL', 'HR', 'RJ', 'JK', 'WB', 'OD', 'MU', 'TN', 'UE', 'BH', 'UW', 'MP', 'PB', 'KO', 'WB', 'JH']
-
-const Checklist = () => {
-    const [make4GFiles, setMake4GFiles] = useState([])
-    const [selectCircle, setSelectCircle] = useState('')
-    const [selectProject , setSelectProject] = useState('')
+const SummaruUpload = () => {
+    const [make4GFiles, setMake4GFiles] = useState({ filename: "", bytes: "" })
     const [show4G, setShow4G] = useState(false)
-    const [show, setShow] = useState(false)
-    const [showCircle, setShowCircle] = useState(false)
-    const [showProject, setShowProject] = useState(false)
-    const [fileData, setFileData] = useState()
-    const [download, setDownload] = useState(false);
-    const { loading, action } = useLoadingDialog()
+    const classes = OverAllCss();
     const navigate = useNavigate()
-    const classes = OverAllCss()
-    const link = `${ServerURL}${fileData}`;
+        const [fileData, setFileData] = useState()
+    const { loading, action } = useLoadingDialog()
+    const [download, setDownload] = useState(false)
+
 
 
     const handle4GFileSelection = (event) => {
 
-        setMake4GFiles(event.target.files)
+        setMake4GFiles({
+            filename: event.target.files[0].name,
+            bytes: event.target.files[0],
+            state: true
+
+        })
     }
 
 
+
     const handleSubmit = async () => {
-        if (make4GFiles.length > 0 && selectCircle !== '' && selectProject !== '') {
+        if (make4GFiles.filename.length > 0) {
             action(true)
             var formData = new FormData();
-            formData.append('circle_name', selectCircle)
-            formData.append('project_type', selectProject)
-
-            for (let i = 0; i < make4GFiles.length; i++) {
-                formData.append(`xml_files`, make4GFiles[i]);
-            }
-
-            const response = await postData('Soft_AT_Checklist_Nokia/process-xml/', formData)
-
+            // console.log('pre files' , preFiles[i])
+            formData.append(`excel_file`, make4GFiles.bytes);
+            const response = await postData('Soft_AT_Checklist_Nokia/upload_Summary_excel/', formData)
             // console.log('response data', response)
 
-
-            if (response.status === true) {
+            if (response) {
                 action(false)
                 setDownload(true)
 
-                setFileData(response.download_link)
+                setFileData(response.download_url)
                 Swal.fire({
                     icon: "success",
                     title: "Done",
                     text: `${response.message}`,
                 });
-               
+                console.log('sssssssssssssssssssss', response)
+
+
+
             } else {
                 action(false)
 
@@ -82,29 +78,17 @@ const Checklist = () => {
             }
         }
         else {
-            if (make4GFiles.length === 0) {
+            if (make4GFiles.filename.length === 0) {
                 setShow4G(true)
             } else {
                 setShow4G(false)
-            }
-            if(selectCircle === ''){
-                setShowCircle(true)
-            }else{
-                setShowCircle(false)
-            }
-            if(selectProject === ''){
-                setShowProject(true)
-            }else{
-                setShowProject(false)
             }
 
         }
     }
 
     const handleCancel = () => {
-        setMake4GFiles([])
-        setSelectCircle('')
-        setSelectProject('')
+        setMake4GFiles({ filename: "", bytes: "" })
 
         setShow4G(false)
 
@@ -114,13 +98,12 @@ const Checklist = () => {
         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
 
     }, [])
-    return (
-        <>
+    return  <>
             <div style={{ margin: 5, marginLeft: 10 }}>
                 <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
                     <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
                     <Link underline="hover" onClick={() => { navigate('/tools/soft_at') }}>Soft-AT Tool</Link>
-                    <Typography color='text.primary'>Nokia Checklist</Typography>
+                    <Typography color='text.primary'>Upload Nokia Soft-At Summary</Typography>
                 </Breadcrumbs>
             </div>
             <Slide
@@ -133,64 +116,22 @@ const Checklist = () => {
                     <Box className={classes.main_Box}>
                         <Box className={classes.Back_Box} sx={{ width: { md: '75%', xs: '100%' } }}>
                             <Box className={classes.Box_Hading} >
-                                Create Nokia Soft-At Checklist
+                                Upload Nokia Soft-At Summary
                             </Box>
                             <Stack spacing={2} sx={{ marginTop: "-40px" }} direction={'column'}>
-                                <Box className={classes.Front_Box}>
-                                    <Box className={classes.Front_Box_Hading}>
-                                        Select Circle
-                                    </Box>
-                                    <Box className={classes.Front_Box_Select_Button} >
-                                        <FormControl sx={{ minWidth: 150 }}>
-                                            <InputLabel id="demo-simple-select-label">Select Circle</InputLabel>
-                                            <Select
-                                                labelId="demo-simple-select-label"
-                                                id="demo-simple-select"
-                                                value={selectCircle}
-                                                label="Select Circle"
-                                                onChange={(event) => { setSelectCircle(event.target.value); setShowCircle(false) }}
-                                            >
-                                                {circleArray.map((item, index) => (
-                                                    <MenuItem value={item} key={index}>{item}</MenuItem>
-                                                ))}
-                                            </Select>
-                                        </FormControl>
-                                        <div>  <span style={{ display: showCircle ? 'inherit' : 'none', color: 'red', fontSize: '18px', fontWeight: 600 }}>This Field Is Required !</span> </div>
-                                    </Box>
-                                </Box>
+                               
 
-                                <Box className={classes.Front_Box}>
-                                    <Box className={classes.Front_Box_Hading}>
-                                        Select Project
-                                    </Box>
-                                    <Box className={classes.Front_Box_Select_Button} >
-                                        <FormControl sx={{ minWidth: 150 }}>
-                                            <InputLabel id="demo-simple-select-label">Select Project</InputLabel>
-                                            <Select
-                                                labelId="demo-simple-select-label"
-                                                id="demo-simple-select"
-                                                value={selectProject}
-                                                label="Select Project"
-                                                onChange={(event) => { setSelectProject(event.target.value); setShowProject(false) }}
-                                            >
-                                                {projectArray.map((item, index) => (
-                                                    <MenuItem value={item} key={index}>{item}</MenuItem>
-                                                ))}
-                                            </Select>
-                                        </FormControl>
-                                        <div>  <span style={{ display: showProject ? 'inherit' : 'none', color: 'red', fontSize: '18px', fontWeight: 600 }}>This Field Is Required !</span> </div>
-                                    </Box>
-                                </Box>
+                           
 
                                 <Box className={classes.Front_Box} >
                                     <div className={classes.Front_Box_Hading}>
-                                        Select XML Files:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{ }</span>
+                                        Select Excel Files:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{ }</span>
                                     </div>
                                     <div className={classes.Front_Box_Select_Button} >
                                         <div style={{ float: "left" }}>
                                             <Button variant="contained" component="label" color={make4GFiles.length > 0 ? "warning" : "primary"}>
                                                 select file
-                                                <input required hidden accept=".xml,txt" multiple type="file"
+                                                <input required hidden accept=".xlsx" multiple type="file"
                                                     // webkitdirectory="true"
                                                     // directory="true"
                                                     onChange={(e) => { handle4GFileSelection(e); setShow4G(false); }} />
@@ -218,8 +159,7 @@ const Checklist = () => {
                 </Box>
             </Slide>
             {loading}
-        </>
-    )
-}
+        </>;
+};
 
-export default Checklist
+export default SummaruUpload;

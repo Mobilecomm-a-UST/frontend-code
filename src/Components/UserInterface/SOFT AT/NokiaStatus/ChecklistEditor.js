@@ -121,7 +121,7 @@ const ChecklistEditor = () => {
         queryKey: ['SOFT_AT_Nokia_Checklist'],
         queryFn: async () => {
             action(isPending)
-            const res = await makeGetRequest("soft_at_nokia/get/");
+            const res = await makeGetRequest("Soft_AT_Checklist_Nokia/get/");
             if (res) {
                 action(false)
                 console.log('soft at nokia data', res)
@@ -290,7 +290,9 @@ const ChecklistEditor = () => {
                     </Box>
                 </DialogTitle>
                 <DialogContent dividers={'paper'}>
-                    <form onSubmit={handleUpdateData} style={{ width: '100%', marginTop: 20 }}>
+                    <form 
+                    // onSubmit={handleUpdateData}
+                     style={{ width: '100%', marginTop: 20 }}>
                         <Grid container spacing={2}>
                             <Grid item xs={6}>
                                 <TextField
