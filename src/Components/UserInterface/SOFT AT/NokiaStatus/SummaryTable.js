@@ -4,7 +4,7 @@ import { styled } from '@mui/material/styles';
 import { Box, Grid, Stack, Button, Popover, List, ListItem, ListItemText, Link, Breadcrumbs, Typography } from "@mui/material";
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { useNavigate } from 'react-router-dom';
-import InputAdornment from '@mui/material/InputAdornment';
+import * as ExcelJS from 'exceljs'
 import Tooltip from '@mui/material/Tooltip';
 import DownloadIcon from '@mui/icons-material/Download';
 import Table from '@mui/material/Table';
@@ -237,6 +237,68 @@ const SummaryTable = () => {
             handleClose2();
         }
     
+           const handleDownload = () => {
+                const workbook = new ExcelJS.Workbook();
+                const sheet1 = workbook.addWorksheet("Nokia Summary", { properties: { tabColor: { argb: 'B0EBB4' } } })
+        
+        
+                sheet1.getCell('A1').value = 'MO Class';
+                sheet1.getCell('B1').value = 'Parameter';
+                sheet1.columns = [
+                    { key: 'MO_Class' },
+                    { key: 'Parameter' },
+                ]
+        
+                data?.map(item => {
+                    sheet1.addRow({
+                        MO_Class: item?.MO_Class,
+                        Parameter: item?.Parameter,
+                    })
+                })
+        
+                sheet1.eachRow({ includeEmpty: true }, (row, rowNumber) => {
+                    const rows = sheet1.getColumn(1);
+
+                    row.eachCell({ includeEmpty: true }, (cell) => {
+                        cell.alignment = { vertical: 'middle', horizontal: 'center' }
+                        cell.border = {
+                            top: { style: 'thin' },
+                            left: { style: 'thin' },
+                            bottom: { style: 'thin' },
+                            right: { style: 'thin' }
+                        }
+        
+                        if (rowNumber === 1) {
+                            // First set the background of header row
+                            cell.fill = {
+                                type: 'pattern',
+                                pattern: 'solid',
+                                fgColor: { argb: '223354' }
+                            }
+                            cell.font = {
+                                color: { argb: 'FFFFFF' },
+                                bold: true,
+                                size: 12,
+                            }
+                            cell.views = [{ state: 'frozen', ySplit: 1 }]
+                        }
+                    });
+                    
+                        
+                   
+                })
+                workbook.xlsx.writeBuffer().then(item => {
+                    const blob = new Blob([item], {
+                        type: "application/vnd.openxmlformats-officedocument.spreadsheet.sheet"
+                    })
+                    const url = window.URL.createObjectURL(blob);
+                    const anchor = document.createElement('a');
+                    anchor.href = url;
+                    anchor.download = "Nokia_Summary_Table.xlsx";
+                    anchor.click();
+                    window.URL.revokeObjectURL(url);
+                })
+            }
     
     
         const handleEditDialog = useCallback(() => {
@@ -374,7 +436,7 @@ const SummaryTable = () => {
     
                             <Box style={{ float: 'right', display: 'flex' }}>
                                 <Tooltip title="Export Excel">
-                                    <IconButton >
+                                    <IconButton onClick={()=>{handleDownload()}}>
                                         <DownloadIcon fontSize='medium' color='primary' />
                                     </IconButton>
                                 </Tooltip>
