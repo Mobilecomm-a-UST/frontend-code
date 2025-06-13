@@ -371,20 +371,7 @@ const Rca_data = () => {
                                 </FormControl>
                             </Grid>
                             <Grid item xs={6}>
-                                {/* <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    placeholder="Tentative Counters"
-                                    label="Tentative Counters"
-                                    name="Tentative_counters"
-                                    value={formData.Tentative_counters}
-                                    onChange={handleChange}
-                                    multiline
-                                    maxRows={4}
-                                    size="small"
-                                    type='text'
-                                /> */}
+                               
                                 <FormControl fullWidth size="small">
                                     <InputLabel id="demo-simple-select-label">Tentative Counters</InputLabel>
                                     <Select

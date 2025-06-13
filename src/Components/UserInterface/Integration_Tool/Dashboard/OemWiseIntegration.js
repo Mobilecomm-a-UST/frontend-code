@@ -320,8 +320,8 @@ const OemWiseIntegration = ({ onData }) => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {mainDataT2?.map((item) => (
-                                    <tr style={{ textAlign: "center", fontWeigth: 700 }}>
+                                {mainDataT2?.map((item , index) => (
+                                    <tr key={index} style={{ textAlign: "center", fontWeigth: 700 }}>
                                         <th>{item.cir}</th>
                                         <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'DE-GROW' })}>{item.DE_GROW}</th>
                                         <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'MACRO' })}>{item.MACRO}</th>
@@ -337,12 +337,12 @@ const OemWiseIntegration = ({ onData }) => {
                                         <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'RECTIFICATION' })}>{item.RECTIFICATION}</th>
                                         <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'OPERATIONS' })}>{item.OPERATIONS}</th>
                                         <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'OTHERS' })}>{item.OTHERS}</th>
-                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'RRU UPGRADE' })}>{it['RRU UPGRADE'] || 0}</th>
-                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: '5G BW UPGRADE' })}>{it['5G BW UPGRADE'] || 0}</th>
-                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: '5G RRU SWAP' })}>{it['5G RRU SWAP'] || 0}</th>
-                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'G5_SECTOR_ADDITION' })}>{item['5G SECTOR ADDITION']}</th>
-                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'G5_RELOCATION' })}>{item['5G RELOCATION']}</th>
-                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'TRAFFIC_SHIFTING' })}>{item.TRAFFIC_SHIFTING}</th>
+                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'RRU UPGRADE' })}>{item?.RRU_UPGRADE}</th> 
+                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: '5G BW UPGRADE' })}>{item['5G_BW_UPGRADE']}</th>
+                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: '5G RRU SWAP' })}>{item['5G_RRU_SWAP']}</th>
+                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: '5G SECTOR ADDITION' })}>{item['5G_SECTOR_ADDITION']}</th>
+                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: '5G RELOCATION' })}>{item['5G_RELOCATION']}</th>
+                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'TRAFFIC SHIFTING' })}>{item?.TRAFFIC_SHIFTING}</th>
 
                                     </tr>
                                 ))}
@@ -368,7 +368,7 @@ const OemWiseIntegration = ({ onData }) => {
 
         const responce = await makePostRequest('IntegrationTracker/hyperlink-monthly-oemwise-integration-data/', formData)
         if (responce) {
-            // console.log('hyperlink data', JSON.parse(responce.table_data))
+            console.log('hyperlink data', JSON.parse(responce.table_data)[0])
             setMainDataT2(JSON.parse(responce.table_data))
             action(false)
             setOpen(true)

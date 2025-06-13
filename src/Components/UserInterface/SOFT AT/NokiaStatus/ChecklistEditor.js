@@ -31,6 +31,7 @@ import { useQuery } from '@tanstack/react-query';
 import { ServerURL } from '../../../services/FetchNodeServices';
 import axios from 'axios';
 import Swal from "sweetalert2";
+import * as ExcelJS from 'exceljs'
 // import { MemoAdd_Rca } from './Add_Rca';
 import AddCheckListData from './AddCheckListData';
 import _ from 'lodash';
@@ -102,7 +103,10 @@ const ChecklistEditor = () => {
     const [anchorE1, setAnchorE1] = useState(null);//
     const [perametrer, setPerameter] = useState([]);//for unique perameter from database
     const [selectPerameter, setSelectPerameter] = useState([]);
-    const [expected , setExpected] = useState([]);//for unique perameter from database
+
+    const [expected, setExpected] = useState([]);//for unique perameter from database
+
+
     const [selectExpected, setSelectExpected] = useState([]);
 
     const [formData, setFormData] = useState({
@@ -132,7 +136,7 @@ const ChecklistEditor = () => {
         staleTime: 100000,
         refetchOnReconnect: false,
     })
-   
+
 
     const open2 = Boolean(anchorE1);
     const handleOpen2 = (event) => {
@@ -240,6 +244,72 @@ const ChecklistEditor = () => {
         handleClose2();
     }
 
+    const handleDownload = () => {
+        const workbook = new ExcelJS.Workbook();
+        const sheet1 = workbook.addWorksheet("Nokia Checklist", { properties: { tabColor: { argb: 'B0EBB4' } } })
+
+
+        sheet1.getCell('A1').value = 'Path';
+        sheet1.getCell('B1').value = 'Parameter Name';
+        sheet1.getCell('C1').value = 'Expected Value';
+        sheet1.columns = [
+            { key: 'path' },
+            { key: 'parameter_name' },
+            { key: 'expected_value' },
+        ]
+
+        data?.map(item => {
+            sheet1.addRow({
+                path: item?.path,
+                parameter_name: item?.parameter_name,
+                expected_value: item?.expected_value,
+
+            })
+        })
+
+        sheet1.eachRow({ includeEmpty: true }, (row, rowNumber) => {
+            const rows = sheet1.getColumn(1);
+            const rowsCount = rows['_worksheet']['_rows'].length;
+            row.eachCell({ includeEmpty: true }, (cell) => {
+                cell.alignment = { vertical: 'middle', horizontal: 'center' }
+                cell.border = {
+                    top: { style: 'thin' },
+                    left: { style: 'thin' },
+                    bottom: { style: 'thin' },
+                    right: { style: 'thin' }
+                }
+
+                if (rowNumber === 1) {
+                    // First set the background of header row
+                    cell.fill = {
+                        type: 'pattern',
+                        pattern: 'solid',
+                        fgColor: { argb: '223354' }
+                    }
+                    cell.font = {
+                        color: { argb: 'FFFFFF' },
+                        bold: true,
+                        size: 12,
+                    }
+                    cell.views = [{ state: 'frozen', ySplit: 1 }]
+                }
+            });
+            
+                
+           
+        })
+        workbook.xlsx.writeBuffer().then(item => {
+            const blob = new Blob([item], {
+                type: "application/vnd.openxmlformats-officedocument.spreadsheet.sheet"
+            })
+            const url = window.URL.createObjectURL(blob);
+            const anchor = document.createElement('a');
+            anchor.href = url;
+            anchor.download = "Nokia_Checklist.xlsx";
+            anchor.click();
+            window.URL.revokeObjectURL(url);
+        })
+    }
 
 
     const handleEditDialog = useCallback(() => {
@@ -280,7 +350,9 @@ const ChecklistEditor = () => {
                                     type='text'
                                 />
                             </Grid>
-                             <Grid item xs={6}>
+
+                            <Grid item xs={6}>
+
                                 <TextField
                                     variant="outlined"
                                     fullWidth
@@ -326,9 +398,12 @@ const ChecklistEditor = () => {
         let filteredData = _.filter(data, item => {
             const perameterMatch = selectPerameter.length === 0 || _.includes(selectPerameter, item.parameter_name);
             const expectedMatch = selectExpected.length === 0 || _.includes(selectExpected, item.expected_value);
-          
+
+
             return perameterMatch && expectedMatch;
-         
+
+          
+
         });
 
         return filteredData?.map((row, index) => (
@@ -355,12 +430,13 @@ const ChecklistEditor = () => {
             </StyledTableRow>
         ))
 
-    }, [ data,selectPerameter,selectExpected])
+    }, [data, selectPerameter, selectExpected])
 
     useEffect(() => {
         if (data) {
-                 setExpected(_.uniq(_.map(data, 'expected_value')))
-                setPerameter(_.uniq(_.map(data, 'parameter_name')))
+            setExpected(_.uniq(_.map(data, 'expected_value')))
+            setPerameter(_.uniq(_.map(data, 'parameter_name')))
+
 
         }
         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
@@ -392,8 +468,8 @@ const ChecklistEditor = () => {
                         </Box>
 
                         <Box style={{ float: 'right', display: 'flex' }}>
-                            <Tooltip title="Export Excel">
-                                <IconButton >
+                            <Tooltip title="Export Checklist">
+                                <IconButton onClick={() => { handleDownload() }}>
                                     <DownloadIcon fontSize='medium' color='primary' />
                                 </IconButton>
                             </Tooltip>
