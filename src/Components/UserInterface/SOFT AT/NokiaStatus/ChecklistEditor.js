@@ -103,7 +103,10 @@ const ChecklistEditor = () => {
     const [anchorE1, setAnchorE1] = useState(null);//
     const [perametrer, setPerameter] = useState([]);//for unique perameter from database
     const [selectPerameter, setSelectPerameter] = useState([]);
+
     const [expected, setExpected] = useState([]);//for unique perameter from database
+
+
     const [selectExpected, setSelectExpected] = useState([]);
 
     const [formData, setFormData] = useState({
@@ -347,7 +350,9 @@ const ChecklistEditor = () => {
                                     type='text'
                                 />
                             </Grid>
+
                             <Grid item xs={6}>
+
                                 <TextField
                                     variant="outlined"
                                     fullWidth
@@ -394,7 +399,10 @@ const ChecklistEditor = () => {
             const perameterMatch = selectPerameter.length === 0 || _.includes(selectPerameter, item.parameter_name);
             const expectedMatch = selectExpected.length === 0 || _.includes(selectExpected, item.expected_value);
 
+
             return perameterMatch && expectedMatch;
+
+          
 
         });
 
@@ -428,6 +436,7 @@ const ChecklistEditor = () => {
         if (data) {
             setExpected(_.uniq(_.map(data, 'expected_value')))
             setPerameter(_.uniq(_.map(data, 'parameter_name')))
+
 
         }
         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
