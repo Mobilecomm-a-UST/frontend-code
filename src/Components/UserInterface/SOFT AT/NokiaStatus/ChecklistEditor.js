@@ -108,6 +108,7 @@ const ChecklistEditor = () => {
 
 
     const [selectExpected, setSelectExpected] = useState([]);
+    const userType = (getDecreyptedData('user_type')?.split(","))
 
     const [formData, setFormData] = useState({
         path: '',
@@ -250,8 +251,8 @@ const ChecklistEditor = () => {
 
 
         sheet1.getCell('A1').value = 'Path';
-        sheet1.getCell('B1').value = 'Parameter Name';
-        sheet1.getCell('C1').value = 'Expected Value';
+        sheet1.getCell('B1').value = 'Parameter';
+        sheet1.getCell('C1').value = 'Value';
         sheet1.columns = [
             { key: 'path' },
             { key: 'parameter_name' },
@@ -294,9 +295,9 @@ const ChecklistEditor = () => {
                     cell.views = [{ state: 'frozen', ySplit: 1 }]
                 }
             });
-            
-                
-           
+
+
+
         })
         workbook.xlsx.writeBuffer().then(item => {
             const blob = new Blob([item], {
@@ -457,11 +458,12 @@ const ChecklistEditor = () => {
                 <div style={{ height: 'auto', width: '100%', margin: '5px 0px', boxShadow: 'rgba(0, 0, 0, 0.5) 0px 3px 8px', backgroundColor: 'white', borderRadius: '10px', padding: '1px' }}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Box >
-                            <Tooltip title="Add List" color='primary'>
+                            {userType.includes('Admin') && <Tooltip title="Add List" color='primary'>
                                 <IconButton color='primary' onClick={() => setAdd(!add)}>
                                     <PlaylistAddIcon fontSize='medium' color='primary' />
                                 </IconButton>
-                            </Tooltip>
+                            </Tooltip>}
+
                         </Box>
                         <Box>
                             <h3>Nokia Checkpoint Table</h3>

@@ -35,31 +35,31 @@ const ToolData = [
         link: '/trends',
         groupBy:['quality','admin','quality-s']
     },
-    {
-        id: 1,
-        name: 'DPR',
-        title: 'This is a DPR tool',
-        icons: DetailIcon,
-        link: '/tools/dpr',
-        groupBy:['central','admin']
-    },
-    {
-        id: 2,
-        name: 'VENDOR',
-        title: 'This is a Vendor tool',
-        icons: PeopleBranchIcon,
-        link: '/tools/vendor',
-        groupBy:['central','admin']
-    },
-    {
-        id: 3,
-        name: 'PHYSICAL AT',
-        title: 'This is a PHYSICAL AT tool',
-        icons: CellTowerIcon,
-        link: '/tools/physical_at',
-        groupBy:['central','admin']
+    // {
+    //     id: 1,
+    //     name: 'DPR',
+    //     title: 'This is a DPR tool',
+    //     icons: DetailIcon,
+    //     link: '/tools/dpr',
+    //     groupBy:['central','admin']
+    // },
+    // {
+    //     id: 2,
+    //     name: 'VENDOR',
+    //     title: 'This is a Vendor tool',
+    //     icons: PeopleBranchIcon,
+    //     link: '/tools/vendor',
+    //     groupBy:['central','admin']
+    // },
+    // {
+    //     id: 3,
+    //     name: 'PHYSICAL AT',
+    //     title: 'This is a PHYSICAL AT tool',
+    //     icons: CellTowerIcon,
+    //     link: '/tools/physical_at',
+    //     groupBy:['central','admin']
 
-    },
+    // },
     {
         id: 4,
         name: 'SOFT AT',
@@ -78,22 +78,22 @@ const ToolData = [
         groupBy:['soft_at_team','admin']
     },
 
-    {
-        id: 6,
-        name: 'PERFORMANCE AT',
-        title: 'This is a PERFORMANCE AT tool',
-        icons: WavePointIcon,
-        link: '/tools/performance_at',
-        groupBy:['quality','admin','quality-s']
-    },
-    {
-        id: 7,
-        name: 'WPR',
-        title: 'This is a WPR tool',
-        icons: FunnelStepsIcon,
-        link:'/tools/wpr',
-        groupBy:['quality','admin','quality-s']
-    },
+    // {
+    //     id: 6,
+    //     name: 'PERFORMANCE AT',
+    //     title: 'This is a PERFORMANCE AT tool',
+    //     icons: WavePointIcon,
+    //     link: '/tools/performance_at',
+    //     groupBy:['quality','admin','quality-s']
+    // },
+    // {
+    //     id: 7,
+    //     name: 'WPR',
+    //     title: 'This is a WPR tool',
+    //     icons: FunnelStepsIcon,
+    //     link:'/tools/wpr',
+    //     groupBy:['quality','admin','quality-s']
+    // },
     {
         id: 8,
         name: 'MDP',
@@ -102,14 +102,14 @@ const ToolData = [
         link: '/tools/mdp',
         groupBy:['central','circle','admin']
     },
-    {
-        id: 9,
-        name: 'INVENTORY',
-        title: 'This is a Inventory tool',
-        icons: ThreeColumnsIcon,
-        link: '/tools/inventory',
-        groupBy:['central','circle','admin']
-    },
+    // {
+    //     id: 9,
+    //     name: 'INVENTORY',
+    //     title: 'This is a Inventory tool',
+    //     icons: ThreeColumnsIcon,
+    //     link: '/tools/inventory',
+    //     groupBy:['central','circle','admin']
+    // },
     {
         id: 10,
         name: 'Mcom Scripting',
@@ -154,23 +154,23 @@ const ToolData = [
         link: '/tools/schedular',
         groupBy:['admin']
     },
-    {
-        id: 18,
-        name: 'UBR Soft-At Tracker',
-        title: '',
-        icons: BlockIcon,
-        link: '/tools/UBR_soft_at_Tracker',
-        groupBy:['admin']
-    },
-    {
-        id: 19,
-        name: 'Zero RNA Payload',
-        title: 'This is a Zero RNA Payload',
-        icons: CombinationIcon,
-        link:  '/tools/zero_RNA_payload',
-        groupBy:['admin']
+    // {
+    //     id: 18,
+    //     name: 'UBR Soft-At Tracker',
+    //     title: '',
+    //     icons: BlockIcon,
+    //     link: '/tools/UBR_soft_at_Tracker',
+    //     groupBy:['admin']
+    // },
+    // {
+    //     id: 19,
+    //     name: 'Zero RNA Payload',
+    //     title: 'This is a Zero RNA Payload',
+    //     icons: CombinationIcon,
+    //     link:  '/tools/zero_RNA_payload',
+    //     groupBy:['admin']
 
-    },
+    // },
     {
         id: 20,
         name: 'CATS Tracker',

@@ -35,7 +35,7 @@ const DateWiseIntegration = ({ onData }) => {
     const [dateArray, setDateArray] = useState([])
     const [tableData, setTableData] = useState([])
     const [givenDate, setGivenDate] = useState('')
-
+    const activityArray = ['DE-GROW','MACRO','OTHER','RELOCATION','RET','ULS-HPSC','UPGRADE','MEMTO','HT-INCREMENT','IBS','IDSC','ODSC','RECTIFICATION','OPERATION','RRU UPGRADE','5G BW UPGRADE','5G RRU SWAP','5G SECTOR ADDITION','5G RELOCATION','TRAFFIC SHIFTING','5G AIR SWAP'] 
     // const [totals, setTotals] = useState()
 
 
@@ -101,6 +101,7 @@ const DateWiseIntegration = ({ onData }) => {
             D1_5G_SECTOR_ADDITION: 0,
             D1_5G_RELOCATION: 0,
             D1_TRAFFIC_SHIFTING: 0,
+            D1_5G_AIR_SWAP: 0,
             D2_DE_GROW: 0,
             D2_MACRO: 0,
             D2_OTHERS: 0,
@@ -121,6 +122,7 @@ const DateWiseIntegration = ({ onData }) => {
             D2_5G_SECTOR_ADDITION: 0,
             D2_5G_RELOCATION: 0,
             D2_TRAFFIC_SHIFTING: 0,
+            D2_5G_AIR_SWAP: 0,
             D3_DE_GROW: 0,
             D3_MACRO: 0,
             D3_OTHERS: 0,
@@ -141,6 +143,7 @@ const DateWiseIntegration = ({ onData }) => {
             D3_5G_SECTOR_ADDITION: 0,
             D3_5G_RELOCATION: 0,
             D3_TRAFFIC_SHIFTING: 0,
+            D3_5G_AIR_SWAP: 0,
 
         };
 
@@ -353,35 +356,7 @@ const DateWiseIntegration = ({ onData }) => {
             <style>{"th{border:1px solid black;}"}</style>
             <Slide direction="left" in='true' timeout={700} style={{ transformOrigin: '1 1 1' }}>
                 <div style={{ margin: 20 }}>
-                    {/* <div style={{ margin: 5, marginLeft: 10 }}>
-                        <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
-                            <Link underline="hover" href='/tools'>Tools</Link>
-
-                            <Link underline="hover" href='/tools/Integration'>Integration</Link>
-                            <Typography color='text.primary'>Dashboard</Typography>
-                        </Breadcrumbs>
-                    </div>
-                    <div style={{ height: 'auto', width: '100%', margin: '5px 0px', border: '1px solid black', borderRadius: '10px', padding: '2px', display: 'flex' }}>
-                        <Grid container spacing={1}>
-                            <Grid item xs={10} style={{ display: "flex" }}>
-                                <Box >
-
-                                </Box>
-
-                            </Grid>
-                            <Grid item xs={2}>
-                                <Box style={{ float: 'right' }}>
-                                    <Tooltip title="Export Excel">
-                                        <IconButton onClick={() => { handleExport(); }}>
-                                            <DownloadIcon fontSize='large' color='primary' />
-                                        </IconButton>
-                                    </Tooltip>
-                                </Box>
-                            </Grid>
-                        </Grid>
-
-                    </div> */}
-
+                   
                     {/* ************* 2G  TABLE DATA ************** */}
                     <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', alignContent: 'center' }}>
                         <Box style={{ fontSize: 22, fontWeight: 'bold' }}>
@@ -403,79 +378,25 @@ const DateWiseIntegration = ({ onData }) => {
                     </Box>
 
                     <Box sx={{ marginTop: 0 }}>
-                        <TableContainer sx={{ maxHeight: 540, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} component={Paper}>
+                        <TableContainer sx={{ maxHeight: 550, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} component={Paper}>
                             <table style={{ width: "100%", border: "1px solid black", borderCollapse: 'collapse', overflow: 'auto' }} >
                                 <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
                                         <th rowSpan='2' style={{ padding: '5px 20px', whiteSpace: 'nowrap', position: 'sticky', left: 0, top: 0, backgroundColor: '#223354' }}>CIRCLE</th>
-                                        <th colSpan='20' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#2F75B5' }}>{ChangeDateFormate(dateArray[2])}</th>
-                                        <th colSpan='20' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: "#DD761C" }}>{ChangeDateFormate(dateArray[1])}</th>
-                                        <th colSpan='20' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#03AED2' }}>{ChangeDateFormate(dateArray[0])}</th>
+                                        <th colSpan='21' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#2F75B5' }}>{ChangeDateFormate(dateArray[2])}</th>
+                                        <th colSpan='21' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: "#DD761C" }}>{ChangeDateFormate(dateArray[1])}</th>
+                                        <th colSpan='21' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#03AED2' }}>{ChangeDateFormate(dateArray[0])}</th>
                                     </tr>
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>DE-GROW     </th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>MACRO       </th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>OTHER       </th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>RELOCATION  </th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>RET         </th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>ULS-HPSC    </th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>UPGRADE     </th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>FEMTO       </th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>HT-INCREMENT</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>IBS          </th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>IDSC         </th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>ODSC          </th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>RECTIFICATION</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>OPERATIONS</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>RRU UPGRADE</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>5G BW UPGRADE</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>5G RRU SWAP</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>5G SECTOR ADDITION</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>5G RELOCATION</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>TRAFFIC SHIFTING</th>
-
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: "#FF9933" }}>DE-GROW</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: "#FF9933" }}>MACRO</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: "#FF9933" }}>OTHER</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: "#FF9933" }}>RELOCATION</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: "#FF9933" }}>RET</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: "#FF9933" }}>ULS-HPSC</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: "#FF9933" }}>UPGRADE</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>FEMTO</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>HT-INCREMENT</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>IBS</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>IDSC</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>ODSC</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>RECTIFICATION</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>OPERATIONS</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>RRU UPGRADE</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>5G BW UPGRADE</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>5G RRU SWAP</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>5G SECTOR ADDITION</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>5G RELOCATION</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>TRAFFIC SHIFTING</th>
-
-
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>DE-GROW</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>MACRO</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>OTHER</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>RELOCATION</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>RET</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>ULS-HPSC</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>UPGRADE</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>FEMTO</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>HT-INCREMENT</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>IBS</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>IDSC</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>ODSC</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>RECTIFICATION</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>OPERATIONS</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>RRU UPGRADE</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>5G BW UPGRADE</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>5G RRU SWAP</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>5G SECTOR ADDITION</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>5G RELOCATION</th>
-                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>TRAFFIC SHIFTING</th>
+                                        {activityArray.map((item, index) => (
+                                             <th key={index} style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>{item}</th>
+                                        ))}
+                                         {activityArray.map((item, index) => (
+                                             <th key={index} style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>{item}</th>
+                                        ))}
+                                         {activityArray.map((item, index) => (
+                                             <th key={index} style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>{item}</th>
+                                        ))}
 
                                     </tr>
                                 </thead>
@@ -504,6 +425,7 @@ const DateWiseIntegration = ({ onData }) => {
                                                 <th style={{ cursor: 'pointer', backgroundColor: it.D1_5G_SECTOR_ADDITION > 0 ? '#FEEFAD' : '' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: '5G SECTOR ADDITION' })}>{it?.D1_5G_SECTOR_ADDITION}</th>
                                                 <th style={{ cursor: 'pointer', backgroundColor: it.D1_5G_RELOCATION > 0 ? '#FEEFAD' : '' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: '5G RELOCATION' })}>{it?.D1_5G_RELOCATION}</th>
                                                 <th style={{ cursor: 'pointer', backgroundColor: it.D1_TRAFFIC_SHIFTING > 0 ? '#FEEFAD' : '' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: 'TRAFFIC SHIFTING' })}>{it?.D1_TRAFFIC_SHIFTING}</th>
+                                                <th style={{ cursor: 'pointer', backgroundColor: it.D1_TRAFFIC_SHIFTING > 0 ? '#FEEFAD' : '' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: '5G AIR SWAP' })}>{it?.D1_5G_AIR_SWAP}</th>
 
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D2_DE_GROW > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: 'DE-GROW' })}>{it?.D2_DE_GROW}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D2_MACRO > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: 'MACRO' })}>{it?.D2_MACRO}</th>
@@ -525,6 +447,7 @@ const DateWiseIntegration = ({ onData }) => {
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D2_5G_SECTOR_ADDITION > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: '5G SECTOR ADDITION' })}>{it?.D2_5G_SECTOR_ADDITION}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D2_5G_RELOCATION > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: '5G RELOCATION' })}>{it?.D2_5G_RELOCATION}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D2_TRAFFIC_SHIFTING > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: 'TRAFFIC SHIFTING' })}>{it?.D2_TRAFFIC_SHIFTING}</th>
+                                                <th style={{ cursor: 'pointer', backgroundColor: it.D1_TRAFFIC_SHIFTING > 0 ? '#FEEFAD' : '' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: '5G AIR SWAP' })}>{it?.D2_5G_AIR_SWAP}</th>
 
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D3_DE_GROW > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[0], circle: it?.cir, activity: 'DE-GROW' })}>{it?.D3_DE_GROW}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D3_MACRO > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[0], circle: it?.cir, activity: 'MACRO' })}>{it?.D3_MACRO}</th>
@@ -546,6 +469,7 @@ const DateWiseIntegration = ({ onData }) => {
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D3_5G_SECTOR_ADDITION > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[0], circle: it?.cir, activity: '5G SECTOR ADDITION' })}>{it?.D3_5G_SECTOR_ADDITION}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D3_5G_RELOCATION > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[0], circle: it?.cir, activity: '5G RELOCATION' })}>{it?.D3_5G_RELOCATION}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D3_TRAFFIC_SHIFTING > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[0], circle: it?.cir, activity: 'TRAFFIC SHIFTING' })}>{it?.D3_TRAFFIC_SHIFTING}</th>
+                                                <th style={{ cursor: 'pointer', backgroundColor: it.D1_TRAFFIC_SHIFTING > 0 ? '#FEEFAD' : '' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: '5G AIR SWAP' })}>{it?.D3_5G_AIR_SWAP}</th>
                                             </tr>
                                         )
                                     }

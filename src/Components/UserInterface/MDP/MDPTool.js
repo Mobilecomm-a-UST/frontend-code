@@ -80,7 +80,7 @@ const MDPTool = () => {
                 <Zoom in='true' timeout={500}>
 
                     <Box sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
-                        <Box style={{ marginLeft: 70 , marginBottom:5 }}>
+                        <Box style={{ marginLeft: 90 , marginBottom:5 }}>
                             <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
                                 <Link underline="hover" onClick={()=>{ navigate('/tools')}}>Tools</Link>
                                 {/* <Link underline="hover" href='/trends'>Trend</Link> */}

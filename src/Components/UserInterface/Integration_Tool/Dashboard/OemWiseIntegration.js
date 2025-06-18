@@ -316,6 +316,7 @@ const OemWiseIntegration = ({ onData }) => {
                                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>5G SECTOR ADDITION</th>
                                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>5G RELOCATION</th>
                                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>TRAFFIC SHIFTING</th>
+                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>5G AIR SWAP</th>
 
                                 </tr>
                             </thead>
@@ -343,6 +344,7 @@ const OemWiseIntegration = ({ onData }) => {
                                         <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: '5G SECTOR ADDITION' })}>{item['5G_SECTOR_ADDITION']}</th>
                                         <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: '5G RELOCATION' })}>{item['5G_RELOCATION']}</th>
                                         <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'TRAFFIC SHIFTING' })}>{item?.TRAFFIC_SHIFTING}</th>
+                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: '5G AIR SWAP' })}>{item['5G_AIR_SWAP']}</th>
 
                                     </tr>
                                 ))}
