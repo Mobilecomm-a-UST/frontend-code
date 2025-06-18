@@ -54,20 +54,20 @@ const AddCheckListData = (props) => {
             formData.append(`excel_file`, make4GFiles.bytes);
             const response = await postData(`Soft_AT_Checklist_Nokia/${props.api}/`, formData)
             // console.log('response data', response)
-            if (response) {
+            if (response.status === true) {
                 action(false)
                 props.handleClick();
                 props.handleFetch();
-                // setDownload(true)
-                // setFileData(response.download_url)
+                
                 Swal.fire({
                     icon: "success",
                     title: "Done",
                     text: `${response.message}`,
                 });
-                // console.log('sssssssssssssssssssss', response)
+         
             } else {
                 action(false)
+                props.handleClick();
 
                 Swal.fire({
                     icon: "error",

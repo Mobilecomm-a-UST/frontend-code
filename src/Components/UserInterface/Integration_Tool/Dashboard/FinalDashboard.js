@@ -33,7 +33,7 @@ const monthNames = [" ",
     "November",
     "December"
 ];
-const alphaBate = ['B', 'V', 'AP']
+const alphaBate = ['B', 'W', 'AR']
 
 const colorType = ['#B0EBB4', '#A0DEFF', '#FF9F66', '#ECB176', '#CDE8E5']
 
@@ -115,21 +115,16 @@ const FinalDashboard = () => {
         const sheet3 = workbook.addWorksheet("Monthly OEM Wise", { properties: { tabColor: { argb: 'A0DEFF' } } })
         const sheet4 = workbook.addWorksheet("Range Wise", { properties: { tabColor: { argb: '5AB2FF' } } })
 
-        // sheet.properties.defaultRowHeight = 20;
-        // sheet.properties.showGridLines = '#58D68D';
-
-
-
         // sheet3.mergeCells('A1:S1');
         sheet1.mergeCells('A1:A2');
-        sheet1.mergeCells('B1:U1');
-        sheet1.mergeCells('V1:AO1');
-        sheet1.mergeCells('AP1:BI1');
+        sheet1.mergeCells('B1:V1');
+        sheet1.mergeCells('W1:AQ1');
+        sheet1.mergeCells('AR1:BL1');
 
         sheet1.getCell('A1').value = 'Circle';
         sheet1.getCell('B1').value = `${sheet1Date[0]}`;
-        sheet1.getCell('V1').value = `${sheet1Date[1]}`;
-        sheet1.getCell('AP1').value = `${sheet1Date[2]}`;
+        sheet1.getCell('W1').value = `${sheet1Date[1]}`;
+        sheet1.getCell('AR1').value = `${sheet1Date[2]}`;
 
 
         sheet1.getCell('B2').value = 'DE-GROW';
@@ -152,59 +147,62 @@ const FinalDashboard = () => {
         sheet1.getCell('S2').value = '5G SECTOR ADDITION';
         sheet1.getCell('T2').value = '5G RELOCATION';
         sheet1.getCell('U2').value = 'TRAFFIC SHIFTING';
+        sheet1.getCell('V2').value = '5G AIR SWAP';
 
 
-        sheet1.getCell('V2').value = 'DE-GROW';
-        sheet1.getCell('W2').value = 'MACRO';
-        sheet1.getCell('X2').value = 'OTHER';
-        sheet1.getCell('Y2').value = 'RELOCATION';
-        sheet1.getCell('Z2').value = 'RET';
-        sheet1.getCell('AA2').value = 'ULS-HPSC';
-        sheet1.getCell('AB2').value = 'UPGRADE';
-        sheet1.getCell('AC2').value = 'FEMTO';
-        sheet1.getCell('AD2').value = 'HT-INCREMENT';
-        sheet1.getCell('AE2').value = 'IBS';
-        sheet1.getCell('AF2').value = 'IDSC';
-        sheet1.getCell('AG2').value = 'ODSC';
-        sheet1.getCell('AH2').value = 'RECTIFICATION';
-        sheet1.getCell('AI2').value = 'OPERATIONS';
-        sheet1.getCell('AJ2').value = 'RRU UPGRADE';
-        sheet1.getCell('AK2').value = '5G BW UPGRADE';
-        sheet1.getCell('AL2').value = '5G RRU SWAP';
-        sheet1.getCell('AM2').value = '5G SECTOR ADDITION';
-        sheet1.getCell('AN2').value = '5G RELOCATION';
-        sheet1.getCell('AO2').value = 'TRAFFIC SHIFTING';
+        sheet1.getCell('W2').value = 'DE-GROW';
+        sheet1.getCell('X2').value = 'MACRO';
+        sheet1.getCell('Y2').value = 'OTHER';
+        sheet1.getCell('Z2').value = 'RELOCATION';
+        sheet1.getCell('AA2').value = 'RET';
+        sheet1.getCell('AB2').value = 'ULS-HPSC';
+        sheet1.getCell('AC2').value = 'UPGRADE';
+        sheet1.getCell('AD2').value = 'FEMTO';
+        sheet1.getCell('AE2').value = 'HT-INCREMENT';
+        sheet1.getCell('AF2').value = 'IBS';
+        sheet1.getCell('AG2').value = 'IDSC';
+        sheet1.getCell('AH2').value = 'ODSC';
+        sheet1.getCell('AI2').value = 'RECTIFICATION';
+        sheet1.getCell('AJ2').value = 'OPERATIONS';
+        sheet1.getCell('AK2').value = 'RRU UPGRADE';
+        sheet1.getCell('AL2').value = '5G BW UPGRADE';
+        sheet1.getCell('AM2').value = '5G RRU SWAP';
+        sheet1.getCell('AN2').value = '5G SECTOR ADDITION';
+        sheet1.getCell('AO2').value = '5G RELOCATION';
+        sheet1.getCell('AP2').value = 'TRAFFIC SHIFTING';
+        sheet1.getCell('AQ2').value = '5G AIR SWAP';
 
 
-        sheet1.getCell('AP2').value = 'DE-GROW';
-        sheet1.getCell('AQ2').value = 'MACRO';
-        sheet1.getCell('AR2').value = 'OTHER';
-        sheet1.getCell('AS2').value = 'RELOCATION';
-        sheet1.getCell('AT2').value = 'RET';
-        sheet1.getCell('AU2').value = 'ULS-HPSC';
-        sheet1.getCell('AV2').value = 'UPGRADE';
-        sheet1.getCell('AW2').value = 'FEMTO';
-        sheet1.getCell('AX2').value = 'HT-INCREMENT';
-        sheet1.getCell('AY2').value = 'IBS';
-        sheet1.getCell('AZ2').value = 'IDSC';
-        sheet1.getCell('BA2').value = 'ODSC';
-        sheet1.getCell('BB2').value = 'RECTIFICATION';
-        sheet1.getCell('BC2').value = 'OPERATIONS';
-        sheet1.getCell('BD2').value = 'RRU UPGRADE';
-        sheet1.getCell('BE2').value = '5G BW UPGRADE';
-        sheet1.getCell('BF2').value = '5G RRU SWAP';
-        sheet1.getCell('BG2').value = '5G SECTOR ADDITION';
-        sheet1.getCell('BH2').value = '5G RELOCATION';
-        sheet1.getCell('BI2').value = 'TRAFFIC SHIFTING';
+        sheet1.getCell('AR2').value = 'DE-GROW';
+        sheet1.getCell('AS2').value = 'MACRO';
+        sheet1.getCell('AT2').value = 'OTHER';
+        sheet1.getCell('AU2').value = 'RELOCATION';
+        sheet1.getCell('AV2').value = 'RET';
+        sheet1.getCell('AW2').value = 'ULS-HPSC';
+        sheet1.getCell('AX2').value = 'UPGRADE';
+        sheet1.getCell('AY2').value = 'FEMTO';
+        sheet1.getCell('AZ2').value = 'HT-INCREMENT';
+        sheet1.getCell('BA2').value = 'IBS';
+        sheet1.getCell('BB2').value = 'IDSC';
+        sheet1.getCell('BC2').value = 'ODSC';
+        sheet1.getCell('BD2').value = 'RECTIFICATION';
+        sheet1.getCell('BE2').value = 'OPERATIONS';
+        sheet1.getCell('BF2').value = 'RRU UPGRADE';
+        sheet1.getCell('BG2').value = '5G BW UPGRADE';
+        sheet1.getCell('BH2').value = '5G RRU SWAP';
+        sheet1.getCell('BI2').value = '5G SECTOR ADDITION';
+        sheet1.getCell('BJ2').value = '5G RELOCATION';
+        sheet1.getCell('BK2').value = 'TRAFFIC SHIFTING';
+        sheet1.getCell('BL2').value = '5G AIR SWAP';
 
 
 
         /// sheet 2 ///
 
         sheet2.mergeCells('A1:A2');
-        sheet2.mergeCells('B1:U1');
-        sheet2.mergeCells('V1:AO1');
-        sheet2.mergeCells('AP1:BI1');
+        sheet2.mergeCells('B1:V1');
+        sheet2.mergeCells('W1:AQ1');
+        sheet2.mergeCells('AR1:BL1');
 
         sheet2.getCell('A1').value = 'Circle';
         {
@@ -241,49 +239,53 @@ const FinalDashboard = () => {
         sheet2.getCell('S2').value = '5G SECTOR ADDITION';
         sheet2.getCell('T2').value = '5G RELOCATION';
         sheet2.getCell('U2').value = 'TRAFFIC SHIFTING';
+        sheet2.getCell('V2').value = '5G AIR SWAP';
 
 
-        sheet2.getCell('V2').value = 'DE-GROW';
-        sheet2.getCell('W2').value = 'MACRO';
-        sheet2.getCell('X2').value = 'OTHER';
-        sheet2.getCell('Y2').value = 'RELOCATION';
-        sheet2.getCell('Z2').value = 'RET';
-        sheet2.getCell('AA2').value = 'ULS-HPSC';
-        sheet2.getCell('AB2').value = 'UPGRADE';
-        sheet2.getCell('AC2').value = 'FEMTO';
-        sheet2.getCell('AD2').value = 'HT-INCREMENT';
-        sheet2.getCell('AE2').value = 'IBS';
-        sheet2.getCell('AF2').value = 'IDSC';
-        sheet2.getCell('AG2').value = 'ODSC';
-        sheet2.getCell('AH2').value = 'RECTIFICATION';
-        sheet2.getCell('AI2').value = 'OPERATIONS';
-        sheet2.getCell('AJ2').value = 'RRU UPGRADE';
-        sheet2.getCell('AK2').value = '5G BW UPGRADE';
-        sheet2.getCell('AL2').value = '5G RRU SWAP';
-        sheet2.getCell('AM2').value = '5G SECTOR ADDITION';
-        sheet2.getCell('AN2').value = '5G RELOCATION';
-        sheet2.getCell('AO2').value = 'TRAFFIC SHIFTING';
+        sheet2.getCell('W2').value = 'DE-GROW';
+        sheet2.getCell('X2').value = 'MACRO';
+        sheet2.getCell('Y2').value = 'OTHER';
+        sheet2.getCell('Z2').value = 'RELOCATION';
+        sheet2.getCell('AA2').value = 'RET';
+        sheet2.getCell('AB2').value = 'ULS-HPSC';
+        sheet2.getCell('AC2').value = 'UPGRADE';
+        sheet2.getCell('AD2').value = 'FEMTO';
+        sheet2.getCell('AE2').value = 'HT-INCREMENT';
+        sheet2.getCell('AF2').value = 'IBS';
+        sheet2.getCell('AG2').value = 'IDSC';
+        sheet2.getCell('AH2').value = 'ODSC';
+        sheet2.getCell('AI2').value = 'RECTIFICATION';
+        sheet2.getCell('AJ2').value = 'OPERATIONS';
+        sheet2.getCell('AK2').value = 'RRU UPGRADE';
+        sheet2.getCell('AL2').value = '5G BW UPGRADE';
+        sheet2.getCell('AM2').value = '5G RRU SWAP';
+        sheet2.getCell('AN2').value = '5G SECTOR ADDITION';
+        sheet2.getCell('AO2').value = '5G RELOCATION';
+        sheet2.getCell('AP2').value = 'TRAFFIC SHIFTING';
+        sheet2.getCell('AQ2').value = '5G AIR SWAP';
 
-        sheet2.getCell('AP2').value = 'DE-GROW';
-        sheet2.getCell('AQ2').value = 'MACRO';
-        sheet2.getCell('AR2').value = 'OTHER';
-        sheet2.getCell('AS2').value = 'RELOCATION';
-        sheet2.getCell('AT2').value = 'RET';
-        sheet2.getCell('AU2').value = 'ULS-HPSC';
-        sheet2.getCell('AV2').value = 'UPGRADE';
-        sheet2.getCell('AW2').value = 'FEMTO';
-        sheet2.getCell('AX2').value = 'HT-INCREMENT';
-        sheet2.getCell('AY2').value = 'IBS';
-        sheet2.getCell('AZ2').value = 'IDSC';
-        sheet2.getCell('BA2').value = 'ODSC';
-        sheet2.getCell('BB2').value = 'RECTIFICATION';
-        sheet2.getCell('BC2').value = 'OPERATIONS';
-        sheet2.getCell('BD2').value = 'RRU UPGRADE';
-        sheet2.getCell('BE2').value = '5G BW UPGRADE';
-        sheet2.getCell('BF2').value = '5G RRU SWAP';
-        sheet2.getCell('BG2').value = '5G SECTOR ADDITION';
-        sheet2.getCell('BH2').value = '5G RELOCATION';
-        sheet2.getCell('BI2').value = 'TRAFFIC SHIFTING';
+
+        sheet2.getCell('AR2').value = 'DE-GROW';
+        sheet2.getCell('AS2').value = 'MACRO';
+        sheet2.getCell('AT2').value = 'OTHER';
+        sheet2.getCell('AU2').value = 'RELOCATION';
+        sheet2.getCell('AV2').value = 'RET';
+        sheet2.getCell('AW2').value = 'ULS-HPSC';
+        sheet2.getCell('AX2').value = 'UPGRADE';
+        sheet2.getCell('AY2').value = 'FEMTO';
+        sheet2.getCell('AZ2').value = 'HT-INCREMENT';
+        sheet2.getCell('BA2').value = 'IBS';
+        sheet2.getCell('BB2').value = 'IDSC';
+        sheet2.getCell('BC2').value = 'ODSC';
+        sheet2.getCell('BD2').value = 'RECTIFICATION';
+        sheet2.getCell('BE2').value = 'OPERATIONS';
+        sheet2.getCell('BF2').value = 'RRU UPGRADE';
+        sheet2.getCell('BG2').value = '5G BW UPGRADE';
+        sheet2.getCell('BH2').value = '5G RRU SWAP';
+        sheet2.getCell('BI2').value = '5G SECTOR ADDITION';
+        sheet2.getCell('BJ2').value = '5G RELOCATION';
+        sheet2.getCell('BK2').value = 'TRAFFIC SHIFTING';
+        sheet2.getCell('BL2').value = '5G AIR SWAP';
 
 
         //          SHEET 3
@@ -299,7 +301,7 @@ const FinalDashboard = () => {
 
         //          SHEET 4
         sheet4.mergeCells('A1:A2');
-        sheet4.mergeCells('B1:U1');
+        sheet4.mergeCells('B1:V1');
 
         sheet4.getCell('A1').value = 'Circle';
         sheet4.getCell('B1').value = `${sheet4Date[0]} to ${sheet4Date[1]}`;
@@ -324,6 +326,7 @@ const FinalDashboard = () => {
         sheet4.getCell('S2').value = '5G SECTOR ADDITION';
         sheet4.getCell('T2').value = '5G RELOCATION';
         sheet4.getCell('U2').value = 'TRAFFIC SHIFTING';
+        sheet4.getCell('V2').value = '5G AIR SWAP';
 
 
         sheet1.columns = [
@@ -348,6 +351,7 @@ const FinalDashboard = () => {
             { key: 'D1_5G_SECTOR_ADDITION' },
             { key: 'D1_5G_RELOCATION' },
             { key: 'D1_TRAFFIC_SHIFTING' },//D1_TRAFFIC_SHIFTING
+            {key:'D1_5G_AIR_SWAP'},
 
             { key: 'D2_DE_GROW' },
             { key: 'D2_MACRO' },
@@ -369,6 +373,7 @@ const FinalDashboard = () => {
             { key: 'D2_5G_SECTOR_ADDITION' },
             { key: 'D2_5G_RELOCATION' },
             { key: 'D2_TRAFFIC_SHIFTING' },
+            {key:'D2_5G_AIR_SWAP'},
 
             { key: 'D3_DE_GROW' },
             { key: 'D3_MACRO' },
@@ -390,6 +395,7 @@ const FinalDashboard = () => {
             { key: 'D3_5G_SECTOR_ADDITION' },
             { key: 'D3_5G_RELOCATION' },
             { key: 'D3_TRAFFIC_SHIFTING' },
+            {key:'D3_5G_AIR_SWAP'},
 
         ]
         sheet1Data?.map(item => {
@@ -415,6 +421,7 @@ const FinalDashboard = () => {
                 D1_5G_SECTOR_ADDITION: Number(item?.D1_5G_SECTOR_ADDITION),
                 D1_5G_RELOCATION: Number(item?.D1_5G_RELOCATION),
                 D1_TRAFFIC_SHIFTING: Number(item?.D1_TRAFFIC_SHIFTING),
+                D1_5G_AIR_SWAP: Number(item?.D1_5G_AIR_SWAP),
 
                 D2_DE_GROW: Number(item?.D2_DE_GROW),
                 D2_MACRO: Number(item?.D2_MACRO),
@@ -436,6 +443,7 @@ const FinalDashboard = () => {
                 D2_5G_SECTOR_ADDITION: Number(item?.D2_5G_SECTOR_ADDITION),
                 D2_5G_RELOCATION: Number(item?.D2_5G_RELOCATION),
                 D2_TRAFFIC_SHIFTING: Number(item?.D2_TRAFFIC_SHIFTING),
+                D2_5G_AIR_SWAP: Number(item?.D2_5G_AIR_SWAP),
 
                 D3_DE_GROW: Number(item?.D3_DE_GROW),
                 D3_MACRO: Number(item?.D3_MACRO),
@@ -457,6 +465,7 @@ const FinalDashboard = () => {
                 D3_5G_SECTOR_ADDITION: Number(item?.D3_5G_SECTOR_ADDITION),
                 D3_5G_RELOCATION: Number(item?.D3_5G_RELOCATION),
                 D3_TRAFFIC_SHIFTING: Number(item?.D3_TRAFFIC_SHIFTING),
+                D3_5G_AIR_SWAP: Number(item?.D3_5G_AIR_SWAP),
             });
         })
 
@@ -484,6 +493,7 @@ const FinalDashboard = () => {
             { key: 'M1_5G_SECTOR_ADDITION' },
             { key: 'M1_5G_RELOCATION' },
             { key: 'M1_TRAFFIC_SHIFTING' },
+            {key: 'M1_5G_AIR_SWAP'},
 
             { key: 'M2_DE_GROW' },
             { key: 'M2_MACRO' },
@@ -505,6 +515,7 @@ const FinalDashboard = () => {
             { key: 'M2_5G_SECTOR_ADDITION' },
             { key: 'M2_5G_RELOCATION' },
             { key: 'M2_TRAFFIC_SHIFTING' },
+            {key: 'M2_5G_AIR_SWAP'},
 
             { key: 'M3_DE_GROW' },
             { key: 'M3_MACRO' },
@@ -526,6 +537,7 @@ const FinalDashboard = () => {
             { key: 'M3_5G_SECTOR_ADDITION' },
             { key: 'M3_5G_RELOCATION' },
             { key: 'M3_TRAFFIC_SHIFTING' },
+            {key: 'M3_5G_AIR_SWAP'},
         ]
 
         sheet2Data?.map(item => {
@@ -552,6 +564,7 @@ const FinalDashboard = () => {
                 M1_5G_SECTOR_ADDITION: Number(item?.M1_5G_SECTOR_ADDITION),
                 M1_5G_RELOCATION: Number(item?.M1_5G_RELOCATION),
                 M1_TRAFFIC_SHIFTING: Number(item?.M1_TRAFFIC_SHIFTING),
+                M1_5G_AIR_SWAP: Number(item?.M1_5G_AIR_SWAP),
 
                 M2_DE_GROW: Number(item?.M2_DE_GROW),
                 M2_MACRO: Number(item?.M2_MACRO),
@@ -573,6 +586,7 @@ const FinalDashboard = () => {
                 M2_5G_SECTOR_ADDITION: Number(item?.M2_5G_SECTOR_ADDITION),
                 M2_5G_RELOCATION: Number(item?.M2_5G_RELOCATION),
                 M2_TRAFFIC_SHIFTING: Number(item?.M2_TRAFFIC_SHIFTING),
+                M2_5G_AIR_SWAP: Number(item?.M2_5G_AIR_SWAP),
 
                 M3_DE_GROW: Number(item?.M3_DE_GROW),
                 M3_MACRO: Number(item?.M3_MACRO),
@@ -594,6 +608,7 @@ const FinalDashboard = () => {
                 M3_5G_SECTOR_ADDITION: Number(item?.M3_5G_SECTOR_ADDITION),
                 M3_5G_RELOCATION: Number(item?.M3_5G_RELOCATION),
                 M3_TRAFFIC_SHIFTING: Number(item?.M3_TRAFFIC_SHIFTING),
+                M3_5G_AIR_SWAP: Number(item?.M3_5G_AIR_SWAP),
             });
         })
 
@@ -638,6 +653,7 @@ const FinalDashboard = () => {
             { key: 'D1_5G_SECTOR_ADDITION' },
             { key: 'D1_5G_RELOCATION' },
             { key: 'D1_TRAFFIC_SHIFTING' },//RAFFIC_SHIFTING
+            { key: 'D1_5G_AIR_SWAP' },
 
         ]
         sheet4Data?.map(item => {
@@ -663,6 +679,7 @@ const FinalDashboard = () => {
                 D1_5G_SECTOR_ADDITION: Number(item?.D1_5G_SECTOR_ADDITION),
                 D1_5G_RELOCATION: Number(item?.D1_5G_RELOCATION),
                 D1_TRAFFIC_SHIFTING: Number(item?.D1_TRAFFIC_SHIFTING),
+                D1_5G_AIR_SWAP: Number(item?.D1_5G_AIR_SWAP),
 
             })
         })

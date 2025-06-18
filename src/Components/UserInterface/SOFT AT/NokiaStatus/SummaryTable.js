@@ -91,300 +91,301 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const SummaryTable = () => {
-     const navigate = useNavigate();
-        const { makeGetRequest } = useGet()
-        const { action, loading } = useLoadingDialog()
-        const classes = useStyles();
-        const [add, setAdd] = useState(false)
-        const [edit, setEdit] = useState(false)
-        const [editDataId, setEditDataID] = useState()
-        const [searchTerm, setSearchTerm] = useState('');//
-        const [anchorE1, setAnchorE1] = useState(null);//
-        const [perametrer, setPerameter] = useState([]);//for unique perameter from database
-        const [selectPerameter, setSelectPerameter] = useState([]);
-        const [expected , setExpected] = useState([]);//for unique perameter from database
-        const [selectExpected, setSelectExpected] = useState([]);
-    
-        const [formData, setFormData] = useState({
-            MO_Class: '',
-            Parameter: '',
-        })
-        const { isPending, data, refetch } = useQuery({
-            queryKey: ['SOFT_AT_Nokia_Summary'],
-            queryFn: async () => {
-                action(isPending)
-                const res = await makeGetRequest("Soft_AT_Checklist_Nokia/get_summary/");
-                if (res) {
-                    action(false)
-                    console.log('soft at nokia data', res)
-                    // setExpected(_.uniq(_.map(res, 'expected_value')))
-                    setPerameter(_.uniq(_.map(res, 'Parameter')))
-                    // console.log('sssssssaa', _.uniq(_.map(res, 'RCA')))
-    
-                    return res
-                }
-                else {
-                    action(false)
-                }
-            },
-            staleTime: 100000,
-            refetchOnReconnect: false,
-        })
-       
-    
-        const open2 = Boolean(anchorE1);
-        const handleOpen2 = (event) => {
-            console.log('check data in  tentative counters', event.currentTarget)
-            setAnchorE1(event.currentTarget);
-        };
-        const handleCategoryChange2 = (event) => {
-            // setCategory(event.currentTarget.getAttribute('data-value'));
-            setFormData({
-                ...formData,
-                Tentative_counters: event.currentTarget.getAttribute('data-value'),
-            })
-            setAnchorE1(null);
-        };
-    
-        const handleChange = (e) => {
-            setFormData({
-                ...formData,
-                [e.target.name]: e.target.value,
-            });
-        }
-        const handleDelete = async (id) => {
-            try {
-                // Make the DELETE request
-                const response = await axios.delete(`${ServerURL}/RCA_TOOL/rca-tables/${id}/`,
-                    {
-                        headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
-                    }
-                );
-                // console.log('Deleted successfully:', response);
-    
-                if (response.status === 204) {
-                    Swal.fire({
-                        icon: "success",
-                        title: "Done",
-                        text: `Data Deleted Successfully`,
-                    });
-    
-                    refetch();
-                }
-            } catch (error) {
-                // Handle error
-                alert('Error deleting data:' + error);
+    const navigate = useNavigate();
+    const { makeGetRequest } = useGet()
+    const { action, loading } = useLoadingDialog()
+    const classes = useStyles();
+    const [add, setAdd] = useState(false)
+    const [edit, setEdit] = useState(false)
+    const [editDataId, setEditDataID] = useState()
+    const [searchTerm, setSearchTerm] = useState('');//
+    const [anchorE1, setAnchorE1] = useState(null);//
+    const [perametrer, setPerameter] = useState([]);//for unique perameter from database
+    const [selectPerameter, setSelectPerameter] = useState([]);
+    const [expected, setExpected] = useState([]);//for unique perameter from database
+    const [selectExpected, setSelectExpected] = useState([]);
+      const userType = (getDecreyptedData('user_type')?.split(","))
+
+    const [formData, setFormData] = useState({
+        MO_Class: '',
+        Parameter: '',
+    })
+    const { isPending, data, refetch } = useQuery({
+        queryKey: ['SOFT_AT_Nokia_Summary'],
+        queryFn: async () => {
+            action(isPending)
+            const res = await makeGetRequest("Soft_AT_Checklist_Nokia/get_summary/");
+            if (res) {
+                action(false)
+                console.log('soft at nokia data', res)
+                // setExpected(_.uniq(_.map(res, 'expected_value')))
+                setPerameter(_.uniq(_.map(res, 'Parameter')))
+                // console.log('sssssssaa', _.uniq(_.map(res, 'RCA')))
+
+                return res
             }
-        }
-    
-        const handleEdit = (tabData) => {
-            setFormData({
-                MO_Class: tabData.MO_Class,
-                Parameter: tabData.Parameter,
-    
-            })
-            setEditDataID(tabData.id)
-            setEdit(true)
-        }
-    
-        const handleUpdateData = async (e) => {
-            e.preventDefault()
-            const response = await axios.put(`${ServerURL}/RCA_TOOL/rca-tables/${editDataId}/`, formData,
+            else {
+                action(false)
+            }
+        },
+        staleTime: 100000,
+        refetchOnReconnect: false,
+    })
+
+
+    const open2 = Boolean(anchorE1);
+    const handleOpen2 = (event) => {
+        console.log('check data in  tentative counters', event.currentTarget)
+        setAnchorE1(event.currentTarget);
+    };
+    const handleCategoryChange2 = (event) => {
+        // setCategory(event.currentTarget.getAttribute('data-value'));
+        setFormData({
+            ...formData,
+            Tentative_counters: event.currentTarget.getAttribute('data-value'),
+        })
+        setAnchorE1(null);
+    };
+
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        });
+    }
+    const handleDelete = async (id) => {
+        try {
+            // Make the DELETE request
+            const response = await axios.delete(`${ServerURL}/RCA_TOOL/rca-tables/${id}/`,
                 {
                     headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
                 }
             );
-            if (response.status === 200) {
+            // console.log('Deleted successfully:', response);
+
+            if (response.status === 204) {
                 Swal.fire({
                     icon: "success",
                     title: "Done",
-                    text: `Data Updated Successfully`,
+                    text: `Data Deleted Successfully`,
                 });
-                setEdit(false)
-                handleCloser()
-                refetch();
-            }
-            else {
-                setEdit(false)
-                handleCloser()
-                refetch();
-            }
-        }
-    
-        const handleCloser = () => {
-            setFormData({
-                path: '',
-                parameter_name: '',
-                expected_value: '',
-            })
-            setEdit(false)
-            setEditDataID()
-        }
-        const handleClick = () => {
-            setAdd(false)
-        };
-    
-        const handleClose2 = () => {
-            setSearchTerm('');
-            setAnchorE1(null);
-    
-        }
-        const handleAddCounters = () => {
-            setFormData({
-                ...formData,
-                Tentative_counters: searchTerm
-            })
-            handleClose2();
-        }
-    
-           const handleDownload = () => {
-                const workbook = new ExcelJS.Workbook();
-                const sheet1 = workbook.addWorksheet("Nokia Summary", { properties: { tabColor: { argb: 'B0EBB4' } } })
-        
-        
-                sheet1.getCell('A1').value = 'MO Class';
-                sheet1.getCell('B1').value = 'Parameter';
-                sheet1.columns = [
-                    { key: 'MO_Class' },
-                    { key: 'Parameter' },
-                ]
-        
-                data?.map(item => {
-                    sheet1.addRow({
-                        MO_Class: item?.MO_Class,
-                        Parameter: item?.Parameter,
-                    })
-                })
-        
-                sheet1.eachRow({ includeEmpty: true }, (row, rowNumber) => {
-                    const rows = sheet1.getColumn(1);
 
-                    row.eachCell({ includeEmpty: true }, (cell) => {
-                        cell.alignment = { vertical: 'middle', horizontal: 'center' }
-                        cell.border = {
-                            top: { style: 'thin' },
-                            left: { style: 'thin' },
-                            bottom: { style: 'thin' },
-                            right: { style: 'thin' }
-                        }
-        
-                        if (rowNumber === 1) {
-                            // First set the background of header row
-                            cell.fill = {
-                                type: 'pattern',
-                                pattern: 'solid',
-                                fgColor: { argb: '223354' }
-                            }
-                            cell.font = {
-                                color: { argb: 'FFFFFF' },
-                                bold: true,
-                                size: 12,
-                            }
-                            cell.views = [{ state: 'frozen', ySplit: 1 }]
-                        }
-                    });
-                    
-                        
-                   
-                })
-                workbook.xlsx.writeBuffer().then(item => {
-                    const blob = new Blob([item], {
-                        type: "application/vnd.openxmlformats-officedocument.spreadsheet.sheet"
-                    })
-                    const url = window.URL.createObjectURL(blob);
-                    const anchor = document.createElement('a');
-                    anchor.href = url;
-                    anchor.download = "Nokia_Summary_Table.xlsx";
-                    anchor.click();
-                    window.URL.revokeObjectURL(url);
-                })
+                refetch();
             }
-    
-    
-        const handleEditDialog = useCallback(() => {
-            return (
-                <Dialog
-                    open={edit}
-                    TransitionComponent={Transition}
-                    keepMounted
-                    // onClose={handleClose}
-                    maxWidth={'md'}
-                    fullWidth={true}
-                >
-                    <DialogTitle style={{ borderBottom: '1px solid black', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <Box style={{ display: 'flex', justifyContent: 'center', alignItem: 'center' }}><Box><EditIcon fontSize='medium' /></Box><Box>EDIT CHECKLIST DATA</Box></Box>
-                        <Box >
-                            <Tooltip title="Cancel">
-                                <IconButton onClick={() => setEdit(false)}>
-                                    <CloseIcon fontSize='medium' color='default' />
-                                </IconButton>
-                            </Tooltip>
-                        </Box>
-                    </DialogTitle>
-                    <DialogContent dividers={'paper'}>
-                        <form onSubmit={handleUpdateData} style={{ width: '100%', marginTop: 20 }}>
-                            <Grid container spacing={2}>
-                              
-                                 <Grid item xs={6}>
-                                    <TextField
-                                        variant="outlined"
-                                        fullWidth
-                                        placeholder="MO Class"
-                                        label="MO Class"
-                                        name="MO_Class"
-                                        value={formData.MO_Class}
-                                        onChange={handleChange}
-                                        multiline
-                                        maxRows={4}
-                                        size="small"
-                                        type='text'
-                                    />
-                                </Grid> <Grid item xs={6}>
-                                    <TextField
-                                        variant="outlined"
-                                        fullWidth
-                                        placeholder="Parameter Value"
-                                        label="Parameter Value"
-                                        name="Parameter"
-                                        value={formData.Parameter}
-                                        onChange={handleChange}
-                                        multiline
-                                        maxRows={4}
-                                        size="small"
-                                        type='text'
-                                    />
-                                </Grid>
-    
-    
-                                <Grid item xs={12}>
-                                    <Button type="submit" fullWidth variant="contained" >Update</Button>
-                                </Grid>
-                            </Grid>
-                        </form>
-                    </DialogContent>
-                </Dialog>
-            )
-        }, [edit, formData, anchorE1, searchTerm, open2])
-    
-        const filterRCAData = useCallback(() => {
-    
-            let filteredData = _.filter(data, item => {
-                const perameterMatch = selectPerameter.length === 0 || _.includes(selectPerameter, item.parameter_name);
-                const expectedMatch = selectExpected.length === 0 || _.includes(selectExpected, item.expected_value);
-              
-                return perameterMatch && expectedMatch;
-             
+        } catch (error) {
+            // Handle error
+            alert('Error deleting data:' + error);
+        }
+    }
+
+    const handleEdit = (tabData) => {
+        setFormData({
+            MO_Class: tabData.MO_Class,
+            Parameter: tabData.Parameter,
+
+        })
+        setEditDataID(tabData.id)
+        setEdit(true)
+    }
+
+    const handleUpdateData = async (e) => {
+        e.preventDefault()
+        const response = await axios.put(`${ServerURL}/RCA_TOOL/rca-tables/${editDataId}/`, formData,
+            {
+                headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
+            }
+        );
+        if (response.status === 200) {
+            Swal.fire({
+                icon: "success",
+                title: "Done",
+                text: `Data Updated Successfully`,
             });
-    
-            return filteredData?.map((row, index) => (
-                <StyledTableRow
-                    key={index}
-                    className={classes.hover}
-                >
-                    <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{row.MO_Class}</StyledTableCell>
-                    <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{row.Parameter}</StyledTableCell>
-                    {/* <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{row.expected_value}</StyledTableCell> */}
-                    {/* <StyledTableCell align="center" style={{ borderRight: "2px solid black", display: 'flex', flex: 'row', justifyContent: 'space-evenly' }}>
+            setEdit(false)
+            handleCloser()
+            refetch();
+        }
+        else {
+            setEdit(false)
+            handleCloser()
+            refetch();
+        }
+    }
+
+    const handleCloser = () => {
+        setFormData({
+            path: '',
+            parameter_name: '',
+            expected_value: '',
+        })
+        setEdit(false)
+        setEditDataID()
+    }
+    const handleClick = () => {
+        setAdd(false)
+    };
+
+    const handleClose2 = () => {
+        setSearchTerm('');
+        setAnchorE1(null);
+
+    }
+    const handleAddCounters = () => {
+        setFormData({
+            ...formData,
+            Tentative_counters: searchTerm
+        })
+        handleClose2();
+    }
+
+    const handleDownload = () => {
+        const workbook = new ExcelJS.Workbook();
+        const sheet1 = workbook.addWorksheet("Nokia Summary", { properties: { tabColor: { argb: 'B0EBB4' } } })
+
+
+        sheet1.getCell('A1').value = 'MO Class';
+        sheet1.getCell('B1').value = 'Parameter';
+        sheet1.columns = [
+            { key: 'MO_Class' },
+            { key: 'Parameter' },
+        ]
+
+        data?.map(item => {
+            sheet1.addRow({
+                MO_Class: item?.MO_Class,
+                Parameter: item?.Parameter,
+            })
+        })
+
+        sheet1.eachRow({ includeEmpty: true }, (row, rowNumber) => {
+            const rows = sheet1.getColumn(1);
+
+            row.eachCell({ includeEmpty: true }, (cell) => {
+                cell.alignment = { vertical: 'middle', horizontal: 'center' }
+                cell.border = {
+                    top: { style: 'thin' },
+                    left: { style: 'thin' },
+                    bottom: { style: 'thin' },
+                    right: { style: 'thin' }
+                }
+
+                if (rowNumber === 1) {
+                    // First set the background of header row
+                    cell.fill = {
+                        type: 'pattern',
+                        pattern: 'solid',
+                        fgColor: { argb: '223354' }
+                    }
+                    cell.font = {
+                        color: { argb: 'FFFFFF' },
+                        bold: true,
+                        size: 12,
+                    }
+                    cell.views = [{ state: 'frozen', ySplit: 1 }]
+                }
+            });
+
+
+
+        })
+        workbook.xlsx.writeBuffer().then(item => {
+            const blob = new Blob([item], {
+                type: "application/vnd.openxmlformats-officedocument.spreadsheet.sheet"
+            })
+            const url = window.URL.createObjectURL(blob);
+            const anchor = document.createElement('a');
+            anchor.href = url;
+            anchor.download = "Nokia_Summary_Table.xlsx";
+            anchor.click();
+            window.URL.revokeObjectURL(url);
+        })
+    }
+
+
+    const handleEditDialog = useCallback(() => {
+        return (
+            <Dialog
+                open={edit}
+                TransitionComponent={Transition}
+                keepMounted
+                // onClose={handleClose}
+                maxWidth={'md'}
+                fullWidth={true}
+            >
+                <DialogTitle style={{ borderBottom: '1px solid black', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Box style={{ display: 'flex', justifyContent: 'center', alignItem: 'center' }}><Box><EditIcon fontSize='medium' /></Box><Box>EDIT CHECKLIST DATA</Box></Box>
+                    <Box >
+                        <Tooltip title="Cancel">
+                            <IconButton onClick={() => setEdit(false)}>
+                                <CloseIcon fontSize='medium' color='default' />
+                            </IconButton>
+                        </Tooltip>
+                    </Box>
+                </DialogTitle>
+                <DialogContent dividers={'paper'}>
+                    <form onSubmit={handleUpdateData} style={{ width: '100%', marginTop: 20 }}>
+                        <Grid container spacing={2}>
+
+                            <Grid item xs={6}>
+                                <TextField
+                                    variant="outlined"
+                                    fullWidth
+                                    placeholder="MO Class"
+                                    label="MO Class"
+                                    name="MO_Class"
+                                    value={formData.MO_Class}
+                                    onChange={handleChange}
+                                    multiline
+                                    maxRows={4}
+                                    size="small"
+                                    type='text'
+                                />
+                            </Grid> <Grid item xs={6}>
+                                <TextField
+                                    variant="outlined"
+                                    fullWidth
+                                    placeholder="Parameter Value"
+                                    label="Parameter Value"
+                                    name="Parameter"
+                                    value={formData.Parameter}
+                                    onChange={handleChange}
+                                    multiline
+                                    maxRows={4}
+                                    size="small"
+                                    type='text'
+                                />
+                            </Grid>
+
+
+                            <Grid item xs={12}>
+                                <Button type="submit" fullWidth variant="contained" >Update</Button>
+                            </Grid>
+                        </Grid>
+                    </form>
+                </DialogContent>
+            </Dialog>
+        )
+    }, [edit, formData, anchorE1, searchTerm, open2])
+
+    const filterRCAData = useCallback(() => {
+
+        let filteredData = _.filter(data, item => {
+            const perameterMatch = selectPerameter.length === 0 || _.includes(selectPerameter, item.parameter_name);
+            const expectedMatch = selectExpected.length === 0 || _.includes(selectExpected, item.expected_value);
+
+            return perameterMatch && expectedMatch;
+
+        });
+
+        return filteredData?.map((row, index) => (
+            <StyledTableRow
+                key={index}
+                className={classes.hover}
+            >
+                <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{row.MO_Class}</StyledTableCell>
+                <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{row.Parameter}</StyledTableCell>
+                {/* <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{row.expected_value}</StyledTableCell> */}
+                {/* <StyledTableCell align="center" style={{ borderRight: "2px solid black", display: 'flex', flex: 'row', justifyContent: 'space-evenly' }}>
                         <Tooltip title="Edit" color='primary'>
                             <IconButton color="primary" onClick={() => { handleEdit(row) }}>
                                 <EditIcon fontSize='medium' />
@@ -396,90 +397,90 @@ const SummaryTable = () => {
                             </IconButton>
                         </Tooltip>
                     </StyledTableCell> */}
-                </StyledTableRow>
-            ))
-    
-        }, [ data,selectPerameter,selectExpected])
-    
-        useEffect(() => {
-            if (data) {
-                    //  setExpected(_.uniq(_.map(data, 'expected_value')))
-                    setPerameter(_.uniq(_.map(data, 'Parameter')))
-    
-            }
-            document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
-        }, [])
-  return (
-    <>
-                <div style={{ margin: 10 }}>
-                    <div style={{ margin: 5, marginLeft: 10 }}>
-                        <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
-    
-                            <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
-                            <Link underline="hover" onClick={() => { navigate('/tools/soft_at') }}>Soft-AT Tool</Link>
-                            <Typography color='text.primary'>Nokia Summary Table</Typography>
-    
-                        </Breadcrumbs>
-                    </div>
-                    <div style={{ height: 'auto', width: '100%', margin: '5px 0px', boxShadow: 'rgba(0, 0, 0, 0.5) 0px 3px 8px', backgroundColor: 'white', borderRadius: '10px', padding: '1px' }}>
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <Box >
-                                <Tooltip title="Add List" color='primary'>
-                                    <IconButton color='primary' onClick={() => setAdd(!add)}>
-                                        <PlaylistAddIcon fontSize='medium' color='primary' />
-                                    </IconButton>
-                                </Tooltip>
-                            </Box>
-                            <Box>
-                                <h3>Nokia Summary Table</h3>
-                            </Box>
-    
-                            <Box style={{ float: 'right', display: 'flex' }}>
-                                <Tooltip title="Export Excel">
-                                    <IconButton onClick={()=>{handleDownload()}}>
-                                        <DownloadIcon fontSize='medium' color='primary' />
-                                    </IconButton>
-                                </Tooltip>
-                            </Box>
-                        </Box>
-                    </div>
-                    <Slide
-                        direction='left'
-                        in='true'
-                        // style={{ transformOrigin: '0 0 0' }}
-                        timeout={1000}
-                    >
-                        <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-                            <TableContainer sx={{ maxHeight: '77vh', width: '100%' }}>
-                                <Table stickyHeader >
-                                    <TableHead style={{ fontSize: 18 }}>
-                                        <TableRow >
-                                            <StyledTableCell align="center">Path </StyledTableCell>
-                                            <StyledTableCell align="center">Parameter Name <CheckPicker data={perametrer.map(item => ({ label: item, value: item }))} value={selectPerameter} onChange={(value) => { setSelectPerameter(value) }} size="sm" appearance="subtle" style={{ width: 40 }} /></StyledTableCell>
-                                            {/* <StyledTableCell align="center" >Expected Value  <CheckPicker data={expected.map(item => ({ label: item, value: item }))} value={selectExpected} onChange={(value) => { setSelectExpected(value) }} size="sm" appearance="subtle" placeholder="Expected Value" style={{ width: 100 }} /> </StyledTableCell> */}
-                                            {/* <StyledTableCell align="center">Action</StyledTableCell> */}
-    
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-    
-                                        {filterRCAData()}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                        </Paper>
-                    </Slide>
-                    {handleEditDialog()}
-    
-                    <Box sx={{ marginTop: 5 }}>
-                        {/* <Payload_data /> */}
-                    </Box>
-                <AddCheckListData open={add} handleClick={handleClick} handleFetch={refetch} name='SUMMARY' api="upload_Summary_excel" />
-                    {loading}
+            </StyledTableRow>
+        ))
+
+    }, [data, selectPerameter, selectExpected])
+
+    useEffect(() => {
+        if (data) {
+            //  setExpected(_.uniq(_.map(data, 'expected_value')))
+            setPerameter(_.uniq(_.map(data, 'Parameter')))
+
+        }
+        document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
+    }, [])
+    return (
+        <>
+            <div style={{ margin: 10 }}>
+                <div style={{ margin: 5, marginLeft: 10 }}>
+                    <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
+
+                        <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
+                        <Link underline="hover" onClick={() => { navigate('/tools/soft_at') }}>Soft-AT Tool</Link>
+                        <Typography color='text.primary'>Nokia Summary Table</Typography>
+
+                    </Breadcrumbs>
                 </div>
-    
-            </>
-  )
+                <div style={{ height: 'auto', width: '100%', margin: '5px 0px', boxShadow: 'rgba(0, 0, 0, 0.5) 0px 3px 8px', backgroundColor: 'white', borderRadius: '10px', padding: '1px' }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Box >
+                            {userType.includes('Admin') && <Tooltip title="Add List" color='primary'>
+                                <IconButton color='primary' onClick={() => setAdd(!add)}>
+                                    <PlaylistAddIcon fontSize='medium' color='primary' />
+                                </IconButton>
+                            </Tooltip>}
+                        </Box>
+                        <Box>
+                            <h3>Nokia Summary Table</h3>
+                        </Box>
+
+                        <Box style={{ float: 'right', display: 'flex' }}>
+                            <Tooltip title="Export Excel">
+                                <IconButton onClick={() => { handleDownload() }}>
+                                    <DownloadIcon fontSize='medium' color='primary' />
+                                </IconButton>
+                            </Tooltip>
+                        </Box>
+                    </Box>
+                </div>
+                <Slide
+                    direction='left'
+                    in='true'
+                    // style={{ transformOrigin: '0 0 0' }}
+                    timeout={1000}
+                >
+                    <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+                        <TableContainer sx={{ maxHeight: '77vh', width: '100%' }}>
+                            <Table stickyHeader >
+                                <TableHead style={{ fontSize: 18 }}>
+                                    <TableRow >
+                                        <StyledTableCell align="center">Path </StyledTableCell>
+                                        <StyledTableCell align="center">Parameter Name <CheckPicker data={perametrer.map(item => ({ label: item, value: item }))} value={selectPerameter} onChange={(value) => { setSelectPerameter(value) }} size="sm" appearance="subtle" style={{ width: 40 }} /></StyledTableCell>
+                                        {/* <StyledTableCell align="center" >Expected Value  <CheckPicker data={expected.map(item => ({ label: item, value: item }))} value={selectExpected} onChange={(value) => { setSelectExpected(value) }} size="sm" appearance="subtle" placeholder="Expected Value" style={{ width: 100 }} /> </StyledTableCell> */}
+                                        {/* <StyledTableCell align="center">Action</StyledTableCell> */}
+
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+
+                                    {filterRCAData()}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Paper>
+                </Slide>
+                {handleEditDialog()}
+
+                <Box sx={{ marginTop: 5 }}>
+                    {/* <Payload_data /> */}
+                </Box>
+                <AddCheckListData open={add} handleClick={handleClick} handleFetch={refetch} name='SUMMARY' api="upload_Summary_excel" />
+                {loading}
+            </div>
+
+        </>
+    )
 }
 
 export default SummaryTable
