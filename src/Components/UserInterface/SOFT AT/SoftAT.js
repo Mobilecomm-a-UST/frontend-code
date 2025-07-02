@@ -33,8 +33,10 @@ const EricssonChecklist = lazy(() => import('./EricssonStatus/Checklist'))
 const EricssonSummary = lazy(() => import('./EricssonStatus/Summary'))
 const NokiaChecklist = lazy(() => import('./NokiaStatus/Checklist'))
 const NokiaSummary = lazy(() => import('./NokiaStatus/Summary'))
-const NokiaChecklistTable = lazy(()=> import('./NokiaStatus/ChecklistEditor'))
-const NokiaSummaryTable = lazy(()=> import('./NokiaStatus/SummaryTable'))
+const NokiaChecklistTable = lazy(() => import('./NokiaStatus/ChecklistEditor'))
+const NokiaSummaryTable = lazy(() => import('./NokiaStatus/SummaryTable'))
+const Softat5gChecklist = lazy(() => import('./Softat5G/Checklist'))
+const Softat5gSummary = lazy(() => import('./Softat5G/Summary'))
 
 
 
@@ -163,6 +165,12 @@ const SoftAT = () => {
                         <Nav.Item eventKey='6-3' onClick={() => { navigate('/tools/soft_at/nokia_summary'); show(); setMenuButton(true) }} >Summary</Nav.Item>
                         <Nav.Item eventKey='6-4' onClick={() => { navigate('/tools/soft_at/nokia_summary_table'); show(); setMenuButton(true) }} >Summary Table</Nav.Item>
                       </Nav.Menu>
+                      <Nav.Menu eventKey="7" title="Soft-AT 5G" placement="rightStart" icon={<CheckOutlineIcon />} >
+                        <Nav.Item eventKey='7-1' onClick={() => { navigate('/tools/soft_at/softat_5g_checklist'); show(); setMenuButton(true) }} >Checklist</Nav.Item>
+                        {/* <Nav.Item eventKey='6-2' onClick={() => { navigate('/tools/soft_at/nokia_checklist_table'); show(); setMenuButton(true) }} >Checklist Table</Nav.Item> */}
+                        <Nav.Item eventKey='7-3' onClick={() => { navigate('/tools/soft_at/softat_5g_summary'); show(); setMenuButton(true) }} >Summary</Nav.Item>
+                        {/* <Nav.Item eventKey='6-4' onClick={() => { navigate('/tools/soft_at/nokia_summary_table'); show(); setMenuButton(true) }} >Summary Table</Nav.Item> */}
+                      </Nav.Menu>
 
                     </Nav>
                   </Sidenav.Body>
@@ -196,6 +204,8 @@ const SoftAT = () => {
                 <Route element={<NokiaSummary />} path='/nokia_summary' />
                 <Route element={<NokiaChecklistTable />} path='/nokia_checklist_table' />
                 <Route element={<NokiaSummaryTable />} path='/nokia_summary_table' />
+                <Route element={<Softat5gChecklist />} path='/softat_5g_checklist' />
+                <Route element={<Softat5gSummary />} path='/softat_5g_summary' />
 
               </Routes>
             </Suspense>
