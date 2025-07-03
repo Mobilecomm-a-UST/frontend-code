@@ -13,6 +13,7 @@ const Make4G = lazy(() => import('./MakeAlarm/Make4G'))
 const Make5G = lazy(() => import('./MakeAlarm/Make5G'))
 const DmaTool = lazy(() => import('./DmaTool'))
 const RRUAlarm = lazy(() => import('./RRU/RRUstatus'))
+const Twamp = lazy(()=>import('./Twamp/TwampStatus'))
 
 const Dma = () => {
     const [expanded, setExpanded] = useState(true);
@@ -85,6 +86,9 @@ const Dma = () => {
                                             <Nav.Item eventKey="3" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/dma/RRU_status'); show(); setMenuButton(true) }}>
                                                 RRU Status
                                             </Nav.Item>
+                                            <Nav.Item eventKey="4" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/dma/twamp_ericsson'); show(); setMenuButton(true) }}>
+                                                Twamp Ericsson
+                                            </Nav.Item>
                                             {/* <Nav.Menu eventKey="3" placement="rightStart" title="NOM Audit" icon={<DocPassIcon />}>
                                                 <Nav.Item eventKey="3-1" placement="rightStart" onClick={() => { navigate('/tools/nomenclature_scriptor/nom_audit_dashboard'); show(); setMenuButton(true) }}>
                                                     Dashboard
@@ -119,6 +123,7 @@ const Dma = () => {
                                  <Route element={<Make4G />} path="/make_4g" />
                                  <Route element={<Make5G />} path="/make_5g" />
                                  <Route element={<RRUAlarm />} path="/RRU_status" />
+                                 <Route element={<Twamp />} path="/twamp_ericsson" />
                           
 
 

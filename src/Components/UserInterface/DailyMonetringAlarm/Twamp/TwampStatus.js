@@ -46,7 +46,7 @@ const TwampStatus = () => {
             formData.append('circle', selectCircle)
             for (let i = 0; i < make4GFiles.length; i++) {
                 // console.log('pre files' , preFiles[i])
-                formData.append(`log_files`, make4GFiles[i]);
+                formData.append(`files`, make4GFiles[i]);
             }
 
             const response = await postData('twamp_ericsson/twamp_data/', formData)
