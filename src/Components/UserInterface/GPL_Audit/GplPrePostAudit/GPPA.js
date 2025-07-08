@@ -47,7 +47,7 @@ const GPPA = () => {
             }
 
 
-            const response = await postData('gpl_audit/pre_post_audit/', formData)
+            const response = await postData('gpl_audit/get_audit_data/', formData)
 
             // console.log('response data', response)
 
