@@ -36,7 +36,7 @@ const GAP = () => {
             formData.append(`pre_log_files`, make4GFiles);
             
 
-            const response = await postData('gpl_audit/get_table_data/', formData)
+            const response = await postData('gpl_audit/get_parsed_data/', formData)
 
             // console.log('response data', response)
 
