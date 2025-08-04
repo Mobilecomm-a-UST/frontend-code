@@ -58,11 +58,13 @@ const Mobinate = () => {
 
     action(true);
     const formData = new FormData();
-    mobinateDump.forEach((file) => formData.append("log_files", file));
+    Array.from(mobinateDump).forEach((file) => {
+      formData.append("log_files", file);
+    });
     formData.append("site_list", siteList.bytes);
     formData.append("hw_file", hardWareFile.bytes);
 
-    const response = await postData("mobinate_vs_cats/mobinate", formData);
+    const response = await postData("mobinate_vs_cats/mobinate/", formData);
     action(false);
 
     if (response.status) {
@@ -114,7 +116,7 @@ const Mobinate = () => {
                   color={mobinateDump.length > 0 ? "warning" : "primary"}
                   multiple
                   onChange={(e) => {
-                    setMobinateDump(e.target.files);
+                    setMobinateDump(Array.from(e.target.files))
                     setShowError((prev) => ({ ...prev, mobinate: false }));
                   }}
                   error={showError.mobinate}
