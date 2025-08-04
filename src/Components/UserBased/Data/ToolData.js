@@ -257,7 +257,7 @@ const ToolData = [
         title: 'This is a LKF Status Tool',
         icons: FunnelStepsIcon,
         link: '/tools/mobinate_vs_cats',
-        groupBy:['admin']
+        groupBy:['admin','ran']
     }
 
 
