@@ -77,7 +77,10 @@ const Cats = () => {
     
         action(true); 
         const formData = new FormData();
-        locaterFiles.forEach((file) => formData.append("locator_file", file));
+        // locaterFiles.forEach((file) => formData.append("locator_file", file));
+           Array.from(locaterFiles).forEach((file) => {
+      formData.append("locator_file", file);
+    });
         formData.append("mobinte_dump_file",mobinateDump.bytes)
         formData.append("site_list_file", siteList.bytes);
         formData.append("hw_file", hardWareFile.bytes);
@@ -86,7 +89,7 @@ const Cats = () => {
         formData.append("msmf_file" , msmfFile.bytes );
         formData.append("stock_report_file" , stockFile)
     
-        const response = await postData("mobinate_vs_cats/cats", formData);
+        const response = await postData("mobinate_vs_cats/cats/", formData);
         action(false);
     
         if (response.status) {
@@ -209,7 +212,8 @@ const Cats = () => {
                   color={locaterFiles.length > 0 ? "warning" : "primary"}
                   multiple
                   onChange={(e) => {
-                    setLocaterFiles(e.target.files);
+                    // setLocaterFiles(e.target.files);
+                    setLocaterFiles(Array.from(e.target.files))
                     setShowError((prev) => ({ ...prev, locater: false }));
                   }}
                   error={showError.mobinate}
