@@ -81,7 +81,7 @@ const Cats = () => {
            Array.from(locaterFiles).forEach((file) => {
       formData.append("locator_file", file);
     });
-        formData.append("mobinte_dump_file",mobinateDump.bytes)
+        formData.append("mobinet_dump_file",mobinateDump.bytes)
         formData.append("site_list_file", siteList.bytes);
         formData.append("hw_file", hardWareFile.bytes);
         formData.append("olm_id_file", olmidFile.bytes);
