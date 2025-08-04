@@ -55,7 +55,6 @@ const TwoG = () => {
       filename: event.target.files[0].name,
       bytes: event.target.files[0],
       state: true
-
     })
   }
 

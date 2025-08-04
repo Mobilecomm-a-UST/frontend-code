@@ -22,9 +22,12 @@ import NoticeIcon from '@rsuite/icons/Notice';
 import ModelIcon from '@rsuite/icons/Model';
 import CharacterLockIcon from '@rsuite/icons/CharacterLock';
 
+
 import { groupBy } from 'lodash';
 
 // const userType =  ['admin','quality','central','soft_at','circle']
+
+
 
 const ToolData = [
     {
@@ -237,7 +240,9 @@ const ToolData = [
         icons: ModelIcon,
         link: '/tools/mobile_network_integration',
         groupBy:['admin']
-    } ,{
+    } 
+    ,
+    {
         id: 27,
         name: 'LKF Status',
         title: 'This is a LKF Status Tool',
@@ -245,6 +250,16 @@ const ToolData = [
         link: '/tools/lkf_status',
         groupBy:['admin']
     }
+    ,
+    {
+        id: 28,
+        name: 'Mobinate VS CATS',
+        title: 'This is a LKF Status Tool',
+        icons: FunnelStepsIcon,
+        link: '/tools/mobinate_vs_cats',
+        groupBy:['admin']
+    }
+
 
 
 
