@@ -10,6 +10,7 @@ import LoginPage from "./Components/UserInterface/LoginPage";
 import Tools from "./Components/UserInterface/Tools";
 import { getDecreyptedData } from "./Components/utils/localstorage";
 
+
 const ViewSite = lazy(() => import('./Components/UserInterface/DPR/ViewSite'));
 const Dpr = lazy(() => import('./Components/UserInterface/DPR/Dpr'))
 const Vendor = lazy(() => import('./Components/UserInterface/VANDOR_MANAGMENT/Vendor'))
@@ -48,6 +49,7 @@ const Nscripter = lazy(() => import('./Components/UserInterface/Nomenclature Scr
 const Dma = lazy(() => import('./Components/UserInterface/DailyMonetringAlarm/Dma'));
 const Gpl = lazy(() => import('./Components/UserInterface/GPL_Audit/GPL'));
 const LKFStatus = lazy(() => import('./Components/UserInterface/LKF Status/LKF'))
+const MobinateVsCate = lazy(()=> import('./Components/UserInterface/Mobinat_vs_cats/MobinateVsCats'))
 
 const queryClient = new QueryClient()
 
@@ -275,6 +277,12 @@ function App() {
             <Route path="/tools/lkf_status/*" element={
               <Suspense fallback={<div>Loading...</div>}>
                 <ProtectedRoute element={LKFStatus} allowedUserTypes={['admin']} userType={userType} />
+              </Suspense>
+            } />
+
+             <Route path="/tools/mobinate_vs_cats/*" element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProtectedRoute element={MobinateVsCate} allowedUserTypes={['admin']} userType={userType} />
               </Suspense>
             } />
 
