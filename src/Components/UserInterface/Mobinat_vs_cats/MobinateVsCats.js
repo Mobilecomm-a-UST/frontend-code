@@ -84,15 +84,15 @@ const MobinateVsCate = () => {
                                 <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
                                     <Sidenav.Body>
                                         <Nav activeKey={activeKey} onSelect={setActiveKey} >
-                                            <Nav style={{ fontWeight: 500, color: 'white', textAlign: 'center', fontSize: 20 }}>Mobinate Vs CATS</Nav>
+                                            <Nav style={{ fontWeight: 500, color: 'white', textAlign: 'center', fontSize: 20 }}>Mobinet Vs CATS</Nav>
                                             {/* <Nav.Menu eventKey="1" placement="rightStart" title="Acceptance" icon={<CheckOutlineIcon size="3em" />}>
                                                 <Nav.Item eventKey="1-1" onClick={() => { navigate('/tools/mcom_physical_at/acceptance_summary'); show(); setMenuButton(true) }} >
                                                     Acceptance Summary
                                                 </Nav.Item>
                                             </Nav.Menu> */}
-                                            <Nav.Item eventKey="2" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinate_vs_cats/mobinate'); show(); setMenuButton(true) }}>
-                                              Step 1: Mobinate
-                                            </Nav.Item>     <Nav.Item eventKey="3" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinate_vs_cats/CATS'); show(); setMenuButton(true) }}>
+                                            <Nav.Item eventKey="2" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/mobinet'); show(); setMenuButton(true) }}>
+                                              Step 1: Mobinet
+                                            </Nav.Item>     <Nav.Item eventKey="3" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/CATS'); show(); setMenuButton(true) }}>
                                                Step 2: CATS  
                                             </Nav.Item>
                                             {/* <Nav.Menu eventKey="3" placement="rightStart" title="NOM Audit" icon={<DocPassIcon />}>
@@ -117,7 +117,7 @@ const MobinateVsCate = () => {
                         <Suspense fallback={<div>loading............</div>}>
                             <Routes>
                                 <Route element={<MobinateTool />} path="/" />
-                                <Route element={<MobinateFileHandle />} path="/mobinate" />
+                                <Route element={<MobinateFileHandle />} path="/mobinet" />
                                 <Route element={<CateFileHandle />} path="/CATS" />
                                
 
