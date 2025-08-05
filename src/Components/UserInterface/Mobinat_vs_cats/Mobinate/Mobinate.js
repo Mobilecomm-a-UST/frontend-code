@@ -98,8 +98,8 @@ const Mobinate = () => {
       <Box m={1} ml={2}>
         <Breadcrumbs separator={<KeyboardArrowRightIcon fontSize="small" />}>
           <Link underline="hover" onClick={() => navigate("/tools")}>Tools</Link>
-          <Link underline="hover" onClick={() => navigate("/tools/mobinate_vs_cats")}>Mobinate Vs CATS</Link>
-          <Typography color="text.primary">Mobinate</Typography>
+          <Link underline="hover" onClick={() => navigate("/tools/mobinet_vs_cats")}>Mobinet Vs CATS</Link>
+          <Typography color="text.primary">Mobinet</Typography>
         </Breadcrumbs>
       </Box>
 
@@ -107,12 +107,12 @@ const Mobinate = () => {
         <Box>
           <Box className={classes.main_Box}>
             <Box className={classes.Back_Box} sx={{ width: { md: "75%", xs: "100%" } }}>
-              <Box className={classes.Box_Hading}>Make Mobinate Summary</Box>
+              <Box className={classes.Box_Hading}>Make Mobinet Summary</Box>
 
               <Stack spacing={2} sx={{ mt: "-40px" }}>
                 {/* Mobinate Dump */}
                 <UploadSection
-                  label="Select Mobinate Dump Files"
+                  label="Select Mobinet Dump Files"
                   color={mobinateDump.length > 0 ? "warning" : "primary"}
                   multiple
                   onChange={(e) => {
@@ -162,7 +162,7 @@ const Mobinate = () => {
                   startIcon={<FileDownloadIcon sx={{ fontSize: 30, color: "green" }} />}
                   sx={{ mt: 2, textTransform: "none", fontWeight: 800, fontSize: "22px", fontFamily: "Poppins" }}
                 >
-                  Mobinate Report
+                  Mobinet Report
                 </Button>
               </a>
             </Box>

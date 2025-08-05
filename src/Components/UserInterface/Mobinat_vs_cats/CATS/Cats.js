@@ -15,7 +15,7 @@ import OverAllCss from "../../../csss/OverAllCss";
 import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
 
 const Cats = () => {
-    const [mobinateDump, setMobinateDump] = useState({ filename: "", bytes: "" });
+      const [mobinateDump, setMobinateDump] = useState({ filename: "", bytes: "" });
       const [siteList, setSiteList] = useState({ filename: "", bytes: "" });
       const [hardWareFile, setHardWareFile] = useState({ filename: "", bytes: "" });
       const [olmidFile, setOlmidFile] = useState({ filename: "", bytes: "" });
@@ -87,7 +87,7 @@ const Cats = () => {
         formData.append("olm_id_file", olmidFile.bytes);
         formData.append("rfs_file" ,rfsFile.bytes );
         formData.append("msmf_file" , msmfFile.bytes );
-        formData.append("stock_report_file" , stockFile)
+        formData.append("stock_report_file" , stockFile.bytes)
     
         const response = await postData("mobinate_vs_cats/cats/", formData);
         action(false);
@@ -126,7 +126,7 @@ const Cats = () => {
         <Box m={1} ml={2}>
           <Breadcrumbs separator={<KeyboardArrowRightIcon fontSize="small" />}>
             <Link underline="hover" onClick={() => navigate("/tools")}>Tools</Link>
-            <Link underline="hover" onClick={() => navigate("/tools/mobinate_vs_cats")}>Mobinate Vs CATS</Link>
+            <Link underline="hover" onClick={() => navigate("/tools/mobinet_vs_cats")}>Mobinet Vs CATS</Link>
             <Typography color="text.primary">CATS</Typography>
           </Breadcrumbs>
         </Box>
@@ -140,7 +140,7 @@ const Cats = () => {
                 <Stack spacing={2} sx={{ mt: "-40px" }}>
                   {/* Mobinate Dump */}
                   <UploadSection
-                    label="Select Mobinate Tool Files"
+                    label="Select Mobinet Tool Files"
                     color={mobinateDump.filename ? "warning" : "primary"}
                     // multiple
                     // onChange={(e) => {
