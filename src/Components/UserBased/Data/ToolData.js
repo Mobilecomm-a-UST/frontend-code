@@ -253,7 +253,7 @@ const ToolData = [
     ,
     {
         id: 28,
-        name: 'Mobinate VS CATS',
+        name: 'Mobinet VS CATS',
         title: 'This is a LKF Status Tool',
         icons: FunnelStepsIcon,
         link: '/tools/mobinet_vs_cats',
