@@ -60,14 +60,12 @@ const Mobinate = () => {
   const handleSubmit = async () => {
     const isValid =
       // mobinateDump.length > 0 &&
-      siteList.filename &&
-      hardWareFile.filename;
+      siteList.filename ;
 
     if (!isValid) {
       setShowError({
         // mobinate: mobinateDump.length === 0,
         siteList: !siteList.filename,
-        hardware: !hardWareFile.filename,
       });
       return;
     }

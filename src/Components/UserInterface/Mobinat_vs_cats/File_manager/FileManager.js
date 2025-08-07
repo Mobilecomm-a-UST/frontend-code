@@ -85,7 +85,7 @@ const FileManager = () => {
         setOpen2(false);
         setShoweFiles([])
         setDialogData()
-        setShowError({selectfile: false})
+        setShowError({ selectfile: false })
         setSeletctFiles([])
 
     }
@@ -111,7 +111,7 @@ const FileManager = () => {
 
         if (response.status) {
             fetchApiData(api);
-            setShowError({selectfile:false})
+            setShowError({ selectfile: false })
             setSeletctFiles([])
             Swal.fire({ icon: "success", title: "Done", text: response.message });
         } else {
@@ -121,20 +121,35 @@ const FileManager = () => {
     }
 
     const handleDelete = async (api) => {
-        action(true)
-        const response = await deleteData(`${api}/`);
-        console.log('response', response)
-       
-        if (response?.status) {
-               action(false);
-            setShoweFiles([])
-            Swal.fire({ icon: "success", title: "Done", text: response.message });
+        const confirmResult = await Swal.fire({
+            title: "Are you sure?",
+            text: "This action cannot be undone!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Yes, delete it!",
+        });
+
+        if (confirmResult.isConfirmed) {
+            action(true);
+
+            const response = await deleteData(`${api}/`);
+            console.log("response", response);
+
+            action(false);
+
+            if (response?.status) {
+                setShoweFiles([]);
+                Swal.fire({ icon: "success", title: "Deleted!", text: response.message });
+            } else {
+                Swal.fire({ icon: "error", title: "Oops...", text: response.message });
+            }
         } else {
-            Swal.fire({ icon: "error", title: "Oops...", text: response.message });
+            // Optional: do something when deletion is cancelled
+            console.log("Deletion cancelled.");
         }
-
-
-    }
+    };
 
 
 
