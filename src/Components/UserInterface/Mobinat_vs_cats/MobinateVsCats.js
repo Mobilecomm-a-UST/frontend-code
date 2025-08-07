@@ -6,13 +6,20 @@ import { Grid } from '@mui/material'
 import { Sidenav, Nav } from 'rsuite';
 
 import { useNavigate } from 'react-router-dom'
-import { BrowserRouter , Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import FolderOpenIcon from '@mui/icons-material/FolderOpen';
+import FolderIcon from '@rsuite/icons/Folder';
+
+
+
 
 import ChangeListIcon from '@rsuite/icons/ChangeList';
 
-const MobinateTool = lazy(()=>import('./MobinateTool'))
-const MobinateFileHandle = lazy(()=>import('./Mobinate/Mobinate'))
-const CateFileHandle = lazy(()=>import('./CATS/Cats'))
+const MobinateTool = lazy(() => import('./MobinateTool'))
+const MobinateFileHandle = lazy(() => import('./Mobinate/Mobinate'))
+const CateFileHandle = lazy(() => import('./CATS/Cats'))
+const FileManager = lazy(() => import('./File_manager/FileManager'))
+
 
 
 const MobinateVsCate = () => {
@@ -90,10 +97,14 @@ const MobinateVsCate = () => {
                                                     Acceptance Summary
                                                 </Nav.Item>
                                             </Nav.Menu> */}
+                                            <Nav.Item eventKey="1" placement="rightStart" icon={<FolderIcon style={{}} />} onClick={() => { navigate('/tools/mobinet_vs_cats/file_manager'); show(); setMenuButton(true) }}>
+                                                File Manager
+                                            </Nav.Item>
                                             <Nav.Item eventKey="2" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/mobinet'); show(); setMenuButton(true) }}>
-                                              Step 1: Mobinet
-                                            </Nav.Item>     <Nav.Item eventKey="3" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/CATS'); show(); setMenuButton(true) }}>
-                                               Step 2: CATS  
+                                                Step 1: Mobinet
+                                            </Nav.Item>
+                                            <Nav.Item eventKey="3" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/CATS'); show(); setMenuButton(true) }}>
+                                                Step 2: CATS
                                             </Nav.Item>
                                             {/* <Nav.Menu eventKey="3" placement="rightStart" title="NOM Audit" icon={<DocPassIcon />}>
                                                 <Nav.Item eventKey="3-1" placement="rightStart" onClick={() => { navigate('/tools/nomenclature_scriptor/nom_audit_dashboard'); show(); setMenuButton(true) }}>
@@ -119,7 +130,8 @@ const MobinateVsCate = () => {
                                 <Route element={<MobinateTool />} path="/" />
                                 <Route element={<MobinateFileHandle />} path="/mobinet" />
                                 <Route element={<CateFileHandle />} path="/CATS" />
-                               
+                                <Route element={<FileManager />} path="/file_manager" />
+
 
                             </Routes>
                         </Suspense>

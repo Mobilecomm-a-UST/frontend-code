@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import {
-  Box, Button, Stack, Breadcrumbs, Link, Typography, Slide
+  Box, Button, Stack, Breadcrumbs, Link, Typography, Slide,Grid
 } from "@mui/material";
 import {
   Upload as UploadIcon,
@@ -10,19 +10,21 @@ import {
 } from "@mui/icons-material";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import TopicIcon from '@mui/icons-material/Topic';
 import { postData, ServerURL } from "../../../services/FetchNodeServices";
 import OverAllCss from "../../../csss/OverAllCss";
 import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
+import { getData } from "../../../services/FetchNodeServices";
 
 const Mobinate = () => {
-  const [mobinateDump, setMobinateDump] = useState([]);
+  // const [mobinateDump, setMobinateDump] = useState([]);
   const [siteList, setSiteList] = useState({ filename: "", bytes: "" });
   const [hardWareFile, setHardWareFile] = useState({ filename: "", bytes: "" });
   const [fileData, setFileData] = useState();
   const [download, setDownload] = useState(false);
-
+  const [showFiles, setShoweFiles] = useState([])
   const [showError, setShowError] = useState({
-    mobinate: false,
+    // mobinate: false,
     siteList: false,
     hardware: false,
   });
@@ -32,6 +34,20 @@ const Mobinate = () => {
   const classes = OverAllCss();
 
   const link = `${ServerURL}${fileData}`;
+
+
+  const fetchMobinetFileData = async () => {
+    action(true)
+
+    const response = await getData('mobinate_vs_cats/mobinet_dump/');
+
+    if (response.status) {
+      action(false);
+      setShoweFiles(response.files);
+
+    }
+    // console.log('mobinate dump file ' , response)
+  }
 
   const updateFile = (event, setFileState, errorKey) => {
     const file = event.target.files[0];
@@ -43,13 +59,13 @@ const Mobinate = () => {
 
   const handleSubmit = async () => {
     const isValid =
-      mobinateDump.length > 0 &&
+      // mobinateDump.length > 0 &&
       siteList.filename &&
       hardWareFile.filename;
 
     if (!isValid) {
       setShowError({
-        mobinate: mobinateDump.length === 0,
+        // mobinate: mobinateDump.length === 0,
         siteList: !siteList.filename,
         hardware: !hardWareFile.filename,
       });
@@ -58,9 +74,9 @@ const Mobinate = () => {
 
     action(true);
     const formData = new FormData();
-    Array.from(mobinateDump).forEach((file) => {
-      formData.append("log_files", file);
-    });
+    // Array.from(mobinateDump).forEach((file) => {
+    //   formData.append("log_files", file);
+    // });
     formData.append("site_list", siteList.bytes);
     formData.append("hw_file", hardWareFile.bytes);
 
@@ -77,11 +93,11 @@ const Mobinate = () => {
   };
 
   const handleCancel = () => {
-    setMobinateDump([]);
+    // setMobinateDump([]);
     setSiteList({ filename: "", bytes: "" });
     setHardWareFile({ filename: "", bytes: "" });
     setDownload(false);
-    setShowError({ mobinate: false, siteList: false, hardware: false });
+    setShowError({ siteList: false, hardware: false });
   };
 
   useEffect(() => {
@@ -91,6 +107,8 @@ const Mobinate = () => {
       .replaceAll("/", " | ")
       .toUpperCase();
     document.title = title;
+
+    fetchMobinetFileData();
   }, []);
 
   return (
@@ -111,7 +129,7 @@ const Mobinate = () => {
 
               <Stack spacing={2} sx={{ mt: "-40px" }}>
                 {/* Mobinate Dump */}
-                <UploadSection
+                {/* <UploadSection
                   label="Select Mobinet Dump Files"
                   color={mobinateDump.length > 0 ? "warning" : "primary"}
                   multiple
@@ -121,7 +139,22 @@ const Mobinate = () => {
                   }}
                   error={showError.mobinate}
                   selectedText={mobinateDump.length > 0 ? `Selected File(s): ${mobinateDump.length}` : ""}
-                />
+                /> */}
+                <Box className={OverAllCss().Front_Box}>
+                  <div className={OverAllCss().Front_Box_Hading}>Mobinet Dump Files:</div>
+                  <div className={OverAllCss().Front_Box_Select_Button}>
+                      <Grid container rowSpacing={1} columnSpacing={1} direction={{ xs: "column", sm: "column", md: "row" }}>
+                            {showFiles.map((item, index) => (
+                                <Grid item xs={6} key={index}>
+                                    <Box key={item} sx={{ display: "flex", justifyContent: 'flex-start', alignItems: 'center',fontWeight:'bold' }}>
+                                        <TopicIcon sx={{ color: '#FEA405' }} />{item}
+                                    </Box>
+                                </Grid>
+                            ))}
+                        </Grid>
+               
+                  </div>
+                </Box>
 
                 {/* Site List */}
                 <UploadSection
