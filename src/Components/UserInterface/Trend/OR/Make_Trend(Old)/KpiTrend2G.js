@@ -62,6 +62,7 @@ const KpiTrend2G = () => {
         // console.log('dddddddddddd', dd.replaceAll(' ', ','))
         let list = dd.replaceAll(' ', ',')
         setSiteData(list)
+        setSiteShow(false)
 
 
     }
@@ -119,7 +120,7 @@ const KpiTrend2G = () => {
 
     const handleSubmit = async () => {
 
-        if (rawKpiLength > 0 && siteListLength > 0) {
+        if (rawKpiLength > 0 && siteData.length > 0) {
             abortController = new AbortController()
             const abortSignal = abortController.signal
             setOpen(true)
@@ -155,7 +156,7 @@ const KpiTrend2G = () => {
             if (rawKpiLength == 0) {
                 setRawShow(true)
             }
-            if (siteListLength == 0) {
+            if (siteData.length == 0) {
                 setSiteShow(true)
             }
 
