@@ -126,7 +126,7 @@ const KpiTrend2G = () => {
             setOpen(true)
             var formData = new FormData();
             formData.append("raw_file", rawKpiFile.bytes);
-            formData.append("site_id", siteListFile.bytes);
+            formData.append("site_id", siteData);
             formData.append("offered_date", offerDate);
             // const response = await postData('trend/or/makeKpiTrend/old/4G',formData, {headers: {Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` },signal:abortSignal})
             const response = await makePostRequest('trend/or/makeKpiTrend/old/2G_trend', formData)
