@@ -60,7 +60,7 @@ function TrendState() {
               <Box className={classes.des}  onClick={() => navigate(tnchLink)}><img src={`${ServerURL}/media/assets/TNCH.png`} width="50" loading='lazy'/><span className={classes.lettal}>Tamil Nadu/Chennai</span></Box>
             </Grid>
             <Grid item xs={3}>
-              <Box className={classes.des} onClick={() => navigate(rjLink)}><img src={`${ServerURL}/media/assets/RJ.png`} width="50" loading='lazy'/><span className={classes.lettal}>Rajasthan</span></Box>
+              <Box className={classes.des} onClick={() => navigate(rjLink)}><img src={`${ServerURL}/media/assets/RJ.png`} width="50" loading='lazy'/><span className={classes.lettal}>Rajasthan/NESA</span></Box>
             </Grid>
             <Grid item xs={3}>
               <Box className={classes.des} onClick={() => navigate('/trends/hr')}><img src={`${ServerURL}/media/assets/haryana.png`} width="50" loading='lazy'/><span className={classes.lettal}>Haryana</span></Box>
