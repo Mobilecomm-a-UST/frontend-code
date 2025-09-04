@@ -21,6 +21,7 @@ import ParagraphIcon from '@rsuite/icons/Paragraph';
 import NoticeIcon from '@rsuite/icons/Notice';
 import ModelIcon from '@rsuite/icons/Model';
 import CharacterLockIcon from '@rsuite/icons/CharacterLock';
+import IndirectIcon from '@rsuite/icons/Indirect';
 
 
 import { groupBy } from 'lodash';
@@ -257,6 +258,14 @@ const ToolData = [
         title: 'This is a LKF Status Tool',
         icons: FunnelStepsIcon,
         link: '/tools/mobinet_vs_cats',
+        groupBy:['admin','ran']
+    } ,
+    {
+        id: 29,
+        name: 'Degrow Dismantle',
+        title: 'This is a Degrow Dismantle Tool',
+        icons: IndirectIcon,
+        link: '/tools/degrow_dismantle',
         groupBy:['admin','ran']
     }
 
