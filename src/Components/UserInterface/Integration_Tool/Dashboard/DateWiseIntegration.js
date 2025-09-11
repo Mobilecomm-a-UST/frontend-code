@@ -17,7 +17,6 @@ import { usePost } from '../../../Hooks/PostApis';
 import { useLoadingDialog } from '../../../Hooks/LoadingDialog';
 import { useQuery } from '@tanstack/react-query';
 import { useStyles } from '../../ToolsCss'
-
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -35,7 +34,7 @@ const DateWiseIntegration = ({ onData }) => {
     const [dateArray, setDateArray] = useState([])
     const [tableData, setTableData] = useState([])
     const [givenDate, setGivenDate] = useState('')
-    const activityArray = ['DE-GROW','MACRO','OTHER','RELOCATION','RET','ULS-HPSC','UPGRADE','MEMTO','HT-INCREMENT','IBS','IDSC','ODSC','RECTIFICATION','OPERATION','RRU UPGRADE','5G BW UPGRADE','5G RRU SWAP','5G SECTOR ADDITION','5G RELOCATION','TRAFFIC SHIFTING','5G AIR SWAP'] 
+    const activityArray = ['DE-GROW','MACRO','OTHER','RELOCATION','RET','ULS-HPSC','UPGRADE','MEMTO','HT-INCREMENT','IBS','IDSC','ODSC','RECTIFICATION','OPERATION','RRU UPGRADE','5G BW UPGRADE','5G RRU SWAP','5G SECTOR ADDITION','5G RELOCATION','TRAFFIC SHIFTING','RRU SWAP'] 
     // const [totals, setTotals] = useState()
 
 
@@ -101,7 +100,7 @@ const DateWiseIntegration = ({ onData }) => {
             D1_5G_SECTOR_ADDITION: 0,
             D1_5G_RELOCATION: 0,
             D1_TRAFFIC_SHIFTING: 0,
-            D1_5G_AIR_SWAP: 0,
+            D1_RRU_SWAP: 0,
             D2_DE_GROW: 0,
             D2_MACRO: 0,
             D2_OTHERS: 0,
@@ -122,7 +121,7 @@ const DateWiseIntegration = ({ onData }) => {
             D2_5G_SECTOR_ADDITION: 0,
             D2_5G_RELOCATION: 0,
             D2_TRAFFIC_SHIFTING: 0,
-            D2_5G_AIR_SWAP: 0,
+            D2_RRU_SWAP: 0,
             D3_DE_GROW: 0,
             D3_MACRO: 0,
             D3_OTHERS: 0,
@@ -143,7 +142,7 @@ const DateWiseIntegration = ({ onData }) => {
             D3_5G_SECTOR_ADDITION: 0,
             D3_5G_RELOCATION: 0,
             D3_TRAFFIC_SHIFTING: 0,
-            D3_5G_AIR_SWAP: 0,
+            D3_RRU_SWAP: 0,
 
         };
 
@@ -422,10 +421,10 @@ const DateWiseIntegration = ({ onData }) => {
                                                 <th style={{ cursor: 'pointer', backgroundColor: it.D1_RRU_UPGRADE > 0 ? '#FEEFAD' : '' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: 'RRU UPGRADE' })}>{it?.D1_RRU_UPGRADE || 0}</th>
                                                 <th style={{ cursor: 'pointer', backgroundColor: it.D1_5G_BW_UPGRADE > 0 ? '#FEEFAD' : '' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: '5G BW UPGRADE' })}>{it?.D1_5G_BW_UPGRADE || 0}</th>
                                                 <th style={{ cursor: 'pointer', backgroundColor: it.D1_5G_RRU_SWAP > 0 ? '#FEEFAD' : '' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: '5G RRU SWAP' })}>{it?.D1_5G_RRU_SWAP || 0}</th>
-                                                <th style={{ cursor: 'pointer', backgroundColor: it.D1_5G_SECTOR_ADDITION > 0 ? '#FEEFAD' : '' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: '5G SECTOR ADDITION' })}>{it?.D1_5G_SECTOR_ADDITION}</th>
-                                                <th style={{ cursor: 'pointer', backgroundColor: it.D1_5G_RELOCATION > 0 ? '#FEEFAD' : '' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: '5G RELOCATION' })}>{it?.D1_5G_RELOCATION}</th>
-                                                <th style={{ cursor: 'pointer', backgroundColor: it.D1_TRAFFIC_SHIFTING > 0 ? '#FEEFAD' : '' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: 'TRAFFIC SHIFTING' })}>{it?.D1_TRAFFIC_SHIFTING}</th>
-                                                <th style={{ cursor: 'pointer', backgroundColor: it.D1_TRAFFIC_SHIFTING > 0 ? '#FEEFAD' : '' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: '5G AIR SWAP' })}>{it?.D1_5G_AIR_SWAP}</th>
+                                                <th style={{ cursor: 'pointer', backgroundColor: it.D1_5G_SECTOR_ADDITION > 0 ? '#FEEFAD' : '' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: '5G SECTOR ADDITION' })}>{it?.D1_5G_SECTOR_ADDITION || 0}</th>
+                                                <th style={{ cursor: 'pointer', backgroundColor: it.D1_5G_RELOCATION > 0 ? '#FEEFAD' : '' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: '5G RELOCATION' })}>{it?.D1_5G_RELOCATION || 0}</th>
+                                                <th style={{ cursor: 'pointer', backgroundColor: it.D1_TRAFFIC_SHIFTING > 0 ? '#FEEFAD' : '' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: 'TRAFFIC SHIFTING' })}>{it?.D1_TRAFFIC_SHIFTING || 0}</th>
+                                                <th style={{ cursor: 'pointer', backgroundColor: it?.D1_RRU_SWAP > 0 ? '#FEEFAD' : '' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: 'RRU SWAP' })}>{it?.D1_RRU_SWAP || 0}</th>
 
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D2_DE_GROW > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: 'DE-GROW' })}>{it?.D2_DE_GROW}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D2_MACRO > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: 'MACRO' })}>{it?.D2_MACRO}</th>
@@ -444,10 +443,10 @@ const DateWiseIntegration = ({ onData }) => {
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D2_RRU_UPGRADE > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: 'RRU UPGRADE' })}>{it?.D2_RRU_UPGRADE || 0}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D2_5G_BW_UPGRADE > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: '5G BW UPGRADE' })}>{it?.D2_5G_BW_UPGRADE  || 0}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D2_5G_RRU_SWAP > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: '5G RRU SWAP' })}>{it?.D2_5G_RRU_SWAP || 0}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D2_5G_SECTOR_ADDITION > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: '5G SECTOR ADDITION' })}>{it?.D2_5G_SECTOR_ADDITION}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D2_5G_RELOCATION > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: '5G RELOCATION' })}>{it?.D2_5G_RELOCATION}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D2_TRAFFIC_SHIFTING > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: 'TRAFFIC SHIFTING' })}>{it?.D2_TRAFFIC_SHIFTING}</th>
-                                                <th style={{ cursor: 'pointer', backgroundColor: it.D1_TRAFFIC_SHIFTING > 0 ? '#FEEFAD' : '' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: '5G AIR SWAP' })}>{it?.D2_5G_AIR_SWAP}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D2_5G_SECTOR_ADDITION > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: '5G SECTOR ADDITION' })}>{it?.D2_5G_SECTOR_ADDITION || 0}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D2_5G_RELOCATION > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: '5G RELOCATION' })}>{it?.D2_5G_RELOCATION || 0}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D2_TRAFFIC_SHIFTING > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: 'TRAFFIC SHIFTING' })}>{it?.D2_TRAFFIC_SHIFTING || 0}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it?.D2_RRU_SWAP > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: 'RRU SWAP' })}>{it?.D2_RRU_SWAP || 0}</th>
 
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D3_DE_GROW > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[0], circle: it?.cir, activity: 'DE-GROW' })}>{it?.D3_DE_GROW}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D3_MACRO > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[0], circle: it?.cir, activity: 'MACRO' })}>{it?.D3_MACRO}</th>
@@ -466,10 +465,10 @@ const DateWiseIntegration = ({ onData }) => {
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D3_RRU_UPGRADE > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[0], circle: it?.cir, activity: 'RRU UPGRADE' })}>{it?.D3_RRU_UPGRADE || 0}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D3_5G_BW_UPGRADE > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[0], circle: it?.cir, activity: '5G BW UPGRADE' })}>{it?.D3_5G_BW_UPGRADE || 0}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D3_5G_RRU_SWAP > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[0], circle: it?.cir, activity: '5G RRU SWAP' })}>{it?.D3_5G_RRU_SWAP || 0}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D3_5G_SECTOR_ADDITION > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[0], circle: it?.cir, activity: '5G SECTOR ADDITION' })}>{it?.D3_5G_SECTOR_ADDITION}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D3_5G_RELOCATION > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[0], circle: it?.cir, activity: '5G RELOCATION' })}>{it?.D3_5G_RELOCATION}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D3_TRAFFIC_SHIFTING > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[0], circle: it?.cir, activity: 'TRAFFIC SHIFTING' })}>{it?.D3_TRAFFIC_SHIFTING}</th>
-                                                <th style={{ cursor: 'pointer', backgroundColor: it.D1_TRAFFIC_SHIFTING > 0 ? '#FEEFAD' : '' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: '5G AIR SWAP' })}>{it?.D3_5G_AIR_SWAP}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D3_5G_SECTOR_ADDITION > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[0], circle: it?.cir, activity: '5G SECTOR ADDITION' })}>{it?.D3_5G_SECTOR_ADDITION || 0}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D3_5G_RELOCATION > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[0], circle: it?.cir, activity: '5G RELOCATION' })}>{it?.D3_5G_RELOCATION || 0}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D3_TRAFFIC_SHIFTING > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[0], circle: it?.cir, activity: 'TRAFFIC SHIFTING' })}>{it?.D3_TRAFFIC_SHIFTING || 0}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it?.D3_RRU_SWAP > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[0], circle: it?.cir, activity: 'RRU SWAP' })}>{it?.D3_RRU_SWAP || 0}</th>
                                             </tr>
                                         )
                                     }

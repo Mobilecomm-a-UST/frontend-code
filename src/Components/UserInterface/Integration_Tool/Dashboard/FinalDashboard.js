@@ -886,7 +886,7 @@ const FinalDashboard = () => {
             return `${day}-${month}-${year}`;
         }
         return (
-            <Box sx={{ height: 'auto', width: '32vh', cursor: 'pointer', padding: 1.5, borderRadius: 1.5, boxShadow: " rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px", backgroundColor: color, textAlign: 'center' }}
+            <Box sx={{ height: 'auto', width: '28vh', cursor: 'pointer', padding: 1.5, borderRadius: 1.5, boxShadow: " rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px", backgroundColor: color, textAlign: 'center' }}
                 onClick={() => { HandleDashboard(data.OEM) }}
                 title={data.OEM}
             >
@@ -967,7 +967,7 @@ const FinalDashboard = () => {
                     </Grid>
 
                 </div>
-                <div style={{ padding: '5px', display: 'flex', justifyContent: 'space-evenly', flexWrap: "wrap", flexDirection: 'row', gap: 20 }}>
+                <div style={{ padding: '5px', display: 'flex', justifyContent: 'space-evenly', flexWrap: "wrap", flexDirection: 'row', gap: 5 }}>
                     {mdashboard?.map((item, index) => index < 5 && (
                         <Dashboard data={item} color={colorType[index]} key={index} />
                     ))}

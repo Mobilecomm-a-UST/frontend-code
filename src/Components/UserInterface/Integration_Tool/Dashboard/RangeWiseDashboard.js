@@ -33,7 +33,7 @@ const RangeWiseDashboard = ({ onData }) => {
     const [givenDate, setGivenDate] = useState('')
     const [fromDate , setFromDate] = useState('')
     const [toDate , setToDate] = useState('')
-      const activityArray = ['DE-GROW','MACRO','OTHER','RELOCATION','RET','ULS-HPSC','UPGRADE','MEMTO','HT-INCREMENT','IBS','IDSC','ODSC','RECTIFICATION','OPERATION','RRU UPGRADE','5G BW UPGRADE','5G RRU SWAP','5G SECTOR ADDITION','5G RELOCATION','TRAFFIC SHIFTING','5G AIR SWAP']
+      const activityArray = ['DE-GROW','MACRO','OTHER','RELOCATION','RET','ULS-HPSC','UPGRADE','MEMTO','HT-INCREMENT','IBS','IDSC','ODSC','RECTIFICATION','OPERATION','RRU UPGRADE','5G BW UPGRADE','5G RRU SWAP','5G SECTOR ADDITION','5G RELOCATION','TRAFFIC SHIFTING','RRU SWAP']
 
     // const [totals, setTotals] = useState()
 
@@ -86,13 +86,13 @@ const RangeWiseDashboard = ({ onData }) => {
             D1_ODSC: 0,
             D1_RECTIFICATION: 0,
             D1_OPERATIONS: 0,
-             D1_RRU_UPGRADE:0,
+            D1_RRU_UPGRADE:0,
             D1_5G_BW_UPGRADE:0,
             D1_5G_RRU_SWAP:0,
             D1_5G_SECTOR_ADDITION:0,
             D1_5G_RELOCATION:0,
             D1_TRAFFIC_SHIFTING:0,
-            D1_5G_AIR_SWAP:0,
+            D1_RRU_SWAP:0,
            
         };
 
@@ -416,7 +416,7 @@ const RangeWiseDashboard = ({ onData }) => {
                                                 <th style={{ cursor: 'pointer' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: '5G SECTOR ADDITION' })}>{it?.D1_5G_SECTOR_ADDITION}</th>
                                                 <th style={{ cursor: 'pointer' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: '5G RELOCATION' })}>{it?.D1_5G_RELOCATION}</th>
                                                 <th style={{ cursor: 'pointer' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: 'TRAFFIC SHIFTING' })}>{it?.D1_TRAFFIC_SHIFTING}</th>
-                                                 <th style={{ cursor: 'pointer'}} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: '5G AIR SWAP' })}>{it?.D1_5G_AIR_SWAP}</th>
+                                                 <th style={{ cursor: 'pointer'}} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: 'RRU SWAP' })}>{it?.D1_RRU_SWAP}</th>
 
                                             </tr>
                                         )
