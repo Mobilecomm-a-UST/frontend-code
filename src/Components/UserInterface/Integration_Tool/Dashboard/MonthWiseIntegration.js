@@ -50,7 +50,7 @@ const MonthWiseIntegration = ({ onData }) => {
     const [year, setYear] = useState('')
     const [months, setMonths] = useState('')
     const [years, setYears] = useState('')
-    const activityArray = ['DE-GROW', 'MACRO', 'OTHER', 'RELOCATION', 'RET', 'ULS-HPSC', 'UPGRADE', 'MEMTO', 'HT-INCREMENT', 'IBS', 'IDSC', 'ODSC', 'RECTIFICATION', 'OPERATION', 'RRU UPGRADE', '5G BW UPGRADE', '5G RRU SWAP', '5G SECTOR ADDITION', '5G RELOCATION', 'TRAFFIC SHIFTING', '5G AIR SWAP']
+    const activityArray = ['DE-GROW', 'MACRO', 'OTHER', 'RELOCATION', 'RET', 'ULS-HPSC', 'UPGRADE', 'MEMTO', 'HT-INCREMENT', 'IBS', 'IDSC', 'ODSC', 'RECTIFICATION', 'OPERATION', 'RRU UPGRADE', '5G BW UPGRADE', '5G RRU SWAP', '5G SECTOR ADDITION', '5G RELOCATION', 'TRAFFIC SHIFTING', 'RRU SWAP']
     const { isPending, isFetching, isError, data, error, refetch } = useQuery({
         queryKey: ['Integration_month_wise'],
         queryFn: async () => {
@@ -103,7 +103,7 @@ const MonthWiseIntegration = ({ onData }) => {
             M1_5G_SECTOR_ADDITION: 0,
             M1_5G_RELOCATION: 0,
             M1_TRAFFIC_SHIFTING: 0,
-            M1_5G_AIR_SWAP: 0,
+            M1_RRU_SWAP: 0,
             M2_DE_GROW: 0,
             M2_MACRO: 0,
             M2_OTHERS: 0,
@@ -124,7 +124,7 @@ const MonthWiseIntegration = ({ onData }) => {
             M2_5G_SECTOR_ADDITION: 0,
             M2_5G_RELOCATION: 0,
             M2_TRAFFIC_SHIFTING: 0,
-            M2_5G_AIR_SWAP: 0,
+            M2_RRU_SWAP: 0,
             M3_DE_GROW: 0,
             M3_MACRO: 0,
             M3_OTHERS: 0,
@@ -145,7 +145,7 @@ const MonthWiseIntegration = ({ onData }) => {
             M3_5G_SECTOR_ADDITION: 0,
             M3_5G_RELOCATION: 0,
             M3_TRAFFIC_SHIFTING: 0,
-            M3_5G_AIR_SWAP: 0
+            M3_RRU_SWAP: 0
 
         };
 
@@ -453,7 +453,7 @@ const MonthWiseIntegration = ({ onData }) => {
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: '5G SECTOR ADDITION' })}>{it?.M1_5G_SECTOR_ADDITION}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: '5G RELOCATION' })}>{it?.M1_5G_RELOCATION}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'TRAFFIC SHIFTING' })}>{it?.M1_TRAFFIC_SHIFTING}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: '5G AIR SWAP' })}>{it?.M1_5G_AIR_SWAP}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'RRU SWAP' })}>{it?.M1_RRU_SWAP}</th>
                                        
 
 
@@ -477,7 +477,7 @@ const MonthWiseIntegration = ({ onData }) => {
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: '5G SECTOR ADDITION' })}>{it?.M2_5G_SECTOR_ADDITION}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: '5G RELOCATION' })}>{it?.M2_5G_RELOCATION}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: 'TRAFFIC SHIFTING' })}>{it?.M2_TRAFFIC_SHIFTING}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: '5G AIR SWAP' })}>{it?.M2_5G_AIR_SWAP}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'RRU SWAP' })}>{it?.M2_RRU_SWAP}</th>
 
 
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: 'DE-GROW' })}>{it?.M3_DE_GROW}</th>
@@ -500,7 +500,7 @@ const MonthWiseIntegration = ({ onData }) => {
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: '5G SECTOR ADDITION' })}>{it?.M3_5G_SECTOR_ADDITION}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: '5G RELOCATION' })}>{it?.M3_5G_RELOCATION}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: 'TRAFFIC SHIFTING' })}>{it?.M3_TRAFFIC_SHIFTING}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: '5G AIR SWAP' })}>{it?.M3_5G_AIR_SWAP}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'RRU SWAP' })}>{it?.M3_RRU_SWAP}</th>
 
 
                                             </tr>

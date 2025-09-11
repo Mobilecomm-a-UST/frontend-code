@@ -555,7 +555,7 @@ const ActivityBar = () => {
   return (<>
     <Box sx={{ display: 'flex', justifyContent: 'space-evenly', flexWrap: "wrap", flexDirection: 'row', gap: 1,marginBottom:2 }}>
       {totalCount.length > 0 && totalCount.map((item, index) =>(
-          <Box sx={{ height: 'auto', width: '25vh', cursor: 'pointer', padding: 1.5, borderRadius: 1.5, boxShadow: " rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px", backgroundColor:`${colorType[index]}`, textAlign: 'center' }}>
+          <Box sx={{ height: 'auto', width: '23vh', cursor: 'pointer', padding: 1.5, borderRadius: 1.5, boxShadow: " rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px", backgroundColor:`${colorType[index]}`, textAlign: 'center' }}>
         <Box sx={{ fontWeight: 600, fontSize: '16px', color: "black", textAlign: 'left' }}>{`${monthNames[month[index]]}-${year[index]}`}</Box>
         <Box sx={{ fontWeight: 600, fontSize: '24px', color: "black", fontFamily: 'cursive' }}><CountUp end={item?.count}  duration={6} /></Box>
         <Box sx={{ color: "black", textAlign: 'left' }}>{item?.activity.replace(/^M\d_/, '').replace(/_/g, ' ')}</Box>
