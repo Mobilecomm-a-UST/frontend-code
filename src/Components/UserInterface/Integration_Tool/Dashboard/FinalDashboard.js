@@ -147,7 +147,7 @@ const FinalDashboard = () => {
         sheet1.getCell('S2').value = '5G SECTOR ADDITION';
         sheet1.getCell('T2').value = '5G RELOCATION';
         sheet1.getCell('U2').value = 'TRAFFIC SHIFTING';
-        sheet1.getCell('V2').value = '5G AIR SWAP';
+        sheet1.getCell('V2').value = 'RRU SWAP';
 
 
         sheet1.getCell('W2').value = 'DE-GROW';
@@ -170,7 +170,7 @@ const FinalDashboard = () => {
         sheet1.getCell('AN2').value = '5G SECTOR ADDITION';
         sheet1.getCell('AO2').value = '5G RELOCATION';
         sheet1.getCell('AP2').value = 'TRAFFIC SHIFTING';
-        sheet1.getCell('AQ2').value = '5G AIR SWAP';
+        sheet1.getCell('AQ2').value = 'RRU SWAP';
 
 
         sheet1.getCell('AR2').value = 'DE-GROW';
@@ -193,7 +193,7 @@ const FinalDashboard = () => {
         sheet1.getCell('BI2').value = '5G SECTOR ADDITION';
         sheet1.getCell('BJ2').value = '5G RELOCATION';
         sheet1.getCell('BK2').value = 'TRAFFIC SHIFTING';
-        sheet1.getCell('BL2').value = '5G AIR SWAP';
+        sheet1.getCell('BL2').value = 'RRU SWAP';
 
 
 
@@ -239,7 +239,7 @@ const FinalDashboard = () => {
         sheet2.getCell('S2').value = '5G SECTOR ADDITION';
         sheet2.getCell('T2').value = '5G RELOCATION';
         sheet2.getCell('U2').value = 'TRAFFIC SHIFTING';
-        sheet2.getCell('V2').value = '5G AIR SWAP';
+        sheet2.getCell('V2').value = 'RRU SWAP';
 
 
         sheet2.getCell('W2').value = 'DE-GROW';
@@ -262,7 +262,7 @@ const FinalDashboard = () => {
         sheet2.getCell('AN2').value = '5G SECTOR ADDITION';
         sheet2.getCell('AO2').value = '5G RELOCATION';
         sheet2.getCell('AP2').value = 'TRAFFIC SHIFTING';
-        sheet2.getCell('AQ2').value = '5G AIR SWAP';
+        sheet2.getCell('AQ2').value = 'RRU SWAP';
 
 
         sheet2.getCell('AR2').value = 'DE-GROW';
@@ -285,7 +285,7 @@ const FinalDashboard = () => {
         sheet2.getCell('BI2').value = '5G SECTOR ADDITION';
         sheet2.getCell('BJ2').value = '5G RELOCATION';
         sheet2.getCell('BK2').value = 'TRAFFIC SHIFTING';
-        sheet2.getCell('BL2').value = '5G AIR SWAP';
+        sheet2.getCell('BL2').value = 'RRU SWAP';
 
 
         //          SHEET 3
@@ -326,7 +326,7 @@ const FinalDashboard = () => {
         sheet4.getCell('S2').value = '5G SECTOR ADDITION';
         sheet4.getCell('T2').value = '5G RELOCATION';
         sheet4.getCell('U2').value = 'TRAFFIC SHIFTING';
-        sheet4.getCell('V2').value = '5G AIR SWAP';
+        sheet4.getCell('V2').value = 'RRU SWAP';
 
 
         sheet1.columns = [
@@ -351,7 +351,7 @@ const FinalDashboard = () => {
             { key: 'D1_5G_SECTOR_ADDITION' },
             { key: 'D1_5G_RELOCATION' },
             { key: 'D1_TRAFFIC_SHIFTING' },//D1_TRAFFIC_SHIFTING
-            {key:'D1_5G_AIR_SWAP'},
+            {key:'D1_RRU_SWAP'},
 
             { key: 'D2_DE_GROW' },
             { key: 'D2_MACRO' },
@@ -373,7 +373,7 @@ const FinalDashboard = () => {
             { key: 'D2_5G_SECTOR_ADDITION' },
             { key: 'D2_5G_RELOCATION' },
             { key: 'D2_TRAFFIC_SHIFTING' },
-            {key:'D2_5G_AIR_SWAP'},
+            {key:'D2_RRU_SWAP'},
 
             { key: 'D3_DE_GROW' },
             { key: 'D3_MACRO' },
@@ -395,7 +395,7 @@ const FinalDashboard = () => {
             { key: 'D3_5G_SECTOR_ADDITION' },
             { key: 'D3_5G_RELOCATION' },
             { key: 'D3_TRAFFIC_SHIFTING' },
-            {key:'D3_5G_AIR_SWAP'},
+            {key:'D3_RRU_SWAP'},
 
         ]
         sheet1Data?.map(item => {
@@ -421,7 +421,7 @@ const FinalDashboard = () => {
                 D1_5G_SECTOR_ADDITION: Number(item?.D1_5G_SECTOR_ADDITION),
                 D1_5G_RELOCATION: Number(item?.D1_5G_RELOCATION),
                 D1_TRAFFIC_SHIFTING: Number(item?.D1_TRAFFIC_SHIFTING),
-                D1_5G_AIR_SWAP: Number(item?.D1_5G_AIR_SWAP),
+                D1_RRU_SWAP: Number(item?.D1_RRU_SWAP),
 
                 D2_DE_GROW: Number(item?.D2_DE_GROW),
                 D2_MACRO: Number(item?.D2_MACRO),
@@ -443,7 +443,7 @@ const FinalDashboard = () => {
                 D2_5G_SECTOR_ADDITION: Number(item?.D2_5G_SECTOR_ADDITION),
                 D2_5G_RELOCATION: Number(item?.D2_5G_RELOCATION),
                 D2_TRAFFIC_SHIFTING: Number(item?.D2_TRAFFIC_SHIFTING),
-                D2_5G_AIR_SWAP: Number(item?.D2_5G_AIR_SWAP),
+                D2_RRU_SWAP: Number(item?.D2_RRU_SWAP),
 
                 D3_DE_GROW: Number(item?.D3_DE_GROW),
                 D3_MACRO: Number(item?.D3_MACRO),
@@ -465,7 +465,7 @@ const FinalDashboard = () => {
                 D3_5G_SECTOR_ADDITION: Number(item?.D3_5G_SECTOR_ADDITION),
                 D3_5G_RELOCATION: Number(item?.D3_5G_RELOCATION),
                 D3_TRAFFIC_SHIFTING: Number(item?.D3_TRAFFIC_SHIFTING),
-                D3_5G_AIR_SWAP: Number(item?.D3_5G_AIR_SWAP),
+                D3_RRU_SWAP: Number(item?.D3_RRU_SWAP),
             });
         })
 
@@ -493,7 +493,7 @@ const FinalDashboard = () => {
             { key: 'M1_5G_SECTOR_ADDITION' },
             { key: 'M1_5G_RELOCATION' },
             { key: 'M1_TRAFFIC_SHIFTING' },
-            {key: 'M1_5G_AIR_SWAP'},
+            {key: 'M1_RRU_SWAP'},
 
             { key: 'M2_DE_GROW' },
             { key: 'M2_MACRO' },
@@ -515,7 +515,7 @@ const FinalDashboard = () => {
             { key: 'M2_5G_SECTOR_ADDITION' },
             { key: 'M2_5G_RELOCATION' },
             { key: 'M2_TRAFFIC_SHIFTING' },
-            {key: 'M2_5G_AIR_SWAP'},
+            {key: 'M2_RRU_SWAP'},
 
             { key: 'M3_DE_GROW' },
             { key: 'M3_MACRO' },
@@ -537,7 +537,7 @@ const FinalDashboard = () => {
             { key: 'M3_5G_SECTOR_ADDITION' },
             { key: 'M3_5G_RELOCATION' },
             { key: 'M3_TRAFFIC_SHIFTING' },
-            {key: 'M3_5G_AIR_SWAP'},
+            {key: 'M3_RRU_SWAP'},
         ]
 
         sheet2Data?.map(item => {
@@ -564,7 +564,7 @@ const FinalDashboard = () => {
                 M1_5G_SECTOR_ADDITION: Number(item?.M1_5G_SECTOR_ADDITION),
                 M1_5G_RELOCATION: Number(item?.M1_5G_RELOCATION),
                 M1_TRAFFIC_SHIFTING: Number(item?.M1_TRAFFIC_SHIFTING),
-                M1_5G_AIR_SWAP: Number(item?.M1_5G_AIR_SWAP),
+                M1_RRU_SWAP: Number(item?.M1_RRU_SWAP),
 
                 M2_DE_GROW: Number(item?.M2_DE_GROW),
                 M2_MACRO: Number(item?.M2_MACRO),
@@ -586,7 +586,7 @@ const FinalDashboard = () => {
                 M2_5G_SECTOR_ADDITION: Number(item?.M2_5G_SECTOR_ADDITION),
                 M2_5G_RELOCATION: Number(item?.M2_5G_RELOCATION),
                 M2_TRAFFIC_SHIFTING: Number(item?.M2_TRAFFIC_SHIFTING),
-                M2_5G_AIR_SWAP: Number(item?.M2_5G_AIR_SWAP),
+                M2_RRU_SWAP: Number(item?.M2_RRU_SWAP),
 
                 M3_DE_GROW: Number(item?.M3_DE_GROW),
                 M3_MACRO: Number(item?.M3_MACRO),
@@ -608,7 +608,7 @@ const FinalDashboard = () => {
                 M3_5G_SECTOR_ADDITION: Number(item?.M3_5G_SECTOR_ADDITION),
                 M3_5G_RELOCATION: Number(item?.M3_5G_RELOCATION),
                 M3_TRAFFIC_SHIFTING: Number(item?.M3_TRAFFIC_SHIFTING),
-                M3_5G_AIR_SWAP: Number(item?.M3_5G_AIR_SWAP),
+                M3_RRU_SWAP: Number(item?.M3_RRU_SWAP),
             });
         })
 
@@ -653,7 +653,7 @@ const FinalDashboard = () => {
             { key: 'D1_5G_SECTOR_ADDITION' },
             { key: 'D1_5G_RELOCATION' },
             { key: 'D1_TRAFFIC_SHIFTING' },//RAFFIC_SHIFTING
-            { key: 'D1_5G_AIR_SWAP' },
+            { key: 'D1_RRU_SWAP' },
 
         ]
         sheet4Data?.map(item => {
@@ -679,7 +679,7 @@ const FinalDashboard = () => {
                 D1_5G_SECTOR_ADDITION: Number(item?.D1_5G_SECTOR_ADDITION),
                 D1_5G_RELOCATION: Number(item?.D1_5G_RELOCATION),
                 D1_TRAFFIC_SHIFTING: Number(item?.D1_TRAFFIC_SHIFTING),
-                D1_5G_AIR_SWAP: Number(item?.D1_5G_AIR_SWAP),
+                D1_RRU_SWAP: Number(item?.D1_RRU_SWAP),
 
             })
         })
