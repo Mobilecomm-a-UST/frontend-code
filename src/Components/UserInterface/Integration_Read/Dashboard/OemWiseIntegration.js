@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Box, Grid } from "@mui/material";
-import Tooltip from '@mui/material/Tooltip';
+// import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
-import DownloadIcon from '@mui/icons-material/Download';
+// import DownloadIcon from '@mui/icons-material/Download';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -11,9 +11,9 @@ import * as ExcelJS from 'exceljs'
 import TableContainer from '@mui/material/TableContainer';
 import Paper from '@mui/material/Paper';
 import Slide from '@mui/material/Slide';
-import { Breadcrumbs, Link, Typography } from "@mui/material";
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import { useGet } from '../../../Hooks/GetApis';
+// import { Breadcrumbs, Link, Typography } from "@mui/material";
+// import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+// import { useGet } from '../../../Hooks/GetApis';
 import { usePost } from '../../../Hooks/PostApis';
 import { useLoadingDialog } from '../../../Hooks/LoadingDialog';
 import { useQuery } from '@tanstack/react-query';
@@ -289,68 +289,70 @@ const OemWiseIntegration = ({ onData }) => {
                 <DialogTitle> Month:{monthNames[month]}-{year}, OEM:{oem}   <span style={{ float: 'right' }}><IconButton size="large" onClick={handleClose}><CloseIcon /></IconButton></span></DialogTitle>
 
                 <DialogContent >
-                     <TableContainer sx={{ maxHeight: 450, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} component={Paper}>
-                    
-                                            <table style={{ width: "100%", border: "1px solid black", borderCollapse: 'collapse', overflow: 'auto' }} >
-                    
-                                                <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
-                                                    <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
-                                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>CIRCLE</th>
-                                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>DE-GROW</th>
-                                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>MACRO</th>
-                                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>RELOCATION</th>
-                                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>RET</th>
-                                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>ULS HPSC</th>
-                                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>UPGRADE</th>
-                                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>FEMTO</th>
-                                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>HT-INCREMENT</th>
-                                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>IBS</th>
-                                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>IDSC</th>
-                                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>ODSC</th>
-                                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>RECTIFICATION</th>
-                                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>OPERATIONS</th>
-                                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>OTHERS</th>
-                                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>RRU UPGRADE</th>
-                                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>5G BW UPGRADE</th>
-                                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>5G RRU SWAP</th>
-                                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>5G SECTOR ADDITION</th>
-                                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>5G RELOCATION</th>
-                                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>TRAFFIC SHIFTING</th>
-                    
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {mainDataT2?.map((item) => (
-                                                        <tr style={{ textAlign: "center", fontWeigth: 700 }}>
-                                                            <th>{item.cir}</th>
-                                                            <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'DE-GROW' })}>{item.DE_GROW}</th>
-                                                            <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'MACRO' })}>{item.MACRO}</th>
-                                                            <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'RELOCATION' })}>{item.RELOCATION}</th>
-                                                            <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'RET' })}>{item.RET}</th>
-                                                            <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'ULS_HPSC' })}>{item.ULS_HPSC}</th>
-                                                            <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'UPGRADE' })}>{item.UPGRADE}</th>
-                                                            <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'FEMTO' })}>{item.FEMTO}</th>
-                                                            <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'HT INCREMENT' })}>{item.HT_INCREMENT}</th>
-                                                            <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'IBS' })}>{item.IBS}</th>
-                                                            <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'IDSC' })}>{item.IDSC}</th>
-                                                            <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'ODSC' })}>{item.ODSC}</th>
-                                                            <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'RECTIFICATION' })}>{item.RECTIFICATION}</th>
-                                                            <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'OPERATIONS' })}>{item.OPERATIONS}</th>
-                                                            <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'OTHERS' })}>{item.OTHERS}</th>
-                                                            <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'RRU UPGRADE' })}>{it['RRU UPGRADE'] || 0}</th>
-                                                            <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: '5G BW UPGRADE' })}>{it['5G BW UPGRADE'] || 0}</th>
-                                                            <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: '5G RRU SWAP' })}>{it['5G RRU SWAP'] || 0}</th>
-                                                            <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'G5_SECTOR_ADDITION' })}>{item['5G SECTOR ADDITION']}</th>
-                                                            <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'G5_RELOCATION' })}>{item['5G RELOCATION']}</th>
-                                                            <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'TRAFFIC_SHIFTING' })}>{item.TRAFFIC_SHIFTING}</th>
-                    
-                                                        </tr>
-                                                    ))}
-                                                </tbody>
-                    
-                    
-                                            </table>
-                                        </TableContainer>
+                    <TableContainer sx={{ maxHeight: 450, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} component={Paper}>
+
+                        <table style={{ width: "100%", border: "1px solid black", borderCollapse: 'collapse', overflow: 'auto' }} >
+
+                            <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
+                                <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
+                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>CIRCLE</th>
+                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>DE-GROW</th>
+                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>MACRO</th>
+                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>RELOCATION</th>
+                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>RET</th>
+                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>ULS HPSC</th>
+                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>UPGRADE</th>
+                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>FEMTO</th>
+                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>HT-INCREMENT</th>
+                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>IBS</th>
+                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>IDSC</th>
+                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>ODSC</th>
+                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>RECTIFICATION</th>
+                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>OPERATIONS</th>
+                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>OTHERS</th>
+                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>RRU UPGRADE</th>
+                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>5G BW UPGRADE</th>
+                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>5G RRU SWAP</th>
+                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>5G SECTOR ADDITION</th>
+                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>5G RELOCATION</th>
+                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>TRAFFIC SHIFTING</th>
+                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>RRU SWAP</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {mainDataT2?.map((item , index) => (
+                                    <tr key={index} style={{ textAlign: "center", fontWeigth: 700 }}>
+                                        <th>{item.cir}</th>
+                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'DE-GROW' })}>{item.DE_GROW}</th>
+                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'MACRO' })}>{item.MACRO}</th>
+                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'RELOCATION' })}>{item.RELOCATION}</th>
+                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'RET' })}>{item.RET}</th>
+                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'ULS_HPSC' })}>{item.ULS_HPSC}</th>
+                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'UPGRADE' })}>{item.UPGRADE}</th>
+                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'FEMTO' })}>{item.FEMTO}</th>
+                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'HT INCREMENT' })}>{item.HT_INCREMENT}</th>
+                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'IBS' })}>{item.IBS}</th>
+                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'IDSC' })}>{item.IDSC}</th>
+                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'ODSC' })}>{item.ODSC}</th>
+                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'RECTIFICATION' })}>{item.RECTIFICATION}</th>
+                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'OPERATIONS' })}>{item.OPERATIONS}</th>
+                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'OTHERS' })}>{item.OTHERS}</th>
+                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'RRU UPGRADE' })}>{item?.RRU_UPGRADE}</th> 
+                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: '5G BW UPGRADE' })}>{item['5G_BW_UPGRADE']}</th>
+                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: '5G RRU SWAP' })}>{item['5G_RRU_SWAP']}</th>
+                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: '5G SECTOR ADDITION' })}>{item['5G_SECTOR_ADDITION']}</th>
+                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: '5G RELOCATION' })}>{item['5G_RELOCATION']}</th>
+                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'TRAFFIC SHIFTING' })}>{item?.TRAFFIC_SHIFTING}</th>
+                                        <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => secondHyperLink({ circle: item.cir, activity: 'RRU SWAP' })}>{item['RRU_SWAP']}</th>
+
+                                    </tr>
+                                ))}
+                            </tbody>
+
+
+                        </table>
+                    </TableContainer>
 
                 </DialogContent>
             </Dialog>
@@ -368,7 +370,7 @@ const OemWiseIntegration = ({ onData }) => {
 
         const responce = await makePostRequest('IntegrationTracker/hyperlink-monthly-oemwise-integration-data/', formData)
         if (responce) {
-            console.log('hyperlink data', JSON.parse(responce.table_data))
+            console.log('hyperlink data', JSON.parse(responce.table_data)[0])
             setMainDataT2(JSON.parse(responce.table_data))
             action(false)
             setOpen(true)
@@ -398,7 +400,7 @@ const OemWiseIntegration = ({ onData }) => {
                     {/* ************* 2G  TABLE DATA ************** */}
                     <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', alignContent: 'center' }}>
                         <Box style={{ fontSize: 20, fontWeight: 'bold' }}>
-                        Monthly OEM Wise Dashboard
+                            Monthly OEM Wise Dashboard
                         </Box>
                         <Box>
                             <LocalizationProvider dateAdapter={AdapterDayjs} >
@@ -415,7 +417,7 @@ const OemWiseIntegration = ({ onData }) => {
 
                                 <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
-                                    <th colSpan={6} style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{monthNames[month]}-{year}</th>
+                                        <th colSpan={6} style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{monthNames[month]}-{year}</th>
                                     </tr>
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
                                         <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>CIRCLE</th>
@@ -428,7 +430,7 @@ const OemWiseIntegration = ({ onData }) => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {tableData?.map((it,index) => {
+                                    {tableData?.map((it, index) => {
                                         return (
                                             <tr className={classes.hover} style={{ textAlign: "center", fontWeigth: 700 }} key={index}>
                                                 <th >{it?.cir}</th>
@@ -462,4 +464,4 @@ const OemWiseIntegration = ({ onData }) => {
     )
 }
 
-export const MemoOemWiseIntegration= React.memo(OemWiseIntegration)
+export const MemoOemWiseIntegration = React.memo(OemWiseIntegration)

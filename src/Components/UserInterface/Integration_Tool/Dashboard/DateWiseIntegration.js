@@ -43,7 +43,7 @@ const DateWiseIntegration = ({ onData }) => {
     const { isPending, isFetching, isError, data, refetch } = useQuery({
         queryKey: ['Integration_date_wise'],
         queryFn: async () => {
-            action(isPending)
+            action(true)
             var formData = new FormData()
             formData.append('date', givenDate)
             const res = await makePostRequest("IntegrationTracker/datewise-integration-data/", formData);
@@ -51,7 +51,7 @@ const DateWiseIntegration = ({ onData }) => {
                 action(false)
                 ShortDate(res.latest_dates)
                 setTableData(JSON.parse(res.table_data))
-                console.log('date wise data', JSON.parse(res.table_data))
+                // console.log('date wise data', JSON.parse(res.table_data))
                 onData(res);
                 return res;
             }

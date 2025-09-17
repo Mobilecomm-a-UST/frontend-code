@@ -967,7 +967,7 @@ const FinalDashboard = () => {
                     </Grid>
 
                 </div>
-                <div style={{ padding: '5px', display: 'flex', justifyContent: 'space-evenly', flexWrap: "wrap", flexDirection: 'row', gap: 5 }}>
+                <div style={{ padding: '5px', display: 'flex', justifyContent: 'space-evenly', flexWrap: "wrap", flexDirection: 'row', gap: 10 }}>
                     {mdashboard?.map((item, index) => index < 5 && (
                         <Dashboard data={item} color={colorType[index]} key={index} />
                     ))}
