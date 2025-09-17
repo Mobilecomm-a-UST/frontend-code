@@ -43,7 +43,7 @@ const RangeWiseDashboard = ({ onData }) => {
     const { isPending, isFetching, isError, data, refetch } = useQuery({
         queryKey: ['Integration_Range_wise'],
         queryFn: async () => {
-            action(isPending)
+            action(true)
             var formData = new FormData()
             formData.append('from_date', fromDate)
             formData.append('to_date', toDate)
@@ -55,7 +55,7 @@ const RangeWiseDashboard = ({ onData }) => {
                 setFromDate(res.date_range[0])
                 setToDate(res.date_range[1])
                 setTableData(JSON.parse(res.table_data))
-                console.log('range wise data',JSON.parse(res.table_data))
+                // console.log('range wise data',JSON.parse(res.table_data))
                 onData(res);
                 return res;
             }

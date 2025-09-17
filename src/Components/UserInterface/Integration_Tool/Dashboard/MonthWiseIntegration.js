@@ -54,7 +54,7 @@ const MonthWiseIntegration = ({ onData }) => {
     const { isPending, isFetching, isError, data, error, refetch } = useQuery({
         queryKey: ['Integration_month_wise'],
         queryFn: async () => {
-            action(isPending)
+            action(true)
             var formData = new FormData()
             formData.append('month', month)
             formData.append('year', year)
@@ -65,7 +65,7 @@ const MonthWiseIntegration = ({ onData }) => {
                 setYears(res.latest_year)
                 ShortDate(res.latest_months, res.latest_year)
                 setTableData(JSON.parse(res.table_data))
-                console.log('test data month', JSON.parse(res.table_data))
+                // console.log('test data month', JSON.parse(res.table_data))
                 onData(res)
                 return res;
             }

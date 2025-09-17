@@ -22,6 +22,7 @@ import NoticeIcon from '@rsuite/icons/Notice';
 import ModelIcon from '@rsuite/icons/Model';
 import CharacterLockIcon from '@rsuite/icons/CharacterLock';
 import IndirectIcon from '@rsuite/icons/Indirect';
+import TableIcon from '@rsuite/icons/Table';
 
 
 import { groupBy } from 'lodash';
@@ -267,6 +268,14 @@ const ToolData = [
         icons: IndirectIcon,
         link: '/tools/degrow_dismantle',
         groupBy:['admin','ran']
+    },
+    {
+        id: 30,
+        name: 'KPI Matrix',
+        title: 'This is a KPI Matrix Tool',
+        icons: TableIcon,
+        link: '/tools/kpi_matrix',
+        groupBy:['admin']
     }
 
 
