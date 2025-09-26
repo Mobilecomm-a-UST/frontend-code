@@ -251,30 +251,7 @@ const Cats = () => {
 
                   </div>
                 </Box>
-                {/* Stock File */}
-                {/* <UploadSection
-                  label="Select Stock File"
-                  color={stockFile.filename ? "warning" : "primary"}
-                  onChange={(e) => updateFile(e, setStockFile, "stockFile")}
-                  error={showError.olmId}
-                  selectedText={stockFile.filename}
-                /> */}
-                 <Box className={OverAllCss().Front_Box}>
-                  <div className={OverAllCss().Front_Box_Hading}>Stock File :</div>
-                  <div className={OverAllCss().Front_Box_Select_Button}>
-                    <Grid container rowSpacing={1} columnSpacing={1} direction={{ xs: "column", sm: "column", md: "row" }}>
-                      {showFiles?.stock.map((item, index) => (
-                        <Grid item xs={6} key={index}>
-                          <Box key={item} sx={{ display: "flex", justifyContent: 'flex-start', alignItems: 'center', fontWeight: 'bold' }}>
-                            <TopicIcon sx={{ color: '#FEA405' }} />{item}
-                          </Box>
-                        </Grid>
-                      ))}
-                    </Grid>
-
-                  </div>
-                </Box>
-
+    
                 {/* Locater files Dump */}
                 {/* <UploadSection
                   label="Select Locator Files"
@@ -303,6 +280,30 @@ const Cats = () => {
 
                   </div>
                 </Box>
+                            {/* Stock File */}
+                {/* <UploadSection
+                  label="Select Stock File"
+                  color={stockFile.filename ? "warning" : "primary"}
+                  onChange={(e) => updateFile(e, setStockFile, "stockFile")}
+                  error={showError.olmId}
+                  selectedText={stockFile.filename}
+                /> */}
+                 <Box className={OverAllCss().Front_Box}>
+                  <div className={OverAllCss().Front_Box_Hading}>Stock File :</div>
+                  <div className={OverAllCss().Front_Box_Select_Button}>
+                    <Grid container rowSpacing={1} columnSpacing={1} direction={{ xs: "column", sm: "column", md: "row" }}>
+                      {showFiles?.stock.map((item, index) => (
+                        <Grid item xs={6} key={index}>
+                          <Box key={item} sx={{ display: "flex", justifyContent: 'flex-start', alignItems: 'center', fontWeight: 'bold' }}>
+                            <TopicIcon sx={{ color: '#FEA405' }} />{item}
+                          </Box>
+                        </Grid>
+                      ))}
+                    </Grid>
+
+                  </div>
+                </Box>
+
 
               </Stack>
 
