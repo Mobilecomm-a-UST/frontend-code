@@ -23,6 +23,7 @@ import ModelIcon from '@rsuite/icons/Model';
 import CharacterLockIcon from '@rsuite/icons/CharacterLock';
 import IndirectIcon from '@rsuite/icons/Indirect';
 import TableIcon from '@rsuite/icons/Table';
+import AbTestIcon from '@rsuite/icons/AbTest';
 
 
 import { groupBy } from 'lodash';
@@ -275,6 +276,15 @@ const ToolData = [
         title: 'This is a KPI Matrix Tool',
         icons: TableIcon,
         link: '/tools/kpi_matrix',
+        groupBy:['admin']
+    }
+    ,
+    {
+        id: 31,
+        name: 'RPT',
+        title: 'This is a Relocation Payload Tracker Tool',
+        icons: AbTestIcon,
+        link: '/tools/relocation_payload_tracker',
         groupBy:['admin']
     }
 

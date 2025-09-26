@@ -52,6 +52,7 @@ const LKFStatus = lazy(() => import('./Components/UserInterface/LKF Status/LKF')
 const MobinateVsCate = lazy(() => import('./Components/UserInterface/Mobinat_vs_cats/MobinateVsCats'))
 const DegrowDismantle = lazy(() => import('./Components/UserInterface/DegrowDismantle/DegrowDismantle'))
 const KPImatrix = lazy(()=>import('./Components/UserInterface/KPI Matrix/KPImatrix'))
+const RelocationPayload = lazy(()=>import('./Components/UserInterface/RelocationPayload/Relocation'))
 
 const queryClient = new QueryClient()
 
@@ -297,6 +298,12 @@ function App() {
              <Route path="/tools/kpi_matrix/*" element={
               <Suspense fallback={<div>Loading...</div>}>
                 <ProtectedRoute element={KPImatrix} allowedUserTypes={['admin']} userType={userType} />
+              </Suspense>
+            } />
+
+              <Route path="/tools/relocation_payload_tracker/*" element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProtectedRoute element={RelocationPayload} allowedUserTypes={['admin']} userType={userType} />
               </Suspense>
             } />
 

@@ -11,6 +11,8 @@ import GearIcon from '@rsuite/icons/Gear';
 import TrendIcon from '@rsuite/icons/Trend';
 import ViewsAuthorizeIcon from '@rsuite/icons/ViewsAuthorize';
 import { getDecreyptedData } from '../../utils/localstorage';
+import WaitIcon from '@rsuite/icons/Wait';
+
 
 
 
@@ -33,6 +35,7 @@ const RaiseTicket = lazy(() => import('./TroubleTicket/RaiseTicket'))
 const RaiseTicket2 = lazy(() => import('./TroubleTicket/RaiseTicket2'))
 const MailData = lazy(() => import('./Kpi_table/MailData'))
 const Graphs = lazy(() => import('./Dashboard/Graphs'))
+const SAper = lazy(()=>import('./SA_performance/SAper'))
 
 
 
@@ -99,6 +102,9 @@ const Rca = () => {
                                         <Nav.Item eventKey="3" placement="rightStart" icon={<GearIcon size="3em" />} onClick={() => navigate('/tools/rca/generate_rca')}>
                                             Generate RCA
                                         </Nav.Item>
+                                            <Nav.Item eventKey="7" placement="rightStart" icon={<WaitIcon size="3em" />} onClick={() => navigate('/tools/rca/sa_performance')}>
+                                            SA Performance
+                                        </Nav.Item>
 {/* 
                                         {(!userType.includes('Circle_Rno')) ? (<Nav.Menu eventKey="1" placement="rightStart" title="Threshold Data" icon={<DashboardIcon size="3em" />}>
                                             <Nav.Item eventKey="1-1" placement="rightStart" onClick={() => navigate('/tools/rca/kpi_table')}>
@@ -156,6 +162,7 @@ const Rca = () => {
                                 <Route element={<WeekWisePayload />} path="/week_wise_payload_variation" />
                                 {/* <Route element={<RaiseTicket />} path="/raise_ticket" /> */}
                                 <Route element={<RaiseTicket2 />} path="/ticket" />
+                                <Route element={<SAper />} path="/sa_performance" />
 
                             </Routes>
                         </Suspense>
