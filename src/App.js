@@ -303,7 +303,7 @@ function App() {
 
               <Route path="/tools/relocation_payload_tracker/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={RelocationPayload} allowedUserTypes={['admin']} userType={userType} />
+                <ProtectedRoute element={RelocationPayload} allowedUserTypes={['admin','quality-s','quality']} userType={userType} />
               </Suspense>
             } />
 
