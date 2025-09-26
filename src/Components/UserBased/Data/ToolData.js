@@ -150,7 +150,7 @@ const ToolData = [
         title: 'This is a file merge tool<',
         icons: SingleSourceIcon,
         link: '/tools/file_merge',
-        groupBy:['admin','quality','quality-s']
+        groupBy:['admin','quality','quality-s','ran']
     },
     {
         id: 15,
@@ -285,7 +285,7 @@ const ToolData = [
         title: 'This is a Relocation Payload Tracker Tool',
         icons: AbTestIcon,
         link: '/tools/relocation_payload_tracker',
-        groupBy:['admin']
+        groupBy:['admin','quality-s','quality']
     }
 
 
