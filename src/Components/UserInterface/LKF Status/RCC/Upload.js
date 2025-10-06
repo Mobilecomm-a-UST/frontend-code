@@ -7,10 +7,10 @@ import Slide from '@mui/material/Slide';
 import UploadIcon from '@mui/icons-material/Upload';
 import DoDisturbIcon from '@mui/icons-material/DoDisturb';
 import Swal from "sweetalert2";
-import { postData, ServerURL } from "../../services/FetchNodeServices";
+import { postData, ServerURL } from "../../../services/FetchNodeServices";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import OverAllCss from "../../csss/OverAllCss";
-import { useLoadingDialog } from "../../Hooks/LoadingDialog";
+import OverAllCss from "../../../csss/OverAllCss";
+import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
 
 
 const Upload = () => {
@@ -42,7 +42,7 @@ const Upload = () => {
                 formData.append(`files`, make4GFiles[i]);
             }
 
-            const response = await postData('LKF/LKF_status/', formData)
+            const response = await postData('Relocation_Configration_Check/RCC/', formData)
 
             // console.log('response data', response)
 
@@ -99,7 +99,7 @@ const Upload = () => {
                 <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
                     <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
                     <Link underline="hover" onClick={() => { navigate('/tools/lkf_status') }}>LKF/RCC Status Tool</Link>
-                    <Typography color='text.primary'>Make LKF Status</Typography>
+                    <Typography color='text.primary'>Make RCC Status</Typography>
                 </Breadcrumbs>
             </div>
             <Slide
@@ -112,7 +112,7 @@ const Upload = () => {
                     <Box className={classes.main_Box}>
                         <Box className={classes.Back_Box} sx={{ width: { md: '75%', xs: '100%' } }}>
                             <Box className={classes.Box_Hading} >
-                                Make LKF Status
+                                Make RCC Status
                             </Box>
                             <Stack spacing={2} sx={{ marginTop: "-40px" }} direction={'column'}>
                         
