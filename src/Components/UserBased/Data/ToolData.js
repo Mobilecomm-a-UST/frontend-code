@@ -247,7 +247,7 @@ const ToolData = [
     ,
     {
         id: 27,
-        name: 'LKF Status',
+        name: 'LKF/RCC Status',
         title: 'This is a LKF Status Tool',
         icons: CharacterLockIcon,
         link: '/tools/lkf_status',

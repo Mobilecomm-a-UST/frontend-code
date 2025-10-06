@@ -12,6 +12,7 @@ import TextImageIcon from '@rsuite/icons/TextImage';
 
 const LKFTool = lazy(() => import('./LKFTool'))
 const UploadLKFile = lazy(() => import('./Upload'))
+const RccUpload = lazy(() => import('./RCC/Upload'))
 
 const LKF = () => {
     const [expanded, setExpanded] = useState(true);
@@ -49,7 +50,7 @@ const LKF = () => {
                                     <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle">
                                         <Sidenav.Body>
                                             <Nav activeKey={activeKey} onSelect={setActiveKey} style={{ width: 'auto', minHeight: "670px", height: "100hv", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
-                                                <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>LKF TOOL</Nav>
+                                                <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>LKF/RCC TOOL</Nav>
 
 
                                                 {/* <Nav.Item eventKey="4" placement="rightStart" icon={<ViewsUnauthorizeIcon />} onClick={() => { navigate('/tools/soft_at/rejected_report'); show(); setMenuButton(true) }}>
@@ -69,7 +70,7 @@ const LKF = () => {
                                 <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
                                     <Sidenav.Body>
                                         <Nav activeKey={activeKey} onSelect={setActiveKey} >
-                                            <Nav style={{ fontWeight: 500, color: 'white', textAlign: 'center', fontSize: 20 }}>LKF TOOL</Nav>
+                                            <Nav style={{ fontWeight: 500, color: 'white', textAlign: 'center', fontSize: 20 }}>LKF/RCC TOOL</Nav>
                                             {/* <Nav.Menu eventKey="1" placement="rightStart" title="Acceptance" icon={<CheckOutlineIcon size="3em" />}>
                                            <Nav.Item eventKey="1-1" onClick={() => { navigate('/tools/mcom_physical_at/acceptance_summary'); show(); setMenuButton(true) }} >
                                                Acceptance Summary
@@ -77,6 +78,9 @@ const LKF = () => {
                                        </Nav.Menu> */}
                                             <Nav.Item eventKey="1" placement="rightStart" icon={<TextImageIcon />} onClick={() => { navigate('/tools/lkf_status/make_status'); show(); setMenuButton(true) }}>
                                                 Make LKF Status
+                                            </Nav.Item>
+                                            <Nav.Item eventKey="2" placement="rightStart" icon={<TextImageIcon />} onClick={() => { navigate('/tools/lkf_status/rcc_status'); show(); setMenuButton(true) }}>
+                                                Make RCC Status
                                             </Nav.Item>
                                          
                                             {/* <Nav.Menu eventKey="3" placement="rightStart" title="NOM Audit" icon={<DocPassIcon />}>
@@ -111,6 +115,7 @@ const LKF = () => {
                             <Routes>
                                 <Route element={<LKFTool />} path="/" />
                                 <Route element={<UploadLKFile />} path="/make_status" />
+                                <Route element={<RccUpload />} path="/rcc_status" />
                                
                             </Routes>
                         </Suspense>
