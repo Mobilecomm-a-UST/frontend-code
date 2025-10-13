@@ -26,11 +26,11 @@ import { postData, getData, deleteData } from "../../../services/FetchNodeServic
 import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
 
 const jsonData = [
-    // { folder_name: "Mobinet Dump Files", api: "mobinate_vs_cats/mobinet_dump" },
-    { folder_name: "Locator File", api: "degrow_dismantle/locator" },
-    { folder_name: "MS-MF File", api: "degrow_dismantle/msmf" },
-    { folder_name: "RFS File", api: "degrow_dismantle/rfs" },
-    // { folder_name: "Hardware File", api: "degrow_dismantle/stock" }
+    // { folder_name: "Mobinet Dump Files", api: "mobinate_vs_cats/mobinet_dump",back_folder:"mobinet_dump_data" },
+    { folder_name: "Locator File", api: "mobinate_vs_cats/locator" ,back_folder:"locator_data" },
+    { folder_name: "MS-MF File", api: "mobinate_vs_cats/msmf" ,back_folder:"msmf_data" },
+    { folder_name: "RFS File", api: "mobinate_vs_cats/rfs" ,back_folder:"rfs_data" },
+    // { folder_name: "Stock File", api: "mobinate_vs_cats/stock" ,back_folder:"stock_report_data" }
 ];
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -60,6 +60,9 @@ const FileManager = () => {
 
 
 
+
+
+
     const fetchApiData = async (api) => {
         action(true)
 
@@ -71,14 +74,14 @@ const FileManager = () => {
 
         }
 
-        console.log('response', response)
+        
 
     }
 
-    const handleOpen = (foldername, apikey) => {
+    const handleOpen = (foldername, apikey , back_folder) => {
         fetchApiData(apikey)
         setOpen2(true);
-        setDialogData({ foldername: foldername, apikey: apikey })
+        setDialogData({ foldername: foldername, apikey: apikey , back_folder: back_folder })
         // console.log('data', foldername, apikey)
     }
     const handleClose = () => {
@@ -151,6 +154,38 @@ const FileManager = () => {
         }
     };
 
+    const OneFileDelete = async(fileName,api,back_folder) => {
+
+       const confirmResult = await Swal.fire({
+            title: "Are you sure?",
+            text: `Want to delete ${fileName} file!`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Yes, delete it!",
+        });
+
+        if (confirmResult.isConfirmed) {
+            action(true);
+
+            const response = await deleteData(`mobinate_vs_cats/delete_mobinet_file/`, {
+                data: { filename: `${fileName}`, foldername: `${back_folder}`}
+            });
+
+            action(false);
+            if (response?.status) {
+                fetchApiData(api)
+                Swal.fire({ icon: "success", title: "Deleted!", text: response.message });
+            } else {
+                Swal.fire({ icon: "error", title: "Oops...", text: response.message });
+            }
+        } else {
+            // Optional: do something when deletion is cancelled
+            console.log("Deletion cancelled.");
+        }
+    }
+
 
 
 
@@ -177,14 +212,18 @@ const FileManager = () => {
                     {jsonData.map((item, index) => (
                         <Grid item xs={4} key={index}>
                             <Box
-                                onClick={() => handleOpen(item.folder_name, item.api)}
+                                onClick={() => handleOpen(item.folder_name, item.api, item.back_folder)}
                                 sx={{
-                                    border: '2px solid black',
+                                    border: '1px solid black',
                                     cursor: 'pointer',
                                     display: 'flex',
                                     gap: '10px',
                                     padding: 1,
-                                    alignItems: 'center'
+                                    alignItems: 'center',
+                                    borderRadius: '5px',
+                                    boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px',
+                                    '&:hover': { backgroundColor: '#223354', color: 'white' },
+
                                 }}
                             >
                                 <FolderIcon sx={{ color: '#FEA405', fontSize: 35 }} />
@@ -236,14 +275,21 @@ const FileManager = () => {
                         <Grid container rowSpacing={2} columnSpacing={3} direction={{ xs: "column", sm: "column", md: "row" }}>
                             {showFiles.map((item, index) => (
                                 <Grid item xs={4} key={index}>
-                                    <Box key={item} sx={{ display: "flex", justifyContent: 'flex-start', alignItems: 'center' }}>
+                                    <Box key={item} sx={{ display: "flex", 
+                                    justifyContent: 'flex-start', alignItems: 'center', 
+                                    cursor: 'pointer', border: '0px solid black', borderRadius: '5px',
+                                     padding: 0.5, background: '#e9e9e9',
+                                     '&:hover': { backgroundColor: '#223354', color: 'white' }
+                                     }}
+                                        onClick={() => OneFileDelete(item, dialogData?.apikey , dialogData?.back_folder)}
+                                    >
                                         <TopicIcon sx={{ color: '#FEA405' }} />{item}
                                     </Box>
                                 </Grid>
                             ))}
                         </Grid>
                         <Box sx={{ textAlign: 'center', marginTop: 2 }}>
-                            <Button onClick={() => handleDelete(dialogData?.apikey)} variant="contained" fullWidth color="error" endIcon={<DeleteIcon />}>Delete</Button>
+                            <Button onClick={() => handleDelete(dialogData?.apikey)} variant="contained" fullWidth color="error" endIcon={<DeleteIcon />}>Delete All</Button>
                         </Box>
                     </Box>}
 
