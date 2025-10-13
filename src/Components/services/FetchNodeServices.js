@@ -65,11 +65,11 @@ const postData = async (url, body) => {
   }
 }
 
-const deleteData = async (url) => {
+const deleteData = async (url, payload = {}) => {
   try {
     var response = await axios.delete(`${ServerURL}/${url}`, {
-      // headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` }
-      headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
+      headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` },
+      ...payload // allows sending { data: {...} } or { params: {...} }
     })
     // console.log('delete api responce', response)
     var result = await response.data
