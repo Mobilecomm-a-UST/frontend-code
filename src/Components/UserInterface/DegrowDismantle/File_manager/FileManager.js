@@ -27,9 +27,9 @@ import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
 
 const jsonData = [
     // { folder_name: "Mobinet Dump Files", api: "mobinate_vs_cats/mobinet_dump",back_folder:"mobinet_dump_data" },
-    { folder_name: "Locator File", api: "mobinate_vs_cats/locator" ,back_folder:"locator_data" },
-    { folder_name: "MS-MF File", api: "mobinate_vs_cats/msmf" ,back_folder:"msmf_data" },
-    { folder_name: "RFS File", api: "mobinate_vs_cats/rfs" ,back_folder:"rfs_data" },
+    { folder_name: "Locator File", api: "degrow_dismental/upload_locator" ,back_folder:"locater" },
+    { folder_name: "MS-MF File", api: "degrow_dismental/upload_msmf" ,back_folder:"msmf" },
+    { folder_name: "RFS File", api: "degrow_dismental/upload_rfs" ,back_folder:"rfs" },
     // { folder_name: "Stock File", api: "mobinate_vs_cats/stock" ,back_folder:"stock_report_data" }
 ];
 
@@ -65,17 +65,11 @@ const FileManager = () => {
 
     const fetchApiData = async (api) => {
         action(true)
-
         const response = await getData(`${api}/`);
-
         if (response?.status) {
             action(false);
             setShoweFiles(response.files);
-
         }
-
-        
-
     }
 
     const handleOpen = (foldername, apikey , back_folder) => {
@@ -169,7 +163,7 @@ const FileManager = () => {
         if (confirmResult.isConfirmed) {
             action(true);
 
-            const response = await deleteData(`mobinate_vs_cats/delete_mobinet_file/`, {
+            const response = await deleteData(`degrow_dismental/delete_file/`, {
                 data: { filename: `${fileName}`, foldername: `${back_folder}`}
             });
 
@@ -245,7 +239,7 @@ const FileManager = () => {
             >
                 <DialogTitle>
                     <span style={{ float: 'left' }}>
-                        <h2>{dialogData.foldername}</h2>
+                        <h3>{dialogData.foldername}</h3>
                     </span>
                     <span style={{ float: 'right' }}>
                         <IconButton size="large" onClick={handleClose}>
