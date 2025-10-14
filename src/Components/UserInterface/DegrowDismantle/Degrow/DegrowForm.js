@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import {
-  Box, Button, Stack, Breadcrumbs, Link, Typography, Slide,Grid
+  Box, Button, Stack, Breadcrumbs, Link, Typography, Slide, Grid
 } from "@mui/material";
 import {
   Upload as UploadIcon,
@@ -11,7 +11,7 @@ import {
 import TopicIcon from '@mui/icons-material/Topic';
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-import { postData,getData, ServerURL } from "../../../services/FetchNodeServices";
+import { postData, getData, ServerURL } from "../../../services/FetchNodeServices";
 import OverAllCss from "../../../csss/OverAllCss";
 import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
 
@@ -26,7 +26,7 @@ const DegrowForm = () => {
   // const [locaterFiles, setLocaterFiles] = useState([])
   const [fileData, setFileData] = useState();
   const [download, setDownload] = useState(false);
-  const [showFiles, setShoweFiles] = useState({locator:[],stock:[],msmf:[],rfs:[]})
+  const [showFiles, setShoweFiles] = useState({ locator: [], stock: [], msmf: [], rfs: [] })
 
   const [showError, setShowError] = useState({
     mobinate: false,
@@ -54,40 +54,38 @@ const DegrowForm = () => {
   };
 
   const fetchMobinetFileData = async () => {
-      action(true)
-  
-      const response1 = await getData('mobinate_vs_cats/rfs/');
-      const response2 = await getData('mobinate_vs_cats/msmf/');
-      const response3 = await getData('mobinate_vs_cats/stock/');
-      const response4 = await getData('mobinate_vs_cats/locator/');
-  
-      if (response4.status) {
-        action(false);
-        // setShoweFiles(response.files);
-        setShoweFiles({locator:response4?.files?response4?.files:[],
-                        stock:response3?.files?response3?.files:[],
-                        msmf:response2?.files?response2?.files:[],
-                        rfs:response1?.files?response1?.files:[]})
-  
-      }
+    action(true)
+
+    const response1 = await getData('degrow_dismental/upload_rfs/');
+    const response2 = await getData('degrow_dismental/upload_msmf/');
+    const response4 = await getData('degrow_dismental/upload_locator/');
+
+    if (response4.status) {
+      action(false);
+      // setShoweFiles(response.files);
+      setShoweFiles({
+        locator: response4?.files ? response4?.files : [],
+        msmf: response2?.files ? response2?.files : [],
+        rfs: response1?.files ? response1?.files : []
+      })
 
     }
+
+  }
 
   const handleSubmit = async () => {
     const isValid =
       mobinateDump.filename &&
-      siteList.filename &&
       hardWareFile.filename &&
-      olmidFile.filename ;
-      // rfsFile.filename &&
-      // msmfFile.filename &&
-      // stockFile.filename;
+      olmidFile.filename;
+    // rfsFile.filename &&
+    // msmfFile.filename &&
+    // stockFile.filename;
 
     if (!isValid) {
       setShowError({
         // mobinate: mobinateDump.length === 0,
         mobinate: !mobinateDump.filename,
-        siteList: !siteList.filename,
         hardware: !hardWareFile.filename,
         olmId: !olmidFile.filename,
         // rfs: !rfsFile.filename,
@@ -103,15 +101,14 @@ const DegrowForm = () => {
     // Array.from(locaterFiles).forEach((file) => {
     //   formData.append("locator_file", file);
     // });
-    formData.append("mobinet_dump_file", mobinateDump.bytes)
-    formData.append("site_list_file", siteList.bytes);
-    formData.append("hw_file", hardWareFile.bytes);
-    formData.append("olm_id_file", olmidFile.bytes);
+    formData.append("dpr", mobinateDump.bytes)
+    formData.append("hw", hardWareFile.bytes);
+    formData.append("olm", olmidFile.bytes);
     // formData.append("rfs_file", rfsFile.bytes);
     // formData.append("msmf_file", msmfFile.bytes);
     // formData.append("stock_report_file", stockFile.bytes)
 
-    const response = await postData("mobinate_vs_cats/cats/", formData);
+    const response = await postData("degrow_dismental/upload/", formData);
     action(false);
 
     if (response.status) {
@@ -125,7 +122,7 @@ const DegrowForm = () => {
 
   const handleCancel = () => {
     setMobinateDump({ filename: "", bytes: "" });
-    setSiteList({ filename: "", bytes: "" });
+    // setSiteList({ filename: "", bytes: "" });
     setHardWareFile({ filename: "", bytes: "" });
     setOlmidFile({ filename: "", bytes: "" });
     setDownload(false);
@@ -206,7 +203,7 @@ const DegrowForm = () => {
                   error={showError.olmId}
                   selectedText={rfsFile.filename}
                 /> */}
-                 <Box className={OverAllCss().Front_Box}>
+                <Box className={OverAllCss().Front_Box}>
                   <div className={OverAllCss().Front_Box_Hading}>RFS File :</div>
                   <div className={OverAllCss().Front_Box_Select_Button}>
                     <Grid container rowSpacing={1} columnSpacing={1} direction={{ xs: "column", sm: "column", md: "row" }}>
@@ -231,8 +228,8 @@ const DegrowForm = () => {
                   error={showError.olmId}
                   selectedText={msmfFile.filename}
                 /> */}
-
-                 <Box className={OverAllCss().Front_Box}>
+                {/* MS-MF DATA UPLOAD */}
+                {/* <Box className={OverAllCss().Front_Box}>
                   <div className={OverAllCss().Front_Box_Hading}>MS-MF File :</div>
                   <div className={OverAllCss().Front_Box_Select_Button}>
                     <Grid container rowSpacing={1} columnSpacing={1} direction={{ xs: "column", sm: "column", md: "row" }}>
@@ -246,7 +243,8 @@ const DegrowForm = () => {
                     </Grid>
 
                   </div>
-                </Box>
+                </Box> */}
+
                 {/* Stock File */}
                 {/* <UploadSection
                   label="Select Stock File"
@@ -255,7 +253,7 @@ const DegrowForm = () => {
                   error={showError.olmId}
                   selectedText={stockFile.filename}
                 /> */}
-                 {/* <Box className={OverAllCss().Front_Box}>
+                {/* <Box className={OverAllCss().Front_Box}>
                   <div className={OverAllCss().Front_Box_Hading}>Stock File :</div>
                   <div className={OverAllCss().Front_Box_Select_Button}>
                     <Grid container rowSpacing={1} columnSpacing={1} direction={{ xs: "column", sm: "column", md: "row" }}>
@@ -314,18 +312,51 @@ const DegrowForm = () => {
             </Box>
           </Box>
 
-          {download && (
-            <Box textAlign="center">
-              <a href={fileData} download>
-                <Button
-                  variant="outlined"
-                  startIcon={<FileDownloadIcon sx={{ fontSize: 30, color: "green" }} />}
-                  sx={{ mt: 2, textTransform: "none", fontWeight: 800, fontSize: "22px", fontFamily: "Poppins" }}
+          {download && fileData && (
+            <div
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                justifyContent: "center",
+                gap: "16px",
+                marginTop: "16px",
+              }}
+            >
+              {Object.entries(fileData).map(([key, value]) => (
+                <a
+                  key={key}
+                  href={value}
+                  download
+                  style={{ textDecoration: "none" }}
                 >
-                  CATS Overall Summary Report
-                </Button>
-              </a>
-            </Box>
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    startIcon={
+                      <FileDownloadIcon sx={{ fontSize: 28, color: "green" }} />
+                    }
+                    sx={{
+                      textTransform: "none",
+                      fontWeight: 700,
+                      fontSize: "18px",
+                      fontFamily: "Poppins",
+                      borderRadius: "12px",
+                      px: 3,
+                      py: 1.2,
+                      transition: "0.3s",
+                      "&:hover": {
+                        backgroundColor: "rgba(0,128,0,0.1)",
+                        borderColor: "green",
+                      },
+                    }}
+                  >
+                    {key
+                      .replace(/_/g, " ")       // replace underscores with spaces
+                      .replace(/\b\w/g, (l) => l.toUpperCase())} {/* capitalize */}
+                  </Button>
+                </a>
+              ))}
+            </div>
           )}
         </Box>
       </Slide>
