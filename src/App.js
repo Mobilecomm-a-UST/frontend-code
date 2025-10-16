@@ -314,7 +314,9 @@ function App() {
           </Routes>
 
         </Router>
-        <div style={{ position:'absolute', top:'50px', right: 0 }}><img src="/assets/diya.gif" alt="Diya"   style={{ width: "150px", height: "150px" }} /></div>
+        <div style={{ position:'absolute', top:'50px', right: 0,zIndex:100 }}>
+          <img src="/assets/diya.gif" alt="Diya"   style={{ width: "150px", height: "150px" }} />
+        </div>
 
       </div>
     </QueryClientProvider>
