@@ -314,9 +314,9 @@ function App() {
           </Routes>
 
         </Router>
-        <div style={{ position:'absolute', top:'50px', right: 0,zIndex:100 }}>
+        <Box sx={{ position:'fixed', top:'50px', right: 0,zIndex:100,'&:hover': { display: 'none' } }}>
           <img src="/assets/diya.gif" alt="Diya"   style={{ width: "150px", height: "150px" }} />
-        </div>
+        </Box>
 
       </div>
     </QueryClientProvider>
