@@ -11,6 +11,7 @@ import Tools from "./Components/UserInterface/Tools";
 import { getDecreyptedData } from "./Components/utils/localstorage";
 
 
+
 const ViewSite = lazy(() => import('./Components/UserInterface/DPR/ViewSite'));
 const Dpr = lazy(() => import('./Components/UserInterface/DPR/Dpr'))
 const Vendor = lazy(() => import('./Components/UserInterface/VANDOR_MANAGMENT/Vendor'))
@@ -313,6 +314,7 @@ function App() {
           </Routes>
 
         </Router>
+        <div style={{ position:'absolute', top:'50px', right: 0 }}><img src="/assets/diya.gif" alt="Diya"   style={{ width: "150px", height: "150px" }} /></div>
 
       </div>
     </QueryClientProvider>
