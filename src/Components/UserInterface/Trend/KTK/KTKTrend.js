@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import TrendBox from '../TrendBox';
 import Kpi4G from './MakeKPI(old)/Kpi4G';
 const Degrow =  lazy(() => import('./Degrow/Degrow'))
+const KTKKpiNew =  lazy(() => import('./MakeKPI(new)/Kpi4G'))
 
 const KTKTrend = () => {
     const [expanded, setExpanded] = useState(true);
@@ -35,7 +36,8 @@ const KTKTrend = () => {
                                 >4G
                                 </Nav.Item>
                             </Nav.Menu> */}
-                            <Nav.Item eventKey='2' icon={<FileUploadIcon />} onClick={()=>navigate('/trends/ktk/make_kpi_trend_old')}>Make Trend(Old)</Nav.Item>
+                            <Nav.Item eventKey='1' icon={<FileUploadIcon />} onClick={()=>navigate('/trends/ktk/make_kpi_trend_old')}>Make Trend(Old)</Nav.Item>
+                            <Nav.Item eventKey='2' icon={<FileUploadIcon />} onClick={()=>navigate('/trends/ktk/make_kpi_trend_new')}>Make Trend(New)</Nav.Item>
                             <Nav.Item eventKey='3' icon={<FileUploadIcon />} onClick={()=>navigate('/trends/ktk/make_degrow')}>Make Degrow</Nav.Item>
                         </Nav>
                     </Sidenav.Body>
@@ -48,6 +50,7 @@ const KTKTrend = () => {
                 <Routes>
                     <Route element={<TrendBox data={'KTK'} />} path="/" />
                     <Route element={<Kpi4G/>} path="/make_kpi_trend_old" />
+                    <Route element={<KTKKpiNew/>} path="/make_kpi_trend_new" />
                     <Route element={<Degrow/>} path="/make_degrow" />
 
                 </Routes>
