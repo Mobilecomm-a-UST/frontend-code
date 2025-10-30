@@ -24,6 +24,7 @@ import CharacterLockIcon from '@rsuite/icons/CharacterLock';
 import IndirectIcon from '@rsuite/icons/Indirect';
 import TableIcon from '@rsuite/icons/Table';
 import AbTestIcon from '@rsuite/icons/AbTest';
+import ProjectIcon from '@rsuite/icons/Project';
 
 
 import { groupBy } from 'lodash';
@@ -286,6 +287,14 @@ const ToolData = [
         icons: AbTestIcon,
         link: '/tools/relocation_payload_tracker',
         groupBy:['admin','quality-s','quality']
+    }    ,
+    {
+        id: 32,
+        name: 'Project Tracking',
+        title: 'This is a Project Tracking Tool',
+        icons: ProjectIcon,
+        link: '/tools/project_tracking',
+        groupBy:['admin']
     }
 
 

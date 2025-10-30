@@ -28,7 +28,7 @@ const MDashboard = lazy(() => import('./MasterDashboard/MDashboard'));
 const TicketDashboard = lazy(() => import('./Dashboard/TicketDashboard'));
 const OverallSummary = lazy(() => import('./Dashboard/OverallSummary'));
 const LteKpiTrend = lazy(() => import('./Trend/LteKpiTrend'));
-const ZeroPayload = lazy(() => import('./Trend/ZeroPayload'));
+const   ZeroPayload = lazy(() => import('./Trend/ZeroPayload'));
 const DayWisePayload = lazy(() => import('./Trend/DayWisePayload'));
 const WeekWisePayload = lazy(() => import('./Trend/WeekWisePayload'))
 const RaiseTicket = lazy(() => import('./TroubleTicket/RaiseTicket'))

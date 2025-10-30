@@ -52,8 +52,9 @@ const Gpl = lazy(() => import('./Components/UserInterface/GPL_Audit/GPL'));
 const LKFStatus = lazy(() => import('./Components/UserInterface/LKF Status/LKF'))
 const MobinateVsCate = lazy(() => import('./Components/UserInterface/Mobinat_vs_cats/MobinateVsCats'))
 const DegrowDismantle = lazy(() => import('./Components/UserInterface/DegrowDismantle/DegrowDismantle'))
-const KPImatrix = lazy(()=>import('./Components/UserInterface/KPI Matrix/KPImatrix'))
-const RelocationPayload = lazy(()=>import('./Components/UserInterface/RelocationPayload/Relocation'))
+const KPImatrix = lazy(() => import('./Components/UserInterface/KPI Matrix/KPImatrix'))
+const RelocationPayload = lazy(() => import('./Components/UserInterface/RelocationPayload/Relocation'))
+const ProjectTracking = lazy(() => import('./Components/UserInterface/ProjectTracking/PTracking'))
 
 const queryClient = new QueryClient()
 
@@ -144,7 +145,7 @@ function App() {
             } />
             <Route path="/tools/file_merge" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={File_Merge} allowedUserTypes={['admin', 'quality', 'quality-s','ran']} userType={userType} />
+                <ProtectedRoute element={File_Merge} allowedUserTypes={['admin', 'quality', 'quality-s', 'ran']} userType={userType} />
               </Suspense>
             } />
             <Route path="/tools/schedular/*" element={
@@ -296,27 +297,34 @@ function App() {
               </Suspense>
             } />
 
-             <Route path="/tools/kpi_matrix/*" element={
+            <Route path="/tools/kpi_matrix/*" element={
               <Suspense fallback={<div>Loading...</div>}>
                 <ProtectedRoute element={KPImatrix} allowedUserTypes={['admin']} userType={userType} />
               </Suspense>
             } />
 
-              <Route path="/tools/relocation_payload_tracker/*" element={
+            <Route path="/tools/relocation_payload_tracker/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={RelocationPayload} allowedUserTypes={['admin','quality-s','quality']} userType={userType} />
+                <ProtectedRoute element={RelocationPayload} allowedUserTypes={['admin', 'quality-s', 'quality']} userType={userType} />
               </Suspense>
             } />
 
-            
+            <Route path="/tools/project_tracking/*" element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProtectedRoute element={ProjectTracking} allowedUserTypes={['admin']} userType={userType} />
+              </Suspense>
+            } />
+
+
+
 
 
           </Routes>
 
         </Router>
-        <Box sx={{ position:'fixed', top:'50px', right: 0,zIndex:100,'&:hover': { display: 'none' } }}>
-          <img src="/assets/diya.gif" alt="Diya"   style={{ width: "150px", height: "150px" }} />
-        </Box>
+        {/* <Box sx={{ position: 'fixed', top: '50px', right: 0, zIndex: 100, '&:hover': { display: 'none' } }}>
+          <img src="/assets/diya.gif" alt="Diya" style={{ width: "150px", height: "150px" }} />
+        </Box> */}
 
       </div>
     </QueryClientProvider>

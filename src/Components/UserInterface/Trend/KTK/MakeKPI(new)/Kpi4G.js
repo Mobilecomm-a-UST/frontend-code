@@ -164,8 +164,8 @@ const Kpi4G = () => {
 
             setOpen(true)
             var formData = new FormData();
-            formData.append("2G_raw_kpi_eri", g2rawKpiHuiFile.bytes);
-            formData.append("2G_raw_kpi_hui", g2rawKpiFile.bytes);
+            formData.append("2G_raw_kpi_eri", g2rawKpiFile.bytes);
+            formData.append("2G_raw_kpi_hui", g2rawKpiHuiFile.bytes);
             formData.append("2G_site_list", g2siteListFile.bytes);
             formData.append("4G_raw_kpi", g4rawKpiFile.bytes);
             formData.append("4G_site_list", g4siteListFile.bytes);
@@ -411,7 +411,7 @@ const Kpi4G = () => {
                         </Box>
                     </Box>
                     <Box style={{ display: dlink ? "inherit" : "none" }}>
-                        <a download href={link}><Button variant="outlined" onClick='' startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />} sx={{ marginTop: "10px", width: "auto" }}><span style={{ fontFamily: "Poppins", fontSize: "22px", fontWeight: 800, textTransform: "none", textDecorationLine: "none" }}>Download KPI Trend</span></Button></a>
+                        <a download href={link}><Button variant="outlined" onClick='' startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />} sx={{ marginTop: "10px", width: "auto" }}><span style={{ fontFamily: "Poppins", fontSize: "22px", fontWeight: 800, textTransform: "none", textDecorationLine: "none" }}>Download KPI Trend(new)</span></Button></a>
                     </Box>
 
 
