@@ -45,7 +45,7 @@ export default function Tools() {
 
   const backgroundStyle = {
     height: "auto",
-    width: "300px",
+    width: "305px",
     // marginLeft: "auto",
     // marginRight: "auto",
     borderRadius: 2,

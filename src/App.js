@@ -309,7 +309,7 @@ function App() {
               </Suspense>
             } />
 
-            <Route path="/tools/project_tracking/*" element={
+            <Route path="/tools/relocation_tracking/*" element={
               <Suspense fallback={<div>Loading...</div>}>
                 <ProtectedRoute element={ProjectTracking} allowedUserTypes={['admin']} userType={userType} />
               </Suspense>
