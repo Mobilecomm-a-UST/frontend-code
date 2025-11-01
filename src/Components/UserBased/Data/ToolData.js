@@ -290,10 +290,10 @@ const ToolData = [
     }    ,
     {
         id: 32,
-        name: 'Project Tracking',
-        title: 'This is a Project Tracking Tool',
+        name: 'Relocation Tracking',
+        title: 'This is a Relocation Tracking Tool',
         icons: ProjectIcon,
-        link: '/tools/project_tracking',
+        link: '/tools/relocation_tracking',
         groupBy:['admin']
     }
 

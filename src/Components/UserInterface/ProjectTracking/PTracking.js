@@ -13,12 +13,10 @@ import DashboardIcon from '@rsuite/icons/legacy/Dashboard';
 import FileUploadIcon from '@rsuite/icons/FileUpload';
 import { useNavigate } from 'react-router-dom'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import ViewsUnauthorizeIcon from '@rsuite/icons/ViewsUnauthorize';
-import AddOutlineIcon from '@rsuite/icons/AddOutline';
-import DocPassIcon from '@rsuite/icons/DocPass';
-import CheckOutlineIcon from '@rsuite/icons/CheckOutline';
 import ChangeListIcon from '@rsuite/icons/ChangeList';
 const PTtool = lazy(() => import('./PTtool'))
+const UploadFile = lazy(() => import('./UploadFile/Upload'))
+const DashboardTable = lazy(() => import('./Dashboard/DashboardTable'))
 
 
 
@@ -28,8 +26,7 @@ const PTracking = () => {
     const [states, setStates] = useState(60)
     const [checked, setChecked] = useState(true)
     const [menuButton, setMenuButton] = useState(false)
-    const [scrollTop, setScrollTop] = useState(0);
-
+ 
     const navigate = useNavigate()
 
 
@@ -62,9 +59,9 @@ const PTracking = () => {
                                     <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle">
                                         <Sidenav.Body>
                                             <Nav activeKey={activeKey} onSelect={setActiveKey} style={{ width: 'auto', minHeight: "670px", height: "100hv", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
-                                                <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>Proiject Tracking</Nav>
-                                                <Nav.Item eventKey="2" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/nomenclature_scriptor/generate_script'); show(); setMenuButton(true) }}>
-                                                    Genetate Script
+                                                <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>Relocation Tracking</Nav>
+                                                <Nav.Item eventKey="1" placement="rightStart" icon={<DashboardIcon />} onClick={() => { navigate('/tools/project_tracking/'); show(); setMenuButton(true) }}>
+                                                   Dashboard
                                                 </Nav.Item>
                                                 {/* <Nav.Menu eventKey="3" placement="rightStart" title="NOM Audit" icon={<DocPassIcon />}>
                                                     <Nav.Item eventKey="3-1" placement="rightStart" onClick={() => { navigate('/tools/nomenclature_scriptor/nom_audit_dashboard'); show(); setMenuButton(true) }}>
@@ -90,23 +87,26 @@ const PTracking = () => {
                                 <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
                                     <Sidenav.Body>
                                         <Nav activeKey={activeKey} onSelect={setActiveKey} >
-                                            <Nav style={{ fontWeight: 500, color: 'white', textAlign: 'center', fontSize: 20 }}>Nomenclature Scriptor</Nav>
+                                            <Nav style={{ fontWeight: 500, color: 'white', textAlign: 'center', fontSize: 20 }}>Relocation Tracking</Nav>
                                             {/* <Nav.Menu eventKey="1" placement="rightStart" title="Acceptance" icon={<CheckOutlineIcon size="3em" />}>
                                                 <Nav.Item eventKey="1-1" onClick={() => { navigate('/tools/mcom_physical_at/acceptance_summary'); show(); setMenuButton(true) }} >
                                                     Acceptance Summary
                                                 </Nav.Item>
                                             </Nav.Menu> */}
-                                            <Nav.Item eventKey="2" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/nomenclature_scriptor/generate_script'); show(); setMenuButton(true) }}>
-                                                Genetate Script
+                                            <Nav.Item eventKey="1" placement="rightStart" icon={<DashboardIcon />} onClick={() => { navigate('/tools/relocation_tracking/dashboard'); show(); setMenuButton(true) }}>
+                                                Dashboard
                                             </Nav.Item>
-                                            <Nav.Menu eventKey="3" placement="rightStart" title="NOM Audit" icon={<DocPassIcon />}>
-                                                <Nav.Item eventKey="3-1" placement="rightStart" onClick={() => { navigate('/tools/nomenclature_scriptor/nom_audit_dashboard'); show(); setMenuButton(true) }}>
+                                               <Nav.Item eventKey="2" placement="rightStart" icon={<FileUploadIcon />} onClick={() => { navigate('/tools/relocation_tracking/upload_file'); show(); setMenuButton(true) }}>
+                                                Upload File
+                                            </Nav.Item>
+                                            {/* <Nav.Menu eventKey="3" placement="rightStart" title="NOM Audit" icon={<DocPassIcon />}>
+                                                <Nav.Item eventKey="3-1" placement="rightStart" onClick={() => { navigate('/tools/project_tracking'); show(); setMenuButton(true) }}>
                                                     Dashboard
                                                 </Nav.Item>
-                                                <Nav.Item eventKey="3-2" placement="rightStart" onClick={() => { navigate('/tools/nomenclature_scriptor/nom_audit'); show(); setMenuButton(true) }}>
+                                                <Nav.Item eventKey="3-2" placement="rightStart" onClick={() => { navigate('/tools/project_tracking'); show(); setMenuButton(true) }}>
                                                     Pre-Post Audit
                                                 </Nav.Item>
-                                            </Nav.Menu>
+                                            </Nav.Menu> */}
 
                                             {/* <Nav.Item eventKey="3" placement="rightStart" icon={<PageIcon />} onClick={() => { navigate('/tools/soft_at/view_report'); show(); setMenuButton(true) }}>
                                                 View Report
@@ -130,6 +130,8 @@ const PTracking = () => {
                         <Suspense fallback={<div>loading............</div>}>
                             <Routes>
                                 <Route element={<PTtool />} path="/" />
+                                <Route element={<UploadFile />} path="/upload_file" />
+                                <Route element={<DashboardTable />} path="/dashboard" />
 
 
 
