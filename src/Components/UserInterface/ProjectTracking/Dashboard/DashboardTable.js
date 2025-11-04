@@ -19,7 +19,7 @@ const DashboardTable = () => {
                     <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
                         <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
                         <Link underline="hover" onClick={() => { navigate('/tools/relocation_tracking') }}>Relocation Tracking</Link>
-                        <Typography color='text.primary'>Dashboard</Typography>
+                        <Typography color='text.primary'>Waterfall Dashboard</Typography>
                     </Breadcrumbs>
                 </div>
         <Box>
