@@ -83,6 +83,13 @@
           fontWeight:'bold',
         }
     },
+     hoverRT: {
+        "&:hover": {
+          backgroundColor: 'rgb(0,110,116, 0.5)',
+          color:'black',
+          fontWeight:'bold',
+        }
+    },
     custom_select: {
         border:'none',
         width:'45px',

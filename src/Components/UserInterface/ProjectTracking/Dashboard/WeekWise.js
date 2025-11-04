@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, TextField } from "@mui/material";
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import DownloadIcon from '@mui/icons-material/Download';
@@ -43,8 +43,12 @@ const WeekWise = () => {
     const [relocationMethodOptions, setRelocationMethodOptions] = useState([])
     const [toco, setToco] = useState('')
     const [tocoOptions, setTocoOptions] = useState([])
+    const [month, setMonth] = useState('')
     const [downloadExcelData, setDownloadExcelData] = useState('')
+
     // const [totals, setTotals] = useState()
+
+    // console.log('month select ' , month.split('-')[1] , month.split('-')[0] )
 
     const fetchDailyData = async () => {
         action(true)
@@ -53,6 +57,8 @@ const WeekWise = () => {
         formData.append('site_tagging', tagging)
         formData.append('relocation_method', relocationMethod)
         formData.append('new_toco_name', toco)
+        formData.append('month', month.split('-')[1] || '')
+        formData.append('year', month.split('-')[0] || '')
         const res = await postData("alok_tracker/weekly_monthly_dashboard_file/", formData);
         // const res =  tempData; //  remove this line when API is ready
         console.log('week wise response', res)
@@ -84,6 +90,10 @@ const WeekWise = () => {
     }
     const handleToco = (event) => {
         setToco(event.target.value)
+    }
+    const handleMonthChange = (event) => {
+        console.log(event.target.value.split('-')[1])
+        setMonth(event.target.value)
     }
 
 
@@ -273,20 +283,33 @@ const WeekWise = () => {
     useEffect(() => {
         fetchDailyData()
         // setTotals(calculateColumnTotals(tableData))
-    }, [circle, tagging, relocationMethod, toco])
+    }, [circle, tagging, relocationMethod, toco,month])
     return (
         <>
             <style>{"th{border:1px solid black;}"}</style>
             <Slide direction="left" in='true' timeout={700} style={{ transformOrigin: '1 1 1' }}>
                 <div style={{ margin: 20 }}>
 
-                    
+
                     <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', alignContent: 'center' }}>
                         <Box style={{ fontSize: 22, fontWeight: 'bold' }}>
-                            Weekly - RFAI to MS1
+                            Monthly Progress - RFAI to MS1 Waterfall
                         </Box>
-                        <Box>
-                            <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap',gap:1}}>
+                            <FormControl sx={{ minWidth: 100 }} size="small">
+                                <TextField
+                                    variant="outlined"
+                                    // required
+                                    fullWidth
+                                    label="Month"
+                                    name="month"
+                                    value={month}
+                                    onChange={handleMonthChange}
+                                    size="small"
+                                    type="month"
+                                />
+                            </FormControl>
+                            <FormControl sx={{ minWidth: 120 }} size="small">
                                 <InputLabel id="demo-select-small-label">Circle</InputLabel>
                                 <Select
                                     labelId="demo-select-small-label"
@@ -302,7 +325,7 @@ const WeekWise = () => {
                                     ))}
                                 </Select>
                             </FormControl>
-                            <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                            <FormControl sx={{minWidth: 120 }} size="small">
                                 <InputLabel id="demo-select-small-label">Tagging</InputLabel>
                                 <Select
                                     labelId="demo-select-small-label"
@@ -318,7 +341,7 @@ const WeekWise = () => {
                                     ))}
                                 </Select>
                             </FormControl>
-                            <FormControl sx={{ m: 1, minWidth: 160 }} size="small">
+                            <FormControl sx={{ minWidth: 160 }} size="small">
                                 <InputLabel id="demo-select-small-label">Relocation Method</InputLabel>
                                 <Select
                                     labelId="demo-select-small-label"
@@ -334,7 +357,7 @@ const WeekWise = () => {
                                     ))}
                                 </Select>
                             </FormControl>
-                            <FormControl sx={{ m: 1, minWidth: 160 }} size="small">
+                            <FormControl sx={{ minWidth: 100 }} size="small">
                                 <InputLabel id="demo-select-small-label">TOCO</InputLabel>
                                 <Select
                                     labelId="demo-select-small-label"
@@ -343,13 +366,18 @@ const WeekWise = () => {
                                     label="TOCO"
                                     onChange={handleToco}
                                 >
-                                    {tocoOptions.map((option) => (
+                                    <MenuItem value="Indus">Indus</MenuItem>
+                                    <MenuItem value="ATC">ATC</MenuItem>
+                                    <MenuItem value="ADIPL">ADIPL</MenuItem>
+                                    <MenuItem value="3PP">3PP</MenuItem>
+                                    {/* {tocoOptions.map((option) => (
                                         <MenuItem key={option} value={option}>
                                             {option}
                                         </MenuItem>
-                                    ))}
+                                    ))} */}
                                 </Select>
                             </FormControl>
+
 
                             {/* <LocalizationProvider dateAdapter={AdapterDayjs} >
                                 <DatePicker
@@ -374,20 +402,20 @@ const WeekWise = () => {
                             <table style={{ width: "100%", border: "1px solid black", borderCollapse: 'collapse', overflow: 'auto' }} >
                                 <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
-                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', position: 'sticky', left: 0, top: 0, backgroundColor: '#223354' }}>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', position: 'sticky', left: 0, top: 0, backgroundColor: '#006e74' }}>
                                             Milestone Track/Site Count</th>
                                         {/* <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', position: 'sticky', left: 218, top: 0, backgroundColor: '#223354' }}>
                                             CF</th> */}
                                         {weekArray?.map((item, index) => (
-                                            <th key={index} style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>{item}</th>
+                                            <th key={index} style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#CBCBCB',color:'black' }}>{item}</th>
                                         ))}
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {tableData?.map((it, index) => {
                                         return (
-                                            <tr className={classes.hover} style={{ textAlign: "center", fontWeigth: 700 }} key={index}>
-                                                <th style={{ position: 'sticky', left: 0, top: 0, backgroundColor: 'rgb(197 214 246)', color: 'black' }}>{it['Milestone Track/Site Count']}</th>
+                                            <tr className={classes.hoverRT} style={{ textAlign: "center", fontWeigth: 700 }} key={index}>
+                                                <th style={{ position: 'sticky', left: 0, top: 0, backgroundColor: '#CBCBCB', color: 'black' }}>{it['Milestone Track/Site Count']}</th>
                                                 {/* <th style={{ position: 'sticky', left: 218, top: 0, backgroundColor: 'rgb(197 214 246)', color: 'black' }}>{it['CF']}</th> */}
                                                 {weekArray?.map((item, index) => (
                                                     <th key={index} >{it[`Month_Week-${index + 1}`]}</th>
@@ -413,4 +441,4 @@ const WeekWise = () => {
     )
 }
 
-export const  MemoWeekWise = React.memo(WeekWise);
+export const MemoWeekWise = React.memo(WeekWise);

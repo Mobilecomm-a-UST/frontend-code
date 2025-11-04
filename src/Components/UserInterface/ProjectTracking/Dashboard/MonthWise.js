@@ -281,10 +281,10 @@ const MonthWise = () => {
 
                     <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', alignContent: 'center' }}>
                         <Box style={{ fontSize: 22, fontWeight: 'bold' }}>
-                            Monthly - RFAI to MS1 
+                            Yearly Progress - RFAI to MS1 Waterfall
                         </Box>
-                        <Box>
-                            <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap',gap:1}}>
+                            <FormControl sx={{ minWidth: 120 }} size="small">
                                 <InputLabel id="demo-select-small-label">Circle</InputLabel>
                                 <Select
                                     labelId="demo-select-small-label"
@@ -300,7 +300,7 @@ const MonthWise = () => {
                                     ))}
                                 </Select>
                             </FormControl>
-                            <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                            <FormControl sx={{ minWidth: 120 }} size="small">
                                 <InputLabel id="demo-select-small-label">Tagging</InputLabel>
                                 <Select
                                     labelId="demo-select-small-label"
@@ -316,7 +316,7 @@ const MonthWise = () => {
                                     ))}
                                 </Select>
                             </FormControl>
-                            <FormControl sx={{ m: 1, minWidth: 160 }} size="small">
+                            <FormControl sx={{  minWidth: 160 }} size="small">
                                 <InputLabel id="demo-select-small-label">Relocation Method</InputLabel>
                                 <Select
                                     labelId="demo-select-small-label"
@@ -332,7 +332,7 @@ const MonthWise = () => {
                                     ))}
                                 </Select>
                             </FormControl>
-                            <FormControl sx={{ m: 1, minWidth: 160 }} size="small">
+                            <FormControl sx={{  minWidth: 100 }} size="small">
                                 <InputLabel id="demo-select-small-label">TOCO</InputLabel>
                                 <Select
                                     labelId="demo-select-small-label"
@@ -341,11 +341,15 @@ const MonthWise = () => {
                                     label="TOCO"
                                     onChange={handleToco}
                                 >
-                                    {tocoOptions.map((option) => (
+                                    <MenuItem value="Indus">Indus</MenuItem>
+                                    <MenuItem value="ATC">ATC</MenuItem>
+                                    <MenuItem value="ADIPL">ADIPL</MenuItem>
+                                    <MenuItem value="3PP">3PP</MenuItem>
+                                    {/* {tocoOptions.map((option) => (
                                         <MenuItem key={option} value={option}>
                                             {option}
                                         </MenuItem>
-                                    ))}
+                                    ))} */}
                                 </Select>
                             </FormControl>
 
@@ -372,21 +376,21 @@ const MonthWise = () => {
                             <table style={{ width: "100%", border: "1px solid black", borderCollapse: 'collapse', overflow: 'auto' }} >
                                 <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
-                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', position: 'sticky', left: 0, top: 0, backgroundColor: '#223354' }}>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', position: 'sticky', left: 0, top: 0, backgroundColor: '#006e74' }}>
                                             Milestone Track/Site Count</th>
-                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', position: 'sticky', left: 218, top: 0, backgroundColor: '#223354' }}>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', position: 'sticky', left: 218, top: 0, backgroundColor: '#006e74' }}>
                                             CF</th>
                                         {monthArray?.map((item, index) => (
-                                            <th key={index} style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>{item}</th>
+                                            <th key={index} style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#CBCBCB',color:'black' }}>{item}</th>
                                         ))}
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {tableData?.map((it, index) => {
                                         return (
-                                            <tr className={classes.hover} style={{ textAlign: "center", fontWeigth: 700 }} key={index}>
-                                                <th style={{ position: 'sticky', left: 0, top: 0, backgroundColor: 'rgb(197 214 246)', color: 'black' }}>{it['Milestone Track/Site Count']}</th>
-                                                <th style={{ position: 'sticky', left: 218, top: 0, backgroundColor: 'rgb(197 214 246)', color: 'black' }}>{it['CF']}</th>
+                                            <tr className={classes.hoverRT} style={{ textAlign: "center", fontWeigth: 700 }} key={index}>
+                                                <th style={{ position: 'sticky', left: 0, top: 0, backgroundColor: '#CBCBCB', color: 'black' }}>{it['Milestone Track/Site Count']}</th>
+                                                <th style={{ position: 'sticky', left: 218, top: 0, backgroundColor: '#CBCBCB', color: 'black' }}>{it['CF']}</th>
                                                 {monthArray?.map((item, index) => (
                                                     // <th key={index} style={{ backgroundColor: it[`Month-${index + 1}`] > 0 ? '#FEEFAD' : '' }} >{it[`Month-${index + 1}`]}</th>
                                                     <th key={index} >{it[`Month-${index + 1}`]}</th>

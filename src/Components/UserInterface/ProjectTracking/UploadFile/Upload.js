@@ -43,17 +43,36 @@ const Upload = () => {
         })
     }
 
-    const handleDownloadRelocation= async()=>{
+    const handleDownloadRelocation = async () => {
+        try {
+            action(true); // optional: show loader
 
-        const response = await postData('alok_tracker/download_file/', { userId: userID })
+            const response = await postData('alok_tracker/download_tracker_file/', { userId: userID });
+            console.log('Download file response:', response);
 
-    }
+            if (response?.download_link) {
+                // ✅ Automatically trigger file download
+                const link = document.createElement('a');
+                link.href = response.download_link;
+                link.setAttribute('download', '');
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } else {
+                console.warn('No download link found in response');
+            }
+        } catch (error) {
+            console.error('Error downloading relocation file:', error);
+        } finally {
+            action(false); // stop loader
+        }
+    };
 
 
 
 
     const handleSubmit = async () => {
-        if (make4GFiles ) {
+        if (make4GFiles) {
             action(true)
             var formData = new FormData();
             formData.append(`tracker_file`, make4GFiles.bytes);
@@ -98,7 +117,7 @@ const Upload = () => {
     const handleCancel = () => {
         setMake4GFiles({ filename: "", bytes: "" })
         setShow4G(false)
-    
+
     }
 
     useEffect(() => {
@@ -160,8 +179,8 @@ const Upload = () => {
                             </Stack>
                         </Box>
                     </Box>
-                    <Box sx={{  textAlign: 'center' }}>
-                       <Button variant="outlined" onClick='' title="Export Excel" startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />} sx={{ marginTop: "10px", width: "auto" }}><span style={{ fontFamily: "Poppins", fontSize: "22px", fontWeight: 800, textTransform: "none", textDecorationLine: "none" }}>Download Relocation Tracking Data</span></Button>
+                    <Box sx={{ textAlign: 'center' }}>
+                        <Button variant="outlined" onClick={()=>handleDownloadRelocation()} title="Export Excel" startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />} sx={{ marginTop: "10px", width: "auto" }}><span style={{ fontFamily: "Poppins", fontSize: "22px", fontWeight: 800, textTransform: "none", textDecorationLine: "none" }}>Download Relocation Tracking Data</span></Button>
                     </Box>
                 </Box>
             </Slide>
