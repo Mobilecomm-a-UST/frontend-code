@@ -90,7 +90,7 @@ const PTracking = () => {
                         {/* THIS VIEW FOR PC  */}
                         <Box sx={{ display: { xs: 'none', md: 'inherit' } }} >
                             <Box sx={{ position: 'fixed', width: '16.5%' }} >
-                                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#006e74", marginTop: 8, borderRadius: 10 }}>
+                                <Sidenav expanded={expanded} defaultOpenKeys={['1']} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#006e74", marginTop: 8, borderRadius: 10 }}>
                                     <Sidenav.Body>
                                         <Nav activeKey={activeKey} onSelect={setActiveKey} >
                                             <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>Relocation Tracking</Nav>

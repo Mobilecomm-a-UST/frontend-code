@@ -501,7 +501,7 @@ const DateWise = () => {
                     </Box>
                 </div>
             </Slide>
-            {gapData && filterDialog()}
+            {/* {gapData && filterDialog()} */}
             {loading}
         </>
     )
