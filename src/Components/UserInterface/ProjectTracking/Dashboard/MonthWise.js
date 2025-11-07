@@ -18,11 +18,71 @@ import { useLoadingDialog } from '../../../Hooks/LoadingDialog';
 import { useQuery } from '@tanstack/react-query';
 import { useStyles } from '../../ToolsCss'
 import { setEncreptedData, getDecreyptedData } from '../../../utils/localstorage';
+import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
+import ListItemText from '@mui/material/ListItemText';
 import Select from '@mui/material/Select';
+import Checkbox from '@mui/material/Checkbox';
 import { postData } from '../../../services/FetchNodeServices';
+
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+
+const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues }) => {
+    const handleChange = (event) => {
+        const { value } = event.target;
+        const selected = typeof value === 'string' ? value.split(',') : value;
+
+        if (selected.includes('ALL')) {
+            if (selectedValues.length === options.length) {
+                setSelectedValues([]);
+            } else {
+                setSelectedValues(options);
+            }
+        } else {
+            setSelectedValues(selected);
+        }
+    };
+
+    const isAllSelected = options.length > 0 && selectedValues.length === options.length;
+
+    return (
+        <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
+            <InputLabel id={`${label}-label`}>{label}</InputLabel>
+            <Select
+                labelId={`${label}-label`}
+                multiple
+                value={selectedValues}
+                onChange={handleChange}
+                input={<OutlinedInput label={label} />}
+                renderValue={(selected) => selected.join(', ')}
+            >
+                <MenuItem value="ALL">
+                    <Checkbox
+                        checked={isAllSelected}
+                        indeterminate={
+                            selectedValues.length > 0 && selectedValues.length < options.length
+                        }
+                    />
+                    <ListItemText primary="Select All" />
+                </MenuItem>
+
+                {options.map((name) => (
+                    <MenuItem key={name} value={name}>
+                        <Checkbox checked={selectedValues.includes(name)} />
+                        <ListItemText primary={name} />
+                    </MenuItem>
+                ))}
+            </Select>
+        </FormControl>
+    );
+};
+
+
+
 
 const MonthWise = () => {
     const classes = useStyles()
@@ -34,15 +94,16 @@ const MonthWise = () => {
     const [monthArray, setMonthArray] = useState([])
     const [tableData, setTableData] = useState([])
     const [givenDate, setGivenDate] = useState('')
-    const [circle, setCircle] = useState('')
+    const [circle, setCircle] = useState([])
     const [circleOptions, setCircleOptions] = useState([])
-    const [tagging, setTagging] = useState('')
+    const [tagging, setTagging] = useState([])
     const [taggingOptions, setTaggingOptions] = useState([])
-    const [relocationMethod, setRelocationMethod] = useState('')
+    const [relocationMethod, setRelocationMethod] = useState([])
     const [relocationMethodOptions, setRelocationMethodOptions] = useState([])
-    const [toco, setToco] = useState('')
+    const [toco, setToco] = useState([])
     const [tocoOptions, setTocoOptions] = useState([])
     const [downloadExcelData, setDownloadExcelData] = useState('')
+    const [view, setView] = useState('Cumulative')
     // const [totals, setTotals] = useState()
 
     const fetchDailyData = async () => {
@@ -52,6 +113,7 @@ const MonthWise = () => {
         formData.append('site_tagging', tagging)
         formData.append('relocation_method', relocationMethod)
         formData.append('new_toco_name', toco)
+          formData.append('view', view)
         const res = await postData("alok_tracker/weekly_monthly_dashboard_file/", formData);
         // const res =  tempData; //  remove this line when API is ready
         console.log('month wise response', res)
@@ -73,18 +135,45 @@ const MonthWise = () => {
     }
 
     const handleCircle = (event) => {
-        setCircle(event.target.value)
+        const {
+            target: { value },
+        } = event;
+        setCircle(
+            // On autofill we get a stringified value.
+            typeof value === 'string' ? value.split(',') : value,
+        );
+        // setCircle(event.target.value)
     }
     const handleTagging = (event) => {
-        setTagging(event.target.value)
+        const {
+            target: { value },
+        } = event;
+        setTagging(
+            // On autofill we get a stringified value.
+            typeof value === 'string' ? value.split(',') : value,
+        );
+        // setTagging(event.target.value)
     }
     const handleRelocationMethod = (event) => {
-        setRelocationMethod(event.target.value)
+        const {
+            target: { value },
+        } = event;
+        setRelocationMethod(
+            // On autofill we get a stringified value.
+            typeof value === 'string' ? value.split(',') : value,
+        );
+        // setRelocationMethod(event.target.value)
     }
     const handleToco = (event) => {
-        setToco(event.target.value)
+        const {
+            target: { value },
+        } = event;
+        setToco(
+            // On autofill we get a stringified value.
+            typeof value === 'string' ? value.split(',') : value,
+        );
+        // setToco(event.target.value)
     }
-
 
     // console.log('date wise dashboard')
 
@@ -111,6 +200,9 @@ const MonthWise = () => {
     //     setDateArray(sortedDates)
 
     // }
+        const handleViewChange = (event) => {
+        setView(event.target.value)
+    }
 
     const handleClose = () => {
         setOpen(false)
@@ -272,7 +364,7 @@ const MonthWise = () => {
     useEffect(() => {
         fetchDailyData()
         // setTotals(calculateColumnTotals(tableData))
-    }, [circle, tagging, relocationMethod, toco])
+    }, [circle, tagging, relocationMethod, toco,view])
     return (
         <>
             <style>{"th{border:1px solid black;}"}</style>
@@ -283,83 +375,55 @@ const MonthWise = () => {
                         <Box style={{ fontSize: 22, fontWeight: 'bold' }}>
                             Yearly Progress - RFAI to MS1 Waterfall
                         </Box>
-                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap',gap:1}}>
-                            <FormControl sx={{ minWidth: 120 }} size="small">
-                                <InputLabel id="demo-select-small-label">Circle</InputLabel>
+                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', gap: 1 }}>
+                            <FormControl sx={{ minWidth: 100, maxWidth: 100 }} size="small">
+                                <InputLabel id="demo-select-small-label">View</InputLabel>
                                 <Select
                                     labelId="demo-select-small-label"
                                     id="demo-select-small"
-                                    value={circle}
-                                    label="Circle"
-                                    onChange={handleCircle}
+                                    value={view}
+                                    label="View"
+                                    onChange={handleViewChange}
                                 >
-                                    {circleOptions.map((option) => (
-                                        <MenuItem key={option} value={option}>
-                                            {option}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                            <FormControl sx={{ minWidth: 120 }} size="small">
-                                <InputLabel id="demo-select-small-label">Tagging</InputLabel>
-                                <Select
-                                    labelId="demo-select-small-label"
-                                    id="demo-select-small"
-                                    value={tagging}
-                                    label="Tagging"
-                                    onChange={handleTagging}
-                                >
-                                    {taggingOptions.map((option) => (
-                                        <MenuItem key={option} value={option}>
-                                            {option}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                            <FormControl sx={{  minWidth: 160 }} size="small">
-                                <InputLabel id="demo-select-small-label">Relocation Method</InputLabel>
-                                <Select
-                                    labelId="demo-select-small-label"
-                                    id="demo-select-small"
-                                    value={relocationMethod}
-                                    label="Relocation Method"
-                                    onChange={handleRelocationMethod}
-                                >
-                                    {relocationMethodOptions.map((option) => (
-                                        <MenuItem key={option} value={option}>
-                                            {option}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                            <FormControl sx={{  minWidth: 100 }} size="small">
-                                <InputLabel id="demo-select-small-label">TOCO</InputLabel>
-                                <Select
-                                    labelId="demo-select-small-label"
-                                    id="demo-select-small"
-                                    value={toco}
-                                    label="TOCO"
-                                    onChange={handleToco}
-                                >
-                                    <MenuItem value="Indus">Indus</MenuItem>
-                                    <MenuItem value="ATC">ATC</MenuItem>
-                                    <MenuItem value="ADIPL">ADIPL</MenuItem>
-                                    <MenuItem value="3PP">3PP</MenuItem>
-                                    {/* {tocoOptions.map((option) => (
-                                        <MenuItem key={option} value={option}>
-                                            {option}
-                                        </MenuItem>
-                                    ))} */}
-                                </Select>
-                            </FormControl>
+                                    <MenuItem value="Cumulative">Cumulative</MenuItem>
+                                    <MenuItem value="Non-cumulative">Non-cumulative</MenuItem>
 
-                            {/* <LocalizationProvider dateAdapter={AdapterDayjs} >
-                                <DatePicker
-                                    value={givenDate}
-                                    onChange={handleDate}
-                                />
-                            </LocalizationProvider> */}
-                            <Tooltip title="Download Monthly-RFAI to MS1 Waterfall">
+                                </Select>
+                            </FormControl>
+                            {/* circle */}
+                            <MultiSelectWithAll
+                                label="Circle"
+                                options={circleOptions}
+                                selectedValues={circle}
+                                setSelectedValues={setCircle}
+                            />
+
+                            {/* tagging */}
+                            <MultiSelectWithAll
+                                label="Site Tagging"
+                                options={taggingOptions}
+                                selectedValues={tagging}
+                                setSelectedValues={setTagging}
+                            />
+
+                            {/* Current Status */}
+                            <MultiSelectWithAll
+                                label="Current Status"
+                                options={relocationMethodOptions}
+                                selectedValues={relocationMethod}
+                                setSelectedValues={setRelocationMethod}
+                            />
+
+                            {/* Toco  */}
+
+                            <MultiSelectWithAll
+                                label="TOCO"
+                                options={tocoOptions}
+                                selectedValues={toco}
+                                setSelectedValues={setToco}
+                            />
+                            
+                            <Tooltip title="Download Yearly-RFAI to MS1 Waterfall">
                                 <IconButton
                                     component="a"
                                     href={downloadExcelData}
@@ -381,7 +445,7 @@ const MonthWise = () => {
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', position: 'sticky', left: 218, top: 0, backgroundColor: '#006e74' }}>
                                             CF</th>
                                         {monthArray?.map((item, index) => (
-                                            <th key={index} style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#CBCBCB',color:'black' }}>{item}</th>
+                                            <th key={index} style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#CBCBCB', color: 'black' }}>{item}</th>
                                         ))}
                                     </tr>
                                 </thead>
