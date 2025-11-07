@@ -17,16 +17,73 @@ import { usePost } from '../../../Hooks/PostApis';
 import { useLoadingDialog } from '../../../Hooks/LoadingDialog';
 import { useStyles } from '../../ToolsCss'
 import { setEncreptedData, getDecreyptedData } from '../../../utils/localstorage';
+import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
+import ListItemText from '@mui/material/ListItemText';
 import Select from '@mui/material/Select';
+import Checkbox from '@mui/material/Checkbox';
 import { postData } from '../../../services/FetchNodeServices';
 import { DateRangePicker } from 'rsuite';
 import 'rsuite/dist/rsuite.min.css';
+import { set } from 'lodash';
 
 
 
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+
+const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues }) => {
+    const handleChange = (event) => {
+        const { value } = event.target;
+        const selected = typeof value === 'string' ? value.split(',') : value;
+
+        if (selected.includes('ALL')) {
+            if (selectedValues.length === options.length) {
+                setSelectedValues([]);
+            } else {
+                setSelectedValues(options);
+            }
+        } else {
+            setSelectedValues(selected);
+        }
+    };
+
+    const isAllSelected = options.length > 0 && selectedValues.length === options.length;
+
+    return (
+        <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
+            <InputLabel id={`${label}-label`}>{label}</InputLabel>
+            <Select
+                labelId={`${label}-label`}
+                multiple
+                value={selectedValues}
+                onChange={handleChange}
+                input={<OutlinedInput label={label} />}
+                renderValue={(selected) => selected.join(', ')}
+            >
+                <MenuItem value="ALL">
+                    <Checkbox
+                        checked={isAllSelected}
+                        indeterminate={
+                            selectedValues.length > 0 && selectedValues.length < options.length
+                        }
+                    />
+                    <ListItemText primary="Select All" />
+                </MenuItem>
+
+                {options.map((name) => (
+                    <MenuItem key={name} value={name}>
+                        <Checkbox checked={selectedValues.includes(name)} />
+                        <ListItemText primary={name} />
+                    </MenuItem>
+                ))}
+            </Select>
+        </FormControl>
+    );
+};
 
 
 
@@ -41,13 +98,13 @@ const DateWise = () => {
     const [tableData, setTableData] = useState([])
     const [milestone, setMilestone] = useState([])
     const [gapData, setGapData] = useState('')
-    const [circle, setCircle] = useState('')
+    const [circle, setCircle] = useState([])
     const [circleOptions, setCircleOptions] = useState([])
-    const [tagging, setTagging] = useState('')
+    const [tagging, setTagging] = useState([])
     const [taggingOptions, setTaggingOptions] = useState([])
-    const [relocationMethod, setRelocationMethod] = useState('')
+    const [relocationMethod, setRelocationMethod] = useState([])
     const [relocationMethodOptions, setRelocationMethodOptions] = useState([])
-    const [toco, setToco] = useState('')
+    const [toco, setToco] = useState([])
     const [tocoOptions, setTocoOptions] = useState([])
     const [downloadExcelData, setDownloadExcelData] = useState('')
     const [view, setView] = useState('Cumulative')
@@ -88,18 +145,6 @@ const DateWise = () => {
 
     }
 
-    const handleCircle = (event) => {
-        setCircle(event.target.value)
-    }
-    const handleTagging = (event) => {
-        setTagging(event.target.value)
-    }
-    const handleRelocationMethod = (event) => {
-        setRelocationMethod(event.target.value)
-    }
-    const handleToco = (event) => {
-        setToco(event.target.value)
-    }
     const handleViewChange = (event) => {
         setView(event.target.value)
     }
@@ -151,38 +196,45 @@ const DateWise = () => {
         return `${fullYear}-${month}-${day}`;
     };
 
-    const handleGapHiperlink = async (milestone1, milestone2) => {
+    const handleGapHiperlink = async (milestone1, milestone2, gap) => {
         let mile = { milestone1, milestone2 };
 
-        if (milestone2 && milestone1) {
-            action(true)
-            var formData = new FormData()
-            formData.append('circle', circle)
-            formData.append('site_tagging', tagging)
-            formData.append('relocation_method', relocationMethod)
-            formData.append('new_toco_name', toco)
-            formData.append('milestone1', milestone1)
-            formData.append('milestone2', milestone2)
-            formData.append('last_date', convertToYMD(dateArray.at(-1)))
-            try {
-                const res = await postData("alok_tracker/gap_view/", formData);
-                console.log('gap response', res);
+        if (gap == 0 || gap === '-') {
+            alert('Gap value is zero, file not available for download')
+        } else {
 
-                if (res?.download_link) {
-                    // ✅ Trigger automatic file download
-                    const link = document.createElement('a');
-                    link.href = res.download_link;
-                    link.setAttribute('download', '');
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
+            if (milestone2 && milestone1 && gap) {
+                action(true)
+                var formData = new FormData()
+                formData.append('circle', circle)
+                formData.append('site_tagging', tagging)
+                formData.append('relocation_method', relocationMethod)
+                formData.append('new_toco_name', toco)
+                formData.append('milestone1', milestone1)
+                formData.append('milestone2', milestone2)
+                formData.append('last_date', convertToYMD(dateArray.at(-1)))
+                formData.append('gap', gap)
+                try {
+                    const res = await postData("alok_tracker/gap_view/", formData);
+                    console.log('gap response', res);
+
+                    if (res?.download_link) {
+                        // ✅ Trigger automatic file download
+                        const link = document.createElement('a');
+                        link.href = res.download_link;
+                        link.setAttribute('download', '');
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    }
+                } catch (err) {
+                    console.error('Error downloading file:', err);
+                } finally {
+                    action(false);
                 }
-            } catch (err) {
-                console.error('Error downloading file:', err);
-            } finally {
-                action(false);
             }
         }
+
 
         // console.log('gap value', mile)
     }
@@ -347,7 +399,7 @@ const DateWise = () => {
     useEffect(() => {
         fetchDailyData()
         // setTotals(calculateColumnTotals(tableData))
-    }, [circle, tagging, relocationMethod, toco, selectDate,view])
+    }, [circle, tagging, relocationMethod, toco, selectDate, view])
     return (
         <>
             <style>{"th{border:1px solid black;}"}</style>
@@ -363,7 +415,7 @@ const DateWise = () => {
                             <FormControl sx={{ minWidth: 200 }} size="small">
                                 <DateRangePicker onChange={(e) => handleDateFormate(e)} size="md" format="dd.MM.yyyy" shouldDisableDate={afterToday} placeholder="Select Date Range" color='black' />
                             </FormControl>
-                            <FormControl sx={{ minWidth: 100 }} size="small">
+                            <FormControl sx={{ minWidth: 100, maxWidth: 100 }} size="small">
                                 <InputLabel id="demo-select-small-label">View</InputLabel>
                                 <Select
                                     labelId="demo-select-small-label"
@@ -377,82 +429,41 @@ const DateWise = () => {
 
                                 </Select>
                             </FormControl>
-                            <FormControl sx={{ minWidth: 100 }} size="small">
-                                <InputLabel id="demo-select-small-label">Circle</InputLabel>
-                                <Select
-                                    labelId="demo-select-small-label"
-                                    id="demo-select-small"
-                                    value={circle}
-                                    label="Circle"
-                                    onChange={handleCircle}
-                                >
-                                    {circleOptions?.map((option) => (
-                                        <MenuItem key={option} value={option}>
-                                            {option}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                            <FormControl sx={{ minWidth: 100 }} size="small">
-                                <InputLabel id="demo-select-small-label">Tagging</InputLabel>
-                                <Select
-                                    labelId="demo-select-small-label"
-                                    id="demo-select-small"
-                                    value={tagging}
-                                    label="Tagging"
-                                    onChange={handleTagging}
-                                >
-                                    {taggingOptions?.map((option) => (
-                                        <MenuItem key={option} value={option}>
-                                            {option}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                            <FormControl sx={{ minWidth: 100 }} size="small">
-                                <InputLabel id="demo-select-small-label">Relocation Method</InputLabel>
-                                <Select
-                                    labelId="demo-select-small-label"
-                                    id="demo-select-small"
-                                    value={relocationMethod}
-                                    label="Relocation Method"
-                                    onChange={handleRelocationMethod}
-                                >
-                                    {relocationMethodOptions?.map((option) => (
-                                        <MenuItem key={option} value={option}>
-                                            {option}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                            <FormControl sx={{ minWidth: 100 }} size="small">
-                                <InputLabel id="demo-select-small-label">TOCO</InputLabel>
-                                <Select
-                                    labelId="demo-select-small-label"
-                                    id="demo-select-small"
-                                    value={toco}
-                                    label="TOCO"
-                                    onChange={handleToco}
-                                >
-                                    <MenuItem value="Indus">Indus</MenuItem>
-                                    <MenuItem value="ATC">ATC</MenuItem>
-                                    <MenuItem value="ADIPL">ADIPL</MenuItem>
-                                    <MenuItem value="3PP">3PP</MenuItem>
-                                    {/* {tocoOptions?.map((option) => (
-                                        <MenuItem key={option} value={option}>
-                                            {option}
-                                        </MenuItem>
-                                    ))} */}
-                                </Select>
-                            </FormControl>
+                            {/* circle */}
+                            <MultiSelectWithAll
+                                label="Circle"
+                                options={circleOptions}
+                                selectedValues={circle}
+                                setSelectedValues={setCircle}
+                            />
+
+                            {/* tagging */}
+                            <MultiSelectWithAll
+                                label="Site Tagging"
+                                options={taggingOptions}
+                                selectedValues={tagging}
+                                setSelectedValues={setTagging}
+                            />
+
+                            {/* Current Status */}
+                            <MultiSelectWithAll
+                                label="Current Status"
+                                options={relocationMethodOptions}
+                                selectedValues={relocationMethod}
+                                setSelectedValues={setRelocationMethod}
+                            />
+
+                            {/* Toco  */}
+
+                            <MultiSelectWithAll
+                                label="TOCO"
+                                options={tocoOptions}
+                                selectedValues={toco}
+                                setSelectedValues={setToco}
+                            />
 
 
-                            {/* <LocalizationProvider dateAdapter={AdapterDayjs} >
-                                <DatePicker
-                                    value={givenDate}
-                                    onChange={handleDate}
-                                />
-                            </LocalizationProvider> */}
+
                             <Tooltip title="Download Daily-RFAI to MS1 Waterfall">
                                 <IconButton
                                     component="a"
@@ -472,7 +483,7 @@ const DateWise = () => {
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', position: 'sticky', left: 0, top: 0, backgroundColor: '#006e74' }}>
                                             Milestone Track/Site Count</th>
-                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', position: 'sticky', left: 218, top: 0, backgroundColor: '#006e74' }}>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', position: 'sticky', left: '14%', top: 0, backgroundColor: '#006e74' }}>
                                             CF</th>
                                         {dateArray?.map((item, index) => (
                                             <th key={index} style={{ padding: '1px 1px', whiteSpace: 'nowrap', backgroundColor: '#CBCBCB', color: 'black' }}>{item}</th>
@@ -485,12 +496,12 @@ const DateWise = () => {
                                         return (
                                             <tr className={classes.hoverRT} style={{ textAlign: "center", fontWeigth: 700 }} key={index}>
                                                 <th style={{ position: 'sticky', left: 0, top: 0, backgroundColor: '#CBCBCB', color: 'black' }}>{it['Milestone Track/Site Count']}</th>
-                                                <th style={{ position: 'sticky', left: 218, top: 0, backgroundColor: '#CBCBCB', color: 'black' }}>{it['CF']}</th>
+                                                <th style={{ position: 'sticky', left: '14%', top: 0, backgroundColor: '#CBCBCB', color: 'black' }}>{it['CF']}</th>
                                                 {dateArray?.map((item, index) => (
                                                     // <th key={index} style={{ backgroundColor: it[`date_${index + 1}`] > 0 ? '#FEEFAD' : '' }} >{it[`date_${index + 1}`]}</th>
                                                     <th key={index}  >{isNaN(parseInt(it[`date_${index + 1}`])) ? '-' : parseInt(it[`date_${index + 1}`])}</th>
                                                 ))}
-                                                <th style={{ cursor: 'pointer' }} title='Click to Download Excel' className={classes.hoverRT} onClick={() => handleGapHiperlink(milestone[index - 1], milestone[index])}>{isNaN(parseInt(it['Gap'])) ? '-' : parseInt(it['Gap'])}</th>
+                                                <th style={{ cursor: 'pointer' }} title='Click to Download Excel' className={classes.hoverRT} onClick={() => handleGapHiperlink(milestone[index - 1], milestone[index], it['Gap'])}>{isNaN(parseInt(it['Gap'])) ? '-' : parseInt(it['Gap'])}</th>
                                             </tr>
                                         )
                                     }

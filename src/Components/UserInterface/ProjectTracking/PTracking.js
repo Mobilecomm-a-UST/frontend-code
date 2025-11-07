@@ -22,6 +22,7 @@ const PTtool = lazy(() => import('./PTtool'))
 const UploadFile = lazy(() => import('./UploadFile/Upload'))
 const DashboardTable = lazy(() => import('./Dashboard/DashboardTable'))
 const MainAging = lazy(() => import('./Aging/MainAging'))
+const MainDashboard = lazy(() => import('./Analytics/MainDashboard'))
 
 
 
@@ -94,19 +95,25 @@ const PTracking = () => {
                                     <Sidenav.Body>
                                         <Nav activeKey={activeKey} onSelect={setActiveKey} >
                                             <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>Relocation Tracking</Nav>
+
+                                            {/* RFAI To MS1 */}
                                             <Nav.Menu eventKey="1" style={{ fontWeight: 400, color: 'white' }} placement="leftStart" className="menu-title-custom" title="RFAI To MS1" icon={<ArrowRightIcon />}  >
-                                                <Nav.Item eventKey="1-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/waterfall'); show(); setMenuButton(true) }}>
+                                              <Nav.Item eventKey="1-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/MainDashboard'); show(); setMenuButton(true) }}>
+                                                    Analytics Dashboard
+                                                </Nav.Item>
+                                                <Nav.Item eventKey="2-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/waterfall'); show(); setMenuButton(true) }}>
                                                     Waterfall Dashboard
                                                 </Nav.Item>
-                                                <Nav.Item eventKey="1-2" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/ageing'); show(); setMenuButton(true) }}>
+                                                <Nav.Item eventKey="3-2" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/ageing'); show(); setMenuButton(true) }}>
                                                     Ageing Dashboard
                                                 </Nav.Item>
-                                                <Nav.Item eventKey="1-3" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/upload_file'); show(); setMenuButton(true) }}>
+                                                <Nav.Item eventKey="4-3" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/upload_file'); show(); setMenuButton(true) }}>
                                                     Upload File
                                                 </Nav.Item>
                                             </Nav.Menu>
 
-                                            <Nav.Menu eventKey="2" style={{ fontWeight: 400, color: 'white' }} placement="leftStart" className="menu-title-custom" title="RFAI To MS2" icon={<ArrowRightIcon />}  >
+                                                    {/* RAFI to MS2 */}
+                                            <Nav.Menu eventKey="2" style={{ fontWeight: 400, color: 'white' }} placement="leftStart" className="menu-title-custom" title="MS1 To MS2" icon={<ArrowRightIcon />}  >
                                                 <Nav.Item eventKey="2-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/'); show(); setMenuButton(true) }}>
                                                     Waterfall Dashboard
                                                 </Nav.Item>
@@ -135,6 +142,7 @@ const PTracking = () => {
                                 <Route element={<UploadFile />} path="/upload_file" />
                                 <Route element={<DashboardTable />} path="/waterfall" />
                                 <Route element={<MainAging />} path="/ageing" />
+                                <Route element={<MainDashboard />} path="/analytics" />
 
 
 
