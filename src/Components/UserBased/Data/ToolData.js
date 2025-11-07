@@ -294,7 +294,7 @@ const ToolData = [
         title: 'This is a Relocation Tracking Tool',
         icons: ProjectIcon,
         link: '/tools/relocation_tracking',
-        groupBy:['admin']
+        groupBy:['admin','RLT']
     }
 
 
