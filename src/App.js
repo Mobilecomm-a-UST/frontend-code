@@ -311,7 +311,7 @@ function App() {
 
             <Route path="/tools/relocation_tracking/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={ProjectTracking} allowedUserTypes={['admin']} userType={userType} />
+                <ProtectedRoute element={ProjectTracking} allowedUserTypes={['admin','RLT']} userType={userType} />
               </Suspense>
             } />
 
