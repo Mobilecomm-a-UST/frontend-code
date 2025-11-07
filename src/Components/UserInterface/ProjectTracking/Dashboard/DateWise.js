@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, TextField } from "@mui/material";
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import DownloadIcon from '@mui/icons-material/Download';
@@ -15,38 +15,104 @@ import { CsvBuilder } from 'filefy';
 import { useGet } from '../../../Hooks/GetApis';
 import { usePost } from '../../../Hooks/PostApis';
 import { useLoadingDialog } from '../../../Hooks/LoadingDialog';
-import { useQuery } from '@tanstack/react-query';
 import { useStyles } from '../../ToolsCss'
 import { setEncreptedData, getDecreyptedData } from '../../../utils/localstorage';
+import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
+import ListItemText from '@mui/material/ListItemText';
 import Select from '@mui/material/Select';
+import Checkbox from '@mui/material/Checkbox';
 import { postData } from '../../../services/FetchNodeServices';
+import { DateRangePicker } from 'rsuite';
+import 'rsuite/dist/rsuite.min.css';
+import { set } from 'lodash';
 
+
+
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+
+const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues }) => {
+    const handleChange = (event) => {
+        const { value } = event.target;
+        const selected = typeof value === 'string' ? value.split(',') : value;
+
+        if (selected.includes('ALL')) {
+            if (selectedValues.length === options.length) {
+                setSelectedValues([]);
+            } else {
+                setSelectedValues(options);
+            }
+        } else {
+            setSelectedValues(selected);
+        }
+    };
+
+    const isAllSelected = options.length > 0 && selectedValues.length === options.length;
+
+    return (
+        <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
+            <InputLabel id={`${label}-label`}>{label}</InputLabel>
+            <Select
+                labelId={`${label}-label`}
+                multiple
+                value={selectedValues}
+                onChange={handleChange}
+                input={<OutlinedInput label={label} />}
+                renderValue={(selected) => selected.join(', ')}
+            >
+                <MenuItem value="ALL">
+                    <Checkbox
+                        checked={isAllSelected}
+                        indeterminate={
+                            selectedValues.length > 0 && selectedValues.length < options.length
+                        }
+                    />
+                    <ListItemText primary="Select All" />
+                </MenuItem>
+
+                {options.map((name) => (
+                    <MenuItem key={name} value={name}>
+                        <Checkbox checked={selectedValues.includes(name)} />
+                        <ListItemText primary={name} />
+                    </MenuItem>
+                ))}
+            </Select>
+        </FormControl>
+    );
+};
 
 
 
 
 const DateWise = () => {
     const classes = useStyles()
-    const [open, setOpen] = useState(false)
+    const [open, setOpen] = useState(true)
     const { makePostRequest } = usePost()
     const { loading, action } = useLoadingDialog();
     const [mainDataT2, setMainDataT2] = useState([])
     const [dateArray, setDateArray] = useState([])
     const [tableData, setTableData] = useState([])
-    const [givenDate, setGivenDate] = useState('')
-    const [circle, setCircle] = useState('')
+    const [milestone, setMilestone] = useState([])
+    const [gapData, setGapData] = useState('')
+    const [circle, setCircle] = useState([])
     const [circleOptions, setCircleOptions] = useState([])
-    const [tagging, setTagging] = useState('')
+    const [tagging, setTagging] = useState([])
     const [taggingOptions, setTaggingOptions] = useState([])
-    const [relocationMethod, setRelocationMethod] = useState('')
+    const [relocationMethod, setRelocationMethod] = useState([])
     const [relocationMethodOptions, setRelocationMethodOptions] = useState([])
-    const [toco, setToco] = useState('')
+    const [toco, setToco] = useState([])
     const [tocoOptions, setTocoOptions] = useState([])
     const [downloadExcelData, setDownloadExcelData] = useState('')
+    const [view, setView] = useState('Cumulative')
+    const [selectDate, setSelectDate] = useState([])
+    const { afterToday, combine } = DateRangePicker;
     // const [totals, setTotals] = useState()
+
+    console.log('table data', tableData)
 
     const fetchDailyData = async () => {
         action(true)
@@ -55,6 +121,9 @@ const DateWise = () => {
         formData.append('site_tagging', tagging)
         formData.append('relocation_method', relocationMethod)
         formData.append('new_toco_name', toco)
+        formData.append('from_date', selectDate[0] || '')
+        formData.append('to_date', selectDate[1] || '')
+        formData.append('view', view)
         const res = await postData("alok_tracker/daily_dashboard_file/", formData);
         // const res =  tempData; //  remove this line when API is ready
         console.log('date wise response', res)
@@ -66,6 +135,7 @@ const DateWise = () => {
             setTaggingOptions(res.unique_data.unique_site_tagging)
             setRelocationMethodOptions(res.unique_data.unique_relocation_method)
             setTocoOptions(res.unique_data.unique_new_toco_name)
+            setMilestone(res.unique_data.Milestone)
             setDownloadExcelData(res.download_link)
             // setMainDataT2(JSON.parse(res.data))
         }
@@ -75,44 +145,98 @@ const DateWise = () => {
 
     }
 
-    const handleCircle = (event) => {
-        setCircle(event.target.value)
-    }
-    const handleTagging = (event) => {
-        setTagging(event.target.value)
-    }
-    const handleRelocationMethod = (event) => {
-        setRelocationMethod(event.target.value)
-    }
-    const handleToco = (event) => {
-        setToco(event.target.value)
+    const handleViewChange = (event) => {
+        setView(event.target.value)
     }
 
+    const handleDateFormate = (dateArray) => {
+        // console.log('date array', dateArray)
+        const formattedDates = dateArray.map(date => ChangeDateFormate(date));
+        setSelectDate(formattedDates);
+        // console.log('chnage date formate ', formattedDates)
+    }
 
     // console.log('date wise dashboard')
 
-    const ChangeDateFormate = (dates) => {
+    const ChangeDateFormate = (date) => {
+        if (!date) return '';
 
-        if (dates && typeof dates === 'string') {
-            // console.log('date', dates.split('-'));
-            const [year, month, day] = dates.split('-');
-            return `${day}-${month}-${year}`;
+        const d = new Date(date);
+        if (isNaN(d)) return 'Invalid Date';
+
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+
+        return `${year}-${month}-${day}`;
+    };
+
+    const convertToYMD = (dateStr) => {
+        const [day, monthStr, year] = dateStr.split('-');
+
+        // month map
+        const months = {
+            Jan: '01',
+            Feb: '02',
+            Mar: '03',
+            Apr: '04',
+            May: '05',
+            Jun: '06',
+            Jul: '07',
+            Aug: '08',
+            Sep: '09',
+            Oct: '10',
+            Nov: '11',
+            Dec: '12'
+        };
+
+        const month = months[monthStr];
+        const fullYear = `20${year}`; // convert '25' → '2025'
+
+        return `${fullYear}-${month}-${day}`;
+    };
+
+    const handleGapHiperlink = async (milestone1, milestone2, gap) => {
+        let mile = { milestone1, milestone2 };
+
+        if (gap == 0 || gap === '-') {
+            alert('Gap value is zero, file not available for download')
         } else {
-            // console.log("Invalid date format");
-            return dates;
+
+            if (milestone2 && milestone1 && gap) {
+                action(true)
+                var formData = new FormData()
+                formData.append('circle', circle)
+                formData.append('site_tagging', tagging)
+                formData.append('relocation_method', relocationMethod)
+                formData.append('new_toco_name', toco)
+                formData.append('milestone1', milestone1)
+                formData.append('milestone2', milestone2)
+                formData.append('last_date', convertToYMD(dateArray.at(-1)))
+                formData.append('gap', gap)
+                try {
+                    const res = await postData("alok_tracker/gap_view/", formData);
+                    console.log('gap response', res);
+
+                    if (res?.download_link) {
+                        // ✅ Trigger automatic file download
+                        const link = document.createElement('a');
+                        link.href = res.download_link;
+                        link.setAttribute('download', '');
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    }
+                } catch (err) {
+                    console.error('Error downloading file:', err);
+                } finally {
+                    action(false);
+                }
+            }
         }
-    }
 
 
-
-    const ShortDate = (dates) => {
-        const dateObjects = dates.map(dateStr => new Date(dateStr));
-        // Sort Date objects in increasing order
-        dateObjects.sort((a, b) => a - b);
-        // Convert sorted Date objects back to string format
-        const sortedDates = dateObjects.map(date => date.toISOString().split('T')[0]);
-        setDateArray(sortedDates)
-
+        // console.log('gap value', mile)
     }
 
     const handleClose = () => {
@@ -201,7 +325,7 @@ const DateWise = () => {
     // }
 
     // ********** Filter Dialog Box **********//
-    const filterDialog = useCallback(() => {
+    const filterDialog = (() => {
         return (
             <Dialog
                 open={open}
@@ -222,14 +346,12 @@ const DateWise = () => {
                                 <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
                                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Circle</th>
                                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Short Name</th>
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{mainDataT2?.current_date}</th>
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{mainDataT2?.previous_date}</th>
                                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Site Priority</th>
                                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Delta</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {mainDataT2?.data?.map((item) => (
+                                {/* {mainDataT2?.data?.map((item) => (
                                     <tr className={classes.hover} style={{ textAlign: "center", fontWeigth: 700 }}>
                                         <th>{item.Circle}</th>
                                         <th>{item.Short_name}</th>
@@ -238,7 +360,7 @@ const DateWise = () => {
                                         <th>{item.del_value.toUpperCase()}</th>
                                         <th>{item.delta}</th>
                                     </tr>
-                                ))}
+                                ))} */}
                             </tbody>
 
 
@@ -248,7 +370,7 @@ const DateWise = () => {
                 </DialogContent>
             </Dialog>
         )
-    }, [mainDataT2, open])
+    })
 
     const ClickDataGet = async (props) => {
 
@@ -277,7 +399,7 @@ const DateWise = () => {
     useEffect(() => {
         fetchDailyData()
         // setTotals(calculateColumnTotals(tableData))
-    }, [circle,tagging,relocationMethod,toco])  
+    }, [circle, tagging, relocationMethod, toco, selectDate, view])
     return (
         <>
             <style>{"th{border:1px solid black;}"}</style>
@@ -287,80 +409,61 @@ const DateWise = () => {
                     {/* ************* 2G  TABLE DATA ************** */}
                     <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', alignContent: 'center' }}>
                         <Box style={{ fontSize: 22, fontWeight: 'bold' }}>
-                            Daily - RFAI to MS1 Waterfall
+                            Daily Progress - RFAI to MS1 Waterfall
                         </Box>
-                        <Box>
-                            <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-                                <InputLabel id="demo-select-small-label">Circle</InputLabel>
+                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', gap: 1 }}>
+                            <FormControl sx={{ minWidth: 200 }} size="small">
+                                <DateRangePicker onChange={(e) => handleDateFormate(e)} size="md" format="dd.MM.yyyy" shouldDisableDate={afterToday} placeholder="Select Date Range" color='black' />
+                            </FormControl>
+                            <FormControl sx={{ minWidth: 100, maxWidth: 100 }} size="small">
+                                <InputLabel id="demo-select-small-label">View</InputLabel>
                                 <Select
                                     labelId="demo-select-small-label"
                                     id="demo-select-small"
-                                    value={circle}
-                                    label="Circle"
-                                    onChange={handleCircle}
+                                    value={view}
+                                    label="View"
+                                    onChange={handleViewChange}
                                 >
-                                    {circleOptions.map((option) => (
-                                        <MenuItem key={option} value={option}>
-                                            {option}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                            <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-                                <InputLabel id="demo-select-small-label">Tagging</InputLabel>
-                                <Select
-                                    labelId="demo-select-small-label"
-                                    id="demo-select-small"
-                                    value={tagging}
-                                    label="Tagging"
-                                    onChange={handleTagging}
-                                >
-                                    {taggingOptions.map((option) => (
-                                        <MenuItem key={option} value={option}>
-                                            {option}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                            <FormControl sx={{ m: 1, minWidth: 160 }} size="small">
-                                <InputLabel id="demo-select-small-label">Relocation Method</InputLabel>
-                                <Select
-                                    labelId="demo-select-small-label"
-                                    id="demo-select-small"
-                                    value={relocationMethod}
-                                    label="Relocation Method"
-                                    onChange={handleRelocationMethod}
-                                >
-                                    {relocationMethodOptions.map((option) => (
-                                        <MenuItem key={option} value={option}>
-                                            {option}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                            <FormControl sx={{ m: 1, minWidth: 160 }} size="small">
-                                <InputLabel id="demo-select-small-label">TOCO</InputLabel>
-                                <Select
-                                    labelId="demo-select-small-label"
-                                    id="demo-select-small"
-                                    value={toco}
-                                    label="TOCO"
-                                    onChange={handleToco}
-                                >
-                                    {tocoOptions.map((option) => (
-                                        <MenuItem key={option} value={option}>
-                                            {option}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
+                                    <MenuItem value="Cumulative">Cumulative</MenuItem>
+                                    <MenuItem value="Non-cumulative">Non-cumulative</MenuItem>
 
-                            {/* <LocalizationProvider dateAdapter={AdapterDayjs} >
-                                <DatePicker
-                                    value={givenDate}
-                                    onChange={handleDate}
-                                />
-                            </LocalizationProvider> */}
+                                </Select>
+                            </FormControl>
+                            {/* circle */}
+                            <MultiSelectWithAll
+                                label="Circle"
+                                options={circleOptions}
+                                selectedValues={circle}
+                                setSelectedValues={setCircle}
+                            />
+
+                            {/* tagging */}
+                            <MultiSelectWithAll
+                                label="Site Tagging"
+                                options={taggingOptions}
+                                selectedValues={tagging}
+                                setSelectedValues={setTagging}
+                            />
+
+                            {/* Current Status */}
+                            <MultiSelectWithAll
+                                label="Current Status"
+                                options={relocationMethodOptions}
+                                selectedValues={relocationMethod}
+                                setSelectedValues={setRelocationMethod}
+                            />
+
+                            {/* Toco  */}
+
+                            <MultiSelectWithAll
+                                label="TOCO"
+                                options={tocoOptions}
+                                selectedValues={toco}
+                                setSelectedValues={setToco}
+                            />
+
+
+
                             <Tooltip title="Download Daily-RFAI to MS1 Waterfall">
                                 <IconButton
                                     component="a"
@@ -378,26 +481,27 @@ const DateWise = () => {
                             <table style={{ width: "100%", border: "1px solid black", borderCollapse: 'collapse', overflow: 'auto' }} >
                                 <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
-                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', position: 'sticky', left: 0, top: 0, backgroundColor: '#223354' }}>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', position: 'sticky', left: 0, top: 0, backgroundColor: '#006e74' }}>
                                             Milestone Track/Site Count</th>
-                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', position: 'sticky', left: 218, top: 0, backgroundColor: '#223354' }}>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', position: 'sticky', left: '14%', top: 0, backgroundColor: '#006e74' }}>
                                             CF</th>
                                         {dateArray?.map((item, index) => (
-                                            <th key={index} style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>{item}</th>
+                                            <th key={index} style={{ padding: '1px 1px', whiteSpace: 'nowrap', backgroundColor: '#CBCBCB', color: 'black' }}>{item}</th>
                                         ))}
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#ff6060' }}>Gap</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {tableData?.map((it, index) => {
                                         return (
-                                            <tr className={classes.hover} style={{ textAlign: "center", fontWeigth: 700 }} key={index}>
-                                                <th style={{ position: 'sticky', left: 0, top: 0, backgroundColor: 'rgb(197 214 246)', color: 'black' }}>{it['Milestone Track/Site Count']}</th>
-                                                <th style={{ position: 'sticky', left: 218, top: 0, backgroundColor: 'rgb(197 214 246)', color: 'black' }}>{it['CF']}</th>
+                                            <tr className={classes.hoverRT} style={{ textAlign: "center", fontWeigth: 700 }} key={index}>
+                                                <th style={{ position: 'sticky', left: 0, top: 0, backgroundColor: '#CBCBCB', color: 'black' }}>{it['Milestone Track/Site Count']}</th>
+                                                <th style={{ position: 'sticky', left: '14%', top: 0, backgroundColor: '#CBCBCB', color: 'black' }}>{it['CF']}</th>
                                                 {dateArray?.map((item, index) => (
                                                     // <th key={index} style={{ backgroundColor: it[`date_${index + 1}`] > 0 ? '#FEEFAD' : '' }} >{it[`date_${index + 1}`]}</th>
-                                                    <th key={index}  >{it[`date_${index + 1}`]}</th>
+                                                    <th key={index}  >{isNaN(parseInt(it[`date_${index + 1}`])) ? '-' : parseInt(it[`date_${index + 1}`])}</th>
                                                 ))}
-
+                                                <th style={{ cursor: 'pointer' }} title='Click to Download Excel' className={classes.hoverRT} onClick={() => handleGapHiperlink(milestone[index - 1], milestone[index], it['Gap'])}>{isNaN(parseInt(it['Gap'])) ? '-' : parseInt(it['Gap'])}</th>
                                             </tr>
                                         )
                                     }
@@ -406,10 +510,9 @@ const DateWise = () => {
                             </table>
                         </TableContainer>
                     </Box>
-
                 </div>
             </Slide>
-            {/* {filterDialog()} */}
+            {/* {gapData && filterDialog()} */}
             {loading}
         </>
     )

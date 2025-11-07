@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, TextField } from "@mui/material";
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import DownloadIcon from '@mui/icons-material/Download';
@@ -18,11 +18,70 @@ import { useLoadingDialog } from '../../../Hooks/LoadingDialog';
 import { useQuery } from '@tanstack/react-query';
 import { useStyles } from '../../ToolsCss'
 import { setEncreptedData, getDecreyptedData } from '../../../utils/localstorage';
+import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
+import ListItemText from '@mui/material/ListItemText';
 import Select from '@mui/material/Select';
+import Checkbox from '@mui/material/Checkbox';
 import { postData } from '../../../services/FetchNodeServices';
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+
+const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues }) => {
+    const handleChange = (event) => {
+        const { value } = event.target;
+        const selected = typeof value === 'string' ? value.split(',') : value;
+
+        if (selected.includes('ALL')) {
+            if (selectedValues.length === options.length) {
+                setSelectedValues([]);
+            } else {
+                setSelectedValues(options);
+            }
+        } else {
+            setSelectedValues(selected);
+        }
+    };
+
+    const isAllSelected = options.length > 0 && selectedValues.length === options.length;
+
+    return (
+        <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
+            <InputLabel id={`${label}-label`}>{label}</InputLabel>
+            <Select
+                labelId={`${label}-label`}
+                multiple
+                value={selectedValues}
+                onChange={handleChange}
+                input={<OutlinedInput label={label} />}
+                renderValue={(selected) => selected.join(', ')}
+            >
+                <MenuItem value="ALL">
+                    <Checkbox
+                        checked={isAllSelected}
+                        indeterminate={
+                            selectedValues.length > 0 && selectedValues.length < options.length
+                        }
+                    />
+                    <ListItemText primary="Select All" />
+                </MenuItem>
+
+                {options.map((name) => (
+                    <MenuItem key={name} value={name}>
+                        <Checkbox checked={selectedValues.includes(name)} />
+                        <ListItemText primary={name} />
+                    </MenuItem>
+                ))}
+            </Select>
+        </FormControl>
+    );
+};
+
+
+
 
 const WeekWise = () => {
     const classes = useStyles()
@@ -35,16 +94,21 @@ const WeekWise = () => {
     const [weekArray, setWeekArray] = useState([])
     const [tableData, setTableData] = useState([])
     const [givenDate, setGivenDate] = useState('')
-    const [circle, setCircle] = useState('')
+    const [circle, setCircle] = useState([])
     const [circleOptions, setCircleOptions] = useState([])
-    const [tagging, setTagging] = useState('')
+    const [tagging, setTagging] = useState([])
     const [taggingOptions, setTaggingOptions] = useState([])
-    const [relocationMethod, setRelocationMethod] = useState('')
+    const [relocationMethod, setRelocationMethod] = useState([])
     const [relocationMethodOptions, setRelocationMethodOptions] = useState([])
-    const [toco, setToco] = useState('')
+    const [toco, setToco] = useState([])
     const [tocoOptions, setTocoOptions] = useState([])
+    const [month, setMonth] = useState('')
     const [downloadExcelData, setDownloadExcelData] = useState('')
+    const [view, setView] = useState('Cumulative')
+
     // const [totals, setTotals] = useState()
+
+    // console.log('month select ' , month.split('-')[1] , month.split('-')[0] )
 
     const fetchDailyData = async () => {
         action(true)
@@ -53,6 +117,9 @@ const WeekWise = () => {
         formData.append('site_tagging', tagging)
         formData.append('relocation_method', relocationMethod)
         formData.append('new_toco_name', toco)
+        formData.append('month', month.split('-')[1] || '')
+        formData.append('year', month.split('-')[0] || '')
+          formData.append('view', view)
         const res = await postData("alok_tracker/weekly_monthly_dashboard_file/", formData);
         // const res =  tempData; //  remove this line when API is ready
         console.log('week wise response', res)
@@ -73,17 +140,10 @@ const WeekWise = () => {
 
     }
 
-    const handleCircle = (event) => {
-        setCircle(event.target.value)
-    }
-    const handleTagging = (event) => {
-        setTagging(event.target.value)
-    }
-    const handleRelocationMethod = (event) => {
-        setRelocationMethod(event.target.value)
-    }
-    const handleToco = (event) => {
-        setToco(event.target.value)
+
+    const handleMonthChange = (event) => {
+        console.log(event.target.value.split('-')[1])
+        setMonth(event.target.value)
     }
 
 
@@ -115,6 +175,9 @@ const WeekWise = () => {
 
     const handleClose = () => {
         setOpen(false)
+    }
+    const handleViewChange = (event) => {
+        setView(event.target.value)
     }
 
     // Download Key and value
@@ -273,91 +336,80 @@ const WeekWise = () => {
     useEffect(() => {
         fetchDailyData()
         // setTotals(calculateColumnTotals(tableData))
-    }, [circle, tagging, relocationMethod, toco])
+    }, [circle, tagging, relocationMethod, toco, month,view])
     return (
         <>
             <style>{"th{border:1px solid black;}"}</style>
             <Slide direction="left" in='true' timeout={700} style={{ transformOrigin: '1 1 1' }}>
                 <div style={{ margin: 20 }}>
 
-                    
+
                     <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', alignContent: 'center' }}>
                         <Box style={{ fontSize: 22, fontWeight: 'bold' }}>
-                            Weekly - RFAI to MS1
+                            Monthly Progress - RFAI to MS1 Waterfall
                         </Box>
-                        <Box>
-                            <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-                                <InputLabel id="demo-select-small-label">Circle</InputLabel>
-                                <Select
-                                    labelId="demo-select-small-label"
-                                    id="demo-select-small"
-                                    value={circle}
-                                    label="Circle"
-                                    onChange={handleCircle}
-                                >
-                                    {circleOptions.map((option) => (
-                                        <MenuItem key={option} value={option}>
-                                            {option}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                            <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-                                <InputLabel id="demo-select-small-label">Tagging</InputLabel>
-                                <Select
-                                    labelId="demo-select-small-label"
-                                    id="demo-select-small"
-                                    value={tagging}
-                                    label="Tagging"
-                                    onChange={handleTagging}
-                                >
-                                    {taggingOptions.map((option) => (
-                                        <MenuItem key={option} value={option}>
-                                            {option}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                            <FormControl sx={{ m: 1, minWidth: 160 }} size="small">
-                                <InputLabel id="demo-select-small-label">Relocation Method</InputLabel>
-                                <Select
-                                    labelId="demo-select-small-label"
-                                    id="demo-select-small"
-                                    value={relocationMethod}
-                                    label="Relocation Method"
-                                    onChange={handleRelocationMethod}
-                                >
-                                    {relocationMethodOptions.map((option) => (
-                                        <MenuItem key={option} value={option}>
-                                            {option}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                            <FormControl sx={{ m: 1, minWidth: 160 }} size="small">
-                                <InputLabel id="demo-select-small-label">TOCO</InputLabel>
-                                <Select
-                                    labelId="demo-select-small-label"
-                                    id="demo-select-small"
-                                    value={toco}
-                                    label="TOCO"
-                                    onChange={handleToco}
-                                >
-                                    {tocoOptions.map((option) => (
-                                        <MenuItem key={option} value={option}>
-                                            {option}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-
-                            {/* <LocalizationProvider dateAdapter={AdapterDayjs} >
-                                <DatePicker
-                                    value={givenDate}
-                                    onChange={handleDate}
+                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', gap: 1 }}>
+                            <FormControl sx={{ minWidth: 100, maxWidth: 100 }} size="small">
+                                <TextField
+                                    variant="outlined"
+                                    // required
+                                    fullWidth
+                                    label="Month"
+                                    name="month"
+                                    value={month}
+                                    onChange={handleMonthChange}
+                                    size="small"
+                                    type="month"
                                 />
-                            </LocalizationProvider> */}
-                            <Tooltip title="Download Weekly-RFAI to MS1">
+                            </FormControl>
+                            <FormControl sx={{ minWidth: 100, maxWidth: 100 }} size="small">
+                                <InputLabel id="demo-select-small-label">View</InputLabel>
+                                <Select
+                                    labelId="demo-select-small-label"
+                                    id="demo-select-small"
+                                    value={view}
+                                    label="View"
+                                    onChange={handleViewChange}
+                                >
+                                    <MenuItem value="Cumulative">Cumulative</MenuItem>
+                                    <MenuItem value="Non-cumulative">Non-cumulative</MenuItem>
+
+                                </Select>
+                            </FormControl>
+                            {/* circle */}
+                            <MultiSelectWithAll
+                                label="Circle"
+                                options={circleOptions}
+                                selectedValues={circle}
+                                setSelectedValues={setCircle}
+                            />
+
+                            {/* tagging */}
+                            <MultiSelectWithAll
+                                label="Site Tagging"
+                                options={taggingOptions}
+                                selectedValues={tagging}
+                                setSelectedValues={setTagging}
+                            />
+
+                            {/* Current Status */}
+                            <MultiSelectWithAll
+                                label="Current Status"
+                                options={relocationMethodOptions}
+                                selectedValues={relocationMethod}
+                                setSelectedValues={setRelocationMethod}
+                            />
+
+                            {/* Toco  */}
+
+                            <MultiSelectWithAll
+                                label="TOCO"
+                                options={tocoOptions}
+                                selectedValues={toco}
+                                setSelectedValues={setToco}
+                            />
+
+                            <Tooltip title="Download Monthly-RFAI to MS1">
                                 <IconButton
                                     component="a"
                                     href={downloadExcelData}
@@ -374,20 +426,20 @@ const WeekWise = () => {
                             <table style={{ width: "100%", border: "1px solid black", borderCollapse: 'collapse', overflow: 'auto' }} >
                                 <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
-                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', position: 'sticky', left: 0, top: 0, backgroundColor: '#223354' }}>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', position: 'sticky', left: 0, top: 0, backgroundColor: '#006e74' }}>
                                             Milestone Track/Site Count</th>
                                         {/* <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', position: 'sticky', left: 218, top: 0, backgroundColor: '#223354' }}>
                                             CF</th> */}
                                         {weekArray?.map((item, index) => (
-                                            <th key={index} style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>{item}</th>
+                                            <th key={index} style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#CBCBCB', color: 'black' }}>{item}</th>
                                         ))}
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {tableData?.map((it, index) => {
                                         return (
-                                            <tr className={classes.hover} style={{ textAlign: "center", fontWeigth: 700 }} key={index}>
-                                                <th style={{ position: 'sticky', left: 0, top: 0, backgroundColor: 'rgb(197 214 246)', color: 'black' }}>{it['Milestone Track/Site Count']}</th>
+                                            <tr className={classes.hoverRT} style={{ textAlign: "center", fontWeigth: 700 }} key={index}>
+                                                <th style={{ position: 'sticky', left: 0, top: 0, backgroundColor: '#CBCBCB', color: 'black' }}>{it['Milestone Track/Site Count']}</th>
                                                 {/* <th style={{ position: 'sticky', left: 218, top: 0, backgroundColor: 'rgb(197 214 246)', color: 'black' }}>{it['CF']}</th> */}
                                                 {weekArray?.map((item, index) => (
                                                     <th key={index} >{it[`Month_Week-${index + 1}`]}</th>
@@ -413,4 +465,4 @@ const WeekWise = () => {
     )
 }
 
-export const  MemoWeekWise = React.memo(WeekWise);
+export const MemoWeekWise = React.memo(WeekWise);

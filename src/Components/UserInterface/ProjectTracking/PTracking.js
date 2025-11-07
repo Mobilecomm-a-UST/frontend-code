@@ -12,11 +12,17 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import DashboardIcon from '@rsuite/icons/legacy/Dashboard';
 import FileUploadIcon from '@rsuite/icons/FileUpload';
 import { useNavigate } from 'react-router-dom'
+import FunnelTrendIcon from '@rsuite/icons/FunnelTrend';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import ChangeListIcon from '@rsuite/icons/ChangeList';
+import WaitIcon from '@rsuite/icons/Wait';
+import App from '../../../App.css'
+import ArrowRightIcon from '@rsuite/icons/ArrowRight';
+
 const PTtool = lazy(() => import('./PTtool'))
 const UploadFile = lazy(() => import('./UploadFile/Upload'))
 const DashboardTable = lazy(() => import('./Dashboard/DashboardTable'))
+const MainAging = lazy(() => import('./Aging/MainAging'))
+const MainDashboard = lazy(() => import('./Analytics/MainDashboard'))
 
 
 
@@ -26,7 +32,8 @@ const PTracking = () => {
     const [states, setStates] = useState(60)
     const [checked, setChecked] = useState(true)
     const [menuButton, setMenuButton] = useState(false)
- 
+    //  const classes = useStyles();
+
     const navigate = useNavigate()
 
 
@@ -61,7 +68,7 @@ const PTracking = () => {
                                             <Nav activeKey={activeKey} onSelect={setActiveKey} style={{ width: 'auto', minHeight: "670px", height: "100hv", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
                                                 <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>Relocation Tracking</Nav>
                                                 <Nav.Item eventKey="1" placement="rightStart" icon={<DashboardIcon />} onClick={() => { navigate('/tools/project_tracking/'); show(); setMenuButton(true) }}>
-                                                   Dashboard
+                                                    Dashboard
                                                 </Nav.Item>
                                                 {/* <Nav.Menu eventKey="3" placement="rightStart" title="NOM Audit" icon={<DocPassIcon />}>
                                                     <Nav.Item eventKey="3-1" placement="rightStart" onClick={() => { navigate('/tools/nomenclature_scriptor/nom_audit_dashboard'); show(); setMenuButton(true) }}>
@@ -84,39 +91,41 @@ const PTracking = () => {
                         {/* THIS VIEW FOR PC  */}
                         <Box sx={{ display: { xs: 'none', md: 'inherit' } }} >
                             <Box sx={{ position: 'fixed', width: '16.5%' }} >
-                                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
+                                <Sidenav expanded={expanded} defaultOpenKeys={['1']} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#006e74", marginTop: 8, borderRadius: 10 }}>
                                     <Sidenav.Body>
                                         <Nav activeKey={activeKey} onSelect={setActiveKey} >
-                                            <Nav style={{ fontWeight: 500, color: 'white', textAlign: 'center', fontSize: 20 }}>Relocation Tracking</Nav>
-                                            {/* <Nav.Menu eventKey="1" placement="rightStart" title="Acceptance" icon={<CheckOutlineIcon size="3em" />}>
-                                                <Nav.Item eventKey="1-1" onClick={() => { navigate('/tools/mcom_physical_at/acceptance_summary'); show(); setMenuButton(true) }} >
-                                                    Acceptance Summary
-                                                </Nav.Item>
-                                            </Nav.Menu> */}
-                                            <Nav.Item eventKey="1" placement="rightStart" icon={<DashboardIcon />} onClick={() => { navigate('/tools/relocation_tracking/dashboard'); show(); setMenuButton(true) }}>
-                                                Dashboard
-                                            </Nav.Item>
-                                               <Nav.Item eventKey="2" placement="rightStart" icon={<FileUploadIcon />} onClick={() => { navigate('/tools/relocation_tracking/upload_file'); show(); setMenuButton(true) }}>
-                                                Upload File
-                                            </Nav.Item>
-                                            {/* <Nav.Menu eventKey="3" placement="rightStart" title="NOM Audit" icon={<DocPassIcon />}>
-                                                <Nav.Item eventKey="3-1" placement="rightStart" onClick={() => { navigate('/tools/project_tracking'); show(); setMenuButton(true) }}>
-                                                    Dashboard
-                                                </Nav.Item>
-                                                <Nav.Item eventKey="3-2" placement="rightStart" onClick={() => { navigate('/tools/project_tracking'); show(); setMenuButton(true) }}>
-                                                    Pre-Post Audit
-                                                </Nav.Item>
-                                            </Nav.Menu> */}
+                                            <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>Relocation Tracking</Nav>
 
-                                            {/* <Nav.Item eventKey="3" placement="rightStart" icon={<PageIcon />} onClick={() => { navigate('/tools/soft_at/view_report'); show(); setMenuButton(true) }}>
-                                                View Report
-                                            </Nav.Item>
-                                            <Nav.Item eventKey="4" placement="rightStart" icon={<FileDownloadIcon />} onClick={() => { navigate('/tools/soft_at/download_template'); show(); setMenuButton(true) }}>
-                                                Download Template
-                                            </Nav.Item> */}
-                                            {/* <Nav.Item eventKey="4" placement="rightStart" icon={<ViewsUnauthorizeIcon />} onClick={() => { navigate('/tools/soft_at/rejected_report'); show(); setMenuButton(true) }}>
-                        Rejected Report
-                      </Nav.Item> */}
+                                            {/* RFAI To MS1 */}
+                                            <Nav.Menu eventKey="1" style={{ fontWeight: 400, color: 'white' }} placement="leftStart" className="menu-title-custom" title="RFAI To MS1" icon={<ArrowRightIcon />}  >
+                                              <Nav.Item eventKey="1-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/MainDashboard'); show(); setMenuButton(true) }}>
+                                                    Analytics Dashboard
+                                                </Nav.Item>
+                                                <Nav.Item eventKey="2-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/waterfall'); show(); setMenuButton(true) }}>
+                                                    Waterfall Dashboard
+                                                </Nav.Item>
+                                                <Nav.Item eventKey="3-2" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/ageing'); show(); setMenuButton(true) }}>
+                                                    Ageing Dashboard
+                                                </Nav.Item>
+                                                <Nav.Item eventKey="4-3" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/upload_file'); show(); setMenuButton(true) }}>
+                                                    Upload File
+                                                </Nav.Item>
+                                            </Nav.Menu>
+
+                                                    {/* RAFI to MS2 */}
+                                            <Nav.Menu eventKey="2" style={{ fontWeight: 400, color: 'white' }} placement="leftStart" className="menu-title-custom" title="MS1 To MS2" icon={<ArrowRightIcon />}  >
+                                                <Nav.Item eventKey="2-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/'); show(); setMenuButton(true) }}>
+                                                    Waterfall Dashboard
+                                                </Nav.Item>
+                                                <Nav.Item eventKey="2-2" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/'); show(); setMenuButton(true) }}>
+                                                    Ageing Dashboard
+                                                </Nav.Item>
+                                                <Nav.Item eventKey="2-3" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/'); show(); setMenuButton(true) }}>
+                                                    Upload File
+                                                </Nav.Item>
+                                            </Nav.Menu>
+
+
                                         </Nav>
                                     </Sidenav.Body>
 
@@ -131,7 +140,9 @@ const PTracking = () => {
                             <Routes>
                                 <Route element={<PTtool />} path="/" />
                                 <Route element={<UploadFile />} path="/upload_file" />
-                                <Route element={<DashboardTable />} path="/dashboard" />
+                                <Route element={<DashboardTable />} path="/waterfall" />
+                                <Route element={<MainAging />} path="/ageing" />
+                                <Route element={<MainDashboard />} path="/analytics" />
 
 
 
@@ -139,7 +150,7 @@ const PTracking = () => {
                         </Suspense>
                     </Grid>
                 </Grid>
-            </Box>
+            </Box >
         </>
     )
 }

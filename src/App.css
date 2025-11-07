@@ -170,3 +170,22 @@ html {
 .driver-popover.driverjs-theme .driver-popover-arrow-side-bottom.driver-popover-arrow {
   border-bottom-color: #fde047;
 }
+
+.menu-title-custom > .rs-dropdown-toggle {
+  color: white !important;
+  font-weight: bold;
+}
+
+/* Hover style for Nav.Item and Nav.Menu */
+.rs-sidenav .rs-nav-item:hover,
+.rs-sidenav .rs-nav-item-active,
+.rs-sidenav .rs-dropdown-toggle:hover {
+  background-color: #ffffff !important; /* light black */
+  color: #006e74 !important;
+}
+
+/* Optional: for nested menu items */
+.rs-dropdown-item:hover {
+  background-color: #ffffff !important;
+  color: #006e74 !important;
+}
