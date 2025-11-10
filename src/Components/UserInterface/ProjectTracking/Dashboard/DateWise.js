@@ -481,12 +481,12 @@ const DateWise = () => {
                             <table style={{ width: "100%", border: "1px solid black", borderCollapse: 'collapse', overflow: 'auto' }} >
                                 <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
-                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', position: 'sticky', left: 0, top: 0, backgroundColor: '#006e74' }}>
+                                        <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', position: 'sticky', left: 0, top: 0, backgroundColor: '#006e74' }}>
                                             Milestone Track/Site Count</th>
-                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', position: 'sticky', left: '14%', top: 0, backgroundColor: '#006e74' }}>
+                                        <th style={{ padding: '5px 15px', whiteSpace: 'nowrap', position: 'sticky', left: '14%', top: 0, backgroundColor: '#006e74' }}>
                                             CF</th>
                                         {dateArray?.map((item, index) => (
-                                            <th key={index} style={{ padding: '1px 1px', whiteSpace: 'nowrap', backgroundColor: '#CBCBCB', color: 'black' }}>{item}</th>
+                                            <th key={index} style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#CBCBCB', color: 'black' }}>{item}</th>
                                         ))}
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#ff6060' }}>Gap</th>
                                     </tr>
