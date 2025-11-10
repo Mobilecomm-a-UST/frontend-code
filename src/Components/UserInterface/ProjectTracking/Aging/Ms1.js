@@ -165,9 +165,9 @@ const Ms1 = () => {
                             <table style={{ width: "100%", border: "1px solid black", borderCollapse: 'collapse', overflow: 'auto' }} >
                                 <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
-                                        <th rowSpan={2} style={{ padding: '1px 1px', whiteSpace: 'nowrap', position: 'sticky', left: 0, top: 0, backgroundColor: '#006e74' }}>
+                                        <th rowSpan={2} style={{ padding: '1px 1px', whiteSpace: 'nowrap', position: 'sticky', left: 0, top: 0,zIndex:3, backgroundColor: '#006e74' }}>
                                             Circle</th>
-                                        <th rowSpan={2} style={{ padding: '1px 1px', whiteSpace: 'nowrap', top: 0, backgroundColor: '#006e74' }}>
+                                        <th rowSpan={2} style={{ padding: '1px 1px', whiteSpace: 'nowrap', backgroundColor: '#006e74' }}>
                                             RFAI Done Count</th>
                                         <th colSpan={5} style={{ padding: '1px 1px', whiteSpace: 'nowrap' }}>RFAI to MS1 - Completed</th>
                                     </tr>
@@ -185,7 +185,7 @@ const Ms1 = () => {
                                         if(it.Circle==='Total'){
                                               return (
                                             <tr className={classes.hoverRT} style={{ textAlign: "center", fontWeigth: 700 ,backgroundColor: '#ffd3be' }} key={index}>
-                                                <th style={{ position: 'sticky', left: 0, top: 0, color: 'black' }}>{it['Circle']}</th>
+                                                <th style={{ position: 'sticky', left: 0, top: 0, color: 'black',zIndex:3,backgroundColor:'#ffd3be' }}>{it['Circle']}</th>
                                                 <th style={{ position: 'sticky', color: 'black' }}>{it['RFAI Done Count']}</th>
                                                 <th >{isNaN(parseInt(it[`MS1 Done Count`])) ? '-' : parseInt(it[`MS1 Done Count`])}</th>
                                                 <th   >{isNaN(parseInt(it[`<= 14 days`])) ? '-' : parseInt(it[`<= 14 days`])}</th>
@@ -198,7 +198,7 @@ const Ms1 = () => {
                                         }else{
                                               return (
                                             <tr className={classes.hoverRT} style={{ textAlign: "center", fontWeigth: 700 }} key={index}>
-                                                <th style={{ position: 'sticky', left: 0, top: 0, backgroundColor: '#CBCBCB', color: 'black' }}>{it['Circle']}</th>
+                                                <th style={{ position: 'sticky', left: 0, top: 0, backgroundColor: '#CBCBCB', color: 'black',zIndex:3 }}>{it['Circle']}</th>
                                                 <th style={{ position: 'sticky', backgroundColor: '#CBCBCB', color: 'black' }}>{it['RFAI Done Count']}</th>
                                                 <th >{isNaN(parseInt(it[`MS1 Done Count`])) ? '-' : parseInt(it[`MS1 Done Count`])}</th>
                                                 <th   >{isNaN(parseInt(it[`<= 14 days`])) ? '-' : parseInt(it[`<= 14 days`])}</th>
@@ -217,9 +217,9 @@ const Ms1 = () => {
                             <table style={{ width: "100%", border: "1px solid black", borderCollapse: 'collapse', overflow: 'auto' }} >
                                 <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
-                                        <th rowSpan={2} style={{ padding: '1px 1px', whiteSpace: 'nowrap', position: 'sticky', left: 0, top: 0, backgroundColor: '#006e74' }}>
+                                        <th rowSpan={2} style={{ padding: '1px 1px', whiteSpace: 'nowrap', position: 'sticky', left: 0, top: 0, backgroundColor: '#006e74', zIndex: 3 }}>
                                             Circle</th>
-                                        <th rowSpan={2} style={{ padding: '1px 1px', whiteSpace: 'nowrap', top: 0, backgroundColor: '#006e74' }}>
+                                        <th rowSpan={2} style={{ padding: '1px 1px', whiteSpace: 'nowrap',  backgroundColor: '#006e74' }}>
                                             RFAI Done Count</th>
                                         <th colSpan={5} style={{ padding: '1px 1px', whiteSpace: 'nowrap' }}>RFAI to MS1 - Incompleted</th>
                                     </tr>
@@ -237,7 +237,7 @@ const Ms1 = () => {
                                         if(it.Circle === 'Total') {
                                              return (
                                             <tr className={classes.hoverRT} style={{ textAlign: "center", fontWeigth: 700, backgroundColor: '#ffd3be' }} key={index}>
-                                                <th style={{ position: 'sticky', left: 0, top: 0, color: 'black' }}>{it['Circle']}</th>
+                                                <th style={{ position: 'sticky', left: 0, top: 0, color: 'black',zIndex:3,backgroundColor:'#ffd3be' }}>{it['Circle']}</th>
                                                 <th style={{ position: 'sticky', color: 'black' }}>{it['RFAI Done Count']}</th>
                                                 <th >{isNaN(parseInt(it[`MS1 Pending Count`])) ? '-' : parseInt(it[`MS1 Pending Count`])}</th>
                                                 <th   >{isNaN(parseInt(it[`<= 14 days`])) ? '-' : parseInt(it[`<= 14 days`])}</th>
@@ -249,7 +249,7 @@ const Ms1 = () => {
                                         }else{
                                              return (
                                             <tr className={classes.hoverRT} style={{ textAlign: "center", fontWeigth: 700 }} key={index}>
-                                                <th style={{ position: 'sticky', left: 0, top: 0, backgroundColor: '#CBCBCB', color: 'black' }}>{it['Circle']}</th>
+                                                <th style={{ position: 'sticky', left: 0, top: 0, backgroundColor: '#CBCBCB', color: 'black',zIndex:3 }}>{it['Circle']}</th>
                                                 <th style={{ position: 'sticky', backgroundColor: '#CBCBCB', color: 'black' }}>{it['RFAI Done Count']}</th>
                                                 <th >{isNaN(parseInt(it[`MS1 Pending Count`])) ? '-' : parseInt(it[`MS1 Pending Count`])}</th>
                                                 <th   >{isNaN(parseInt(it[`<= 14 days`])) ? '-' : parseInt(it[`<= 14 days`])}</th>
