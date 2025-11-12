@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkmobilecomm=self.webpackChunkmobilecomm||[]).push([[9986],{59986:(e,s,a)=>{a.r(s),a.d(s,{default:()=>i});a(72791);var c=a(80184);const i=()=>(0,c.jsx)("div",{children:"MainDashboard"})}}]);
-//# sourceMappingURL=9986.8446fff3.chunk.js.map
