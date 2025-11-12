@@ -72,6 +72,7 @@ const ActivityBar = () => {
       try {
         const res = await makePostRequest("IntegrationTracker/monthwise-integration-data/", formData);
         action(false);
+        console.log('graph data' , res)
 
         if (res) {
           setMonth(res.latest_months);
