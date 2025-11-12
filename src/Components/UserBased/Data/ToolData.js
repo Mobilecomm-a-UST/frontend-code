@@ -271,15 +271,15 @@ const ToolData = [
         link: '/tools/degrow_dismantle',
         groupBy:['admin','ran']
     },
-    {
-        id: 30,
-        name: 'KPI Matrix',
-        title: 'This is a KPI Matrix Tool',
-        icons: TableIcon,
-        link: '/tools/kpi_matrix',
-        groupBy:['admin']
-    }
-    ,
+    // {
+    //     id: 30,
+    //     name: 'KPI Matrix',
+    //     title: 'This is a KPI Matrix Tool',
+    //     icons: TableIcon,
+    //     link: '/tools/kpi_matrix',
+    //     groupBy:['admin']
+    // }
+    // ,
     {
         id: 31,
         name: 'RPT',
@@ -294,7 +294,7 @@ const ToolData = [
         title: 'This is a Relocation Tracking Tool',
         icons: ProjectIcon,
         link: '/tools/relocation_tracking',
-        groupBy:['admin','RLT']
+        groupBy:['admin','RLT','RLT_reader']
     }
 
 

@@ -14,9 +14,9 @@ import FileUploadIcon from '@rsuite/icons/FileUpload';
 import { useNavigate } from 'react-router-dom'
 import FunnelTrendIcon from '@rsuite/icons/FunnelTrend';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import WaitIcon from '@rsuite/icons/Wait';
 import App from '../../../App.css'
 import ArrowRightIcon from '@rsuite/icons/ArrowRight';
+import { getDecreyptedData } from '../../../Components/utils/localstorage';
 
 const PTtool = lazy(() => import('./PTtool'))
 const UploadFile = lazy(() => import('./UploadFile/Upload'))
@@ -32,6 +32,7 @@ const PTracking = () => {
     const [states, setStates] = useState(60)
     const [checked, setChecked] = useState(true)
     const [menuButton, setMenuButton] = useState(false)
+    const userTypes = (getDecreyptedData('user_type')?.split(","))
     //  const classes = useStyles();
 
     const navigate = useNavigate()
@@ -98,7 +99,7 @@ const PTracking = () => {
 
                                             {/* RFAI To MS1 */}
                                             <Nav.Menu eventKey="1" style={{ fontWeight: 400, color: 'white' }} placement="leftStart" className="menu-title-custom" title="RFAI To MS1" icon={<ArrowRightIcon />}  >
-                                              <Nav.Item eventKey="1-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/MainDashboard'); show(); setMenuButton(true) }}>
+                                                <Nav.Item eventKey="1-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/analytics'); show(); setMenuButton(true) }}>
                                                     Analytics Dashboard
                                                 </Nav.Item>
                                                 <Nav.Item eventKey="2-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/waterfall'); show(); setMenuButton(true) }}>
@@ -110,9 +111,10 @@ const PTracking = () => {
                                                 <Nav.Item eventKey="4-3" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/upload_file'); show(); setMenuButton(true) }}>
                                                     Upload File
                                                 </Nav.Item>
+
                                             </Nav.Menu>
 
-                                                    {/* RAFI to MS2 */}
+                                            {/* RAFI to MS2 */}
                                             <Nav.Menu eventKey="2" style={{ fontWeight: 400, color: 'white' }} placement="leftStart" className="menu-title-custom" title="MS1 To MS2" icon={<ArrowRightIcon />}  >
                                                 <Nav.Item eventKey="2-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/'); show(); setMenuButton(true) }}>
                                                     Waterfall Dashboard
@@ -139,6 +141,7 @@ const PTracking = () => {
                         <Suspense fallback={<div>loading............</div>}>
                             <Routes>
                                 <Route element={<PTtool />} path="/" />
+
                                 <Route element={<UploadFile />} path="/upload_file" />
                                 <Route element={<DashboardTable />} path="/waterfall" />
                                 <Route element={<MainAging />} path="/ageing" />

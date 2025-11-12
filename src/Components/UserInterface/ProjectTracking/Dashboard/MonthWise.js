@@ -106,6 +106,9 @@ const MonthWise = () => {
     const [view, setView] = useState('Cumulative')
     // const [totals, setTotals] = useState()
 
+
+    console.log('table data', tableData)
+
     const fetchDailyData = async () => {
         action(true)
         var formData = new FormData()
