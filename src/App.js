@@ -297,11 +297,11 @@ function App() {
               </Suspense>
             } />
 
-            <Route path="/tools/kpi_matrix/*" element={
+            {/* <Route path="/tools/kpi_matrix/*" element={
               <Suspense fallback={<div>Loading...</div>}>
                 <ProtectedRoute element={KPImatrix} allowedUserTypes={['admin']} userType={userType} />
               </Suspense>
-            } />
+            } /> */}
 
             <Route path="/tools/relocation_payload_tracker/*" element={
               <Suspense fallback={<div>Loading...</div>}>
@@ -311,7 +311,7 @@ function App() {
 
             <Route path="/tools/relocation_tracking/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={ProjectTracking} allowedUserTypes={['admin','RLT']} userType={userType} />
+                <ProtectedRoute element={ProjectTracking} allowedUserTypes={['admin','RLT','RLT_reader']} userType={userType} />
               </Suspense>
             } />
 

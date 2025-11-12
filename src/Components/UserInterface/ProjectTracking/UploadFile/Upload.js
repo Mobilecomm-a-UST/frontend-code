@@ -17,7 +17,6 @@ import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import { getDecreyptedData } from "../../../utils/localstorage";
 
-const circleArray = ['AP', 'CH', 'KK', 'DL', 'HR', 'RJ', 'JK', 'WB', 'OD', 'MU', 'TN', 'UE', 'BH', 'UW', 'MP', 'PB', 'KO', 'WB', 'JH']
 const Upload = () => {
     const [make4GFiles, setMake4GFiles] = useState({ filename: "", bytes: "" })
     const [selectCircle, setSelectCircle] = useState('')
@@ -29,6 +28,7 @@ const Upload = () => {
     const navigate = useNavigate()
     const classes = OverAllCss()
     const userID = getDecreyptedData("userID")
+    const userTypes = (getDecreyptedData('user_type')?.split(","))
     const link = `${ServerURL}${fileData}`;
 
 
@@ -140,8 +140,7 @@ const Upload = () => {
                 // style={{ transformOrigin: '0 0 0' }}
                 timeout={1000}
             >
-                <Box>
-                    <Box className={classes.main_Box}>
+                <Box>{!userTypes?.includes('RLT_reader') &&   <Box className={classes.main_Box}>
                         <Box className={classes.Back_Box} sx={{ width: { md: '75%', xs: '100%' } }}>
                             <Box className={classes.Box_Hading} >
                                 Upload Relocation File
@@ -178,7 +177,8 @@ const Upload = () => {
 
                             </Stack>
                         </Box>
-                    </Box>
+                    </Box>}
+                 
                     <Box sx={{ textAlign: 'center' }}>
                         <Button variant="outlined" onClick={()=>handleDownloadRelocation()} title="Export Excel" startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />} sx={{ marginTop: "10px", width: "auto" }}><span style={{ fontFamily: "Poppins", fontSize: "22px", fontWeight: 800, textTransform: "none", textDecorationLine: "none" }}>Download Relocation Tracking Data</span></Button>
                     </Box>
