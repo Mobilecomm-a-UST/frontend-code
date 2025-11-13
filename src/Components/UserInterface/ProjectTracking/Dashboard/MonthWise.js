@@ -90,10 +90,8 @@ const MonthWise = () => {
     const { makePostRequest } = usePost()
     const { loading, action } = useLoadingDialog();
     const [mainDataT2, setMainDataT2] = useState([])
-    // const [dateArray, setDateArray] = useState([])
     const [monthArray, setMonthArray] = useState([])
     const [tableData, setTableData] = useState([])
-    const [givenDate, setGivenDate] = useState('')
     const [circle, setCircle] = useState([])
     const [circleOptions, setCircleOptions] = useState([])
     const [tagging, setTagging] = useState([])
@@ -107,7 +105,7 @@ const MonthWise = () => {
     // const [totals, setTotals] = useState()
 
 
-    console.log('table data', tableData)
+    // console.log('table data', tableData)
 
     const fetchDailyData = async () => {
         action(true)

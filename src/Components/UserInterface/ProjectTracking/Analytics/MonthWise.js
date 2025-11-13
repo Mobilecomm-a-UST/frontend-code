@@ -2,13 +2,18 @@ import React, { useEffect, useState, useRef, useCallback } from 'react'
 import { Chart as Chartjs } from 'chart.js/auto'
 import { Line, Bar } from 'react-chartjs-2';
 import Button from '@mui/material/Button';
-import { Box } from '@mui/material';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import ListItemText from '@mui/material/ListItemText';
+import Select from '@mui/material/Select';
+import Checkbox from '@mui/material/Checkbox';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import zoomPlugin from 'chartjs-plugin-zoom';
 import ChartjsPluginWatermark from 'chartjs-plugin-watermark'
 import { ServerURL } from '../../../services/FetchNodeServices';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
-import InputLabel from '@mui/material/InputLabel';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import LaunchIcon from '@mui/icons-material/Launch';
@@ -16,8 +21,7 @@ import Dialog from '@mui/material/Dialog';
 import Slide from '@mui/material/Slide';
 import { usePost } from '../../../Hooks/PostApis';
 import { useLoadingDialog } from '../../../Hooks/LoadingDialog';
-import { useQuery } from '@tanstack/react-query';
-import CountUp from 'react-countup';
+import { postData } from '../../../services/FetchNodeServices';
 import _ from 'lodash';
 
 
@@ -25,21 +29,56 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="down" timeout={2500} style={{ transformOrigin: '0 0 0' }} mountOnEnter unmountOnExit ref={ref} {...props} />;
 });
 
-const monthNames = [" ",
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December"
-];
-const colorType = ['#B0EBB4', '#A0DEFF', '#FF9F66', '#ECB176', '#CDE8E5']
+const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues }) => {
+    const handleChange = (event) => {
+        const { value } = event.target;
+        const selected = typeof value === 'string' ? value.split(',') : value;
+
+        if (selected.includes('ALL')) {
+            if (selectedValues.length === options.length) {
+                setSelectedValues([]);
+            } else {
+                setSelectedValues(options);
+            }
+        } else {
+            setSelectedValues(selected);
+        }
+    };
+
+    const isAllSelected = options.length > 0 && selectedValues.length === options.length;
+
+    return (
+        <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
+            <InputLabel id={`${label}-label`}>{label}</InputLabel>
+            <Select
+                labelId={`${label}-label`}
+                multiple
+                value={selectedValues}
+                onChange={handleChange}
+                input={<OutlinedInput label={label} />}
+                renderValue={(selected) => selected.join(', ')}
+            >
+                <MenuItem value="ALL">
+                    <Checkbox
+                        checked={isAllSelected}
+                        indeterminate={
+                            selectedValues.length > 0 && selectedValues.length < options.length
+                        }
+                    />
+                    <ListItemText primary="Select All" />
+                </MenuItem>
+
+                {options.map((name) => (
+                    <MenuItem key={name} value={name}>
+                        <Checkbox checked={selectedValues.includes(name)} />
+                        <ListItemText primary={name} />
+                    </MenuItem>
+                ))}
+            </Select>
+        </FormControl>
+    );
+};
+
 
 const MonthWise = () => {
     const chartRef = useRef(null);
@@ -47,251 +86,180 @@ const MonthWise = () => {
     const [open, setOpen] = useState(false)
     const { makePostRequest, cancelRequest } = usePost()
     const { loading, action } = useLoadingDialog();
+    const [mainDataT2, setMainDataT2] = useState([])
+    const [monthArray, setMonthArray] = useState(['CF'])
+    const [tableData, setTableData] = useState([])
+    const milestones = ["RFAI", "Site ONAIR"];
+    const [milestoneData, setMilestoneData] = useState({})
     const [circle, setCircle] = useState([])
-    const [selectCircle, setSelectCircle] = useState('AP')
-    const [selectActivity, setSelectActivity] = useState('_DE_GROW')
-    const [month1, setMonth1] = useState([])
-    const [month2, setMonth2] = useState([])
-    const [month3, setMonth3] = useState([])
-    const [month4, setMonth4] = useState([])
-    const [month5, setMonth5] = useState([])
-    const [month6, setMonth6] = useState([])
-    const [month, setMonth] = useState('')
-    const [year, setYear] = useState('')
-    const [date, setDate] = useState('')
-    const [totalCount, setTotalCount] = useState([])
-    
-
-    const [activityData, setActivityData] = useState([])
-    const { isPending, isFetching, isError, data, error, refetch } = useQuery({
-        queryKey: ['Integration_month_wise'],
-        queryFn: async () => {
-            action(true)
-            var formData = new FormData()
-            formData.append('month', month)
-            formData.append('year', year)
-            try {
-                const res = await makePostRequest("IntegrationTracker/monthwise-integration-data/", formData);
-                action(false);
-                console.log('graph data', res)
-
-                if (res) {
-                    setMonth(res.latest_months);
-                    setYear(res.latest_year);
-                    setDate(`${res.latest_year[0]}-${res.latest_months[0] < 10 ? '0' + res.latest_months[0] : res.latest_months[0]}`);
-                    setCircle(_.map(JSON.parse(res.table_data), 'cir'));
-                    setActivityData(JSON.parse(res.table_data));
-                    return res;
-                } else {
-                    // Handle the case where res is falsy
-                    return {};
-                }
-            } catch (error) {
-                action(false);
-                console.error('Error fetching data:', error);
-                return {}; // Return an empty object or some default value in case of error
-            }
-        },
-        staleTime: 100000,
-        refetchOnReconnect: false,
-    })
-
+    const [circleOptions, setCircleOptions] = useState([])
+    const [tagging, setTagging] = useState([])
+    const [taggingOptions, setTaggingOptions] = useState([])
+    const [relocationMethod, setRelocationMethod] = useState([])
+    const [relocationMethodOptions, setRelocationMethodOptions] = useState([])
+    const [toco, setToco] = useState([])
+    const [tocoOptions, setTocoOptions] = useState([])
+    const [downloadExcelData, setDownloadExcelData] = useState('')
+    const [view, setView] = useState('Cumulative')
     let delayed;
 
+    console.log('data get', monthArray, milestoneData)
 
-    // console.log('activityData', activityData ?? 0);
-    const handleMonthData = async (e) => {
-        let tempData = e.split('-')
-        await setMonth(tempData[1])
-        await setYear(tempData[0])
-        await setDate(e)
-        await refetch()
+
+    const fetchDailyData = async () => {
+        setMonthArray(['CF'])
+        action(true)
+        var formData = new FormData()
+        formData.append('circle', circle)
+        formData.append('site_tagging', tagging)
+        formData.append('relocation_method', relocationMethod)
+        formData.append('new_toco_name', toco)
+        formData.append('view', view)
+        const res = await postData("alok_tracker/weekly_monthly_dashboard_file/", formData);
+        // const res =  tempData; //  remove this line when API is ready
+        console.log('month wise response', res)
+        if (res) {
+            action(false)
+            setMonthArray((prev) => [...prev, ...res.unique_data.month_columns])
+            setTableData(JSON.parse(res.months_data))
+            setMilestoneData(extractMilestoneData(JSON.parse(res.months_data), milestones))
+            setCircleOptions(res.unique_data.unique_circle)
+            setTaggingOptions(res.unique_data.unique_site_tagging)
+            setRelocationMethodOptions(res.unique_data.unique_relocation_method)
+            setTocoOptions(res.unique_data.unique_new_toco_name)
+
+            // setMainDataT2(JSON.parse(res.data))
+        }
+        else {
+            action(false)
+        }
 
     }
 
 
-    const filterData = useCallback(() => {
-        handleClear()
-        let totals = {
-            [`M1${selectActivity}`]: 0,
-            [`M2${selectActivity}`]: 0,
-            [`M3${selectActivity}`]: 0,
-            [`M4${selectActivity}`]: 0,
-            [`M5${selectActivity}`]: 0,
-            [`M6${selectActivity}`]: 0,
-        }
+    const extractMilestoneData = (data, milestones) => {
+        const result = {};
 
-        circle?.map((items) => {
-            const tempcircle = _.filter(activityData, item => _.includes(items, item.cir))
-            // console.log('circle filter ', tempcircle)
-            // const temMonth = _.map(_.pickBy(tempcircle, (value, key) => key.includes('_OTHERS')), Number);
-            // const temMonth = _.get(tempcircle[0], `M1${selectActivity}`)
-            setMonth1((prev) => [...prev, _.get(tempcircle[0], `M1${selectActivity}`)])
-            setMonth2((prev) => [...prev, _.get(tempcircle[0], `M2${selectActivity}`)])
-            setMonth3((prev) => [...prev, _.get(tempcircle[0], `M3${selectActivity}`)])
-            setMonth4((prev) => [...prev, _.get(tempcircle[0], `M4${selectActivity}`)])
-            setMonth5((prev) => [...prev, _.get(tempcircle[0], `M5${selectActivity}`)])
-            setMonth6((prev) => [...prev, _.get(tempcircle[0], `M6${selectActivity}`)])
-            // console.log('temMonth', selectActivity, temMonth)
-        })
+        // Find all dynamic month keys from the first object (or any object)
+        const monthKeys = _(data[0])
+            .keys()
+            .filter((k) => k.startsWith("Month-"))
+            .sortBy((k) => Number(k.split("-")[1])) // ensure Month-1, Month-2...Month-n are in correct order
+            .value();
 
-        // console.log('month', activityData)
-        activityData?.forEach(item => {
-            for (let key in totals) {
-                totals[key] += Number(item[key]) || 0;
+        // Add 'CF' at start
+        const keysToExtract = ["CF", ...monthKeys];
+
+        // Loop through milestones and pick data dynamically
+        _.forEach(milestones, (milestone) => {
+            const item = _.find(
+                data,
+                (d) => d["Milestone Track/Site Count"] === milestone
+            );
+
+            if (item) {
+                const values = _.map(_.pick(item, keysToExtract), (v) => Number(v));
+                result[milestone] = values;
             }
         });
 
-        // console.log('totals', totals
-        setTotalCount(Object.entries(totals).map(([key, value]) => ({ activity: key, count: value })))
+        if (milestones.length === 2) {
+            const [m1, m2] = milestones;
+            const arr1 = result[m1] || [];
+            const arr2 = result[m2] || [];
 
-    }, [selectCircle, selectActivity, activityData])
+            // calculate (arr1 / arr2) * 100 safely
+            const percentage = _.map(arr1, (val, i) =>
+                arr2[i] && arr2[i] !== 0 ? Number(((arr2[i] / val) * 100).toFixed(2)) : 0
+            );
+
+            result["Percentage"] = percentage;
+        }
+
+
+        return result;
+    };
+
+
 
 
 
     const data1 = {
-        labels: circle,
+        labels: monthArray,
         datasets: [
             {
-                label: `${monthNames[month[0]]}-${year[0]}`,
-                data: month1,
-                borderColor: 'rgb(0, 159, 189)',
-                backgroundColor: ['rgb(0, 159, 189)'],
+                label: 'RFAI',
+                data: milestoneData?.RFAI,
+                borderColor: 'rgb(0, 110, 116)',
+                backgroundColor: ['rgb(0, 110, 116)'],
                 borderWidth: 2,
                 borderRadius: 5,
                 fill: false,
                 tension: 0.4
             },
             {
-                label: `${monthNames[month[1]]}-${year[1]}`,
-                data: month2,
-                borderColor: 'rgb(249, 226, 175)',
-                backgroundColor: ['rgb(249, 226, 175)'],
+                label: 'MS1',
+                data: milestoneData?.['Site ONAIR'],
+                borderColor: 'rgb(107, 107, 107)',
+                backgroundColor: ['rgb(204, 255, 254)'],
                 borderWidth: 2,
                 borderRadius: 5,
                 color: 'red',
                 fill: false,
                 tension: 0.4
-            },
+            }
+            ,
             {
-                label: `${monthNames[month[2]]}-${year[2]}`,
-                data: month3,
-                borderColor: 'rgb(63, 162, 246)',
-                backgroundColor: ['rgb(63, 162, 246)'],
+                label: 'Sites Converted %',
+                data: milestoneData?.['Percentage'],
+                type: 'bar',
+                borderColor: 'rgb(183, 183, 183)',
+                backgroundColor: 'rgba(183, 183, 183, 0.5)',
                 borderWidth: 2,
                 borderRadius: 5,
-                color: 'red',
-                fill: false,
-                tension: 0.4
-            },
-            {
-                label: `${monthNames[month[3]]}-${year[3]}`,
-                data: month4,
-                borderColor: 'rgb(54, 186, 152)',
-                backgroundColor: ['rgb(54, 186, 152)'],
-                borderWidth: 2,
-                borderRadius: 5,
-                color: 'red',
-                fill: false,
-                tension: 0.4
-            },
-            {
-                label: `${monthNames[month[4]]}-${year[4]}`,
-                data: month5,
-                borderColor: 'rgb(255, 177, 177)',
-                backgroundColor: ['rgb(255, 177, 177)'],
-                borderWidth: 2,
-                borderRadius: 5,
-                color: 'red',
                 fill: false,
                 tension: 0.4,
-                borderRadius: 5
-            },
-            {
-                label: `${monthNames[month[5]]}-${year[5]}`,
-                data: month6,
-                borderColor: 'rgb(0,76,156,0.8)',
-                backgroundColor: ['rgb(0,76,156,0.8)'],
-                borderWidth: 2,
-                borderRadius: 5,
-                color: 'red',
-                fill: false,
-                tension: 0.4,
-                borderRadius: 5
+                yAxisID: 'y1'
             }
         ]
     }
 
+
     const data2 = {
-        labels: circle,
+        labels: monthArray,
         datasets: [
-            {
-                label: `${monthNames[month[0]]}-${year[0]}`,
-                data: month1,
-                borderColor: 'black',
-                backgroundColor: ['rgb(0, 159, 189)'],
-                borderWidth: 1,
-                borderRadius: 5,
-                fill: true,
-                tension: 0.4
-            },
-            {
-                label: `${monthNames[month[1]]}-${year[1]}`,
-                data: month2,
-                borderColor: 'black',
-                backgroundColor: ['rgb(249, 226, 175)'],
-                borderWidth: 1,
-                borderRadius: 5,
-                color: 'red',
-                fill: true,
-                tension: 0.4
-            },
-            {
-                label: `${monthNames[month[2]]}-${year[2]}`,
-                data: month3,
-                borderColor: 'black',
-                backgroundColor: ['rgb(63, 162, 246)'],
-                borderWidth: 1,
-                borderRadius: 5,
-                color: 'red',
-                fill: true,
-                tension: 0.4
-            },
-            {
-                label: `${monthNames[month[3]]}-${year[3]}`,
-                data: month4,
-                borderColor: 'black',
-                backgroundColor: ['rgb(54, 186, 152)'],
-                borderWidth: 1,
-                borderRadius: 5,
-                color: 'red',
-                fill: true,
-                tension: 0.4
-            },
-            {
-                label: `${monthNames[month[4]]}-${year[4]}`,
-                data: month5,
-                borderColor: 'black',
-                backgroundColor: ['rgb(255, 177, 177)'],
-                borderWidth: 1,
-                borderRadius: 5,
-                color: 'red',
-                fill: true,
-                tension: 0.4,
 
-            }
-            ,
             {
-                label: `${monthNames[month[5]]}-${year[5]}`,
-                data: month6,
+                label: 'Sites Converted %',
+                data: milestoneData?.['Percentage'],
+                type: 'line', // ✅ correct property
+                borderColor: 'rgb(72, 98, 149)',
+                backgroundColor: 'rgba(48, 104, 215, 0.3)',
+                borderWidth: 2,
+                fill: false,
+                tension: 0.4,
+                yAxisID: 'y1'
+            },
+            {
+                label: 'RFAI',
+                data: milestoneData?.RFAI,
                 borderColor: 'black',
-                backgroundColor: ['rgb(0,76,156,0.8)'],
+                backgroundColor: ['rgb(0, 110, 116)'],
+                borderWidth: 1,
+                borderRadius: 5,
+                fill: true,
+                tension: 0.4
+            },
+            {
+                label: 'MS1',
+                data: milestoneData?.['Site ONAIR'],
+                borderColor: 'black',
+                backgroundColor: ['rgb(171, 171, 171)'],
                 borderWidth: 1,
                 borderRadius: 5,
                 color: 'red',
                 fill: true,
-                tension: 0.4,
-
+                tension: 0.4
             }
         ]
     }
@@ -307,6 +275,7 @@ const MonthWise = () => {
         },
         plugins: {
             // backgroundImageUrl:'https://www.msoutlook.info/pictures/bgconfidential.png',
+
             legend: {
                 position: 'bottom',
                 labels: {
@@ -321,7 +290,7 @@ const MonthWise = () => {
             },
             title: {
                 display: true,
-                text: `Monthly Wise Integration Site Count ( ${monthNames[month[0]]}-${year[0]} ~ ${monthNames[month[5]]}-${year[5]} )`,
+                text: `Monthly Progress - RFAI to MS1`,
                 font: {
                     size: 16,
                     weight: 'bold'
@@ -360,70 +329,6 @@ const MonthWise = () => {
                     mode: 'x'
                 },
             },
-            // tooltip: {
-            //     displayColors: false,
-            //     backgroundColor: 'white',
-            //     borderColor: 'black',
-            //     borderWidth: '1',
-            //     padding: 10,
-            //     bodyColor: 'black',
-            //     bodyFont: {
-            //         size: '14'
-            //     },
-            //     bodyAlign: 'left',
-            //     footerAlign: 'right',
-            //     titleColor: 'black',
-            //     titleFont: {
-            //         weight: 'bold',
-            //         size: '15'
-            //     },
-            //     yAlign: 'bottom',
-            //     xAlign: 'center',
-            //     callbacks: {
-            //         // labelColor: function(context) {
-            //         //     return {
-            //         //         borderColor: 'rgb(0, 0, 255)',
-            //         //         backgroundColor: 'rgb(255, 0, 0)',
-            //         //         borderWidth: 2,
-            //         //         borderDash: [2, 2],
-            //         //         borderRadius: 2,
-            //         //     };
-            //         // },
-            //         // labelTextColor: function(context) {
-            //         //     return '#543453';
-            //         // },
-            //         label: ((tooltipItem) => {
-            //             // console.log(tooltipItem.dataset.label,":",tooltipItem.formattedValue)
-
-            //         })
-            //     },
-            //     // external: function(context) {
-            //     //     const tooltipModel = context.tooltip;
-            //     //     const canvas = context.chart.canvas;
-
-            //     //     canvas.onclick = function(event) {
-            //     //         if (tooltipModel.opacity === 0) {
-            //     //             return;
-            //     //         }
-
-            //     //         const rect = canvas.getBoundingClientRect();
-            //     //         const tooltipPosition = {
-            //     //             x: event.clientX - rect.left,
-            //     //             y: event.clientY - rect.top
-            //     //         };
-
-            //     //         if (
-            //     //             tooltipPosition.x >= tooltipModel.caretX - tooltipModel.width / 2 &&
-            //     //             tooltipPosition.x <= tooltipModel.caretX + tooltipModel.width / 2 &&
-            //     //             tooltipPosition.y >= tooltipModel.caretY - tooltipModel.height / 2 &&
-            //     //             tooltipPosition.y <= tooltipModel.caretY + tooltipModel.height / 2
-            //     //         ) {
-            //     //             console.log('You clicked on the tooltip for', tooltipModel.dataPoints[0]);
-            //     //         }
-            //     //     };
-            //     // }
-
-            // },
 
         },
         scales: {
@@ -487,14 +392,6 @@ const MonthWise = () => {
 
     }
 
-    const handleClear = () => {
-        setMonth1([])
-        setMonth2([])
-        setMonth3([])
-        setMonth4([])
-        setMonth5([])
-        setMonth6([])
-    }
 
 
 
@@ -534,66 +431,55 @@ const MonthWise = () => {
     }, [open])
 
 
-    useEffect(() => {
-        // console.log('aaaa')
-        filterData()
-    }, [filterData])
 
     useEffect(() => {
-        if (data) {
-            setMonth(data.latest_months)
-            setYear(data.latest_year)
-            setDate(`${data.latest_year[0]}-${data.latest_months[0] < 10 ? '0' + data.latest_months[0] : data.latest_months[0]}`)
-            setCircle(_.map(JSON.parse(data.table_data), 'cir'))
-            // console.log('activity data', res)
-            setActivityData(JSON.parse(data.table_data))
-        }
+        fetchDailyData()
         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
-
         return () => {
             cancelRequest();
         }
-    }, [])
+    }, [circle, tagging, relocationMethod, toco])
     return (
         <>
-           
-            <div style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', padding: 10, height: 'auto', width: "96%",margin:20, borderRadius: 10, backgroundColor: "white", display: "flex", justifyContent: 'space-around', alignItems: 'center' }}>
+
+            <div style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', padding: 10, height: 'auto', width: "96%", margin: 20, borderRadius: 10, backgroundColor: "white", display: "flex", justifyContent: 'space-around', alignItems: 'center' }}>
                 <div style={{ width: 200, height: 350, borderRadius: 5, padding: 10, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: "12px" }}>
                     <div style={{ display: 'flex', alignItems: 'center', fontSize: '18px', fontWeight: 'bold', color: "black" }}><FilterAltIcon />FILTER DATA</div>
                     {/* select month */}
-                    <div>
+                    {/* <div>
                         <InputLabel style={{ fontSize: 15 }}>Select Month</InputLabel>
                         <input type='month' value={date} onChange={(e) => handleMonthData(e.target.value)} />
-                    </div>
+                    </div> */}
                     {/* select circle */}
-                    {/* <div>
-          <InputLabel style={{ fontSize: 15 }}>Select Circle</InputLabel>
-          <select style={{ width: 145, height: 25, borderRadius: 2 }} value={selectCircle} onChange={(e) => setSelectCircle(e.target.value)}>
-            {circle?.map((item, index) => <option key={index} >{item}</option>)}
-          </select>
-        </div> */}
-                    {/* select Activity */}
-                    <div>
-                        <InputLabel style={{ fontSize: 15 }}>Select Activity</InputLabel>
-                        <select style={{ width: 145, height: 25, borderRadius: 2 }} value={selectActivity} onChange={(e) => setSelectActivity(e.target.value)}>
-                            <option selected value={'_DE_GROW'}>DE-GROW</option>
-                            <option value={'_MACRO'}>MACRO</option>
-                            <option value={'_RELOCATION'}>RELOCATION</option>
-                            <option value={'_RET'}>RET</option>
-                            <option value={'_ULS_HPSC'}>ULS-HPSC</option>
-                            <option value={'_UPGRADE'}>UPGRADE</option>
-                            <option value={'_FEMTO'}>FEMTO</option>
-                            <option value={'_HT_INCREMENT'}>HT-INCREMENT</option>
-                            <option value={'_IBS'}>IBS</option>
-                            <option value={'_IDSC'}>IDSC</option>
-                            <option value={'_ODSC'}>ODSC</option>
-                            <option value={'_RECTIFICATION'}>RECTIFICATION</option>
-                            <option value={'_5G_RELOCATION'}>5G RELOCATION</option>
-                            <option value={'_5G_SECTOR_ADDITION'}>5G SECTOR ADDITION</option>
-                            <option value={'_OPERATIONS'}>OPERATIONS</option>
-                            <option value={'_OTHERS'}>OTHER</option>
-                        </select>
-                    </div>
+                    <MultiSelectWithAll
+                        label="Circle"
+                        options={circleOptions}
+                        selectedValues={circle}
+                        setSelectedValues={setCircle}
+                    />
+                    {/* tagging */}
+                    <MultiSelectWithAll
+                        label="Site Tagging"
+                        options={taggingOptions}
+                        selectedValues={tagging}
+                        setSelectedValues={setTagging}
+                    />
+
+                    {/* Current Status */}
+                    <MultiSelectWithAll
+                        label="Current Status"
+                        options={relocationMethodOptions}
+                        selectedValues={relocationMethod}
+                        setSelectedValues={setRelocationMethod}
+                    />
+                    {/* Toco  */}
+
+                    <MultiSelectWithAll
+                        label="TOCO"
+                        options={tocoOptions}
+                        selectedValues={toco}
+                        setSelectedValues={setToco}
+                    />
 
                     {/* toggle button */}
                     <div>
