@@ -72,7 +72,7 @@ const ActivityBar = () => {
       try {
         const res = await makePostRequest("IntegrationTracker/monthwise-integration-data/", formData);
         action(false);
-        console.log('graph data' , res)
+        console.log('graph data', res)
 
         if (res) {
           setMonth(res.latest_months);
@@ -97,7 +97,7 @@ const ActivityBar = () => {
   let delayed;
 
 
-  console.log('activityData',activityData ?? 0);
+  console.log('activityData', activityData ?? 0);
   const handleMonthData = async (e) => {
     let tempData = e.split('-')
     await setMonth(tempData[1])
@@ -141,7 +141,7 @@ const ActivityBar = () => {
     });
 
     // console.log('totals', totals
-    setTotalCount( Object.entries(totals).map(([key, value]) => ( {activity: key, count: value} )))
+    setTotalCount(Object.entries(totals).map(([key, value]) => ({ activity: key, count: value })))
 
   }, [selectCircle, selectActivity, activityData])
 
@@ -554,16 +554,16 @@ const ActivityBar = () => {
   }, [])
 
   return (<>
-    <Box sx={{ display: 'flex', justifyContent: 'space-evenly', flexWrap: "wrap", flexDirection: 'row', gap: 1,marginBottom:2 }}>
-      {totalCount.length > 0 && totalCount.map((item, index) =>(
-          <Box sx={{ height: 'auto', width: '23vh', cursor: 'pointer', padding: 1.5, borderRadius: 1.5, boxShadow: " rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px", backgroundColor:`${colorType[index]}`, textAlign: 'center' }}>
-        <Box sx={{ fontWeight: 600, fontSize: '16px', color: "black", textAlign: 'left' }}>{`${monthNames[month[index]]}-${year[index]}`}</Box>
-        <Box sx={{ fontWeight: 600, fontSize: '24px', color: "black", fontFamily: 'cursive' }}><CountUp end={item?.count}  duration={6} /></Box>
-        <Box sx={{ color: "black", textAlign: 'left' }}>{item?.activity.replace(/^M\d_/, '').replace(/_/g, ' ')}</Box>
-        {/* // <Box sx={{ color: "black", textAlign: 'left' }}> <span style={{ fontWeight: 600 }}>To-</span>{convertDate(data.to_integration_date)}</Box> */}
-      </Box>
+    <Box sx={{ display: 'flex', justifyContent: 'space-evenly', flexWrap: "wrap", flexDirection: 'row', gap: 1, marginBottom: 2 }}>
+      {totalCount.length > 0 && totalCount.map((item, index) => (
+        <Box sx={{ height: 'auto', width: '23vh', cursor: 'pointer', padding: 1.5, borderRadius: 1.5, boxShadow: " rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px", backgroundColor: `${colorType[index]}`, textAlign: 'center' }}>
+          <Box sx={{ fontWeight: 600, fontSize: '16px', color: "black", textAlign: 'left' }}>{`${monthNames[month[index]]}-${year[index]}`}</Box>
+          <Box sx={{ fontWeight: 600, fontSize: '24px', color: "black", fontFamily: 'cursive' }}><CountUp end={item?.count} duration={6} /></Box>
+          <Box sx={{ color: "black", textAlign: 'left' }}>{item?.activity.replace(/^M\d_/, '').replace(/_/g, ' ')}</Box>
+          {/* // <Box sx={{ color: "black", textAlign: 'left' }}> <span style={{ fontWeight: 600 }}>To-</span>{convertDate(data.to_integration_date)}</Box> */}
+        </Box>
       ))}
-    
+
     </Box>
 
     <div style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', padding: 10, height: 'auto', width: "100%", borderRadius: 10, backgroundColor: "white", display: "flex", justifyContent: 'space-around', alignItems: 'center' }}>
