@@ -7,6 +7,7 @@ import Collapse from '@mui/material/Collapse';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { useNavigate } from 'react-router-dom'
 import { Routes, Route } from "react-router-dom";
+import CombinationIcon from '@rsuite/icons/Combination';
 
 import ChangeListIcon from '@rsuite/icons/ChangeList';
 const Make4G = lazy(() => import('./MakeAlarm/Make4G'))
@@ -14,6 +15,8 @@ const Make5G = lazy(() => import('./MakeAlarm/Make5G'))
 const DmaTool = lazy(() => import('./DmaTool'))
 const RRUAlarm = lazy(() => import('./RRU/RRUstatus'))
 const Twamp = lazy(()=>import('./Twamp/TwampStatus'))
+const Alarm5G = lazy(() => import('./OldvsNew/Alarm5G'))
+const Alarm4G = lazy(() => import('./OldvsNew/Alarm4G'))
 
 const Dma = () => {
     const [expanded, setExpanded] = useState(true);
@@ -72,21 +75,24 @@ const Dma = () => {
                                     <Sidenav.Body>
                                         <Nav activeKey={activeKey} onSelect={setActiveKey} >
                                             <Nav style={{ fontWeight: 500, color: 'white', textAlign: 'center', fontSize: 20 }}>DSA TOOL</Nav>
-                                            {/* <Nav.Menu eventKey="1" placement="rightStart" title="Acceptance" icon={<CheckOutlineIcon size="3em" />}>
-                                        <Nav.Item eventKey="1-1" onClick={() => { navigate('/tools/mcom_physical_at/acceptance_summary'); show(); setMenuButton(true) }} >
-                                            Acceptance Summary
+                                            <Nav.Menu eventKey="1" placement="rightStart" title="Old Vs New" icon={<CombinationIcon size="3em" />}>
+                                        <Nav.Item eventKey="1-1" onClick={() => { navigate('/tools/dma/old_vs_new_4g'); show(); setMenuButton(true) }}>
+                                            4G Alarm
                                         </Nav.Item>
-                                    </Nav.Menu> */}
-                                            <Nav.Item eventKey="1" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/dma/make_4g'); show(); setMenuButton(true) }}>
+                                        <Nav.Item eventKey="1-2" onClick={() => { navigate('/tools/dma/old_vs_new_5g'); show(); setMenuButton(true) }}>
+                                            5G Alarm
+                                        </Nav.Item>
+                                    </Nav.Menu>
+                                            <Nav.Item eventKey="2" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/dma/make_4g'); show(); setMenuButton(true) }}>
                                                 Make 4G Alarm
                                             </Nav.Item>
-                                            <Nav.Item eventKey="2" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/dma/make_5g'); show(); setMenuButton(true) }}>
+                                            <Nav.Item eventKey="3" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/dma/make_5g'); show(); setMenuButton(true) }}>
                                                 Make 5G Alarm
                                             </Nav.Item>
-                                            <Nav.Item eventKey="3" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/dma/RRU_status'); show(); setMenuButton(true) }}>
+                                            <Nav.Item eventKey="4" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/dma/RRU_status'); show(); setMenuButton(true) }}>
                                                 RRU Status
                                             </Nav.Item>
-                                            <Nav.Item eventKey="4" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/dma/twamp_ericsson'); show(); setMenuButton(true) }}>
+                                            <Nav.Item eventKey="5" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/dma/twamp_ericsson'); show(); setMenuButton(true) }}>
                                                 Twamp Ericsson
                                             </Nav.Item>
                                             {/* <Nav.Menu eventKey="3" placement="rightStart" title="NOM Audit" icon={<DocPassIcon />}>
@@ -124,6 +130,8 @@ const Dma = () => {
                                  <Route element={<Make5G />} path="/make_5g" />
                                  <Route element={<RRUAlarm />} path="/RRU_status" />
                                  <Route element={<Twamp />} path="/twamp_ericsson" />
+                                 <Route element={<Alarm4G />} path="/old_vs_new_4g" />
+                                 <Route element={<Alarm5G />} path="/old_vs_new_5g" />
                           
 
 
