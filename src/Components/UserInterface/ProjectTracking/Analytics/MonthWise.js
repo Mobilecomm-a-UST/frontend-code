@@ -99,7 +99,6 @@ const MonthWise = () => {
     const [relocationMethodOptions, setRelocationMethodOptions] = useState([])
     const [toco, setToco] = useState([])
     const [tocoOptions, setTocoOptions] = useState([])
-    const [downloadExcelData, setDownloadExcelData] = useState('')
     const [view, setView] = useState('Cumulative')
     let delayed;
 
@@ -107,7 +106,7 @@ const MonthWise = () => {
 
 
     const fetchDailyData = async () => {
-        setMonthArray(['CF'])
+
         action(true)
         var formData = new FormData()
         formData.append('circle', circle)
@@ -116,17 +115,18 @@ const MonthWise = () => {
         formData.append('new_toco_name', toco)
         formData.append('view', view)
         const res = await postData("alok_tracker/weekly_monthly_dashboard_file/", formData);
-        // const res =  tempData; //  remove this line when API is ready
-        console.log('month wise response', res)
+        // const res =  tempData; //  remove this line when API is read
         if (res) {
             action(false)
-            setMonthArray((prev) => [...prev, ...res.unique_data.month_columns])
-            setTableData(JSON.parse(res.months_data))
             setMilestoneData(extractMilestoneData(JSON.parse(res.months_data), milestones))
-            setCircleOptions(res.unique_data.unique_circle)
-            setTaggingOptions(res.unique_data.unique_site_tagging)
-            setRelocationMethodOptions(res.unique_data.unique_relocation_method)
-            setTocoOptions(res.unique_data.unique_new_toco_name)
+            if (circleOptions.length === 0) {
+                setMonthArray((prev) => [...prev, ...res.unique_data.month_columns])
+                setCircleOptions(res.unique_data.unique_circle)
+                setTaggingOptions(res.unique_data.unique_site_tagging)
+                setRelocationMethodOptions(res.unique_data.unique_relocation_method)
+                setTocoOptions(res.unique_data.unique_new_toco_name)
+            }
+
 
             // setMainDataT2(JSON.parse(res.data))
         }
@@ -433,6 +433,7 @@ const MonthWise = () => {
 
 
     useEffect(() => {
+        setMilestoneData({'Percentage':[],'RFAI':[], 'Site ONAIR':[]})
         fetchDailyData()
         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
         return () => {
