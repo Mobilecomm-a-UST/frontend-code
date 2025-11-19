@@ -10,6 +10,7 @@ const initialState={
     makekpitrend:{},
     ageingSiteList:{},
     IXtracker:{},
+    relocationFinalTracker:{}
 }
 
 export default function RootReducer(state=initialState,actions)
@@ -47,6 +48,10 @@ export default function RootReducer(state=initialState,actions)
         case 'IX_TRACKER':
             state.IXtracker=actions.payload
             return({IXtracker:state.IXtracker})
+
+        case 'RELOCATION_FINAL_TRACKER':
+            state.relocationFinalTracker=actions.payload
+            return({relocationFinalTracker:state.relocationFinalTracker})
 
         default:
             return state

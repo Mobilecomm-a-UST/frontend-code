@@ -62,7 +62,7 @@ const Alarm4G = () => {
                     formData.append(`new_logs`, newLog[k]);
                 }
     
-                const response = await postData('Alarm/upload_5g/', formData)
+                const response = await postData('Alarm/upload_4g/', formData)
     
                 //   console.log('response data', response)
     
