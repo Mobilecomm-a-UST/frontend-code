@@ -95,11 +95,11 @@ const ComanDashboard = () => {
     const [editDataID , setEditDataID] = useState('')
     const [open, setOpen] = useState(false)
     const [status, setStatus] = useState()
-    const [selectedRows, setSelectedRows] = useState()
+    const [selectedRows, setSelectedRows] = useState([])
     // const params = useParams()
 
 
-    console.log('redux data handler', listDataa)
+    // console.log('redux data handler', listDataa)
 
 
 
@@ -223,29 +223,6 @@ const ComanDashboard = () => {
                 title: "Error",
                 text:`${error.response.data.message}`,
             });});
-
-        // try {
-        //     // Make the DELETE request
-        //     const response = await axios.delete(`${ServerURL}/IntegrationTracker/delete-integration-record/${rowData.id}/`,
-        //         {
-        //             headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` }
-        //         }
-        //     );
-        //     console.log('Deleted successfully:', response);
-
-        //     // if (response.status === 204) {
-        //     //     Swal.fire({
-        //     //         icon: "success",
-        //     //         title: "Done",
-        //     //         text: `Data Deleted Successfully`,
-        //     //     });
-
-
-        //     // }
-        // } catch (error) {
-        //     // Handle error
-        //     console.log('Error deleting data:' + error);
-        // }
     }
 
 
@@ -372,177 +349,6 @@ const ComanDashboard = () => {
             </DialogTitle>
             <DialogContent dividers={'paper'}>
             <form onSubmit={handleUpdateData} style={{ width: '100%', marginTop: 10 }}>
-                        {/* <Grid container spacing={2}>
-                       
-                            <Grid item xs={4}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    placeholder="OEM"
-                                    label="OEM"
-                                    name="OEM"
-                                    value={editData.OEM}
-                                    onChange={handleChange}
-                                    size="small"
-                                    type='text'
-                                    autoFocus
-                                />
-                            </Grid>
-                            <Grid item xs={4}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    placeholder="Integration Date"
-                                    label="Integration Date"
-                                    name="Integration_Date"
-                                    value={editData.Integration_Date}
-                                    onChange={handleChange}
-                                    size="small"
-                                    type='date'
-                                     
-                                />
-                            </Grid>
-                            <Grid item xs={4}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    placeholder="Circle"
-                                    label="Circle"
-                                    name="CIRCLE"
-                                    value={editData.CIRCLE}
-                                    onChange={handleChange}
-                                    size="small"
-                                    type='text'
-                                    
-                                />
-                            </Grid>
-                            <Grid item xs={4}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    placeholder="Activity Name"
-                                    label="Activity Name"
-                                    name="Activity_Name"
-                                    value={editData.Activity_Name}
-                                    onChange={handleChange}
-                                    size="small"
-                                    type='text'
-                                    
-                                />
-                            </Grid>
-                            <Grid item xs={4}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    placeholder="Site ID"
-                                    label="Site ID"
-                                    name="Site_ID"
-                                    value={editData.Site_ID}
-                                    onChange={handleChange}
-                                    size="small"
-                                    type='text'
-                                     
-                                />
-                            </Grid>
-                            <Grid item xs={4}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    placeholder="MO Name"
-                                    label="MO Name"
-                                    name="MO_NAME"
-                                    value={editData.MO_NAME}
-                                    onChange={handleChange}
-                                    size="small"
-                                    type='text'
-                                    
-                                />
-                            </Grid>
-                            <Grid item xs={4}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    placeholder="LNBTS ID"
-                                    label="LNBTS ID"
-                                    name="LNBTS_ID"
-                                    value={editData.LNBTS_ID}
-                                    onChange={handleChange}
-                                    size="small"
-                                    type='text'
-                                  
-                                />
-                            </Grid>
-                            <Grid item xs={4}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    placeholder="Technology"
-                                    label="Technology"
-                                    name="Technology"
-                                    value={editData.Technology}
-                                    onChange={handleChange}
-                                    size="small"
-                                    type='text'
-                                    
-                                />
-                            </Grid>
-                            <Grid item xs={4}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    placeholder="OSS Details"
-                                    label="OSS Details"
-                                    name="OSS_Details"
-                                    value={editData.OSS_Details}
-                                    onChange={handleChange}
-                                    size="small"
-                                    type='text'
-                              
-                                />
-                            </Grid>
-                            <Grid item xs={4}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    placeholder="Cell ID"
-                                    label="Cell ID"
-                                    name="Cell_ID"
-                                    value={editData.Cell_ID}
-                                    onChange={handleChange}
-                                    size="small"
-                                    type='text'
-                              
-                                />
-                            </Grid>
-                            <Grid item xs={4}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    placeholder="Cell Count"
-                                    label="Cell Count"
-                                    name="CELL_COUNT"
-                                    value={editData.CELL_COUNT}
-                                    onChange={handleChange}
-                                    size="small"
-                                    type='text'
-                              
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Button type="submit" fullWidth variant="contained">Add</Button>
-                            </Grid>
-                        </Grid> */}
                          <Grid container spacing={2}>
                 {Object.keys(editData).map(key => (
                     <Grid item xs={3} key={key}>

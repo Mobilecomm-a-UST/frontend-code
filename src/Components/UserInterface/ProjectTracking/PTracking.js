@@ -23,6 +23,7 @@ const UploadFile = lazy(() => import('./UploadFile/Upload'))
 const DashboardTable = lazy(() => import('./Dashboard/DashboardTable'))
 const MainAging = lazy(() => import('./Aging/MainAging'))
 const MainDashboard = lazy(() => import('./Analytics/MainDashboard'))
+const FinalData = lazy(() => import('./Dashboard/FinalData'))
 
 
 
@@ -108,9 +109,10 @@ const PTracking = () => {
                                                 <Nav.Item eventKey="3-2" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/ageing'); show(); setMenuButton(true) }}>
                                                     Ageing Dashboard
                                                 </Nav.Item>
-                                                <Nav.Item eventKey="4-3" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/upload_file'); show(); setMenuButton(true) }}>
+                                                {!userTypes?.includes('RLT_reader') &&       <Nav.Item eventKey="4-3" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/upload_file'); show(); setMenuButton(true) }}>
                                                     Upload File
-                                                </Nav.Item>
+                                                </Nav.Item>}
+                                           
 
                                             </Nav.Menu>
 
@@ -142,8 +144,9 @@ const PTracking = () => {
                             <Routes>
                                 <Route element={<PTtool />} path="/" />
 
-                                <Route element={<UploadFile />} path="/upload_file" />
-                                <Route element={<DashboardTable />} path="/waterfall" />
+                                {!userTypes?.includes('RLT_reader') &&  <Route element={<UploadFile />} path="/upload_file" />}
+                                <Route element={<DashboardTable />} path="/waterfall/*" />
+                                <Route element={<FinalData />} path="/waterfall/:milestone" />
                                 <Route element={<MainAging />} path="/ageing" />
                                 <Route element={<MainDashboard />} path="/analytics" />
 

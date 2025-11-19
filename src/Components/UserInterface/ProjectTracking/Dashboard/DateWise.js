@@ -27,13 +27,9 @@ import Checkbox from '@mui/material/Checkbox';
 import { postData } from '../../../services/FetchNodeServices';
 import { DateRangePicker } from 'rsuite';
 import 'rsuite/dist/rsuite.min.css';
-import { set } from 'lodash';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-
-
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
 
 const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues }) => {
     const handleChange = (event) => {
@@ -90,10 +86,12 @@ const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues 
 
 const DateWise = () => {
     const classes = useStyles()
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [open, setOpen] = useState(true)
     const { makePostRequest } = usePost()
     const { loading, action } = useLoadingDialog();
-    const [mainDataT2, setMainDataT2] = useState([])
+    const userID = getDecreyptedData('userID')
     const [dateArray, setDateArray] = useState([])
     const [tableData, setTableData] = useState([])
     const [milestone, setMilestone] = useState([])
@@ -117,6 +115,7 @@ const DateWise = () => {
     const fetchDailyData = async () => {
         action(true)
         var formData = new FormData()
+
         formData.append('circle', circle)
         formData.append('site_tagging', tagging)
         formData.append('relocation_method', relocationMethod)
@@ -373,23 +372,27 @@ const DateWise = () => {
     })
 
     const ClickDataGet = async (props) => {
-
-
         // console.log('aaaaaaaa', props)
         action(true)
         var formData = new FormData();
-        formData.append("circle", props.circle);
-        formData.append("Activity_Name", props.activity);
-        formData.append("date", props.date);
-        const responce = await makePostRequest('IntegrationTracker/hyperlink-datewise-integration-data/', formData)
+        formData.append('userId', userID);
+        formData.append("circle", circle);
+        formData.append("day_type", 'daily');
+        formData.append("milestone", props.milestone);
+        formData.append("col_name", props.col_name);
+        formData.append('site_tagging', tagging);
+        formData.append('current_status', relocationMethod);
+        formData.append('toco_name', toco);
+        formData.append('view', view)
+
+        const responce = await makePostRequest('alok_tracker/hyperlink_frontend_editing/', formData)
         if (responce) {
-            // console.log('responce', responce)
-            // setMainDataT2(responce)
-            action(false)
-            setEncreptedData("integration_final_tracker", responce.data);
-            // console.log('response data in huawia site id' , response)
-            window.open(`${window.location.href}/${props.activity}`, "_blank")
-            // setOpen(true)
+            console.log('response', JSON.parse(responce.data))
+            action(false);
+            const temp = JSON.parse(responce.data)
+
+            dispatch({ type: 'RELOCATION_FINAL_TRACKER', payload: { temp } })
+            navigate(`/tools/relocation_tracking/waterfall/${props.milestone}`)
         }
         else {
             action(false)
@@ -499,7 +502,10 @@ const DateWise = () => {
                                                 <th style={{ position: 'sticky', left: '14%', top: 0, backgroundColor: '#CBCBCB', color: 'black' }}>{it['CF']}</th>
                                                 {dateArray?.map((item, index) => (
                                                     // <th key={index} style={{ backgroundColor: it[`date_${index + 1}`] > 0 ? '#FEEFAD' : '' }} >{it[`date_${index + 1}`]}</th>
-                                                    <th key={index}  >{isNaN(parseInt(it[`date_${index + 1}`])) ? '-' : parseInt(it[`date_${index + 1}`])}</th>
+                                                    <th key={index} className={classes.hoverRT} style={{ cursor: 'pointer' }}
+                                                        onClick={() => ClickDataGet({ date_value: it[`date_${index + 1}`], col_name: item, milestone: it['Milestone Track/Site Count'] })} >
+                                                        {isNaN(parseInt(it[`date_${index + 1}`])) ? '-' : parseInt(it[`date_${index + 1}`])}
+                                                    </th>
                                                 ))}
                                                 <th style={{ cursor: 'pointer' }} title='Click to Download Excel' className={classes.hoverRT} onClick={() => handleGapHiperlink(milestone[index - 1], milestone[index], it['Gap'])}>{isNaN(parseInt(it['Gap'])) ? '-' : parseInt(it['Gap'])}</th>
                                             </tr>

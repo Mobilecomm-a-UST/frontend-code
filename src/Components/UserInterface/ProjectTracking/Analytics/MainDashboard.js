@@ -12,12 +12,61 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import CountUp from 'react-countup';
 import MonthWise from './MonthWise';
+import IntegrationTableOnAir from './IntegrationTableOnAir';
+import RfaiIntegration from './RfaiIntegration';
+import CircleWiese from './CircleWiese';
+import { useLoadingDialog } from '../../../Hooks/LoadingDialog';
+import { postData } from '../../../services/FetchNodeServices';
 
 
 const colorType = ['#B0EBB4', '#A0DEFF', '#FF9F66', '#ECB176', '#CDE8E5']
+const requiredMilestones = ['RFAI', 'Integration', 'Site ONAIR', 'SCFT I-Deploy Offered'];
 const MainDashboard = () => {
     const navigate = useNavigate()
+    const { loading, action } = useLoadingDialog();
+    const [dateArray, setDateArray] = useState([])
+    const [tableData, setTableData] = useState([])
 
+
+    console.log('table data', tableData)
+    const ChangeDateFormate = (date) => {
+        if (!date) return '';
+
+        const d = new Date(date);
+        if (isNaN(d)) return 'Invalid Date';
+
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+
+        return `${year}-${month}-${day}`;
+    };
+
+    const fetchDailyData = async () => {
+        action(true)
+        var formData = new FormData()
+        formData.append('circle', '')
+        formData.append('site_tagging', '')
+        formData.append('relocation_method', '')
+        formData.append('new_toco_name', '')
+        formData.append('from_date', ChangeDateFormate(new Date(Date.now() - 86400000)))
+        formData.append('to_date', ChangeDateFormate(new Date()))
+        formData.append('view', 'Cumulative')
+        const res = await postData("alok_tracker/daily_dashboard_file/", formData);
+        // const res =  tempData; //  remove this line when API is ready
+        // console.log('box wise data ', res)
+        if (res) {
+            action(false)
+            setDateArray(res.dates)
+            setTableData(JSON.parse(res.data).filter(item =>
+                requiredMilestones.includes(item["Milestone Track/Site Count"])
+            ));
+        }
+        else {
+            action(false)
+        }
+
+    }
 
 
     const Dashboard = useCallback(({ data, color }) => {
@@ -41,6 +90,14 @@ const MainDashboard = () => {
             </Box>
         );
     }, []);
+
+
+    useEffect(() => {
+        fetchDailyData()
+        document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
+        fetchDailyData()
+    }, [])
+
     return (
         <>
             <div style={{ margin: 5, marginLeft: 10 }}>
@@ -50,8 +107,28 @@ const MainDashboard = () => {
                     <Typography color='text.primary'>Analytics Dashboard</Typography>
                 </Breadcrumbs>
             </div>
+            <Box sx={{ display: 'flex', justifyContent: 'space-evenly', flexWrap: "wrap", flexDirection: 'row', gap: 1, marginBottom: 2 }}>
+                {tableData.length > 0 && tableData.map((item, index) => (
+                    <Box sx={{ height: 'auto', width: '30vh', cursor: 'pointer', padding: 1.5, borderRadius: 1.5, boxShadow: " rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px", backgroundColor: `${colorType[index]}`, textAlign: 'center' }}>
+                        <Box sx={{ fontWeight: 600, fontSize: '16px', color: "black", textAlign: 'left' }}>{item?.['Milestone Track/Site Count']}</Box>
+                        <Box sx={{ fontWeight: 600, fontSize: '24px', color: "black", fontFamily: 'cursive' }}><CountUp end={item.date_1} duration={6} /></Box>
+                        <Box sx={{ color: "black", textAlign: 'left' }}>{dateArray[0]}</Box>
+                        {/* // <Box sx={{ color: "black", textAlign: 'left' }}> <span style={{ fontWeight: 600 }}>To-</span>{convertDate(data.to_integration_date)}</Box> */}
+                    </Box>
+                ))}
+
+            </Box>
             <Box>
                 <MonthWise />
+            </Box>
+            <Box>
+                <CircleWiese />
+            </Box>
+            <Box>
+                <RfaiIntegration />
+            </Box>
+            <Box>
+                <IntegrationTableOnAir />
             </Box>
 
 
