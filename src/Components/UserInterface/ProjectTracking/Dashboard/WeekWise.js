@@ -26,6 +26,8 @@ import ListItemText from '@mui/material/ListItemText';
 import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import { postData } from '../../../services/FetchNodeServices';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -85,15 +87,15 @@ const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues 
 
 const WeekWise = () => {
     const classes = useStyles()
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [open, setOpen] = useState(false)
     const { makePostRequest } = usePost()
+    const userID = getDecreyptedData('userID')
     const { loading, action } = useLoadingDialog();
-    const [mainDataT2, setMainDataT2] = useState([])
-    // const [dateArray, setDateArray] = useState([])
-    // const [monthArray, setMonthArray] = useState([])
-    const [weekArray, setWeekArray] = useState([])
+    const [mainDataT2, setMainDataT2] = useState([]);
+    const [weekArray, setWeekArray] = useState([]);
     const [tableData, setTableData] = useState([])
-    const [givenDate, setGivenDate] = useState('')
     const [circle, setCircle] = useState([])
     const [circleOptions, setCircleOptions] = useState([])
     const [tagging, setTagging] = useState([])
@@ -119,7 +121,7 @@ const WeekWise = () => {
         formData.append('new_toco_name', toco)
         formData.append('month', month.split('-')[1] || '')
         formData.append('year', month.split('-')[0] || '')
-          formData.append('view', view)
+        formData.append('view', view)
         const res = await postData("alok_tracker/weekly_monthly_dashboard_file/", formData);
         // const res =  tempData; //  remove this line when API is ready
         console.log('week wise response', res)
@@ -312,31 +314,38 @@ const WeekWise = () => {
     }, [mainDataT2, open])
 
     const ClickDataGet = async (props) => {
-
+        // console.log('aaaaaaaa', props)
         action(true)
         var formData = new FormData();
-        formData.append("circle", props.circle);
-        formData.append("Activity_Name", props.activity);
-        formData.append("date", props.date);
-        const responce = await makePostRequest('IntegrationTracker/hyperlink-datewise-integration-data/', formData)
+        formData.append('userId', userID);
+        formData.append("circle", circle);
+        formData.append("day_type", 'weekly');
+        formData.append("milestone", props.milestone);
+        formData.append("col_name", props.col_name);
+        formData.append('site_tagging', tagging);
+        formData.append('current_status', relocationMethod);
+        formData.append('toco_name', toco);
+        formData.append('view', view)
+
+        const responce = await makePostRequest('alok_tracker/hyperlink_frontend_editing/', formData)
         if (responce) {
-            // console.log('responce', responce)
-            // setMainDataT2(responce)
-            action(false)
-            setEncreptedData("integration_final_tracker", responce.data);
-            // console.log('response data in huawia site id' , response)
-            window.open(`${window.location.href}/${props.activity}`, "_blank")
-            // setOpen(true)
+            console.log('response', JSON.parse(responce.data))
+            action(false);
+            const temp = JSON.parse(responce.data)
+
+            dispatch({ type: 'RELOCATION_FINAL_TRACKER', payload: { temp } })
+            navigate(`/tools/relocation_tracking/waterfall/${props.milestone}`)
         }
         else {
             action(false)
         }
     }
 
+
     useEffect(() => {
         fetchDailyData()
         // setTotals(calculateColumnTotals(tableData))
-    }, [circle, tagging, relocationMethod, toco, month,view])
+    }, [circle, tagging, relocationMethod, toco, month, view])
     return (
         <>
             <style>{"th{border:1px solid black;}"}</style>
@@ -442,7 +451,9 @@ const WeekWise = () => {
                                                 <th style={{ position: 'sticky', left: 0, top: 0, backgroundColor: '#CBCBCB', color: 'black' }}>{it['Milestone Track/Site Count']}</th>
                                                 {/* <th style={{ position: 'sticky', left: 218, top: 0, backgroundColor: 'rgb(197 214 246)', color: 'black' }}>{it['CF']}</th> */}
                                                 {weekArray?.map((item, index) => (
-                                                    <th key={index} >{it[`Month_Week-${index + 1}`]}</th>
+                                                    <th key={index} className={classes.hoverRT} style={{ cursor: 'pointer' }}
+                                                        onClick={() => ClickDataGet({ col_name: item, milestone: it['Milestone Track/Site Count'] })}
+                                                    >{it[`Month_Week-${index + 1}`]}</th>
                                                     // <th key={index} style={{ backgroundColor: it[`Month_Week-${index + 1}`] > 0 ? '#FEEFAD' : '' }} >{it[`Month_Week-${index + 1}`]}</th>
                                                 ))}
 
