@@ -1,23 +1,22 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import {
-    Box,
-    FormControl,
-    InputLabel,
-    OutlinedInput,
-    MenuItem,
-    Select,
-    Checkbox,
-    ListItemText,
-    IconButton,
-    Paper,
-    TableContainer,
-    Tooltip,
-    Slide
-} from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Box} from "@mui/material";
+import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
 import DownloadIcon from '@mui/icons-material/Download';
-import { useLoadingDialog } from '../../../Hooks/LoadingDialog';
-import { useStyles } from '../../ToolsCss';
-import { postData } from '../../../services/FetchNodeServices';
+import TableContainer from '@mui/material/TableContainer';
+import Paper from '@mui/material/Paper';
+import Slide from '@mui/material/Slide';
+import { useLoadingDialog } from '../../../../Hooks/LoadingDialog';
+import { useStyles } from '../../../ToolsCss'
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import ListItemText from '@mui/material/ListItemText';
+import Select from '@mui/material/Select';
+import Checkbox from '@mui/material/Checkbox';
+import { postData } from '../../../../services/FetchNodeServices';
+import 'rsuite/dist/rsuite.min.css';
 
 
 const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues }) => {
@@ -70,15 +69,14 @@ const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues 
     );
 };
 
-
-const Ms1 = () => {
+const Integration = () => {
     const { loading, action } = useLoadingDialog();
     const [site_taggingAgingData, setSite_taggingAgingData] = useState([]);
     const [site_taggingAgingOption, setSite_taggingAgingOption] = useState([]);
     const [currentStatus, setCurrentStatus] = useState([])
     const [currentStatusOption, setCurrentStatusOption] = useState([])
-    const [ms1_done, setMs1_done] = useState([]);
-    const [ms1_pending, setMs1_pending] = useState([]);
+    const [integrationDone, setIntegrationDone] = useState([]);
+    const [integrationPending, setIntegrationPending] = useState([]);
     const [downloadExcelData, setDownloadExcelData] = useState('');
     const classes = useStyles();
 
@@ -91,17 +89,17 @@ const Ms1 = () => {
 
         const res = await postData("alok_tracker/ageing_dashboard_file/", formData);
         // const res =  tempData; //  remove this line when API is ready
-        console.log('MS1 response', res)
+        console.log('Integartion response', res)
         if (res) {
             action(false)
-            setMs1_done(JSON.parse(res.json_data.ms1_done))
-            setMs1_pending(JSON.parse(res.json_data.ms1_pending))
-            if(currentStatusOption.length===0 && site_taggingAgingOption.length===0){
+            setIntegrationDone(JSON.parse(res.json_data.integration_done))
+            setIntegrationPending(JSON.parse(res.json_data.integration_pending))
+            if (currentStatusOption.length === 0 && site_taggingAgingOption.length === 0) {
                 setCurrentStatusOption(res.unique_data.unique_current_status)
-            setSite_taggingAgingOption(res.unique_data.unique_site_tagging)
+                setSite_taggingAgingOption(res.unique_data.unique_site_tagging)
             }
-             setDownloadExcelData(res.download_link)
-        
+            setDownloadExcelData(res.download_link)
+
             // setMainDataT2(JSON.parse(res.data))
         }
         else {
@@ -109,15 +107,27 @@ const Ms1 = () => {
         }
 
     }
+    const handleSiteTagging = (event) => {
+        const {
+            target: { value },
+        } = event;
+        setSite_taggingAgingData(
+            // On autofill we get a stringified value.
+            typeof value === 'string' ? value.split(',') : value,
+        );
+    }
 
+    const handleCurrentStatus = (event) => {
+        const { target: { value } } = event
+        setCurrentStatus(typeof value === 'string' ? value.split(',') : value)
 
+    }
 
 
     useEffect(() => {
         fetchDailyData()
         // setTotals(calculateColumnTotals(tableData))
-    }, [site_taggingAgingData,currentStatus])
-
+    }, [site_taggingAgingData, currentStatus])
 
 
     return (
@@ -129,10 +139,9 @@ const Ms1 = () => {
                     {/* ************* 2G  TABLE DATA ************** */}
                     <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', alignContent: 'center' }}>
                         <Box style={{ fontSize: 22, fontWeight: 'bold' }}>
-                            RFAI to MS1 Aging Completed & Incompleted
+                            RFAI to Integration Aging Completed & Incompleted
                         </Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', gap: 1 }}>
-
                             <MultiSelectWithAll
                                 label="Site Tagging"
                                 options={site_taggingAgingOption}
@@ -147,11 +156,10 @@ const Ms1 = () => {
                                 selectedValues={currentStatus}
                                 setSelectedValues={setCurrentStatus}
                             />
-
                             <Tooltip title="Download Daily-RFAI to MS1 Waterfall">
                                 <IconButton
                                     component="a"
-                                    href={downloadExcelData}
+                                    // href={downloadExcelData}
                                     download
                                 >
                                     <DownloadIcon fontSize="large" color="primary" />
@@ -165,50 +173,49 @@ const Ms1 = () => {
                             <table style={{ width: "100%", border: "1px solid black", borderCollapse: 'collapse', overflow: 'auto' }} >
                                 <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
-                                        <th rowSpan={2} style={{ padding: '1px 1px', whiteSpace: 'nowrap', position: 'sticky', left: 0, top: 0,zIndex:3, backgroundColor: '#006e74' }}>
+                                        <th rowSpan={2} style={{ padding: '1px 1px', whiteSpace: 'nowrap', position: 'sticky', left: 0, top: 0, zIndex:3,backgroundColor: '#006e74' }}>
                                             Circle</th>
                                         <th rowSpan={2} style={{ padding: '1px 1px', whiteSpace: 'nowrap', backgroundColor: '#006e74' }}>
                                             RFAI Done Count</th>
-                                        <th colSpan={5} style={{ padding: '1px 1px', whiteSpace: 'nowrap' }}>RFAI to MS1 - Completed</th>
+                                        <th colSpan={5} style={{ padding: '1px 1px', whiteSpace: 'nowrap' }}>RFAI to Integration - Completed</th>
                                     </tr>
                                     <tr style={{ fontSize: 15, backgroundColor: "#CBCBCB", color: "balck", border: '1px solid white' }}>
-                                        <th style={{ padding: '1px 1px', whiteSpace: 'nowrap' }}>MS1 Done Count</th>
-                                        <th style={{ padding: '1px 1px', whiteSpace: 'nowrap' }}> &#60;=14 days</th>
-                                        <th style={{ padding: '1px 1px', whiteSpace: 'nowrap' }}>15-30 days</th>
-                                        <th style={{ padding: '1px 1px', whiteSpace: 'nowrap' }}> &#62;=31 days</th>
-                                        <th style={{ padding: '1px 1px', whiteSpace: 'nowrap' }}>Average</th>
+                                        <th style={{ padding: '1px 1px', whiteSpace: 'nowrap' }}>Integration Done Count</th>
+                                        <th style={{ padding: '1px 1px', whiteSpace: 'nowrap' }}> &#60;=7 days</th>
+                                        <th style={{ padding: '1px 1px', whiteSpace: 'nowrap' }}>8-15 days</th>
+                                        <th style={{ padding: '1px 1px', whiteSpace: 'nowrap' }}> &#62;=16 days</th>
+                                        <th style={{ padding: '1px 1px', whiteSpace: 'nowrap' }}> Average</th>
                                     </tr>
 
                                 </thead>
                                 <tbody>
-                                    {ms1_done?.map((it, index) => {
+                                    {integrationDone?.map((it, index) => {
                                         if(it.Circle==='Total'){
-                                              return (
-                                            <tr className={classes.hoverRT} style={{ textAlign: "center", fontWeigth: 700 ,backgroundColor: '#ffd3be' }} key={index}>
-                                                <th style={{ position: 'sticky', left: 0, top: 0, color: 'black',zIndex:3,backgroundColor:'#ffd3be' }}>{it['Circle']}</th>
-                                                <th style={{ position: 'sticky', color: 'black' }}>{it['RFAI Done Count']}</th>
-                                                <th >{isNaN(parseInt(it[`MS1 Done Count`])) ? '-' : parseInt(it[`MS1 Done Count`])}</th>
-                                                <th   >{isNaN(parseInt(it[`<= 14 days`])) ? '-' : parseInt(it[`<= 14 days`])}</th>
-                                                <th   >{isNaN(parseInt(it[`15-30 days`])) ? '-' : parseInt(it[`15-30 days`])}</th>
-                                                <th   >{isNaN(parseInt(it[`>= 31 days`])) ? '-' : parseInt(it[`>= 31 days`])}</th>
+                                            return (
+                                            <tr className={classes.hoverRT} style={{ textAlign: "center", fontWeigth: 700 ,  backgroundColor: '#ffd3be'}} key={index}>
+                                                <th style={{ position: 'sticky', left: 0, top: 0, zIndex:3, color: 'black' ,backgroundColor: '#ffd3be'}}>{it['Circle']}</th>
+                                                <th style={{ position: 'sticky',  color: 'black' }}>{it['RFAI Done Count']}</th>
+                                                <th >{isNaN(parseInt(it[`Integration Done Count`])) ? '-' : parseInt(it[`Integration Done Count`])}</th>
+                                                <th   >{isNaN(parseInt(it[`<= 7 days`])) ? '-' : parseInt(it[`<= 7 days`])}</th>
+                                                <th   >{isNaN(parseInt(it[`8-15 days`])) ? '-' : parseInt(it[`8-15 days`])}</th>
+                                                <th   >{isNaN(parseInt(it[`>= 16 days`])) ? '-' : parseInt(it[`>= 16 days`])}</th>
                                                 <th   >{isNaN(parseInt(it[`Average Days`])) ? '-' : parseInt(it[`Average Days`])}</th>
                                             </tr>
                                         )
-
                                         }else{
-                                              return (
+                                            return (
                                             <tr className={classes.hoverRT} style={{ textAlign: "center", fontWeigth: 700 }} key={index}>
-                                                <th style={{ position: 'sticky', left: 0, top: 0, backgroundColor: '#CBCBCB', color: 'black',zIndex:3 }}>{it['Circle']}</th>
+                                                <th style={{ position: 'sticky', left: 0, top: 0, zIndex:3,backgroundColor: '#CBCBCB', color: 'black' }}>{it['Circle']}</th>
                                                 <th style={{ position: 'sticky', backgroundColor: '#CBCBCB', color: 'black' }}>{it['RFAI Done Count']}</th>
-                                                <th >{isNaN(parseInt(it[`MS1 Done Count`])) ? '-' : parseInt(it[`MS1 Done Count`])}</th>
-                                                <th   >{isNaN(parseInt(it[`<= 14 days`])) ? '-' : parseInt(it[`<= 14 days`])}</th>
-                                                <th   >{isNaN(parseInt(it[`15-30 days`])) ? '-' : parseInt(it[`15-30 days`])}</th>
-                                                <th   >{isNaN(parseInt(it[`>= 31 days`])) ? '-' : parseInt(it[`>= 31 days`])}</th>
+                                                <th >{isNaN(parseInt(it[`Integration Done Count`])) ? '-' : parseInt(it[`Integration Done Count`])}</th>
+                                                <th   >{isNaN(parseInt(it[`<= 7 days`])) ? '-' : parseInt(it[`<= 7 days`])}</th>
+                                                <th   >{isNaN(parseInt(it[`8-15 days`])) ? '-' : parseInt(it[`8-15 days`])}</th>
+                                                <th   >{isNaN(parseInt(it[`>= 16 days`])) ? '-' : parseInt(it[`>= 16 days`])}</th>
                                                 <th   >{isNaN(parseInt(it[`Average Days`])) ? '-' : parseInt(it[`Average Days`])}</th>
                                             </tr>
                                         )
                                         }
-                                      
+                                        
                                     })}
                                 </tbody>
                             </table>
@@ -217,49 +224,49 @@ const Ms1 = () => {
                             <table style={{ width: "100%", border: "1px solid black", borderCollapse: 'collapse', overflow: 'auto' }} >
                                 <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
-                                        <th rowSpan={2} style={{ padding: '1px 1px', whiteSpace: 'nowrap', position: 'sticky', left: 0, top: 0, backgroundColor: '#006e74', zIndex: 3 }}>
+                                        <th rowSpan={2} style={{ padding: '1px 1px', whiteSpace: 'nowrap', position: 'sticky', left: 0, top: 0, zIndex: 3, backgroundColor: '#006e74' }}>
                                             Circle</th>
-                                        <th rowSpan={2} style={{ padding: '1px 1px', whiteSpace: 'nowrap',  backgroundColor: '#006e74' }}>
+                                        <th rowSpan={2} style={{ padding: '1px 1px', whiteSpace: 'nowrap', backgroundColor: '#006e74' }}>
                                             RFAI Done Count</th>
-                                        <th colSpan={5} style={{ padding: '1px 1px', whiteSpace: 'nowrap' }}>RFAI to MS1 - Incompleted</th>
+                                        <th colSpan={5} style={{ padding: '1px 1px', whiteSpace: 'nowrap' }}>RFAI to Integration - Incompleted</th>
                                     </tr>
                                     <tr style={{ fontSize: 15, backgroundColor: "#CBCBCB", color: "balck", border: '1px solid white' }}>
-                                        <th style={{ padding: '1px 1px', whiteSpace: 'nowrap' }}>MS1 Pending Count</th>
-                                        <th style={{ padding: '1px 1px', whiteSpace: 'nowrap' }}> &#60;=14 days</th>
-                                        <th style={{ padding: '1px 1px', whiteSpace: 'nowrap' }}>15-30 days</th>
-                                        <th style={{ padding: '1px 1px', whiteSpace: 'nowrap' }}> &#62;=31 days</th>
-                                        <th style={{ padding: '1px 1px', whiteSpace: 'nowrap' }}> Average</th>
+                                        <th style={{ padding: '1px 1px', whiteSpace: 'nowrap' }}>Integration Pending Count</th>
+                                        <th style={{ padding: '1px 1px', whiteSpace: 'nowrap' }}> &#60;=7 days</th>
+                                        <th style={{ padding: '1px 1px', whiteSpace: 'nowrap' }}>8-15 days</th>
+                                        <th style={{ padding: '1px 1px', whiteSpace: 'nowrap' }}> &#62;=16 days</th>
+                                        <th style={{ padding: '1px 1px', whiteSpace: 'nowrap' }}>Average</th>
                                     </tr>
 
                                 </thead>
                                 <tbody>
-                                    {ms1_pending?.map((it, index) => {
-                                        if(it.Circle === 'Total') {
-                                             return (
-                                            <tr className={classes.hoverRT} style={{ textAlign: "center", fontWeigth: 700, backgroundColor: '#ffd3be' }} key={index}>
-                                                <th style={{ position: 'sticky', left: 0, top: 0, color: 'black',zIndex:3,backgroundColor:'#ffd3be' }}>{it['Circle']}</th>
+                                    {integrationPending?.map((it, index) => {
+                                        if(it.Circle==='Total'){
+                                                return (
+                                            <tr className={classes.hoverRT} style={{ textAlign: "center", fontWeigth: 700,  backgroundColor: '#ffd3be' }} key={index}>
+                                                <th style={{ position: 'sticky', left: 0, top: 0,  color: 'black', zIndex:3,backgroundColor:'#ffd3be' }}>{it['Circle']}</th>
                                                 <th style={{ position: 'sticky', color: 'black' }}>{it['RFAI Done Count']}</th>
-                                                <th >{isNaN(parseInt(it[`MS1 Pending Count`])) ? '-' : parseInt(it[`MS1 Pending Count`])}</th>
-                                                <th   >{isNaN(parseInt(it[`<= 14 days`])) ? '-' : parseInt(it[`<= 14 days`])}</th>
-                                                <th   >{isNaN(parseInt(it[`15-30 days`])) ? '-' : parseInt(it[`15-30 days`])}</th>
-                                                <th   >{isNaN(parseInt(it[`>= 31 days`])) ? '-' : parseInt(it[`>= 31 days`])}</th>
+                                                <th >{isNaN(parseInt(it[`Integration Pending Count`])) ? '-' : parseInt(it[`Integration Pending Count`])}</th>
+                                                <th   >{isNaN(parseInt(it[`<= 7 days`])) ? '-' : parseInt(it[`<= 7 days`])}</th>
+                                                <th   >{isNaN(parseInt(it[`8-15 days`])) ? '-' : parseInt(it[`8-15 days`])}</th>
+                                                <th   >{isNaN(parseInt(it[`>= 16 days`])) ? '-' : parseInt(it[`>= 16 days`])}</th>
                                                 <th   >{isNaN(parseInt(it[`Average Days`])) ? '-' : parseInt(it[`Average Days`])}</th>
                                             </tr>
                                         )
                                         }else{
-                                             return (
+                                                return (
                                             <tr className={classes.hoverRT} style={{ textAlign: "center", fontWeigth: 700 }} key={index}>
                                                 <th style={{ position: 'sticky', left: 0, top: 0, backgroundColor: '#CBCBCB', color: 'black',zIndex:3 }}>{it['Circle']}</th>
                                                 <th style={{ position: 'sticky', backgroundColor: '#CBCBCB', color: 'black' }}>{it['RFAI Done Count']}</th>
-                                                <th >{isNaN(parseInt(it[`MS1 Pending Count`])) ? '-' : parseInt(it[`MS1 Pending Count`])}</th>
-                                                <th   >{isNaN(parseInt(it[`<= 14 days`])) ? '-' : parseInt(it[`<= 14 days`])}</th>
-                                                <th   >{isNaN(parseInt(it[`15-30 days`])) ? '-' : parseInt(it[`15-30 days`])}</th>
-                                                <th   >{isNaN(parseInt(it[`>= 31 days`])) ? '-' : parseInt(it[`>= 31 days`])}</th>
+                                                <th >{isNaN(parseInt(it[`Integration Pending Count`])) ? '-' : parseInt(it[`Integration Pending Count`])}</th>
+                                                <th   >{isNaN(parseInt(it[`<= 7 days`])) ? '-' : parseInt(it[`<= 7 days`])}</th>
+                                                <th   >{isNaN(parseInt(it[`8-15 days`])) ? '-' : parseInt(it[`8-15 days`])}</th>
+                                                <th   >{isNaN(parseInt(it[`>= 16 days`])) ? '-' : parseInt(it[`>= 16 days`])}</th>
                                                 <th   >{isNaN(parseInt(it[`Average Days`])) ? '-' : parseInt(it[`Average Days`])}</th>
                                             </tr>
                                         )
                                         }
-                                       
+                                    
                                     }
                                     )}
                                 </tbody>
@@ -274,4 +281,4 @@ const Ms1 = () => {
     )
 }
 
-export default Ms1
+export default Integration

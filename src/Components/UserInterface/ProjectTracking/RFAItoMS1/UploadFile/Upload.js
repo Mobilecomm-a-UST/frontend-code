@@ -7,15 +7,11 @@ import Slide from '@mui/material/Slide';
 import UploadIcon from '@mui/icons-material/Upload';
 import DoDisturbIcon from '@mui/icons-material/DoDisturb';
 import Swal from "sweetalert2";
-import { postData, ServerURL } from "../../../services/FetchNodeServices";
+import { postData, ServerURL } from "../../../../services/FetchNodeServices";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import OverAllCss from "../../../csss/OverAllCss";
-import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import InputLabel from '@mui/material/InputLabel';
-import { getDecreyptedData } from "../../../utils/localstorage";
+import OverAllCss from "../../../../csss/OverAllCss";
+import { useLoadingDialog } from "../../../../Hooks/LoadingDialog";
+import { getDecreyptedData } from "../../../../utils/localstorage";
 
 const Upload = () => {
     const [make4GFiles, setMake4GFiles] = useState({ filename: "", bytes: "" })
@@ -77,12 +73,8 @@ const Upload = () => {
             var formData = new FormData();
             formData.append(`tracker_file`, make4GFiles.bytes);
             formData.append(`userId`, userID);
-
             const response = await postData('alok_tracker/upload_file/', formData)
-
             // console.log('response data', response)
-
-
             if (response.status === true) {
                 action(false)
                 setDownload(true)
