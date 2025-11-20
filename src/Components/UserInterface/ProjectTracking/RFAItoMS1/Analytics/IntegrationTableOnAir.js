@@ -7,8 +7,8 @@ import TableContainer from '@mui/material/TableContainer';
 import Paper from '@mui/material/Paper';
 import Slide from '@mui/material/Slide';
 import { CsvBuilder } from 'filefy';
-import { useLoadingDialog } from '../../../Hooks/LoadingDialog';
-import { useStyles } from '../../ToolsCss'
+import { useLoadingDialog } from '../../../../Hooks/LoadingDialog';
+import { useStyles } from '../../../ToolsCss'
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -16,7 +16,7 @@ import FormControl from '@mui/material/FormControl';
 import ListItemText from '@mui/material/ListItemText';
 import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
-import { postData } from '../../../services/FetchNodeServices';
+import { postData } from '../../../../services/FetchNodeServices';
 import 'rsuite/dist/rsuite.min.css';
 
 
@@ -71,7 +71,7 @@ const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues 
 };
 
 
-const RfaiIntegration = () => {
+const IntegrationTableOnAir = () => {
     const { loading, action } = useLoadingDialog();
     const [site_taggingAgingData, setSite_taggingAgingData] = useState([]);
     const [site_taggingAgingOption, setSite_taggingAgingOption] = useState([]);
@@ -96,14 +96,16 @@ const RfaiIntegration = () => {
 
         const res = await postData("alok_tracker/graphs/", formData);
         // const res =  tempData; //  remove this line when API is ready
-        console.log(' rfai data', JSON.parse(res.json_data.rfai_to_integration_table))
+        // console.log(' setIntegrationToOnairData', transformData(JSON.parse(res.json_data.integration_to_onair_table)))
         if (res) {
             action(false)
-            setIntegrationToOnairData(transformData(JSON.parse(res.json_data.rfai_to_integration_table)))
+            setIntegrationToOnairData(transformData(JSON.parse(res.json_data.integration_to_onair_table)))
             if (currentStatusOption.length === 0 && site_taggingAgingOption.length === 0) {
                 setCurrentStatusOption(res.unique_data.unique_current_status)
                 setSite_taggingAgingOption(res.unique_data.unique_site_tagging)
             }
+
+            // setMainDataT2(JSON.parse(res.data))
         }
         else {
             action(false)
@@ -113,9 +115,11 @@ const RfaiIntegration = () => {
 
     const transformData = (arr) => {
         const result = {};
+
         arr.forEach(item => {
             const circle = item.Circle;
             const status = item["Site Status"]; // "Done" or "Pending"
+
             if (!result[circle]) {
                 result[circle] = {
                     Circle: circle,
@@ -139,6 +143,8 @@ const RfaiIntegration = () => {
         fetchDailyData()
     }, [site_taggingAgingData, currentStatus])
 
+
+
     return (
         <>
             <style>{"th{border:1px solid black;}"}</style>
@@ -148,7 +154,7 @@ const RfaiIntegration = () => {
                     {/* ************* 2G  TABLE DATA ************** */}
                     <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', alignContent: 'center' }}>
                         <Box style={{ fontSize: 22, fontWeight: 'bold' }}>
-                            Done Vs Pending Count - Clear RFAI to Integration
+                            Done Vs Pending Count - Clear Integration to MS1
                         </Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', gap: 1 }}>
 
@@ -230,14 +236,16 @@ const RfaiIntegration = () => {
                                         }}
                                     >
                                         <th>Site Status</th>
-                                        <th>Site RFAI</th>
-                                        <th>Site Allocation</th>
-                                        <th>Survey Status</th>
-                                        <th>Material Punched</th>
-                                        <th>Material Delivered</th>
-                                        <th>Installation End</th>
                                         <th>Integration Status</th>
-                                 
+                                        <th>EMF Status</th>
+                                        <th>Alarm Status</th>
+                                        <th>SCFT Offered</th>
+                                        <th>PAT Offered</th>
+                                        <th>SAT Offered</th>
+                                        <th>MW PAT Offered</th>
+                                        <th>MW SAT Offered</th>
+                                        <th>MW MIDS MS1</th>
+                                        <th>I-Deploy MS1</th>
                                     </tr>
                                 </thead>
 
@@ -264,25 +272,31 @@ const RfaiIntegration = () => {
                                                         {Circle}
                                                     </th>
                                                     <th>Done</th>
-                                                    <th>{done["Site RFAI"]}</th>
-                                                    <th>{done["Site Allocation"]}</th>
-                                                    <th>{done["Survey Status"]}</th>
-                                                    <th>{done["Material Punched"]}</th>
-                                                    <th>{done["Material Delivered"]}</th>
-                                                    <th>{done["Installation End"]}</th>
                                                     <th>{done["Integration Status"]}</th>
+                                                    <th>{done["EMF Status"]}</th>
+                                                    <th>{done["Alarm Status"]}</th>
+                                                    <th>{done["SCFT Offered"]}</th>
+                                                    <th>{done["PAT Offered"]}</th>
+                                                    <th>{done["SAT Offered"]}</th>
+                                                    <th>{done["MW PAT Offered"]}</th>
+                                                    <th>{done["MW SAT Offered"]}</th>
+                                                    <th>{done["MW MIDS MS1"]}</th>
+                                                    <th>{done["I-Deploy MS1"]}</th>
                                                 </tr>
 
                                                 {/* PENDING ROW */}
                                                 <tr className={classes.hoverRT} style={{ textAlign: "center" }}>
                                                     <th>Pending</th>
-                                                    <th>{pending["Site RFAI"]}</th>
-                                                    <th>{pending["Site Allocation"]}</th>
-                                                    <th>{pending["Survey Status"]}</th>
-                                                    <th>{pending["Material Punched"]}</th>
-                                                    <th>{pending["Material Delivered"]}</th>
-                                                    <th>{pending["Installation End"]}</th>
                                                     <th>{pending["Integration Status"]}</th>
+                                                    <th>{pending["EMF Status"]}</th>
+                                                    <th>{pending["Alarm Status"]}</th>
+                                                    <th>{pending["SCFT Offered"]}</th>
+                                                    <th>{pending["PAT Offered"]}</th>
+                                                    <th>{pending["SAT Offered"]}</th>
+                                                    <th>{pending["MW PAT Offered"]}</th>
+                                                    <th>{pending["MW SAT Offered"]}</th>
+                                                    <th>{pending["MW MIDS MS1"]}</th>
+                                                    <th>{pending["I-Deploy MS1"]}</th>
                                                 </tr>
                                             </React.Fragment>
                                         );
@@ -298,4 +312,4 @@ const RfaiIntegration = () => {
     )
 }
 
-export default RfaiIntegration
+export default IntegrationTableOnAir

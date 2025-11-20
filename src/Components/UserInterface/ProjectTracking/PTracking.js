@@ -10,7 +10,6 @@ import { Sidenav, Nav } from 'rsuite';
 import Collapse from '@mui/material/Collapse';
 import SettingsIcon from '@mui/icons-material/Settings';
 import DashboardIcon from '@rsuite/icons/legacy/Dashboard';
-import FileUploadIcon from '@rsuite/icons/FileUpload';
 import { useNavigate } from 'react-router-dom'
 import FunnelTrendIcon from '@rsuite/icons/FunnelTrend';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -19,11 +18,11 @@ import ArrowRightIcon from '@rsuite/icons/ArrowRight';
 import { getDecreyptedData } from '../../../Components/utils/localstorage';
 
 const PTtool = lazy(() => import('./PTtool'))
-const UploadFile = lazy(() => import('./UploadFile/Upload'))
-const DashboardTable = lazy(() => import('./Dashboard/DashboardTable'))
-const MainAging = lazy(() => import('./Aging/MainAging'))
-const MainDashboard = lazy(() => import('./Analytics/MainDashboard'))
-const FinalData = lazy(() => import('./Dashboard/FinalData'))
+const UploadFile = lazy(() => import('./RFAItoMS1/UploadFile/Upload'))
+const DashboardTable = lazy(() => import('./RFAItoMS1/Dashboard/DashboardTable'))
+const MainAging = lazy(() => import('./RFAItoMS1/Aging/MainAging'))
+const MainDashboard = lazy(() => import('./RFAItoMS1/Analytics/MainDashboard'))
+const FinalData = lazy(() => import('./RFAItoMS1/Dashboard/FinalData'))
 
 
 
