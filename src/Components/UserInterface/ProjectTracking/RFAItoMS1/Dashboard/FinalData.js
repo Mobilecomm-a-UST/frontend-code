@@ -6,7 +6,7 @@ import { CsvBuilder } from 'filefy';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 // import { useParams } from 'react-router-dom';
 import { Dialog, DialogContent, IconButton, DialogTitle } from '@mui/material';
-import { ServerURL } from '../../../services/FetchNodeServices';
+import { ServerURL } from '../../../../services/FetchNodeServices';
 import CloseIcon from '@mui/icons-material/Close';
 import axios from 'axios';
 import Swal from "sweetalert2";
@@ -14,8 +14,8 @@ import TextField from '@mui/material/TextField';
 import { Grid, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux'
-import { getDecreyptedData } from '../../../utils/localstorage';
-import { useLoadingDialog } from '../../../Hooks/LoadingDialog';
+import { getDecreyptedData } from '../../../../utils/localstorage';
+import { useLoadingDialog } from '../../../../Hooks/LoadingDialog';
 
 const FinalData = () => {
     const listDataa = useSelector(state => state.relocationFinalTracker)

@@ -6,20 +6,20 @@ import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import DownloadIcon from '@mui/icons-material/Download';
 import * as ExcelJS from 'exceljs'
-import { useGet } from '../../../Hooks/GetApis';
-import { usePost } from '../../../Hooks/PostApis';
+import { useGet } from '../../../../Hooks/GetApis';
+import { usePost } from '../../../../Hooks/PostApis';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import CountUp from 'react-countup';
 import MonthWise from './MonthWise';
-import IntegrationTableOnAir from './IntegrationTableOnAir';
+// import IntegrationTableOnAir from './IntegrationTableOnAir';
 import RfaiIntegration from './RfaiIntegration';
 import CircleWiese from './CircleWiese';
-import { useLoadingDialog } from '../../../Hooks/LoadingDialog';
-import { postData } from '../../../services/FetchNodeServices';
+import { useLoadingDialog } from '../../../../Hooks/LoadingDialog';
+import { postData } from '../../../../services/FetchNodeServices';
 
 
-const colorType = ['#B0EBB4', '#A0DEFF', '#FF9F66', '#ECB176', '#CDE8E5']
+const colorType = [ '#A0DEFF', '#FF9F66','#ECB176', '#B0EBB4', '#CDE8E5']
 const requiredMilestones = ['RFAI', 'Integration', 'Site ONAIR', 'SCFT I-Deploy Offered'];
 const MainDashboard = () => {
     const navigate = useNavigate()
@@ -109,7 +109,10 @@ const MainDashboard = () => {
             </div>
             <Box sx={{ display: 'flex', justifyContent: 'space-evenly', flexWrap: "wrap", flexDirection: 'row', gap: 1, marginBottom: 2 }}>
                 {tableData.length > 0 && tableData.map((item, index) => (
-                    <Box sx={{ height: 'auto', width: '30vh', cursor: 'pointer', padding: 1.5, borderRadius: 1.5, boxShadow: " rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px", backgroundColor: `${colorType[index]}`, textAlign: 'center' }}>
+                    <Box sx={{ height: 'auto', width: '30vh', padding: 1.5, borderRadius: 1.5, boxShadow: " rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px", backgroundColor: `${colorType[index]}`, textAlign: 'center' }} key={index}
+                        // onClick={() => { HandleDashboard(data.OEM) }}
+                        title={item?.['Milestone Track/Site Count']}
+                    >
                         <Box sx={{ fontWeight: 600, fontSize: '16px', color: "black", textAlign: 'left' }}>{item?.['Milestone Track/Site Count']}</Box>
                         <Box sx={{ fontWeight: 600, fontSize: '24px', color: "black", fontFamily: 'cursive' }}><CountUp end={item.date_1} duration={6} /></Box>
                         <Box sx={{ color: "black", textAlign: 'left' }}>{dateArray[0]}</Box>
@@ -127,9 +130,9 @@ const MainDashboard = () => {
             <Box>
                 <RfaiIntegration />
             </Box>
-            <Box>
+            {/* <Box>
                 <IntegrationTableOnAir />
-            </Box>
+            </Box> */}
 
 
         </>

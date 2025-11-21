@@ -7,8 +7,8 @@ import TableContainer from '@mui/material/TableContainer';
 import Paper from '@mui/material/Paper';
 import Slide from '@mui/material/Slide';
 import { CsvBuilder } from 'filefy';
-import { useLoadingDialog } from '../../../Hooks/LoadingDialog';
-import { useStyles } from '../../ToolsCss'
+import { useLoadingDialog } from '../../../../Hooks/LoadingDialog';
+import { useStyles } from '../../../ToolsCss'
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -16,7 +16,7 @@ import FormControl from '@mui/material/FormControl';
 import ListItemText from '@mui/material/ListItemText';
 import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
-import { postData } from '../../../services/FetchNodeServices';
+import { postData } from '../../../../services/FetchNodeServices';
 import 'rsuite/dist/rsuite.min.css';
 
 
@@ -71,15 +71,39 @@ const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues 
 };
 
 
-const IntegrationTableOnAir = () => {
+const RfaiIntegration = () => {
     const { loading, action } = useLoadingDialog();
     const [site_taggingAgingData, setSite_taggingAgingData] = useState([]);
     const [site_taggingAgingOption, setSite_taggingAgingOption] = useState([]);
     const [currentStatus, setCurrentStatus] = useState([])
     const [currentStatusOption, setCurrentStatusOption] = useState([])
     const [integrationToOnairData, setIntegrationToOnairData] = useState([]);
+    const [milestone1, setMilestone1] = useState('RFAI');
+    const [milestone2, setMilestone2] = useState('Integration');
+    const [milestoneOptions, setMilestoneOptions] = useState([
+        "Allocation",
+        "RFAI",
+        "RFAI Survey",
+        "MO Punch",
+        "Material Dispatch",
+        "Material Delivered",
+        "Installation End",
+        "Integration",
+        "EMF Submission",
+        "Alarm Rectification Done",
+        "SCFT I-Deploy Offered",
+        "RAN PAT Offer",
+        "RAN SAT Offer",
+        "MW PAT Offer",
+        "MW SAT Offer",
+        "Site ONAIR",
+        "I-Deploy ONAIR"
+    ]);
     const [mos_pending, setMos_pending] = useState([]);
     const [downloadExcelData, setDownloadExcelData] = useState('');
+    const dynamicHeaders = Object.keys(integrationToOnairData?.[0]?.data?.Done || []);
+
+    console.log('table data', dynamicHeaders)
 
     const classes = useStyles();
 
@@ -90,22 +114,20 @@ const IntegrationTableOnAir = () => {
 
         formData.append('site_tagging', site_taggingAgingData)
         formData.append('current_status', currentStatus)
-        formData.append('milestone1', 'RFAI')
-        formData.append('milestone2', 'Integration')
+        formData.append('milestone1', milestone1)
+        formData.append('milestone2', milestone2)
 
 
         const res = await postData("alok_tracker/graphs/", formData);
         // const res =  tempData; //  remove this line when API is ready
-        // console.log(' setIntegrationToOnairData', transformData(JSON.parse(res.json_data.integration_to_onair_table)))
+        console.log(' rfai data', transformData(JSON.parse(res.json_data.table_summary)))
         if (res) {
             action(false)
-            setIntegrationToOnairData(transformData(JSON.parse(res.json_data.integration_to_onair_table)))
+            setIntegrationToOnairData(transformData(JSON.parse(res.json_data.table_summary)))
             if (currentStatusOption.length === 0 && site_taggingAgingOption.length === 0) {
                 setCurrentStatusOption(res.unique_data.unique_current_status)
                 setSite_taggingAgingOption(res.unique_data.unique_site_tagging)
             }
-
-            // setMainDataT2(JSON.parse(res.data))
         }
         else {
             action(false)
@@ -115,11 +137,9 @@ const IntegrationTableOnAir = () => {
 
     const transformData = (arr) => {
         const result = {};
-
         arr.forEach(item => {
             const circle = item.Circle;
             const status = item["Site Status"]; // "Done" or "Pending"
-
             if (!result[circle]) {
                 result[circle] = {
                     Circle: circle,
@@ -139,11 +159,18 @@ const IntegrationTableOnAir = () => {
         return Object.values(result);
     };
 
+    const handleMilestone1Change = (event) => {
+        setMilestone1(event.target.value);
+    }
+
+    const handleMilestone2Change = (event) => {
+        setMilestone2(event.target.value);
+    }
+
+
     useEffect(() => {
         fetchDailyData()
-    }, [site_taggingAgingData, currentStatus])
-
-
+    }, [site_taggingAgingData, currentStatus,milestone1,milestone2])
 
     return (
         <>
@@ -154,10 +181,37 @@ const IntegrationTableOnAir = () => {
                     {/* ************* 2G  TABLE DATA ************** */}
                     <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', alignContent: 'center' }}>
                         <Box style={{ fontSize: 22, fontWeight: 'bold' }}>
-                            Done Vs Pending Count - Clear Integration to MS1
+                            Done Vs Pending Count - Clear {milestone1} to {milestone2}
                         </Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', gap: 1 }}>
-
+                            <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
+                                <InputLabel id="demo-simple-select-label">milestone1</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    value={milestone1}
+                                    label="milestone1"
+                                    onChange={handleMilestone1Change}
+                                >
+                                    {milestoneOptions?.map((item, index) => (
+                                        <MenuItem key={index} value={item}>{item}</MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                            <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
+                                <InputLabel id="demo-simple-select-label">milestone2</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    value={milestone2}
+                                    label="milestone2"
+                                    onChange={handleMilestone2Change}
+                                >
+                                    {milestoneOptions?.map((item, index) => (
+                                        <MenuItem key={index} value={item}>{item}</MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
                             <MultiSelectWithAll
                                 label="Site Tagging"
                                 options={site_taggingAgingOption}
@@ -185,28 +239,17 @@ const IntegrationTableOnAir = () => {
                     </Box>
 
                     <Box sx={{ marginTop: 0, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2 }}>
+             
+
                         <TableContainer
-                            sx={{ maxHeight: 400, boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }}
+                            sx={{ maxHeight: 600, boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }}
                             component={Paper}
                         >
-                            <table
-                                style={{
-                                    width: "100%",
-                                    border: "1px solid black",
-                                    borderCollapse: "collapse",
-                                    overflow: "auto",
-                                }}
-                            >
+                            <table style={{ width: "100%", border: "1px solid black", borderCollapse: "collapse" }}>
                                 <thead style={{ position: "sticky", top: 0, zIndex: 1 }}>
-                                    {/* Top Header */}
-                                    <tr
-                                        style={{
-                                            fontSize: 15,
-                                            backgroundColor: "#223354",
-                                            color: "white",
-                                            border: "1px solid white",
-                                        }}
-                                    >
+
+                                    {/* TOP HEADER */}
+                                    <tr style={{ backgroundColor: "#223354", color: "white" }}>
                                         <th
                                             rowSpan={2}
                                             style={{
@@ -221,82 +264,45 @@ const IntegrationTableOnAir = () => {
                                         >
                                             Circle
                                         </th>
-                                        <th colSpan={11} style={{ padding: "1px 1px" }}>
-                                            Status Summary
-                                        </th>
+                                        <th colSpan={dynamicHeaders.length + 1}>Status Summary</th>
                                     </tr>
 
-                                    {/* Second header row */}
-                                    <tr
-                                        style={{
-                                            fontSize: 15,
-                                            backgroundColor: "#CBCBCB",
-                                            color: "black",
-                                            border: "1px solid white",
-                                        }}
-                                    >
-                                        <th>Site Status</th>
-                                        <th>Integration Status</th>
-                                        <th>EMF Status</th>
-                                        <th>Alarm Status</th>
-                                        <th>SCFT Offered</th>
-                                        <th>PAT Offered</th>
-                                        <th>SAT Offered</th>
-                                        <th>MW PAT Offered</th>
-                                        <th>MW SAT Offered</th>
-                                        <th>MW MIDS MS1</th>
-                                        <th>I-Deploy MS1</th>
+                                    {/* SUB HEADER */}
+                                    <tr style={{ backgroundColor: "#CBCBCB" }}>
+                                        <th>Type</th>
+                                        {dynamicHeaders.map((h) => (
+                                            <th key={h}>{h}</th>
+                                        ))}
                                     </tr>
                                 </thead>
 
                                 <tbody>
                                     {integrationToOnairData?.map((item, idx) => {
                                         const { Circle, data } = item;
-                                        const done = data?.Done || {};
-                                        const pending = data?.Pending || {};
+                                        const done = data.Done || {};
+                                        const pending = data.Pending || {};
 
                                         return (
                                             <React.Fragment key={idx}>
-                                                {/* DONE ROW */}
-                                                <tr className={classes.hoverRT} style={{ textAlign: "center" }} >
+                                                {/* DONE */}
+                                                <tr className={classes.tableRow} style={{ textAlign: "center" }}>
                                                     <th
                                                         rowSpan={2}
-                                                        style={{
-                                                            padding: "1px 1px",
-                                                            whiteSpace: "nowrap",
-                                                            background: "#fff",
-                                                            borderRight: "1px solid black",
-                                                        }}
-                                                        className={classes.hoverRT}
                                                     >
                                                         {Circle}
                                                     </th>
                                                     <th>Done</th>
-                                                    <th>{done["Integration Status"]}</th>
-                                                    <th>{done["EMF Status"]}</th>
-                                                    <th>{done["Alarm Status"]}</th>
-                                                    <th>{done["SCFT Offered"]}</th>
-                                                    <th>{done["PAT Offered"]}</th>
-                                                    <th>{done["SAT Offered"]}</th>
-                                                    <th>{done["MW PAT Offered"]}</th>
-                                                    <th>{done["MW SAT Offered"]}</th>
-                                                    <th>{done["MW MIDS MS1"]}</th>
-                                                    <th>{done["I-Deploy MS1"]}</th>
+                                                    {dynamicHeaders.map((h) => (
+                                                        <th key={h}>{done[h] ?? "-"}</th>
+                                                    ))}
                                                 </tr>
 
-                                                {/* PENDING ROW */}
-                                                <tr className={classes.hoverRT} style={{ textAlign: "center" }}>
+                                                {/* PENDING */}
+                                                <tr className={classes.tableRow} style={{ textAlign: "center" }}>
                                                     <th>Pending</th>
-                                                    <th>{pending["Integration Status"]}</th>
-                                                    <th>{pending["EMF Status"]}</th>
-                                                    <th>{pending["Alarm Status"]}</th>
-                                                    <th>{pending["SCFT Offered"]}</th>
-                                                    <th>{pending["PAT Offered"]}</th>
-                                                    <th>{pending["SAT Offered"]}</th>
-                                                    <th>{pending["MW PAT Offered"]}</th>
-                                                    <th>{pending["MW SAT Offered"]}</th>
-                                                    <th>{pending["MW MIDS MS1"]}</th>
-                                                    <th>{pending["I-Deploy MS1"]}</th>
+                                                    {dynamicHeaders.map((h) => (
+                                                        <th key={h}>{pending[h] ?? "-"}</th>
+                                                    ))}
                                                 </tr>
                                             </React.Fragment>
                                         );
@@ -312,4 +318,4 @@ const IntegrationTableOnAir = () => {
     )
 }
 
-export default IntegrationTableOnAir
+export default RfaiIntegration

@@ -12,16 +12,16 @@ import Checkbox from '@mui/material/Checkbox';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import zoomPlugin from 'chartjs-plugin-zoom';
 import ChartjsPluginWatermark from 'chartjs-plugin-watermark'
-import { ServerURL } from '../../../services/FetchNodeServices';
+import { ServerURL } from '../../../../services/FetchNodeServices';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import LaunchIcon from '@mui/icons-material/Launch';
 import Dialog from '@mui/material/Dialog';
 import Slide from '@mui/material/Slide';
-import { usePost } from '../../../Hooks/PostApis';
-import { useLoadingDialog } from '../../../Hooks/LoadingDialog';
-import { postData } from '../../../services/FetchNodeServices';
+import { usePost } from '../../../../Hooks/PostApis';
+import { useLoadingDialog } from '../../../../Hooks/LoadingDialog';
+import { postData } from '../../../../services/FetchNodeServices';
 import _ from 'lodash';
 
 
@@ -80,95 +80,61 @@ const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues 
 };
 
 
-const CircleWiese = () => {
+const MonthWise = () => {
     const chartRef = useRef(null);
     const [graphType, setGraphType] = useState(false);
     const [open, setOpen] = useState(false)
     const { makePostRequest, cancelRequest } = usePost()
     const { loading, action } = useLoadingDialog();
-    const milestoneOptions = [
-        "Allocation",
-        "RFAI",
-        "RFAI Survey",
-        "MO Punch",
-        "Material Dispatch",
-        "Material Delivered",
-        "Installation End",
-        "Integration",
-        "EMF Submission",
-        "Alarm Rectification Done",
-        "SCFT I-Deploy Offered",
-        "RAN PAT Offer",
-        "RAN SAT Offer",
-        "MW PAT Offer",
-        "MW SAT Offer",
-        "Site ONAIR",
-        "I-Deploy ONAIR"
-    ]
-    const [milestone1, setMilestone1] = useState('RFAI')
-    const [milestone2, setMilestone2] = useState('Site ONAIR')
-    const [circle, setCircle] = useState([])
-    const [site_taggingAgingData, setSite_taggingAgingData] = useState([]);
-    const [site_taggingAgingOption, setSite_taggingAgingOption] = useState([]);
-    const [currentStatus, setCurrentStatus] = useState([])
-    const [currentStatusOption, setCurrentStatusOption] = useState([])
-    const [circleWieseData, setCircleWieseData] = useState([])
+    const [mainDataT2, setMainDataT2] = useState([])
+    const [monthArray, setMonthArray] = useState(['CF'])
+    const [tableData, setTableData] = useState([])
+    const milestones = ["RFAI", "Site ONAIR"];
     const [milestoneData, setMilestoneData] = useState({})
+    const [circle, setCircle] = useState([])
+    const [circleOptions, setCircleOptions] = useState([])
+    const [tagging, setTagging] = useState([])
+    const [taggingOptions, setTaggingOptions] = useState([])
+    const [relocationMethod, setRelocationMethod] = useState([])
+    const [relocationMethodOptions, setRelocationMethodOptions] = useState([])
     const [toco, setToco] = useState([])
     const [tocoOptions, setTocoOptions] = useState([])
     const [view, setView] = useState('Cumulative')
     let delayed;
 
-    console.log('data get', milestoneOptions)
+    console.log('data get', monthArray, milestoneData)
 
 
+    const fetchDailyData = async () => {
 
-
-    const fetchDailyDataCircle = async () => {
-
-        if (milestone1 !== milestone2) {
-            action(true)
-            var formData = new FormData()
-            formData.append('site_tagging', site_taggingAgingData)
-            formData.append('current_status', currentStatus)
-            formData.append('milestone1', milestone1)
-            formData.append('milestone2', milestone2)
-
-            const res = await postData("alok_tracker/graphs/", formData);
-            // const res =  tempData; //  remove this line when API is ready
-            console.log(' circle wise data', (res))
-            if (res) {
-                action(false)
-                setCircleWieseData(transformData(JSON.parse(res.json_data.graph_summary)))
-                if (currentStatusOption.length === 0 && site_taggingAgingOption.length === 0) {
-                    setCircle(transformData(JSON.parse(res.json_data.graph_summary)).circle)
-                    setCurrentStatusOption(res.unique_data.unique_current_status)
-                    setSite_taggingAgingOption(res.unique_data.unique_site_tagging)
-                    // setMilestoneOptions(res.unique_data?.milestones)
-                }
-
-                // setMainDataT2(JSON.parse(res.data))
+        action(true)
+        var formData = new FormData()
+        formData.append('circle', circle)
+        formData.append('site_tagging', tagging)
+        formData.append('relocation_method', relocationMethod)
+        formData.append('new_toco_name', toco)
+        formData.append('view', view)
+        const res = await postData("alok_tracker/weekly_monthly_dashboard_file/", formData);
+        // const res =  tempData; //  remove this line when API is read
+        if (res) {
+            action(false)
+            setMilestoneData(extractMilestoneData(JSON.parse(res.months_data), milestones))
+            if (circleOptions.length === 0) {
+                setMonthArray((prev) => [...prev, ...res.unique_data.month_columns])
+                setCircleOptions(res.unique_data.unique_circle)
+                setTaggingOptions(res.unique_data.unique_site_tagging)
+                setRelocationMethodOptions(res.unique_data.unique_relocation_method)
+                setTocoOptions(res.unique_data.unique_new_toco_name)
             }
-            else {
-                action(false)
-            }
-        } else {
-            alert("Please select different milestones")
+
+
+            // setMainDataT2(JSON.parse(res.data))
+        }
+        else {
+            action(false)
         }
 
-
     }
-
-    const transformData = (arr) => {
-        return {
-            circle: arr.map(item => item.Circle),
-            RFAI_done: arr.map(item => Number(item[`${milestone1} Done Count`])),
-            onAirDone: arr.map(item => Number(item[`${milestone2} Done Count`])),
-            onAirPending: arr.map(item => Number(item[`${milestone2} Pending Count`]))
-        };
-    };
-
-
 
 
     const extractMilestoneData = (data, milestones) => {
@@ -219,24 +185,25 @@ const CircleWiese = () => {
 
 
     const data1 = {
-        labels: circle,
+        labels: monthArray,
         datasets: [
             {
-                label: `${milestone2} Done`,
-                data: circleWieseData?.onAirDone,
-                borderColor: 'rgb(0, 110, 116)',
-                backgroundColor: ['rgb(0, 110, 116)'],
-                borderWidth: 2,
+                label: 'RFAI',
+                data: milestoneData?.RFAI,
+                borderColor: 'rgb(107, 107, 107)',
+                backgroundColor: ['rgb(204, 255, 254)'],
+
+                borderWidth: 3,
                 borderRadius: 5,
                 fill: false,
                 tension: 0.4
             },
             {
-                label: `${milestone2} Pending`,
-                data: circleWieseData?.onAirPending,
-                borderColor: 'rgb(107, 107, 107)',
-                backgroundColor: ['rgb(204, 255, 254)'],
-                borderWidth: 2,
+                label: 'MS1',
+                data: milestoneData?.['Site ONAIR'],
+                borderColor: 'rgb(0, 110, 116)',
+                backgroundColor: ['rgb(0, 110, 116)'],
+                borderWidth: 3,
                 borderRadius: 5,
                 color: 'red',
                 fill: false,
@@ -244,49 +211,55 @@ const CircleWiese = () => {
             }
             ,
             {
-                label: `${milestone1} Done`,
-                data: circleWieseData?.RFAI_done,
+                label: 'Sites Converted %',
+                data: milestoneData?.['Percentage'],
                 type: 'bar',
-                borderColor: 'rgb(183, 183, 183)',
-                backgroundColor: 'rgba(183, 183, 183, 0.5)',
+                borderColor: 'rgb(136, 30, 135)',
+                backgroundColor: 'rgb(136, 30, 135,0.3)',
                 borderWidth: 2,
                 borderRadius: 5,
                 fill: false,
                 tension: 0.4,
+                yAxisID: 'y1'
             }
         ]
     }
 
+
     const data2 = {
-        labels: circle,
+        labels: monthArray,
         datasets: [
 
             {
-                label: `${milestone1} Done`,
-                data: circleWieseData?.RFAI_done,
+                label: 'Sites Converted %',
+                data: milestoneData?.['Percentage'],
                 type: 'line', // ✅ correct property
-                borderColor: 'rgb(72, 98, 149)',
-                backgroundColor: 'rgba(48, 104, 215, 0.3)',
+                borderColor: 'rgb(136, 30, 135)',
+                backgroundColor: 'rgb(136, 30, 135,0.7)',
                 borderWidth: 2,
                 fill: false,
                 tension: 0.4,
-                // yAxisID: 'y1'
+                yAxisID: 'y1'
             },
             {
-                label: `${milestone2} Done`,
-                data: circleWieseData?.onAirDone,
+                label: 'RFAI',
+                data: milestoneData?.RFAI,
                 borderColor: 'black',
-                backgroundColor: ['rgb(0, 110, 116)'],
+                // backgroundColor: ['rgb(0, 110, 116)'],
+                backgroundColor: ['rgb(171, 171, 171)'],
+
                 borderWidth: 1,
                 borderRadius: 5,
                 fill: true,
                 tension: 0.4
             },
             {
-                label: `${milestone2} Pending`,
-                data: circleWieseData?.onAirPending,
+                label: 'MS1',
+                data: milestoneData?.['Site ONAIR'],
                 borderColor: 'black',
-                backgroundColor: ['rgb(171, 171, 171)'],
+                // backgroundColor: ['rgb(171, 171, 171)'],
+                backgroundColor: ['rgb(0, 110, 116)'],
+
                 borderWidth: 1,
                 borderRadius: 5,
                 color: 'red',
@@ -322,11 +295,12 @@ const CircleWiese = () => {
             },
             title: {
                 display: true,
-                text: `Circlewise Progress - ${milestone1} to ${milestone2}`,
+                text: `Monthly Progress - RFAI to MS1`,
                 font: {
                     size: 16,
                     weight: 'bold'
                 }
+
             },
             datalabels: {
                 display: true,
@@ -338,6 +312,9 @@ const CircleWiese = () => {
                     size: 12,
                     weight: 'bold'
                 }
+                // formatter:(value,context)=>{
+                //         console.log(context)
+                // }
             },
             zoom: {
                 zoom: {
@@ -410,15 +387,6 @@ const CircleWiese = () => {
         },
     }
 
-
-    const handleMilestone1Change = (event) => {
-        setMilestone1(event.target.value);
-    }
-
-    const handleMilestone2Change = (event) => {
-        setMilestone2(event.target.value);
-    }
-
     // TOGGAL BUTTON
     const handleChange = () => {
         setGraphType(!graphType)
@@ -470,18 +438,13 @@ const CircleWiese = () => {
 
 
     useEffect(() => {
-        setMilestoneData({
-            circle: [],
-            RFAI_done: [],
-            onAirDone: [],
-            onAirPending: []
-        })
-        fetchDailyDataCircle()
+        setMilestoneData({ 'Percentage': [], 'RFAI': [], 'Site ONAIR': [] })
+        fetchDailyData()
         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
         return () => {
             cancelRequest();
         }
-    }, [site_taggingAgingData, currentStatus, milestone1, milestone2])
+    }, [circle, tagging, relocationMethod, toco])
     return (
         <>
 
@@ -492,49 +455,36 @@ const CircleWiese = () => {
                     {/* <div>
                         <InputLabel style={{ fontSize: 15 }}>Select Month</InputLabel>
                         <input type='month' value={date} onChange={(e) => handleMonthData(e.target.value)} />
-                    
-                </div> */}
-
-
-                    <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
-                        <InputLabel id="demo-simple-select-label">milestone1</InputLabel>
-                        <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={milestone1}
-                            label="milestone1"
-                            onChange={handleMilestone1Change}
-                        >
-                            {milestoneOptions?.map((item, index) => (
-                                <MenuItem key={index} value={item}>{item}</MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                    <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
-                        <InputLabel id="demo-simple-select-label">milestone2</InputLabel>
-                        <Select
-                            labelId="demo-simple-select-label"
-                            id="demo-simple-select"
-                            value={milestone2}
-                            label="milestone2"
-                            onChange={handleMilestone2Change}
-                        >
-                            {milestoneOptions?.map((item, index) => (
-                                <MenuItem key={index} value={item}>{item}</MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
+                    </div> */}
+                    {/* select circle */}
+                    <MultiSelectWithAll
+                        label="Circle"
+                        options={circleOptions}
+                        selectedValues={circle}
+                        setSelectedValues={setCircle}
+                    />
+                    {/* tagging */}
                     <MultiSelectWithAll
                         label="Site Tagging"
-                        options={site_taggingAgingOption}
-                        selectedValues={site_taggingAgingData}
-                        setSelectedValues={setSite_taggingAgingData}
+                        options={taggingOptions}
+                        selectedValues={tagging}
+                        setSelectedValues={setTagging}
                     />
+
+                    {/* Current Status */}
                     <MultiSelectWithAll
                         label="Current Status"
-                        options={currentStatusOption}
-                        selectedValues={currentStatus}
-                        setSelectedValues={setCurrentStatus}
+                        options={relocationMethodOptions}
+                        selectedValues={relocationMethod}
+                        setSelectedValues={setRelocationMethod}
+                    />
+                    {/* Toco  */}
+
+                    <MultiSelectWithAll
+                        label="TOCO"
+                        options={tocoOptions}
+                        selectedValues={toco}
+                        setSelectedValues={setToco}
                     />
 
                     {/* toggle button */}
@@ -589,4 +539,4 @@ const CircleWiese = () => {
     )
 }
 
-export default CircleWiese
+export default MonthWise
