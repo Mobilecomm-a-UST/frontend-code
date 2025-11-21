@@ -168,7 +168,7 @@ const CircleWiese = () => {
         // ✅ Calculate percentage array
         const percentage = onAirDone.map((done, index) => {
             const rfai = RFAI_done[index];
-            return rfai ? Number(((done / rfai) * 100).toFixed(2)) : 0;  // Avoid division by 0
+            return rfai ? Math.ceil((done / rfai) * 100) : 0;  // Avoid division by 0
         });
 
         return {
@@ -179,55 +179,6 @@ const CircleWiese = () => {
             percentage   // ✅ Added
         };
     };
-
-
-
-
-    const extractMilestoneData = (data, milestones) => {
-        const result = {};
-
-        // Find all dynamic month keys from the first object (or any object)
-        const monthKeys = _(data[0])
-            .keys()
-            .filter((k) => k.startsWith("Month-"))
-            .sortBy((k) => Number(k.split("-")[1])) // ensure Month-1, Month-2...Month-n are in correct order
-            .value();
-
-        // Add 'CF' at start
-        const keysToExtract = ["CF", ...monthKeys];
-
-        // Loop through milestones and pick data dynamically
-        _.forEach(milestones, (milestone) => {
-            const item = _.find(
-                data,
-                (d) => d["Milestone Track/Site Count"] === milestone
-            );
-
-            if (item) {
-                const values = _.map(_.pick(item, keysToExtract), (v) => Number(v));
-                result[milestone] = values;
-            }
-        });
-
-        if (milestones.length === 2) {
-            const [m1, m2] = milestones;
-            const arr1 = result[m1] || [];
-            const arr2 = result[m2] || [];
-
-            // calculate (arr1 / arr2) * 100 safely
-            const percentage = _.map(arr1, (val, i) =>
-                arr2[i] && arr2[i] !== 0 ? Number(((arr2[i] / val) * 100).toFixed(2)) : 0
-            );
-
-            result["Percentage"] = percentage;
-        }
-
-
-        return result;
-    };
-
-
-
 
 
     const data1 = {
@@ -252,7 +203,7 @@ const CircleWiese = () => {
                 borderRadius: 5,
                 fill: false,
                 tension: 0.4,
-            } ,
+            },
             {
                 label: 'Sites Converted %',
                 data: circleWieseData?.percentage,
@@ -287,7 +238,7 @@ const CircleWiese = () => {
                 label: `${milestone1} Done`,
                 data: circleWieseData?.RFAI_done,
                 borderColor: 'black',
-                backgroundColor: ['rgb(0, 110, 116)'],
+                backgroundColor: ['rgb(171, 171, 171)'],
                 borderWidth: 1,
                 borderRadius: 5,
                 fill: true,
@@ -296,8 +247,9 @@ const CircleWiese = () => {
             {
                 label: `${milestone2} Done`,
                 data: circleWieseData?.onAirDone,
+
                 borderColor: 'black',
-                backgroundColor: ['rgb(171, 171, 171)'],
+                backgroundColor: ['rgb(0, 110, 116)'],
                 borderWidth: 1,
                 borderRadius: 5,
                 fill: true,
@@ -307,38 +259,148 @@ const CircleWiese = () => {
         ]
     }
 
+    // const options = {
+    //     responsive: true,
+    //     // events: ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove'],
+    //     maintainApectRatio: false,
+    //     interaction: {
+    //         mode: 'index',
+    //         intersect: false,
+    //         // axis:'x',
+    //     },
+    //     plugins: {
+    //         // backgroundImageUrl:'https://www.msoutlook.info/pictures/bgconfidential.png',
+
+    //         legend: {
+    //             position: 'bottom',
+    //             labels: {
+    //                 // This more specific font property overrides the global property
+    //                 font: {
+    //                     size: 13,
+    //                     // weight: 'bold',
+    //                 },
+    //                 // color: "white",
+    //                 boxWidth: 18,
+    //             }
+    //         },
+    //         title: {
+    //             display: true,
+    //             text: `Circlewise Progress - ${milestone1} (${circleWieseData?.RFAI_done?.reduce((sum, num) => sum + num, 0) || 0}) to ${milestone2} (${circleWieseData?.onAirDone?.reduce((sum, num) => sum + num, 0) || 0})`,
+    //             font: {
+    //                 size: 16,
+    //                 weight: 'bold'
+    //             }
+    //         },
+    //         datalabels: {
+    //             display: true,
+    //             color: 'black',
+    //             anchor: 'end',
+    //             align: 'top',
+    //             offset: 0.5,
+    //             font: {
+    //                 size: 12,
+    //                 weight: 'bold'
+    //             }
+    //         },
+    //         zoom: {
+    //             zoom: {
+    //                 wheel: {
+    //                     enabled: true,
+    //                     speed: 0.01,
+    //                 },
+    //                 pinch: {
+    //                     enabled: true,
+    //                     speed: 0.01,
+    //                 },
+    //                 mode: 'x',
+    //                 // mode:'y',
+    //             },
+    //             pan: {
+    //                 enabled: true,
+    //                 mode: 'x'
+    //             },
+    //         },
+
+    //     },
+    //     scales: {
+    //         x: {
+    //             grid: {
+    //                 display: false
+    //             },
+    //             ticks: {
+    //                 // color:"white"
+    //             },
+    //             // stacked: true
+
+    //         },
+    //         y: {
+    //             grid: {
+    //                 display: true,
+    //                 // color:'white'
+    //             },
+    //             ticks: {
+    //                 // forces step size to be 50 units
+    //                 stepSize: 10,
+    //                 // color:'white'
+    //             },
+    //             // stacked: true
+    //         }
+    //     },
+    //     watermark: {
+    //         image: `${ServerURL}/media/assets/logo-new.png`,
+    //         x: 50,
+    //         y: 50,
+    //         width: 300,
+    //         height: 150,
+    //         opacity: 0.25,
+    //         alignX: "right",
+    //         alignY: "top",
+    //         alignToChartArea: false,
+    //         position: "back"
+
+    //     },
+    //     animation: {
+    //         onComplete: () => {
+    //             delayed = true;
+    //         },
+    //         delay: (context) => {
+    //             let delay = 0;
+    //             if (context.type === 'data' && context.mode === 'default' && !delayed) {
+    //                 delay = context.dataIndex * 300 + context.datasetIndex * 100;
+    //             }
+    //             return delay;
+    //         },
+    //     },
+    // }
     const options = {
         responsive: true,
-        // events: ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove'],
-        maintainApectRatio: false,
+        maintainAspectRatio: false,
+
         interaction: {
             mode: 'index',
             intersect: false,
-            // axis:'x',
         },
-        plugins: {
-            // backgroundImageUrl:'https://www.msoutlook.info/pictures/bgconfidential.png',
 
+        plugins: {
             legend: {
                 position: 'bottom',
                 labels: {
-                    // This more specific font property overrides the global property
                     font: {
                         size: 13,
-                        // weight: 'bold',
                     },
-                    // color: "white",
                     boxWidth: 18,
                 }
             },
+
             title: {
                 display: true,
-               text: `Circlewise Progress - ${milestone1} (${circleWieseData?.RFAI_done?.reduce((sum, num) => sum + num, 0) || 0}) to ${milestone2} (${circleWieseData?.onAirDone?.reduce((sum, num) => sum + num, 0) || 0})`,
+                text: `Circlewise Progress - ${milestone1} (${circleWieseData?.RFAI_done?.reduce((sum, num) => sum + num, 0) || 0}) to ${milestone2} (${circleWieseData?.onAirDone?.reduce((sum, num) => sum + num, 0) || 0})`,
                 font: {
                     size: 16,
                     weight: 'bold'
                 }
             },
+
             datalabels: {
                 display: true,
                 color: 'black',
@@ -348,8 +410,17 @@ const CircleWiese = () => {
                 font: {
                     size: 12,
                     weight: 'bold'
+                },
+
+                // ⭐ Add % Symbol for Percentage Dataset ⭐
+                formatter: (value, context) => {
+                    if (context.dataset.label === "Sites Converted %") {
+                        return value + "%";       // show 45%
+                    }
+                    return value;                 // keep normal values for others
                 }
             },
+
             zoom: {
                 zoom: {
                     wheel: {
@@ -361,39 +432,31 @@ const CircleWiese = () => {
                         speed: 0.01,
                     },
                     mode: 'x',
-                    // mode:'y',
                 },
                 pan: {
                     enabled: true,
                     mode: 'x'
                 },
             },
-
         },
+
         scales: {
             x: {
                 grid: {
                     display: false
                 },
-                ticks: {
-                    // color:"white"
-                },
-                // stacked: true
-
             },
+
             y: {
                 grid: {
                     display: true,
-                    // color:'white'
                 },
                 ticks: {
-                    // forces step size to be 50 units
                     stepSize: 10,
-                    // color:'white'
                 },
-                // stacked: true
             }
         },
+
         watermark: {
             image: `${ServerURL}/media/assets/logo-new.png`,
             x: 50,
@@ -405,8 +468,8 @@ const CircleWiese = () => {
             alignY: "top",
             alignToChartArea: false,
             position: "back"
-
         },
+
         animation: {
             onComplete: () => {
                 delayed = true;
@@ -419,7 +482,7 @@ const CircleWiese = () => {
                 return delay;
             },
         },
-    }
+    };
 
 
     const handleMilestone1Change = (event) => {

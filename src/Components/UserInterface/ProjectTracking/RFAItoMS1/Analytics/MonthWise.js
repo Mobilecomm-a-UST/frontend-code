@@ -170,7 +170,7 @@ const MonthWise = () => {
 
             // calculate (arr1 / arr2) * 100 safely
             const percentage = _.map(arr1, (val, i) =>
-                arr2[i] && arr2[i] !== 0 ? Number(((arr2[i] / val) * 100).toFixed(2)) : 0
+                arr2[i] && arr2[i] !== 0 ? Math.ceil(((arr2[i] / val) * 100)) : 0
             );
 
             result["Percentage"] = percentage;
@@ -302,7 +302,7 @@ const MonthWise = () => {
                 }
 
             },
-            datalabels: {
+              datalabels: {
                 display: true,
                 color: 'black',
                 anchor: 'end',
@@ -311,10 +311,15 @@ const MonthWise = () => {
                 font: {
                     size: 12,
                     weight: 'bold'
+                },
+
+                // ⭐ Add % Symbol for Percentage Dataset ⭐
+                formatter: (value, context) => {
+                    if (context.dataset.label === "Sites Converted %") {
+                        return value + "%";       // show 45%
+                    }
+                    return value;                 // keep normal values for others
                 }
-                // formatter:(value,context)=>{
-                //         console.log(context)
-                // }
             },
             zoom: {
                 zoom: {
