@@ -181,7 +181,7 @@ const RfaiIntegration = () => {
                     {/* ************* 2G  TABLE DATA ************** */}
                     <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', alignContent: 'center' }}>
                         <Box style={{ fontSize: 22, fontWeight: 'bold' }}>
-                            Done Vs Pending Count - Clear {milestone1} to {milestone2}
+                            Done Vs Pending Count - {milestone1} to {milestone2}
                         </Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', gap: 1 }}>
                             <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
