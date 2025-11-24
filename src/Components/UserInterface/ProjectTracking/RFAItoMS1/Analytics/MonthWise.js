@@ -57,6 +57,7 @@ const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues 
                 onChange={handleChange}
                 input={<OutlinedInput label={label} />}
                 renderValue={(selected) => selected.join(', ')}
+                size='small'
             >
                 <MenuItem value="ALL">
                     <Checkbox
@@ -302,7 +303,7 @@ const MonthWise = () => {
                 }
 
             },
-              datalabels: {
+            datalabels: {
                 display: true,
                 color: 'black',
                 anchor: 'end',
@@ -401,6 +402,9 @@ const MonthWise = () => {
         setOpen(false);
 
     }
+        const handleViewChange = (event) => {
+        setView(event.target.value)
+    }
 
 
 
@@ -449,18 +453,32 @@ const MonthWise = () => {
         return () => {
             cancelRequest();
         }
-    }, [circle, tagging, relocationMethod, toco])
+    }, [circle, tagging, relocationMethod, toco,view])
     return (
         <>
 
             <div style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', padding: 10, height: 'auto', width: "96%", margin: 20, borderRadius: 10, backgroundColor: "white", display: "flex", justifyContent: 'space-around', alignItems: 'center' }}>
-                <div style={{ width: 200, height: 350, borderRadius: 5, padding: 10, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: "12px" }}>
+                <div style={{ width: 200, height: 350, borderRadius: 5, padding: 10, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: "10px" ,overflowY:'auto'}}>
                     <div style={{ display: 'flex', alignItems: 'center', fontSize: '18px', fontWeight: 'bold', color: "black" }}><FilterAltIcon />FILTER DATA</div>
                     {/* select month */}
                     {/* <div>
                         <InputLabel style={{ fontSize: 15 }}>Select Month</InputLabel>
                         <input type='month' value={date} onChange={(e) => handleMonthData(e.target.value)} />
                     </div> */}
+                    <FormControl sx={{  minWidth: 120, maxWidth: 120 }} size="small">
+                        <InputLabel id="demo-select-small-label">View</InputLabel>
+                        <Select
+                            labelId="demo-select-small-label"
+                            id="demo-select-small"
+                            value={view}
+                            label="View"
+                            onChange={handleViewChange}
+                        >
+                            <MenuItem value="Cumulative">Cumulative</MenuItem>
+                            <MenuItem value="Non-cumulative">Non-cumulative</MenuItem>
+
+                        </Select>
+                    </FormControl>
                     {/* select circle */}
                     <MultiSelectWithAll
                         label="Circle"
@@ -511,9 +529,6 @@ const MonthWise = () => {
                     <div>
                         <Button color="primary" endIcon={<LaunchIcon />} onClick={() => { setOpen(true) }}>Full screen</Button>
                     </div>
-                    {/* <div>
-          <Button color="primary" endIcon={<LaunchIcon />} onClick={() => {handleDownloadChart()}}>Download</Button>
-        </div> */}
                 </div>
                 <div style={{ display: graphType ? 'inherit' : 'none', filter: 'drop-shadow(rgba(0, 0, 0, 0.34) 0px 3px 3px)', width: "800px", height: 400 }}>
                     <Line
