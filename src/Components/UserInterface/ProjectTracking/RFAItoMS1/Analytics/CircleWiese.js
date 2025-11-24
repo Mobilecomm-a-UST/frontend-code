@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react'
 import { Chart as Chartjs } from 'chart.js/auto'
+import { TextField } from "@mui/material";
 import { Line, Bar } from 'react-chartjs-2';
 import Button from '@mui/material/Button';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -114,9 +115,7 @@ const CircleWiese = () => {
     const [currentStatusOption, setCurrentStatusOption] = useState([])
     const [circleWieseData, setCircleWieseData] = useState([])
     const [milestoneData, setMilestoneData] = useState({})
-    const [toco, setToco] = useState([])
-    const [tocoOptions, setTocoOptions] = useState([])
-    const [view, setView] = useState('Cumulative')
+    const [month, setMonth] = useState('')
     let delayed;
 
     console.log('data get', circleWieseData)
@@ -133,7 +132,8 @@ const CircleWiese = () => {
             formData.append('current_status', currentStatus)
             formData.append('milestone1', milestone1)
             formData.append('milestone2', milestone2)
-
+            formData.append('month', month.split('-')[1] || '')
+            formData.append('year', month.split('-')[0] || '')
             const res = await postData("alok_tracker/graphs/", formData);
             // const res =  tempData; //  remove this line when API is ready
             console.log(' circle wise data', (res))
@@ -492,6 +492,10 @@ const CircleWiese = () => {
     const handleMilestone2Change = (event) => {
         setMilestone2(event.target.value);
     }
+    const handleMonthChange = (event) => {
+        // console.log(event.target.value.split('-')[1])
+        setMonth(event.target.value)
+    }
 
     // TOGGAL BUTTON
     const handleChange = () => {
@@ -556,12 +560,12 @@ const CircleWiese = () => {
         return () => {
             cancelRequest();
         }
-    }, [site_taggingAgingData, currentStatus, milestone1, milestone2])
+    }, [site_taggingAgingData, currentStatus, milestone1, milestone2,month])
     return (
         <>
 
             <div style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', padding: 10, height: 'auto', width: "96%", margin: 20, borderRadius: 10, backgroundColor: "white", display: "flex", justifyContent: 'space-around', alignItems: 'center' }}>
-                <div style={{ width: 200, height: 350, borderRadius: 5, padding: 10, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: "12px" }}>
+                <div style={{ width: 200, height: 350, borderRadius: 5, padding: 10, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: "10px",overflowY:'auto' }}>
                     <div style={{ display: 'flex', alignItems: 'center', fontSize: '18px', fontWeight: 'bold', color: "black" }}><FilterAltIcon />FILTER DATA</div>
                     {/* select month */}
                     {/* <div>
@@ -611,6 +615,19 @@ const CircleWiese = () => {
                         selectedValues={currentStatus}
                         setSelectedValues={setCurrentStatus}
                     />
+                    <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
+                        <TextField
+                            variant="outlined"
+                            // required
+                            fullWidth
+                            label="Month"
+                            name="month"
+                            value={month}
+                            onChange={handleMonthChange}
+                            size="small"
+                            type="month"
+                        />
+                    </FormControl>
 
                     {/* toggle button */}
                     <div>
