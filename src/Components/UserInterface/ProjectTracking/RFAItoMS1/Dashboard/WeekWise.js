@@ -142,7 +142,7 @@ const WeekWise = () => {
 
 
     const handleMonthChange = (event) => {
-        console.log(event.target.value.split('-')[1])
+        // console.log(event.target.value.split('-')[1])
         setMonth(event.target.value)
     }
 
