@@ -18,11 +18,11 @@ import ArrowRightIcon from '@rsuite/icons/ArrowRight';
 import { getDecreyptedData } from '../../../Components/utils/localstorage';
 
 const PTtool = lazy(() => import('./PTtool'))
-const UploadFile = lazy(() => import('./RFAItoMS1/UploadFile/Upload'))
-const DashboardTable = lazy(() => import('./RFAItoMS1/Dashboard/DashboardTable'))
-const MainAging = lazy(() => import('./RFAItoMS1/Aging/MainAging'))
-const MainDashboard = lazy(() => import('./RFAItoMS1/Analytics/MainDashboard'))
-const FinalData = lazy(() => import('./RFAItoMS1/Dashboard/FinalData'))
+const RFAItoMS1_UploadFile = lazy(() => import('./RFAItoMS1/UploadFile/Upload'))
+const RFAItoMS1_DashboardTable = lazy(() => import('./RFAItoMS1/Dashboard/DashboardTable'))
+const RFAItoMS1_MainAging = lazy(() => import('./RFAItoMS1/Aging/MainAging'))
+const RFAItoMS1_MainDashboard = lazy(() => import('./RFAItoMS1/Analytics/MainDashboard'))
+const RFAItoMS1_FinalData = lazy(() => import('./RFAItoMS1/Dashboard/FinalData'))
 
 
 
@@ -99,16 +99,16 @@ const PTracking = () => {
 
                                             {/* RFAI To MS1 */}
                                             <Nav.Menu eventKey="1" style={{ fontWeight: 400, color: 'white' }} placement="leftStart" className="menu-title-custom" title="RFAI To MS1" icon={<ArrowRightIcon />}  >
-                                                <Nav.Item eventKey="1-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/analytics'); show(); setMenuButton(true) }}>
+                                                <Nav.Item eventKey="1-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/rfai_to_ms1_analytics'); show(); setMenuButton(true) }}>
                                                     Analytics Dashboard
                                                 </Nav.Item>
-                                                <Nav.Item eventKey="2-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/waterfall'); show(); setMenuButton(true) }}>
+                                                <Nav.Item eventKey="2-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/rfai_to_ms1_waterfall'); show(); setMenuButton(true) }}>
                                                     Waterfall Dashboard
                                                 </Nav.Item>
-                                                <Nav.Item eventKey="3-2" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/ageing'); show(); setMenuButton(true) }}>
+                                                <Nav.Item eventKey="3-2" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/rfai_to_ms1_ageing'); show(); setMenuButton(true) }}>
                                                     Ageing Dashboard
                                                 </Nav.Item>
-                                                {!userTypes?.includes('RLT_reader') &&       <Nav.Item eventKey="4-3" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/upload_file'); show(); setMenuButton(true) }}>
+                                                {!userTypes?.includes('RLT_reader') &&       <Nav.Item eventKey="4-3" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/rfai_to_ms1_upload_file'); show(); setMenuButton(true) }}>
                                                     Upload File
                                                 </Nav.Item>}
                                            
@@ -143,11 +143,11 @@ const PTracking = () => {
                             <Routes>
                                 <Route element={<PTtool />} path="/" />
 
-                                {!userTypes?.includes('RLT_reader') &&  <Route element={<UploadFile />} path="/upload_file" />}
-                                <Route element={<DashboardTable />} path="/waterfall/*" />
-                                <Route element={<FinalData />} path="/waterfall/:milestone" />
-                                <Route element={<MainAging />} path="/ageing" />
-                                <Route element={<MainDashboard />} path="/analytics" />
+                                {!userTypes?.includes('RLT_reader') &&  <Route element={<RFAItoMS1_UploadFile />} path="/rfai_to_ms1_upload_file" />}
+                                <Route element={<RFAItoMS1_DashboardTable />} path="/rfai_to_ms1_waterfall/*" />
+                                <Route element={<RFAItoMS1_FinalData />} path="/rfai_to_ms1_waterfall/:milestone" />
+                                <Route element={<RFAItoMS1_MainAging />} path="/rfai_to_ms1_ageing" />
+                                <Route element={<RFAItoMS1_MainDashboard />} path="/rfai_to_ms1_analytics" />
 
 
 

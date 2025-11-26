@@ -13,7 +13,6 @@ import { useNavigate } from "react-router-dom";
 import CountUp from 'react-countup';
 import MonthWise from './MonthWise';
 // import IntegrationTableOnAir from './IntegrationTableOnAir';
-import RfaiIntegration from './RfaiIntegration';
 import CircleWiese from './CircleWiese';
 import { useLoadingDialog } from '../../../../Hooks/LoadingDialog';
 import { postData } from '../../../../services/FetchNodeServices';
@@ -49,8 +48,8 @@ const MainDashboard = () => {
         formData.append('site_tagging', '')
         formData.append('relocation_method', '')
         formData.append('new_toco_name', '')
-        formData.append('from_date', ChangeDateFormate(new Date(Date.now() - 86400000)))
-        formData.append('to_date', ChangeDateFormate(new Date()))
+        formData.append('from_date', ChangeDateFormate(new Date()))
+        formData.append('to_date', ChangeDateFormate(new Date(Date.now() + 86400000)))
         formData.append('view', 'Cumulative')
         const res = await postData("alok_tracker/daily_dashboard_file/", formData);
         // const res =  tempData; //  remove this line when API is ready
@@ -127,9 +126,9 @@ const MainDashboard = () => {
             <Box>
                 <CircleWiese />
             </Box>
-            <Box>
+            {/* <Box>
                 <RfaiIntegration />
-            </Box>
+            </Box> */}
             {/* <Box>
                 <IntegrationTableOnAir />
             </Box> */}
