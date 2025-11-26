@@ -390,7 +390,7 @@ const DateWise = () => {
             const temp = JSON.parse(responce.data)
 
             dispatch({ type: 'RELOCATION_FINAL_TRACKER', payload: { temp } })
-            navigate(`/tools/relocation_tracking/waterfall/${props.milestone}`)
+            navigate(`/tools/relocation_tracking/rfai_to_ms1_waterfall/${props.milestone}`)
         }
         else {
             action(false)
@@ -484,7 +484,7 @@ const DateWise = () => {
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
                                         <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', position: 'sticky', left: 0, top: 0, backgroundColor: '#006e74' }}>
                                             Milestone Track/Site Count</th>
-                                        <th style={{ padding: '5px 15px', whiteSpace: 'nowrap', position: 'sticky', left: '14%', top: 0, backgroundColor: '#006e74' }}>
+                                        <th style={{ padding: '5px 15px', whiteSpace: 'nowrap', backgroundColor: '#006e74' }}>
                                             CF</th>
                                         {dateArray?.map((item, index) => (
                                             <th key={index} style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#CBCBCB', color: 'black' }}>{item}</th>
@@ -497,7 +497,7 @@ const DateWise = () => {
                                         return (
                                             <tr className={classes.hoverRT} style={{ textAlign: "center", fontWeigth: 700 }} key={index}>
                                                 <th style={{ position: 'sticky', left: 0, top: 0, backgroundColor: '#CBCBCB', color: 'black' }}>{it['Milestone Track/Site Count']}</th>
-                                                <th style={{ position: 'sticky', left: '14%', top: 0, backgroundColor: '#CBCBCB', color: 'black' }}>{it['CF']}</th>
+                                                <th style={{ backgroundColor: '#CBCBCB', color: 'black' }}>{it['CF']}</th>
                                                 {dateArray?.map((item, index) => (
                                                     // <th key={index} style={{ backgroundColor: it[`date_${index + 1}`] > 0 ? '#FEEFAD' : '' }} >{it[`date_${index + 1}`]}</th>
                                                     <th key={index} className={classes.hoverRT} style={{ cursor: 'pointer' }}

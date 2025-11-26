@@ -11,11 +11,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import TableContainer from '@mui/material/TableContainer';
 import Paper from '@mui/material/Paper';
 import Slide from '@mui/material/Slide';
-import { CsvBuilder } from 'filefy';
-import { useGet } from '../../../../Hooks/GetApis';
 import { usePost } from '../../../../Hooks/PostApis';
 import { useLoadingDialog } from '../../../../Hooks/LoadingDialog';
-import { useQuery } from '@tanstack/react-query';
 import { useStyles } from '../../../ToolsCss'
 import { setEncreptedData, getDecreyptedData } from '../../../../utils/localstorage';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -26,6 +23,8 @@ import ListItemText from '@mui/material/ListItemText';
 import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import { postData } from '../../../../services/FetchNodeServices';
+import { DateRangePicker } from 'rsuite';
+import 'rsuite/dist/rsuite.min.css';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -83,17 +82,18 @@ const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues 
 
 
 
-const WeekWise = () => {
+const DateWise = () => {
     const classes = useStyles()
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [open, setOpen] = useState(false)
+    const [open, setOpen] = useState(true)
     const { makePostRequest } = usePost()
-    const userID = getDecreyptedData('userID')
     const { loading, action } = useLoadingDialog();
-    const [mainDataT2, setMainDataT2] = useState([]);
-    const [weekArray, setWeekArray] = useState([]);
+    const userID = getDecreyptedData('userID')
+    const [dateArray, setDateArray] = useState([])
     const [tableData, setTableData] = useState([])
+    const [milestone, setMilestone] = useState([])
+    const [gapData, setGapData] = useState('')
     const [circle, setCircle] = useState([])
     const [circleOptions, setCircleOptions] = useState([])
     const [tagging, setTagging] = useState([])
@@ -102,35 +102,37 @@ const WeekWise = () => {
     const [relocationMethodOptions, setRelocationMethodOptions] = useState([])
     const [toco, setToco] = useState([])
     const [tocoOptions, setTocoOptions] = useState([])
-    const [month, setMonth] = useState('')
     const [downloadExcelData, setDownloadExcelData] = useState('')
     const [view, setView] = useState('Cumulative')
-
+    const [selectDate, setSelectDate] = useState([])
+    const { afterToday, combine } = DateRangePicker;
     // const [totals, setTotals] = useState()
 
-    // console.log('month select ' , month.split('-')[1] , month.split('-')[0] )
+    // console.log('table data', tableData)
 
     const fetchDailyData = async () => {
         action(true)
         var formData = new FormData()
+
         formData.append('circle', circle)
         formData.append('site_tagging', tagging)
         formData.append('relocation_method', relocationMethod)
         formData.append('new_toco_name', toco)
-        formData.append('month', month.split('-')[1] || '')
-        formData.append('year', month.split('-')[0] || '')
+        formData.append('from_date', selectDate[0] || '')
+        formData.append('to_date', selectDate[1] || '')
         formData.append('view', view)
-        const res = await postData("alok_tracker/weekly_monthly_dashboard_file/", formData);
+        const res = await postData("alok_tracker/daily_dashboard_file/", formData);
         // const res =  tempData; //  remove this line when API is ready
-        console.log('week wise response', res)
+        console.log('date wise response', res)
         if (res) {
             action(false)
-            setWeekArray(res.unique_data.week_columns)
-            setTableData(JSON.parse(res.week_data))
+            setDateArray(res.dates)
+            setTableData(JSON.parse(res.data))
             setCircleOptions(res.unique_data.unique_circle)
             setTaggingOptions(res.unique_data.unique_site_tagging)
             setRelocationMethodOptions(res.unique_data.unique_relocation_method)
             setTocoOptions(res.unique_data.unique_new_toco_name)
+            setMilestone(res.unique_data.Milestone)
             setDownloadExcelData(res.download_link)
             // setMainDataT2(JSON.parse(res.data))
         }
@@ -140,44 +142,102 @@ const WeekWise = () => {
 
     }
 
-
-    const handleMonthChange = (event) => {
-        // console.log(event.target.value.split('-')[1])
-        setMonth(event.target.value)
+    const handleViewChange = (event) => {
+        setView(event.target.value)
     }
 
+    const handleDateFormate = (dateArray) => {
+        // console.log('date array', dateArray)
+        const formattedDates = dateArray.map(date => ChangeDateFormate(date));
+        setSelectDate(formattedDates);
+        // console.log('chnage date formate ', formattedDates)
+    }
 
     // console.log('date wise dashboard')
 
-    const ChangeDateFormate = (dates) => {
+    const ChangeDateFormate = (date) => {
+        if (!date) return '';
 
-        if (dates && typeof dates === 'string') {
-            // console.log('date', dates.split('-'));
-            const [year, month, day] = dates.split('-');
-            return `${day}-${month}-${year}`;
+        const d = new Date(date);
+        if (isNaN(d)) return 'Invalid Date';
+
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+
+        return `${year}-${month}-${day}`;
+    };
+
+    const convertToYMD = (dateStr) => {
+        const [day, monthStr, year] = dateStr.split('-');
+
+        // month map
+        const months = {
+            Jan: '01',
+            Feb: '02',
+            Mar: '03',
+            Apr: '04',
+            May: '05',
+            Jun: '06',
+            Jul: '07',
+            Aug: '08',
+            Sep: '09',
+            Oct: '10',
+            Nov: '11',
+            Dec: '12'
+        };
+
+        const month = months[monthStr];
+        const fullYear = `20${year}`; // convert '25' → '2025'
+
+        return `${fullYear}-${month}-${day}`;
+    };
+
+    const handleGapHiperlink = async (milestone1, milestone2, gap) => {
+        let mile = { milestone1, milestone2 };
+
+        if (gap == 0 || gap === '-') {
+            alert('Gap value is zero, file not available for download')
         } else {
-            // console.log("Invalid date format");
-            return dates;
+
+            if (milestone2 && milestone1 && gap) {
+                action(true)
+                var formData = new FormData()
+                formData.append('circle', circle)
+                formData.append('site_tagging', tagging)
+                formData.append('relocation_method', relocationMethod)
+                formData.append('new_toco_name', toco)
+                formData.append('milestone1', milestone1)
+                formData.append('milestone2', milestone2)
+                formData.append('last_date', convertToYMD(dateArray.at(-1)))
+                formData.append('gap', gap)
+                try {
+                    const res = await postData("alok_tracker/gap_view/", formData);
+                    console.log('gap response', res);
+
+                    if (res?.download_link) {
+                        // ✅ Trigger automatic file download
+                        const link = document.createElement('a');
+                        link.href = res.download_link;
+                        link.setAttribute('download', '');
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    }
+                } catch (err) {
+                    console.error('Error downloading file:', err);
+                } finally {
+                    action(false);
+                }
+            }
         }
+
+
+        // console.log('gap value', mile)
     }
-
-
-
-    // const ShortDate = (dates) => {
-    //     const dateObjects = dates.map(dateStr => new Date(dateStr));
-    //     // Sort Date objects in increasing order
-    //     dateObjects.sort((a, b) => a - b);
-    //     // Convert sorted Date objects back to string format
-    //     const sortedDates = dateObjects.map(date => date.toISOString().split('T')[0]);
-    //     setDateArray(sortedDates)
-
-    // }
 
     const handleClose = () => {
         setOpen(false)
-    }
-    const handleViewChange = (event) => {
-        setView(event.target.value)
     }
 
     // Download Key and value
@@ -262,7 +322,7 @@ const WeekWise = () => {
     // }
 
     // ********** Filter Dialog Box **********//
-    const filterDialog = useCallback(() => {
+    const filterDialog = (() => {
         return (
             <Dialog
                 open={open}
@@ -283,14 +343,12 @@ const WeekWise = () => {
                                 <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
                                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Circle</th>
                                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Short Name</th>
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{mainDataT2?.current_date}</th>
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{mainDataT2?.previous_date}</th>
                                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Site Priority</th>
                                     <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Delta</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {mainDataT2?.data?.map((item) => (
+                                {/* {mainDataT2?.data?.map((item) => (
                                     <tr className={classes.hover} style={{ textAlign: "center", fontWeigth: 700 }}>
                                         <th>{item.Circle}</th>
                                         <th>{item.Short_name}</th>
@@ -299,7 +357,7 @@ const WeekWise = () => {
                                         <th>{item.del_value.toUpperCase()}</th>
                                         <th>{item.delta}</th>
                                     </tr>
-                                ))}
+                                ))} */}
                             </tbody>
 
 
@@ -309,7 +367,7 @@ const WeekWise = () => {
                 </DialogContent>
             </Dialog>
         )
-    }, [mainDataT2, open])
+    })
 
     const ClickDataGet = async (props) => {
         // console.log('aaaaaaaa', props)
@@ -317,7 +375,7 @@ const WeekWise = () => {
         var formData = new FormData();
         formData.append('userId', userID);
         formData.append("circle", circle);
-        formData.append("day_type", 'weekly');
+        formData.append("day_type", 'daily');
         formData.append("milestone", props.milestone);
         formData.append("col_name", props.col_name);
         formData.append('site_tagging', tagging);
@@ -332,43 +390,31 @@ const WeekWise = () => {
             const temp = JSON.parse(responce.data)
 
             dispatch({ type: 'RELOCATION_FINAL_TRACKER', payload: { temp } })
-            navigate(`/tools/relocation_tracking/rfai_to_ms1_waterfall/${props.milestone}`)
+            navigate(`/tools/relocation_tracking/waterfall/${props.milestone}`)
         }
         else {
             action(false)
         }
     }
 
-
     useEffect(() => {
         fetchDailyData()
         // setTotals(calculateColumnTotals(tableData))
-    }, [circle, tagging, relocationMethod, toco, month, view])
+    }, [circle, tagging, relocationMethod, toco, selectDate, view])
     return (
         <>
             <style>{"th{border:1px solid black;}"}</style>
             <Slide direction="left" in='true' timeout={700} style={{ transformOrigin: '1 1 1' }}>
                 <div style={{ margin: 20 }}>
 
-
+                    {/* ************* 2G  TABLE DATA ************** */}
                     <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', alignContent: 'center' }}>
                         <Box style={{ fontSize: 22, fontWeight: 'bold' }}>
-                            Monthly Progress - RFAI to MS1 Waterfall
+                            Daily Progress - RFAI to MS1 Waterfall
                         </Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', gap: 1 }}>
-                            <FormControl sx={{ minWidth: 100, maxWidth: 100 }} size="small">
-                                <TextField
-                                    variant="outlined"
-                                    // required
-                                    fullWidth
-                                    label="Month"
-                                    name="month"
-                                    value={month}
-                                    onChange={handleMonthChange}
-                                    size="small"
-                                    type="month"
-                                     InputLabelProps={{ shrink: true }}
-                                />
+                            <FormControl sx={{ minWidth: 200 }} size="small">
+                                <DateRangePicker onChange={(e) => handleDateFormate(e)} size="md" format="dd.MM.yyyy" shouldDisableDate={afterToday} placeholder="Select Date Range" color='black' />
                             </FormControl>
                             <FormControl sx={{ minWidth: 100, maxWidth: 100 }} size="small">
                                 <InputLabel id="demo-select-small-label">View</InputLabel>
@@ -417,7 +463,9 @@ const WeekWise = () => {
                                 setSelectedValues={setToco}
                             />
 
-                            <Tooltip title="Download Monthly-RFAI to MS1">
+
+
+                            <Tooltip title="Download Daily-RFAI to MS1 Waterfall">
                                 <IconButton
                                     component="a"
                                     href={downloadExcelData}
@@ -434,13 +482,14 @@ const WeekWise = () => {
                             <table style={{ width: "100%", border: "1px solid black", borderCollapse: 'collapse', overflow: 'auto' }} >
                                 <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
-                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', position: 'sticky', left: 0, top: 0, backgroundColor: '#006e74' }}>
+                                        <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', position: 'sticky', left: 0, top: 0, backgroundColor: '#006e74' }}>
                                             Milestone Track/Site Count</th>
-                                        {/* <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', position: 'sticky', left: 218, top: 0, backgroundColor: '#223354' }}>
-                                            CF</th> */}
-                                        {weekArray?.map((item, index) => (
+                                        <th style={{ padding: '5px 15px', whiteSpace: 'nowrap', backgroundColor: '#006e74' }}>
+                                            CF</th>
+                                        {dateArray?.map((item, index) => (
                                             <th key={index} style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#CBCBCB', color: 'black' }}>{item}</th>
                                         ))}
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#ff6060' }}>Gap</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -448,31 +497,29 @@ const WeekWise = () => {
                                         return (
                                             <tr className={classes.hoverRT} style={{ textAlign: "center", fontWeigth: 700 }} key={index}>
                                                 <th style={{ position: 'sticky', left: 0, top: 0, backgroundColor: '#CBCBCB', color: 'black' }}>{it['Milestone Track/Site Count']}</th>
-                                                {/* <th style={{ position: 'sticky', left: 218, top: 0, backgroundColor: 'rgb(197 214 246)', color: 'black' }}>{it['CF']}</th> */}
-                                                {weekArray?.map((item, index) => (
+                                                <th style={{ backgroundColor: '#CBCBCB', color: 'black' }}>{it['CF']}</th>
+                                                {dateArray?.map((item, index) => (
+                                                    // <th key={index} style={{ backgroundColor: it[`date_${index + 1}`] > 0 ? '#FEEFAD' : '' }} >{it[`date_${index + 1}`]}</th>
                                                     <th key={index} className={classes.hoverRT} style={{ cursor: 'pointer' }}
-                                                        onClick={() => ClickDataGet({ col_name: item, milestone: it['Milestone Track/Site Count'] })}
-                                                    >{it[`Month_Week-${index + 1}`]}</th>
-                                                    // <th key={index} style={{ backgroundColor: it[`Month_Week-${index + 1}`] > 0 ? '#FEEFAD' : '' }} >{it[`Month_Week-${index + 1}`]}</th>
+                                                        onClick={() => ClickDataGet({ date_value: it[`date_${index + 1}`], col_name: item, milestone: it['Milestone Track/Site Count'] })} >
+                                                        {isNaN(parseInt(it[`date_${index + 1}`])) ? '-' : parseInt(it[`date_${index + 1}`])}
+                                                    </th>
                                                 ))}
-
+                                                <th style={{ cursor: 'pointer' }} title='Click to Download Excel' className={classes.hoverRT} onClick={() => handleGapHiperlink(milestone[index - 1], milestone[index], it['Gap'])}>{isNaN(parseInt(it['Gap'])) ? '-' : parseInt(it['Gap'])}</th>
                                             </tr>
                                         )
                                     }
                                     )}
-
-
                                 </tbody>
                             </table>
                         </TableContainer>
                     </Box>
-
                 </div>
             </Slide>
-            {/* {filterDialog()} */}
+            {/* {gapData && filterDialog()} */}
             {loading}
         </>
     )
 }
 
-export const MemoWeekWise = React.memo(WeekWise);
+export const MDateWise = React.memo(DateWise)

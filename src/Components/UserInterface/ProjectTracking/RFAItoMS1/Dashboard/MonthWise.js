@@ -364,7 +364,7 @@ const MonthWise = () => {
             const temp = JSON.parse(responce.data)
 
             dispatch({ type: 'RELOCATION_FINAL_TRACKER', payload: { temp } })
-            navigate(`/tools/relocation_tracking/waterfall/${props.milestone}`)
+            navigate(`/tools/relocation_tracking/rfai_to_ms1_waterfall/${props.milestone}`)
         }
         else {
             action(false)
