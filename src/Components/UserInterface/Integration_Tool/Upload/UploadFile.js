@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Box, Button, Stack, Breadcrumbs, Link, Typography,IconButton } from "@mui/material";
+import { Box, Button, Stack, Breadcrumbs, Link, Typography, IconButton } from "@mui/material";
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import UploadIcon from '@mui/icons-material/Upload';
 import DoDisturbIcon from '@mui/icons-material/DoDisturb';
-import { getData, ServerURL,postData } from "../../../services/FetchNodeServices";
+import { getData, ServerURL, postDataa } from "../../../services/FetchNodeServices";
 import Tooltip from '@mui/material/Tooltip';
 import Swal from "sweetalert2";
 import Dialog from '@mui/material/Dialog';
@@ -30,7 +30,7 @@ const UploadFile = () => {
     const rawKpiLength = rawKpiFile.filename.length
     const [tableDialog, setTableDialog] = useState(false)
     const [error, setError] = useState([])
-    const [version , setVersion] = useState('')
+    const [version, setVersion] = useState('')
     const classes = OverAllCss()
     const navigate = useNavigate()
     var link = `${ServerURL}${fileData}`;
@@ -59,32 +59,41 @@ const UploadFile = () => {
 
             setOpen(true)
             var formData = new FormData();
-            formData.append("file", rawKpiFile.bytes);  
+            formData.append("file", rawKpiFile.bytes);
             try {
-                const response = await postData( `IntegrationTracker/upload/`, formData);
+                const response = await postDataa(`IntegrationTracker/upload/`, formData);
                 var result = await response
                 setOpen(false);
                 setError(result.error_rows)
-                Swal.fire({
-                    icon: "success",
-                    title: "Done",
-                    text: `${result.message}`,
-                });
-                if(result.error_rows.length > 0){
+                if (result.error_type) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops ...',
+                        text: `${result.message}`
+                    })
+                } else {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Done",
+                        text: `${result.message}`,
+                    });
+                }
+
+                if (result.error_rows.length > 0) {
                     setTableDialog(true)
-                 }
+                }
 
-              }
-              catch (error) {
-                  console.log('error', error)
-                  setOpen(false)
-                  Swal.fire({
-                      icon: "error",
-                      title: "Oops...",
-                      text: `${error.response.data.error}`,
-                  });
+            }
+            catch (error) {
+                console.log('error', error)
+                setOpen(false)
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: `${error.response.data.error}`,
+                });
 
-              }
+            }
         }
         else {
             if (rawKpiLength == 0) {
@@ -120,44 +129,44 @@ const UploadFile = () => {
     }
 
 
-        // display responce table data...............
+    // display responce table data...............
 
-        const displayTable = () => {
-            return (
-                <Dialog
-                    open={tableDialog}
-                    fullWidth
-                    maxWidth={'md'}
-                >
-                    <DialogTitle><span style={{color:'red'}}>Below Record could not be saved because of the follow remarks.</span><span style={{float:'right'}}><IconButton onClick={()=>setTableDialog(false)}><CloseIcon></CloseIcon></IconButton></span></DialogTitle>
-                    <DialogContent>
-                        <table border="3" style={{ width: "100%", border: "2px solid" }}>
-                            <thead border="3">
-                                <tr >
-                                    <th>Unique Key</th>
-                                    <th>Required Fields</th>
-                                    <th>Remarks</th>
-                                </tr>
-                            </thead>
-                            <tbody align="center">
-                                {
-                                    error?.map((item, index) => (
-                                        <tr key={index} className={classes.tableRow}>
-                                            <td>{item.unique_key}</td>
-                                            <td>{item.invalid_fields?.map(item => item + ' , ')}</td>
-                                            <td>{item.remarks}</td>
-                                        </tr>
-                                    ))
-                                }
+    const displayTable = () => {
+        return (
+            <Dialog
+                open={tableDialog}
+                fullWidth
+                maxWidth={'md'}
+            >
+                <DialogTitle><span style={{ color: 'red' }}>Below Record could not be saved because of the follow remarks.</span><span style={{ float: 'right' }}><IconButton onClick={() => setTableDialog(false)}><CloseIcon></CloseIcon></IconButton></span></DialogTitle>
+                <DialogContent>
+                    <table border="3" style={{ width: "100%", border: "2px solid" }}>
+                        <thead border="3">
+                            <tr >
+                                <th>Unique Key</th>
+                                <th>Required Fields</th>
+                                <th>Remarks</th>
+                            </tr>
+                        </thead>
+                        <tbody align="center">
+                            {
+                                error?.map((item, index) => (
+                                    <tr key={index} className={classes.tableRow}>
+                                        <td>{item.unique_key}</td>
+                                        <td>{item.invalid_fields?.map(item => item + ' , ')}</td>
+                                        <td>{item.remarks}</td>
+                                    </tr>
+                                ))
+                            }
 
-                            </tbody>
-                        </table>
+                        </tbody>
+                    </table>
 
-                    </DialogContent>
+                </DialogContent>
 
-                </Dialog>
-            )
-        }
+            </Dialog>
+        )
+    }
 
 
     const handleCancel = () => {
@@ -198,7 +207,7 @@ const UploadFile = () => {
                 </div>
 
                 <Box style={{ position: 'fixed', right: 20 }}>
-                    <Box style={{ fontWeight: 'bolder',color:'green' }}>Template :{version.toUpperCase()}</Box>
+                    <Box style={{ fontWeight: 'bolder', color: 'green' }}>Template :{version.toUpperCase()}</Box>
                     <Tooltip title={`Download ${version.toUpperCase()} Temp.`}>
                         <a download href={link}>
                             <Fab color="primary" aria-label="add" >
@@ -222,7 +231,7 @@ const UploadFile = () => {
                                     <div style={{ float: "left" }}>
                                         <Button variant="contained" component="label" color={rawKpiFile.state ? "warning" : "primary"}>
                                             select file
-                                            <input required onChange={handleRawKpiFile} hidden accept=".xlsm,.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"  type="file" />
+                                            <input required onChange={handleRawKpiFile} hidden accept=".xlsm,.csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" type="file" />
                                         </Button>
                                     </div>
                                     <div>  <span style={{ display: rawShow ? 'inherit' : 'none', color: 'red', fontSize: '18px', fontWeight: 600 }}>This Field Is Required !</span> </div>

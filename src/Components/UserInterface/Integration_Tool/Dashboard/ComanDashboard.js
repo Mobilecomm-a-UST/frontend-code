@@ -90,7 +90,8 @@ const ComanDashboard = () => {
         Allocated_Tech:'',
         Deployed_Tech:'',
         Old_Site_ID:'',
-        Old_Site_Tech:''
+        Old_Site_Tech:'',
+        Configuration_5G:''
         })
     const [editDataID , setEditDataID] = useState('')
     const [open, setOpen] = useState(false)
@@ -120,6 +121,7 @@ const ComanDashboard = () => {
             MO_NAME: rowData.MO_NAME,
             LNBTS_ID: rowData.LNBTS_ID,
             Technology_SIWA: rowData.Technology_SIWA,
+            Configuration_5G:rowData.Configuration_5G,
             OSS_Details: rowData.OSS_Details,
             Cell_ID: rowData.Cell_ID,
             CELL_COUNT: rowData.CELL_COUNT,
@@ -236,6 +238,7 @@ const ComanDashboard = () => {
        
         { title: 'LNBTS ID', field: 'LNBTS_ID' },
         { title: 'Technology (SIWA)', field: 'Technology_SIWA' },
+        { title: 'Configuration 5G', field: 'Configuration_5G' },
         { title: 'OSS Details', field: 'OSS_Details' },
         { title: 'Cell ID', field: 'Cell_ID' },
         { title: 'CELL COUNT', field: 'CELL_COUNT' },

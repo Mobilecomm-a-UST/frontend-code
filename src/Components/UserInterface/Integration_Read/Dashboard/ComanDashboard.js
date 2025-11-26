@@ -110,6 +110,7 @@ const ComanDashboard = () => {
     }
 
 
+
     const columnData = [
         { title: 'OEM', field: 'OEM' },
         { title: 'Integration Date', field: 'Integration_Date' },
@@ -120,6 +121,7 @@ const ComanDashboard = () => {
        
         { title: 'LNBTS ID', field: 'LNBTS_ID' },
         { title: 'Technology (SIWA)', field: 'Technology_SIWA' },
+        { title: 'Configuration 5G', field: 'Configuration_5G' },
         { title: 'OSS Details', field: 'OSS_Details' },
         { title: 'Cell ID', field: 'Cell_ID' },
         { title: 'CELL COUNT', field: 'CELL_COUNT' },
@@ -183,13 +185,21 @@ const ComanDashboard = () => {
         // {
         //     title: 'Actions',
         //     field: 'actions',
-        //     render: rowData => (
+        //     render: rowData => (<>
+        //         <IconButton aria-label="delete" title={'Edit'} size="large"   onClick={() => {handleEdit(rowData) }}>
+        //             <DriveFileRenameOutlineIcon
+        //                 style={{ cursor: 'pointer' }}
+        //                 color='success'
+        //             />
+        //         </IconButton>
         //         <IconButton aria-label="delete" title={'Delete'} size="large"   onClick={() => { handleDelete(rowData) }}>
         //             <DeleteOutlineIcon
         //                 style={{ cursor: 'pointer' }}
         //                 color='error'
         //             />
         //         </IconButton>
+                
+        //         </>
 
         //     )
         // }

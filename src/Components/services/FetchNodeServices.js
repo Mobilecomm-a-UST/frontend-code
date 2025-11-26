@@ -65,6 +65,22 @@ const postData = async (url, body) => {
   }
 }
 
+const postDataa = async (url, body) => {
+  try {
+    var response = await axios.post(`${ServerURL}/${url}`, body, {
+      headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
+    })
+  
+    var result = await response.data
+    return (result)
+    
+  }
+  catch (error) {
+    console.log(error)
+    return (error.response.data)
+  }
+}
+
 const deleteData = async (url, payload = {}) => {
   try {
     var response = await axios.delete(`${ServerURL}/${url}`, {
@@ -106,4 +122,4 @@ const postDatas = async (url, body) => {
 
 
 
-export { ServerURL, postData, postDatas, getData, putData,deleteData }
+export { ServerURL, postData, postDatas, getData, putData,deleteData,postDataa }
