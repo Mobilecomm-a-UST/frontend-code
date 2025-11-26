@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import MOS from './MOS';
 import Ms1 from './Ms1';
 import Integration from './Integration';
-import RfaiIntegration from './RfaiIntegration';
 
 const MainAging = () => {
     const navigate = useNavigate()
@@ -25,17 +24,14 @@ const MainAging = () => {
                 </Breadcrumbs>
             </div>
             <Box>
-                <RfaiIntegration />
-            </Box>
-            <Box>
                 <MOS />
             </Box>
-            {/* <Box>
+            <Box>
                 <Integration />
             </Box>
             <Box>
                 <Ms1 />
-            </Box> */}
+            </Box>
 
         </>
 

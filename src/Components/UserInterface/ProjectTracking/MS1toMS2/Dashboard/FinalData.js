@@ -116,54 +116,34 @@ const FinalData = () => {
     // console.log('local storage', listDataa)
 
 
-    const createNextHistoryEntry = (start, close, index) => {
-        return {
-            [`S${index}`]: start || "",
-            [`C${index}`]: close || ""
-        };
-    };
+    const generateHistory = (start, close) => {
+        if (!start || !close) return "";
+        return `S1=${start}, C1=${close}`;
+    }
+
 
     const handleChange = (e) => {
-        setEditData({
-            ...editData,
-            [e.target.name]: e.target.value,
-        });
-        // const { name, value } = e.target;
-
-        // setEditData(prev => {
-        //     const updated = { ...prev, [name]: value };
-
-        //     if (name === "pri_start_date" || name === "pri_close_date") {
-
-        //         // Parse existing history (json string or array)
-        //         let oldHistory = [];
-        //         try {
-        //             oldHistory = prev.pri_history
-        //                 ? JSON.parse(prev.pri_history)
-        //                 : [];
-        //         } catch {
-        //             oldHistory = [];
-        //         }
-
-        //         // Determine next index like S3/C3
-        //         const nextIndex = oldHistory.length + 1;
-
-        //         // Create new entry
-        //         const newEntry = createNextHistoryEntry(
-        //             updated.pri_start_date,
-        //             updated.pri_close_date,
-        //             nextIndex
-        //         );
-
-        //         // Append new entry
-        //         const newHistory = [...oldHistory, newEntry];
-
-        //         updated.pri_history = JSON.stringify(newHistory);
-        //         updated.pri_count = newHistory.length;  // total entries
-        //     }
-
-        //     return updated;
+        // setEditData({
+        //     ...editData,
+        //     [e.target.name]: e.target.value,
         // });
+        const { name, value } = e.target;
+
+        setEditData(prev => {
+            const updated = { ...prev, [name]: value };
+
+            // Auto update PRI history
+            if (name === "pri_start_date" || name === "pri_close_date") {
+                updated.pri_history = generateHistory(
+                    updated.pri_start_date,
+                    updated.pri_close_date
+                );
+            }
+
+            return updated;
+        });
+
+
     }
 
     const handleEdit = async (rowData) => {
@@ -239,13 +219,16 @@ const FinalData = () => {
             issue_ageing: rowData.issue_ageing,
             clear_rfai_to_ms1_ageing: rowData.clear_rfai_to_ms1_ageing,
             rfai_to_ms1_ageing: rowData.rfai_to_ms1_ageing,
+
             ran_pat_accepted_date: rowData.ran_pat_accepted_date,
             ran_sat_accepted_date: rowData.ran_sat_accepted_date,
             mw_pat_accepted_date: rowData.mw_pat_accepted_date,
             mw_sat_accepted_date: rowData.mw_sat_accepted_date,
             scft_accepted_date: rowData.scft_accepted_date,
+
             kpi_at_offer_date: rowData.kpi_at_offer_date,
             kpi_at_accepted_date: rowData.kpi_at_accepted_date,
+
             four_g_ms2_date: rowData.four_g_ms2_date,
             five_g_ms2_date: rowData.five_g_ms2_date,
             final_ms2_date: rowData.final_ms2_date,
@@ -275,7 +258,7 @@ const FinalData = () => {
                     title: "Done",
                     text: `Data Updated Successfully`,
                 });
-                navigate('/tools/relocation_tracking/rfai_to_ms1_waterfall/')
+                navigate('/tools/relocation_tracking/waterfall/')
             }
             // console.log('update response', response);
 
@@ -500,7 +483,7 @@ const FinalData = () => {
 
     const downloadExcel = (data) => {
         // **************** FILEFY DEPENDANCY *****************
-        var csvBuilder = new CsvBuilder(`RFAI-To-MS1_Tracker.csv`)
+        var csvBuilder = new CsvBuilder(`Integration_Tracker.csv`)
             .setColumns(columnData.map(item => item.title))
             .addRows(data.map(row => columnData.map(col => row[col.field])))
             .exportFile();

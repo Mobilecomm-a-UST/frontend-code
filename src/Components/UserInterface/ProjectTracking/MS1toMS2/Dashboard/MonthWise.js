@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Box, Grid, TextField } from "@mui/material";
+import { Box, Grid } from "@mui/material";
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import DownloadIcon from '@mui/icons-material/Download';
@@ -28,6 +28,7 @@ import Checkbox from '@mui/material/Checkbox';
 import { postData } from '../../../../services/FetchNodeServices';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+
 
 
 const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues }) => {
@@ -83,16 +84,16 @@ const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues 
 
 
 
-const WeekWise = () => {
+const MonthWise = () => {
     const classes = useStyles()
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const userID = getDecreyptedData('userID')
     const [open, setOpen] = useState(false)
     const { makePostRequest } = usePost()
-    const userID = getDecreyptedData('userID')
     const { loading, action } = useLoadingDialog();
-    const [mainDataT2, setMainDataT2] = useState([]);
-    const [weekArray, setWeekArray] = useState([]);
+    const [mainDataT2, setMainDataT2] = useState([])
+    const [monthArray, setMonthArray] = useState([])
     const [tableData, setTableData] = useState([])
     const [circle, setCircle] = useState([])
     const [circleOptions, setCircleOptions] = useState([])
@@ -102,13 +103,12 @@ const WeekWise = () => {
     const [relocationMethodOptions, setRelocationMethodOptions] = useState([])
     const [toco, setToco] = useState([])
     const [tocoOptions, setTocoOptions] = useState([])
-    const [month, setMonth] = useState('')
     const [downloadExcelData, setDownloadExcelData] = useState('')
     const [view, setView] = useState('Cumulative')
-
     // const [totals, setTotals] = useState()
 
-    // console.log('month select ' , month.split('-')[1] , month.split('-')[0] )
+
+    // console.log('table data', tableData)
 
     const fetchDailyData = async () => {
         action(true)
@@ -117,16 +117,14 @@ const WeekWise = () => {
         formData.append('site_tagging', tagging)
         formData.append('relocation_method', relocationMethod)
         formData.append('new_toco_name', toco)
-        formData.append('month', month.split('-')[1] || '')
-        formData.append('year', month.split('-')[0] || '')
         formData.append('view', view)
         const res = await postData("alok_tracker/weekly_monthly_dashboard_file/", formData);
         // const res =  tempData; //  remove this line when API is ready
-        console.log('week wise response', res)
+        console.log('month wise response', res)
         if (res) {
             action(false)
-            setWeekArray(res.unique_data.week_columns)
-            setTableData(JSON.parse(res.week_data))
+            setMonthArray(res.unique_data.month_columns)
+            setTableData(JSON.parse(res.months_data))
             setCircleOptions(res.unique_data.unique_circle)
             setTaggingOptions(res.unique_data.unique_site_tagging)
             setRelocationMethodOptions(res.unique_data.unique_relocation_method)
@@ -140,12 +138,46 @@ const WeekWise = () => {
 
     }
 
-
-    const handleMonthChange = (event) => {
-        // console.log(event.target.value.split('-')[1])
-        setMonth(event.target.value)
+    const handleCircle = (event) => {
+        const {
+            target: { value },
+        } = event;
+        setCircle(
+            // On autofill we get a stringified value.
+            typeof value === 'string' ? value.split(',') : value,
+        );
+        // setCircle(event.target.value)
     }
-
+    const handleTagging = (event) => {
+        const {
+            target: { value },
+        } = event;
+        setTagging(
+            // On autofill we get a stringified value.
+            typeof value === 'string' ? value.split(',') : value,
+        );
+        // setTagging(event.target.value)
+    }
+    const handleRelocationMethod = (event) => {
+        const {
+            target: { value },
+        } = event;
+        setRelocationMethod(
+            // On autofill we get a stringified value.
+            typeof value === 'string' ? value.split(',') : value,
+        );
+        // setRelocationMethod(event.target.value)
+    }
+    const handleToco = (event) => {
+        const {
+            target: { value },
+        } = event;
+        setToco(
+            // On autofill we get a stringified value.
+            typeof value === 'string' ? value.split(',') : value,
+        );
+        // setToco(event.target.value)
+    }
 
     // console.log('date wise dashboard')
 
@@ -172,12 +204,12 @@ const WeekWise = () => {
     //     setDateArray(sortedDates)
 
     // }
+    const handleViewChange = (event) => {
+        setView(event.target.value)
+    }
 
     const handleClose = () => {
         setOpen(false)
-    }
-    const handleViewChange = (event) => {
-        setView(event.target.value)
     }
 
     // Download Key and value
@@ -317,7 +349,7 @@ const WeekWise = () => {
         var formData = new FormData();
         formData.append('userId', userID);
         formData.append("circle", circle);
-        formData.append("day_type", 'weekly');
+        formData.append("day_type", 'monthly    ');
         formData.append("milestone", props.milestone);
         formData.append("col_name", props.col_name);
         formData.append('site_tagging', tagging);
@@ -332,7 +364,7 @@ const WeekWise = () => {
             const temp = JSON.parse(responce.data)
 
             dispatch({ type: 'RELOCATION_FINAL_TRACKER', payload: { temp } })
-            navigate(`/tools/relocation_tracking/rfai_to_ms1_waterfall/${props.milestone}`)
+            navigate(`/tools/relocation_tracking/waterfall/${props.milestone}`)
         }
         else {
             action(false)
@@ -343,33 +375,18 @@ const WeekWise = () => {
     useEffect(() => {
         fetchDailyData()
         // setTotals(calculateColumnTotals(tableData))
-    }, [circle, tagging, relocationMethod, toco, month, view])
+    }, [circle, tagging, relocationMethod, toco, view])
     return (
         <>
             <style>{"th{border:1px solid black;}"}</style>
             <Slide direction="left" in='true' timeout={700} style={{ transformOrigin: '1 1 1' }}>
                 <div style={{ margin: 20 }}>
 
-
                     <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', alignContent: 'center' }}>
                         <Box style={{ fontSize: 22, fontWeight: 'bold' }}>
-                            Monthly Progress - RFAI to MS1 Waterfall
+                            Yearly Progress - RFAI to MS1 Waterfall
                         </Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', gap: 1 }}>
-                            <FormControl sx={{ minWidth: 100, maxWidth: 100 }} size="small">
-                                <TextField
-                                    variant="outlined"
-                                    // required
-                                    fullWidth
-                                    label="Month"
-                                    name="month"
-                                    value={month}
-                                    onChange={handleMonthChange}
-                                    size="small"
-                                    type="month"
-                                     InputLabelProps={{ shrink: true }}
-                                />
-                            </FormControl>
                             <FormControl sx={{ minWidth: 100, maxWidth: 100 }} size="small">
                                 <InputLabel id="demo-select-small-label">View</InputLabel>
                                 <Select
@@ -417,7 +434,7 @@ const WeekWise = () => {
                                 setSelectedValues={setToco}
                             />
 
-                            <Tooltip title="Download Monthly-RFAI to MS1">
+                            <Tooltip title="Download Yearly-RFAI to MS1 Waterfall">
                                 <IconButton
                                     component="a"
                                     href={downloadExcelData}
@@ -436,9 +453,9 @@ const WeekWise = () => {
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', position: 'sticky', left: 0, top: 0, backgroundColor: '#006e74' }}>
                                             Milestone Track/Site Count</th>
-                                        {/* <th style={{ padding: '5px 20px', whiteSpace: 'nowrap', position: 'sticky', left: 218, top: 0, backgroundColor: '#223354' }}>
-                                            CF</th> */}
-                                        {weekArray?.map((item, index) => (
+                                        <th style={{ padding: '5px 15px', whiteSpace: 'nowrap', position: 'sticky', left: 218, top: 0, backgroundColor: '#006e74' }}>
+                                            CF</th>
+                                        {monthArray?.map((item, index) => (
                                             <th key={index} style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#CBCBCB', color: 'black' }}>{item}</th>
                                         ))}
                                     </tr>
@@ -448,12 +465,11 @@ const WeekWise = () => {
                                         return (
                                             <tr className={classes.hoverRT} style={{ textAlign: "center", fontWeigth: 700 }} key={index}>
                                                 <th style={{ position: 'sticky', left: 0, top: 0, backgroundColor: '#CBCBCB', color: 'black' }}>{it['Milestone Track/Site Count']}</th>
-                                                {/* <th style={{ position: 'sticky', left: 218, top: 0, backgroundColor: 'rgb(197 214 246)', color: 'black' }}>{it['CF']}</th> */}
-                                                {weekArray?.map((item, index) => (
+                                                <th style={{ position: 'sticky', left: 218, top: 0, backgroundColor: '#CBCBCB', color: 'black' }}>{it['CF']}</th>
+                                                {monthArray?.map((item, index) => (
                                                     <th key={index} className={classes.hoverRT} style={{ cursor: 'pointer' }}
-                                                        onClick={() => ClickDataGet({ col_name: item, milestone: it['Milestone Track/Site Count'] })}
-                                                    >{it[`Month_Week-${index + 1}`]}</th>
-                                                    // <th key={index} style={{ backgroundColor: it[`Month_Week-${index + 1}`] > 0 ? '#FEEFAD' : '' }} >{it[`Month_Week-${index + 1}`]}</th>
+                                                         onClick={() => ClickDataGet({ col_name: item, milestone: it['Milestone Track/Site Count'] })}
+                                                    >{it[`Month-${index + 1}`]}</th>
                                                 ))}
 
                                             </tr>
@@ -475,4 +491,4 @@ const WeekWise = () => {
     )
 }
 
-export const MemoWeekWise = React.memo(WeekWise);
+export const MemoMonthWise = React.memo(MonthWise)
