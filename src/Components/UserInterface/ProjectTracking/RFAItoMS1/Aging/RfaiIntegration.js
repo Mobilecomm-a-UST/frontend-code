@@ -18,6 +18,7 @@ import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import { postData } from '../../../../services/FetchNodeServices';
 import 'rsuite/dist/rsuite.min.css';
+import * as ExcelJS from 'exceljs'
 
 
 const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues }) => {
@@ -172,6 +173,76 @@ const RfaiIntegration = () => {
         setMonth(event.target.value)
     }
 
+        const handleExportExcel = async () => {
+            const workbook = new ExcelJS.Workbook();
+            const sheet = workbook.addWorksheet("Done Vs Pending Count");
+    
+            // ----------------- HEADER -----------------
+            const columns = [
+                { header: "Circle", key: "circle", width: 15 },
+                { header: "Type", key: "type", width: 10 },
+            ];
+    
+            dynamicHeaders.forEach((h) => {
+                columns.push({ header: h, key: h, width: 15 });
+            });
+    
+            sheet.columns = columns;
+    
+            // ----------------- ROWS -------------------
+            integrationToOnairData.forEach((item) => {
+                const { Circle, data } = item;
+                const done = data.Done || {};
+                const pending = data.Pending || {};
+    
+                // DONE row
+                const doneRow = { circle: Circle, type: "Done" };
+                dynamicHeaders.forEach((h) => {
+                    doneRow[h] = done[h] ?? "-";
+                });
+                sheet.addRow(doneRow);
+    
+                // PENDING row
+                const pendingRow = { circle: Circle, type: "Pending" };
+                dynamicHeaders.forEach((h) => {
+                    pendingRow[h] = pending[h] ?? "-";
+                });
+                sheet.addRow(pendingRow);
+            });
+    
+            // ----------------- STYLING -----------------
+            sheet.eachRow((row, rowNumber) => {
+                row.eachCell((cell) => {
+                    cell.alignment = { horizontal: "center", vertical: "middle" };
+                    cell.border = {
+                        top: { style: "thin" },
+                        left: { style: "thin" },
+                        bottom: { style: "thin" },
+                        right: { style: "thin" },
+                    };
+    
+                    // Header styling
+                    if (rowNumber === 1) {
+                        cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "223354" } };
+                        cell.font = { color: { argb: "FFFFFF" }, bold: true };
+                    }
+                });
+            });
+    
+            // ----------------- EXPORT -----------------
+            const buffer = await workbook.xlsx.writeBuffer();
+            const blob = new Blob([buffer], {
+                type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            });
+    
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `${milestone1}_to_${milestone2}.xlsx`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        };
+
 
     useEffect(() => {
         fetchDailyData()
@@ -245,15 +316,16 @@ const RfaiIntegration = () => {
                                 selectedValues={currentStatus}
                                 setSelectedValues={setCurrentStatus}
                             />
-                            {/* <Tooltip title="Download Ageing Data">
+                            <Tooltip title="Download Done Vs Pending Count">
                                 <IconButton
                                     component="a"
-                                    href={downloadExcelData}
+                                    // href={downloadExcelData}
+                                    onClick={(handleExportExcel)}
                                     download
                                 >
                                     <DownloadIcon fontSize="large" color="primary" />
                                 </IconButton>
-                            </Tooltip> */}
+                            </Tooltip>
                         </Box>
                     </Box>
 
