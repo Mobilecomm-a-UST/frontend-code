@@ -16,6 +16,7 @@ const MobinateFileHandle = lazy(() => import('./Mobinate/Mobinate'))
 const CateFileHandle = lazy(() => import('./CATS/Cats'))
 const FileManager = lazy(() => import('./File_manager/FileManager'))
 const SiteMaping = lazy(()=>import('./Site_maping/SiteMaping'))
+const SNmaping = lazy(()=>import('./SNmapping/SNmaping'))
 
 
 
@@ -106,6 +107,9 @@ const MobinateVsCate = () => {
                                              <Nav.Item eventKey="4" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/site_mapping'); show(); setMenuButton(true) }}>
                                                 Site Mapping
                                             </Nav.Item>
+                                              <Nav.Item eventKey="5" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/sn_mapping'); show(); setMenuButton(true) }}>
+                                                SN Mapping
+                                            </Nav.Item>
                                             {/* <Nav.Menu eventKey="3" placement="rightStart" title="NOM Audit" icon={<DocPassIcon />}>
                                                 <Nav.Item eventKey="3-1" placement="rightStart" onClick={() => { navigate('/tools/nomenclature_scriptor/nom_audit_dashboard'); show(); setMenuButton(true) }}>
                                                     Dashboard
@@ -132,6 +136,7 @@ const MobinateVsCate = () => {
                                 <Route element={<CateFileHandle />} path="/CATS" />
                                 <Route element={<FileManager />} path="/file_manager" />
                                 <Route element={<SiteMaping />} path="/site_mapping" />
+                                <Route element={<SNmaping/>} path='/sn_mapping' />
 
 
                             </Routes>
