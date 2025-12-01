@@ -20,10 +20,6 @@ const Cats = () => {
   const [siteList, setSiteList] = useState({ filename: "", bytes: "" });
   const [hardWareFile, setHardWareFile] = useState({ filename: "", bytes: "" });
   const [olmidFile, setOlmidFile] = useState({ filename: "", bytes: "" });
-  // const [rfsFile, setRfsFile] = useState({ filename: "", bytes: "" });
-  // const [msmfFile, setMsmfFile] = useState({ filename: '', bytes: '' });
-  // const [stockFile, setStockFile] = useState({ filename: '', bytes: '' })
-  // const [locaterFiles, setLocaterFiles] = useState([])
   const [fileData, setFileData] = useState();
   const [download, setDownload] = useState(false);
   const [showFiles, setShoweFiles] = useState({locator:[],stock:[],msmf:[],rfs:[]})
