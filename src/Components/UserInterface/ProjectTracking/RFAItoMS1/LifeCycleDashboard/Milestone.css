@@ -1,0 +1,64 @@
+.timeline {
+    list-style: none;
+    padding-left: 5px;
+    margin: 0;
+    position: relative;
+}
+
+/* Vertical Line */
+.timeline::before {
+    content: "";
+    position: absolute;
+    left: 11px;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: #006e74; /* light gray */
+}
+
+/* List Item */
+.timeline-item {
+    position: relative;
+    margin-bottom: 10px;
+    padding-left: 10px;
+    display: flex;
+    align-items: flex-start;
+    /* justify-content: center; */
+    align-items: center;
+    align-content: center;
+}
+
+/* Circle */
+.timeline-circle {
+    width: 18px;
+    height: 18px;
+    background: #ffffff;
+    border-radius: 50%;
+    border: 3px solid #006e74; /* Indigo */
+    position: absolute;
+    left: -2px;
+}
+
+/* Content */
+.timeline-content {
+    margin-left: 40px;
+}
+
+.timeline-content h4 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.timeline-content p {
+    margin: 0px 0 0;
+    color: #000000;
+    font-size: 14px;
+}
+
+/* Hover effect (optional) */
+.timeline-item:hover .timeline-circle {
+    /* border-color: #223354; */
+    background-color: #223354;
+}

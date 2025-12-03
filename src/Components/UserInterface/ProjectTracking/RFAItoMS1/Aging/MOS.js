@@ -69,7 +69,7 @@ const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues 
     );
 };
 
-const breakpointOption =Array.from({ length: 50 }, (_, i) => i + 1);
+const breakpointOption = Array.from({ length: 50 }, (_, i) => i + 1);
 const MOS = () => {
     const debounceTimer = React.useRef(null);
     const { loading, action } = useLoadingDialog();
@@ -104,6 +104,7 @@ const MOS = () => {
     const [breakpoint1, setBreakpoint1] = useState(3);
     const [breakpoint2, setBreakpoint2] = useState(8);
     const [month, setMonth] = useState('')
+    const [typeFileter, setTypeFilter] = useState('type1')
 
     const [downloadExcelData, setDownloadExcelData] = useState('');
 
@@ -124,6 +125,7 @@ const MOS = () => {
         formData.append('breakpoint2', breakpoint2)
         formData.append('month', month.split('-')[1] || '')
         formData.append('year', month.split('-')[0] || '')
+      formData.append('type', typeFileter)
 
         const res = await postData("alok_tracker/ageing_dashboard_file/", formData);
         // const res =  tempData; //  remove this line when API is ready
@@ -200,7 +202,7 @@ const MOS = () => {
     useEffect(() => {
         fetchDailyData()
         // setTotals(calculateColumnTotals(tableData))
-    }, [site_taggingAgingData, currentStatus, milestone1, milestone2, breakpoint1, breakpoint2,month]);
+    }, [site_taggingAgingData, currentStatus, milestone1, milestone2, breakpoint1, breakpoint2, month,typeFileter]);
 
 
 
@@ -216,6 +218,22 @@ const MOS = () => {
                             {milestone1} to {milestone2} Aging
                         </Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', gap: 1 }}>
+
+                            <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
+                                <InputLabel id="demo-select-small-label">Type</InputLabel>
+                                <Select
+                                    labelId="demo-select-small-label"
+                                    id="demo-select-small"
+                                    value={typeFileter}
+                                    label="Type"
+                                    onChange={(e) => { setTypeFilter(e.target.value) }}
+                                >
+                                    <MenuItem value="type1">Type 1</MenuItem>
+                                    <MenuItem value="type2">Type 2</MenuItem>
+
+                                </Select>
+                            </FormControl>
+
                             <FormControl sx={{ minWidth: 100, maxWidth: 100 }} size="small">
                                 <TextField
                                     variant="outlined"
@@ -264,7 +282,7 @@ const MOS = () => {
                             <FormControl sx={{ minWidth: 100, maxWidth: 100 }} size="small">
                                 {/* <TextField label="Breakpoint 1" size="small" variant="outlined"  type="number" value={breakpoint1} onChange={(e) => setBreakpoint1(Number(e.target.value))} /> */}
                                 {/* <TextField label="Breakpoint 1" size="small" variant="outlined" type="number" value={breakpoint1} onChange={(e) => handleBreakpointDiff("bp1", e.target.value)} /> */}
-                                 <InputLabel id="demo-simple-select-label">Breakpoint 1</InputLabel>
+                                <InputLabel id="demo-simple-select-label">Breakpoint 1</InputLabel>
                                 <Select
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
@@ -281,14 +299,14 @@ const MOS = () => {
                             <FormControl sx={{ minWidth: 100, maxWidth: 100 }} size="small">
                                 {/* <TextField label="Breakpoint 2" size="small" variant="outlined"  type="number" value={breakpoint2} onChange={(e) => setBreakpoint2(Number(e.target.value))} /> */}
                                 {/* <TextField label="Breakpoint 2" size="small" variant="outlined" type="number" value={breakpoint2} onChange={(e) => handleBreakpointDiff("bp2", e.target.value)} /> */}
-                                    <InputLabel id="demo-simple-select-label">Breakpoint 2</InputLabel>
+                                <InputLabel id="demo-simple-select-label">Breakpoint 2</InputLabel>
                                 <Select
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
                                     value={breakpoint2}
                                     label="Breakpoint 2"
                                     onChange={(e) => handleBreakpointDiff("bp2", e.target.value)}
-                                    
+
                                 >
                                     {breakpointOption?.map((item, index) => (
                                         <MenuItem key={index} value={item}>{item}</MenuItem>
@@ -372,7 +390,7 @@ const MOS = () => {
                                 </tbody>
                             </table>
                         </TableContainer>
-                        <TableContainer sx={{ maxHeight: 600, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} component={Paper}>
+                        {typeFileter == 'type2'?<TableContainer sx={{ maxHeight: 600, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} component={Paper}>
                             <table style={{ width: "100%", border: "1px solid black", borderCollapse: 'collapse', overflow: 'auto' }} >
                                 <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
@@ -392,6 +410,7 @@ const MOS = () => {
                                     </tr>
 
                                 </thead>
+                                
                                 <tbody>
                                     {mos_pending?.map((it, index) => {
                                         if (it.Circle === 'Total') {
@@ -424,7 +443,8 @@ const MOS = () => {
                                     )}
                                 </tbody>
                             </table>
-                        </TableContainer>
+                        </TableContainer>:<></>}
+                
                     </Box>
                 </div>
             </Slide>

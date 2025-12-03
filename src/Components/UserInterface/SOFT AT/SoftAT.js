@@ -37,6 +37,7 @@ const NokiaChecklistTable = lazy(() => import('./NokiaStatus/ChecklistEditor'))
 const NokiaSummaryTable = lazy(() => import('./NokiaStatus/SummaryTable'))
 const Softat5gChecklist = lazy(() => import('./Softat5G/Checklist'))
 const Softat5gSummary = lazy(() => import('./Softat5G/Summary'))
+const G5parser = lazy(()=> import('./5Gparser/G5parser'))
 
 
 
@@ -171,6 +172,9 @@ const SoftAT = () => {
                         <Nav.Item eventKey='7-3' onClick={() => { navigate('/tools/soft_at/softat_5g_summary'); show(); setMenuButton(true) }} >Summary</Nav.Item>
                         {/* <Nav.Item eventKey='6-4' onClick={() => { navigate('/tools/soft_at/nokia_summary_table'); show(); setMenuButton(true) }} >Summary Table</Nav.Item> */}
                       </Nav.Menu>
+                      <Nav.Item eventKey="8" placement="rightStart" icon={<PageIcon />} onClick={() => { navigate('/tools/soft_at/5g_parser'); show(); setMenuButton(true) }}>
+                        5G Parser
+                      </Nav.Item>
 
                     </Nav>
                   </Sidenav.Body>
@@ -206,6 +210,7 @@ const SoftAT = () => {
                 <Route element={<NokiaSummaryTable />} path='/nokia_summary_table' />
                 <Route element={<Softat5gChecklist />} path='/softat_5g_checklist' />
                 <Route element={<Softat5gSummary />} path='/softat_5g_summary' />
+                <Route element={<G5parser />} path='/5g_parser' />
 
               </Routes>
             </Suspense>
