@@ -189,3 +189,47 @@ html {
   background-color: #ffffff !important;
   color: #006e74 !important;
 }
+
+/* Entire Steps Component */
+.custom-steps {
+    padding: 10px;
+    --rs-step-icon-size: 28px;         /* Change step circle size */
+    --rs-primary: #007bff;             /* Active color */
+}
+
+/* Each Step Item */
+.custom-step-item {
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+/* Step Title */
+.custom-step-item .rs-steps-item-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+}
+
+/* Step Description */
+.custom-step-item .rs-steps-item-description {
+    color: #666;
+    font-size: 14px;
+}
+
+/* Circle Icon */
+.custom-step-item .rs-steps-item-icon {
+    background-color: #e0e7ff !important;
+    border: 2px solid #4f46e5 !important;
+    width: 34px !important;
+    height: 34px !important;
+}
+
+/* Line Styling */
+.custom-steps .rs-steps-item-tail {
+    border-color: #cbd5e1 !important;
+}
+
+/* Hover Effect */
+.custom-step-item:hover .rs-steps-item-title {
+    color: #4f46e5;
+}

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState, useMemo } from 'react'
 import { Breadcrumbs, Link, Typography } from "@mui/material";
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { Box, Grid } from "@mui/material";
@@ -33,7 +33,7 @@ const monthNames = [" ",
     "November",
     "December"
 ];
-const alphaBate = ['B', 'P', 'AD']
+const alphaBate = ['B', 'W', 'AR']
 
 const colorType = ['#B0EBB4', '#A0DEFF', '#FF9F66', '#ECB176', '#CDE8E5']
 
@@ -54,10 +54,16 @@ const FinalDashboard = () => {
     const [sheet4Data, setSheet4Data] = useState([])
     const { makeGetRequest } = useGet()
     const [mdashboard, setMdashboard] = useState([])
+
     const { loading, action } = useLoadingDialog();
     const { makePostRequest } = usePost()
 
 
+
+    // const MemoizedDateWiseData = useMemo(() => {DateWiseIntegration})
+
+
+    // console.log('girraj',sheet2Date)
 
     const handleDateWiseData = useCallback((data) => {
         //    console.log('date Wise',data)
@@ -72,6 +78,7 @@ const FinalDashboard = () => {
     }, []);
 
     const ShortDate = (months, years) => {
+
         const result = [];
 
         for (let i = 0; i < Math.min(months.length, years.length); i++) {
@@ -80,6 +87,8 @@ const FinalDashboard = () => {
                 year: years[i]
             });
         }
+        // console.log('result ', result)
+
         setSheet2Date(result)
     }
 
@@ -342,7 +351,7 @@ const FinalDashboard = () => {
             { key: 'D1_5G_SECTOR_ADDITION' },
             { key: 'D1_5G_RELOCATION' },
             { key: 'D1_TRAFFIC_SHIFTING' },//D1_TRAFFIC_SHIFTING
-            { key: 'D1_RRU_SWAP' },
+            {key:'D1_RRU_SWAP'},
 
             { key: 'D2_DE_GROW' },
             { key: 'D2_MACRO' },
@@ -364,7 +373,7 @@ const FinalDashboard = () => {
             { key: 'D2_5G_SECTOR_ADDITION' },
             { key: 'D2_5G_RELOCATION' },
             { key: 'D2_TRAFFIC_SHIFTING' },
-            { key: 'D2_RRU_SWAP' },
+            {key:'D2_RRU_SWAP'},
 
             { key: 'D3_DE_GROW' },
             { key: 'D3_MACRO' },
@@ -386,7 +395,7 @@ const FinalDashboard = () => {
             { key: 'D3_5G_SECTOR_ADDITION' },
             { key: 'D3_5G_RELOCATION' },
             { key: 'D3_TRAFFIC_SHIFTING' },
-            { key: 'D3_RRU_SWAP' },
+            {key:'D3_RRU_SWAP'},
 
         ]
         sheet1Data?.map(item => {
@@ -484,7 +493,7 @@ const FinalDashboard = () => {
             { key: 'M1_5G_SECTOR_ADDITION' },
             { key: 'M1_5G_RELOCATION' },
             { key: 'M1_TRAFFIC_SHIFTING' },
-            { key: 'M1_RRU_SWAP' },
+            {key: 'M1_RRU_SWAP'},
 
             { key: 'M2_DE_GROW' },
             { key: 'M2_MACRO' },
@@ -506,7 +515,7 @@ const FinalDashboard = () => {
             { key: 'M2_5G_SECTOR_ADDITION' },
             { key: 'M2_5G_RELOCATION' },
             { key: 'M2_TRAFFIC_SHIFTING' },
-            { key: 'M2_RRU_SWAP' },
+            {key: 'M2_RRU_SWAP'},
 
             { key: 'M3_DE_GROW' },
             { key: 'M3_MACRO' },
@@ -528,7 +537,7 @@ const FinalDashboard = () => {
             { key: 'M3_5G_SECTOR_ADDITION' },
             { key: 'M3_5G_RELOCATION' },
             { key: 'M3_TRAFFIC_SHIFTING' },
-            { key: 'M3_RRU_SWAP' },
+            {key: 'M3_RRU_SWAP'},
         ]
 
         sheet2Data?.map(item => {
@@ -858,28 +867,12 @@ const FinalDashboard = () => {
         })
 
     }
-    const HandleDashboard = async (oem) => {
-        // console.log('ssssss',oem)
-        action(true)
-        var formData = new FormData();
-        formData.append("oem", oem);
-
-        const responce = await makePostRequest('IntegrationTracker/oem_wise_integration_data/', formData)
-        if (responce) {
-            action(false)
-            dispatch({ type: 'IX_TRACKER', payload: { responce } })
-            navigate(`/tools/IX_Tracker/dashboard/total_count/${oem}`)
-        }
-        else {
-            action(false)
-        }
-    }
 
     const fetchDashboardData = async () => {
         const responce = await makeGetRequest("IntegrationTracker/overall-record-summary/")
         if (responce) {
             setMdashboard(JSON.parse(responce.table_data))
-            // console.log('master dashboard'  ,  JSON.parse(responce.table_data) )
+            console.log('master dashboard'  ,  JSON.parse(responce.table_data) )
         }
     }
 
@@ -893,7 +886,7 @@ const FinalDashboard = () => {
             return `${day}-${month}-${year}`;
         }
         return (
-            <Box sx={{ height: 'auto', width: '32vh', padding: 1.5, borderRadius: 1.5, boxShadow: " rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px", backgroundColor: color, textAlign: 'center', cursor: 'pointer' }}
+            <Box sx={{ height: 'auto', width: '28vh', cursor: 'pointer', padding: 1.5, borderRadius: 1.5, boxShadow: " rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px", backgroundColor: color, textAlign: 'center' }}
                 onClick={() => { HandleDashboard(data.OEM) }}
                 title={data.OEM}
             >
@@ -904,6 +897,32 @@ const FinalDashboard = () => {
             </Box>
         );
     }, []);
+
+    const HandleDashboard = async (oem) => {
+        // console.log('ssssss',oem)
+        action(true)
+        var formData = new FormData();
+        formData.append("oem", oem);
+
+        const responce = await makePostRequest('IntegrationTracker/oem_wise_integration_data/', formData)
+        if (responce) {
+            // console.log('responce', responce)
+            // setMainDataT2(responce)
+            action(false)
+            // localStorage.removeItem("integration_final_tracker");
+            // localStorage.setItem("integration_final_tracker", JSON.stringify(responce.table_data));
+            dispatch({ type: 'IX_TRACKER', payload: { responce } })
+            navigate(`/tools/Integration/dashboard/total_count/${oem}`)
+            // console.log('response data in huawia site id' , response)
+            // window.open(`${window.location.href}/${oem}` , "_blank")
+
+            // setOpen(true)
+            // console.log('dfdiufhsdiuhf', responce)
+        }
+        else {
+            action(false)
+        }
+    }
 
 
 
@@ -920,7 +939,6 @@ const FinalDashboard = () => {
                 <div style={{ margin: 5, marginLeft: 10 }}>
                     <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
                         <Link underline="hover" href='/tools'>Tools</Link>
-
                         <Link underline="hover" href='/tools/Integration'>Integration</Link>
                         <Typography color='text.primary'>Dashboard</Typography>
                     </Breadcrumbs>
@@ -949,7 +967,7 @@ const FinalDashboard = () => {
                     </Grid>
 
                 </div>
-                <div style={{ padding: '5px', display: 'flex', justifyContent: 'space-evenly', flexWrap: "wrap", flexDirection: 'row', gap: 5 }}>
+                <div style={{ padding: '5px', display: 'flex', justifyContent: 'space-evenly', flexWrap: "wrap", flexDirection: 'row', gap: 10 }}>
                     {mdashboard?.map((item, index) => index < 5 && (
                         <Dashboard data={item} color={colorType[index]} key={index} />
                     ))}
