@@ -275,6 +275,7 @@ const MonthWiseIntegration = ({ onData }) => {
 
         { title: 'LNBTS ID', field: 'LNBTS_ID' },
         { title: 'Technology (SIWA)', field: 'Technology_SIWA' },
+           { title: 'Configuration 5G', field: 'Configuration_5G' },
         { title: 'OSS Details', field: 'OSS_Details' },
         { title: 'Cell ID', field: 'Cell_ID' },
         { title: 'CELL COUNT', field: 'CELL_COUNT' },

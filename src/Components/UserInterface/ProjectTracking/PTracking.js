@@ -23,6 +23,7 @@ const RFAItoMS1_DashboardTable = lazy(() => import('./RFAItoMS1/Dashboard/Dashbo
 const RFAItoMS1_MainAging = lazy(() => import('./RFAItoMS1/Aging/MainAging'))
 const RFAItoMS1_MainDashboard = lazy(() => import('./RFAItoMS1/Analytics/MainDashboard'))
 const RFAItoMS1_FinalData = lazy(() => import('./RFAItoMS1/Dashboard/FinalData'))
+const LifeCycle = lazy(()=>import('./RFAItoMS1/LifeCycleDashboard/LifeCycle'))
 
 
 
@@ -102,13 +103,16 @@ const PTracking = () => {
                                                 <Nav.Item eventKey="1-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/rfai_to_ms1_analytics'); show(); setMenuButton(true) }}>
                                                     Analytics Dashboard
                                                 </Nav.Item>
-                                                <Nav.Item eventKey="2-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/rfai_to_ms1_waterfall'); show(); setMenuButton(true) }}>
+                                                <Nav.Item eventKey="1-2" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/rfai_to_ms1_waterfall'); show(); setMenuButton(true) }}>
                                                     Waterfall Dashboard
                                                 </Nav.Item>
-                                                <Nav.Item eventKey="3-2" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/rfai_to_ms1_ageing'); show(); setMenuButton(true) }}>
+                                                   <Nav.Item eventKey="1-3" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking'); show(); setMenuButton(true) }}>
+                                                    Site Lifecycle
+                                                </Nav.Item>
+                                                <Nav.Item eventKey="1-4" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/rfai_to_ms1_ageing'); show(); setMenuButton(true) }}>
                                                     Ageing Dashboard
                                                 </Nav.Item>
-                                                {!userTypes?.includes('RLT_reader') &&       <Nav.Item eventKey="4-3" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/rfai_to_ms1_upload_file'); show(); setMenuButton(true) }}>
+                                                {!userTypes?.includes('RLT_reader') &&       <Nav.Item eventKey="1-5" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/rfai_to_ms1_upload_file'); show(); setMenuButton(true) }}>
                                                     Upload File
                                                 </Nav.Item>}
                                            
@@ -148,6 +152,7 @@ const PTracking = () => {
                                 <Route element={<RFAItoMS1_FinalData />} path="/rfai_to_ms1_waterfall/:milestone" />
                                 <Route element={<RFAItoMS1_MainAging />} path="/rfai_to_ms1_ageing" />
                                 <Route element={<RFAItoMS1_MainDashboard />} path="/rfai_to_ms1_analytics" />
+                                <Route element={<LifeCycle />} path="/site_lifecycle" />
 
 
 
