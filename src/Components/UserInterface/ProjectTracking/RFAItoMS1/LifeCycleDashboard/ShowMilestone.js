@@ -168,24 +168,21 @@ const ShowMilestone = () => {
             </Steps>
 
             <ol>
-                <li>qwer qwer
-                    <dt>girraj</dt>
-                </li>
-                <li>qwer qwer
-                    <dt>girraj</dt>
-                </li>      <li>qwer qwer
-                    <dt>girraj</dt>
-                </li>      <li>qwer qwer
-                    <dt>girraj</dt>
-                </li>      <li>qwer qwer
-                    <dt>girraj</dt>
-                </li>      <li>qwer qwer
-                    <dt>girraj</dt>
-                </li>      <li>qwer qwer
-                    <dt>girraj</dt>
-                </li>
-
-
+                <dt>milestone
+                    <li>Date</li>
+                </dt> <dt>milestone
+                    <li>Date</li>
+                </dt> <dt>milestone
+                    <li>Date</li>
+                </dt> <dt>milestone
+                    <li>Date</li>
+                </dt> <dt>milestone
+                    <li>Date</li>
+                </dt> <dt>milestone
+                    <li>Date</li>
+                </dt> <dt>milestone
+                    <li>Date</li>
+                </dt>
             </ol>
         </>
     )
