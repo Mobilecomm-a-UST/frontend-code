@@ -88,7 +88,7 @@ const MonthWise = () => {
     const { makePostRequest, cancelRequest } = usePost()
     const { loading, action } = useLoadingDialog();
     const [mainDataT2, setMainDataT2] = useState([])
-    const [monthArray, setMonthArray] = useState(['CF'])
+    const [monthArray, setMonthArray] = useState([])
     const [tableData, setTableData] = useState([])
     const milestones = ["RFAI", "Site ONAIR"];
     const [milestoneData, setMilestoneData] = useState({})
@@ -100,10 +100,32 @@ const MonthWise = () => {
     const [relocationMethodOptions, setRelocationMethodOptions] = useState([])
     const [toco, setToco] = useState([])
     const [tocoOptions, setTocoOptions] = useState([])
+    const [typeFileter, setTypeFilter] = useState('type1')
+    const milestoneOptions = [
+        "Allocation",
+        "RFAI",
+        "RFAI Survey",
+        "MO Punch",
+        "Material Dispatch",
+        "Material Delivered",
+        "Installation End",
+        "Integration",
+        "EMF Submission",
+        "Alarm Rectification Done",
+        "SCFT I-Deploy Offered",
+        "RAN PAT Offer",
+        "RAN SAT Offer",
+        "MW PAT Offer",
+        "MW SAT Offer",
+        "Site ONAIR",
+        "I-Deploy ONAIR"
+    ]
+    const [milestone1, setMilestone1] = useState('RFAI')
+    const [milestone2, setMilestone2] = useState('Site ONAIR')
     const [view, setView] = useState('Cumulative')
     let delayed;
 
-    console.log('data get', monthArray, milestoneData)
+    // console.log('data get', monthArray, milestoneData)
 
 
     const fetchDailyData = async () => {
@@ -115,13 +137,18 @@ const MonthWise = () => {
         formData.append('relocation_method', relocationMethod)
         formData.append('new_toco_name', toco)
         formData.append('view', view)
-        const res = await postData("alok_tracker/weekly_monthly_dashboard_file/", formData);
+        formData.append('milestone1', milestone1)
+        formData.append('milestone2', milestone2)
+        formData.append('type', typeFileter)
+        const res = await postData("alok_tracker/monthly_graph/", formData);
         // const res =  tempData; //  remove this line when API is read
+        // console.log('responce data1' , (JSON.parse(res.json_data)))
+        // console.log('responce data2' , transformData(JSON.parse(res.json_data)))
         if (res) {
             action(false)
-            setMilestoneData(extractMilestoneData(JSON.parse(res.months_data), milestones))
+            setMilestoneData(transformData(JSON.parse(res.json_data)))
             if (circleOptions.length === 0) {
-                setMonthArray((prev) => [...prev, ...res.unique_data.month_columns])
+                // setMonthArray((prev) => [...prev, ...res.unique_data.month_columns])
                 setCircleOptions(res.unique_data.unique_circle)
                 setTaggingOptions(res.unique_data.unique_site_tagging)
                 setRelocationMethodOptions(res.unique_data.unique_relocation_method)
@@ -137,6 +164,30 @@ const MonthWise = () => {
 
     }
 
+
+    const transformData = (arr) => {
+
+        const RFAI_done = arr.map(item => Number(item[`${milestone1} Done Count`]));
+        const onAirDone = arr.map(item => Number(item[`${milestone2} Done Count`]));
+        if (monthArray == 0) {
+            setMonthArray(arr.map(item => (item['month_name'])))
+        }
+        const monthArrays = arr.map(item => (item['month_name']));
+
+        // ✅ Calculate percentage array
+        const percentage = onAirDone.map((done, index) => {
+            const rfai = RFAI_done[index];
+            return rfai ? Math.ceil((done / rfai) * 100) : 0;  // Avoid division by 0
+        });
+
+        return {
+
+            RFAI_done,
+            onAirDone,
+            monthArrays,
+            percentage   // ✅ Added
+        };
+    };
 
     const extractMilestoneData = (data, milestones) => {
         const result = {};
@@ -189,8 +240,8 @@ const MonthWise = () => {
         labels: monthArray,
         datasets: [
             {
-                label: 'RFAI',
-                data: milestoneData?.RFAI,
+                label: `${milestone1} Done`,
+                data: milestoneData?.RFAI_done,
                 borderColor: 'rgb(107, 107, 107)',
                 backgroundColor: ['rgb(204, 255, 254)'],
 
@@ -200,8 +251,8 @@ const MonthWise = () => {
                 tension: 0.4
             },
             {
-                label: 'MS1',
-                data: milestoneData?.['Site ONAIR'],
+                label: `${milestone2} Done`,
+                data: milestoneData?.['onAirDone'],
                 borderColor: 'rgb(0, 110, 116)',
                 backgroundColor: ['rgb(0, 110, 116)'],
                 borderWidth: 3,
@@ -213,7 +264,7 @@ const MonthWise = () => {
             ,
             {
                 label: 'Sites Converted %',
-                data: milestoneData?.['Percentage'],
+                data: milestoneData?.['percentage'],
                 type: 'bar',
                 borderColor: 'rgb(136, 30, 135)',
                 backgroundColor: 'rgb(136, 30, 135,0.3)',
@@ -233,7 +284,7 @@ const MonthWise = () => {
 
             {
                 label: 'Sites Converted %',
-                data: milestoneData?.['Percentage'],
+                data: milestoneData?.['percentage'],
                 type: 'line', // ✅ correct property
                 borderColor: 'rgb(136, 30, 135)',
                 backgroundColor: 'rgb(136, 30, 135,0.7)',
@@ -243,8 +294,8 @@ const MonthWise = () => {
                 yAxisID: 'y1'
             },
             {
-                label: 'RFAI',
-                data: milestoneData?.RFAI,
+                label: `${milestone1} Done`,
+                data: milestoneData?.RFAI_done,
                 borderColor: 'black',
                 // backgroundColor: ['rgb(0, 110, 116)'],
                 backgroundColor: ['rgb(171, 171, 171)'],
@@ -255,12 +306,11 @@ const MonthWise = () => {
                 tension: 0.4
             },
             {
-                label: 'MS1',
-                data: milestoneData?.['Site ONAIR'],
+                label: `${milestone2} Done`,
+                data: milestoneData?.['onAirDone'],
                 borderColor: 'black',
                 // backgroundColor: ['rgb(171, 171, 171)'],
                 backgroundColor: ['rgb(0, 110, 116)'],
-
                 borderWidth: 1,
                 borderRadius: 5,
                 color: 'red',
@@ -296,7 +346,7 @@ const MonthWise = () => {
             },
             title: {
                 display: true,
-                text: `Monthly Progress - RFAI to MS1`,
+                text: `Monthly Progress - ${milestone1} (${milestoneData?.RFAI_done?.reduce((sum, num) => sum + num, 0) || 0}) to ${milestone2} (${milestoneData?.onAirDone?.reduce((sum, num) => sum + num, 0) || 0})`,
                 font: {
                     size: 16,
                     weight: 'bold'
@@ -402,10 +452,16 @@ const MonthWise = () => {
         setOpen(false);
 
     }
-        const handleViewChange = (event) => {
+    const handleViewChange = (event) => {
         setView(event.target.value)
     }
+    const handleMilestone1Change = (event) => {
+        setMilestone1(event.target.value);
+    }
 
+    const handleMilestone2Change = (event) => {
+        setMilestone2(event.target.value);
+    }
 
 
 
@@ -447,25 +503,25 @@ const MonthWise = () => {
 
 
     useEffect(() => {
-        setMilestoneData({ 'Percentage': [], 'RFAI': [], 'Site ONAIR': [] })
+        setMilestoneData({ 'percentage': [], 'RFAI_done': [], 'onAirDone': [] })
         fetchDailyData()
         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
         return () => {
             cancelRequest();
         }
-    }, [circle, tagging, relocationMethod, toco,view])
+    }, [circle, tagging, relocationMethod, toco, view,milestone1,milestone2,typeFileter])
     return (
         <>
 
             <div style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', padding: 10, height: 'auto', width: "96%", margin: 20, borderRadius: 10, backgroundColor: "white", display: "flex", justifyContent: 'space-around', alignItems: 'center' }}>
-                <div style={{ width: 200, height: 350, borderRadius: 5, padding: 10, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: "10px" ,overflowY:'auto'}}>
+                <div style={{ width: 200, height: 350, borderRadius: 5, padding: 10, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: "10px", overflowY: 'auto' }}>
                     <div style={{ display: 'flex', alignItems: 'center', fontSize: '18px', fontWeight: 'bold', color: "black" }}><FilterAltIcon />FILTER DATA</div>
                     {/* select month */}
                     {/* <div>
                         <InputLabel style={{ fontSize: 15 }}>Select Month</InputLabel>
                         <input type='month' value={date} onChange={(e) => handleMonthData(e.target.value)} />
                     </div> */}
-                    <FormControl sx={{  minWidth: 120, maxWidth: 120 }} size="small">
+                    <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
                         <InputLabel id="demo-select-small-label">View</InputLabel>
                         <Select
                             labelId="demo-select-small-label"
@@ -477,6 +533,48 @@ const MonthWise = () => {
                             <MenuItem value="Cumulative">Cumulative</MenuItem>
                             <MenuItem value="Non-cumulative">Non-cumulative</MenuItem>
 
+                        </Select>
+                    </FormControl>
+                           <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
+                        <InputLabel id="demo-select-small-label">Type</InputLabel>
+                        <Select
+                            labelId="demo-select-small-label"
+                            id="demo-select-small"
+                            value={typeFileter}
+                            label="Type"
+                            onChange={(e)=>{setTypeFilter(e.target.value)}}
+                        >
+                            <MenuItem value="type1">Type 1</MenuItem>
+                            <MenuItem value="type2">Type 2</MenuItem>
+
+                        </Select>
+                    </FormControl>
+                    <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
+                        <InputLabel id="demo-simple-select-label">milestone1</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={milestone1}
+                            label="milestone1"
+                            onChange={handleMilestone1Change}
+                        >
+                            {milestoneOptions?.map((item, index) => (
+                                <MenuItem key={index} value={item}>{item}</MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                    <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
+                        <InputLabel id="demo-simple-select-label">milestone2</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={milestone2}
+                            label="milestone2"
+                            onChange={handleMilestone2Change}
+                        >
+                            {milestoneOptions?.map((item, index) => (
+                                <MenuItem key={index} value={item}>{item}</MenuItem>
+                            ))}
                         </Select>
                     </FormControl>
                     {/* select circle */}

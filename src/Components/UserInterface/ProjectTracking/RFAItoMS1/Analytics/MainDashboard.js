@@ -94,7 +94,6 @@ const MainDashboard = () => {
     useEffect(() => {
         fetchDailyData()
         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
-        fetchDailyData()
     }, [])
 
     return (
