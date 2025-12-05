@@ -44,7 +44,7 @@ const milestones = [
 
 const ShowMilestone = (props) => {
     const {mileston} = props;
-    console.log('show mileston', mileston)
+
     return (
         <>
             <ol className="timeline">
@@ -53,7 +53,7 @@ const ShowMilestone = (props) => {
                         <div className="timeline-circle" />
                         <div className="timeline-content">
                             <h4>{item.title}</h4>
-                            <p>{tempData[item.dateKey] || "—"}</p>
+                            <p>{mileston?.[0]?.[item.dateKey] || "—"}</p>
                         </div>
                     </li>
                 ))}
