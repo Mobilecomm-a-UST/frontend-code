@@ -17,7 +17,24 @@ import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 
 
-const circleArray = ['AP', 'CH', 'KK', 'DL', 'HR', 'RJ', 'JK', 'WB', 'OD', 'MU', 'TNCH', 'UE', 'BH', 'UW', 'MP', 'PB', 'KO', 'WB', 'JH']
+const circleArray = [
+  'UPW',
+  'ASM',
+  'NESA',
+  'RAJ',
+  'AS',
+  'DEL',
+  'AP',
+  'HRY',
+  'JK',
+  'ROTN',
+  'KK',
+  'BIH',
+  'UPE',
+  'NE',
+  'CHN'
+];
+
 
 const Alarm4G = () => {
     const [selectCircle, setSelectCircle] = useState('')
