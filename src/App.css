@@ -190,6 +190,31 @@ html {
   color: #006e74 !important;
 }
 
+/* Title style (same as dropdown titles) */
+.single-item-custom {
+  color: white !important;
+  font-weight: bold !important;
+}
+
+/* Hover style */
+.single-item-custom:hover,
+.single-item-custom:focus,
+.single-item-custom.rs-nav-item-active {
+  background-color: #ffffff !important;
+  color: #006e74 !important;
+}
+
+/* Ensure icon also changes color */
+.single-item-custom svg {
+  fill: white !important;
+}
+
+.single-item-custom:hover svg,
+.single-item-custom:focus svg,
+.single-item-custom.rs-nav-item-active svg {
+  fill: #006e74 !important;
+}
+
 /* Entire Steps Component */
 .custom-steps {
     padding: 10px;

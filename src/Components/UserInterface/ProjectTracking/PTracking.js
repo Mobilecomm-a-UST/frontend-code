@@ -11,11 +11,13 @@ import Collapse from '@mui/material/Collapse';
 import SettingsIcon from '@mui/icons-material/Settings';
 import DashboardIcon from '@rsuite/icons/legacy/Dashboard';
 import { useNavigate } from 'react-router-dom'
+import { Navigate } from "react-router-dom";
 import FunnelTrendIcon from '@rsuite/icons/FunnelTrend';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import App from '../../../App.css'
 import ArrowRightIcon from '@rsuite/icons/ArrowRight';
 import { getDecreyptedData } from '../../../Components/utils/localstorage';
+import AdminIcon from '@rsuite/icons/Admin';
 
 const PTtool = lazy(() => import('./PTtool'))
 const RFAItoMS1_UploadFile = lazy(() => import('./RFAItoMS1/UploadFile/Upload'))
@@ -23,7 +25,18 @@ const RFAItoMS1_DashboardTable = lazy(() => import('./RFAItoMS1/Dashboard/Dashbo
 const RFAItoMS1_MainAging = lazy(() => import('./RFAItoMS1/Aging/MainAging'))
 const RFAItoMS1_MainDashboard = lazy(() => import('./RFAItoMS1/Analytics/MainDashboard'))
 const RFAItoMS1_FinalData = lazy(() => import('./RFAItoMS1/Dashboard/FinalData'))
-const LifeCycle = lazy(()=>import('./RFAItoMS1/LifeCycleDashboard/LifeCycle'))
+const LifeCycle = lazy(() => import('./RFAItoMS1/LifeCycleDashboard/LifeCycle'))
+const AdminPanel = lazy(() => import('./Admin/AdminPanel'))
+// const Error = lazy(() => import('./Components/csss/Error'));
+const Error = lazy(() => import('../../../Components/csss/Error'));
+
+
+const ProtectedRoute = ({ allowed, children }) => {
+    if (!allowed) {
+        return <Navigate to="/tools/relocation_tracking/error" replace />;
+    }
+    return children;
+}
 
 
 
@@ -32,11 +45,12 @@ const PTracking = () => {
     const [activeKey, setActiveKey] = useState();
     const [states, setStates] = useState(60)
     const [checked, setChecked] = useState(true)
+    const navigate = useNavigate()
     const [menuButton, setMenuButton] = useState(false)
     const userTypes = (getDecreyptedData('user_type')?.split(","))
     //  const classes = useStyles();
 
-    const navigate = useNavigate()
+
 
 
 
@@ -97,7 +111,11 @@ const PTracking = () => {
                                     <Sidenav.Body>
                                         <Nav activeKey={activeKey} onSelect={setActiveKey} >
                                             <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>Relocation Tracking</Nav>
-
+                                            {/* Admin Panel */}
+                                            {userTypes?.includes('RLT_Admin') &&
+                                                <Nav.Item eventKey="3" placement="rightStart" className="single-item-custom" icon={<AdminIcon />} onClick={() => { navigate('/tools/relocation_tracking/admin_panel'); show(); setMenuButton(true) }}>
+                                                    Admin Panel
+                                                </Nav.Item>}
                                             {/* RFAI To MS1 */}
                                             <Nav.Menu eventKey="1" style={{ fontWeight: 400, color: 'white' }} placement="leftStart" className="menu-title-custom" title="RFAI To MS1" icon={<ArrowRightIcon />}  >
                                                 <Nav.Item eventKey="1-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/rfai_to_ms1_analytics'); show(); setMenuButton(true) }}>
@@ -106,16 +124,16 @@ const PTracking = () => {
                                                 <Nav.Item eventKey="1-2" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/rfai_to_ms1_waterfall'); show(); setMenuButton(true) }}>
                                                     Waterfall Dashboard
                                                 </Nav.Item>
-                                                   <Nav.Item eventKey="1-3" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/site_lifecycle'); show(); setMenuButton(true) }}>
+                                                <Nav.Item eventKey="1-3" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/site_lifecycle'); show(); setMenuButton(true) }}>
                                                     Site Lifecycle
                                                 </Nav.Item>
                                                 <Nav.Item eventKey="1-4" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/rfai_to_ms1_ageing'); show(); setMenuButton(true) }}>
                                                     Ageing Dashboard
                                                 </Nav.Item>
-                                                {!userTypes?.includes('RLT_reader') &&       <Nav.Item eventKey="1-5" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/rfai_to_ms1_upload_file'); show(); setMenuButton(true) }}>
+                                                {!userTypes?.includes('RLT_reader') && <Nav.Item eventKey="1-5" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/rfai_to_ms1_upload_file'); show(); setMenuButton(true) }}>
                                                     Upload File
                                                 </Nav.Item>}
-                                           
+
 
                                             </Nav.Menu>
 
@@ -147,13 +165,29 @@ const PTracking = () => {
                             <Routes>
                                 <Route element={<PTtool />} path="/" />
 
-                                {!userTypes?.includes('RLT_reader') &&  <Route element={<RFAItoMS1_UploadFile />} path="/rfai_to_ms1_upload_file" />}
+                                {!userTypes?.includes('RLT_reader') && <Route element={<RFAItoMS1_UploadFile />} path="/rfai_to_ms1_upload_file" />}
                                 <Route element={<RFAItoMS1_DashboardTable />} path="/rfai_to_ms1_waterfall/*" />
                                 <Route element={<RFAItoMS1_FinalData />} path="/rfai_to_ms1_waterfall/:milestone" />
                                 <Route element={<RFAItoMS1_MainAging />} path="/rfai_to_ms1_ageing" />
                                 <Route element={<RFAItoMS1_MainDashboard />} path="/rfai_to_ms1_analytics" />
                                 <Route element={<LifeCycle />} path="/site_lifecycle" />
-
+                                <Route
+                                    path="/rfai_to_ms1_upload_file"
+                                    element={
+                                        <ProtectedRoute allowed={!userTypes?.includes("RLT_reader")}>
+                                            <RFAItoMS1_UploadFile />
+                                        </ProtectedRoute>
+                                    }
+                                />
+                                <Route
+                                    path="/admin_panel"
+                                    element={
+                                        <ProtectedRoute allowed={userTypes?.includes("RLT_Admin")}>
+                                            <AdminPanel />
+                                        </ProtectedRoute>
+                                    }
+                                />
+                                <Route element={<Error />} path="/error" />
 
 
                             </Routes>
@@ -164,5 +198,7 @@ const PTracking = () => {
         </>
     )
 }
+
+
 
 export default PTracking
