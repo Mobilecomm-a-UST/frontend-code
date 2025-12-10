@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkmobilecomm=self.webpackChunkmobilecomm||[]).push([[1506],{71506:(e,c,l)=>{l.r(c),l.d(c,{default:()=>s});l(72791);var m=l(80184);const s=()=>(0,m.jsx)("div",{children:"AdminPanel"})}}]);
-//# sourceMappingURL=1506.35fe8755.chunk.js.map

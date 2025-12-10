@@ -160,7 +160,8 @@ const Kpi4G = () => {
 
     const handleSubmit = async () => {
 
-        if (g2rawKpiHuiLength > 0 && g2rawKpiLength > 0 && g2siteListLength > 0 && g4rawKpiLength > 0 && g4siteListLength > 0 && mappingFileLength > 0) {
+        // if (g2rawKpiHuiLength > 0 && g2rawKpiLength > 0 && g2siteListLength > 0 && g4rawKpiLength > 0 && g4siteListLength > 0 && mappingFileLength > 0) {
+        if ( mappingFileLength > 0) {
 
             setOpen(true)
             var formData = new FormData();
@@ -173,7 +174,7 @@ const Kpi4G = () => {
             formData.append("offered_date", offerDate);
             const response = await makePostRequest('trend/ktk/makeKpiTrend/new/', formData)
             setFileData(response.Download_url)
-            console.log('response data', response)
+            // console.log('response data', response)
 
             if (response.status == true) {
                 setOpen(false);
@@ -195,24 +196,24 @@ const Kpi4G = () => {
             }
         }
         else {
-            if (g2rawKpiLength == 0) {
-                setRaw2GShow(true)
-            }
-            if (g2siteListLength == 0) {
-                setSite2GShow(true)
-            }
-            if (g4rawKpiLength == 0) {
-                setRaw4GShow(true)
-            }
-            if (g4siteListLength == 0) {
-                setSite4GShow(true)
-            }
+            // if (g2rawKpiLength == 0) {
+            //     setRaw2GShow(true)
+            // }
+            // if (g2siteListLength == 0) {
+            //     setSite2GShow(true)
+            // }
+            // if (g4rawKpiLength == 0) {
+            //     setRaw4GShow(true)
+            // }
+            // if (g4siteListLength == 0) {
+            //     setSite4GShow(true)
+            // }
             if (mappingFileLength == 0) {
                 setMappingShow(true)
             }
-            if(g2rawKpiHuiLength==0){
-                setRaw2GShowHui(true)
-            }
+            // if(g2rawKpiHuiLength==0){
+            //     setRaw2GShowHui(true)
+            // }
 
         }
     };

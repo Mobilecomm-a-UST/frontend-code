@@ -38,7 +38,7 @@ const readOnlyFields = [
 ];
 
 const dateTypeKey = [
-     "rfai_date",
+    "rfai_date",
     "allocation_date",
     "rfai_survey_date",
     "mo_punch_date",
@@ -279,7 +279,7 @@ const FinalData = () => {
             pri_close_date: rowData.pri_close_date,
             pri_history: rowData.pri_history,
             pri_count: rowData.pri_count,
-            pri_issue_ageing:rowData.pri_issue_ageing,
+            pri_issue_ageing: rowData.pri_issue_ageing,
 
             issue: rowData.issue,
             issue_start_date: rowData.issue_start_date,
@@ -321,7 +321,7 @@ const FinalData = () => {
                 (`${ServerURL}/alok_tracker/hyperlink_frontend_editing_update/`, formData, {
                     headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
                 });
-            console.log('weeee',response)
+            console.log('weeee', response)
             if (response.status) {
                 setOpen(false);
                 Swal.fire({
@@ -335,7 +335,7 @@ const FinalData = () => {
 
 
         } catch (error) {
-            console.log('error',error.response)
+            console.log('error', error.response)
             setOpen(false);
             Swal.fire({
                 icon: "error",
@@ -372,7 +372,20 @@ const FinalData = () => {
 
 
     const columnData = [
-        { title: 'Unique ID', field: 'Unique ID' },
+        {
+            title: 'Actions',
+            field: 'actions',
+            render: rowData => (
+                <>
+                    {!userTypes?.includes('RLT_reader') && (
+                        <IconButton aria-label="edit" onClick={() => handleEdit(rowData)}>
+                            <DriveFileRenameOutlineIcon color='success' />
+                        </IconButton>
+                    )}
+                </>
+            )
+        },
+        // { title: 'Unique ID', field: 'Unique ID' },
         { title: 'Circle', field: 'circle' },
         { title: 'Site Tagging', field: 'site_tagging' },
         { title: 'Old TOCO Name', field: 'old_toco_name' },
@@ -420,7 +433,7 @@ const FinalData = () => {
         { title: 'PRI Close Date', field: 'pri_close_date' },
         { title: 'PRI History', field: 'pri_history' },
         { title: 'PRI Count', field: 'pri_count' },
-        {title: 'Pri Issue Ageing' , field:'pri_issue_ageing'},
+        { title: 'Pri Issue Ageing', field: 'pri_issue_ageing' },
 
         { title: 'Issue', field: 'issue' },
         { title: 'Issue Start Date', field: 'issue_start_date' },
@@ -447,19 +460,7 @@ const FinalData = () => {
         { title: 'Last Updated Date', field: 'last_updated_date' },
         { title: 'Last Updated By', field: 'last_updated_by' },
 
-        {
-            title: 'Actions',
-            field: 'actions',
-            render: rowData => (
-                <>
-                    {!userTypes?.includes('RLT_reader') && (
-                        <IconButton aria-label="edit" onClick={() => handleEdit(rowData)}>
-                            <DriveFileRenameOutlineIcon color='success' />
-                        </IconButton>
-                    )}
-                </>
-            )
-        }
+
     ];
 
 
@@ -572,43 +573,31 @@ const FinalData = () => {
         <>
             <div style={{ margin: '1% 1%' }}>
                 <MaterialTable
-                    title={'Relocation Site Details'}
+                    title="Relocation Site Details"
                     columns={columnData}
                     data={listDataa.temp}
-                    onSelectionChange={(rows) => setSelectedRows(rows)}
-                    // onRowClick={((evt, selectedRow) => console.log())}
                     actions={[
                         {
                             icon: () => <DownloadIcon color='primary' fontSize='large' />,
                             tooltip: "Export to Excel",
-                            onClick: () => downloadExcel(listDataa.temp), isFreeAction: true
-                        },
-                        {
-                            tooltip: 'Selected Rows download',
-                            icon: () => <DownloadIcon color='error' fontSize='large' />,
-
-                            onClick: (evt, data) => downloadExcel(data),
+                            onClick: () => downloadExcel(listDataa.temp),
+                            isFreeAction: true
                         }
                     ]}
-
                     options={{
-                        selection: true,
+                        selection: false,
                         search: true,
                         exportButton: true,
-                        grouping: true,
+                        grouping: false,
                         headerStyle: {
-                            backgroundColor: '#01579b',
+                            backgroundColor: '#006e74',
                             color: '#FFF',
-                            width: 'auto',
-                            whiteSpace: 'nowrap'
+                            whiteSpace: 'nowrap',
+                            fontWeight: 'bold'
                         },
                         rowStyle: {
-                            // backgroundColor: '#EEE',
-                            width: 'auto',
                             whiteSpace: 'nowrap'
-                        },
-
-
+                        }
                     }}
                 />
             </div>
