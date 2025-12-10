@@ -170,6 +170,7 @@ const LifeCycle = () => {
             if (response.status) {
                 setOpen(false);
                 action(false)
+                handleClearData()
                 setIssueTable(response?.data?.json_data);
 
                 Swal.fire({
@@ -182,6 +183,7 @@ const LifeCycle = () => {
         } catch (error) {
             setOpen(false);
             action(false)
+            handleClearData()
             Swal.fire({
                 icon: "error",
                 title: "Error",
@@ -250,7 +252,7 @@ const LifeCycle = () => {
 
         >
             <DialogTitle>
-                Edit Site Issue History
+                Edit Site Issue Logs
                 <span style={{ float: 'right' }}><IconButton aria-label="close" onClick={() => setOpen(false)}><CloseIcon /> </IconButton></span>
             </DialogTitle>
             <DialogContent dividers={'paper'}>
@@ -288,6 +290,7 @@ const LifeCycle = () => {
                                 name="Start Date"
                                 value={dateFormateChange(tempIssueTableData?.['Start Date']) || ''}
                                 onChange={handleChangeListDialog}
+                                required
                                 type="date"
                                 size="small"
                                 InputLabelProps={{ shrink: true }}
@@ -314,6 +317,10 @@ const LifeCycle = () => {
                 </form>
             </DialogContent>
         </Dialog>)
+    }
+
+    const handleClearData =()=>{
+        setTempIssueTableData()
     }
 
 
@@ -433,6 +440,7 @@ const LifeCycle = () => {
                                                 onChange={handleChange}
                                                 type="date"
                                                 size="small"
+                                                required
                                                 InputLabelProps={{ shrink: true }}
                                             />
                                         </FormControl>

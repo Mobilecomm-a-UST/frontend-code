@@ -544,8 +544,8 @@ const MonthWise = () => {
                             label="Type"
                             onChange={(e)=>{setTypeFilter(e.target.value)}}
                         >
-                            <MenuItem value="type1">Type 1</MenuItem>
-                            <MenuItem value="type2">Type 2</MenuItem>
+                            <MenuItem value="type1">Sequential Independent</MenuItem>
+                            <MenuItem value="type2">Combined Overlapping</MenuItem>
 
                         </Select>
                     </FormControl>
