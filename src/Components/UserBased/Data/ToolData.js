@@ -40,7 +40,7 @@ const ToolData = [
         title: 'This is a trend tool',
         icons: TrendIcon,
         link: '/trends',
-        groupBy:['quality','admin','quality-s']
+        groupBy:['quality','admin','quality-s','trend_tool']
     },
     // {
     //     id: 1,
