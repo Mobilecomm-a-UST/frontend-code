@@ -18,6 +18,8 @@ import { getDecreyptedData } from '../../../utils/localstorage';
 import { useLoadingDialog } from '../../../Hooks/LoadingDialog';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DialogForm from './DialogForm';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+
 import { add, set } from 'lodash';
 
 const readOnlyFields = [
@@ -107,8 +109,8 @@ const AdminPanel = () => {
   // const params = useParams()
 
 
-  const fetchAdminPanelData = async () => { 
-     try {
+  const fetchAdminPanelData = async () => {
+    try {
 
       const formData = new FormData();
       formData.append('adminId', getDecreyptedData('userID'));
@@ -116,7 +118,7 @@ const AdminPanel = () => {
         (`${ServerURL}/alok_tracker/users/`, formData, {
           headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
         });
-      console.log('fetchAdminPanelData response', response.data) 
+      console.log('fetchAdminPanelData response', response.data)
       if (response) {
         setOpen(false);
         setColumnsArray(['CENTRAL', ...response?.data?.columns])
@@ -135,19 +137,14 @@ const AdminPanel = () => {
   }
 
 
-  const createNextHistoryEntry = (start, close, index) => {
-    return {
-      [`S${index}`]: start || "",
-      [`C${index}`]: close || ""
-    };
-  };
+
 
   const handleChange = (e) => {
     setEditData({
       ...editData,
       [e.target.name]: e.target.value,
     });
-   
+
   }
 
   const handleEdit = async (rowData) => {
@@ -203,28 +200,42 @@ const AdminPanel = () => {
   }
 
   const handleDelete = async (rowData) => {
-    axios.delete(`${ServerURL}/IntegrationTracker/delete-integration-record/${rowData.id}/`, { headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }, })
-      .then((res) => {
-        console.log('Data deleted successfully', res);
-        Swal.fire({
-          icon: "success",
-          title: "Deleted",
-          text: `${res.data.message}`,
-        });
-        const newData = listDataa.filter(item => item.id !== rowData.id);
-        // setListDataa(newData);
-        dispatch({ type: 'RELOCATION_FINAL_TRACKER', payload: { newData } })
-        // console.log('Data deleted successfully');
-      })
-      .catch(error => {
-        console.error('Error deleting data:', error);
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: `${error.response.data.message}`,
-        });
+    try {
+
+      const formData = new FormData();
+      formData.append("email", rowData?.email);   // change according to your backend
+      formData.append("adminId", getDecreyptedData("userID"));
+
+      const response = await axios.post(
+        `${ServerURL}/alok_tracker/delete_user/`,
+        formData,
+        {
+          headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
+        }
+      );
+
+      console.log("Data deleted successfully", response.data);
+
+      Swal.fire({
+        icon: "success",
+        title: "Deleted",
+        text: `${response.data.message}`,
       });
-  }
+
+      // Optional: Refresh table after delete
+      fetchAdminPanelData();
+
+    } catch (error) {
+      console.error("Error deleting data:", error);
+
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: `${error.response?.data?.message || error.message}`,
+      });
+    }
+  };
+
 
 
   const columnData = [{
@@ -236,30 +247,32 @@ const AdminPanel = () => {
         <IconButton aria-label="edit" onClick={() => handleEdit(rowData)}>
           <DriveFileRenameOutlineIcon color='success' />
         </IconButton>
+        <IconButton aria-label="edit" onClick={() => handleDelete(rowData)}>
+          <DeleteOutlineIcon color='error' />
+        </IconButton>
       </>
     )
   },
   { title: 'Name', field: 'name' },
   { title: 'Email', field: 'email' },
-  { title: 'Circles', field: 'circles' },
-  { title: 'Columns', field: 'columns' },
+  { title: 'Circles', 
+    field: 'circles',
+     render: rowData => rowData.circles?.join(", ") || "-"
+  },
+  { title: 'Columns', 
+    field: 'columns',
+   render: rowData => rowData.columns?.join(", ") || "-"
+  },
   { title: 'Rights', field: 'right' },
+  { title: 'Created By', field: 'created_by' },
+  { title: 'Created At', field: 'created_at' },
+  { title: 'Updated By', field: 'updated_by' },
+  { title: 'Updated At', field: 'updated_at' },
 
   ];
 
 
 
-  const getStatus = () => {
-    var arr = []
-    listDataa?.map((item) => {
-      // console.log('status oem', item.AT_STATUS)
-      arr.push(item.AT_STATUS)
-    })
-    setStatus(`( ${[...new Set(arr)]} )`);
-
-
-
-  }
 
   const dateFormateChange = (dateStr) => {
     if (!dateStr || dateStr === "nan") return "";
@@ -335,7 +348,7 @@ const AdminPanel = () => {
   }, [open, editData])
 
   useEffect(() => {
-   fetchAdminPanelData()
+    fetchAdminPanelData()
     document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
 
   }, [])
@@ -355,16 +368,16 @@ const AdminPanel = () => {
         <MaterialTable
           title="User Control Admin Panel"
           columns={columnData}
-          data={listDataa.temp}
+          data={tableData}
           actions={[
             {
-              icon: () => <AddCircleIcon color='primary' fontSize='large' />,
+              icon: () => <AddCircleIcon sx={{ color: '#006e74' }} fontSize='large' />,
               tooltip: "Add New User",
               onClick: () => setAddDataDialog(!addDataDialog),
               isFreeAction: true
             },
             {
-              icon: () => <DownloadIcon color='primary' fontSize='large' />,
+              icon: () => <DownloadIcon sx={{ color: '#006e74' }} fontSize='large' />,
               tooltip: "Export to Excel",
               onClick: () => downloadExcel(listDataa.temp),
               isFreeAction: true
@@ -389,7 +402,7 @@ const AdminPanel = () => {
       </div>
       {handleDialogBox()}
       {addDataDialog && (
-        <DialogForm close={() => setAddDataDialog(prev => !prev)} column={columnsArray} />
+        <DialogForm close={() => setAddDataDialog(prev => !prev)} column={columnsArray} refetch={()=> fetchAdminPanelData()} />
       )}
       {loading}
     </>

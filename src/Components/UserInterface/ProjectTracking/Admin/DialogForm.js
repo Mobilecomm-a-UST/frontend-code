@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React, { useState } from 'react'
 import { Dialog, DialogContent, IconButton, DialogTitle } from '@mui/material';
 import { Grid, Button, Box } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
@@ -10,11 +10,16 @@ import ListItemText from '@mui/material/ListItemText';
 import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import TextField from '@mui/material/TextField';
+import axios from 'axios';
+import { getDecreyptedData } from '../../../utils/localstorage';
+import { ServerURL } from '../../../services/FetchNodeServices';
+import Swal from 'sweetalert2';
 
 
 
 
-const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues,name,required }) => {
+
+const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues, name, required }) => {
     const handleChange = (event) => {
         const { value } = event.target;
         const selected = typeof value === 'string' ? value.split(',') : value;
@@ -67,58 +72,62 @@ const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues,
     );
 };
 
-const SingleSelect = ({ label, options, value, setValue,name,required }) => {
 
-    const handleChange = (event) => {
-        setValue(event.target.value);
-    };
-
-    return (
-        <FormControl fullWidth size="small">
-            <InputLabel id={`${label}-label`}>{label}</InputLabel>
-
-            <Select
-                labelId={`${label}-label`}
-                value={value}
-                label={label}
-                name={name}
-                required={required}
-                onChange={handleChange}
-            >
-                {options.map((item) => (
-                    <MenuItem key={item} value={item}>
-                        {item}
-                    </MenuItem>
-                ))}
-            </Select>
-        </FormControl>
-    );
-};
-
-const circleOptions = ['CENTRAL','AP', 'ASM', 'BIH', 'CHN', 'DEL', 'HRY', 'JK', 'JRK', 'KK', 'KOL', 'MAH', 'MP', 'MUM', 'NE', 'ORI', 'PUN', 'RAJ', 'ROTN', 'UPE', 'UPW', 'WB']
+const circleOptions = ['CENTRAL', 'AP', 'ASM', 'BIH', 'CHN', 'DEL', 'HRY', 'JK', 'JRK', 'KK', 'KOL', 'MAH', 'MP', 'MUM', 'NE', 'ORI', 'PUN', 'RAJ', 'ROTN', 'UPE', 'UPW', 'WB']
 
 const DialogForm = (props) => {
-    const [formData, setFormData] = useState({
-        name:'',
-        email:'',
-        circles:[],
-        columns:[],
-        right:'',
+    const [formDatas, setFormDatas] = useState({
+        name: '',
+        email: '',
+        circles: [],
+        columns: [],
+        right: '',
     })
 
-    console.log('props in dialog form', formData);
-    const { close,column } = props;
+    console.log('props in dialog form', formDatas);
+    const { close, column, refetch } = props;
 
-    const handleChange = (event) => {   
+    const handleChange = (event) => {
         const { name, value } = event.target;
-        setFormData((prevData) => ({
+        setFormDatas((prevData) => ({
             ...prevData,
             [name]: value,
         }));
-     }
+    }
 
-    const handleAddNewData = (event) => {
+    const handleAddNewData = async (event) => {
         event.preventDefault();
+        try {
+
+            const formData = new FormData();
+            formData.append('adminId', getDecreyptedData('userID'));
+            formData.append('name', formDatas.name);
+            formData.append('email', formDatas.email);
+            formData.append('circles', formDatas.circles);
+            formData.append('columns',formDatas.columns);
+            formData.append('right', formDatas.right);
+            const response = await axios.post
+                (`${ServerURL}/alok_tracker/create_user/`, formData, {
+                    headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
+                });
+            console.log('fetchAdminPanelData response', response.data)
+            if (response) {
+                Swal.fire({
+                    icon: "success",
+                    title: "Success",
+                    text: "User data added successfully.",
+                });
+                refetch();
+                // close();
+            }
+        } catch (error) {
+            //    close();
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: `Failed to update data: ${error.response?.data?.error || error.message}`,
+            });
+        }
         // Handle form submission logic here
     }
 
@@ -144,7 +153,7 @@ const DialogForm = (props) => {
                                 variant="outlined"
                                 label="User Name"
                                 name="name"
-                                value={formData?.name || ''}
+                                value={formDatas?.name || ''}
                                 onChange={handleChange}
                                 type="Text"
                                 size="small"
@@ -153,12 +162,12 @@ const DialogForm = (props) => {
                             />
                         </FormControl>
                         {/* User Email Id  */}
-                         <FormControl fullWidth size="small" sx={{ flex: 1 }}>
+                        <FormControl fullWidth size="small" sx={{ flex: 1 }}>
                             <TextField
                                 variant="outlined"
                                 label="User Email Id"
                                 name="email"
-                                value={formData?.email || ''}
+                                value={formDatas?.email || ''}
                                 onChange={handleChange}
                                 type="email"
                                 size="small"
@@ -166,45 +175,63 @@ const DialogForm = (props) => {
                                 InputLabelProps={{ shrink: true }}
                             />
                         </FormControl>
-                                 {/* circle */}
-                            <MultiSelectWithAll
-                                label="Circle"
-                                options={circleOptions}
-                                name="circles"
+                        {/* circle */}
+                        <MultiSelectWithAll
+                            label="Circle"
+                            options={circleOptions}
+                            name="circles"
+                            required={true}
+                            selectedValues={formDatas.circles}
+                            setSelectedValues={(value) => setFormDatas((prevData) => ({
+                                ...prevData,
+                                circles: value
+                            }))}
+                        />
+                        {/* columns */}
+                        <MultiSelectWithAll
+                            label="Columns"
+                            options={column}
+                            name="columns"
+                            required={true}
+                            selectedValues={formDatas.columns}
+                            setSelectedValues={(value) => setFormDatas((prevData) => ({
+                                ...prevData,
+                                columns: value
+                            }))}
+                        />
+                        {/* right */}
+                        {/* <SingleSelect
+                            label="Rights"
+                            options={['Admin', 'Read', 'Write']}
+                            name="right"
+                            required={true}
+                            selectedValues={formData.right}
+                            setSelectedValues={(value) => setFormData((prevData) => ({
+                                ...prevData,
+                                right: value
+                            }))}
+                        /> */}
+                        <FormControl fullWidth size="small">
+                            <InputLabel id={`Rights-label`}>Rights</InputLabel>
+
+                            <Select
+                                labelId={`Rights-label`}
+                                value={formDatas.right}
+                                label={`Rights`}
+                                name={`right`}
                                 required={true}
-                                selectedValues={formData.circles}
-                                setSelectedValues={(value) => setFormData((prevData) => ({
-                                    ...prevData,
-                                    circles: value
-                                }))}
-                            />
-                            {/* columns */}
-                            <MultiSelectWithAll
-                                label="Columns"
-                                options={column}
-                                name="columns"
-                                required={true}
-                                selectedValues={formData.columns}
-                                setSelectedValues={(value) => setFormData((prevData) => ({
-                                    ...prevData,
-                                    columns: value
-                                }))}
-                            />
-                            {/* right */}
-                            <SingleSelect
-                                label="Rights"
-                                options={['Admin', 'Read', 'Write']}
-                                name="right"
-                                required={true}
-                                selectedValues={formData.right}
-                                setSelectedValues={(value) => setFormData((prevData) => ({
-                                    ...prevData,
-                                    right: value
-                                }))}
-                            />
-                            <Button type="submit" variant="contained" color="primary">
-                                Add User
-                            </Button>
+                                onChange={handleChange}
+                            >
+                                {['Admin', 'Read', 'Write'].map((item) => (
+                                    <MenuItem key={item} value={item}>
+                                        {item}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                        <Button type="submit" variant="contained" color="primary">
+                            Add User
+                        </Button>
                     </Box>
                 </form>
             </DialogContent>
