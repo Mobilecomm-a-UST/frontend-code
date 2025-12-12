@@ -8,10 +8,17 @@ import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutli
 import { Dialog, DialogContent, IconButton, DialogTitle } from '@mui/material';
 import { ServerURL } from '../../../services/FetchNodeServices';
 import CloseIcon from '@mui/icons-material/Close';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import ListItemText from '@mui/material/ListItemText';
+import Select from '@mui/material/Select';
+import Checkbox from '@mui/material/Checkbox';
 import axios from 'axios';
 import Swal from "sweetalert2";
 import TextField from '@mui/material/TextField';
-import { Grid, Button } from '@mui/material';
+import { Grid, Button, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux'
 import { getDecreyptedData } from '../../../utils/localstorage';
@@ -81,6 +88,63 @@ const dateTypeKey = [
   "final_ms2_date",
 ]
 
+const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues, name, required }) => {
+  const handleChange = (event) => {
+    const { value } = event.target;
+    const selected = typeof value === 'string' ? value.split(',') : value;
+
+    if (selected.includes('ALL')) {
+      if (selectedValues.length === options.length) {
+        setSelectedValues([]);
+      } else {
+        setSelectedValues(options);
+      }
+    } else {
+      setSelectedValues(selected);
+    }
+  };
+
+  const isAllSelected = options?.length > 0 && selectedValues?.length === options?.length;
+
+  return (
+    <FormControl fullWidth size="small">
+      <InputLabel id={`${label}-label`}>{label}</InputLabel>
+      <Select
+        labelId={`${label}-label`}
+        multiple
+        value={selectedValues}
+        name={name}
+        label={label}
+        onChange={handleChange}
+        required={required}
+        input={<OutlinedInput label={label} />}
+        renderValue={(selected) => selected.join(', ')}
+      >
+        <MenuItem value="ALL">
+          <Checkbox
+            checked={isAllSelected}
+            indeterminate={
+              selectedValues.length > 0 && selectedValues.length < options.length
+            }
+          />
+          <ListItemText primary="Select All" />
+        </MenuItem>
+
+        {options.map((name) => (
+          <MenuItem key={name} value={name}>
+            <Checkbox checked={selectedValues.includes(name)} />
+            <ListItemText primary={name} />
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+  );
+};
+
+
+const circleOptions = ['CENTRAL', 'AP', 'ASM', 'BIH', 'CHN', 'DEL', 'HRY', 'JK', 'JRK', 'KK', 'KOL', 'MAH', 'MP', 'MUM', 'NE', 'ORI', 'PUN', 'RAJ', 'ROTN', 'UPE', 'UPW', 'WB']
+
+
 
 const AdminPanel = () => {
   const listDataa = useSelector(state => state.relocationFinalTracker)
@@ -88,16 +152,7 @@ const AdminPanel = () => {
   const navigate = useNavigate();
   const userID = getDecreyptedData('userID')
   const { actions, loading } = useLoadingDialog();
-  const [editData, setEditData] = useState({
-    unique_id: "",
-    circle: "",
-    site_tagging: "",
-    old_toco_name: "",
-    old_site_id: "",
-    new_site_id: "",
-    new_toco_name: "",
-    sr_number: "",
-  });
+  const [editData, setEditData] = useState({});
   const [addDataDialog, setAddDataDialog] = useState(false)
   const [columnsArray, setColumnsArray] = useState(['CENTRAL'])
   const [editDataID, setEditDataID] = useState('')
@@ -108,6 +163,8 @@ const AdminPanel = () => {
   const userTypes = (getDecreyptedData('user_type')?.split(","))
   // const params = useParams()
 
+
+  console.log('edit data', columnsArray)
 
   const fetchAdminPanelData = async () => {
     try {
@@ -144,49 +201,37 @@ const AdminPanel = () => {
       ...editData,
       [e.target.name]: e.target.value,
     });
-
   }
 
   const handleEdit = async (rowData) => {
-    // console.log(rowData)
-    setEditData({
-      unique_id: rowData["Unique ID"],
-      circle: rowData.circle,
-      site_tagging: rowData.site_tagging,
-      old_toco_name: rowData.old_toco_name,
-      old_site_id: rowData.old_site_id,
-      new_site_id: rowData.new_site_id,
-      new_toco_name: rowData.new_toco_name,
-      sr_number: rowData.sr_number,
-    });
-    setEditDataID(rowData.id)
+    setEditData(rowData);
     setOpen(true)
   }
 
   const handleUpdateData = async (e) => {
     e.preventDefault()
     try {
-
       const formData = new FormData();
-      formData.append('data', JSON.stringify(editData));
-      formData.append('userId', userID);
+      formData.append('adminId', getDecreyptedData('userID'));
+      formData.append('email', editData.email);
+      formData.append('circles', editData.circles);
+      formData.append('columns', editData.columns);
+      formData.append('right', editData.right);
       const response = await axios.post
-        (`${ServerURL}/alok_tracker/hyperlink_frontend_editing_update/`, formData, {
+        (`${ServerURL}/alok_tracker/update_user/`, formData, {
           headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
         });
-      console.log('weeee', response)
+      console.log('update user data ', response)
       if (response.status) {
         setOpen(false);
+        fetchAdminPanelData()
         Swal.fire({
           icon: "success",
           title: "Done",
           text: `Data Updated Successfully`,
         });
-        navigate('/tools/relocation_tracking/rfai_to_ms1_waterfall/')
       }
       // console.log('update response', response);
-
-
     } catch (error) {
       console.log('error', error.response)
       setOpen(false);
@@ -201,9 +246,26 @@ const AdminPanel = () => {
 
   const handleDelete = async (rowData) => {
     try {
+      // Step 1 — Ask for confirmation
+      const confirmDelete = await Swal.fire({
+        title: "Are you sure?",
+        text: "Do you really want to delete this user?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, Delete",
+        cancelButtonText: "Cancel"
+      });
 
+      // If user clicked Cancel, stop here
+      if (!confirmDelete.isConfirmed) {
+        return;
+      }
+
+      // Step 2 — Proceed with delete API
       const formData = new FormData();
-      formData.append("email", rowData?.email);   // change according to your backend
+      formData.append("email", rowData?.email);
       formData.append("adminId", getDecreyptedData("userID"));
 
       const response = await axios.post(
@@ -222,7 +284,7 @@ const AdminPanel = () => {
         text: `${response.data.message}`,
       });
 
-      // Optional: Refresh table after delete
+      // Refresh table
       fetchAdminPanelData();
 
     } catch (error) {
@@ -235,7 +297,6 @@ const AdminPanel = () => {
       });
     }
   };
-
 
 
   const columnData = [{
@@ -255,13 +316,15 @@ const AdminPanel = () => {
   },
   { title: 'Name', field: 'name' },
   { title: 'Email', field: 'email' },
-  { title: 'Circles', 
+  {
+    title: 'Circles',
     field: 'circles',
-     render: rowData => rowData.circles?.join(", ") || "-"
+    render: rowData => rowData.circles?.join(", ") || "-"
   },
-  { title: 'Columns', 
+  {
+    title: 'Columns',
     field: 'columns',
-   render: rowData => rowData.columns?.join(", ") || "-"
+    render: rowData => rowData.columns?.join(", ") || "-"
   },
   { title: 'Rights', field: 'right' },
   { title: 'Created By', field: 'created_by' },
@@ -270,37 +333,6 @@ const AdminPanel = () => {
   { title: 'Updated At', field: 'updated_at' },
 
   ];
-
-
-
-
-  const dateFormateChange = (dateStr) => {
-    if (!dateStr || dateStr === "nan") return "";
-
-    // CASE 1: Already in YYYY-MM-DD → return as is
-    if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
-      return dateStr;
-    }
-
-    // CASE 2: Format like 28-Nov-25 → convert
-    if (/^\d{1,2}-[A-Za-z]{3}-\d{2}$/.test(dateStr)) {
-      const [day, mon, year] = dateStr.split('-');
-
-      const months = {
-        Jan: "01", Feb: "02", Mar: "03", Apr: "04",
-        May: "05", Jun: "06", Jul: "07", Aug: "08",
-        Sep: "09", Oct: "10", Nov: "11", Dec: "12"
-      };
-
-      // Convert YY → YYYY
-      const fullYear = Number(year) < 50 ? "20" + year : "19" + year;
-
-      return `${fullYear}-${months[mon]}-${day.padStart(2, "0")}`;
-    }
-
-    // CASE 3: Unknown format → return as is to avoid breaking data
-    return dateStr;
-  };
 
 
   const handleDialogBox = useCallback(() => {
@@ -318,33 +350,87 @@ const AdminPanel = () => {
       </DialogTitle>
       <DialogContent dividers={'paper'}>
         <form onSubmit={handleUpdateData} style={{ width: '100%', marginTop: 10 }}>
-          <Grid container spacing={2}>
-            {Object.keys(editData).map(key => (
-              <Grid item xs={3} key={key}>
-                <TextField
-                  variant="outlined"
-                  fullWidth
-                  placeholder={key.replace(/_/g, ' ')}
-                  label={key.replace(/_/g, ' ')}
-                  name={key}
-                  value={key.includes('date') ? dateFormateChange(editData[key]) : editData[key]}
-                  onChange={handleChange}
-                  size="small"
-                  type={dateTypeKey.includes(key) ? 'date' : 'text'}
-                  InputLabelProps={key.includes('date') ? { shrink: true } : {}}
-                  inputProps={readOnlyFields.includes(key) ? { readOnly: true } : {}}
-                />
-              </Grid>
-            ))}
-            <Grid item xs={12}>
-              <Button type="submit" fullWidth variant="contained">Update</Button>
-            </Grid>
-          </Grid>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            {/* User Name  */}
+            <FormControl fullWidth size="small" sx={{ flex: 1 }}>
+              <TextField
+                variant="outlined"
+                label="User Name"
+                name="name"
+                value={editData?.name || ''}
+                onChange={handleChange}
+                type="Text"
+                size="small"
+                required
+                disabled
+                InputLabelProps={{ shrink: true }}
+              />
+            </FormControl>
+            {/* User Email Id  */}
+            <FormControl fullWidth size="small" sx={{ flex: 1 }}>
+              <TextField
+                variant="outlined"
+                label="User Email Id"
+                name="email"
+                value={editData?.email || ''}
+                onChange={handleChange}
+                type="email"
+                size="small"
+                required
+                disabled
+                InputLabelProps={{ shrink: true }}
+              />
+            </FormControl>
+            {/* circle */}
+            <MultiSelectWithAll
+              label="Circle"
+              options={circleOptions}
+              name="circles"
+              required={true}
+              selectedValues={editData.circles}
+              setSelectedValues={(value) => setEditData((prevData) => ({
+                ...prevData,
+                circles: value
+              }))}
+            />
+            {/* columns */}
+            <MultiSelectWithAll
+              label="Columns"
+              options={columnsArray}
+              name="columns"
+              required={true}
+              selectedValues={editData.columns}
+              setSelectedValues={(value) => setEditData((prevData) => ({
+                ...prevData,
+                columns: value
+              }))}
+            />
+            {/* right */}
+            <FormControl fullWidth size="small">
+              <InputLabel id={`Rights-label`}>Rights</InputLabel>
+
+              <Select
+                labelId={`Rights-label`}
+                value={editData.right}
+                label={`Rights`}
+                name={`right`}
+                required={true}
+                onChange={handleChange}
+              >
+                {['Admin', 'Read', 'Write'].map((item) => (
+                  <MenuItem key={item} value={item}>
+                    {item}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <Button type="submit" variant="contained" color="primary">
+              Update User
+            </Button>
+          </Box>
         </form>
       </DialogContent>
     </Dialog>)
-
-
   }, [open, editData])
 
   useEffect(() => {
@@ -400,9 +486,9 @@ const AdminPanel = () => {
           }}
         />
       </div>
-      {handleDialogBox()}
+      {open && handleDialogBox()}
       {addDataDialog && (
-        <DialogForm close={() => setAddDataDialog(prev => !prev)} column={columnsArray} refetch={()=> fetchAdminPanelData()} />
+        <DialogForm close={() => setAddDataDialog(prev => !prev)} column={columnsArray} refetch={() => fetchAdminPanelData()} />
       )}
       {loading}
     </>

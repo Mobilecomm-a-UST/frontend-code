@@ -38,13 +38,13 @@ const LifeCycle = () => {
     const userID = getDecreyptedData("userID")
     const [siteId, setSiteId] = useState('')
     const [milestoneData, setMilestoneData] = useState()
+    const [milestoneSelectName, setMilestoneSelectName] = useState('')
     const [tableForm, setTableForm] = useState({})
     const [issueTable, setIssueTable] = useState([])
     const [tempIssueTableData, setTempIssueTableData] = useState()
     const [open, setOpen] = useState(false)
     const { action, loading } = useLoadingDialog();
-
-    // console.log('issue table', issueTable)
+    // console.log('issue table', milestoneData)
     // console.log('temp issue data', tempIssueTableData)
 
 
@@ -60,26 +60,23 @@ const LifeCycle = () => {
                 (`${ServerURL}/alok_tracker/lifecycle_display/`, formData, {
                     headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
                 });
-            const response2 = await axios.post
-                (`${ServerURL}/alok_tracker/issue_timeline_display/`, formData, {
-                    headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
-                });
+            // const response2 = await axios.post
+            //     (`${ServerURL}/alok_tracker/issue_timeline_display/`, formData, {
+            //         headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
+            //     });
 
 
             if (response.status) {
                 action(false)
-                console.log('site id responce ', response2)
-                setIssueTable(JSON.parse(response2?.data?.json_data))
+                // console.log('site id responce ', response2)
+                // setIssueTable(JSON.parse(response2?.data?.json_data))
                 setMilestoneData(JSON.parse(response?.data?.json_data))
                 Swal.fire({
                     icon: "success",
                     title: "Done",
                     text: `This Site-ID Found in database`,
                 });
-                // navigate('/tools/relocation_tracking/rfai_to_ms1_waterfall/')
             }
-            // console.log('update response', response);
-
 
         } catch (error) {
             action(false)
@@ -319,7 +316,48 @@ const LifeCycle = () => {
         </Dialog>)
     }
 
-    const handleClearData =()=>{
+    const handleMilestones = async (milestoneProps) => {
+        // console.log('Milestone Props:', milestoneProps);
+        setMilestoneSelectName(milestoneProps)
+        try {
+            action(true)
+            const formData = new FormData();
+            formData.append('siteId', siteId);
+            formData.append('userId', userID);
+            formData.append('circle', milestoneData?.[0]?.circle || "");
+            formData.append('milestone', milestoneProps);
+            // const response = await axios.post
+            //     (`${ServerURL}/alok_tracker/lifecycle_display/`, formData, {
+            //         headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
+            //     });
+            const response2 = await axios.post
+                (`${ServerURL}/alok_tracker/issue_timeline_display/`, formData, {
+                    headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
+                });
+            if (response2.status) {
+                action(false)
+                console.log('site id responce ', response2)
+                setIssueTable(JSON.parse(response2?.data?.json_data))
+                // setMilestoneData(JSON.parse(response?.data?.json_data))
+                // Swal.fire({
+                //     icon: "success",
+                //     title: "Done",
+                //     text: `This Site-ID Found in database`,
+                // });
+            }
+
+        } catch (error) {
+            action(false)
+            console.log('aaaaa', error)
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: ` ${error.response?.data?.error || error.message}`,
+            });
+        }
+    }
+
+    const handleClearData = () => {
         setTempIssueTableData()
     }
 
@@ -373,7 +411,7 @@ const LifeCycle = () => {
                             borderRadius: 5,
                             backgroundColor: 'white'
                         }}>
-                            <ShowMilestone mileston={milestoneData} />
+                            <ShowMilestone mileston={milestoneData} onMilestoneClick={handleMilestones} />
                         </Box>
                     </Grid>
                     <Grid item xs={9} >
@@ -394,7 +432,7 @@ const LifeCycle = () => {
                             }}
                         >
                             <Box sx={{ fontWeight: 'bold', fontSize: '25px', color: 'black', mb: 2 }}>
-                                SITE ISSUE TRACKER
+                                {milestoneSelectName} ISSUE TRACKER
                             </Box>
 
                             <Box sx={{
