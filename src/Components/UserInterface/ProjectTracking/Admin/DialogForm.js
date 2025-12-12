@@ -118,7 +118,7 @@ const DialogForm = (props) => {
                     text: "User data added successfully.",
                 });
                 refetch();
-                // close();
+                close();
             }
         } catch (error) {
             //    close();
