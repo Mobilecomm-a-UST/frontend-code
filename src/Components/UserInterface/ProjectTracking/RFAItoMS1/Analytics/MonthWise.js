@@ -142,7 +142,7 @@ const MonthWise = () => {
         formData.append('type', typeFileter)
         const res = await postData("alok_tracker/monthly_graph/", formData);
         // const res =  tempData; //  remove this line when API is read
-        // console.log('responce data1' , (JSON.parse(res.json_data)))
+        // console.log('responce data1' , res)
         // console.log('responce data2' , transformData(JSON.parse(res.json_data)))
         if (res) {
             action(false)
