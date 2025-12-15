@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Milestone.css'; // Add CSS file
+import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 
 
 
@@ -25,17 +26,47 @@ const milestones = [
 ];
 
 const ShowMilestone = (props) => {
-    const {mileston,onMilestoneClick} = props;
+    const { mileston, onMilestoneClick, issueCount ,getMilestone} = props;
+    const [activeMilestone, setActiveMilestone] = useState(null);
+
+    console.log('issue count in show milestone', issueCount);
+
+
+    const handleClick = (item) => {
+        // setActiveMilestone(item.title);
+        onMilestoneClick(item.title);
+    };
 
     return (
         <>
             <ol className="timeline">
-                {milestones.map((item, index) => (
-                    <li className="timeline-item" key={index} onClick={() => onMilestoneClick(item.title)}>
+                {milestones?.map((item, index) => (
+                    <li
+                        key={index}
+                        className={`timeline-item ${getMilestone === item.title ? "active" : ""}`}
+                        onClick={() => handleClick(item)}>
                         <div className="timeline-circle" />
-                        <div className="timeline-content">
+                        <div className="timeline-content" >
                             <h4>{item.title}</h4>
-                            <p>{mileston?.[0]?.[item.dateKey] || "—"}</p>
+                            {/* <p style={{display:'flex',alignContent:'center'}}>
+                                {mileston?.[0]?.[item.dateKey] || "—"} <FiberManualRecordIcon size='small' color='error'/>{issueCount?.[item.title]?.open || 0} <FiberManualRecordIcon size='small' color='success'/>{issueCount?.[item.title]?.close || 0}</p> */}
+                            <div className="milestone-meta">
+                                <span className="milestone-date">
+                                    {mileston?.[0]?.[item.dateKey] || "—"}
+                                </span>
+
+                                <span className="milestone-issues">
+                                    <span className="issue open" title='Open Issues'>
+                                        <FiberManualRecordIcon fontSize="small" />
+                                        {issueCount?.[item.title]?.open || 0}
+                                    </span>
+
+                                    <span className="issue close" title='Closed Issues'>
+                                        <FiberManualRecordIcon fontSize="small" />
+                                        {issueCount?.[item.title]?.closed || 0}
+                                    </span>
+                                </span>
+                            </div>
                         </div>
                     </li>
                 ))}
@@ -44,4 +75,4 @@ const ShowMilestone = (props) => {
     );
 };
 
-export default ShowMilestone;
+export default React.memo(ShowMilestone);

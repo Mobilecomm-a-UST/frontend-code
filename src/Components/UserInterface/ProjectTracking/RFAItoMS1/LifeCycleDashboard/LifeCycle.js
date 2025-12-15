@@ -31,21 +31,25 @@ import Swal from "sweetalert2";
 
 
 const issue = ['MW', 'PRI', 'Fiber', 'Material']
+const CircleList = ['AP', 'ASM', 'BIH', 'CHN', 'DEL', 'HRY', 'JK', 'JRK', 'KK', 'KOL', 'MAH', 'MP', 'MUM', 'NE', 'ORI', 'PUN', 'RAJ', 'ROTN', 'UPE', 'UPW', 'WB']
 
 const LifeCycle = () => {
     const classes = useStyles()
     const navigate = useNavigate()
     const userID = getDecreyptedData("userID")
     const [siteId, setSiteId] = useState('')
+    const [selectCircle, setSelectCircle] = useState('')
     const [milestoneData, setMilestoneData] = useState()
     const [milestoneSelectName, setMilestoneSelectName] = useState('')
     const [tableForm, setTableForm] = useState({})
     const [issueTable, setIssueTable] = useState([])
+    const [issueCount, setIssueCount] = useState([])
     const [tempIssueTableData, setTempIssueTableData] = useState()
     const [open, setOpen] = useState(false)
+    const userTypes = (getDecreyptedData('user_type')?.split(","))
     const { action, loading } = useLoadingDialog();
-    // console.log('issue table', milestoneData)
-    // console.log('temp issue data', tempIssueTableData)
+    // console.log('issue table', issueTable)
+
 
 
     const handleSubmitSite = async (e) => {
@@ -56,27 +60,61 @@ const LifeCycle = () => {
             const formData = new FormData();
             formData.append('siteId', siteId);
             formData.append('userId', userID);
+            formData.append('circle', selectCircle);
             const response = await axios.post
                 (`${ServerURL}/alok_tracker/lifecycle_display/`, formData, {
                     headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
                 });
-            // const response2 = await axios.post
-            //     (`${ServerURL}/alok_tracker/issue_timeline_display/`, formData, {
-            //         headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
-            //     });
+
+            action(false)
+            setMilestoneData(JSON.parse(response?.data?.json_data))
+            setIssueCount(response?.data?.issue_counts)
+            setMilestoneSelectName('')
+            setIssueTable([])
+            Swal.fire({
+                icon: "success",
+                title: "Done",
+                text: `This Site-ID Found in database`,
+            });
 
 
-            if (response.status) {
-                action(false)
-                // console.log('site id responce ', response2)
-                // setIssueTable(JSON.parse(response2?.data?.json_data))
-                setMilestoneData(JSON.parse(response?.data?.json_data))
-                Swal.fire({
-                    icon: "success",
-                    title: "Done",
-                    text: `This Site-ID Found in database`,
+        } catch (error) {
+            action(false)
+            setMilestoneSelectName('')
+            setIssueTable([])
+            setMilestoneData([])
+            setIssueCount([])
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: ` ${error.response?.data?.error || error.message}`,
+            });
+        }
+    }
+
+    const refetchlifecycleData = async () => {
+        try {
+
+            const formData = new FormData();
+            formData.append('siteId', siteId);
+            formData.append('userId', userID);
+            formData.append('circle', selectCircle);
+            const response = await axios.post
+                (`${ServerURL}/alok_tracker/lifecycle_display/`, formData, {
+                    headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
                 });
-            }
+
+            action(false)
+            // console.log('site id responce ', response2)
+            // setIssueTable(JSON.parse(response2?.data?.json_data))
+            setMilestoneData(JSON.parse(response?.data?.json_data))
+            setIssueCount(response?.data?.issue_counts)
+            Swal.fire({
+                icon: "success",
+                title: "Done",
+                text: `This Site-ID Found in database`,
+            });
+
 
         } catch (error) {
             action(false)
@@ -96,6 +134,7 @@ const LifeCycle = () => {
             [name]: value,
         }));
     };
+
     const handleChangeListDialog = (e) => {
         const { name, value } = e.target;
         setTempIssueTableData((prev) => ({
@@ -115,7 +154,10 @@ const LifeCycle = () => {
             formData.append('issue', tableForm?.issue);
             formData.append('start_date', tableForm?.start_date);
             formData.append('close_date', tableForm?.close_date);
-            formData.append('timeline', JSON.stringify(issueTable));
+            formData.append('owner', tableForm?.owner);
+            formData.append('milestone', milestoneSelectName);
+            formData.append('circle', milestoneData?.[0]?.circle || "");
+            // formData.append('timeline', JSON.stringify(issueTable));
             const response = await axios.post
                 (`${ServerURL}/alok_tracker/issue_timeline_add/`, formData, {
                     headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
@@ -124,7 +166,8 @@ const LifeCycle = () => {
             if (response.status) {
                 // console.log('add list data responce ', response)
                 action(false)
-                setIssueTable(response?.data?.json_data)
+                refetchMilestoneAfterEdit();
+                refetchlifecycleData();
                 // setMilestoneData(JSON.parse(response?.data?.json_data SER))
                 Swal.fire({
                     icon: "success",
@@ -148,13 +191,18 @@ const LifeCycle = () => {
 
     }
 
-    const issueListUpdateApi = async (updatedData) => {
+    const issueListUpdateApi = async () => {
         action(true)
         try {
             const formData = new FormData();
-            formData.append('siteId', siteId);
+            formData.append('id', tempIssueTableData?.id);
             formData.append('userId', userID);
-            formData.append('timeline', JSON.stringify(updatedData));  // use passed data
+            formData.append('circle', tempIssueTableData?.Circle);
+            formData.append('milestone', tempIssueTableData?.Milestone);
+            formData.append('issue', tempIssueTableData?.['Issue Name'] || "");
+            formData.append('start_date', dateFormateChange(tempIssueTableData?.['Start Date']));
+            formData.append('close_date', dateFormateChange(tempIssueTableData?.['Close Date']));
+            formData.append('owner', tempIssueTableData?.['Issue Owner'] || "");
 
             const response = await axios.post(
                 `${ServerURL}/alok_tracker/issue_timeline_update/`,
@@ -164,11 +212,13 @@ const LifeCycle = () => {
                 }
             );
 
+
             if (response.status) {
                 setOpen(false);
                 action(false)
-                handleClearData()
-                setIssueTable(response?.data?.json_data);
+                setTempIssueTableData()
+                refetchMilestoneAfterEdit();
+                refetchlifecycleData();
 
                 Swal.fire({
                     icon: "success",
@@ -180,7 +230,8 @@ const LifeCycle = () => {
         } catch (error) {
             setOpen(false);
             action(false)
-            handleClearData()
+            setTempIssueTableData()
+
             Swal.fire({
                 icon: "error",
                 title: "Error",
@@ -189,28 +240,16 @@ const LifeCycle = () => {
         }
     };
 
-
     const editDataUpdate = async (e) => {
         e.preventDefault();
-
-        // 1. Create updated array
-        const updatedTable = issueTable.map(item =>
-            item.Index === tempIssueTableData.Index
-                ? { ...item, ...tempIssueTableData }
-                : item
-        );
-
-        // 2. Update React state
-        setIssueTable(updatedTable);
-
-        // 3. Call API with updated data (PASS updatedTable)
-        issueListUpdateApi(updatedTable);
+        issueListUpdateApi();
     };
 
     const handleEditList = (list) => {
         setTempIssueTableData(list)
         setOpen(true)
     }
+
     const dateFormateChange = (dateStr) => {
         if (!dateStr || dateStr === "nan") return "";
 
@@ -240,13 +279,11 @@ const LifeCycle = () => {
     };
 
     const handleDialogBox = () => {
-
         return (<Dialog
             open={open}
             keepMounted
             fullWidth
             maxWidth={'lg'}
-
         >
             <DialogTitle>
                 Edit Site Issue Logs
@@ -264,6 +301,22 @@ const LifeCycle = () => {
                             gap: 1
                         }}
                     >
+                        <FormControl fullWidth size="small" sx={{ flex: 1 }}>
+                            <InputLabel id="owner-label">Owner</InputLabel>
+                            <Select
+                                labelId="owner-label"
+                                name="Issue Owner"
+                                value={tempIssueTableData?.['Issue Owner'] || ""}
+                                label="Owner"
+                                onChange={handleChangeListDialog}
+                                disabled
+                            >
+                                {['Airtel', 'Mobilecomm'].map((item, index) => (
+                                    <MenuItem key={index} value={item}>{item}</MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+
                         <FormControl fullWidth size="small" sx={{ flex: 1 }}>
                             <InputLabel id="issue-label">Issue</InputLabel>
                             <Select
@@ -290,6 +343,9 @@ const LifeCycle = () => {
                                 required
                                 type="date"
                                 size="small"
+                                inputProps={{
+                                    max: new Date().toISOString().split("T")[0],
+                                }}
                                 InputLabelProps={{ shrink: true }}
                             />
                         </FormControl>
@@ -303,6 +359,9 @@ const LifeCycle = () => {
                                 onChange={handleChangeListDialog}
                                 type="date"
                                 size="small"
+                                inputProps={{
+                                    max: new Date().toISOString().split("T")[0],
+                                }}
                                 InputLabelProps={{ shrink: true }}
                             />
                         </FormControl>
@@ -316,50 +375,115 @@ const LifeCycle = () => {
         </Dialog>)
     }
 
-    const handleMilestones = async (milestoneProps) => {
-        // console.log('Milestone Props:', milestoneProps);
-        setMilestoneSelectName(milestoneProps)
-        try {
-            action(true)
-            const formData = new FormData();
-            formData.append('siteId', siteId);
-            formData.append('userId', userID);
-            formData.append('circle', milestoneData?.[0]?.circle || "");
-            formData.append('milestone', milestoneProps);
-            // const response = await axios.post
-            //     (`${ServerURL}/alok_tracker/lifecycle_display/`, formData, {
-            //         headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
-            //     });
-            const response2 = await axios.post
-                (`${ServerURL}/alok_tracker/issue_timeline_display/`, formData, {
-                    headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
-                });
-            if (response2.status) {
-                action(false)
-                console.log('site id responce ', response2)
-                setIssueTable(JSON.parse(response2?.data?.json_data))
-                // setMilestoneData(JSON.parse(response?.data?.json_data))
-                // Swal.fire({
-                //     icon: "success",
-                //     title: "Done",
-                //     text: `This Site-ID Found in database`,
-                // });
-            }
+    const handleMilestones = async (milestoneName) => {
+        setMilestoneSelectName(milestoneName);
 
+        try {
+            action(true); // start loader
+
+            const formData = new FormData();
+            formData.append("siteId", siteId);
+            formData.append("userId", userID);
+            formData.append("circle", milestoneData?.[0]?.circle ?? "");
+            formData.append("milestone", milestoneName);
+
+            const response = await axios.post(
+                `${ServerURL}/alok_tracker/issue_timeline_display/`,
+                formData,
+                {
+                    headers: {
+                        Authorization: `token ${getDecreyptedData("tokenKey")}`,
+                    },
+                }
+            );
+
+            const parsedData = response?.data?.json_data
+                ? response.data.json_data
+                : [];
+
+            setIssueTable(parsedData);
         } catch (error) {
-            action(false)
-            console.log('aaaaa', error)
             Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: ` ${error.response?.data?.error || error.message}`,
+                text: error?.response?.data?.error || error.message,
             });
+        } finally {
+            action(false); // stop loader (always)
+        }
+    };
+
+    const refetchMilestoneAfterEdit = async () => {
+        try {
+            const formData = new FormData();
+            formData.append("siteId", siteId);
+            formData.append("userId", userID);
+            formData.append("circle", milestoneData?.[0]?.circle ?? "");
+            formData.append("milestone", milestoneSelectName);
+
+            const response = await axios.post(
+                `${ServerURL}/alok_tracker/issue_timeline_display/`,
+                formData,
+                {
+                    headers: {
+                        Authorization: `token ${getDecreyptedData("tokenKey")}`,
+                    },
+                }
+            );
+
+            const parsedData = response?.data?.json_data
+                ? response.data.json_data
+                : [];
+
+            setIssueTable(parsedData);
+        } catch (error) {
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: error?.response?.data?.error || error.message,
+            });
+        } finally {
+            action(false); // stop loader (always)
         }
     }
+    const handleDeleteIssue = async (issueId) => {
+        action(true);
+        try {
+            const formData = new FormData();
+            formData.append("id", issueId);
+            formData.append("userId", userID);
+            formData.append("circle", selectCircle);
 
-    const handleClearData = () => {
-        setTempIssueTableData()
-    }
+            const response = await axios.post(
+                `${ServerURL}/alok_tracker/issue_timeline_delete/`,
+                formData,
+                {
+                    headers: {
+                        Authorization: `token ${getDecreyptedData("tokenKey")}`,
+                    },
+                }
+            );
+
+            action(false);
+
+            refetchMilestoneAfterEdit();
+            refetchlifecycleData();
+
+            Swal.fire({
+                icon: "success",
+                title: "Deleted",
+                text: response?.data?.message || "Issue deleted successfully",
+            });
+        } catch (error) {
+            action(false);
+
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: error?.response?.data?.error || error.message,
+            });
+        }
+    };
 
 
     useEffect(() => {
@@ -380,8 +504,22 @@ const LifeCycle = () => {
                     <Grid item xs={10} style={{ display: "flex" }}>
                         <Box >
                             <form onSubmit={handleSubmitSite} style={{ display: 'flex', justifyContent: 'center', gap: 5 }}>
-                                <TextField size='small' placeholder='Enter Site ID' required value={siteId} onChange={(e) => setSiteId(e.target.value)} />
-                                <Button type='submit' variant='contained'>search site</Button>
+                                <TextField size='small' placeholder='Enter Site ID' label="Site ID" required value={siteId} onChange={(e) => setSiteId(e.target.value)} />
+                                <FormControl size="small" sx={{ minWidth: 120 }}>
+                                    <InputLabel id="issue-label">Circle</InputLabel>
+                                    <Select
+                                        labelId="issue-label"
+                                        value={selectCircle}
+                                        onChange={(e) => setSelectCircle(e.target.value)}
+                                        label="Circle"
+                                        required
+                                    >
+                                        {CircleList.map((item, index) => (
+                                            <MenuItem key={index} value={item}>{item}</MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                                <Button type='submit' sx={{ backgroundColor: '#006e74' }} variant='contained'>search site</Button>
                             </form>
                         </Box>
 
@@ -411,7 +549,7 @@ const LifeCycle = () => {
                             borderRadius: 5,
                             backgroundColor: 'white'
                         }}>
-                            <ShowMilestone mileston={milestoneData} onMilestoneClick={handleMilestones} />
+                            <ShowMilestone mileston={milestoneData} onMilestoneClick={handleMilestones} issueCount={issueCount} getMilestone={milestoneSelectName} />
                         </Box>
                     </Grid>
                     <Grid item xs={9} >
@@ -434,8 +572,8 @@ const LifeCycle = () => {
                             <Box sx={{ fontWeight: 'bold', fontSize: '25px', color: 'black', mb: 2 }}>
                                 {milestoneSelectName} ISSUE TRACKER
                             </Box>
-
-                            <Box sx={{
+                            {/* Add issue in one milestone */}
+                            {milestoneSelectName ? <Box sx={{
                                 width: "100%",
                                 //  border: '1px solid black',
                                 boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px',
@@ -453,6 +591,21 @@ const LifeCycle = () => {
                                             gap: 1
                                         }}
                                     >
+                                        <FormControl fullWidth size="small" sx={{ flex: 1 }}>
+                                            <InputLabel id="issue-label">Owner</InputLabel>
+                                            <Select
+                                                labelId="issue-label"
+                                                name="owner"
+                                                value={tableForm?.owner || ""}
+                                                label="Owner"
+                                                onChange={handleChange}
+                                                required
+                                            >
+                                                {['Airtel', 'Mobilecomm'].map((item, index) => (
+                                                    <MenuItem key={index} value={item}>{item}</MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
                                         <FormControl fullWidth size="small" sx={{ flex: 1 }}>
                                             <InputLabel id="issue-label">Issue</InputLabel>
                                             <Select
@@ -480,6 +633,9 @@ const LifeCycle = () => {
                                                 size="small"
                                                 required
                                                 InputLabelProps={{ shrink: true }}
+                                                inputProps={{
+                                                    max: new Date().toISOString().split("T")[0],
+                                                }}
                                             />
                                         </FormControl>
 
@@ -493,17 +649,21 @@ const LifeCycle = () => {
                                                 type="date"
                                                 size="small"
                                                 InputLabelProps={{ shrink: true }}
+                                                inputProps={{
+                                                    max: new Date().toISOString().split("T")[0],
+                                                }}
                                             />
                                         </FormControl>
 
-                                        <Button variant="contained" type="submit" startIcon={<ControlPointIcon />}>
+                                        <Button variant="contained" sx={{ backgroundColor: '#006e74' }} type="submit" startIcon={<ControlPointIcon />}>
                                             Add
                                         </Button>
                                     </Box>
                                 </form>
-                            </Box>
+                            </Box> : <></>}
+
                             <Divider />
-                            <div style={{ width: '100%' }}>
+                            {Array.isArray(issueTable) && issueTable.length > 0 && (<div style={{ width: '100%' }}>
 
                                 {/* ************* 2G  TABLE DATA ************** */}
                                 <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', alignContent: 'center' }}>
@@ -533,6 +693,9 @@ const LifeCycle = () => {
                                                         Duration Days
                                                     </th>
                                                     <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#CBCBCB', color: 'black' }}>
+                                                        Issue Owner
+                                                    </th>
+                                                    <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#CBCBCB', color: 'black' }}>
                                                         Action
                                                     </th>
 
@@ -546,17 +709,19 @@ const LifeCycle = () => {
                                                             <th style={{ position: 'sticky', left: 0, top: 0, backgroundColor: '#CBCBCB', color: 'black' }}>{it['Issue Name']}</th>
                                                             <th style={{ color: 'black' }}>{it['Start Date']}</th>
                                                             <th style={{ color: 'black' }}>{it['Close Date']}</th>
-                                                            <th style={{ color: 'black' }}>{it['Duration Days']}</th>
+                                                            <th style={{ color: 'black' }}>{it['Duration']}</th>
+                                                            <th style={{ color: 'black' }}>{it['Issue Owner']}</th>
                                                             <th style={{ color: 'black' }}>
                                                                 {it.Status == 'Closed' ? <IconButton >
                                                                     <BlockIcon size='small' color='error' />
                                                                 </IconButton> : <IconButton onClick={() => handleEditList(it)}>
                                                                     <EditIcon size='small' color='primary' />
                                                                 </IconButton>}
-
-                                                                {/* <IconButton >
+                                                                {userTypes?.includes('RLT_Admin') && <IconButton onClick={() => handleDeleteIssue(it.id)}>
                                                                     <DeleteIcon size='small' color='error' />
-                                                                </IconButton> */}
+                                                                </IconButton>}
+
+
                                                             </th>
                                                         </tr>
                                                     )
@@ -566,7 +731,9 @@ const LifeCycle = () => {
                                         </table>
                                     </TableContainer>
                                 </Box>
-                            </div>
+                            </div>)}
+
+
                         </Box>
 
                     </Grid>
