@@ -361,6 +361,7 @@ const LifeCycle = () => {
                                 size="small"
                                 inputProps={{
                                     max: new Date().toISOString().split("T")[0],
+                                    min: dateFormateChange(tempIssueTableData?.['Start Date']) || ''
                                 }}
                                 InputLabelProps={{ shrink: true }}
                             />
@@ -651,6 +652,7 @@ const LifeCycle = () => {
                                                 InputLabelProps={{ shrink: true }}
                                                 inputProps={{
                                                     max: new Date().toISOString().split("T")[0],
+                                                    min: tableForm?.start_date || ''
                                                 }}
                                             />
                                         </FormControl>

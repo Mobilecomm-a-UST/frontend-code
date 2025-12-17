@@ -336,6 +336,14 @@ const LteKpiTrend = () => {
         { title: `${(data?.dates?.[5])}`, field: 'MV_CSFB_Redirection_Success_Rate_date_6' },
         { title: `${(data?.dates?.[6])}`, field: 'MV_CSFB_Redirection_Success_Rate_date_7' },
         { title: `${(data?.dates?.[7])}`, field: 'MV_CSFB_Redirection_Success_Rate_date_8' },
+        // UL_RSSI_CDBH_date_1
+        { title: 'Week-2', field: 'UL_RSSI_CDBH_week_2' },
+        { title: 'Week-1', field: 'UL_RSSI_CDBH_week_1' },
+        { title: `${(data?.dates?.[3])}`, field: 'UL_RSSI_CDBH_date_4' },
+        { title: `${(data?.dates?.[4])}`, field: 'UL_RSSI_CDBH_date_5' },
+        { title: `${(data?.dates?.[5])}`, field: 'UL_RSSI_CDBH_date_6' },
+        { title: `${(data?.dates?.[6])}`, field: 'UL_RSSI_CDBH_date_7' },
+        { title: `${(data?.dates?.[7])}`, field: 'UL_RSSI_CDBH_date_8' },
     ]
 
     // handleExport Range wise table in excel formet.........
@@ -1345,6 +1353,13 @@ const LteKpiTrend = () => {
                 'MV_CSFB_Redirection_Success_Rate',
                 'MV_CSFB_Redirection_Success_Rate',
                 'MV_CSFB_Redirection_Success_Rate',
+                'UL_RSSI_CDBH',
+                'UL_RSSI_CDBH',
+                'UL_RSSI_CDBH',
+                'UL_RSSI_CDBH',
+                'UL_RSSI_CDBH',
+                'UL_RSSI_CDBH',
+                'UL_RSSI_CDBH',
 
             ],
             columnData.map(col => col.title) // Column headers
@@ -1543,6 +1558,7 @@ const LteKpiTrend = () => {
                                         <th colSpan='10'>MV_Packet_Loss_UL</th>
                                         <th colSpan='10'>PS_InterF_HOSR</th>
                                         <th colSpan='10'>MV_CSFB_Redirection_Success_Rate</th>
+                                        <th colSpan='10'>UL_RSSI_CDBH</th>
                                     </tr>
                                     <tr style={{ fontSize: 14, backgroundColor: "#223354", color: "white", }}>
                                         {/* MV 4G Data Volume GB */}
@@ -1695,6 +1711,13 @@ const LteKpiTrend = () => {
                                         {data?.dates.map((date) => (
                                             <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
                                         ))}
+                                         {/* UL_RSSI_CDBH */}
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-2</th>
+                                        <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Week-1</th>
+                                        {data?.dates.map((date) => (
+                                            <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{date}</th>
+                                        ))}
+
 
                                     </tr>
                                 </thead>
@@ -1985,6 +2008,17 @@ const LteKpiTrend = () => {
                                             <th >{it?.MV_CSFB_Redirection_Success_Rate_date_6}</th>
                                             <th >{it?.MV_CSFB_Redirection_Success_Rate_date_7}</th>
                                             <th >{it?.MV_CSFB_Redirection_Success_Rate_date_8}</th>
+
+                                             <th >{it?.UL_RSSI_CDBH_week_2}</th>
+                                            <th >{it?.UL_RSSI_CDBH_week_1}</th>
+                                            <th >{it?.UL_RSSI_CDBH_date_1}</th>
+                                            <th >{it?.UL_RSSI_CDBH_date_2}</th>
+                                            <th >{it?.UL_RSSI_CDBH_date_3}</th>
+                                            <th >{it?.UL_RSSI_CDBH_date_4}</th>
+                                            <th >{it?.UL_RSSI_CDBH_date_5}</th>
+                                            <th >{it?.UL_RSSI_CDBH_date_6}</th>
+                                            <th >{it?.UL_RSSI_CDBH_date_7}</th>
+                                            <th >{it?.UL_RSSI_CDBH_date_8}</th>
 
                                         </tr>
                                     ))}
