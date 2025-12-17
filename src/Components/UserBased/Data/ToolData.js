@@ -40,7 +40,7 @@ const ToolData = [
         title: 'This is a trend tool',
         icons: TrendIcon,
         link: '/trends',
-        groupBy:['quality','admin','quality-s']
+        groupBy:['quality','admin','quality-s','trend_tool']
     },
     // {
     //     id: 1,
@@ -294,7 +294,7 @@ const ToolData = [
         title: 'This is a Relocation Tracking Tool',
         icons: ProjectIcon,
         link: '/tools/relocation_tracking',
-        groupBy:['admin','RLT','RLT_reader']
+        groupBy:['admin','RLT','RLT_reader','RLT_Admin']
     }
 
 

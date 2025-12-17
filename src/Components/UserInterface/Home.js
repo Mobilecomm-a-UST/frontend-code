@@ -31,6 +31,7 @@ import { getDecreyptedData } from "../utils/localstorage";
 
 
 
+
 export default function Home() {
 
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -124,7 +125,7 @@ var prevScrollpos = window.pageYOffset;
               variant="h6"
               noWrap
               component="a"
-              href="http://localhost:3000/"
+              href={ServerURL}
               sx={{
                 mr: 2,
                 display: { xs: "none", md: "flex" },

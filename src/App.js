@@ -110,7 +110,7 @@ function App() {
             } />
             <Route path="/trends/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={Trends} allowedUserTypes={['quality', 'admin', 'quality-s']} userType={userType} />
+                <ProtectedRoute element={Trends} allowedUserTypes={['quality', 'admin', 'quality-s','trend_tool']} userType={userType} />
               </Suspense>
             } />
             <Route path="/tools/vendor/*" element={

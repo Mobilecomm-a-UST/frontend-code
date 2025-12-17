@@ -906,13 +906,13 @@ const FinalDashboard = () => {
 
         const responce = await makePostRequest('IntegrationTracker/oem_wise_integration_data/', formData)
         if (responce) {
-            // console.log('responce', responce)
+            console.log('responce oem', responce)
             // setMainDataT2(responce)
             action(false)
             // localStorage.removeItem("integration_final_tracker");
             // localStorage.setItem("integration_final_tracker", JSON.stringify(responce.table_data));
             dispatch({ type: 'IX_TRACKER', payload: { responce } })
-            navigate(`/tools/Integration/dashboard/total_count/${oem}`)
+            navigate(`/tools/IX_Tracker/dashboard/total_count/${oem}`)
             // console.log('response data in huawia site id' , response)
             // window.open(`${window.location.href}/${oem}` , "_blank")
 

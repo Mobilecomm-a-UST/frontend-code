@@ -72,7 +72,6 @@ const postDataa = async (url, body) => {
     var response = await axios.post(`${ServerURL}/${url}`, body, {
       headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
     })
-  
     var result = await response.data
     return (result)
     
@@ -96,7 +95,7 @@ const deleteData = async (url, payload = {}) => {
   } catch (e) {
         console.log(e)
     return (null)
-  }
+  } 
 }
 
 

@@ -142,7 +142,7 @@ const MonthWise = () => {
         formData.append('type', typeFileter)
         const res = await postData("alok_tracker/monthly_graph/", formData);
         // const res =  tempData; //  remove this line when API is read
-        // console.log('responce data1' , (JSON.parse(res.json_data)))
+        // console.log('responce data1' , res)
         // console.log('responce data2' , transformData(JSON.parse(res.json_data)))
         if (res) {
             action(false)
@@ -544,8 +544,8 @@ const MonthWise = () => {
                             label="Type"
                             onChange={(e)=>{setTypeFilter(e.target.value)}}
                         >
-                            <MenuItem value="type1">Type 1</MenuItem>
-                            <MenuItem value="type2">Type 2</MenuItem>
+                            <MenuItem value="type1">Sequential Independent</MenuItem>
+                            <MenuItem value="type2">Combined Overlapping</MenuItem>
 
                         </Select>
                     </FormControl>

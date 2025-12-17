@@ -8,7 +8,7 @@ export const useLoadingDialog = () => {
     const [open, setOpen] = useState(false)
 
     const loadings = () => {
-        console.log('loadingh dialog')
+        // console.log('loadingh dialog')
         return (
             <Dialog
                 open={open}
@@ -41,7 +41,8 @@ export const useLoadingDialog = () => {
     }
 
 
-    return { loading,action }
+    return {  loading, 
+    action: action  }
 
 
 }
