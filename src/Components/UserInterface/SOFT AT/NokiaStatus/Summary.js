@@ -120,7 +120,7 @@ const Summary = () => {
                 <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
                     <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
                     <Link underline="hover" onClick={() => { navigate('/tools/soft_at') }}>Soft-AT Tool</Link>
-                    <Typography color='text.primary'>Nokia Checklist</Typography>
+                    <Typography color='text.primary'>Nokia Summary</Typography>
                 </Breadcrumbs>
             </div>
             <Slide
@@ -213,7 +213,7 @@ const Summary = () => {
                         </Box>
                     </Box>
                     <Box sx={{ display: download ? 'block' : 'none', textAlign: 'center' }}>
-                        <a download href={fileData}><Button variant="outlined" onClick='' title="Export Excel" startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />} sx={{ marginTop: "10px", width: "auto" }}><span style={{ fontFamily: "Poppins", fontSize: "22px", fontWeight: 800, textTransform: "none", textDecorationLine: "none" }}>Download Nokia Checklist</span></Button></a>
+                        <a download href={fileData}><Button variant="outlined" onClick='' title="Export Excel" startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />} sx={{ marginTop: "10px", width: "auto" }}><span style={{ fontFamily: "Poppins", fontSize: "22px", fontWeight: 800, textTransform: "none", textDecorationLine: "none" }}>Download Nokia Summary</span></Button></a>
                     </Box>
                 </Box>
             </Slide>
