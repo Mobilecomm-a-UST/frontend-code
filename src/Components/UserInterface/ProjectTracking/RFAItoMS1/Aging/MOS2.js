@@ -130,7 +130,7 @@ const MOS2 = () => {
             formData.append('breakpoint2', breakpoint2)
             formData.append('month', month.split('-')[1] || '')
             formData.append('year', month.split('-')[0] || '')
-            {showIssueFilter &&  formData.append('issue', issue)}
+            formData.append('issue', issue)
             formData.append('type', typeFileter)
     
             const res = await postData("alok_tracker/ageing_dashboard_issues/", formData);
