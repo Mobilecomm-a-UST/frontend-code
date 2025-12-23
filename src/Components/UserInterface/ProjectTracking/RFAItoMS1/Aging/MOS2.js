@@ -231,8 +231,7 @@ const MOS2 = () => {
                             RFAI to Site On-Air Aging
                         </Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', gap: 1 }}>
-
-                            {showIssueFilter && <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
+                            <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
                                 <InputLabel id="demo-select-small-label">Issue</InputLabel>
                                 <Select
                                     labelId="demo-select-small-label"
@@ -245,7 +244,7 @@ const MOS2 = () => {
                                     <MenuItem value="not considered">Not Considered</MenuItem>
 
                                 </Select>
-                            </FormControl>}
+                            </FormControl>
                             <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
                                 <InputLabel id="demo-select-small-label">Type</InputLabel>
                                 <Select
