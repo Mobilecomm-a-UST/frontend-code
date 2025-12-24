@@ -136,14 +136,22 @@ const ToolData = [
 
     },
     {
-        id: 12,
-        name: 'IX Tracker',
-        title: 'This is a IX Tracker Tool',
-        icons: DocPassIcon,
-        link: '/tools/Integration',
-        groupBy:['soft_at_team','admin','IX']
-
+        id: 33,
+        name: 'IX Trackers',
+        title: 'This is a Relocation Tracking Tool',
+        icons: ProjectIcon,
+        link: '/tools/ix_tools',
+        groupBy:['admin','IX','VI_IX','VI_IX_reader','soft_at_team']
     },
+    // {
+    //     id: 12,
+    //     name: 'IX Tracker',
+    //     title: 'This is a IX Tracker Tool',
+    //     icons: DocPassIcon,
+    //     link: '/tools/Integration',
+    //     groupBy:['soft_at_team','admin','IX']
+
+    // },
 
     {
         id: 14,
