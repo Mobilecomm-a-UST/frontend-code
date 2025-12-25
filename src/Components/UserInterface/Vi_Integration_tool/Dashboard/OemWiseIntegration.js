@@ -59,7 +59,7 @@ const OemWiseIntegration = ({ onData }) => {
     // console.log('OEM wise data ')
 
     const { isPending, isFetching, isError, data, refetch } = useQuery({
-        queryKey: ['Integration_OEM_wise'],
+        queryKey: ['Vi_Integration_OEM_wise'],
         queryFn: async () => {
             action(isPending)
             var formData = new FormData()

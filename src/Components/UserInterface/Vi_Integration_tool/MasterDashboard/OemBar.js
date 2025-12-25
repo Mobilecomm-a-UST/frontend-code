@@ -58,7 +58,7 @@ const OemBar = () => {
     const [barDialogOpen, setBarDialogOpen] = useState(false)
     const [activity_Name , setActivity_Name] = useState('')
     const { isPending, isFetching, isError, data, refetch } = useQuery({
-        queryKey: ['Integration_OEM_wise'],
+        queryKey: ['Vi_Integration_OEM_wise'],
         queryFn: async () => {
             action(isPending)
             var formData = new FormData()
