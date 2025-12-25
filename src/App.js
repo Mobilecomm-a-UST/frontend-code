@@ -332,9 +332,9 @@ function App() {
           </Routes>
 
         </Router>
-        {/* <Box sx={{ position: 'fixed', top: '50px', right: 0, zIndex: 100, '&:hover': { display: 'none' } }}>
-          <img src="/assets/diya.gif" alt="Diya" style={{ width: "150px", height: "150px" }} />
-        </Box> */}
+        <Box sx={{ position: 'fixed', bottom: 0, left: 0, zIndex: 100, '&:hover': { display: 'none' } }}>
+          <img src="/assets/santa gif.gif" alt="Merry Christmas" style={{ width: "260px", height: "170px" }} />
+        </Box>
 
       </div>
     </QueryClientProvider>

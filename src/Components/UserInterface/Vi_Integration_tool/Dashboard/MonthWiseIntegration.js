@@ -52,7 +52,7 @@ const MonthWiseIntegration = ({ onData }) => {
     const [years, setYears] = useState('')
     const activityArray = ['DE-GROW', 'MACRO', 'OTHER', 'RELOCATION', 'RET', 'ULS-HPSC', 'UPGRADE', 'MEMTO', 'HT-INCREMENT', 'IBS', 'IDSC', 'ODSC', 'RECTIFICATION', 'OPERATION', 'RRU UPGRADE', '5G BW UPGRADE', '5G RRU SWAP', '5G SECTOR ADDITION', '5G RELOCATION', 'TRAFFIC SHIFTING', 'RRU SWAP']
     const { isPending, isFetching, isError, data, error, refetch } = useQuery({
-        queryKey: ['Integration_month_wise'],
+        queryKey: ['Vi_Integration_month_wise'],
         queryFn: async () => {
             action(true)
             var formData = new FormData()

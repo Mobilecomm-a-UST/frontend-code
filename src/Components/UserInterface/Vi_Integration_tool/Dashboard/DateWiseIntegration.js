@@ -41,7 +41,7 @@ const DateWiseIntegration = ({ onData }) => {
 
 
     const { isPending, isFetching, isError, data, refetch } = useQuery({
-        queryKey: ['Integration_date_wise'],
+        queryKey: ['Vi_Integration_date_wise'],
         queryFn: async () => {
             action(true)
             var formData = new FormData()

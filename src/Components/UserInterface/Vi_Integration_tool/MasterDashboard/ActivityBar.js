@@ -63,7 +63,7 @@ const ActivityBar = () => {
 
   const [activityData, setActivityData] = useState([])
   const { isPending, isFetching, isError, data, error, refetch } = useQuery({
-    queryKey: ['Integration_month_wise'],
+    queryKey: ['Vi_Integration_month_wise'],
     queryFn: async () => {
       action(true)
       var formData = new FormData()

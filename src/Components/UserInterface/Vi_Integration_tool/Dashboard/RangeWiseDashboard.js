@@ -41,7 +41,7 @@ const RangeWiseDashboard = ({ onData }) => {
 
 
     const { isPending, isFetching, isError, data, refetch } = useQuery({
-        queryKey: ['Integration_Range_wise'],
+        queryKey: ['Vi_Integration_Range_wise'],
         queryFn: async () => {
             action(true)
             var formData = new FormData()
