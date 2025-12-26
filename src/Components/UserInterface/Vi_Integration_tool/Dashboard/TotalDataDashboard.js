@@ -29,7 +29,6 @@ const TotalDataDashboard = () => {
         { title: 'Activity Name', field: 'Activity_Name' },
         { title: 'Site ID', field: 'Site_ID' },
         { title: 'MO NAME', field: 'MO_NAME' },
-
         { title: 'LNBTS ID', field: 'LNBTS_ID' },
         { title: 'Technology (SIWA)', field: 'Technology_SIWA' },
         { title: 'OSS Details', field: 'OSS_Details' },
@@ -86,6 +85,13 @@ const TotalDataDashboard = () => {
         { title: '5G RSI', field: 'RSI_5G' },
         { title: 'GPL', field: 'GPL' },
         { title: 'Pre/Post Check', field: 'Pre_Post_Check' },
+          { title: 'CRQ', field: 'CRQ' },
+        { title: 'Customer Approval', field: 'Customer_Approval' },
+        { title: 'FR Date.', field: 'FR_Date' },
+        { title: '4G HOTO Offered Date.', field: 'HOTO_Offered_Date_4g' },
+        { title: '4G HOTO Accepted Date.', field: 'HOTO_Accepted_Date_4g' },
+        { title: '2G HOTO Offered Date.', field: 'HOTO_Offered_Date_2g' },
+        { title: '2G HOTO Accepted Date.', field: 'HOTO_Accepted_Date_2g' },
         // {
         //     title: 'Actions',
         //     field: 'actions',

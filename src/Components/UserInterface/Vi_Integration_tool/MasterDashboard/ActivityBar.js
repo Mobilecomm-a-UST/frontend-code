@@ -592,6 +592,8 @@ const ActivityBar = () => {
             <option value={'_ULS_HPSC'}>ULS-HPSC</option>
             <option value={'_UPGRADE'}>UPGRADE</option>
             <option value={'_FEMTO'}>FEMTO</option>
+            <option value={'_TRAFFIC_SHIFTING'}>TRAFFIC SHIFTING</option>
+            <option value={'_RRU_SWAP'}>RRU SWAP</option>
             <option value={'_HT_INCREMENT'}>HT-INCREMENT</option>
             <option value={'_IBS'}>IBS</option>
             <option value={'_IDSC'}>IDSC</option>
@@ -599,6 +601,10 @@ const ActivityBar = () => {
             <option value={'_RECTIFICATION'}>RECTIFICATION</option>
             <option value={'_5G_RELOCATION'}>5G RELOCATION</option>
             <option value={'_5G_SECTOR_ADDITION'}>5G SECTOR ADDITION</option>
+            <option value={'_5G_RRU_SWAP'}>5G RRU SWAP</option>
+            <option value={'_5G_BBU_UPGRADE'}>5G BBU UPGRADE</option>
+            <option value={'_5G_BW_UPGRADE'}>5G BW UPGRADE</option>
+            <option value={'_5G_AIR_SWAP'}>5G AIR SWAP</option>
             <option value={'_OPERATIONS'}>OPERATIONS</option>
             <option value={'_OTHERS'}>OTHER</option>
           </select>

@@ -441,7 +441,7 @@ const OemBar = () => {
                         formData.append("month", month);
                         formData.append("year", year);
 
-                        const responce = await makePostRequest('IntegrationTracker/hyperlink-monthly-oemwise-integration-data/', formData)
+                        const responce = await makePostRequest('ix_tracker_vi/hyperlink-monthly-oemwise-integration-data/', formData)
                         if (responce) {
 
                             action(false)

@@ -18,7 +18,7 @@ const Ix_Tools = () => {
     const allowedAirtelRoles = ['Admin', 'IX', 'IX_reader', 'soft_at_team'];
     const allowedViRoles = ['Admin', 'VI_IX', 'VI_IX_reader', 'soft_at_team'];
 
-    console.log('ggggggggg', userTypes)
+    // console.log('ggggggggg', userTypes)
     const linker = window.location.pathname;
 
 

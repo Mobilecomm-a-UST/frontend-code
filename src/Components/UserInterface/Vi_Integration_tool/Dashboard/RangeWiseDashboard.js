@@ -195,12 +195,14 @@ const RangeWiseDashboard = ({ onData }) => {
         { title: 'CRQ', field: 'CRQ' },
         { title: 'Customer Approval', field: 'Customer_Approval' },
         { title: 'FR Date.', field: 'FR_Date' },
-        { title: 'HOTO Accepted Date.', field: 'HOTO_Accepted_Date' },
-        { title: 'HOTO Offered Date.', field: 'HOTO_Offered_Date' },
+        { title: '4G HOTO Offered Date.', field: 'HOTO_Offered_Date_4g' },
+        { title: '4G HOTO Accepted Date.', field: 'HOTO_Accepted_Date_4g' },
+        { title: '2G HOTO Offered Date.', field: 'HOTO_Offered_Date_2g' },
+        { title: '2G HOTO Accepted Date.', field: 'HOTO_Accepted_Date_2g' },
     ]
     // handleExport Range wise table in excel formet.........
     const handleExport = () => {
-        var csvBuilder = new CsvBuilder(`Range_Wise_Integration_Tracker.csv`)
+        var csvBuilder = new CsvBuilder(`VI_Range_Wise_Integration_Tracker.csv`)
             .setColumns(columnData.map(item => item.title))
             .addRows(data?.download_data.map(row => columnData.map(col => row[col.field])))
             .exportFile();

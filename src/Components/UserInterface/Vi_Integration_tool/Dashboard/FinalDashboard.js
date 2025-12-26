@@ -107,7 +107,9 @@ const FinalDashboard = () => {
     }, []);
 
     // handleExport Range wise table in excel formet.........
-    const handleExport = () => {
+    const  
+    
+    handleExport = () => {
 
         const workbook = new ExcelJS.Workbook();
         const sheet1 = workbook.addWorksheet("Date Wise", { properties: { tabColor: { argb: 'B0EBB4' } } })
@@ -861,7 +863,7 @@ const FinalDashboard = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = "Integration_Tracker.xlsx";
+            anchor.download = "VI_Integration_Tracker.xlsx";
             anchor.click();
             window.URL.revokeObjectURL(url);
         })
@@ -872,7 +874,7 @@ const FinalDashboard = () => {
         const responce = await makeGetRequest("ix_tracker_vi/overall-record-summary/")
         if (responce) {
             setMdashboard(JSON.parse(responce.table_data))
-            console.log('master dashboard', JSON.parse(responce.table_data))
+            // console.log('master dashboard', JSON.parse(responce.table_data))
         }
     }
 

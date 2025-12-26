@@ -88,10 +88,11 @@ const ComanDashboard = () => {
         BSC_NAME: '',
         CRQ: '',
         Customer_Approval: '',
-        HOTO_Accepted_Date: '',
         FR_Date: '',
-        HOTO_Offered_Date: '',
-        Configuration_5G: ''
+        HOTO_Offered_Date_4g: '',
+        HOTO_Accepted_Date_4g: '',
+        HOTO_Offered_Date_2g: '',
+        HOTO_Accepted_Date_2g: '',
     })
     const [editDataID, setEditDataID] = useState('')
     const [open, setOpen] = useState(false)
@@ -173,8 +174,11 @@ const ComanDashboard = () => {
             CRQ: rowData.CRQ,
             Customer_Approval: rowData.Customer_Approval,
             FR_Date: rowData.FR_Date,
-            HOTO_Accepted_Date: rowData.HOTO_Accepted_Date,
-            HOTO_Offered_Date: rowData.HOTO_Offered_Date,
+            HOTO_Offered_Date_4g: rowData.HOTO_Offered_Date_4g,
+            HOTO_Accepted_Date_4g: rowData.HOTO_Accepted_Date_4g,
+            HOTO_Offered_Date_2g: rowData.HOTO_Offered_Date_2g,
+            HOTO_Accepted_Date_2g: rowData.HOTO_Accepted_Date_2g,
+         
 
         })
         setEditDataID(rowData.id)
@@ -300,8 +304,11 @@ const ComanDashboard = () => {
         { title: 'CRQ', field: 'CRQ' },
         { title: 'Customer Approval', field: 'Customer_Approval' },
         { title: 'FR Date.', field: 'FR_Date' },
-        { title: 'HOTO Accepted Date.', field: 'HOTO_Accepted_Date' },
-        { title: 'HOTO Offered Date.', field: 'HOTO_Offered_Date' },
+        { title: '4G HOTO Offered Date.', field: 'HOTO_Offered_Date_4g' },
+        { title: '4G HOTO Accepted Date.', field: 'HOTO_Accepted_Date_4g' },
+        { title: '2G HOTO Offered Date.', field: 'HOTO_Offered_Date_2g' },
+        { title: '2G HOTO Accepted Date.', field: 'HOTO_Accepted_Date_2g' },
+
         {
             title: 'Actions',
             field: 'actions',
@@ -392,7 +399,7 @@ const ComanDashboard = () => {
 
     const downloadExcel = (data) => {
         // **************** FILEFY DEPENDANCY *****************
-        var csvBuilder = new CsvBuilder(`Integration_Tracker.csv`)
+        var csvBuilder = new CsvBuilder(`VI_Integration_Tracker.csv`)
             .setColumns(columnData.map(item => item.title))
             .addRows(data.map(row => columnData.map(col => row[col.field])))
             .exportFile();
