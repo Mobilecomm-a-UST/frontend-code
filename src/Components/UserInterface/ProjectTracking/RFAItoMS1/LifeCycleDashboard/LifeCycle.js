@@ -39,7 +39,7 @@ const LifeCycle = () => {
     const userID = getDecreyptedData("userID")
     const [siteId, setSiteId] = useState('')
     const [selectCircle, setSelectCircle] = useState('')
-    const [milestoneData, setMilestoneData] = useState()
+    const [milestoneData, setMilestoneData] = useState([])
     const [milestoneSelectName, setMilestoneSelectName] = useState('')
     const [tableForm, setTableForm] = useState({})
     const [issueTable, setIssueTable] = useState([])
@@ -48,7 +48,7 @@ const LifeCycle = () => {
     const [open, setOpen] = useState(false)
     const userTypes = (getDecreyptedData('user_type')?.split(","))
     const { action, loading } = useLoadingDialog();
-    // console.log('issue table', issueTable)
+    console.log('issue table', milestoneData)
 
 
 
@@ -537,7 +537,7 @@ const LifeCycle = () => {
                 </Grid>
 
             </div>
-            {milestoneData ? <Box>
+            {milestoneData.length > 0 ? <Box>
                 <Grid container spacing={1} sx={{ width: '99%', margin: '5px 5px' }}>
                     <Grid item xs={3} sx={{}}>
                         <Box sx={{
