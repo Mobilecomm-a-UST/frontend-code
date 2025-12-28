@@ -24,10 +24,10 @@ const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues,
         const { value } = event.target;
         const selected = typeof value === 'string' ? value.split(',') : value;
 
-        if (selected.includes('ALL')) {
-            if (selectedValues.length === options.length) {
+        if (selected.includes('ALLL')) {
+            if (selectedValues.length === options.length){
                 setSelectedValues([]);
-            } else {
+            }else{
                 setSelectedValues(options);
             }
         } else {
@@ -51,7 +51,7 @@ const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues,
                 input={<OutlinedInput label={label} />}
                 renderValue={(selected) => selected.join(', ')}
             >
-                <MenuItem value="ALL">
+                {/* <MenuItem value="ALL">
                     <Checkbox
                         checked={isAllSelected}
                         indeterminate={
@@ -59,7 +59,7 @@ const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues,
                         }
                     />
                     <ListItemText primary="Select All" />
-                </MenuItem>
+                </MenuItem> */}
 
                 {options.map((name) => (
                     <MenuItem key={name} value={name}>

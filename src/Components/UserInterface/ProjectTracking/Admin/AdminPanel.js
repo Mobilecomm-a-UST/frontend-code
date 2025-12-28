@@ -93,7 +93,7 @@ const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues,
     const { value } = event.target;
     const selected = typeof value === 'string' ? value.split(',') : value;
 
-    if (selected.includes('ALL')) {
+    if (selected.includes('ALLL')) {
       if (selectedValues.length === options.length) {
         setSelectedValues([]);
       } else {
@@ -120,7 +120,7 @@ const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues,
         input={<OutlinedInput label={label} />}
         renderValue={(selected) => selected.join(', ')}
       >
-        <MenuItem value="ALL">
+        {/* <MenuItem value="ALL">
           <Checkbox
             checked={isAllSelected}
             indeterminate={
@@ -128,7 +128,7 @@ const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues,
             }
           />
           <ListItemText primary="Select All" />
-        </MenuItem>
+        </MenuItem> */}
 
         {options.map((name) => (
           <MenuItem key={name} value={name}>
@@ -154,7 +154,7 @@ const AdminPanel = () => {
   const { actions, loading } = useLoadingDialog();
   const [editData, setEditData] = useState({});
   const [addDataDialog, setAddDataDialog] = useState(false)
-  const [columnsArray, setColumnsArray] = useState(['CENTRAL'])
+  const [columnsArray, setColumnsArray] = useState(['ALL'])
   const [editDataID, setEditDataID] = useState('')
   const [tableData, setTableData] = useState([])
   const [open, setOpen] = useState(false)
@@ -175,10 +175,10 @@ const AdminPanel = () => {
         (`${ServerURL}/alok_tracker/users/`, formData, {
           headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
         });
-      console.log('fetchAdminPanelData response', response.data)
+      // console.log('fetchAdminPanelData response', response.data)
       if (response) {
         setOpen(false);
-        setColumnsArray(['CENTRAL', ...response?.data?.columns])
+        setColumnsArray(['ALL', ...response?.data?.columns])
         setTableData(response?.data?.json_data)
 
       }
@@ -474,6 +474,8 @@ const AdminPanel = () => {
             search: true,
             exportButton: true,
             grouping: false,
+            // pageSize: 10,
+            // pageSizeOptions: [5, 10, 20, 50], // optional
             headerStyle: {
               backgroundColor: '#006e74',
               color: '#FFF',

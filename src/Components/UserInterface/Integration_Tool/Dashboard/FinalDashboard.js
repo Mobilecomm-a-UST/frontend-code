@@ -872,7 +872,7 @@ const FinalDashboard = () => {
         const responce = await makeGetRequest("IntegrationTracker/overall-record-summary/")
         if (responce) {
             setMdashboard(JSON.parse(responce.table_data))
-            console.log('master dashboard'  ,  JSON.parse(responce.table_data) )
+            // console.log('master dashboard'  ,  JSON.parse(responce.table_data) )
         }
     }
 

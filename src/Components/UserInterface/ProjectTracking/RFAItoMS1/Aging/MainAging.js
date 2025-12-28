@@ -7,6 +7,7 @@ import MOS from './MOS';
 import Ms1 from './Ms1';
 import Integration from './Integration';
 import RfaiIntegration from './RfaiIntegration';
+import MOS2 from './MOS2';
 
 const MainAging = () => {
     const navigate = useNavigate()
@@ -29,6 +30,9 @@ const MainAging = () => {
             </Box>
             <Box>
                 <MOS />
+            </Box>
+            <Box>
+                <MOS2/>
             </Box>
             {/* <Box>
                 <Integration />

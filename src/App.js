@@ -55,6 +55,8 @@ const DegrowDismantle = lazy(() => import('./Components/UserInterface/DegrowDism
 const KPImatrix = lazy(() => import('./Components/UserInterface/KPI Matrix/KPImatrix'))
 const RelocationPayload = lazy(() => import('./Components/UserInterface/RelocationPayload/Relocation'))
 const ProjectTracking = lazy(() => import('./Components/UserInterface/ProjectTracking/PTracking'))
+const IxTools = lazy(() => import('./Components/UserInterface/Integration_Tools/Ix_Tools'))
+const Vi_Integration = lazy(() => import('./Components/UserInterface/Vi_Integration_tool/Vi_Integration'))
 
 const queryClient = new QueryClient()
 
@@ -110,7 +112,7 @@ function App() {
             } />
             <Route path="/trends/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={Trends} allowedUserTypes={['quality', 'admin', 'quality-s','trend_tool']} userType={userType} />
+                <ProtectedRoute element={Trends} allowedUserTypes={['quality', 'admin', 'quality-s', 'trend_tool']} userType={userType} />
               </Suspense>
             } />
             <Route path="/tools/vendor/*" element={
@@ -311,16 +313,28 @@ function App() {
 
             <Route path="/tools/relocation_tracking/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={ProjectTracking} allowedUserTypes={['admin','RLT','RLT_reader']} userType={userType} />
+                <ProtectedRoute element={ProjectTracking} allowedUserTypes={['admin', 'RLT', 'RLT_reader']} userType={userType} />
+              </Suspense>
+            } />
+
+            <Route path="/tools/ix_tools/*" element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProtectedRoute element={IxTools} allowedUserTypes={['admin','IX','VI_IX','VI_IX_reader','soft_at_team']} userType={userType} />
+              </Suspense>
+            } />
+
+            <Route path="/tools/ix_tools/vi_integration/*" element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProtectedRoute element={Vi_Integration} allowedUserTypes={['admin', 'VI_IX','VI_IX_reader']} userType={userType} />
               </Suspense>
             } />
 
           </Routes>
 
         </Router>
-        {/* <Box sx={{ position: 'fixed', top: '50px', right: 0, zIndex: 100, '&:hover': { display: 'none' } }}>
-          <img src="/assets/diya.gif" alt="Diya" style={{ width: "150px", height: "150px" }} />
-        </Box> */}
+        <Box sx={{ position: 'fixed', bottom: 0, left: 0, zIndex: 100, '&:hover': { display: 'none' } }}>
+          <img src="/assets/santa gif.gif" alt="Merry Christmas" style={{ width: "260px", height: "170px" }} />
+        </Box>
 
       </div>
     </QueryClientProvider>
