@@ -380,16 +380,17 @@ const OemWiseIntegration = ({ onData }) => {
         }
     }
     useEffect(() => {
+          if (!data) return;
 
-        if (data) {
+        // if (data) {
             // ShortDate(data.latest_months.sort((a, b) => a - b))
             setTableData(JSON.parse(data.table_data))
             setMonth(data.month)
             setYear(data.year)
             onData(data)
-        }
+        // }
         // setTotals(calculateTotals(tableData))
-    }, [])
+    }, [data])
     return (
         <>
             <style>{"th{border:1px solid black;}"}</style>
@@ -459,7 +460,7 @@ const OemWiseIntegration = ({ onData }) => {
                 </div>
             </Slide>
             {filterDialog()}
-            {loading}
+            {isFetching && loading}
         </>
     )
 }
