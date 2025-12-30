@@ -24,8 +24,57 @@ const readOnlyFields = [
     "old_toco_name",
     "old_site_id",
     "new_site_id",
-    "pri_history"
+    "pri_history",
+    "pri_count",
+    "pri_issue_ageing",
+    "issue_history",
+    "other_issue_ageing",
+    "total_issue_ageing",
+    "clear_rfai_to_ms1_ageing",
+    "last_updated_date",
+    "last_updated_by",
+    "clear_rfai_to_ms1_ageing"
+
 ];
+
+const dateTypeKey = [
+    "rfai_date",
+    "allocation_date",
+    "rfai_survey_date",
+    "mo_punch_date",
+    "material_dispatch_date",
+    "material_delivered_date",
+    "installation_start_date",
+    "installation_end_date",
+    "integration_date",
+    "emf_submission_date",
+    "alarm_rectification_done_date",
+    "scft_done_date",
+    "scft_i_deploy_offered_date",
+    "ran_pat_offer_date",
+    "ran_sat_offer_date",
+    "mw_pat_offer_date",
+    "mw_sat_offer_date",
+    "mw_ms1_mids_date",
+    "site_onair_date",
+    "i_deploy_onair_date",
+    "rfai_rejected_date",
+    "re_rfai_date",
+    "pri_start_date",
+    "pri_close_date",
+    "issue_start_date",
+    "issue_close_date",
+    "ran_pat_accepted_date",
+    "ran_sat_accepted_date",
+    "mw_pat_accepted_date",
+    "mw_sat_accepted_date",
+    "scft_accepted_date",
+    "kpi_at_offer_date",
+    "kpi_at_accepted_date",
+    "four_g_ms2_date",
+    "five_g_ms2_date",
+    "final_ms2_date",
+]
 
 const FinalData = () => {
     const listDataa = useSelector(state => state.relocationFinalTracker)
@@ -77,19 +126,21 @@ const FinalData = () => {
         site_onair_date: "",
         i_deploy_onair_date: "",
         current_status: "",
+        detailed_remarks: "",
+        history: "",
         rfai_rejected_date: "",
         re_rfai_date: "",
         pri_start_date: "",
         pri_close_date: "",
         pri_history: "",
         pri_count: "",
-        fiber_issue_start_date: "",
-        fiber_issue_close_date: "",
-        material_issue_start_date: "",
-        material_issue_close_date: "",
-        mw_issue_start_date: "",
-        mw_issue_close_date: "",
-        issue_ageing: "",
+        pri_issue_ageing: "",
+        issue: "",
+        issue_start_date: "",
+        issue_close_date: "",
+        issue_history: "",
+        other_issue_ageing: "",
+        total_issue_ageing: "",
         clear_rfai_to_ms1_ageing: "",
         rfai_to_ms1_ageing: "",
         ran_pat_accepted_date: "",
@@ -116,34 +167,54 @@ const FinalData = () => {
     // console.log('local storage', listDataa)
 
 
-    const generateHistory = (start, close) => {
-        if (!start || !close) return "";
-        return `S1=${start}, C1=${close}`;
-    }
-
+    const createNextHistoryEntry = (start, close, index) => {
+        return {
+            [`S${index}`]: start || "",
+            [`C${index}`]: close || ""
+        };
+    };
 
     const handleChange = (e) => {
-        // setEditData({
-        //     ...editData,
-        //     [e.target.name]: e.target.value,
-        // });
-        const { name, value } = e.target;
-
-        setEditData(prev => {
-            const updated = { ...prev, [name]: value };
-
-            // Auto update PRI history
-            if (name === "pri_start_date" || name === "pri_close_date") {
-                updated.pri_history = generateHistory(
-                    updated.pri_start_date,
-                    updated.pri_close_date
-                );
-            }
-
-            return updated;
+        setEditData({
+            ...editData,
+            [e.target.name]: e.target.value,
         });
+        // const { name, value } = e.target;
 
+        // setEditData(prev => {
+        //     const updated = { ...prev, [name]: value };
 
+        //     if (name === "pri_start_date" || name === "pri_close_date") {
+
+        //         // Parse existing history (json string or array)
+        //         let oldHistory = [];
+        //         try {
+        //             oldHistory = prev.pri_history
+        //                 ? JSON.parse(prev.pri_history)
+        //                 : [];
+        //         } catch {
+        //             oldHistory = [];
+        //         }
+
+        //         // Determine next index like S3/C3
+        //         const nextIndex = oldHistory.length + 1;
+
+        //         // Create new entry
+        //         const newEntry = createNextHistoryEntry(
+        //             updated.pri_start_date,
+        //             updated.pri_close_date,
+        //             nextIndex
+        //         );
+
+        //         // Append new entry
+        //         const newHistory = [...oldHistory, newEntry];
+
+        //         updated.pri_history = JSON.stringify(newHistory);
+        //         updated.pri_count = newHistory.length;  // total entries
+        //     }
+
+        //     return updated;
+        // });
     }
 
     const handleEdit = async (rowData) => {
@@ -168,7 +239,6 @@ const FinalData = () => {
             rfai_date: rowData.rfai_date,
             allocation_date: rowData.allocation_date,
             rfai_survey_date: rowData.rfai_survey_date,
-
             mo_punch_date: rowData.mo_punch_date,
             material_dispatch_date: rowData.material_dispatch_date,
             material_delivered_date: rowData.material_delivered_date,
@@ -199,6 +269,9 @@ const FinalData = () => {
             i_deploy_onair_date: rowData.i_deploy_onair_date,
 
             current_status: rowData.current_status,
+            detailed_remarks: rowData.detailed_remarks,
+            history: rowData.history,
+
             rfai_rejected_date: rowData.rfai_rejected_date,
             re_rfai_date: rowData.re_rfai_date,
 
@@ -206,17 +279,15 @@ const FinalData = () => {
             pri_close_date: rowData.pri_close_date,
             pri_history: rowData.pri_history,
             pri_count: rowData.pri_count,
+            pri_issue_ageing: rowData.pri_issue_ageing,
 
-            fiber_issue_start_date: rowData.fiber_issue_start_date,
-            fiber_issue_close_date: rowData.fiber_issue_close_date,
+            issue: rowData.issue,
+            issue_start_date: rowData.issue_start_date,
+            issue_close_date: rowData.issue_close_date,
+            issue_history: rowData.issue_history,
+            other_issue_ageing: rowData.other_issue_ageing,
+            total_issue_ageing: rowData.total_issue_ageing,
 
-            material_issue_start_date: rowData.material_issue_start_date,
-            material_issue_close_date: rowData.material_issue_close_date,
-
-            mw_issue_start_date: rowData.mw_issue_start_date,
-            mw_issue_close_date: rowData.mw_issue_close_date,
-
-            issue_ageing: rowData.issue_ageing,
             clear_rfai_to_ms1_ageing: rowData.clear_rfai_to_ms1_ageing,
             rfai_to_ms1_ageing: rowData.rfai_to_ms1_ageing,
 
@@ -228,13 +299,12 @@ const FinalData = () => {
 
             kpi_at_offer_date: rowData.kpi_at_offer_date,
             kpi_at_accepted_date: rowData.kpi_at_accepted_date,
-
             four_g_ms2_date: rowData.four_g_ms2_date,
             five_g_ms2_date: rowData.five_g_ms2_date,
             final_ms2_date: rowData.final_ms2_date,
 
             last_updated_date: rowData.last_updated_date,
-            last_updated_by: rowData.last_updated_by
+            last_updated_by: rowData.last_updated_by,
         });
         setEditDataID(rowData.id)
         setOpen(true)
@@ -251,6 +321,7 @@ const FinalData = () => {
                 (`${ServerURL}/alok_tracker/hyperlink_frontend_editing_update/`, formData, {
                     headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
                 });
+            console.log('weeee', response)
             if (response.status) {
                 setOpen(false);
                 Swal.fire({
@@ -258,17 +329,18 @@ const FinalData = () => {
                     title: "Done",
                     text: `Data Updated Successfully`,
                 });
-                navigate('/tools/relocation_tracking/waterfall/')
+                navigate('/tools/relocation_tracking/rfai_to_ms1_waterfall/')
             }
             // console.log('update response', response);
 
 
         } catch (error) {
+            console.log('error', error.response)
             setOpen(false);
             Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: `Failed to update data: ${error.response?.data?.message || error.message}`,
+                text: `Failed to update data: ${error.response?.data?.error || error.message}`,
             });
         }
 
@@ -300,7 +372,20 @@ const FinalData = () => {
 
 
     const columnData = [
-        { title: 'Unique ID', field: 'Unique ID' },
+        {
+            title: 'Actions',
+            field: 'actions',
+            render: rowData => (
+                <>
+                    {!userTypes?.includes('RLT_reader') && (
+                        <IconButton aria-label="edit" onClick={() => handleEdit(rowData)}>
+                            <DriveFileRenameOutlineIcon color='success' />
+                        </IconButton>
+                    )}
+                </>
+            )
+        },
+        // { title: 'Unique ID', field: 'Unique ID' },
         { title: 'Circle', field: 'circle' },
         { title: 'Site Tagging', field: 'site_tagging' },
         { title: 'Old TOCO Name', field: 'old_toco_name' },
@@ -348,53 +433,36 @@ const FinalData = () => {
         { title: 'PRI Close Date', field: 'pri_close_date' },
         { title: 'PRI History', field: 'pri_history' },
         { title: 'PRI Count', field: 'pri_count' },
-        { title: 'Fiber Issue Start Date', field: 'fiber_issue_start_date' },
-        { title: 'Fiber Issue Close Date', field: 'fiber_issue_close_date' },
-        { title: 'Material Issue Start Date', field: 'material_issue_start_date' },
-        { title: 'Material Issue Close Date', field: 'material_issue_close_date' },
-        { title: 'MW Issue Start Date', field: 'mw_issue_start_date' },
-        { title: 'MW Issue Close Date', field: 'mw_issue_close_date' },
-        { title: 'Issue Ageing', field: 'issue_ageing' },
+        { title: 'Pri Issue Ageing', field: 'pri_issue_ageing' },
+
+        { title: 'Issue', field: 'issue' },
+        { title: 'Issue Start Date', field: 'issue_start_date' },
+        { title: 'Issue Close Date', field: 'issue_close_date' },
+        { title: 'Issue History', field: 'issue_history' },
+        { title: 'Other Issue Ageing', field: 'other_issue_ageing' },
+        { title: 'Total Issue Ageing', field: 'total_issue_ageing' },
+
         { title: 'Clear RFAI→MS1 Ageing', field: 'clear_rfai_to_ms1_ageing' },
         { title: 'RFAI→MS1 Ageing', field: 'rfai_to_ms1_ageing' },
+
         { title: 'RAN PAT Accepted', field: 'ran_pat_accepted_date' },
         { title: 'RAN SAT Accepted', field: 'ran_sat_accepted_date' },
         { title: 'MW PAT Accepted', field: 'mw_pat_accepted_date' },
         { title: 'MW SAT Accepted', field: 'mw_sat_accepted_date' },
         { title: 'SCFT Accepted Date', field: 'scft_accepted_date' },
+
         { title: 'KPI AT Offer Date', field: 'kpi_at_offer_date' },
         { title: 'KPI AT Accepted Date', field: 'kpi_at_accepted_date' },
         { title: '4G MS2 Date', field: 'four_g_ms2_date' },
         { title: '5G MS2 Date', field: 'five_g_ms2_date' },
         { title: 'Final MS2 Date', field: 'final_ms2_date' },
+
         { title: 'Last Updated Date', field: 'last_updated_date' },
         { title: 'Last Updated By', field: 'last_updated_by' },
 
-        {
-            title: 'Actions',
-            field: 'actions',
-            render: rowData => (
-                <>
-                    {!userTypes?.includes('RLT_reader') && <IconButton aria-label="delete" title={'Edit'} size="large" onClick={() => { handleEdit(rowData) }}>
-                        <DriveFileRenameOutlineIcon
-                            style={{ cursor: 'pointer' }}
-                            color='success'
-                        />
-                    </IconButton>}
-                    {/* {!userTypes?.includes('RLT_reader') && <IconButton aria-label="delete" title={'Delete'} size="large" onClick={() => { handleDelete(rowData) }}>
-                        <DeleteOutlineIcon
-                            style={{ cursor: 'pointer' }}
-                            color='error'
-                        />
-                    </IconButton>} */}
 
-
-
-
-                </>
-            )
-        }
     ];
+
 
 
     const getStatus = () => {
@@ -410,21 +478,32 @@ const FinalData = () => {
     }
 
     const dateFormateChange = (dateStr) => {
-        if (!dateStr) return "";
+        if (!dateStr || dateStr === "nan") return "";
 
-        const [day, mon, year] = dateStr.split('-');
+        // CASE 1: Already in YYYY-MM-DD → return as is
+        if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+            return dateStr;
+        }
 
-        const months = {
-            Jan: "01", Feb: "02", Mar: "03", Apr: "04",
-            May: "05", Jun: "06", Jul: "07", Aug: "08",
-            Sep: "09", Oct: "10", Nov: "11", Dec: "12"
-        };
+        // CASE 2: Format like 28-Nov-25 → convert
+        if (/^\d{1,2}-[A-Za-z]{3}-\d{2}$/.test(dateStr)) {
+            const [day, mon, year] = dateStr.split('-');
 
-        // Convert 25 → 2025
-        const fullYear = Number(year) < 50 ? "20" + year : "19" + year;
+            const months = {
+                Jan: "01", Feb: "02", Mar: "03", Apr: "04",
+                May: "05", Jun: "06", Jul: "07", Aug: "08",
+                Sep: "09", Oct: "10", Nov: "11", Dec: "12"
+            };
 
-        return `${fullYear}-${months[mon]}-${day.padStart(2, "0")}`;
-    }
+            // Convert YY → YYYY
+            const fullYear = Number(year) < 50 ? "20" + year : "19" + year;
+
+            return `${fullYear}-${months[mon]}-${day.padStart(2, "0")}`;
+        }
+
+        // CASE 3: Unknown format → return as is to avoid breaking data
+        return dateStr;
+    };
 
 
     const handleDialogBox = useCallback(() => {
@@ -454,7 +533,7 @@ const FinalData = () => {
                                     value={key.includes('date') ? dateFormateChange(editData[key]) : editData[key]}
                                     onChange={handleChange}
                                     size="small"
-                                    type={key.includes('date') ? 'date' : 'text'}
+                                    type={dateTypeKey.includes(key) ? 'date' : 'text'}
                                     InputLabelProps={key.includes('date') ? { shrink: true } : {}}
                                     // 🔥 Make specific fields read-only
                                     // disabled={readOnlyFields.includes(key)}
@@ -483,7 +562,7 @@ const FinalData = () => {
 
     const downloadExcel = (data) => {
         // **************** FILEFY DEPENDANCY *****************
-        var csvBuilder = new CsvBuilder(`Integration_Tracker.csv`)
+        var csvBuilder = new CsvBuilder(`RFAI-To-MS1_Tracker.csv`)
             .setColumns(columnData.map(item => item.title))
             .addRows(data.map(row => columnData.map(col => row[col.field])))
             .exportFile();
@@ -494,43 +573,31 @@ const FinalData = () => {
         <>
             <div style={{ margin: '1% 1%' }}>
                 <MaterialTable
-                    title={'Relocation Site Details'}
+                    title="Relocation Site Details"
                     columns={columnData}
                     data={listDataa.temp}
-                    onSelectionChange={(rows) => setSelectedRows(rows)}
-                    // onRowClick={((evt, selectedRow) => console.log())}
                     actions={[
                         {
                             icon: () => <DownloadIcon color='primary' fontSize='large' />,
                             tooltip: "Export to Excel",
-                            onClick: () => downloadExcel(listDataa.temp), isFreeAction: true
-                        },
-                        {
-                            tooltip: 'Selected Rows download',
-                            icon: () => <DownloadIcon color='error' fontSize='large' />,
-
-                            onClick: (evt, data) => downloadExcel(data),
+                            onClick: () => downloadExcel(listDataa.temp),
+                            isFreeAction: true
                         }
                     ]}
-
                     options={{
-                        selection: true,
+                        selection: false,
                         search: true,
                         exportButton: true,
-                        grouping: true,
+                        grouping: false,
                         headerStyle: {
-                            backgroundColor: '#01579b',
+                            backgroundColor: '#006e74',
                             color: '#FFF',
-                            width: 'auto',
-                            whiteSpace: 'nowrap'
+                            whiteSpace: 'nowrap',
+                            fontWeight: 'bold'
                         },
                         rowStyle: {
-                            // backgroundColor: '#EEE',
-                            width: 'auto',
                             whiteSpace: 'nowrap'
-                        },
-
-
+                        }
                     }}
                 />
             </div>
