@@ -76,8 +76,8 @@ const ActivityBar = () => {
 
         if (res) {
           setMonth(res.latest_months);
-          setYear(res.latest_year);
-          setDate(`${res.latest_year[0]}-${res.latest_months[0] < 10 ? '0' + res.latest_months[0] : res.latest_months[0]}`);
+          setYear(res.latest_years);
+          setDate(`${res.latest_years[0]}-${res.latest_months[0] < 10 ? '0' + res.latest_months[0] : res.latest_months[0]}`);
           setCircle(_.map(JSON.parse(res.table_data), 'cir'));
           setActivityData(JSON.parse(res.table_data));
           return res;
@@ -97,7 +97,7 @@ const ActivityBar = () => {
   let delayed;
 
 
-  console.log('activityData', activityData ?? 0);
+  // console.log('activityData', activityData ?? 0);
   const handleMonthData = async (e) => {
     let tempData = e.split('-')
     await setMonth(tempData[1])
@@ -540,8 +540,8 @@ const ActivityBar = () => {
   useEffect(() => {
     if (data) {
       setMonth(data.latest_months)
-      setYear(data.latest_year)
-      setDate(`${data.latest_year[0]}-${data.latest_months[0] < 10 ? '0' + data.latest_months[0] : data.latest_months[0]}`)
+      setYear(data.latest_years)
+      setDate(`${data.latest_years[0]}-${data.latest_months[0] < 10 ? '0' + data.latest_months[0] : data.latest_months[0]}`)
       setCircle(_.map(JSON.parse(data.table_data), 'cir'))
       // console.log('activity data', res)
       setActivityData(JSON.parse(data.table_data))
@@ -551,7 +551,7 @@ const ActivityBar = () => {
     return () => {
       cancelRequest();
     }
-  }, [])
+  }, [data])
 
   return (<>
     <Box sx={{ display: 'flex', justifyContent: 'space-evenly', flexWrap: "wrap", flexDirection: 'row', gap: 1, marginBottom: 2 }}>

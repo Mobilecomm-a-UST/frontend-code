@@ -61,8 +61,8 @@ const MonthWiseIntegration = ({ onData }) => {
             const res = await makePostRequest("ix_tracker_vi/monthwise-integration-data/", formData);
             if (res) {
                 action(false)
-                // setMonths(res.latest_months)
-                // setYears(res.latest_years)
+                setMonths(res.latest_months)
+                setYears(res.latest_years)
                 ShortDate(res.latest_months, res.latest_years)
                 setTableData(JSON.parse(res.table_data))
                 // console.log('test data month',res, JSON.parse(res.table_data))
@@ -374,7 +374,8 @@ const MonthWiseIntegration = ({ onData }) => {
     // }, [])
     useEffect(() => {
         if (!data) return;
-
+        setMonths(data.latest_months)
+        setYears(data.latest_years)
         ShortDate(data.latest_months, data.latest_year)
         setTableData(JSON.parse(data.table_data))
         onData(data)
@@ -509,7 +510,7 @@ const MonthWiseIntegration = ({ onData }) => {
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'FR_Date' })}>{it?.M2_FR_Date}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'HOTO_Offered_2g' })}>{it?.M2_HOTO_Offered_2g}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'HOTO_Accepted_2g' })}>{it?.M2_HOTO_Accepted_2g}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'HOTO_Offered_4g'  })}>{it?.M2_HOTO_Offered_4g}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'HOTO_Offered_4g' })}>{it?.M2_HOTO_Offered_4g}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'HOTO_Accepted_4g' })}>{it?.M2_HOTO_Accepted_4g}</th>
 
 

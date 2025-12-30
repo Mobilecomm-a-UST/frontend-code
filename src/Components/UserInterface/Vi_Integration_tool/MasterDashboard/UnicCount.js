@@ -91,8 +91,8 @@ const UnicCount = () => {
 
                 if (res) {
                     setMonth(res.latest_months);
-                    setYear(res.latest_year);
-                    setDate(`${res.latest_year[0]}-${res.latest_months[0] < 10 ? '0' + res.latest_months[0] : res.latest_months[0]}`);
+                    setYear(res.latest_years);
+                    setDate(`${res.latest_years[0]}-${res.latest_months[0] < 10 ? '0' + res.latest_months[0] : res.latest_months[0]}`);
                     // setCircle(_.map(JSON.parse(res.table_data), 'cir'));
                     setActivityName(_.uniqBy(res.download_data, 'Activity_Name').map(item => item.Activity_Name))
                     setActivityData(res.download_data);
@@ -428,8 +428,8 @@ const UnicCount = () => {
     useEffect(() => {
         if (data) {
             setMonth(data.latest_months)
-            setYear(data.latest_year)
-            setDate(`${data.latest_year[0]}-${data.latest_months[0] < 10 ? '0' + data.latest_months[0] : data.latest_months[0]}`)
+            setYear(data.latest_years)
+            setDate(`${data.latest_years[0]}-${data.latest_months[0] < 10 ? '0' + data.latest_months[0] : data.latest_months[0]}`)
             // setCircle(_.map(JSON.parse(data.table_data), 'cir'))
             // console.log('activity data', res)
             setActivityData(data.download_data)
@@ -438,7 +438,7 @@ const UnicCount = () => {
         return()=>{
             cancelRequest();
         }
-    }, [])
+    }, [data])
 
     return (
         <div style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', padding: 10, height: 'auto', width: "100%", borderRadius: 10, backgroundColor: "white", display: "flex", justifyContent: 'space-around', alignItems: 'center' }}>
