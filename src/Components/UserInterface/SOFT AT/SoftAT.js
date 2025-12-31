@@ -39,6 +39,7 @@ const Softat5gChecklist = lazy(() => import('./Softat5G/Checklist'))
 const Softat5gSummary = lazy(() => import('./Softat5G/Summary'))
 const G5parser = lazy(()=> import('./5Gparser/G5parser'))
 const NokiaSA_NSA = lazy(() => import('./Nokia_SA_NSA/ChecklistEditor'))
+const NokiaUploadAlarm = lazy(()=>import('./Nokia_SA_NSA/UploadNokiaAlarm'))
 
 
 
@@ -173,10 +174,10 @@ const SoftAT = () => {
                         <Nav.Item eventKey='6-3' onClick={() => { navigate('/tools/soft_at/nokia_summary'); show(); setMenuButton(true) }} >Summary</Nav.Item>
                         <Nav.Item eventKey='6-4' onClick={() => { navigate('/tools/soft_at/nokia_summary_table'); show(); setMenuButton(true) }} >Summary Table</Nav.Item>
                       </Nav.Menu>
-                      <Nav.Menu eventKey="8" title="Nokia SA/NAS" placement="rightStart" icon={<CheckOutlineIcon />} >
-                          <Nav.Item eventKey='8-1' onClick={() => { navigate('/tools/soft_at/nokia_sa_nsa_table'); show(); setMenuButton(true) }} >NS/SNA Table</Nav.Item>
-                          <Nav.Item eventKey='8-2' onClick={() => { navigate('/tools/soft_at/nokia_checklist_table'); show(); setMenuButton(true) }} >Checklist Table</Nav.Item>
-                          
+                      <Nav.Menu eventKey="8" title="Nokia SA/NSA" placement="rightStart" icon={<CheckOutlineIcon />} >
+                          <Nav.Item eventKey='8-1' onClick={() => { navigate('/tools/soft_at/nokia_sa_nsa_table'); show(); setMenuButton(true) }} >SA/NSA Table</Nav.Item>
+                          <Nav.Item eventKey='8-2' onClick={() => { navigate('/tools/soft_at/nokia_upload_alarm'); show(); setMenuButton(true) }} >Upload Nokia Alarm</Nav.Item>
+
                       </Nav.Menu>
                       <Nav.Item eventKey="8" placement="rightStart" icon={<PageIcon />} onClick={() => { navigate('/tools/soft_at/5g_parser'); show(); setMenuButton(true) }}>
                         5G Parser
@@ -218,6 +219,7 @@ const SoftAT = () => {
                 <Route element={<Softat5gSummary />} path='/softat_5g_summary' />
                 <Route element={<G5parser />} path='/5g_parser' />
                 <Route element={<NokiaSA_NSA />} path='/nokia_sa_nsa_table' />
+                <Route element={<NokiaUploadAlarm />} path='/nokia_upload_alarm' />
 
               </Routes>
             </Suspense>
