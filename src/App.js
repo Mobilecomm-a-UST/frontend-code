@@ -332,9 +332,9 @@ function App() {
           </Routes>
 
         </Router>
-        <Box sx={{ position: 'fixed', bottom: 0, left: 0, zIndex: 100, '&:hover': { display: 'none' } }}>
+        {/* <Box sx={{ position: 'fixed', bottom: 0, left: 0, zIndex: 100, '&:hover': { display: 'none' } }}>
           <img src="/assets/santa gif.gif" alt="Merry Christmas" style={{ width: "260px", height: "170px" }} />
-        </Box>
+        </Box> */}
 
       </div>
     </QueryClientProvider>

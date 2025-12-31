@@ -51,8 +51,8 @@ const AddCheckListData = (props) => {
             action(true)
             var formData = new FormData();
             // console.log('pre files' , preFiles[i])
-            formData.append(`excel_file`, make4GFiles.bytes);
-            const response = await postData(`Soft_AT_Checklist_Nokia/${props.api}/`, formData)
+            formData.append(`file`, make4GFiles.bytes);
+            const response = await postData(`daily_alarm/${props.api}/`, formData)
             // console.log('response data', response)
             if (response.status === true) {
                 action(false)
@@ -116,7 +116,7 @@ const AddCheckListData = (props) => {
                 </DialogTitle>
                 <DialogContent dividers={'paper'}>
                     <Box className={classes.main_Box}>
-                        <Box className={classes.Back_Box} sx={{ width: { md: '75%', xs: '100%' } }}>
+                        <Box sx={{ width: { md: '75%', xs: '100%' } }}>
 
                             <Stack spacing={2} sx={{ marginTop: "-10px" }} direction={'column'}>
 
@@ -128,7 +128,7 @@ const AddCheckListData = (props) => {
                                         <div style={{ float: "left" }}>
                                             <Button variant="contained" component="label" color={make4GFiles.length > 0 ? "warning" : "primary"}>
                                                 select file
-                                                <input required hidden accept=".xlsx" type="file"
+                                                <input required hidden   accept=".xlsx,.csv" type="file"
                                                     // webkitdirectory="true"
                                                     // directory="true"
                                                     onChange={(e) => { handle4GFileSelection(e); setShow4G(false); }} />

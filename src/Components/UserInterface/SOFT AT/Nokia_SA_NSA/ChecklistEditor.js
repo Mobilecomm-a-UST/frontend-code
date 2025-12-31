@@ -123,10 +123,8 @@ const ChecklistEditor = () => {
             const res = await makeGetRequest("daily_alarm/SA_NSA/");
             if (res) {
                 action(false)
-                console.log('soft at nokia sa nsa', res)
                 setExpected(_.uniq(_.map(res, 'expected_value')))
                 setPerameter(_.uniq(_.map(res, 'parameter_name')))
-                // console.log('sssssssaa', _.uniq(_.map(res, 'RCA')))
 
                 return res
             }
@@ -410,9 +408,9 @@ const ChecklistEditor = () => {
                 key={index}
                 className={classes.hover}
             >
-                <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{row.path}</StyledTableCell>
-                <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{row.parameter_name}</StyledTableCell>
-                <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{row.expected_value}</StyledTableCell>
+                <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{row.id}</StyledTableCell>
+                <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{row.SA}</StyledTableCell>
+                <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{row.NSA}</StyledTableCell>
 
                 {/* <StyledTableCell align="center" style={{ borderRight: "2px solid black", display: 'flex', flex: 'row', justifyContent: 'space-evenly' }}>
                     <Tooltip title="Edit" color='primary'>
@@ -468,7 +466,7 @@ const ChecklistEditor = () => {
                         </Box>
 
                         <Box style={{ float: 'right', display: 'flex' }}>
-                            <Tooltip title="Export Checklist">
+                            <Tooltip title="Export SA/NSA File">
                                 <IconButton onClick={() => { handleDownload() }}>
                                     <DownloadIcon fontSize='medium' color='primary' />
                                 </IconButton>
@@ -507,7 +505,7 @@ const ChecklistEditor = () => {
                 <Box sx={{ marginTop: 5 }}>
                     {/* <Payload_data /> */}
                 </Box>
-                <AddCheckListData open={add} handleClick={handleClick} handleFetch={refetch} name='CHECKLIST' api="upload-excel" />
+                <AddCheckListData open={add} handleClick={handleClick} handleFetch={refetch} name='SA NSA' api="SA_NSA" />
                 {loading}
             </div>
 

@@ -34,35 +34,55 @@ const DateWiseIntegration = ({ onData }) => {
     const [dateArray, setDateArray] = useState([])
     const [tableData, setTableData] = useState([])
     const [givenDate, setGivenDate] = useState('')
-    const activityArray = ['DE-GROW', 'MACRO', 'OTHER', 'RELOCATION', 'RET', 'ULS-HPSC', 'UPGRADE', 'MEMTO', 'HT-INCREMENT', 'IBS', 'IDSC', 'ODSC', 'RECTIFICATION', 'OPERATION', 'RRU UPGRADE', '5G BW UPGRADE', '5G RRU SWAP', '5G SECTOR ADDITION', '5G RELOCATION', 'TRAFFIC SHIFTING', 'RRU SWAP', 'FR DATE', '2G HOTO OFFERED DATE', '2G HOTO ACCEPTED DATE', '4G HOTO OFFERED DATE', '4G HOTO ACCEPTED DATE']
+    const [fullData, setFullData] = useState([])
+    const activityArray = ['DE-GROW', 'MACRO', 'OTHER', 'RELOCATION', 'RET', 'ULS-HPSC', 'UPGRADE', 'MEMTO', 'HT-INCREMENT', 'IBS', 'IDSC', 'ODSC', 'RECTIFICATION', 'OPERATION', 'RRU UPGRADE', '5G BW UPGRADE', '5G RRU SWAP', '5G SECTOR ADDITION', '5G RELOCATION', 'TRAFFIC SHIFTING', 'RRU SWAP', 'FR COUNT', '2G HOTO OFFERED COUNT', '2G HOTO ACCEPTED COUNT', '4G HOTO OFFERED COUNT', '4G HOTO ACCEPTED COUNT']
     // const [totals, setTotals] = useState()
 
 
 
 
-    const { isPending, isFetching, isError, data, refetch } = useQuery({
-        queryKey: ['Vi_Integration_date_wise'],
-        queryFn: async () => {
-            action(isPending)
-            var formData = new FormData()
-            formData.append('date', givenDate)
-            const res = await makePostRequest("ix_tracker_vi/datewise-integration-data/", formData);
-            if (res) {
-                action(false)
-                ShortDate(res.latest_dates)
-                setTableData(JSON.parse(res.table_data))
-                // console.log('date wise data', JSON.parse(res.table_data))
-                onData(res);
-                return res;
-            }
-            else {
-                action(false)
-            }
-        },
-        staleTime: 10000,
-        refetchOnReconnect: false,
-    })
+    // const { isPending, isFetching, isError, data, refetch } = useQuery({
+    //     queryKey: ['Vi_Integration_date_wise'],
+    //     queryFn: async () => {
+    //         action(isPending)
+    //         var formData = new FormData()
+    //         formData.append('date', givenDate)
+    //         const res = await makePostRequest("ix_tracker_vi/datewise-integration-data/", formData);
+    //         if (res) {
+    //             action(false)
+    //             ShortDate(res.latest_dates)
+    //             setTableData(JSON.parse(res.table_data))
+    //             // console.log('date wise data', JSON.parse(res.table_data))
+    //             onData(res);
+    //             return res;
+    //         }
+    //         else {
+    //             action(false)
+    //         }
+    //     },
+    //     staleTime: 10000,
+    //     refetchOnReconnect: false,
+    // })
 
+
+    const fetchDateWiseDashboard = async () => {
+        action(true)
+        var formData = new FormData()
+        formData.append('date', givenDate)
+        const res = await makePostRequest("ix_tracker_vi/datewise-integration-data/", formData);
+        if (res) {
+            action(false)
+            ShortDate(res.latest_dates)
+            setTableData(JSON.parse(res.table_data))
+            setFullData(res.download_data)
+            // console.log('date wise data', JSON.parse(res.table_data))
+            onData(res);
+            return res;
+        }
+        else {
+            action(false)
+        }
+    }
 
     // console.log('date wise dashboard')
 
@@ -266,7 +286,7 @@ const DateWiseIntegration = ({ onData }) => {
     const handleExport = () => {
         var csvBuilder = new CsvBuilder(`VI_Date_Wise_Integration_Tracker.csv`)
             .setColumns(columnData.map(item => item.title))
-            .addRows(data?.download_data.map(row => columnData.map(col => row[col.field])))
+            .addRows(fullData?.map(row => columnData.map(col => row[col.field])))
             .exportFile();
     }
 
@@ -351,20 +371,13 @@ const DateWiseIntegration = ({ onData }) => {
         const day = String(date.$d.getDate()).padStart(2, '0');
         await setGivenDate(`${year}-${month}-${day}`)
         // console.log('date' , `${year}-${month}-${day}` )
-        await refetch()
+        // await fetchDateWiseDashboard()
 
     }
 
     useEffect(() => {
-         if (!data) return;
-
-        // if (data) {
-            ShortDate(data.latest_dates)
-            setTableData(JSON.parse(data.table_data))
-            onData(data);
-        // }
-
-    }, [data])
+        fetchDateWiseDashboard();
+    }, [givenDate])
 
     return (
         <>
@@ -519,7 +532,7 @@ const DateWiseIntegration = ({ onData }) => {
                 </div>
             </Slide>
             {/* {filterDialog()} */}    
-            {isFetching && loading}
+            {loading}
         </>
     )
 }

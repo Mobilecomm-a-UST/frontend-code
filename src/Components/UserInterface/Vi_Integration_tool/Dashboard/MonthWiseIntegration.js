@@ -50,33 +50,56 @@ const MonthWiseIntegration = ({ onData }) => {
     const [year, setYear] = useState('')
     const [months, setMonths] = useState('')
     const [years, setYears] = useState('')
-    const activityArray = ['DE-GROW', 'MACRO', 'OTHER', 'RELOCATION', 'RET', 'ULS-HPSC', 'UPGRADE', 'MEMTO', 'HT-INCREMENT', 'IBS', 'IDSC', 'ODSC', 'RECTIFICATION', 'OPERATION', 'RRU UPGRADE', '5G BW UPGRADE', '5G RRU SWAP', '5G SECTOR ADDITION', '5G RELOCATION', 'TRAFFIC SHIFTING', 'RRU SWAP', 'FR DATE', '2G HOTO OFFERED DATE', '2G HOTO ACCEPTED DATE', '4G HOTO OFFERED DATE', '4G HOTO ACCEPTED DATE']
-    const { isPending, isFetching, isError, data, error, refetch } = useQuery({
-        queryKey: ['vi_Integration_month_wise'],
-        queryFn: async () => {
-            action(isPending)
-            var formData = new FormData()
-            formData.append('month', month)
-            formData.append('year', year)
-            const res = await makePostRequest("ix_tracker_vi/monthwise-integration-data/", formData);
-            if (res) {
-                action(false)
-                setMonths(res.latest_months)
-                setYears(res.latest_years)
-                ShortDate(res.latest_months, res.latest_years)
-                setTableData(JSON.parse(res.table_data))
-                // console.log('test data month',res, JSON.parse(res.table_data))
-                onData(res)
-                return res;
-            }
-            else {
-                action(false)
-            }
-        },
-        staleTime: 100000,
-        refetchOnReconnect: false,
-    })
+    const [fullData, setFullData] = useState([])
+    const activityArray = ['DE-GROW', 'MACRO', 'OTHER', 'RELOCATION', 'RET', 'ULS-HPSC', 'UPGRADE', 'MEMTO', 'HT-INCREMENT', 'IBS', 'IDSC', 'ODSC', 'RECTIFICATION', 'OPERATION', 'RRU UPGRADE', '5G BW UPGRADE', '5G RRU SWAP', '5G SECTOR ADDITION', '5G RELOCATION', 'TRAFFIC SHIFTING', 'RRU SWAP', 'FR COUNT', '2G HOTO OFFERED COUNT', '2G HOTO ACCEPTED COUNT', '4G HOTO OFFERED COUNT', '4G HOTO ACCEPTED COUNT']
+  
+    // const { isPending, isFetching, isError, data, error, refetch } = useQuery({
+    //     queryKey: ['vi_Integration_month_wise'],
+    //     queryFn: async () => {
+    //         action(isPending)
+    //         var formData = new FormData()
+    //         formData.append('month', month)
+    //         formData.append('year', year)
+    //         const res = await makePostRequest("ix_tracker_vi/monthwise-integration-data/", formData);
+    //         if (res) {
+    //             action(false)
+    //             setMonths(res.latest_months)
+    //             setYears(res.latest_years)
+    //             ShortDate(res.latest_months, res.latest_years)
+    //             setTableData(JSON.parse(res.table_data))
+    //             // console.log('test data month',res, JSON.parse(res.table_data))
+    //             onData(res)
+    //             return res;
+    //         }
+    //         else {
+    //             action(false)
+    //         }
+    //     },
+    //     staleTime: 100000,
+    //     refetchOnReconnect: false,
+    // })
 
+    const fetchMonthWiseDashboard = async () => {
+        action(true)
+        var formData = new FormData()
+        formData.append('month', month)
+        formData.append('year', year)
+        const res = await makePostRequest("ix_tracker_vi/monthwise-integration-data/", formData);
+        if (res) {
+            action(false)
+            setMonths(res.latest_months)
+            setYears(res.latest_years)
+            ShortDate(res.latest_months, res.latest_years)
+            setTableData(JSON.parse(res.table_data))
+            setFullData(res.download_data)
+            // console.log('test data month',res, JSON.parse(res.table_data))
+            onData(res)
+            return res;
+        }
+        else {
+            action(false)
+        }
+    }
 
     // console.log('temp month wise',monthArray,months,years)
 
@@ -274,7 +297,7 @@ const MonthWiseIntegration = ({ onData }) => {
         await setYear(dates.$y)
         // console.log('dates month year', dates)
 
-        await refetch()
+        // await refetch()
     }
 
 
@@ -358,7 +381,7 @@ const MonthWiseIntegration = ({ onData }) => {
     const handleExport = () => {
         var csvBuilder = new CsvBuilder(`VI_Month_Wise_Integration_Tracker.csv`)
             .setColumns(columnData.map(item => item.title))
-            .addRows(data?.download_data.map(row => columnData.map(col => row[col.field])))
+            .addRows(fullData?.map(row => columnData.map(col => row[col.field])))
             .exportFile();
     }
 
@@ -373,13 +396,8 @@ const MonthWiseIntegration = ({ onData }) => {
     //     // setTotals(calculateColumnTotals(tableData))
     // }, [])
     useEffect(() => {
-        if (!data) return;
-        setMonths(data.latest_months)
-        setYears(data.latest_years)
-        ShortDate(data.latest_months, data.latest_year)
-        setTableData(JSON.parse(data.table_data))
-        onData(data)
-    }, [data])
+       fetchMonthWiseDashboard();
+    }, [month,year])
     return (
         <>
             <style>{"th{border:1px solid black;}"}</style>
@@ -560,7 +578,7 @@ const MonthWiseIntegration = ({ onData }) => {
                 </div>
             </Slide>
             {/* {filterDialog()} */}
-            {isFetching && loading}
+            {loading}
         </>
     )
 }
