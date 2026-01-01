@@ -24,6 +24,7 @@ import CharacterLockIcon from '@rsuite/icons/CharacterLock';
 import IndirectIcon from '@rsuite/icons/Indirect';
 import TableIcon from '@rsuite/icons/Table';
 import AbTestIcon from '@rsuite/icons/AbTest';
+import StopOutlineIcon from '@rsuite/icons/StopOutline';
 import ProjectIcon from '@rsuite/icons/Project';
 
 
@@ -139,7 +140,7 @@ const ToolData = [
         id: 33,
         name: 'IX Trackers',
         title: 'This is a Relocation Tracking Tool',
-        icons: ProjectIcon,
+        icons: DocPassIcon,
         link: '/tools/ix_tools',
         groupBy:['admin','IX','VI_IX','VI_IX_reader','soft_at_team']
     },
@@ -303,6 +304,15 @@ const ToolData = [
         icons: ProjectIcon,
         link: '/tools/relocation_tracking',
         groupBy:['admin','RLT','RLT_reader','RLT_Admin']
+    }
+     ,
+    {
+        id: 33,
+        name: 'Microwave Soft-At',
+        title: 'This is a Microwave Soft-At Tool',
+        icons: StopOutlineIcon,
+        link: '/tools/microwave_soft_at',
+        groupBy:['admin','microwave']
     }
 
 
