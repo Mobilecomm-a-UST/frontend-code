@@ -12,6 +12,7 @@ import { getDecreyptedData } from "./Components/utils/localstorage";
 
 
 
+
 const ViewSite = lazy(() => import('./Components/UserInterface/DPR/ViewSite'));
 const Dpr = lazy(() => import('./Components/UserInterface/DPR/Dpr'))
 const Vendor = lazy(() => import('./Components/UserInterface/VANDOR_MANAGMENT/Vendor'))
@@ -57,6 +58,7 @@ const RelocationPayload = lazy(() => import('./Components/UserInterface/Relocati
 const ProjectTracking = lazy(() => import('./Components/UserInterface/ProjectTracking/PTracking'))
 const IxTools = lazy(() => import('./Components/UserInterface/Integration_Tools/Ix_Tools'))
 const Vi_Integration = lazy(() => import('./Components/UserInterface/Vi_Integration_tool/Vi_Integration'))
+const MicrowaveSoftAt = lazy(() => import('./Components/UserInterface/Microwave/Microwave'))
 
 const queryClient = new QueryClient()
 
@@ -319,22 +321,34 @@ function App() {
 
             <Route path="/tools/ix_tools/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={IxTools} allowedUserTypes={['admin','IX','VI_IX','VI_IX_reader','soft_at_team']} userType={userType} />
+                <ProtectedRoute element={IxTools} allowedUserTypes={['admin', 'IX', 'VI_IX', 'VI_IX_reader', 'soft_at_team']} userType={userType} />
               </Suspense>
             } />
 
             <Route path="/tools/ix_tools/vi_integration/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={Vi_Integration} allowedUserTypes={['admin', 'VI_IX','VI_IX_reader']} userType={userType} />
+                <ProtectedRoute element={Vi_Integration} allowedUserTypes={['admin', 'VI_IX', 'VI_IX_reader']} userType={userType} />
+              </Suspense>
+            } />
+
+            <Route path="/tools/microwave_soft_at/*" element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProtectedRoute element={MicrowaveSoftAt} allowedUserTypes={['admin', 'microwave']} userType={userType} />
               </Suspense>
             } />
 
           </Routes>
 
         </Router>
-        {/* <Box sx={{ position: 'fixed', bottom: 0, left: 0, zIndex: 100, '&:hover': { display: 'none' } }}>
-          <img src="/assets/santa gif.gif" alt="Merry Christmas" style={{ width: "260px", height: "170px" }} />
-        </Box> */}
+        <Box sx={{ position: 'fixed',
+           bottom: 0, 
+           left: 0,
+            zIndex: 100, 
+            // '&:hover': { display: 'none' } 
+          }}
+            >
+          <img src="/assets/happy-new-year-2026.png" alt="Happy New Year 2026" style={{ width: "220px", height: "140px" }} />
+        </Box>
 
       </div>
     </QueryClientProvider>
