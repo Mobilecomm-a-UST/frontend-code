@@ -125,7 +125,7 @@ const MonthWise = () => {
     const [view, setView] = useState('Cumulative')
     let delayed;
 
-    // console.log('data get', monthArray, milestoneData)
+    console.log('data get', milestoneData)
 
 
     const fetchDailyData = async () => {
@@ -278,6 +278,8 @@ const MonthWise = () => {
     }
 
 
+
+
     const data2 = {
         labels: monthArray,
         datasets: [
@@ -320,6 +322,12 @@ const MonthWise = () => {
         ]
     }
 
+const getTitalValue = (arr, condition) => {
+  return condition === 'Cumulative'
+    ? arr?.at(-1) ?? 0
+    : arr?.reduce((s, n) => s + n, 0) || 0;
+};
+
     const options = {
         responsive: true,
         // events: ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove'],
@@ -331,7 +339,6 @@ const MonthWise = () => {
         },
         plugins: {
             // backgroundImageUrl:'https://www.msoutlook.info/pictures/bgconfidential.png',
-
             legend: {
                 position: 'bottom',
                 labels: {
@@ -340,17 +347,20 @@ const MonthWise = () => {
                         size: 13,
                         // weight: 'bold',
                     },
-                    // color: "white",
+                    color: "black",
                     boxWidth: 18,
                 }
             },
             title: {
                 display: true,
-                text: `Monthly Progress - ${milestone1} (${milestoneData?.RFAI_done?.reduce((sum, num) => sum + num, 0) || 0}) to ${milestone2} (${milestoneData?.onAirDone?.reduce((sum, num) => sum + num, 0) || 0})`,
+                text:  `Monthly Progress - ${milestone1} (${getTitalValue(milestoneData?.RFAI_done, view)})
+to ${milestone2} (${getTitalValue(milestoneData?.onAirDone, view)})`,
                 font: {
                     size: 16,
-                    weight: 'bold'
-                }
+                    weight: 'bold',
+
+                },
+                color: 'black'
 
             },
             datalabels: {
@@ -398,7 +408,11 @@ const MonthWise = () => {
                     display: false
                 },
                 ticks: {
-                    // color:"white"
+                    color: 'black',   // 👈 month labels color
+                    // font: {
+                    //     size: 12,
+                    //     weight: 'bold'
+                    // }
                 },
                 // stacked: true
 
@@ -410,10 +424,20 @@ const MonthWise = () => {
                 },
                 ticks: {
                     // forces step size to be 50 units
+                    color: 'black',
                     stepSize: 10,
-                    // color:'white'
                 },
                 // stacked: true
+            },
+            y1:{
+                position: 'right',
+                grid: {
+                    display: false
+                },
+                ticks: {
+                    color: '#881e87',
+                    callback: (value) => `${value}%`
+                }
             }
         },
         watermark: {
@@ -509,7 +533,7 @@ const MonthWise = () => {
         return () => {
             cancelRequest();
         }
-    }, [circle, tagging, relocationMethod, toco, view,milestone1,milestone2,typeFileter])
+    }, [circle, tagging, relocationMethod, toco, view, milestone1, milestone2, typeFileter])
     return (
         <>
 
@@ -535,14 +559,14 @@ const MonthWise = () => {
 
                         </Select>
                     </FormControl>
-                           <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
+                    <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
                         <InputLabel id="demo-select-small-label">Type</InputLabel>
                         <Select
                             labelId="demo-select-small-label"
                             id="demo-select-small"
                             value={typeFileter}
                             label="Type"
-                            onChange={(e)=>{setTypeFilter(e.target.value)}}
+                            onChange={(e) => { setTypeFilter(e.target.value) }}
                         >
                             <MenuItem value="type1">Sequential Independent</MenuItem>
                             <MenuItem value="type2">Combined Overlapping</MenuItem>

@@ -34,35 +34,55 @@ const DateWiseIntegration = ({ onData }) => {
     const [dateArray, setDateArray] = useState([])
     const [tableData, setTableData] = useState([])
     const [givenDate, setGivenDate] = useState('')
-    const activityArray = ['DE-GROW', 'MACRO', 'OTHER', 'RELOCATION', 'RET', 'ULS-HPSC', 'UPGRADE', 'MEMTO', 'HT-INCREMENT', 'IBS', 'IDSC', 'ODSC', 'RECTIFICATION', 'OPERATION', 'RRU UPGRADE', '5G BW UPGRADE', '5G RRU SWAP', '5G SECTOR ADDITION', '5G RELOCATION', 'TRAFFIC SHIFTING', 'RRU SWAP']
+    const [fullData, setFullData] = useState([])
+    const activityArray = ['DE-GROW', 'MACRO', 'OTHER', 'RELOCATION', 'RET', 'ULS-HPSC', 'UPGRADE', 'MEMTO', 'HT-INCREMENT', 'IBS', 'IDSC', 'ODSC', 'RECTIFICATION', 'OPERATION', 'RRU UPGRADE', '5G BW UPGRADE', '5G RRU SWAP', '5G SECTOR ADDITION', '5G RELOCATION', 'TRAFFIC SHIFTING', 'RRU SWAP', 'FR COUNT', '2G HOTO OFFERED COUNT', '2G HOTO ACCEPTED COUNT', '4G HOTO OFFERED COUNT', '4G HOTO ACCEPTED COUNT']
     // const [totals, setTotals] = useState()
 
 
 
 
-    const { isPending, isFetching, isError, data, refetch } = useQuery({
-        queryKey: ['Vi_Integration_date_wise'],
-        queryFn: async () => {
-            action(true)
-            var formData = new FormData()
-            formData.append('date', givenDate)
-            const res = await makePostRequest("ix_tracker_vi/datewise-integration-data/", formData);
-            if (res) {
-                action(false)
-                ShortDate(res.latest_dates)
-                setTableData(JSON.parse(res.table_data))
-                // console.log('date wise data', JSON.parse(res.table_data))
-                onData(res);
-                return res;
-            }
-            else {
-                action(false)
-            }
-        },
-        staleTime: 100000,
-        refetchOnReconnect: false,
-    })
+    // const { isPending, isFetching, isError, data, refetch } = useQuery({
+    //     queryKey: ['Vi_Integration_date_wise'],
+    //     queryFn: async () => {
+    //         action(isPending)
+    //         var formData = new FormData()
+    //         formData.append('date', givenDate)
+    //         const res = await makePostRequest("ix_tracker_vi/datewise-integration-data/", formData);
+    //         if (res) {
+    //             action(false)
+    //             ShortDate(res.latest_dates)
+    //             setTableData(JSON.parse(res.table_data))
+    //             // console.log('date wise data', JSON.parse(res.table_data))
+    //             onData(res);
+    //             return res;
+    //         }
+    //         else {
+    //             action(false)
+    //         }
+    //     },
+    //     staleTime: 10000,
+    //     refetchOnReconnect: false,
+    // })
 
+
+    const fetchDateWiseDashboard = async () => {
+        action(true)
+        var formData = new FormData()
+        formData.append('date', givenDate)
+        const res = await makePostRequest("ix_tracker_vi/datewise-integration-data/", formData);
+        if (res) {
+            action(false)
+            ShortDate(res.latest_dates)
+            setTableData(JSON.parse(res.table_data))
+            setFullData(res.download_data)
+            // console.log('date wise data', JSON.parse(res.table_data))
+            onData(res);
+            return res;
+        }
+        else {
+            action(false)
+        }
+    }
 
     // console.log('date wise dashboard')
 
@@ -101,6 +121,11 @@ const DateWiseIntegration = ({ onData }) => {
             D1_5G_RELOCATION: 0,
             D1_TRAFFIC_SHIFTING: 0,
             D1_RRU_SWAP: 0,
+            D1_FR_Date: 0,
+            D1_HOTO_Offered_2g: 0,
+            D1_HOTO_Accepted_2g: 0,
+            D1_HOTO_Offered_4g: 0,
+            D1_HOTO_Accepted_4g: 0,
             D2_DE_GROW: 0,
             D2_MACRO: 0,
             D2_OTHERS: 0,
@@ -122,6 +147,11 @@ const DateWiseIntegration = ({ onData }) => {
             D2_5G_RELOCATION: 0,
             D2_TRAFFIC_SHIFTING: 0,
             D2_RRU_SWAP: 0,
+            D2_FR_Date: 0,
+            D2_HOTO_Offered_2g: 0,
+            D2_HOTO_Accepted_2g: 0,
+            D2_HOTO_Offered_4g: 0,
+            D2_HOTO_Accepted_4g: 0,
             D3_DE_GROW: 0,
             D3_MACRO: 0,
             D3_OTHERS: 0,
@@ -143,7 +173,11 @@ const DateWiseIntegration = ({ onData }) => {
             D3_5G_RELOCATION: 0,
             D3_TRAFFIC_SHIFTING: 0,
             D3_RRU_SWAP: 0,
-
+            D3_FR_Date: 0,
+            D3_HOTO_Offered_2g: 0,
+            D3_HOTO_Accepted_2g: 0,
+            D3_HOTO_Offered_4g: 0,
+            D3_HOTO_Accepted_4g: 0
         };
 
         datass.forEach(item => {
@@ -252,7 +286,7 @@ const DateWiseIntegration = ({ onData }) => {
     const handleExport = () => {
         var csvBuilder = new CsvBuilder(`VI_Date_Wise_Integration_Tracker.csv`)
             .setColumns(columnData.map(item => item.title))
-            .addRows(data?.download_data.map(row => columnData.map(col => row[col.field])))
+            .addRows(fullData?.map(row => columnData.map(col => row[col.field])))
             .exportFile();
     }
 
@@ -337,19 +371,13 @@ const DateWiseIntegration = ({ onData }) => {
         const day = String(date.$d.getDate()).padStart(2, '0');
         await setGivenDate(`${year}-${month}-${day}`)
         // console.log('date' , `${year}-${month}-${day}` )
-        await refetch()
+        // await fetchDateWiseDashboard()
 
     }
 
     useEffect(() => {
-
-        if (data) {
-            ShortDate(data.latest_dates)
-            setTableData(JSON.parse(data.table_data))
-            onData(data);
-        }
-        // setTotals(calculateColumnTotals(tableData))
-    }, [])
+        fetchDateWiseDashboard();
+    }, [givenDate])
 
     return (
         <>
@@ -383,9 +411,9 @@ const DateWiseIntegration = ({ onData }) => {
                                 <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
                                         <th rowSpan='2' style={{ padding: '5px 20px', whiteSpace: 'nowrap', position: 'sticky', left: 0, top: 0, backgroundColor: '#223354' }}>CIRCLE</th>
-                                        <th colSpan='21' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#2F75B5' }}>{ChangeDateFormate(dateArray[2])}</th>
-                                        <th colSpan='21' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: "#DD761C" }}>{ChangeDateFormate(dateArray[1])}</th>
-                                        <th colSpan='21' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#03AED2' }}>{ChangeDateFormate(dateArray[0])}</th>
+                                        <th colSpan='26' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#2F75B5' }}>{ChangeDateFormate(dateArray[2])}</th>
+                                        <th colSpan='26' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: "#DD761C" }}>{ChangeDateFormate(dateArray[1])}</th>
+                                        <th colSpan='26' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#03AED2' }}>{ChangeDateFormate(dateArray[0])}</th>
                                     </tr>
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
                                         {activityArray.map((item, index) => (
@@ -426,6 +454,11 @@ const DateWiseIntegration = ({ onData }) => {
                                                 <th style={{ cursor: 'pointer', backgroundColor: it.D1_5G_RELOCATION > 0 ? '#FEEFAD' : '' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: '5G RELOCATION' })}>{it?.D1_5G_RELOCATION || 0}</th>
                                                 <th style={{ cursor: 'pointer', backgroundColor: it.D1_TRAFFIC_SHIFTING > 0 ? '#FEEFAD' : '' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: 'TRAFFIC SHIFTING' })}>{it?.D1_TRAFFIC_SHIFTING || 0}</th>
                                                 <th style={{ cursor: 'pointer', backgroundColor: it?.D1_RRU_SWAP > 0 ? '#FEEFAD' : '' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: 'RRU SWAP' })}>{it?.D1_RRU_SWAP || 0}</th>
+                                                <th style={{ cursor: 'pointer', backgroundColor: it?.D1_FR_Date > 0 ? '#FEEFAD' : '' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: 'FR_Date' })}>{it?.D1_FR_Date || 0}</th>
+                                                <th style={{ cursor: 'pointer', backgroundColor: it?.D1_HOTO_Offered_2g > 0 ? '#FEEFAD' : '' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: 'HOTO_Offered_2g' })}>{it?.D1_HOTO_Offered_2g || 0}</th>
+                                                <th style={{ cursor: 'pointer', backgroundColor: it?.D1_HOTO_Accepted_2g > 0 ? '#FEEFAD' : '' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: 'HOTO_Accepted_2g' })}>{it?.D1_HOTO_Accepted_2g || 0}</th>
+                                                <th style={{ cursor: 'pointer', backgroundColor: it?.D1_HOTO_Offered_4g > 0 ? '#FEEFAD' : '' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: 'HOTO_Offered_4g' })}>{it?.D1_HOTO_Offered_4g || 0}</th>
+                                                <th style={{ cursor: 'pointer', backgroundColor: it?.D1_HOTO_Accepted_4g > 0 ? '#FEEFAD' : '' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: 'HOTO_Accepted_4g' })}>{it?.D1_HOTO_Accepted_4g || 0}</th>
 
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D2_DE_GROW > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: 'DE-GROW' })}>{it?.D2_DE_GROW}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D2_MACRO > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: 'MACRO' })}>{it?.D2_MACRO}</th>
@@ -448,6 +481,11 @@ const DateWiseIntegration = ({ onData }) => {
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D2_5G_RELOCATION > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: '5G RELOCATION' })}>{it?.D2_5G_RELOCATION || 0}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D2_TRAFFIC_SHIFTING > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: 'TRAFFIC SHIFTING' })}>{it?.D2_TRAFFIC_SHIFTING || 0}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it?.D2_RRU_SWAP > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: 'RRU SWAP' })}>{it?.D2_RRU_SWAP || 0}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it?.D2_FR_Date > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: 'FR_Date' })}>{it?.D2_FR_Date || 0}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it?.D2_HOTO_Offered_2g > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: 'HOTO_Offered_2g' })}>{it?.D2_HOTO_Offered_2g || 0}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it?.D2_HOTO_Accepted_2g > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: 'HOTO_Accepted_2g' })}>{it?.D2_HOTO_Accepted_2g || 0}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it?.D2_HOTO_Offered_4g > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: 'HOTO_Offered_4g' })}>{it?.D2_HOTO_Offered_4g || 0}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it?.D2_HOTO_Accepted_4g > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: 'HOTO_Accepted_4g' })}>{it?.D2_HOTO_Accepted_4g || 0}</th>
 
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D3_DE_GROW > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[0], circle: it?.cir, activity: 'DE-GROW' })}>{it?.D3_DE_GROW}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D3_MACRO > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[0], circle: it?.cir, activity: 'MACRO' })}>{it?.D3_MACRO}</th>
@@ -470,6 +508,11 @@ const DateWiseIntegration = ({ onData }) => {
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D3_5G_RELOCATION > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[0], circle: it?.cir, activity: '5G RELOCATION' })}>{it?.D3_5G_RELOCATION || 0}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D3_TRAFFIC_SHIFTING > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[0], circle: it?.cir, activity: 'TRAFFIC SHIFTING' })}>{it?.D3_TRAFFIC_SHIFTING || 0}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it?.D3_RRU_SWAP > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[0], circle: it?.cir, activity: 'RRU SWAP' })}>{it?.D3_RRU_SWAP || 0}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it?.D3_FR_Date > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[0], circle: it?.cir, activity: 'FR_Date' })}>{it?.D3_FR_Date || 0}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it?.D3_HOTO_Offered_2g > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[0], circle: it?.cir, activity: 'HOTO_Offered_2g' })}>{it?.D3_HOTO_Offered_2g || 0}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it?.D3_HOTO_Accepted_2g > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[0], circle: it?.cir, activity: 'HOTO_Accepted_2g' })}>{it?.D3_HOTO_Accepted_2g || 0}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it?.D3_HOTO_Offered_4g > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[0], circle: it?.cir, activity: 'HOTO_Offered_4g' })}>{it?.D3_HOTO_Offered_4g || 0}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it?.D3_HOTO_Accepted_4g > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[0], circle: it?.cir, activity: 'HOTO_Accepted_4g' })}>{it?.D3_HOTO_Accepted_4g || 0}</th>
                                             </tr>
                                         )
                                     }
@@ -488,7 +531,7 @@ const DateWiseIntegration = ({ onData }) => {
 
                 </div>
             </Slide>
-            {filterDialog()}
+            {/* {filterDialog()} */}    
             {loading}
         </>
     )

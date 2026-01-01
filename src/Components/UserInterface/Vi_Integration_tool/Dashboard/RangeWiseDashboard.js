@@ -20,6 +20,7 @@ import { useStyles } from '../../ToolsCss'
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import { setEncreptedData } from '../../../utils/localstorage';
+import { DiscFull } from '@mui/icons-material';
 
 const RangeWiseDashboard = ({ onData }) => {
     const classes = useStyles()
@@ -33,39 +34,64 @@ const RangeWiseDashboard = ({ onData }) => {
     const [givenDate, setGivenDate] = useState('')
     const [fromDate, setFromDate] = useState('')
     const [toDate, setToDate] = useState('')
-    const activityArray = ['DE-GROW', 'MACRO', 'OTHER', 'RELOCATION', 'RET', 'ULS-HPSC', 'UPGRADE', 'MEMTO', 'HT-INCREMENT', 'IBS', 'IDSC', 'ODSC', 'RECTIFICATION', 'OPERATION', 'RRU UPGRADE', '5G BW UPGRADE', '5G RRU SWAP', '5G SECTOR ADDITION', '5G RELOCATION', 'TRAFFIC SHIFTING', 'RRU SWAP']
+    const [fullData, setFullData] = useState([])
+    const activityArray = ['DE-GROW', 'MACRO', 'OTHER', 'RELOCATION', 'RET', 'ULS-HPSC', 'UPGRADE', 'MEMTO', 'HT-INCREMENT', 'IBS', 'IDSC', 'ODSC', 'RECTIFICATION', 'OPERATION', 'RRU UPGRADE', '5G BW UPGRADE', '5G RRU SWAP', '5G SECTOR ADDITION', '5G RELOCATION', 'TRAFFIC SHIFTING', 'RRU SWAP', 'FR COUNT', '2G HOTO OFFERED COUNT', '2G HOTO ACCEPTED COUNT', '4G HOTO OFFERED COUNT', '4G HOTO ACCEPTED COUNT']
 
     // const [totals, setTotals] = useState()
 
 
 
 
-    const { isPending, isFetching, isError, data, refetch } = useQuery({
-        queryKey: ['Vi_Integration_Range_wise'],
-        queryFn: async () => {
-            action(true)
-            var formData = new FormData()
-            formData.append('from_date', fromDate)
-            formData.append('to_date', toDate)
-            const res = await makePostRequest("ix_tracker_vi/date-range-integration-data/", formData);
-            if (res) {
-                action(false)
-                // ShortDate(res.latest_dates)
-                // setDateArray(res.date_range)
-                setFromDate(res.date_range[0])
-                setToDate(res.date_range[1])
-                setTableData(JSON.parse(res.table_data))
-                // console.log('range wise data',JSON.parse(res.table_data))
-                onData(res);
-                return res;
-            }
-            else {
-                action(false)
-            }
-        },
-        staleTime: 100000,
-        refetchOnReconnect: false,
-    })
+    // const { isPending, isFetching, isError, data, refetch } = useQuery({
+    //     queryKey: ['Vi_Integration_Range_wise'],
+    //     queryFn: async () => {
+    //         action(isPending)
+    //         var formData = new FormData()
+    //         formData.append('from_date', fromDate)
+    //         formData.append('to_date', toDate)
+    //         const res = await makePostRequest("ix_tracker_vi/date-range-integration-data/", formData);
+    //         if (res) {
+    //             action(false)
+    //             // ShortDate(res.latest_dates)
+    //             // setDateArray(res.date_range)
+    //             setFromDate(res.date_range[0])
+    //             setToDate(res.date_range[1])
+    //             setTableData(JSON.parse(res.table_data))
+    //             // console.log('range wise data',JSON.parse(res.table_data))
+    //             onData(res);
+    //             return res;
+    //         }
+    //         else {
+    //             action(false)
+    //         }
+    //     },
+    //     staleTime: 100000,
+    //     refetchOnReconnect: false,
+    // })
+
+
+    const fetchRangeWiseDashboard = async () => {
+        action(true)
+        var formData = new FormData()
+        formData.append('from_date', fromDate)
+        formData.append('to_date', toDate)
+        const res = await makePostRequest("ix_tracker_vi/date-range-integration-data/", formData);
+        if (res) {
+            action(false)
+            // ShortDate(res.latest_dates)
+            // setDateArray(res.date_range)
+            setFromDate(res.date_range[0])
+            setToDate(res.date_range[1])
+            setTableData(JSON.parse(res.table_data))
+            setFullData(res.download_data)
+            console.log('range wise data',res)
+            onData(res);
+            return res;
+        }
+        else {
+            action(false)
+        }
+    }
 
 
     // console.log('range dashboard', data, tableData)
@@ -93,6 +119,11 @@ const RangeWiseDashboard = ({ onData }) => {
             D1_5G_RELOCATION: 0,
             D1_TRAFFIC_SHIFTING: 0,
             D1_RRU_SWAP: 0,
+            FR_Date_Count: 0,
+            HOTO_Offered_2g_Count: 0,
+            HOTO_Accepted_2g_Count: 0,
+            HOTO_Offered_4g_Count: 0,
+            HOTO_Accepted_4g_Count: 0,
 
         };
 
@@ -204,7 +235,7 @@ const RangeWiseDashboard = ({ onData }) => {
     const handleExport = () => {
         var csvBuilder = new CsvBuilder(`VI_Range_Wise_Integration_Tracker.csv`)
             .setColumns(columnData.map(item => item.title))
-            .addRows(data?.download_data.map(row => columnData.map(col => row[col.field])))
+            .addRows(fullData?.map(row => columnData.map(col => row[col.field])))
             .exportFile();
     }
 
@@ -283,8 +314,6 @@ const RangeWiseDashboard = ({ onData }) => {
     const handleDate = async (date) => {
         await setToDate(date)
 
-        await refetch()
-
     }
 
 
@@ -294,13 +323,8 @@ const RangeWiseDashboard = ({ onData }) => {
     }
 
     useEffect(() => {
-        if (data) {
-            // ShortDate(data.latest_dates)
-            setTableData(JSON.parse(data.table_data))
-            onData(data);
-        }
-        // setTotals(calculateColumnTotals(tableData))
-    }, [])
+        fetchRangeWiseDashboard()
+    }, [fromDate,toDate])
 
 
     return (
@@ -384,7 +408,7 @@ const RangeWiseDashboard = ({ onData }) => {
                                 <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
                                         <th rowSpan='2' style={{ padding: '5px 20px', whiteSpace: 'nowrap', position: 'sticky', left: 0, top: 0, backgroundColor: '#223354' }}>CIRCLE</th>
-                                        <th colSpan='21' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#2F75B5' }}>{data && ChangeDateFormate(data?.date_range[0])} to {data && ChangeDateFormate(data?.date_range[1])}</th>
+                                        <th colSpan='26' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#2F75B5' }}>{ChangeDateFormate(fromDate)} to {ChangeDateFormate(toDate)}</th>
                                     </tr>
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
                                         {activityArray.map((item, index) => (
@@ -418,6 +442,11 @@ const RangeWiseDashboard = ({ onData }) => {
                                                 <th style={{ cursor: 'pointer' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: '5G RELOCATION' })}>{it?.D1_5G_RELOCATION}</th>
                                                 <th style={{ cursor: 'pointer' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: 'TRAFFIC SHIFTING' })}>{it?.D1_TRAFFIC_SHIFTING}</th>
                                                 <th style={{ cursor: 'pointer' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: 'RRU SWAP' })}>{it?.D1_RRU_SWAP}</th>
+                                                <th style={{ cursor: 'pointer' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: 'FR_Date' })}>{it?.FR_Date_Count}</th>
+                                                <th style={{ cursor: 'pointer' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: 'HOTO_Offered_2g' })}>{it?.HOTO_Offered_2g_Count}</th>
+                                                <th style={{ cursor: 'pointer' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: 'HOTO_Accepted_2g' })}>{it?.HOTO_Accepted_2g_Count}</th>
+                                                <th style={{ cursor: 'pointer' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: 'HOTO_Offered_4g' })}>{it?.HOTO_Offered_4g_Count}</th>
+                                                <th style={{ cursor: 'pointer' }} className={classes.hover} onClick={() => ClickDataGet({ date: dateArray[2], circle: it?.cir, activity: 'HOTO_Accepted_4g' })}>{it?.HOTO_Accepted_4g_Count}</th>
 
                                             </tr>
                                         )
@@ -437,8 +466,8 @@ const RangeWiseDashboard = ({ onData }) => {
 
                 </div>
             </Slide>
-            {filterDialog()}
-            {loading}
+            {/* {filterDialog()} */}
+            { loading}
         </>
     )
 }

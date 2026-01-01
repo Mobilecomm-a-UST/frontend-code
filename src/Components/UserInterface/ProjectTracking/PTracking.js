@@ -27,8 +27,8 @@ const RFAItoMS1_MainDashboard = lazy(() => import('./RFAItoMS1/Analytics/MainDas
 const RFAItoMS1_FinalData = lazy(() => import('./RFAItoMS1/Dashboard/FinalData'))
 const LifeCycle = lazy(() => import('./RFAItoMS1/LifeCycleDashboard/LifeCycle'))
 const AdminPanel = lazy(() => import('./Admin/AdminPanel'))
-// const Error = lazy(() => import('./Components/csss/Error'));
 const Error = lazy(() => import('../../../Components/csss/Error'));
+const MS1toMS2_DashboardTable = lazy(() => import('./MS1toMS2/Dashboard/DashboardTable'))
 
 
 const ProtectedRoute = ({ allowed, children }) => {
@@ -139,7 +139,7 @@ const PTracking = () => {
 
                                             {/* RAFI to MS2 */}
                                             <Nav.Menu eventKey="2" style={{ fontWeight: 400, color: 'white' }} placement="leftStart" className="menu-title-custom" title="MS1 To MS2" icon={<ArrowRightIcon />}  >
-                                                <Nav.Item eventKey="2-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/'); show(); setMenuButton(true) }}>
+                                                <Nav.Item eventKey="2-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/ms1_to_ms2_waterfall'); show(); setMenuButton(true) }}>
                                                     Waterfall Dashboard
                                                 </Nav.Item>
                                                 <Nav.Item eventKey="2-2" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/'); show(); setMenuButton(true) }}>
@@ -179,6 +179,8 @@ const PTracking = () => {
                                         </ProtectedRoute>
                                     }
                                 />
+                                <Route element={<MS1toMS2_DashboardTable />} path="/ms1_to_ms2_waterfall" />
+                                
                                 <Route
                                     path="/admin_panel"
                                     element={

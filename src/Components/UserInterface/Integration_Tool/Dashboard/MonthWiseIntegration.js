@@ -65,7 +65,7 @@ const MonthWiseIntegration = ({ onData }) => {
                 setYears(res.latest_year)
                 ShortDate(res.latest_months, res.latest_year)
                 setTableData(JSON.parse(res.table_data))
-                // console.log('test data month', JSON.parse(res.table_data))
+                // console.log('Airtel data month', res, JSON.parse(res.table_data))
                 onData(res)
                 return res;
             }

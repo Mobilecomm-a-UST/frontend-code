@@ -11,8 +11,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import TableContainer from '@mui/material/TableContainer';
 import Paper from '@mui/material/Paper';
 import Slide from '@mui/material/Slide';
-import { CsvBuilder } from 'filefy';
-import { useGet } from '../../../../Hooks/GetApis';
 import { usePost } from '../../../../Hooks/PostApis';
 import { useLoadingDialog } from '../../../../Hooks/LoadingDialog';
 import { useQuery } from '@tanstack/react-query';
@@ -28,6 +26,7 @@ import Checkbox from '@mui/material/Checkbox';
 import { postData } from '../../../../services/FetchNodeServices';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import * as ExcelJS from 'exceljs'
 
 
 const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues }) => {
@@ -106,9 +105,6 @@ const WeekWise = () => {
     const [downloadExcelData, setDownloadExcelData] = useState('')
     const [view, setView] = useState('Cumulative')
 
-    // const [totals, setTotals] = useState()
-
-    // console.log('month select ' , month.split('-')[1] , month.split('-')[0] )
 
     const fetchDailyData = async () => {
         action(true)
@@ -120,9 +116,9 @@ const WeekWise = () => {
         formData.append('month', month.split('-')[1] || '')
         formData.append('year', month.split('-')[0] || '')
         formData.append('view', view)
-        const res = await postData("alok_tracker/weekly_monthly_dashboard_file/", formData);
+        const res = await postData("alok_tracker/ms2_weekly_monthly_dashboard/", formData);
         // const res =  tempData; //  remove this line when API is ready
-        console.log('week wise response', res)
+        console.log('week wise response', JSON.parse(res.week_data), res.unique_data.week_columns)
         if (res) {
             action(false)
             setWeekArray(res.unique_data.week_columns)
@@ -180,136 +176,93 @@ const WeekWise = () => {
         setView(event.target.value)
     }
 
-    // Download Key and value
-    const columnData = [
-        { title: 'Unique Key', field: 'unique_key' },
-        { title: 'OEM', field: 'OEM' },
-        { title: 'Integration Date', field: 'Integration_Date' },
-        { title: 'CIRCLE', field: 'CIRCLE' },
-        { title: 'Activity Name', field: 'Activity_Name' },
-        { title: 'Site ID', field: 'Site_ID' },
-        { title: 'MO NAME', field: 'MO_NAME' },
+    // ********* EXPORT DATA IN EXCEL FORMET **********
+    const handleExport = async () => {
 
-        { title: 'LNBTS ID', field: 'LNBTS_ID' },
-        { title: 'Technology (SIWA)', field: 'Technology_SIWA' },
-        { title: 'OSS Details', field: 'OSS_Details' },
-        { title: 'Cell ID', field: 'Cell_ID' },
-        { title: 'CELL COUNT', field: 'CELL_COUNT' },
-        { title: 'BSC NAME', field: 'BSC_NAME' },
-        { title: 'BCF', field: 'BCF' },
-        { title: 'TRX Count', field: 'TRX_Count' },
-        { title: 'PRE ALARM', field: 'PRE_ALARM' },
-        { title: 'GPS IP CLK', field: 'GPS_IP_CLK' },
-        { title: 'RET', field: 'RET' },
-        { title: 'POST VSWR', field: 'POST_VSWR' },
-        { title: 'POST Alarms', field: 'POST_Alarms' },
-        { title: 'Activity Mode (SA/NSA)', field: 'Activity_Mode' },
-        { title: 'Activity Type (SIWA)', field: 'Activity_Type_SIWA' },
-        { title: 'Band (SIWA)', field: 'Band_SIWA' },
-        { title: 'CELL STATUS', field: 'CELL_STATUS' },
-        { title: 'CTR STATUS', field: 'CTR_STATUS' },
-        { title: 'Integration Remark', field: 'Integration_Remark' },
-        { title: 'T2T4R', field: 'T2T4R' },
-        { title: 'BBU TYPE', field: 'BBU_TYPE' },
-        { title: 'BB CARD', field: 'BB_CARD' },
-        { title: 'RRU Type', field: 'RRU_Type' },
-        { title: 'Media Status', field: 'Media_Status' },
-        { title: 'Mplane IP', field: 'Mplane_IP' },
-        { title: 'SCF PREPARED_BY', field: 'SCF_PREPARED_BY' },
-        { title: 'SITE INTEGRATE_BY', field: 'SITE_INTEGRATE_BY' },
-        { title: 'Site Status', field: 'Site_Status' },
-        {
-            title: 'External Alarm Confirmation',
-            field: 'External_Alarm_Confirmation'
-        },
-        { title: 'SOFT AT STATUS', field: 'SOFT_AT_STATUS' },
-        { title: 'LICENCE Status', field: 'LICENCE_Status' },
-        { title: 'ESN NO', field: 'ESN_NO' },
-        {
-            title: 'Responsibility_for_alarm_clearance',
-            field: 'Responsibility_for_alarm_clearance'
-        },
-        { title: 'TAC', field: 'TAC' },
-        { title: 'PCI TDD 20', field: 'PCI_TDD_20' },
-        { title: 'PCI TDD 10/20', field: 'PCI_TDD_10_20' },
-        { title: 'PCI FDD 2100', field: 'PCI_FDD_2100' },
-        { title: 'PCI FDD 1800', field: 'PCI_FDD_1800' },
-        { title: 'PCI L900', field: 'PCI_L900' },
-        { title: '5G PCI', field: 'PCI_5G' },
-        { title: 'RSI TDD 20', field: 'RSI_TDD_20' },
-        { title: 'RSI TDD 10/20', field: 'RSI_TDD_10_20' },
-        { title: 'RSI FDD 2100', field: 'RSI_FDD_2100' },
-        { title: 'RSI FDD 1800', field: 'RSI_FDD_1800' },
-        { title: 'RSI L900', field: 'RSI_L900' },
-        { title: '5G RSI', field: 'RSI_5G' },
-        { title: 'GPL', field: 'GPL' },
-        { title: 'Pre/Post Check', field: 'Pre_Post_Check' },
-        { title: 'CRQ', field: 'CRQ' },
-        { title: 'Customer Approval', field: 'Customer_Approval' },
-        { title: 'Allocated Tech.', field: 'Allocated_Tech' },
-        { title: 'Deployed Tech.', field: 'Deployed_Tech' },
-        { title: 'Old Site ID', field: 'Old_Site_ID' },
-        { title: 'Old Site Tech', field: 'Old_Site_Tech' },
+        const workbook = new ExcelJS.Workbook();
+        const sheet = workbook.addWorksheet("Monthly Progress", {
+            properties: { tabColor: { argb: 'f1948a' } }
+        });
 
-    ]
+        // --------------------------
+        // 1️⃣ Create dynamic columns
+        // --------------------------
+        const baseColumns = [
+            { header: "Milestone Track/Site Count", key: "milestone", width: 30 }
+        ];
 
-    // handleExport Range wise table in excel formet.........
-    // const handleExport = () => {
-    //     var csvBuilder = new CsvBuilder(`Date_Wise_Integration_Tracker.csv`)
-    //         .setColumns(columnData.map(item => item.title))
-    //         .addRows(data?.download_data.map(row => columnData.map(col => row[col.field])))
-    //         .exportFile();
-    // }
+        const weekColumns = weekArray.map((week, i) => ({
+            header: week,
+            key: `Week${i + 1}`,
+            width: 15
+        }));
 
-    // ********** Filter Dialog Box **********//
-    const filterDialog = useCallback(() => {
-        return (
-            <Dialog
-                open={open}
-                // onClose={handleClose}
-                keepMounted
-                fullWidth
-                maxWidth={'md'}
-                style={{ zIndex: 5 }}
-            >
-                <DialogTitle>Cell Name Table <span style={{ float: 'right' }}><IconButton size="large" onClick={handleClose}><CloseIcon /></IconButton></span></DialogTitle>
+        sheet.columns = [...baseColumns, ...weekColumns];
 
-                <DialogContent >
-                    <TableContainer sx={{ maxHeight: 450, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} component={Paper}>
+        // --------------------------
+        // 2️⃣ Insert rows dynamically
+        // --------------------------
+        tableData.forEach((item) => {
+            let rowData = {
+                milestone: item["Milestone Track/Site Count"]
+            };
 
-                        <table style={{ width: "100%", border: "1px solid black", borderCollapse: 'collapse', overflow: 'auto' }} >
+            weekArray.forEach((week, index) => {
+                rowData[`Week${index + 1}`] = item[`Month_Week-${index + 1}`];
+            });
 
-                            <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
-                                <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Circle</th>
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Short Name</th>
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{mainDataT2?.current_date}</th>
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>{mainDataT2?.previous_date}</th>
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Site Priority</th>
-                                    <th style={{ padding: '5px 20px', whiteSpace: 'nowrap' }}>Delta</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {mainDataT2?.data?.map((item) => (
-                                    <tr className={classes.hover} style={{ textAlign: "center", fontWeigth: 700 }}>
-                                        <th>{item.Circle}</th>
-                                        <th>{item.Short_name}</th>
-                                        <th>{item.current_date}</th>
-                                        <th>{item.previous_date}</th>
-                                        <th>{item.del_value.toUpperCase()}</th>
-                                        <th>{item.delta}</th>
-                                    </tr>
-                                ))}
-                            </tbody>
+            sheet.addRow(rowData);
+        });
 
+        // --------------------------
+        // 3️⃣ Excel Styling
+        // --------------------------
+        sheet.eachRow((row, rowNumber) => {
+            row.eachCell((cell) => {
 
-                        </table>
-                    </TableContainer>
+                // Borders
+                cell.border = {
+                    top: { style: 'thin' },
+                    left: { style: 'thin' },
+                    bottom: { style: 'thin' },
+                    right: { style: 'thin' }
+                };
 
-                </DialogContent>
-            </Dialog>
-        )
-    }, [mainDataT2, open])
+                // Alignment
+                cell.alignment = { vertical: 'middle', horizontal: 'center' };
+
+                // Header row styling
+                if (rowNumber === 1) {
+                    cell.fill = {
+                        type: 'pattern',
+                        pattern: 'solid',
+                        fgColor: { argb: '223354' }
+                    };
+                    cell.font = {
+                        color: { argb: 'FFFFFF' },
+                        bold: true,
+                        size: 13,
+                    };
+                }
+            });
+        });
+
+        // --------------------------
+        // 4️⃣ Download Excel
+        // --------------------------
+        const buffer = await workbook.xlsx.writeBuffer();
+
+        const blob = new Blob([buffer], {
+            type: "application/vnd.openxmlformats-officedocument.spreadsheet.sheet",
+        });
+
+        const url = window.URL.createObjectURL(blob);
+        const anchor = document.createElement("a");
+        anchor.href = url;
+        anchor.download = "Monthly_Progress-RFAI_to_MS1_Waterfall.xlsx";
+        anchor.click();
+        window.URL.revokeObjectURL(url);
+    };
 
     const ClickDataGet = async (props) => {
         // console.log('aaaaaaaa', props)
@@ -332,7 +285,7 @@ const WeekWise = () => {
             const temp = JSON.parse(responce.data)
 
             dispatch({ type: 'RELOCATION_FINAL_TRACKER', payload: { temp } })
-            navigate(`/tools/relocation_tracking/waterfall/${props.milestone}`)
+            navigate(`/tools/relocation_tracking/rfai_to_ms1_waterfall/${props.milestone}`)
         }
         else {
             action(false)
@@ -353,7 +306,7 @@ const WeekWise = () => {
 
                     <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', alignContent: 'center' }}>
                         <Box style={{ fontSize: 22, fontWeight: 'bold' }}>
-                            Monthly Progress - RFAI to MS1 Waterfall
+                            Monthly Progress - MS1 to MS2 Waterfall
                         </Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', gap: 1 }}>
                             <FormControl sx={{ minWidth: 100, maxWidth: 100 }} size="small">
@@ -367,6 +320,7 @@ const WeekWise = () => {
                                     onChange={handleMonthChange}
                                     size="small"
                                     type="month"
+                                    InputLabelProps={{ shrink: true }}
                                 />
                             </FormControl>
                             <FormControl sx={{ minWidth: 100, maxWidth: 100 }} size="small">
@@ -419,7 +373,8 @@ const WeekWise = () => {
                             <Tooltip title="Download Monthly-RFAI to MS1">
                                 <IconButton
                                     component="a"
-                                    href={downloadExcelData}
+                                    // href={downloadExcelData}
+                                    onClick={handleExport}
                                     download
                                 >
                                     <DownloadIcon fontSize="large" color="primary" />

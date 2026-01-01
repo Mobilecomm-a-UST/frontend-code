@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import {
-  Box, Button, Stack, Breadcrumbs, Link, Typography, Slide,Grid
+  Box, Button, Stack, Breadcrumbs, Link, Typography, Slide, Grid
 } from "@mui/material";
 import {
   Upload as UploadIcon,
@@ -60,7 +60,7 @@ const Mobinate = () => {
   const handleSubmit = async () => {
     const isValid =
       // mobinateDump.length > 0 &&
-      siteList.filename ;
+      siteList.filename;
 
     if (!isValid) {
       setShowError({
@@ -141,16 +141,16 @@ const Mobinate = () => {
                 <Box className={OverAllCss().Front_Box}>
                   <div className={OverAllCss().Front_Box_Hading}>Mobinet Dump Files:</div>
                   <div className={OverAllCss().Front_Box_Select_Button}>
-                      <Grid container rowSpacing={1} columnSpacing={1} direction={{ xs: "column", sm: "column", md: "row" }}>
-                            {showFiles.map((item, index) => (
-                                <Grid item xs={6} key={index}>
-                                    <Box key={item} sx={{ display: "flex", justifyContent: 'flex-start', alignItems: 'center',fontWeight:'bold' }}>
-                                        <TopicIcon sx={{ color: '#FEA405' }} />{item}
-                                    </Box>
-                                </Grid>
-                            ))}
+                    <Grid container rowSpacing={1} columnSpacing={1} direction={{ xs: "column", sm: "column", md: "row" }}>
+                      {showFiles.map((item, index) => (
+                        <Grid item xs={6} key={index}>
+                          <Box key={item} sx={{ display: "flex", justifyContent: 'flex-start', alignItems: 'center', fontWeight: 'bold' }}>
+                            <TopicIcon sx={{ color: '#FEA405' }} />{item}
+                          </Box>
                         </Grid>
-               
+                      ))}
+                    </Grid>
+
                   </div>
                 </Box>
 

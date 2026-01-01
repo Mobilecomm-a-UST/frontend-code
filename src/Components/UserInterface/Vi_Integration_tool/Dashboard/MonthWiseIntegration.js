@@ -50,35 +50,58 @@ const MonthWiseIntegration = ({ onData }) => {
     const [year, setYear] = useState('')
     const [months, setMonths] = useState('')
     const [years, setYears] = useState('')
-    const activityArray = ['DE-GROW', 'MACRO', 'OTHER', 'RELOCATION', 'RET', 'ULS-HPSC', 'UPGRADE', 'MEMTO', 'HT-INCREMENT', 'IBS', 'IDSC', 'ODSC', 'RECTIFICATION', 'OPERATION', 'RRU UPGRADE', '5G BW UPGRADE', '5G RRU SWAP', '5G SECTOR ADDITION', '5G RELOCATION', 'TRAFFIC SHIFTING', 'RRU SWAP']
-    const { isPending, isFetching, isError, data, error, refetch } = useQuery({
-        queryKey: ['Vi_Integration_month_wise'],
-        queryFn: async () => {
-            action(true)
-            var formData = new FormData()
-            formData.append('month', month)
-            formData.append('year', year)
-            const res = await makePostRequest("ix_tracker_vi/monthwise-integration-data/", formData);
-            if (res) {
-                action(false)
-                setMonths(res.latest_months)
-                setYears(res.latest_year)
-                ShortDate(res.latest_months, res.latest_year)
-                setTableData(JSON.parse(res.table_data))
-                // console.log('test data month', JSON.parse(res.table_data))
-                onData(res)
-                return res;
-            }
-            else {
-                action(false)
-            }
-        },
-        staleTime: 100000,
-        refetchOnReconnect: false,
-    })
+    const [fullData, setFullData] = useState([])
+    const activityArray = ['DE-GROW', 'MACRO', 'OTHER', 'RELOCATION', 'RET', 'ULS-HPSC', 'UPGRADE', 'MEMTO', 'HT-INCREMENT', 'IBS', 'IDSC', 'ODSC', 'RECTIFICATION', 'OPERATION', 'RRU UPGRADE', '5G BW UPGRADE', '5G RRU SWAP', '5G SECTOR ADDITION', '5G RELOCATION', 'TRAFFIC SHIFTING', 'RRU SWAP', 'FR COUNT', '2G HOTO OFFERED COUNT', '2G HOTO ACCEPTED COUNT', '4G HOTO OFFERED COUNT', '4G HOTO ACCEPTED COUNT']
+  
+    // const { isPending, isFetching, isError, data, error, refetch } = useQuery({
+    //     queryKey: ['vi_Integration_month_wise'],
+    //     queryFn: async () => {
+    //         action(isPending)
+    //         var formData = new FormData()
+    //         formData.append('month', month)
+    //         formData.append('year', year)
+    //         const res = await makePostRequest("ix_tracker_vi/monthwise-integration-data/", formData);
+    //         if (res) {
+    //             action(false)
+    //             setMonths(res.latest_months)
+    //             setYears(res.latest_years)
+    //             ShortDate(res.latest_months, res.latest_years)
+    //             setTableData(JSON.parse(res.table_data))
+    //             // console.log('test data month',res, JSON.parse(res.table_data))
+    //             onData(res)
+    //             return res;
+    //         }
+    //         else {
+    //             action(false)
+    //         }
+    //     },
+    //     staleTime: 100000,
+    //     refetchOnReconnect: false,
+    // })
 
+    const fetchMonthWiseDashboard = async () => {
+        action(true)
+        var formData = new FormData()
+        formData.append('month', month)
+        formData.append('year', year)
+        const res = await makePostRequest("ix_tracker_vi/monthwise-integration-data/", formData);
+        if (res) {
+            action(false)
+            setMonths(res.latest_months)
+            setYears(res.latest_years)
+            ShortDate(res.latest_months, res.latest_years)
+            setTableData(JSON.parse(res.table_data))
+            setFullData(res.download_data)
+            // console.log('test data month',res, JSON.parse(res.table_data))
+            onData(res)
+            return res;
+        }
+        else {
+            action(false)
+        }
+    }
 
-    // console.log('temp month wise',data)
+    // console.log('temp month wise',monthArray,months,years)
 
 
     const calculateColumnTotals = (datass) => {
@@ -104,6 +127,11 @@ const MonthWiseIntegration = ({ onData }) => {
             M1_5G_RELOCATION: 0,
             M1_TRAFFIC_SHIFTING: 0,
             M1_RRU_SWAP: 0,
+            M1_FR_Date: 0,
+            M1_HOTO_Offered_2g: 0,
+            M1_HOTO_Accepted_2g: 0,
+            M1_HOTO_Offered_4g: 0,
+            M1_HOTO_Accepted_4g: 0,
             M2_DE_GROW: 0,
             M2_MACRO: 0,
             M2_OTHERS: 0,
@@ -125,6 +153,11 @@ const MonthWiseIntegration = ({ onData }) => {
             M2_5G_RELOCATION: 0,
             M2_TRAFFIC_SHIFTING: 0,
             M2_RRU_SWAP: 0,
+            M2_FR_Date: 0,
+            M2_HOTO_Offered_2g: 0,
+            M2_HOTO_Accepted_2g: 0,
+            M2_HOTO_Offered_4g: 0,
+            M2_HOTO_Accepted_4g: 0,
             M3_DE_GROW: 0,
             M3_MACRO: 0,
             M3_OTHERS: 0,
@@ -145,7 +178,12 @@ const MonthWiseIntegration = ({ onData }) => {
             M3_5G_SECTOR_ADDITION: 0,
             M3_5G_RELOCATION: 0,
             M3_TRAFFIC_SHIFTING: 0,
-            M3_RRU_SWAP: 0
+            M3_RRU_SWAP: 0,
+            M3_FR_Date: 0,
+            M3_HOTO_Offered_2g: 0,
+            M3_HOTO_Accepted_2g: 0,
+            M3_HOTO_Offered_4g: 0,
+            M3_HOTO_Accepted_4g: 0
 
         };
 
@@ -259,7 +297,7 @@ const MonthWiseIntegration = ({ onData }) => {
         await setYear(dates.$y)
         // console.log('dates month year', dates)
 
-        await refetch()
+        // await refetch()
     }
 
 
@@ -333,7 +371,7 @@ const MonthWiseIntegration = ({ onData }) => {
         { title: 'CRQ', field: 'CRQ' },
         { title: 'Customer Approval', field: 'Customer_Approval' },
         { title: 'FR Date.', field: 'FR_Date' },
-       { title: '4G HOTO Offered Date.', field: 'HOTO_Offered_Date_4g' },
+        { title: '4G HOTO Offered Date.', field: 'HOTO_Offered_Date_4g' },
         { title: '4G HOTO Accepted Date.', field: 'HOTO_Accepted_Date_4g' },
         { title: '2G HOTO Offered Date.', field: 'HOTO_Offered_Date_2g' },
         { title: '2G HOTO Accepted Date.', field: 'HOTO_Accepted_Date_2g' },
@@ -343,20 +381,23 @@ const MonthWiseIntegration = ({ onData }) => {
     const handleExport = () => {
         var csvBuilder = new CsvBuilder(`VI_Month_Wise_Integration_Tracker.csv`)
             .setColumns(columnData.map(item => item.title))
-            .addRows(data?.download_data.map(row => columnData.map(col => row[col.field])))
+            .addRows(fullData?.map(row => columnData.map(col => row[col.field])))
             .exportFile();
     }
 
+    // useEffect(() => {
+    //     if (data) {
+    //         setMonths(data.latest_months)
+    //         setYears(data.latest_year)
+    //         ShortDate(data.latest_months, data.latest_year)
+    //         setTableData(JSON.parse(data.table_data))
+    //         onData(data)
+    //     }
+    //     // setTotals(calculateColumnTotals(tableData))
+    // }, [])
     useEffect(() => {
-        if (data) {
-            setMonths(data.latest_months)
-            setYears(data.latest_year)
-            ShortDate(data.latest_months, data.latest_year)
-            setTableData(JSON.parse(data.table_data))
-            onData(data)
-        }
-        // setTotals(calculateColumnTotals(tableData))
-    }, [])
+       fetchMonthWiseDashboard();
+    }, [month,year])
     return (
         <>
             <style>{"th{border:1px solid black;}"}</style>
@@ -414,7 +455,7 @@ const MonthWiseIntegration = ({ onData }) => {
                                         <th colSpan='7' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: "#DD761C" }}>{monthArray[1]}</th>
                                         <th colSpan='7' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#03AED2' }}>{monthArray[0]}</th> */}
                                         {monthArray?.map((item, index) => index < 3 && (
-                                            <th colSpan='21' key={index} style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: headerColor[index] }}>{monthNames[item.month]}-{item.year}</th>
+                                            <th colSpan='26' key={index} style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: headerColor[index] }}>{monthNames[item.month]}-{item.year}</th>
                                         ))}
                                     </tr>
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
@@ -430,11 +471,10 @@ const MonthWiseIntegration = ({ onData }) => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {tableData?.map((it) => {
+                                    {tableData?.map((it, index) => {
                                         return (
-                                            <tr className={classes.hover} style={{ textAlign: "center", fontWeigth: 700 }}>
+                                            <tr className={classes.hover} key={index} style={{ textAlign: "center", fontWeigth: 700 }}>
                                                 <th style={{ position: 'sticky', left: 0, top: 0, backgroundColor: 'rgb(197 214 246)', color: 'black' }}>{it?.cir}</th>
-
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'DE-GROW' })}>{it?.M1_DE_GROW}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'MACRO' })}>{it?.M1_MACRO}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'OTHERS' })}>{it?.M1_OTHERS}</th>
@@ -456,6 +496,11 @@ const MonthWiseIntegration = ({ onData }) => {
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: '5G RELOCATION' })}>{it?.M1_5G_RELOCATION}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'TRAFFIC SHIFTING' })}>{it?.M1_TRAFFIC_SHIFTING}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'RRU SWAP' })}>{it?.M1_RRU_SWAP}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'FR_Date' })}>{it?.M1_FR_Date}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'HOTO_Offered_2g' })}>{it?.M1_HOTO_Offered_2g}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'HOTO_Accepted_2g' })}>{it?.M1_HOTO_Accepted_2g}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'HOTO_Offered_4g' })}>{it?.M1_HOTO_Offered_4g}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'HOTO_Accepted_4g' })}>{it?.M1_HOTO_Accepted_4g}</th>
 
 
 
@@ -480,6 +525,11 @@ const MonthWiseIntegration = ({ onData }) => {
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: '5G RELOCATION' })}>{it?.M2_5G_RELOCATION}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: 'TRAFFIC SHIFTING' })}>{it?.M2_TRAFFIC_SHIFTING}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'RRU SWAP' })}>{it?.M2_RRU_SWAP}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'FR_Date' })}>{it?.M2_FR_Date}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'HOTO_Offered_2g' })}>{it?.M2_HOTO_Offered_2g}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'HOTO_Accepted_2g' })}>{it?.M2_HOTO_Accepted_2g}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'HOTO_Offered_4g' })}>{it?.M2_HOTO_Offered_4g}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'HOTO_Accepted_4g' })}>{it?.M2_HOTO_Accepted_4g}</th>
 
 
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: 'DE-GROW' })}>{it?.M3_DE_GROW}</th>
@@ -503,6 +553,11 @@ const MonthWiseIntegration = ({ onData }) => {
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: '5G RELOCATION' })}>{it?.M3_5G_RELOCATION}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[2], yea: years[2], circle: it?.cir, activity: 'TRAFFIC SHIFTING' })}>{it?.M3_TRAFFIC_SHIFTING}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'RRU SWAP' })}>{it?.M3_RRU_SWAP}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'FR_Date' })}>{it?.M3_FR_Date}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'HOTO_Offered_2g' })}>{it?.M3_HOTO_Offered_2g}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'HOTO_Accepted_2g' })}>{it?.M3_HOTO_Accepted_2g}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'HOTO_Offered_4g' })}>{it?.M3_HOTO_Offered_4g}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'HOTO_Accepted_4g' })}>{it?.M3_HOTO_Accepted_4g}</th>
 
 
                                             </tr>
@@ -522,7 +577,7 @@ const MonthWiseIntegration = ({ onData }) => {
 
                 </div>
             </Slide>
-            {filterDialog()}
+            {/* {filterDialog()} */}
             {loading}
         </>
     )
