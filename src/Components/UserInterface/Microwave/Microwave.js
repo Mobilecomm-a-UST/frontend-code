@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Box } from '@mui/material'
 import { Grid } from '@mui/material'
 import { Sidenav, Nav } from 'rsuite';
-
+import DashboardIcon from '@rsuite/icons/Dashboard';
 import { useNavigate } from 'react-router-dom'
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
@@ -13,6 +13,7 @@ import ChangeListIcon from '@rsuite/icons/ChangeList';
 
 const MicrowaveTool = lazy(() => import('./MicrowaveTool'))
 const MicrowaveAVIATUpload = lazy(() => import('./MicrowaveAVIAT/MicrowaveAVIATUpload'))
+const MicrowaveAviatTable = lazy(()=>import('./MicrowaveTable/MicrowaveAviatTable'))
 
 const Microwave = () => {
       const [expanded, setExpanded] = useState(true);
@@ -94,6 +95,9 @@ const Microwave = () => {
                                             <Nav.Item eventKey="2" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/microwave_soft_at/microwave_aviat_upload'); show(); setMenuButton(true) }}>
                                                 Step 1: Microwave(AVIAT)
                                             </Nav.Item>
+                                               <Nav.Item eventKey="3" placement="rightStart" icon={<DashboardIcon />} onClick={() => { navigate('/tools/microwave_soft_at/microwave_aviat_table'); show(); setMenuButton(true) }}>
+                                                Microwave(AVIAT) Dashboard
+                                            </Nav.Item>
                                             {/* <Nav.Item eventKey="3" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/CATS'); show(); setMenuButton(true) }}>
                                                 Step 2: CATS
                                             </Nav.Item>
@@ -119,6 +123,7 @@ const Microwave = () => {
                             <Routes>
                                 <Route element={<MicrowaveTool />} path="/" />
                                 <Route element={<MicrowaveAVIATUpload />} path="/microwave_aviat_upload" />
+                                <Route element={<MicrowaveAviatTable />} path="/microwave_aviat_table" />
                             
 
 

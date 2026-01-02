@@ -40,10 +40,11 @@ const MicrowaveAVIATUpload = () => {
   
   
     const updateFile = (event, setFileState, errorKey) => {
-      const file = event.target.files[0];
+      const file = event.target.files;
+      console.log('file length ',  file, file.length)
       if (file) {
         setShowError((prev) => ({ ...prev, [errorKey]: false }));
-        setFileState({ filename: file.name, bytes: file });
+        setFileState({ filename: file.length, bytes: file });
       }
     };
   
@@ -65,9 +66,19 @@ const MicrowaveAVIATUpload = () => {
       // Array.from(mobinateDump).forEach((file) => {
       //   formData.append("log_files", file);
       // });
-      formData.append("link_buget_file", budget_File.bytes);
-      formData.append("link_report_file", report_File.bytes);
-      formData.append("radio_report_file", radio_File.bytes);
+       for (let i = 0; i < budget_File.length; i++) {
+            formData.append("link_buget_file", budget_File.bytes[i]);
+       }
+       for(let j=0;j<report_File.length;j++){
+              formData.append("link_report_file", report_File.bytes[j]);
+       }
+       for(let k=0;k<radio_File.length;k++){
+        
+        formData.append("radio_report_file", radio_File.bytes[k]);
+       }
+
+  
+
 
       const response = await postData("mw_app/microwave/", formData);
       action(false);
@@ -106,7 +117,7 @@ const MicrowaveAVIATUpload = () => {
         <Breadcrumbs separator={<KeyboardArrowRightIcon fontSize="small" />}>
           <Link underline="hover" onClick={() => navigate("/tools")}>Tools</Link>
           <Link underline="hover" onClick={() => navigate("/tools/microwave_soft_at")}>Microwave Soft_At</Link>
-          <Typography color="text.primary">Mobinet</Typography>
+          <Typography color="text.primary">Microwave(AVIAT)</Typography>
         </Breadcrumbs>
       </Box>
 
@@ -114,7 +125,7 @@ const MicrowaveAVIATUpload = () => {
         <Box>
           <Box className={classes.main_Box}>
             <Box className={classes.Back_Box} sx={{ width: { md: "75%", xs: "100%" } }}>
-              <Box className={classes.Box_Hading}>Make Mobinet Summary</Box>
+              <Box className={classes.Box_Hading}>Make Microwave(AVIAT) Summary</Box>
 
               <Stack spacing={2} sx={{ mt: "-40px" }}>
   
@@ -167,7 +178,7 @@ const MicrowaveAVIATUpload = () => {
                   startIcon={<FileDownloadIcon sx={{ fontSize: 30, color: "green" }} />}
                   sx={{ mt: 2, textTransform: "none", fontWeight: 800, fontSize: "22px", fontFamily: "Poppins" }}
                 >
-                  Mobinet Report
+                 Download Microwave(AVIAT) Report
                 </Button>
               </a>
             </Box>
@@ -180,7 +191,7 @@ const MicrowaveAVIATUpload = () => {
   )
 }
 
-const UploadSection = ({ label, color, onChange, error, multiple = false, selectedText }) => {
+const UploadSection = ({ label, color, onChange, error, multiple = true, selectedText }) => {
   return (
     <Box className={OverAllCss().Front_Box}>
       <div className={OverAllCss().Front_Box_Hading}>{label}:</div>
@@ -198,7 +209,7 @@ const UploadSection = ({ label, color, onChange, error, multiple = false, select
         </Button>
         {selectedText && (
           <span style={{ color: "green", fontSize: 18, fontWeight: 600, marginLeft: 10 }}>
-            {selectedText}
+          No. of Files  {selectedText}
           </span>
         )}
         {error && (
