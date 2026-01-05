@@ -170,10 +170,8 @@ const MicrowaveAviatTable = () => {
  
     const handleDownloadFile = async () => {
         const res = await getData('mw_app/get_delete/');
- 
         if (res?.file_url) {
             const downloadExcelFilelink = res.file_url;
- 
             // 🔽 Auto download
             const link = document.createElement('a');
             link.href = downloadExcelFilelink;

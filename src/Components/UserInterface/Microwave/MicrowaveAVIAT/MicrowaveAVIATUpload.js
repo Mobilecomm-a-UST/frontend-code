@@ -66,13 +66,13 @@ const MicrowaveAVIATUpload = () => {
       // Array.from(mobinateDump).forEach((file) => {
       //   formData.append("log_files", file);
       // });
-       for (let i = 0; i < budget_File.length; i++) {
+       for (let i = 0; i < budget_File.bytes.length; i++) {
             formData.append("link_buget_file", budget_File.bytes[i]);
        }
-       for(let j=0;j<report_File.length;j++){
+       for(let j=0;j<report_File.bytes.length;j++){
               formData.append("link_report_file", report_File.bytes[j]);
        }
-       for(let k=0;k<radio_File.length;k++){
+       for(let k=0;k<radio_File.bytes.length;k++){
         
         formData.append("radio_report_file", radio_File.bytes[k]);
        }
