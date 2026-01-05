@@ -26,15 +26,15 @@ import Swal from "sweetalert2";
 import 'rsuite/dist/rsuite.min.css';
 import axios from 'axios';
 import { constant } from 'lodash';
-
-
-
-
+ 
+ 
+ 
+ 
 const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues }) => {
     const handleChange = (event) => {
         const { value } = event.target;
         const selected = typeof value === 'string' ? value.split(',') : value;
-
+ 
         if (selected.includes('ALL')) {
             if (selectedValues.length === options.length) {
                 setSelectedValues([]);
@@ -45,9 +45,9 @@ const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues 
             setSelectedValues(selected);
         }
     };
-
+ 
     const isAllSelected = options.length > 0 && selectedValues.length === options.length;
-
+ 
     return (
         <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
             <InputLabel id={`${label}-label`}>{label}</InputLabel>
@@ -68,7 +68,7 @@ const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues 
                     />
                     <ListItemText primary="Select All" />
                 </MenuItem>
-
+ 
                 {options.map((name) => (
                     <MenuItem key={name} value={name}>
                         <Checkbox checked={selectedValues.includes(name)} />
@@ -80,7 +80,7 @@ const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues 
     );
 };
 const CircleList = ['AP', 'ASM', 'BIH', 'CHN', 'DEL', 'HRY', 'JK', 'JRK', 'KK', 'KOL', 'MAH', 'MP', 'MUM', 'NE', 'ORI', 'PUN', 'RAJ', 'ROTN', 'UPE', 'UPW', 'WB']
-
+ 
 const MicrowaveAviatTable = () => {
     const navigate = useNavigate();
     const classes = useStyles()
@@ -92,7 +92,7 @@ const MicrowaveAviatTable = () => {
         circle: '',
         equipment_make: ''
     })
-
+ 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormTabel((prev) => ({
@@ -100,28 +100,28 @@ const MicrowaveAviatTable = () => {
             [name]: value,
         }));
     }
-
-
+ 
+ 
     const fetchMicrowaveDashboard = async () => {
-
+ 
         action(true);
         const formData = new FormData();
         formData.append("site_id", formTable.site_id);
         formData.append("circle", formTable.circle);
         formData.append("equipment_make", formTable.equipment_make);
-
+ 
         const response = await makePostRequest("mw_app/get_table/", formData);
-
+ 
         action(false);
         if (response.status) {
             setTableData(response.data)
-
+ 
             Swal.fire({ icon: "success", title: "Done", text: response.message });
         } else {
             Swal.fire({ icon: "error", title: "Oops...", text: response.message });
         }
     }
-
+ 
     const handleDeleteTable = async () => {
         const result = await Swal.fire({
             title: "Are you sure?",
@@ -131,7 +131,7 @@ const MicrowaveAviatTable = () => {
             confirmButtonText: "Yes, delete it!",
             cancelButtonText: "Cancel"
         });
-
+ 
         if (result.isConfirmed) {
             try {
                 const res = await axios.delete(
@@ -142,7 +142,7 @@ const MicrowaveAviatTable = () => {
                         }
                     }
                 );
-
+ 
                 // ✅ Check status from API
                 if (res?.data?.status === true) {
                     Swal.fire({
@@ -157,7 +157,7 @@ const MicrowaveAviatTable = () => {
                         text: res?.data?.message || "Delete operation failed."
                     });
                 }
-
+ 
             } catch (error) {
                 Swal.fire({
                     icon: "error",
@@ -167,13 +167,13 @@ const MicrowaveAviatTable = () => {
             }
         }
     };
-
+ 
     const handleDownloadFile = async () => {
-        const res = await getData('mw_app/get_delete');
-
+        const res = await getData('mw_app/get_delete/');
+ 
         if (res?.file_url) {
             const downloadExcelFilelink = res.file_url;
-
+ 
             // 🔽 Auto download
             const link = document.createElement('a');
             link.href = downloadExcelFilelink;
@@ -183,14 +183,14 @@ const MicrowaveAviatTable = () => {
             document.body.removeChild(link);
         }
     };
-
-
+ 
+ 
     const handleSubmitSite = (e) => {
         e.preventDefault()
         fetchMicrowaveDashboard()
     }
-
-
+ 
+ 
     useEffect(() => {
         fetchMicrowaveDashboard()
         const title = window.location.pathname
@@ -200,7 +200,7 @@ const MicrowaveAviatTable = () => {
             .toUpperCase();
         document.title = title;
     }, []);
-
+ 
     return (
         <>
             <style>{"th{border:1px solid black;}"}</style>
@@ -211,21 +211,21 @@ const MicrowaveAviatTable = () => {
                     <Typography color="text.primary">Microwave(AVIAT) Dashboard</Typography>
                 </Breadcrumbs>
             </Box>
-
-
-
+ 
+ 
+ 
             <Slide direction="left" in='true' timeout={700} style={{ transformOrigin: '1 1 1' }}>
                 <div style={{ margin: 20 }}>
-
+ 
                     {/* ************* 2G  TABLE DATA ************** */}
                     <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', alignContent: 'center' }}>
                         <Box style={{ fontSize: 22, fontWeight: 'bold' }}>
                             Microwave (AVIAT) Dashboard
                         </Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', gap: 1 }}>
-
+ 
                             <form onSubmit={handleSubmitSite} style={{ display: 'flex', justifyContent: 'center', gap: 5 }}>
-
+ 
                                 <FormControl size="small" sx={{ minWidth: 120 }}>
                                     <InputLabel id="issue-label">Circle</InputLabel>
                                     <Select
@@ -244,7 +244,7 @@ const MicrowaveAviatTable = () => {
                                 <TextField size='small' placeholder='Equipment Make' label="Equipment Make" name='equipment_make' value={formTable.equipment_make} onChange={handleChange} />
                                 <Button type='submit' sx={{ backgroundColor: '#223354' }} variant='contained'>Filter</Button>
                             </form>
-
+ 
                             {/* <FormControl sx={{ minWidth: 100, maxWidth: 100 }} size="small">
                                         <InputLabel id="demo-select-small-label">View</InputLabel>
                                         <Select
@@ -256,13 +256,13 @@ const MicrowaveAviatTable = () => {
                                         >
                                             <MenuItem value="Cumulative">Cumulative</MenuItem>
                                             <MenuItem value="Non-cumulative">Non-cumulative</MenuItem>
-
+ 
                                         </Select>
                                     </FormControl> */}
-
-
-
-
+ 
+ 
+ 
+ 
                             <Tooltip title="Download Microwave(AVIAT) Dashboard">
                                 <IconButton
                                     component="a"
@@ -285,151 +285,133 @@ const MicrowaveAviatTable = () => {
                             </Tooltip>
                         </Box>
                     </Box>
-
+ 
                     <Box sx={{ marginTop: 0 }}>
-                        <TableContainer sx={{ maxHeight: 600, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} component={Paper}>
+                        <TableContainer sx={{ maxHeight:600, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} component={Paper}>
                             <table style={{ width: "100%", border: "1px solid black", borderCollapse: 'collapse', overflow: 'auto' }} >
-                                <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
+                                <thead style={{ position: 'sticky', top: 0, zIndex: 1 ,height:'60px'}}>
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
-
-                                        <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', position: 'sticky', left: 0, top: 0, backgroundColor: '#223354' }}>
-                                            Circle
+ 
+                                        <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', position: 'sticky', left: 0, top: 0, backgroundColor: '#223354' }}> Circle </th>
+ 
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' ,width: '300px',minWidth: '300px',maxWidth: '300px',textAlign:'center'}}>Reference-Key
+                                        </th>    
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff', width: '250px',minWidth: '250px',maxWidth: '250px',textAlign:'center'}}>SiteID
                                         </th>
-
-                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#FFF', color: 'black' }}>
-                                            Reference Key
-                                        </th>
-
-                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#FFF', color: 'black' }}>
-                                            Site ID
-                                        </th>
-
-                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#FFF', color: 'black' }}>
-                                            Equipment Make
-                                        </th>
-
-                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#FFF', color: 'black' }}>
-                                            Bandwidth (MHz)
-                                        </th>
-
-                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#FFF', color: 'black' }}>
-                                            TX Frequency
-                                        </th>
-
-                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#FFF', color: 'black' }}>
-                                            RX Frequency
-                                        </th>
-
-                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#FFF', color: 'black' }}>
-                                            ACM Status
-                                        </th>
-
-                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#FFF', color: 'black' }}>
-                                            ATPC Status
-                                        </th>
-
-                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#FFF', color: 'black' }}>
-                                            RSL Min
-                                        </th>
-
-                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#FFF', color: 'black' }}>
-                                            RSL Max
-                                        </th>
-
-                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#FFF', color: 'black' }}>
-                                            Site A RSL
-                                        </th>
-
-                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#FFF', color: 'black' }}>
-                                            Site Z RSL
-                                        </th>
-
-                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#FFF', color: 'black' }}>
-                                            Polarization
-                                        </th>
-
-                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#FFF', color: 'black' }}>
-                                            Remark
-                                        </th>
-
-                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#FFF', color: 'black' }}>
-                                            Created At
-                                        </th>
-
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Equipment Make</th>
+                                        <th style={{padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff', width: '200px',minWidth: '200px',maxWidth: '200px',textAlign:'center'}}>Plan ID</th>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Polarization</th>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site ID - A</th>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Tx Frequency (MHz)</th>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>BER 10e-6 Rx Level (dBm)</th>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site ID - B</th>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Rx Frequency (MHz)</th>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Bandwidth (MHz)</th>
+ 
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>ACM Status</th>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>ACM Min QAM</th>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>ACM Max QAM</th>
+ 
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>ATPC Status</th>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>ATPC Min</th>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>ATPC Max</th>
+ 
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>RSL Min (dBm)</th>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>RSL Max (dBm)</th>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Tx Power Max (dBm)</th>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>SNR Min (dB)</th>
+ 
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>XPD Min (dBm)</th>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>XPD Max (dBm)</th>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Polarization (Radio)</th>
+ 
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site A Current RSL</th>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site Z Current RSL</th>
+ 
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>FREQ TX</th>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>FREQ RX</th>
+ 
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site A Modulation Mode</th>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site Z Modulation Mode</th>
+ 
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site A Min Modulation (24h)</th>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site Z Min Modulation (24h)</th>
+ 
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site A Max Modulation (24h)</th>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site Z Max Modulation (24h)</th>
+ 
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site A Min Configured Modulation</th>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site Z Min Configured Modulation</th>
+ 
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site A Max Configured Modulation</th>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site Z Max Configured Modulation</th>
+ 
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>ATPC Status (Link)</th>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' ,width: '450px',minWidth: '450px',maxWidth: '450px',textAlign:'center'}}>Remark</th>
+                                       
                                     </tr>
-                                </thead>
+                                </thead >
+ 
                                 <tbody>
                                     {tableData?.map((it, index) => {
                                         return (
-                                            <tr
-                                                className={classes.hoverRT}
-                                                style={{ textAlign: "center", fontWeigth: 700 }}
-                                                key={index}
-                                            >
-                                                <th style={{ position: 'sticky', left: 0, top: 0, backgroundColor: '#CBCBCB', color: 'black' }}>
-                                                    {it.circle}
-                                                </th>
-
-                                                <th style={{ backgroundColor: '#FFF', color: 'black' }}>
-                                                    {it.reference_key}
-                                                </th>
-
-                                                <th style={{ backgroundColor: '#FFF', color: 'black' }}>
-                                                    {it.site_id}
-                                                </th>
-
-                                                <th style={{ backgroundColor: '#FFF', color: 'black' }}>
-                                                    {it.equipment_make}
-                                                </th>
-
-                                                <th style={{ backgroundColor: '#FFF', color: 'black' }}>
-                                                    {it.bandwidth_mhz}
-                                                </th>
-
-                                                <th style={{ backgroundColor: '#FFF', color: 'black' }}>
-                                                    {it.tx_frequency_mhz}
-                                                </th>
-
-                                                <th style={{ backgroundColor: '#FFF', color: 'black' }}>
-                                                    {it.rx_frequency_mhz}
-                                                </th>
-
-                                                <th style={{ backgroundColor: '#FFF', color: 'black' }}>
-                                                    {it.acm_status}
-                                                </th>
-
-                                                <th style={{ backgroundColor: '#FFF', color: 'black' }}>
-                                                    {it.atpc_status}
-                                                </th>
-
-                                                <th style={{ backgroundColor: '#FFF', color: 'black' }}>
-                                                    {it.rsl_min_dbm}
-                                                </th>
-
-                                                <th style={{ backgroundColor: '#FFF', color: 'black' }}>
-                                                    {it.rsl_max_dbm}
-                                                </th>
-
-                                                <th style={{ backgroundColor: '#FFF', color: 'black' }}>
-                                                    {it.site_a_current_rsl}
-                                                </th>
-
-                                                <th style={{ backgroundColor: '#FFF', color: 'black' }}>
-                                                    {it.site_z_current_rsl}
-                                                </th>
-
-                                                <th style={{ backgroundColor: '#FFF', color: 'black' }}>
-                                                    {it.polarization}
-                                                </th>
-
-                                                <th style={{ backgroundColor: '#FFF', color: 'black' }}>
-                                                    {it.remark}
-                                                </th>
-
-                                                <th style={{ backgroundColor: '#FFF', color: 'black' }}>
-                                                    {it.created_at}
-                                                </th>
-                                            </tr>
+                                            <tr>
+                                        <th style={{ position: 'sticky', left: 0, top: 0, backgroundColor: '#CBCBCB', color: 'black' }}> {it.circle} </th>
+                                        <th style={{ color: 'black' }}>{it.reference_key} </th>
+                                        <th style={{ color: 'black' }}>{it.site_id}</th>
+                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.equipment_make}</th>
+                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.plan_id}</th>
+                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.polarization}</th>
+                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.site_id_a}</th>
+                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.tx_frequency_mhz}</th>
+                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.ber10e6_rx_level_dbm}</th>
+                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.site_id_b}</th>
+                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.rx_frequency_mhz}</th>
+                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.bandwidth_mhz}</th>
+ 
+                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.acm_status}</th>
+                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.acm_min_qam}</th>
+                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.acm_max_qam}</th>
+ 
+                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.atpc_status}</th>
+                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.atpc_min}</th>
+                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.atpc_max}</th>
+ 
+                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.rsl_min_dbm}</th>
+                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.rsl_max_dbm}</th>
+                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.tx_power_max_dbm}</th>
+                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.snr_min_db}</th>
+ 
+                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.xpd_min_dbm}</th>
+                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.xpd_max_dbm}</th>
+                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.polarization_radio}</th>
+ 
+                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.site_a_current_rsl}</th>
+                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.site_z_current_rsl}</th>
+ 
+                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.freq_tx}</th>
+                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.freq_rx}</th>
+ 
+                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.site_a_modulation_mode}</th>
+                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.site_z_modulation_mode}</th>
+ 
+                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.site_a_min_mod_last_24h}</th>
+                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.site_z_min_mod_last_24h}</th>
+ 
+                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.site_a_max_mod_last_24h}</th>
+                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.site_z_max_mod_last_24h}</th>
+ 
+                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.site_a_min_configured_mod}</th>
+                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.site_z_min_configured_mod}</th>
+ 
+                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.site_a_max_configured_mod}</th>
+                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.site_z_max_configured_mod}</th>
+ 
+                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.atpc_status_link}</th>
+                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.remark}</th>
+                                       
+                                    </tr>
+ 
                                         );
                                     })}
                                 </tbody>
@@ -439,10 +421,10 @@ const MicrowaveAviatTable = () => {
                 </div>
             </Slide>
             {loading}
-
-
+ 
+ 
         </>
     )
 }
-
+ 
 export default MicrowaveAviatTable

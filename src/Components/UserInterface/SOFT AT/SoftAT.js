@@ -130,8 +130,8 @@ const SoftAT = () => {
             </Box>
             {/* THIS VIEW FOR PC  */}
             <Box sx={{ display: { xs: 'none', md: 'inherit' } }} >
-              <Box sx={{ position: 'fixed', width: '16.5%' }} >
-                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
+              <Box sx={{ position: 'fixed', width: '16.5%'  }} >
+                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#223354", marginTop: 8, borderRadius: 10,overflow: "scroll", scrollbarWidth: "1px" }}>
                   <Sidenav.Body>
                     <Nav activeKey={activeKey} onSelect={setActiveKey} >
                       <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>Soft AT TOOL</Nav>

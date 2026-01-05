@@ -340,7 +340,7 @@ function App() {
           </Routes>
 
         </Router>
-        <Box sx={{ position: 'fixed',
+        {/* <Box sx={{ position: 'fixed',
            bottom: 0, 
            left: 0,
             zIndex: 100, 
@@ -348,7 +348,7 @@ function App() {
           }}
             >
           <img src="/assets/happy-new-year-2026.png" alt="Happy New Year 2026" style={{ width: "220px", height: "140px" }} />
-        </Box>
+        </Box> */}
 
       </div>
     </QueryClientProvider>

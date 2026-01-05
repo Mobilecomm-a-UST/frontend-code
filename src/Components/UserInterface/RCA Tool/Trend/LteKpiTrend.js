@@ -1353,13 +1353,13 @@ const LteKpiTrend = () => {
                 'MV_CSFB_Redirection_Success_Rate',
                 'MV_CSFB_Redirection_Success_Rate',
                 'MV_CSFB_Redirection_Success_Rate',
-                'UL_RSSI_CDBH',
-                'UL_RSSI_CDBH',
-                'UL_RSSI_CDBH',
-                'UL_RSSI_CDBH',
-                'UL_RSSI_CDBH',
-                'UL_RSSI_CDBH',
-                'UL_RSSI_CDBH',
+                'UL_RSSI_CDBH_NOKIA',
+                'UL_RSSI_CDBH_NOKIA',
+                'UL_RSSI_CDBH_NOKIA',
+                'UL_RSSI_CDBH_NOKIA',
+                'UL_RSSI_CDBH_NOKIA',
+                'UL_RSSI_CDBH_NOKIA',
+                'UL_RSSI_CDBH_NOKIA',
 
             ],
             columnData.map(col => col.title) // Column headers
@@ -1558,7 +1558,8 @@ const LteKpiTrend = () => {
                                         <th colSpan='10'>MV_Packet_Loss_UL</th>
                                         <th colSpan='10'>PS_InterF_HOSR</th>
                                         <th colSpan='10'>MV_CSFB_Redirection_Success_Rate</th>
-                                        <th colSpan='10'>UL_RSSI_CDBH</th>
+                                        <th colSpan='10'>UL_RSSI_CDBH_NOKIA
+                                        </th>
                                     </tr>
                                     <tr style={{ fontSize: 14, backgroundColor: "#223354", color: "white", }}>
                                         {/* MV 4G Data Volume GB */}
