@@ -4,8 +4,6 @@ import { Breadcrumbs, Link, Typography } from "@mui/material";
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { useNavigate } from "react-router-dom";
 import MOS from './MOS';
-import Ms1 from './Ms1';
-import Integration from './Integration';
 import RfaiIntegration from './RfaiIntegration';
 import MOS2 from './MOS2';
 

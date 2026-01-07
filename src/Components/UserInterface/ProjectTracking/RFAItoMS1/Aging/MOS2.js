@@ -17,7 +17,7 @@ import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import { postData } from '../../../../services/FetchNodeServices';
 import 'rsuite/dist/rsuite.min.css';
-import { set } from 'lodash';
+
 
 
 const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues }) => {
