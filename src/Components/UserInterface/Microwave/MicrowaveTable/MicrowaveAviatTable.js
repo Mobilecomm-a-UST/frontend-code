@@ -79,7 +79,7 @@ const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues 
         </FormControl>
     );
 };
-const CircleList = ['AP', 'ASM', 'BIH', 'CHN', 'DEL', 'HRY', 'JK', 'JRK', 'KK', 'KOL', 'MAH', 'MP', 'MUM', 'NE', 'ORI', 'PUN', 'RAJ', 'ROTN', 'UPE', 'UPW', 'WB']
+const CircleList = ['AP', 'AS', 'BIH', 'CHN', 'DL', 'HRY', 'JK', 'JRK', 'KK', 'KOL', 'MH', 'MP', 'MB', 'NE', 'ORI', 'PUN', 'RAJ', 'ROTN', 'UE', 'UPW', 'WB']
  
 const MicrowaveAviatTable = () => {
     const navigate = useNavigate();
@@ -143,7 +143,6 @@ const MicrowaveAviatTable = () => {
                     }
                 );
  
-                // ✅ Check status from API
                 if (res?.data?.status === true) {
                     Swal.fire({
                         icon: "success",
@@ -151,10 +150,11 @@ const MicrowaveAviatTable = () => {
                         text: res?.data?.message || "Data deleted successfully."
                     });
                 } else {
+                    // ✅ API se aane wala authorization error
                     Swal.fire({
                         icon: "error",
-                        title: "Failed",
-                        text: res?.data?.message || "Delete operation failed."
+                        title: "Unauthorized",
+                        text: res?.data?.error || res?.data?.message || "Delete operation failed."
                     });
                 }
  
@@ -162,16 +162,19 @@ const MicrowaveAviatTable = () => {
                 Swal.fire({
                     icon: "error",
                     title: "Error",
-                    text: "Something went wrong while deleting."
+                    text: error?.response?.data?.error || "Something went wrong while deleting."
                 });
             }
         }
     };
  
+ 
     const handleDownloadFile = async () => {
         const res = await getData('mw_app/get_delete/');
+ 
         if (res?.file_url) {
             const downloadExcelFilelink = res.file_url;
+ 
             // 🔽 Auto download
             const link = document.createElement('a');
             link.href = downloadExcelFilelink;
@@ -285,19 +288,19 @@ const MicrowaveAviatTable = () => {
                     </Box>
  
                     <Box sx={{ marginTop: 0 }}>
-                        <TableContainer sx={{ maxHeight:600, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} component={Paper}>
+                        <TableContainer sx={{ maxHeight: 600, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} component={Paper}>
                             <table style={{ width: "100%", border: "1px solid black", borderCollapse: 'collapse', overflow: 'auto' }} >
-                                <thead style={{ position: 'sticky', top: 0, zIndex: 1 ,height:'60px'}}>
+                                <thead style={{ position: 'sticky', top: 0, zIndex: 1, height: '60px' }}>
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
  
                                         <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', position: 'sticky', left: 0, top: 0, backgroundColor: '#223354' }}> Circle </th>
  
-                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' ,width: '300px',minWidth: '300px',maxWidth: '300px',textAlign:'center'}}>Reference-Key
-                                        </th>    
-                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff', width: '250px',minWidth: '250px',maxWidth: '250px',textAlign:'center'}}>SiteID
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff', width: '300px', minWidth: '300px', maxWidth: '300px', textAlign: 'center' }}>Reference-Key
+                                        </th>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff', width: '250px', minWidth: '250px', maxWidth: '250px', textAlign: 'center' }}>SiteID
                                         </th>
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Equipment Make</th>
-                                        <th style={{padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff', width: '200px',minWidth: '200px',maxWidth: '200px',textAlign:'center'}}>Plan ID</th>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff', width: '200px', minWidth: '200px', maxWidth: '200px', textAlign: 'center' }}>Plan ID</th>
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Polarization</th>
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site ID - A</th>
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Tx Frequency (MHz)</th>
@@ -345,71 +348,160 @@ const MicrowaveAviatTable = () => {
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site Z Max Configured Modulation</th>
  
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>ATPC Status (Link)</th>
-                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' ,width: '450px',minWidth: '450px',maxWidth: '450px',textAlign:'center'}}>Remark</th>
-                                       
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff', width: '450px', minWidth: '450px', maxWidth: '450px', textAlign: 'center' }}>Remark</th>
+ 
                                     </tr>
                                 </thead >
  
                                 <tbody>
                                     {tableData?.map((it, index) => {
+ 
+ 
+                                        const toFloat = (val) => (val !== null && val !== undefined && !isNaN(val) ? parseFloat(val) : null);
+ 
+ 
+                                        const condPolarization = it.polarization === it.polarization_radio;
+                                        const condTxFreq = it.tx_frequency_mhz === it.freq_tx || it.tx_frequency_mhz === it.freq_rx;
+                                        const condRxFreq = it.rx_frequency_mhz === it.freq_rx || it.tx_frequency_mhz === it.freq_rx;
+                                        const condTxPower = parseInt(it.atpc_max) === parseInt(it.tx_power_max_dbm);
+ 
+                                        const condAtpcLink = it.atpc_status_link === true || it.atpc_status_link === "true" || it.atpc_status_link === "True" || it.atpc_status_link === 1;
+                                        const atpcDisplay = it.atpc_status_link === null || it.atpc_status_link === undefined || Number.isNaN(it.atpc_status_link) ? "NaN" : condAtpcLink ? "True" : "NaN";
+ 
+ 
+                                        const condSnr = toFloat(it.snr_min_db) > 40;
+ 
+                                        const ber = toFloat(it.ber10e6_rx_level_dbm);
+                                        const rslMin = toFloat(it.rsl_min_dbm);
+                                        const rslMax = toFloat(it.rsl_max_dbm);
+                                        const rslA = toFloat(it.site_a_current_rsl);
+                                        const rslZ = toFloat(it.site_z_current_rsl);
+                                        const condRsl =
+                                            ber !== null &&
+                                            rslMin !== null &&
+                                            rslMax !== null &&
+                                            rslA !== null &&
+                                            rslZ !== null &&
+                                            ber >= rslMin - 3 &&
+                                            ber <= rslMax + 3 &&
+                                            ber >= rslA - 3 &&
+                                            ber <= rslA + 3 &&
+                                            ber >= rslZ - 3 &&
+                                            ber <= rslZ + 3;
+ 
+ 
+                                        const condXpdMin = toFloat(it.xpd_min_dbm);
+                                        const condXpdMax = toFloat(it.xpd_max_dbm);
+                                        const xpdMinColor =
+                                            condXpdMin > 22 && condXpdMin < 35
+                                                ? "#00B050"
+                                                : (20 <= condXpdMin && condXpdMin <= 22) || (35 <= condXpdMin && condXpdMin <= 38)
+                                                    ? "#FF0000"
+                                                    : "#C00000";
+                                        const xpdMaxColor =
+                                            condXpdMax > 22 && condXpdMax < 35
+                                                ? "#00B050"
+                                                : (20 <= condXpdMax && condXpdMax <= 22) || (35 <= condXpdMax && condXpdMax <= 38)
+                                                    ? "#FF0000"
+                                                    : "#C00000";
+ 
+ 
+                                        const acmStatus = it.acm_status?.toLowerCase();
+                                        const condSiteAMod = (acmStatus === "enable" && it.site_a_modulation_mode?.toLowerCase() === "adaptive") ||
+                                            (acmStatus === "disable" && it.site_a_modulation_mode?.toLowerCase() === "fixed");
+                                        const condSiteZMod = (acmStatus === "enable" && it.site_z_modulation_mode?.toLowerCase() === "adaptive") ||
+                                            (acmStatus === "disable" && it.site_z_modulation_mode?.toLowerCase() === "fixed");
+ 
+ 
+                                        const acmMin = it.acm_min_qam?.toString().toLowerCase();
+                                        const acmMax = it.acm_max_qam?.toString().toLowerCase();
+ 
+                                        const checkQAM = (val) => val?.toString().toLowerCase() === acmMax;
+                                        const checkQAMMin = (val) => val?.toString().toLowerCase() === acmMin;
+ 
+ 
+                                        const normalizeQAM = (val) => {
+                                            if (!val) return "";
+                                            return val.toString().toLowerCase().replace(/[^0-9]/g, ''); // keep only numbers
+                                        };
+ 
+                                        const acmMaxNormalized = normalizeQAM(it.acm_max_qam);
+ 
+ 
+                                        const checkQM = (val) => normalizeQAM(val) === acmMaxNormalized;
+                                        const displayValue = (val) => {
+                                            if (
+                                                val === null ||
+                                                val === undefined ||
+                                                val === "" ||
+                                                val === "NaN" ||
+                                                val === "<NA>" ||
+                                                val === "nan" ||
+                                                val === "NA" ||
+                   
+                                                Number.isNaN(val)
+                                            ) {
+                                                return "";
+                                            }
+                                            return val;
+                                        };
+ 
+ 
+ 
                                         return (
-                                            <tr>
-                                        <th style={{ position: 'sticky', left: 0, top: 0, backgroundColor: '#CBCBCB', color: 'black' }}> {it.circle} </th>
-                                        <th style={{ color: 'black' }}>{it.reference_key} </th>
-                                        <th style={{ color: 'black' }}>{it.site_id}</th>
-                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.equipment_make}</th>
-                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.plan_id}</th>
-                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.polarization}</th>
-                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.site_id_a}</th>
-                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.tx_frequency_mhz}</th>
-                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.ber10e6_rx_level_dbm}</th>
-                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.site_id_b}</th>
-                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.rx_frequency_mhz}</th>
-                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.bandwidth_mhz}</th>
+                                            <tr key={index}>
+                                                <th style={{ backgroundColor: '#CBCBCB', color: 'black', position: 'sticky', left: 0 }}>{it.circle}</th>
+                                                <th style={{ backgroundColor: '#fff', color: 'black' }}>{displayValue(it.reference_key)}</th>
+                                                <th style={{ backgroundColor: '#fff', color: 'black' }}>{displayValue(it.site_id)}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: 'black' }}>{displayValue(it.equipment_make)}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: 'black' }}>{displayValue(it.plan_id)}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: 'black' }}>{displayValue(it.polarization)}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: 'black' }}>{displayValue(it.site_id_a)}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: 'black' }}>{displayValue(it.tx_frequency_mhz)}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: 'black' }}>{displayValue(it.ber10e6_rx_level_dbm)}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: 'black' }}>{displayValue(it.site_id_b)}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: 'black' }}>{displayValue(it.rx_frequency_mhz)}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: 'black' }}>{displayValue(it.bandwidth_mhz)}</th>
  
-                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.acm_status}</th>
-                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.acm_min_qam}</th>
-                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.acm_max_qam}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: 'black' }}>{displayValue(it.acm_status)}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: 'black' }}>{displayValue(it.acm_min_qam)}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: 'black' }}>{displayValue(it.acm_max_qam)}</th>
  
-                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.atpc_status}</th>
-                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.atpc_min}</th>
-                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.atpc_max}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: 'black' }}>{displayValue(it.atpc_status)}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: 'black' }}>{displayValue(it.atpc_min)}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: 'black' }}>{displayValue(it.atpc_max)}</th>
  
-                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.rsl_min_dbm}</th>
-                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.rsl_max_dbm}</th>
-                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.tx_power_max_dbm}</th>
-                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.snr_min_db}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: condRsl ? "#00B050" : "#FF0000" }}>{displayValue(it.rsl_min_dbm)}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: condRsl ? "#00B050" : "#FF0000" }}>{displayValue(it.rsl_max_dbm)}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: condTxPower ? "#00B050" : "#FF0000" }}>{displayValue(it.tx_power_max_dbm)}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: condSnr ? "#00B050" : "#FF0000" }}>{displayValue(it.snr_min_db)}</th>
  
-                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.xpd_min_dbm}</th>
-                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.xpd_max_dbm}</th>
-                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.polarization_radio}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: xpdMinColor }}>{displayValue(it.xpd_min_dbm)}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: xpdMaxColor }}>{displayValue(it.xpd_max_dbm)}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: condPolarization ? "#00B050" : "#FF0000" }}>{displayValue(it.polarization_radio)}</th>
  
-                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.site_a_current_rsl}</th>
-                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.site_z_current_rsl}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: condRsl ? "#00B050" : "#FF0000" }}>{displayValue(it.site_a_current_rsl)}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: condRsl ? "#00B050" : "#FF0000" }}>{displayValue(it.site_z_current_rsl)}</th>
  
-                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.freq_tx}</th>
-                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.freq_rx}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: condTxFreq ? "#00B050" : "#FF0000" }}>{displayValue(it.freq_tx)}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: condRxFreq ? "#00B050" : "#FF0000" }}>{displayValue(it.freq_rx)}</th>
  
-                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.site_a_modulation_mode}</th>
-                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.site_z_modulation_mode}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: condSiteAMod ? "#00B050" : "#FF0000" }}>{displayValue(it.site_a_modulation_mode)}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: condSiteZMod ? "#00B050" : "#FF0000" }}>{displayValue(it.site_z_modulation_mode)}</th>
  
-                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.site_a_min_mod_last_24h}</th>
-                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.site_z_min_mod_last_24h}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: checkQM(it.site_a_min_mod_last_24h) ? "#00B050" : "#FF0000" }}>{displayValue(it.site_a_min_mod_last_24h)}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: checkQM(it.site_z_min_mod_last_24h) ? "#00B050" : "#FF0000" }}>{displayValue(it.site_z_min_mod_last_24h)}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: checkQM(it.site_a_max_mod_last_24h) ? "#00B050" : "#FF0000" }}>{displayValue(it.site_a_max_mod_last_24h)}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: checkQM(it.site_z_max_mod_last_24h) ? "#00B050" : "#FF0000" }}>{displayValue(it.site_z_max_mod_last_24h)}</th>
  
-                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.site_a_max_mod_last_24h}</th>
-                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.site_z_max_mod_last_24h}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: checkQAMMin(it.site_a_min_configured_mod) ? "#00B050" : "#FF0000" }}>{displayValue(it.site_a_min_configured_mod)}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: checkQAMMin(it.site_z_min_configured_mod) ? "#00B050" : "#FF0000" }}>{displayValue(it.site_z_min_configured_mod)}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: checkQM(it.site_a_max_configured_mod) ? "#00B050" : "#FF0000" }}>{displayValue(it.site_a_max_configured_mod)}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: checkQM(it.site_z_max_configured_mod) ? "#00B050" : "#FF0000" }}>{displayValue(it.site_z_max_configured_mod)}</th>
  
-                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.site_a_min_configured_mod}</th>
-                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.site_z_min_configured_mod}</th>
- 
-                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.site_a_max_configured_mod}</th>
-                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.site_z_max_configured_mod}</th>
- 
-                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.atpc_status_link}</th>
-                                        <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.remark}</th>
-                                       
-                                    </tr>
- 
+                                                <th style={{ backgroundColor: '#fff', color: condAtpcLink ? "#00B050" : "#FF0000" }}>{displayValue(atpcDisplay)}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.remark || "Ready to Offer"}</th>
+                                            </tr>
                                         );
                                     })}
                                 </tbody>
