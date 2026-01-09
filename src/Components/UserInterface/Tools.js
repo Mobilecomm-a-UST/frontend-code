@@ -62,7 +62,7 @@ export default function Tools() {
     // if (userMatch) {
     return userType.some(type => allowedUserTypes.includes(type)) ? (
       <Grid item xs={4} key={propsdata.id}>
-        <Box sx={backgroundStyle} className={classes.des} onClick={() => { handleClickTool(propsdata.link) }}>
+        <Box sx={backgroundStyle} className={classes.des} title={propsdata.fullname} onClick={() => { handleClickTool(propsdata.link) }}>
           <div className={classes.centerIcon}><propsdata.icons /></div>
           <div >
             <div className={classes.center}>{propsdata.name}</div>
@@ -115,7 +115,7 @@ export default function Tools() {
                     if (userMatch) {
                       return (
                         <Grid item xs={4} key={index}>
-                          <Box sx={backgroundStyle} className={classes.des} onClick={() => { handleClickTool(item.link) }}>
+                          <Box sx={backgroundStyle} className={classes.des} title={item.fullname} onClick={() => { handleClickTool(item.link) }}>
                             <div className={classes.centerIcon}><item.icons /></div>
                             <div >
                               <div className={classes.center}>{item.name}</div>

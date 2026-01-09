@@ -26,6 +26,7 @@ import TableIcon from '@rsuite/icons/Table';
 import AbTestIcon from '@rsuite/icons/AbTest';
 import StopOutlineIcon from '@rsuite/icons/StopOutline';
 import ProjectIcon from '@rsuite/icons/Project';
+import FlowStopIcon from '@rsuite/icons/FlowStop';
 
 
 import { groupBy } from 'lodash';
@@ -41,6 +42,7 @@ const ToolData = [
         title: 'This is a trend tool',
         icons: TrendIcon,
         link: '/trends',
+        fullname: 'Trend Analysis Tool',
         groupBy:['quality','admin','quality-s','trend_tool']
     },
     // {
@@ -74,6 +76,7 @@ const ToolData = [
         title: 'This is a SOFT AT tool',
         icons: PcIcon,
         link: '/tools/soft_at',
+        fullname: 'Soft AT Tool',
         groupBy:['soft_at_team','admin']
     },
 
@@ -83,6 +86,7 @@ const ToolData = [
         title: 'This is a SOFT AT tool',
         icons: PcIcon,
         link: '/tools/soft_at_rejection',
+        fullname: 'Soft AT Tracking Tool',
         groupBy:['soft_at_team','admin']
     },
 
@@ -108,6 +112,7 @@ const ToolData = [
         title: 'This is a MDP tool',
         icons: CalendarIcon,
         link: '/tools/mdp',
+        fullname: 'MDP Tool',
         groupBy:['central','circle','admin']
     },
     // {
@@ -123,6 +128,7 @@ const ToolData = [
         name: 'Mcom Scripting',
         title: 'This is a Mcom Scripting tool',
         icons: PageIcon,
+        fullname: 'Mcom Scripting Tool',
         link: '/tools/mcom-scripting',
         groupBy:['central','circle','admin']
     },
@@ -132,6 +138,7 @@ const ToolData = [
         name: 'AUDIT',
         title: 'This is a AUDIT tool',
         icons: DocPassIcon,
+        fullname: 'Audit Tool',
         link: '/tools/audit',
         groupBy:['quality','admin','quality-s']
 
@@ -141,6 +148,7 @@ const ToolData = [
         name: 'IX Trackers',
         title: 'This is a Relocation Tracking Tool',
         icons: DocPassIcon,
+        fullname: 'Integration Tools',
         link: '/tools/ix_tools',
         groupBy:['admin','IX','VI_IX','VI_IX_reader','soft_at_team']
     },
@@ -157,8 +165,9 @@ const ToolData = [
     {
         id: 14,
         name: 'FILE MERGE',
-        title: 'This is a file merge tool<',
+        title: 'This is a file merge tool',
         icons: SingleSourceIcon,
+        fullname: 'File Merge Tool',
         link: '/tools/file_merge',
         groupBy:['admin','quality','quality-s','ran']
     },
@@ -167,6 +176,7 @@ const ToolData = [
         name: 'SCHEDULER',
         title: 'This is a SCHEDULER tool',
         icons: TimeIcon,
+        fullname: 'Scheduler Tool',
         link: '/tools/schedular',
         groupBy:['admin']
     },
@@ -192,6 +202,7 @@ const ToolData = [
         name: 'CATS Tracker',
         title: 'This is a CATS Tracker',
         icons: RelatedMapIcon,
+        fullname: 'CATS Tracker Tool',
         link:  '/tools/cats_tracker',
         groupBy:['quality','admin','quality-s']
 
@@ -208,6 +219,7 @@ const ToolData = [
         name: 'RCA Genie',
         title: 'This is a RCA Tool',
         icons: TreeIcon,
+        fullname: 'RCA Genie Tool',
         link:  '/tools/rca',
         groupBy:['quality','admin','quality-s']
     },
@@ -216,6 +228,7 @@ const ToolData = [
         name: 'IX Tracker',
         title: 'This is a IX Tracker Tool',
         icons: DocPassIcon,
+        fullname: 'Integration Tracker Tool',
         link: '/tools/IX_Tracker',
         groupBy:['quality','IX_reader','quality-s']
 
@@ -226,6 +239,7 @@ const ToolData = [
         name: 'Mcom Physical AT',
         title: 'This is a IX Tracker Tool',
         icons: CellTowerIcon,
+        fullname: 'Mcom Physical AT Tool',
         link: '/tools/mcom_physical_at',
         groupBy:['soft_at_team', 'admin']
 
@@ -234,6 +248,7 @@ const ToolData = [
         name: 'NOM Scriptor',
         title: 'This is a IX Tracker Tool',
         icons: ParagraphIcon,
+        fullname: 'Nomenclature Scriptor Tool',
         link: '/tools/nomenclature_scriptor',
         groupBy:['soft_at_team', 'admin']
 
@@ -241,8 +256,9 @@ const ToolData = [
     ,{
         id: 26,
         name: 'DSA',
-        title: 'This is a DMA Tool',
+        title: 'This is a Daily Status Alarm Tool',
         icons: NoticeIcon,
+        fullname: 'Daily Status Alarm Tool',
         link: '/tools/dma',
         groupBy:['soft_at_team', 'admin']
     }
@@ -251,6 +267,7 @@ const ToolData = [
         name: 'MNIT',
         title: 'This is a MNI Tool',
         icons: ModelIcon,
+        fullname: 'Mobile Network Integration Tool',
         link: '/tools/mobile_network_integration',
         groupBy:['admin']
     } 
@@ -260,6 +277,7 @@ const ToolData = [
         name: 'LKF/RCC Status',
         title: 'This is a LKF Status Tool',
         icons: CharacterLockIcon,
+        fullname: 'License Key File Status Tool',
         link: '/tools/lkf_status',
         groupBy:['admin']
     }
@@ -267,8 +285,9 @@ const ToolData = [
     {
         id: 28,
         name: 'Mobinet VS CATS',
-        title: 'This is a LKF Status Tool',
+        title: 'This is a Mobinet VS CATS Tool',
         icons: FunnelStepsIcon,
+        fullname: 'Mobinet VS CATS Tool',
         link: '/tools/mobinet_vs_cats',
         groupBy:['admin','ran']
     } ,
@@ -277,6 +296,7 @@ const ToolData = [
         name: 'Degrow Dismantle',
         title: 'This is a Degrow Dismantle Tool',
         icons: IndirectIcon,
+        fullname: 'Degrow Dismantle Tool',  
         link: '/tools/degrow_dismantle',
         groupBy:['admin','ran']
     },
@@ -294,6 +314,7 @@ const ToolData = [
         name: 'RPT',
         title: 'This is a Relocation Payload Tracker Tool',
         icons: AbTestIcon,
+        fullname: 'Relocation Payload Tracker Tool',
         link: '/tools/relocation_payload_tracker',
         groupBy:['admin','quality-s','quality']
     }    ,
@@ -302,6 +323,7 @@ const ToolData = [
         name: 'Relocation Tracking',
         title: 'This is a Relocation Tracking Tool',
         icons: ProjectIcon,
+        fullname: 'Relocation Tracking Tool',
         link: '/tools/relocation_tracking',
         groupBy:['admin','RLT','RLT_reader','RLT_Admin']
     }
@@ -311,8 +333,18 @@ const ToolData = [
         name: 'Microwave Soft-At',
         title: 'This is a Microwave Soft-At Tool',
         icons: StopOutlineIcon,
+        fullname: 'Microwave Soft-At Tool',
         link: '/tools/microwave_soft_at',
         groupBy:['admin','microwave']
+    } ,
+    {
+        id: 34,
+        name: 'NTD',
+        title: 'This is a New Tower Deployment Tool',
+        icons: FlowStopIcon,
+        fullname: 'New Tower Deployment Tool',
+        link: '/tools/new_tower_deployment',
+        groupBy:['admin','NTD']
     }
 
 
