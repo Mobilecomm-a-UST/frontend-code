@@ -211,7 +211,8 @@ const DateWise = () => {
                 formData.append('milestone1', milestone1)
                 formData.append('milestone2', milestone2)
                 formData.append('last_date', convertToYMD(dateArray.at(-1)))
-                formData.append('gap', gap)
+                formData.append('gap', gap);
+                formData.append(`userId`, userID);
                 try {
                     const res = await postData("alok_tracker/gap_view/", formData);
                     console.log('gap response', res);
