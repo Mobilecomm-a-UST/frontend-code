@@ -245,7 +245,7 @@ const ChecklistEditor = () => {
 
     const handleDownload = () => {
         const workbook = new ExcelJS.Workbook();
-        const sheet1 = workbook.addWorksheet("Nokia SA/NSA", { properties: { tabColor: { argb: 'B0EBB4' } } })
+        const sheet1 = workbook.addWorksheet("Nokia SA_NSA", { properties: { tabColor: { argb: 'B0EBB4' } } })
 
         sheet1.getCell('A1').value = 'ID';
         sheet1.getCell('B1').value = 'SA';
@@ -259,8 +259,8 @@ const ChecklistEditor = () => {
         data?.map(item => {
             sheet1.addRow({
                 id: item?.id,
-                sa: item?.sa,
-                nsa: item?.nsa,
+                sa: item?.SA,
+                nsa: item?.NSA,
 
             })
         })
@@ -303,7 +303,7 @@ const ChecklistEditor = () => {
             const url = window.URL.createObjectURL(blob);
             const anchor = document.createElement('a');
             anchor.href = url;
-            anchor.download = "Nokia_Checklist.xlsx";
+            anchor.download = "Nokia_SA_NSA.xlsx";
             anchor.click();
             window.URL.revokeObjectURL(url);
         })
@@ -454,11 +454,11 @@ const ChecklistEditor = () => {
                 <div style={{ height: 'auto', width: '100%', margin: '5px 0px', boxShadow: 'rgba(0, 0, 0, 0.5) 0px 3px 8px', backgroundColor: 'white', borderRadius: '10px', padding: '1px' }}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Box >
-                            {userType.includes('Admin') && <Tooltip title="Add List" color='primary'>
+                           <Tooltip title="Add List" color='primary'>
                                 <IconButton color='primary' onClick={() => setAdd(!add)}>
                                     <PlaylistAddIcon fontSize='medium' color='primary' />
                                 </IconButton>
-                            </Tooltip>}
+                            </Tooltip>
 
                         </Box>
                         <Box>
@@ -467,7 +467,7 @@ const ChecklistEditor = () => {
 
                         <Box style={{ float: 'right', display: 'flex' }}>
                             <Tooltip title="Export SA/NSA File">
-                                <IconButton onClick={() => { handleDownload() }}>
+                                <IconButton onClick={handleDownload}>
                                     <DownloadIcon fontSize='medium' color='primary' />
                                 </IconButton>
                             </Tooltip>

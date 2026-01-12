@@ -155,6 +155,7 @@ const LifeCycle = () => {
             formData.append('start_date', tableForm?.start_date);
             formData.append('close_date', tableForm?.close_date);
             formData.append('owner', tableForm?.owner);
+            formData.append('remarks', tableForm?.remarks || "");
             formData.append('milestone', milestoneSelectName);
             formData.append('circle', milestoneData?.[0]?.circle || "");
             // formData.append('timeline', JSON.stringify(issueTable));
@@ -202,6 +203,7 @@ const LifeCycle = () => {
             formData.append('issue', tempIssueTableData?.['Issue Name'] || "");
             formData.append('start_date', dateFormateChange(tempIssueTableData?.['Start Date']));
             formData.append('close_date', dateFormateChange(tempIssueTableData?.['Close Date']));
+            formData.append('remarks', tempIssueTableData?.['remarks'] || "");
             formData.append('owner', tempIssueTableData?.['Issue Owner'] || "");
 
             const response = await axios.post(
@@ -363,6 +365,18 @@ const LifeCycle = () => {
                                     max: new Date().toISOString().split("T")[0],
                                     min: dateFormateChange(tempIssueTableData?.['Start Date']) || ''
                                 }}
+                                InputLabelProps={{ shrink: true }}
+                            />
+                        </FormControl>
+                        <FormControl fullWidth size="small" sx={{ flex: 1 }}>
+                            <TextField
+                                variant="outlined"
+                                label="Remarks"
+                                name="remarks"
+                                value={tempIssueTableData?.['remarks'] || ''}
+                                onChange={handleChangeListDialog}
+                                type="text"
+                                size="small"
                                 InputLabelProps={{ shrink: true }}
                             />
                         </FormControl>
@@ -656,6 +670,18 @@ const LifeCycle = () => {
                                                 }}
                                             />
                                         </FormControl>
+                                         <FormControl fullWidth size="small" sx={{ flex: 1 }}>
+                                            <TextField
+                                                variant="outlined"
+                                                label="Remarks"
+                                                name="remarks"
+                                                value={tableForm?.remarks || ''}
+                                                onChange={handleChange}
+                                                type="text"
+                                                size="small"
+                                                InputLabelProps={{ shrink: true }}
+                                            />
+                                        </FormControl>
 
                                         <Button variant="contained" sx={{ backgroundColor: '#006e74' }} type="submit" startIcon={<ControlPointIcon />}>
                                             Add
@@ -695,6 +721,9 @@ const LifeCycle = () => {
                                                         Duration Days
                                                     </th>
                                                     <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#CBCBCB', color: 'black' }}>
+                                                        Remarks
+                                                    </th>
+                                                    <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#CBCBCB', color: 'black' }}>
                                                         Issue Owner
                                                     </th>
                                                     <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#CBCBCB', color: 'black' }}>
@@ -712,6 +741,7 @@ const LifeCycle = () => {
                                                             <th style={{ color: 'black' }}>{it['Start Date']}</th>
                                                             <th style={{ color: 'black' }}>{it['Close Date']}</th>
                                                             <th style={{ color: 'black' }}>{it['Duration']}</th>
+                                                            <th style={{ color: 'black' }}>{it['remarks']}</th>
                                                             <th style={{ color: 'black' }}>{it['Issue Owner']}</th>
                                                             <th style={{ color: 'black' }}>
                                                                 {it.Status == 'Closed' ? <IconButton >
@@ -722,7 +752,6 @@ const LifeCycle = () => {
                                                                 {userTypes?.includes('RLT_Admin') && <IconButton onClick={() => handleDeleteIssue(it.id)}>
                                                                     <DeleteIcon size='small' color='error' />
                                                                 </IconButton>}
-
 
                                                             </th>
                                                         </tr>
