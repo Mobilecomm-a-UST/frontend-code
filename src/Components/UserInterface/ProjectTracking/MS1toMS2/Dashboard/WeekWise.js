@@ -259,7 +259,7 @@ const WeekWise = () => {
         const url = window.URL.createObjectURL(blob);
         const anchor = document.createElement("a");
         anchor.href = url;
-        anchor.download = "Monthly_Progress-RFAI_to_MS1_Waterfall.xlsx";
+        anchor.download = "Monthly_Progress-MS1_to_MS2_Waterfall.xlsx";
         anchor.click();
         window.URL.revokeObjectURL(url);
     };
@@ -370,7 +370,7 @@ const WeekWise = () => {
                                 setSelectedValues={setToco}
                             />
 
-                            <Tooltip title="Download Monthly-RFAI to MS1">
+                            <Tooltip title="Download Monthly-MS1 to MS2">
                                 <IconButton
                                     component="a"
                                     // href={downloadExcelData}

@@ -29,9 +29,9 @@ const MainAging = () => {
             <Box>
                 <Integration />
             </Box>
-            <Box>
+            {/* <Box>
                 <Ms1 />
-            </Box>
+            </Box> */}
 
         </>
 
