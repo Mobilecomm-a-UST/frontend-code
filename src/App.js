@@ -59,6 +59,7 @@ const ProjectTracking = lazy(() => import('./Components/UserInterface/ProjectTra
 const IxTools = lazy(() => import('./Components/UserInterface/Integration_Tools/Ix_Tools'))
 const Vi_Integration = lazy(() => import('./Components/UserInterface/Vi_Integration_tool/Vi_Integration'))
 const MicrowaveSoftAt = lazy(() => import('./Components/UserInterface/Microwave/Microwave'))
+const NTDTool = lazy(() => import('./Components/UserInterface/NewTowerDeployment/NTD'))
 
 const queryClient = new QueryClient()
 
@@ -334,6 +335,12 @@ function App() {
             <Route path="/tools/microwave_soft_at/*" element={
               <Suspense fallback={<div>Loading...</div>}>
                 <ProtectedRoute element={MicrowaveSoftAt} allowedUserTypes={['admin', 'microwave']} userType={userType} />
+              </Suspense>
+            } />
+
+             <Route path="/tools/ntd/*" element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProtectedRoute element={NTDTool} allowedUserTypes={['admin', 'NDT']} userType={userType} />
               </Suspense>
             } />
 

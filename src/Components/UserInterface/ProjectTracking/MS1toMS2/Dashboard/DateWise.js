@@ -94,7 +94,6 @@ const DateWise = () => {
     const [dateArray, setDateArray] = useState([])
     const [tableData, setTableData] = useState([])
     const [milestone, setMilestone] = useState([])
-    const [gapData, setGapData] = useState('')
     const [circle, setCircle] = useState([])
     const [circleOptions, setCircleOptions] = useState([])
     const [tagging, setTagging] = useState([])
@@ -107,9 +106,8 @@ const DateWise = () => {
     const [view, setView] = useState('Cumulative')
     const [selectDate, setSelectDate] = useState([])
     const { afterToday, combine } = DateRangePicker;
-    // const [totals, setTotals] = useState()
 
-    // console.log('table data', tableData)
+    
 
     const fetchDailyData = async () => {
         action(true)
@@ -204,6 +202,7 @@ const DateWise = () => {
             if (milestone2 && milestone1 && gap) {
                 action(true)
                 var formData = new FormData()
+                formData.append('userId', userID);
                 formData.append('circle', circle)
                 formData.append('site_tagging', tagging)
                 formData.append('relocation_method', relocationMethod)
@@ -321,7 +320,7 @@ const DateWise = () => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "Daily_Progress-RFAI_to_MS1_Waterfall.xlsx";
+    a.download = "Daily_Progress-MS1_to_MS2_Waterfall.xlsx";
     a.click();
     URL.revokeObjectURL(url);
 };
@@ -423,7 +422,7 @@ const DateWise = () => {
 
 
 
-                            <Tooltip title="Download Daily-RFAI to MS1 Waterfall">
+                            <Tooltip title="Download Daily MS1 to MS2 Waterfall">
                                 <IconButton
                                     component="a"
                                     // href={downloadExcelData}

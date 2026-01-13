@@ -15,6 +15,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
+import { getDecreyptedData } from "../../../utils/localstorage";
 
 
 
@@ -34,6 +35,7 @@ const Summary = () => {
     const [download, setDownload] = useState(false);
     const { loading, action } = useLoadingDialog()
     const navigate = useNavigate()
+    const userID = getDecreyptedData("userID")
     const classes = OverAllCss()
     const link = `${ServerURL}${fileData}`;
 
@@ -50,6 +52,7 @@ const Summary = () => {
             var formData = new FormData();
             formData.append('circle_name', selectCircle)
             formData.append('project_type', selectProject)
+            formData.append('userId', userID)
 
             for (let i = 0; i < make4GFiles.length; i++) {
                 formData.append(`xml_files`, make4GFiles[i]);

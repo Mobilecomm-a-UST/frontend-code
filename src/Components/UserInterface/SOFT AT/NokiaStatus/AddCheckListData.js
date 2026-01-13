@@ -17,6 +17,7 @@ import DoDisturbIcon from '@mui/icons-material/DoDisturb';
 import Swal from "sweetalert2";
 import { postData, ServerURL } from "../../../services/FetchNodeServices";
 import { useLoadingDialog } from '../../../Hooks/LoadingDialog';
+import { getDecreyptedData } from "../../../utils/localstorage";
 
 
 
@@ -31,6 +32,7 @@ const AddCheckListData = (props) => {
     const [show4G, setShow4G] = useState(false)
     const classes = OverAllCss();
     const { loading, action } = useLoadingDialog()
+        const userID = getDecreyptedData("userID")
 
 
 
@@ -52,6 +54,7 @@ const AddCheckListData = (props) => {
             var formData = new FormData();
             // console.log('pre files' , preFiles[i])
             formData.append(`excel_file`, make4GFiles.bytes);
+            formData.append('userId', userID);
             const response = await postData(`Soft_AT_Checklist_Nokia/${props.api}/`, formData)
             // console.log('response data', response)
             if (response.status === true) {

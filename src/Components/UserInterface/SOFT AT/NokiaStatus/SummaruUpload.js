@@ -11,10 +11,8 @@ import { postData, ServerURL } from "../../../services/FetchNodeServices";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import OverAllCss from "../../../csss/OverAllCss";
 import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import InputLabel from '@mui/material/InputLabel';
+import { getDecreyptedData } from "../../../utils/localstorage";
+
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -29,6 +27,7 @@ const SummaruUpload = () => {
         const [fileData, setFileData] = useState()
     const { loading, action } = useLoadingDialog()
     const [download, setDownload] = useState(false)
+    const userID = getDecreyptedData("userID")
 
 
 
@@ -50,6 +49,7 @@ const SummaruUpload = () => {
             var formData = new FormData();
             // console.log('pre files' , preFiles[i])
             formData.append(`excel_file`, make4GFiles.bytes);
+            formData.append('userId', userID);
             const response = await postData('Soft_AT_Checklist_Nokia/upload_Summary_excel/', formData)
             // console.log('response data', response)
 
@@ -63,7 +63,7 @@ const SummaruUpload = () => {
                     title: "Done",
                     text: `${response.message}`,
                 });
-                console.log('sssssssssssssssssssss', response)
+                // console.log('sssssssssssssssssssss', response)
 
 
 

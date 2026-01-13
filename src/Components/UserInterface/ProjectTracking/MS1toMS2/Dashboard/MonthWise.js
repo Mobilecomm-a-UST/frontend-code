@@ -215,7 +215,7 @@ const MonthWise = () => {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = "Yearly_Progress_RFAI_to_MS1_Waterfall.xlsx";
+        a.download = "Yearly_Progress_MS1_to_MS2_Waterfall.xlsx";
         a.click();
         window.URL.revokeObjectURL(url);
     };
@@ -311,7 +311,7 @@ const MonthWise = () => {
                                 setSelectedValues={setToco}
                             />
 
-                            <Tooltip title="Download Yearly-RFAI to MS1 Waterfall">
+                            <Tooltip title="Download Yearly MS1 to MS2 Waterfall">
                                 <IconButton
                                     component="a"
                                     // href={downloadExcelData}

@@ -31,6 +31,7 @@ const Error = lazy(() => import('../../../Components/csss/Error'));
 const MS1toMS2_DashboardTable = lazy(() => import('./MS1toMS2/Dashboard/DashboardTable'))
 const MS1toMS2_Upload_ftr = lazy(()=>import('./MS1toMS2/UploadFile/Upload'))
 const MS1toMS2_FTR_Dashboard = lazy(()=>import('./MS1toMS2/FTR_Dashboard/Main_FTR'))
+const Dismantle_dashboard = lazy(()=>import('./Dismantle/Dashboard/DashboardTable'))
 
 
 const ProtectedRoute = ({ allowed, children }) => {
@@ -152,6 +153,12 @@ const PTracking = () => {
                                                 </Nav.Item>
                                             </Nav.Menu>
 
+                                            {/* Dismantle */}
+                                            <Nav.Menu eventKey="3" style={{ fontWeight: 400, color: 'white' }} placement="leftStart" className="menu-title-custom" title="Dismantle" icon={<ArrowRightIcon />}  >
+                                                <Nav.Item eventKey="3-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/dismantle_waterfall'); show(); setMenuButton(true) }}>
+                                                    Waterfall Dashboard
+                                                </Nav.Item>
+                                            </Nav.Menu>
 
                                         </Nav>
                                     </Sidenav.Body>
@@ -184,7 +191,8 @@ const PTracking = () => {
                                 <Route element={<MS1toMS2_DashboardTable />} path="/ms1_to_ms2_waterfall" />
                                 <Route element={<MS1toMS2_Upload_ftr />} path="/ms1_to_ms2_upload_ftr" />
                                 <Route element={<MS1toMS2_FTR_Dashboard />} path="/ms1_to_ms2_ftr_dashboard" />
-                                
+                                <Route element={<Dismantle_dashboard />} path="/dismantle_waterfall" />
+
                                 <Route
                                     path="/admin_panel"
                                     element={
@@ -195,7 +203,7 @@ const PTracking = () => {
                                 />
                                 <Route element={<Error />} path="/error" />
 
-
+                                
                             </Routes>
                         </Suspense>
                     </Grid>

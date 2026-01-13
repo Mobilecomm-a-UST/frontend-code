@@ -343,7 +343,7 @@ const ToolData = [
         title: 'This is a New Tower Deployment Tool',
         icons: FlowStopIcon,
         fullname: 'New Tower Deployment Tool',
-        link: '/tools/new_tower_deployment',
+        link: '/tools/ntd',
         groupBy:['admin','NTD']
     }
 
