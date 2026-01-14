@@ -340,7 +340,7 @@ function App() {
 
              <Route path="/tools/ntd/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={NTDTool} allowedUserTypes={['admin', 'NDT']} userType={userType} />
+                <ProtectedRoute element={NTDTool} allowedUserTypes={['admin', 'NTD']} userType={userType} />
               </Suspense>
             } />
 
