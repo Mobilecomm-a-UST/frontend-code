@@ -29,9 +29,12 @@ const LifeCycle = lazy(() => import('./RFAItoMS1/LifeCycleDashboard/LifeCycle'))
 const AdminPanel = lazy(() => import('./Admin/AdminPanel'))
 const Error = lazy(() => import('../../../Components/csss/Error'));
 const MS1toMS2_DashboardTable = lazy(() => import('./MS1toMS2/Dashboard/DashboardTable'))
-const MS1toMS2_Upload_ftr = lazy(()=>import('./MS1toMS2/UploadFile/Upload'))
-const MS1toMS2_FTR_Dashboard = lazy(()=>import('./MS1toMS2/FTR_Dashboard/Main_FTR'))
-const Dismantle_dashboard = lazy(()=>import('./Dismantle/Dashboard/DashboardTable'))
+const MS1toMS2_Upload_ftr = lazy(() => import('./MS1toMS2/UploadFile/Upload'))
+const MS1toMS2_FTR_Dashboard = lazy(() => import('./MS1toMS2/FTR_Dashboard/Main_FTR'))
+const MS1toMS2_Aging = lazy(() => import('./MS1toMS2/Aging/MainAging'))
+const Dismantle_dashboard = lazy(() => import('./Dismantle/Dashboard/DashboardTable'))
+const Dismantle_Aging = lazy(() => import('./Dismantle/Aging/MainAging'))
+
 
 
 const ProtectedRoute = ({ allowed, children }) => {
@@ -145,10 +148,13 @@ const PTracking = () => {
                                                 <Nav.Item eventKey="2-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/ms1_to_ms2_waterfall'); show(); setMenuButton(true) }}>
                                                     Waterfall Dashboard
                                                 </Nav.Item>
+                                                <Nav.Item eventKey="2-2" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/ms1_to_ms2_aging'); show(); setMenuButton(true) }}>
+                                                    Ageing Dashboard
+                                                </Nav.Item>
                                                 <Nav.Item eventKey="2-2" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/ms1_to_ms2_ftr_dashboard'); show(); setMenuButton(true) }}>
                                                     FTR Dashboard
                                                 </Nav.Item>
-                                                <Nav.Item eventKey="2-3" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/ms1_to_ms2_upload_ftr'); show(); setMenuButton(true) }}>
+                                                <Nav.Item eventKey="2-4" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/ms1_to_ms2_upload_ftr'); show(); setMenuButton(true) }}>
                                                     Upload FTR
                                                 </Nav.Item>
                                             </Nav.Menu>
@@ -157,6 +163,9 @@ const PTracking = () => {
                                             <Nav.Menu eventKey="3" style={{ fontWeight: 400, color: 'white' }} placement="leftStart" className="menu-title-custom" title="Dismantle" icon={<ArrowRightIcon />}  >
                                                 <Nav.Item eventKey="3-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/dismantle_waterfall'); show(); setMenuButton(true) }}>
                                                     Waterfall Dashboard
+                                                </Nav.Item>
+                                                <Nav.Item eventKey="3-2" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/dismantle_Ageing'); show(); setMenuButton(true) }}>
+                                                    Ageing Dashboard
                                                 </Nav.Item>
                                             </Nav.Menu>
 
@@ -191,7 +200,11 @@ const PTracking = () => {
                                 <Route element={<MS1toMS2_DashboardTable />} path="/ms1_to_ms2_waterfall" />
                                 <Route element={<MS1toMS2_Upload_ftr />} path="/ms1_to_ms2_upload_ftr" />
                                 <Route element={<MS1toMS2_FTR_Dashboard />} path="/ms1_to_ms2_ftr_dashboard" />
+                                <Route element={<MS1toMS2_Aging />} path="/ms1_to_ms2_aging" />
+
+
                                 <Route element={<Dismantle_dashboard />} path="/dismantle_waterfall" />
+                                <Route element={<Dismantle_Aging />} path="/dismantle_Ageing" />
 
                                 <Route
                                     path="/admin_panel"
@@ -203,7 +216,7 @@ const PTracking = () => {
                                 />
                                 <Route element={<Error />} path="/error" />
 
-                                
+
                             </Routes>
                         </Suspense>
                     </Grid>

@@ -133,6 +133,28 @@ const Soft_AT_FTR = () => {
         URL.revokeObjectURL(url);
     };
 
+    const getCellStyle = (value) => {
+        if (!value || value === '-') {
+            return { backgroundColor: 'transparent', color: 'black' };
+        }
+
+        // remove % and convert to number
+        const num = parseFloat(value.replace('%', ''));
+
+        if (isNaN(num)) {
+            return { backgroundColor: 'transparent', color: 'black' };
+        }
+
+        if (num < 50) {
+            return { backgroundColor: '#ffb3b3', color: 'black' }; // 🔴 red
+        } else if (num >= 50 && num <= 75) {
+            return { backgroundColor: '#fff3b0', color: 'black' }; // 🟡 yellow
+        } else {
+            return { backgroundColor: '#b7e4c7', color: 'black' }; // 🟢 green
+        }
+    };
+
+
 
 
     useEffect(() => {
@@ -208,14 +230,34 @@ const Soft_AT_FTR = () => {
                     </Box>
 
                     <Box sx={{ marginTop: 0, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2 }}>
-                        <TableContainer sx={{ maxHeight: 600, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} component={Paper}>
-                            <table style={{ width: "100%", border: "1px solid black", borderCollapse: 'collapse', overflow: 'auto' }} >
+                        <TableContainer
+                            sx={{
+                                maxHeight: 600,
+                                boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px'
+                            }}
+                            component={Paper}
+                        >
+                            <table
+                                style={{
+                                    width: "100%",
+                                    border: "1px solid black",
+                                    borderCollapse: 'collapse',
+                                    overflow: 'auto'
+                                }}
+                            >
                                 <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
-                                    <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
+                                    <tr
+                                        style={{
+                                            fontSize: 15,
+                                            backgroundColor: "#223354",
+                                            color: "white",
+                                            border: '1px solid white'
+                                        }}
+                                    >
                                         <th
                                             rowSpan={2}
                                             style={{
-                                                padding: '1px 1px',
+                                                padding: '4px',
                                                 whiteSpace: 'nowrap',
                                                 position: 'sticky',
                                                 left: 0,
@@ -227,48 +269,70 @@ const Soft_AT_FTR = () => {
                                             Circle
                                         </th>
 
-                                        <th colSpan={columns.length} style={{ padding: '1px 1px', whiteSpace: 'nowrap' }}>
+                                        <th colSpan={columns.length} style={{ padding: '4px' }}>
                                             SOFT AT FTR
                                         </th>
                                     </tr>
 
-                                    <tr style={{ fontSize: 15, backgroundColor: "#CBCBCB", color: "balck", border: '1px solid white' }}>
+                                    <tr
+                                        style={{
+                                            fontSize: 15,
+                                            backgroundColor: "#CBCBCB",
+                                            color: "black",
+                                            border: '1px solid white'
+                                        }}
+                                    >
                                         {columns.map((col, idx) => (
-                                            <th key={idx} style={{ padding: '1px 1px', whiteSpace: 'nowrap' }}>
+                                            <th key={idx} style={{ padding: '4px', whiteSpace: 'nowrap' }}>
                                                 {col}
                                             </th>
                                         ))}
                                     </tr>
                                 </thead>
+
                                 <tbody>
-                                    {tableData?.map((row, rowIndex) => (
-                                        <tr
-                                            key={rowIndex}
-                                            className={classes.hoverRT}
-                                            style={{ textAlign: "center", fontWeigth: 700 }}
-                                        >
-                                            {/* Sticky First Column */}
-                                            <th
+                                    {tableData?.map((row, rowIndex) => {
+                                        const isTotalRow = row.Circle === 'Total';
+
+                                        return (
+                                            <tr
+                                                key={rowIndex}
+                                                className={classes.hoverRT}
                                                 style={{
-                                                    position: 'sticky',
-                                                    left: 0,
-                                                    top: 0,
-                                                    zIndex: 3,
-                                                    backgroundColor: '#CBCBCB',
-                                                    color: 'black'
+                                                    textAlign: "center",
+                                                    fontWeight: isTotalRow ? 'bold' : 'normal',
+                                                    backgroundColor: isTotalRow ? '#ffd3be' : 'transparent'
                                                 }}
                                             >
-                                                {row.Circle}
-                                            </th>
-
-                                            {/* Dynamic Data Cells */}
-                                            {columns.map((col, colIndex) => (
-                                                <th key={colIndex} style={{ color: 'black' }}>
-                                                    {row[col]}
+                                                {/* Sticky Circle Column */}
+                                                <th
+                                                    style={{
+                                                        position: 'sticky',
+                                                        left: 0,
+                                                        zIndex: 3,
+                                                        backgroundColor: isTotalRow ? '#ffd3be' : '#CBCBCB',
+                                                        color: 'black'
+                                                    }}
+                                                >
+                                                    {row.Circle}
                                                 </th>
-                                            ))}
-                                        </tr>
-                                    ))}
+
+                                                {/* Data Cells */}
+                                                {columns.map((col, colIndex) => (
+                                                    <th
+                                                        key={colIndex}
+                                                        style={{
+                                                            ...getCellStyle(row[col]),
+                                                            // fontWeight: isTotalRow ? 'bold' : 'normal'
+                                                            // fontWeight:'bold'
+                                                        }}
+                                                    >
+                                                        {row[col]}
+                                                    </th>
+                                                ))}
+                                            </tr>
+                                        );
+                                    })}
                                 </tbody>
                             </table>
                         </TableContainer>

@@ -368,7 +368,7 @@ const DateWise = () => {
     useEffect(() => {
         fetchDailyData()
         // setTotals(calculateColumnTotals(tableData))
-    }, [circle, tagging, relocationMethod, toco, selectDate, view])
+    }, [circle, tagging, relocationMethod, toco, selectDate, view, month])
     return (
         <>
             <style>{"th{border:1px solid black;}"}</style>
