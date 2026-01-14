@@ -293,34 +293,68 @@ const FTR_Table = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {tableData?.map((row, rowIndex) => (
-                                        <tr
-                                            key={rowIndex}
-                                            className={classes.hoverRT}
-                                            style={{ textAlign: "center", fontWeigth: 700 }}
-                                        >
-                                            {/* Sticky First Column */}
-                                            <th
-                                                style={{
-                                                    position: 'sticky',
-                                                    left: 0,
-                                                    top: 0,
-                                                    zIndex: 3,
-                                                    backgroundColor: '#CBCBCB',
-                                                    color: 'black'
-                                                }}
-                                            >
-                                                {row.FTR}
-                                            </th>
+                                    {tableData?.map((row, rowIndex) => {
+                                        if (row.FTR === 'Total') {
+                                            return (
+                                                <tr
+                                                    key={rowIndex}
+                                                    className={classes.hoverRT}
+                                                    style={{  textAlign: "center", fontWeigth: 'bolder', backgroundColor: '#ffd3be'}}
+                                                >
+                                                    {/* Sticky First Column */}
+                                                    <th
+                                                        style={{
+                                                            position: 'sticky',
+                                                            left: 0,
+                                                            top: 0,
+                                                            zIndex: 3,
+                                                            backgroundColor: '#ffd3be',
+                                                            color: 'black'
+                                                        }}
+                                                    >
+                                                        {row.FTR}
+                                                    </th>
 
-                                            {/* Dynamic Data Cells */}
-                                            {columns.map((col, colIndex) => (
-                                                <th key={colIndex} style={{ color: 'black' }}>
-                                                    {row[col]}
-                                                </th>
-                                            ))}
-                                        </tr>
-                                    ))}
+                                                    {/* Dynamic Data Cells */}
+                                                    {columns.map((col, colIndex) => (
+                                                        <th key={colIndex} style={{ color: 'black' }}>
+                                                            {row[col]}
+                                                        </th>
+                                                    ))}
+                                                </tr>
+                                            )
+                                        } else {
+                                            return (
+                                                <tr
+                                                    key={rowIndex}
+                                                    className={classes.hoverRT}
+                                                    style={{ textAlign: "center", fontWeigth: 700 }}
+                                                >
+                                                    {/* Sticky First Column */}
+                                                    <th
+                                                        style={{
+                                                            position: 'sticky',
+                                                            left: 0,
+                                                            top: 0,
+                                                            zIndex: 3,
+                                                            backgroundColor: '#CBCBCB',
+                                                            color: 'black'
+                                                        }}
+                                                    >
+                                                        {row.FTR}
+                                                    </th>
+
+                                                    {/* Dynamic Data Cells */}
+                                                    {columns.map((col, colIndex) => (
+                                                        <th key={colIndex} style={{ color: 'black' }}>
+                                                            {row[col]}
+                                                        </th>
+                                                    ))}
+                                                </tr>
+                                            )
+                                        }
+                                       
+                                    })}
                                 </tbody>
                             </table>
                         </TableContainer>

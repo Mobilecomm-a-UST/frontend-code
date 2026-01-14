@@ -87,7 +87,7 @@ export const useStyles = makeStyles({
         "&:hover": {
             backgroundColor: 'rgb(0,110,116, 0.5)',
             color: 'black',
-            fontWeight: 'bold',
+            fontWeight: 'bolder',
         }
     },
     custom_select: {

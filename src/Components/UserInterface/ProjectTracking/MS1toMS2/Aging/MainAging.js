@@ -4,8 +4,8 @@ import { Breadcrumbs, Link, Typography } from "@mui/material";
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { useNavigate } from "react-router-dom";
 import MOS from './MOS';
-import Ms1 from './Ms1';
-import Integration from './Integration';
+import RfaiIntegration from './RfaiIntegration';
+import MOS2 from './MOS2';
 
 const MainAging = () => {
     const navigate = useNavigate()
@@ -20,16 +20,22 @@ const MainAging = () => {
                 <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
                     <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
                     <Link underline="hover" onClick={() => { navigate('/tools/relocation_tracking') }}>Relocation Tracking</Link>
-                    <Typography color='text.primary'>Aging</Typography>
+                    <Typography color='text.primary'>MS1 to MS2 Aging</Typography>
                 </Breadcrumbs>
             </div>
             <Box>
-                <MOS />
+                <RfaiIntegration />
             </Box>
             <Box>
-                <Integration />
+                <MOS />
             </Box>
             {/* <Box>
+                <MOS2/>
+            </Box> */}
+            {/* <Box>
+                <Integration />
+            </Box>
+            <Box>
                 <Ms1 />
             </Box> */}
 

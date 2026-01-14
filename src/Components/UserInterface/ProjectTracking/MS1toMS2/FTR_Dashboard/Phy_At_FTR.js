@@ -132,6 +132,27 @@ const Phy_At_FTR = () => {
         URL.revokeObjectURL(url);
     };
 
+    const getCellStyle = (value) => {
+        if (!value || value === '-') {
+            return { backgroundColor: 'transparent', color: 'black' };
+        }
+
+        // remove % and convert to number
+        const num = parseFloat(value.replace('%', ''));
+
+        if (isNaN(num)) {
+            return { backgroundColor: 'transparent', color: 'black' };
+        }
+
+        if (num < 50) {
+            return { backgroundColor: '#ffb3b3' }; // 🔴 red
+        } else if (num >= 50 && num <= 75) {
+            return { backgroundColor: '#fff3b0' }; // 🟡 yellow
+        } else {
+            return { backgroundColor: '#b7e4c7'}; // 🟢 green
+        }
+    };
+
 
 
     useEffect(() => {
@@ -240,34 +261,67 @@ const Phy_At_FTR = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {tableData?.map((row, rowIndex) => (
-                                        <tr
-                                            key={rowIndex}
-                                            className={classes.hoverRT}
-                                            style={{ textAlign: "center", fontWeigth: 700 }}
-                                        >
-                                            {/* Sticky First Column */}
-                                            <th
-                                                style={{
-                                                    position: 'sticky',
-                                                    left: 0,
-                                                    top: 0,
-                                                    zIndex: 3,
-                                                    backgroundColor: '#CBCBCB',
-                                                    color: 'black'
-                                                }}
-                                            >
-                                                {row.Circle}
-                                            </th>
+                                    {tableData?.map((row, rowIndex) => {
+                                        if (row.Circle === 'Total') {
+                                            return (
+                                                <tr
+                                                    key={rowIndex}
+                                                    className={classes.hoverRT}
+                                                    style={{ textAlign: "center", fontWeigth: 'bolder', backgroundColor: '#ffd3be' }}
+                                                >
+                                                    {/* Sticky First Column */}
+                                                    <th
+                                                        style={{
+                                                            position: 'sticky',
+                                                            left: 0,
+                                                            top: 0,
+                                                            zIndex: 3,
+                                                            backgroundColor: '#ffd3be',
+                                                            color: 'black'
+                                                        }}
+                                                    >
+                                                        {row.Circle}
+                                                    </th>
 
-                                            {/* Dynamic Data Cells */}
-                                            {columns.map((col, colIndex) => (
-                                                <th key={colIndex} style={{ color: 'black' }}>
-                                                    {row[col]}
-                                                </th>
-                                            ))}
-                                        </tr>
-                                    ))}
+                                                    {/* Dynamic Data Cells */}
+                                                    {columns.map((col, colIndex) => (
+                                                        <th key={colIndex} style={{ color: 'black' }}>
+                                                            {row[col]}
+                                                        </th>
+                                                    ))}
+                                                </tr>
+                                            )
+                                        } else {
+                                            return (
+                                                <tr
+                                                    key={rowIndex}
+                                                    className={classes.hoverRT}
+                                                    style={{ textAlign: "center", fontWeigth: 500 }}
+                                                >
+                                                    {/* Sticky First Column */}
+                                                    <th
+                                                        style={{
+                                                            position: 'sticky',
+                                                            left: 0,
+                                                            top: 0,
+                                                            zIndex: 3,
+                                                            backgroundColor: '#CBCBCB',
+                                                            color: 'black'
+                                                        }}
+                                                    >
+                                                        {row.Circle}
+                                                    </th>
+
+                                                    {/* Dynamic Data Cells */}
+                                                    {columns.map((col, colIndex) => (
+                                                        <th key={colIndex} style={{ ...getCellStyle(row[col]), }}>
+                                                            {row[col]}
+                                                        </th>
+                                                    ))}
+                                                </tr>
+                                            )
+                                        }
+                                    })}
                                 </tbody>
                             </table>
                         </TableContainer>
