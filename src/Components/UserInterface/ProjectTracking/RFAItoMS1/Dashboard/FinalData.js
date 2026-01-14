@@ -314,7 +314,18 @@ const FinalData = () => {
             four_g_ms2_date: rowData.four_g_ms2_date,
             five_g_ms2_date: rowData.five_g_ms2_date,
             final_ms2_date: rowData.final_ms2_date,
-
+            dismantling_survey_date: rowData.dismantling_survey_date,
+            sreq_creq_raised_date: rowData.sreq_creq_raised_date,
+            dismantle_date: rowData.dismantle_date,
+            material_pickup_date: rowData.material_pickup_date,
+            material_submission_date: rowData.material_submission_date,
+            oci_done_date: rowData.oci_done_date,
+            sign_off_date: rowData.sign_off_date,
+            toco_owner_issue: rowData.toco_owner_issue,
+            exit_notice_issue: rowData.exit_notice_issue,
+            commercial_issue: rowData.commercial_issue,
+            workable_sites: rowData.workable_sites,
+            
             last_updated_date: rowData.last_updated_date,
             last_updated_by: rowData.last_updated_by,
         });
