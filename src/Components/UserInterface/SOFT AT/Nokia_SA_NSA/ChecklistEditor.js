@@ -256,9 +256,9 @@ const ChecklistEditor = () => {
             { key: 'nsa' },
         ]
 
-        data?.map(item => {
+        data?.map((item, index) => {
             sheet1.addRow({
-                id: item?.id,
+                id: index + 1,
                 sa: item?.SA,
                 nsa: item?.NSA,
 
@@ -408,7 +408,7 @@ const ChecklistEditor = () => {
                 key={index}
                 className={classes.hover}
             >
-                <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{row.id}</StyledTableCell>
+                <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{index+1}</StyledTableCell>
                 <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{row.SA}</StyledTableCell>
                 <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{row.NSA}</StyledTableCell>
 

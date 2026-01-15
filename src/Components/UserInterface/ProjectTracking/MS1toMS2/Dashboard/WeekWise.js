@@ -354,12 +354,12 @@ const WeekWise = () => {
                             />
 
                             {/* Current Status */}
-                            <MultiSelectWithAll
+                            {/* <MultiSelectWithAll
                                 label="Current Status"
                                 options={relocationMethodOptions}
                                 selectedValues={relocationMethod}
                                 setSelectedValues={setRelocationMethod}
-                            />
+                            /> */}
 
                             {/* Toco  */}
 
