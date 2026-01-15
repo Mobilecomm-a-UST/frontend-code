@@ -127,7 +127,7 @@ const DateWise = () => {
         formData.append('year', month.split('-')[0] || '')
         const res = await postData("nt_tracker/daily_dashboard_file/", formData);
         // const res =  tempData; //  remove this line when API is ready
-        console.log('date wise response', res)
+        console.log('date wise response', JSON.parse(res.data))
         if (res) {
             action(false)
             setDateArray(res.dates)
@@ -259,6 +259,7 @@ const DateWise = () => {
         const columns = [
             { header: "Milestone Track/Site Count", key: "milestone", width: 30 },
             { header: "CF", key: "cf", width: 10 },
+            { header: "AOP", key: "AOP", width: 10 }
         ];
 
         // Dynamic date columns
@@ -280,6 +281,7 @@ const DateWise = () => {
             const excelRow = {
                 milestone: row["Milestone Track/Site Count"],
                 cf: row["CF"] ?? "",
+                AOP: row["AOP"] ?? ""
             };
 
             dateArray.forEach((_, index) => {
@@ -468,7 +470,10 @@ const DateWise = () => {
                                         <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', position: 'sticky', left: 0, top: 0, backgroundColor: '#006e74' }}>
                                             Milestone Track/Site Count</th>
                                         <th style={{ padding: '5px 15px', whiteSpace: 'nowrap', backgroundColor: '#006e74' }}>
-                                            CF</th>
+                                            AOP</th>
+                                            {month &&  <th style={{ padding: '5px 15px', whiteSpace: 'nowrap', backgroundColor: '#006e74' }}>
+                                            CF</th>} 
+                                       
                                         {dateArray?.map((item, index) => (
                                             <th key={index} style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#CBCBCB', color: 'black' }}>{item}</th>
                                         ))}
@@ -480,7 +485,8 @@ const DateWise = () => {
                                         return (
                                             <tr className={classes.hoverRT} style={{ textAlign: "center", fontWeigth: 700 }} key={index}>
                                                 <th style={{ position: 'sticky', left: 0, top: 0, backgroundColor: '#CBCBCB', color: 'black' }}>{it['Milestone Track/Site Count']}</th>
-                                                <th style={{ backgroundColor: '#CBCBCB', color: 'black' }}>{it['CF']}</th>
+                                                <th style={{ backgroundColor: '#CBCBCB', color: 'black' }}>{it['AOP']}</th>
+                                                {month && <th style={{ backgroundColor: '#CBCBCB', color: 'black' }}>{it['CF']}</th>}
                                                 {dateArray?.map((item, index) => (
                                                     // <th key={index} style={{ backgroundColor: it[`date_${index + 1}`] > 0 ? '#FEEFAD' : '' }} >{it[`date_${index + 1}`]}</th>
                                                     <th key={index} className={classes.hoverRT} style={{ cursor: 'pointer' }}

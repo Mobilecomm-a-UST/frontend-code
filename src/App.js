@@ -60,6 +60,7 @@ const IxTools = lazy(() => import('./Components/UserInterface/Integration_Tools/
 const Vi_Integration = lazy(() => import('./Components/UserInterface/Vi_Integration_tool/Vi_Integration'))
 const MicrowaveSoftAt = lazy(() => import('./Components/UserInterface/Microwave/Microwave'))
 const NTDTool = lazy(() => import('./Components/UserInterface/NewTowerDeployment/NTD'))
+const UpgradeDeployment = lazy(() => import('./Components/UserInterface/UpgradeDeployment/UD'))
 
 const queryClient = new QueryClient()
 
@@ -341,6 +342,12 @@ function App() {
              <Route path="/tools/ntd/*" element={
               <Suspense fallback={<div>Loading...</div>}>
                 <ProtectedRoute element={NTDTool} allowedUserTypes={['admin', 'NTD']} userType={userType} />
+              </Suspense>
+            } />
+
+             <Route path="/tools/upgrade_deployment/*" element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProtectedRoute element={UpgradeDeployment} allowedUserTypes={['admin', 'UDT','UDT_reader']} userType={userType} />
               </Suspense>
             } />
 

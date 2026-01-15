@@ -27,6 +27,7 @@ import AbTestIcon from '@rsuite/icons/AbTest';
 import StopOutlineIcon from '@rsuite/icons/StopOutline';
 import ProjectIcon from '@rsuite/icons/Project';
 import FlowStopIcon from '@rsuite/icons/FlowStop';
+import SortAscIcon from '@rsuite/icons/SortAsc';
 
 
 import { groupBy } from 'lodash';
@@ -346,7 +347,16 @@ const ToolData = [
         link: '/tools/ntd',
         groupBy:['admin','NTD']
     }
-
+,
+    {
+        id: 35,
+        name: 'UDT',
+        title: 'This is a Upgrade Deployment Tool',
+        icons: SortAscIcon,
+        fullname: 'Upgrade Deployment Tool',
+        link: '/tools/upgrade_deployment',
+        groupBy:['admin','UDT','UDT_reader']
+    }
 
 
 

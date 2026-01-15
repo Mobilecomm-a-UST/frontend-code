@@ -105,9 +105,10 @@ const DateWise = () => {
     const [downloadExcelData, setDownloadExcelData] = useState('')
     const [view, setView] = useState('Cumulative')
     const [selectDate, setSelectDate] = useState([])
+    const [month, setMonth] = useState('')
     const { afterToday, combine } = DateRangePicker;
 
-    
+
 
     const fetchDailyData = async () => {
         action(true)
@@ -120,6 +121,8 @@ const DateWise = () => {
         formData.append('from_date', selectDate[0] || '')
         formData.append('to_date', selectDate[1] || '')
         formData.append('view', view)
+        formData.append('month', month.split('-')[1] || '')
+        formData.append('year', month.split('-')[0] || '')
         const res = await postData("alok_tracker/ms2_daily_dashboard/", formData);
         // const res =  tempData; //  remove this line when API is ready
         // console.log('date wise response', res)
@@ -241,67 +244,56 @@ const DateWise = () => {
     }
 
     const handleExportExcel = async () => {
-    const workbook = new ExcelJS.Workbook();
-    const sheet = workbook.addWorksheet("Daily Progress");
+        const workbook = new ExcelJS.Workbook();
+        const sheet = workbook.addWorksheet("Daily Progress");
 
-    // ----------- DEFINE HEADERS -------------
-    const columns = [
-        { header: "Milestone Track/Site Count", key: "milestone", width: 30 },
-        { header: "CF", key: "cf", width: 10 },
-    ];
+        // ----------- DEFINE HEADERS -------------
+        const columns = [
+            { header: "Milestone Track/Site Count", key: "milestone", width: 30 },
+            { header: "CF", key: "cf", width: 10 },
+            { header: "AOP", key: "AOP", width: 10 },
+        ];
 
-    // Dynamic date columns
-    dateArray.forEach((date, index) => {
-        columns.push({
-            header: date,
-            key: `date_${index + 1}`,
-            width: 15
-        });
-    });
-
-    // Gap column
-    columns.push({ header: "Gap", key: "gap", width: 10 });
-
-    sheet.columns = columns;
-
-    // ------------ ADD ROWS -----------------
-    tableData.forEach((row, rowIndex) => {
-        const excelRow = {
-            milestone: row["Milestone Track/Site Count"],
-            cf: row["CF"] ?? "",
-        };
-
-        dateArray.forEach((_, index) => {
-            excelRow[`date_${index + 1}`] = row[`date_${index + 1}`] ?? "";
+        // Dynamic date columns
+        dateArray.forEach((date, index) => {
+            columns.push({
+                header: date,
+                key: `date_${index + 1}`,
+                width: 15
+            });
         });
 
-        excelRow["gap"] = row["Gap"] ?? "";
+        // Gap column
+        columns.push({ header: "Gap", key: "gap", width: 10 });
 
-        sheet.addRow(excelRow);
-    });
+        sheet.columns = columns;
 
-    // ------------ STYLE HEADER --------------
-    sheet.getRow(1).eachCell((cell) => {
-        cell.font = { bold: true, color: { argb: "FFFFFF" } };
-        cell.fill = {
-            type: "pattern",
-            pattern: "solid",
-            fgColor: { argb: "223354" }
-        };
-        cell.alignment = { horizontal: "center", vertical: "middle" };
-        cell.border = {
-            top: { style: "thin" },
-            left: { style: "thin" },
-            bottom: { style: "thin" },
-            right: { style: "thin" },
-        };
-    });
+        // ------------ ADD ROWS -----------------
+        tableData.forEach((row, rowIndex) => {
+            const excelRow = {
+                milestone: row["Milestone Track/Site Count"],
+                cf: row["CF"] ?? "",
+                AOP: row["AOP"] ?? ""
+            };
 
-    // ------------ STYLE BODY ----------------
-    sheet.eachRow((row, rowNumber) => {
-        if (rowNumber === 1) return;
-        row.eachCell((cell) => {
-            cell.alignment = { horizontal: "center" };
+            dateArray.forEach((_, index) => {
+                excelRow[`date_${index + 1}`] = row[`date_${index + 1}`] ?? "";
+            });
+
+            excelRow["gap"] = row["Gap"] ?? "";
+
+            sheet.addRow(excelRow);
+        });
+
+        // ------------ STYLE HEADER --------------
+        sheet.getRow(1).eachCell((cell) => {
+            cell.font = { bold: true, color: { argb: "FFFFFF" } };
+            cell.fill = {
+                type: "pattern",
+                pattern: "solid",
+                fgColor: { argb: "223354" }
+            };
+            cell.alignment = { horizontal: "center", vertical: "middle" };
             cell.border = {
                 top: { style: "thin" },
                 left: { style: "thin" },
@@ -309,21 +301,34 @@ const DateWise = () => {
                 right: { style: "thin" },
             };
         });
-    });
 
-    // ------------ DOWNLOAD EXCEL -------------
-    const buffer = await workbook.xlsx.writeBuffer();
-    const blob = new Blob([buffer], {
-        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    });
+        // ------------ STYLE BODY ----------------
+        sheet.eachRow((row, rowNumber) => {
+            if (rowNumber === 1) return;
+            row.eachCell((cell) => {
+                cell.alignment = { horizontal: "center" };
+                cell.border = {
+                    top: { style: "thin" },
+                    left: { style: "thin" },
+                    bottom: { style: "thin" },
+                    right: { style: "thin" },
+                };
+            });
+        });
 
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "Daily_Progress-MS1_to_MS2_Waterfall.xlsx";
-    a.click();
-    URL.revokeObjectURL(url);
-};
+        // ------------ DOWNLOAD EXCEL -------------
+        const buffer = await workbook.xlsx.writeBuffer();
+        const blob = new Blob([buffer], {
+            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        });
+
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "Daily_Progress-MS1_to_MS2_Waterfall.xlsx";
+        a.click();
+        URL.revokeObjectURL(url);
+    };
 
 
     const ClickDataGet = async (props) => {
@@ -357,7 +362,7 @@ const DateWise = () => {
     useEffect(() => {
         fetchDailyData()
         // setTotals(calculateColumnTotals(tableData))
-    }, [circle, tagging, relocationMethod, toco, selectDate, view])
+    }, [circle, tagging, relocationMethod, toco, selectDate, view, month])
     return (
         <>
             <style>{"th{border:1px solid black;}"}</style>
@@ -372,6 +377,20 @@ const DateWise = () => {
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', gap: 1 }}>
                             <FormControl sx={{ minWidth: 200 }} size="small">
                                 <DateRangePicker onChange={(e) => handleDateFormate(e)} size="md" format="dd.MM.yyyy" shouldDisableDate={afterToday} placeholder="Select Date Range" color='black' />
+                            </FormControl>
+                            <FormControl sx={{ minWidth: 100, maxWidth: 100 }} size="small">
+                                <TextField
+                                    variant="outlined"  
+                                    // required
+                                    fullWidth
+                                    label="Month"
+                                    name="month"
+                                    value={month}
+                                    onChange={(e) => setMonth(e.target.value)}
+                                    size="small"
+                                    type="month"
+                                    InputLabelProps={{ shrink: true }}
+                                />
                             </FormControl>
                             <FormControl sx={{ minWidth: 100, maxWidth: 100 }} size="small">
                                 <InputLabel id="demo-select-small-label">View</InputLabel>
@@ -404,12 +423,12 @@ const DateWise = () => {
                             />
 
                             {/* Current Status */}
-                            <MultiSelectWithAll
+                            {/* <MultiSelectWithAll
                                 label="Current Status"
                                 options={relocationMethodOptions}
                                 selectedValues={relocationMethod}
                                 setSelectedValues={setRelocationMethod}
-                            />
+                            /> */}
 
                             {/* Toco  */}
 
@@ -442,8 +461,10 @@ const DateWise = () => {
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
                                         <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', position: 'sticky', left: 0, top: 0, backgroundColor: '#006e74' }}>
                                             Milestone Track/Site Count</th>
-                                        <th style={{ padding: '5px 15px', whiteSpace: 'nowrap', backgroundColor: '#006e74' }}>
-                                            CF</th>
+                                          <th style={{ padding: '5px 15px', whiteSpace: 'nowrap', backgroundColor: '#006e74' }}>
+                                            AOP</th>
+                                            {month &&  <th style={{ padding: '5px 15px', whiteSpace: 'nowrap', backgroundColor: '#006e74' }}>
+                                            CF</th>} 
                                         {dateArray?.map((item, index) => (
                                             <th key={index} style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#CBCBCB', color: 'black' }}>{item}</th>
                                         ))}
@@ -455,7 +476,8 @@ const DateWise = () => {
                                         return (
                                             <tr className={classes.hoverRT} style={{ textAlign: "center", fontWeigth: 700 }} key={index}>
                                                 <th style={{ position: 'sticky', left: 0, top: 0, backgroundColor: '#CBCBCB', color: 'black' }}>{it['Milestone Track/Site Count']}</th>
-                                                <th style={{ backgroundColor: '#CBCBCB', color: 'black' }}>{it['CF']}</th>
+                                                 <th style={{ backgroundColor: '#CBCBCB', color: 'black' }}>{it['AOP']}</th>
+                                                {month && <th style={{ backgroundColor: '#CBCBCB', color: 'black' }}>{it['CF']}</th>}
                                                 {dateArray?.map((item, index) => (
                                                     // <th key={index} style={{ backgroundColor: it[`date_${index + 1}`] > 0 ? '#FEEFAD' : '' }} >{it[`date_${index + 1}`]}</th>
                                                     <th key={index} className={classes.hoverRT} style={{ cursor: 'pointer' }}

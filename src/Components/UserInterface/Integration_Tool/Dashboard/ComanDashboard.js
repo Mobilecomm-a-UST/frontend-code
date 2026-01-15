@@ -423,7 +423,7 @@ const ComanDashboard = () => {
                     selection: true,
                     search: true,
                     exportButton: true,
-                    grouping: true,
+                    // grouping: true,
                     headerStyle: {
                         backgroundColor: '#01579b',
                         color: '#FFF',

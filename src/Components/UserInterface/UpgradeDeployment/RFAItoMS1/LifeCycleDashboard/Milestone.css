@@ -1,0 +1,121 @@
+.timeline {
+    list-style: none;
+    padding-left: 5px;
+    margin: 0;
+    position: relative;
+}
+
+/* Vertical Line */
+.timeline::before {
+    content: "";
+    position: absolute;
+    left: 11px;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: #006e74; /* light gray */
+}
+
+/* List Item */
+.timeline-item {
+    position: relative;
+    margin-bottom: 10px;
+    padding-left: 10px;
+    display: flex;
+    align-items: flex-start;
+    /* justify-content: center; */
+    align-items: center;
+    align-content: center;
+    cursor: pointer;
+}
+
+/* Circle */
+.timeline-circle {
+    width: 18px;
+    height: 18px;
+    background: #ffffff;
+    border-radius: 50%;
+    border: 3px solid #006e74; /* Indigo */
+    position: absolute;
+    left: -2px;
+}
+
+/* Content */
+.timeline-content {
+    margin-left: 40px;
+}
+
+.timeline-content h4 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.timeline-content p {
+    margin: 0px 0 0;
+    color: #000000;
+    font-size: 14px;
+}
+
+/* Hover effect (optional) */
+.timeline-item:hover .timeline-circle {
+    /* border-color: #223354; */
+    background-color: #223354;
+}
+
+
+/* Active milestone */
+.timeline-item.active .timeline-circle {
+    background-color: #006e74;
+    border-color: #006e74;
+}
+
+.timeline-item.active .timeline-content h4 {
+    color: #006e74;
+    font-weight: 700;
+}
+
+.timeline-item.active {
+    background: rgba(0, 110, 116, 0.08);
+    border-radius: 6px;
+}
+
+.milestone-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 4px;
+    font-size: 13px;
+    color: #111827;
+}
+
+/* Date */
+.milestone-date {
+    min-width: 90px;
+    font-weight: 500;
+}
+
+/* Issue container */
+.milestone-issues {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Single issue badge */
+.issue {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: 600;
+}
+
+/* Colors */
+.issue.open svg {
+    color: #d32f2f; /* red */
+}
+
+.issue.close svg {
+    color: #2e7d32; /* green */
+}
