@@ -134,8 +134,6 @@ const NTD = () => {
                                                         Upload FTR
                                                     </Nav.Item>
                                                 </Nav.Menu> */}
-    
-    
                                             </Nav>
                                         </Sidenav.Body>
     

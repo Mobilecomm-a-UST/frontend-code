@@ -191,42 +191,7 @@ const FinalData = () => {
             ...editData,
             [e.target.name]: e.target.value,
         });
-        // const { name, value } = e.target;
 
-        // setEditData(prev => {
-        //     const updated = { ...prev, [name]: value };
-
-        //     if (name === "pri_start_date" || name === "pri_close_date") {
-
-        //         // Parse existing history (json string or array)
-        //         let oldHistory = [];
-        //         try {
-        //             oldHistory = prev.pri_history
-        //                 ? JSON.parse(prev.pri_history)
-        //                 : [];
-        //         } catch {
-        //             oldHistory = [];
-        //         }
-
-        //         // Determine next index like S3/C3
-        //         const nextIndex = oldHistory.length + 1;
-
-        //         // Create new entry
-        //         const newEntry = createNextHistoryEntry(
-        //             updated.pri_start_date,
-        //             updated.pri_close_date,
-        //             nextIndex
-        //         );
-
-        //         // Append new entry
-        //         const newHistory = [...oldHistory, newEntry];
-
-        //         updated.pri_history = JSON.stringify(newHistory);
-        //         updated.pri_count = newHistory.length;  // total entries
-        //     }
-
-        //     return updated;
-        // });
     }
 
     const handleEdit = async (rowData) => {
