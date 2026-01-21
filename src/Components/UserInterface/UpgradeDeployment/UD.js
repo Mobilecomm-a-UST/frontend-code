@@ -22,6 +22,9 @@ const Error = lazy(() => import('../../../Components/csss/Error'));
 const RFAItoMS1_UploadFile = lazy(() => import('./RFAItoMS1/UploadFile/Upload'))
 const RFAItoMS1_DashboardTable = lazy(() => import('./RFAItoMS1/Dashboard/DashboardTable'))
 const RFAItoMS1_FinalData = lazy(() => import('./RFAItoMS1/Dashboard/FinalData'))
+const RFAItoMS1_lifecycle = lazy(() => import('./RFAItoMS1/LifeCycleDashboard/LifeCycle'))
+
+const MS1toMS2_Waterfall = lazy(() => import('./MS1toMS2/Dashboard/DashboardTable'))
 
 
 
@@ -119,9 +122,9 @@ const UD = () => {
                                                 <Nav.Item eventKey="1-2" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/upgrade_deployment/rfai_to_ms1_waterfall'); show(); setMenuButton(true) }}>
                                                     Waterfall Dashboard
                                                 </Nav.Item>
-                                                {/* <Nav.Item eventKey="1-3" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/upgrade_deployment/'); show(); setMenuButton(true) }}>
+                                                <Nav.Item eventKey="1-3" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/upgrade_deployment/rfai_to_ms1_lifecycle'); show(); setMenuButton(true) }}>
                                                     Site Lifecycle
-                                                </Nav.Item> */}
+                                                </Nav.Item>
                                                 {/* <Nav.Item eventKey="1-4" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/upgrade_deployment/'); show(); setMenuButton(true) }}>
                                                     Ageing Dashboard
                                                 </Nav.Item> */}
@@ -133,11 +136,11 @@ const UD = () => {
                                             </Nav.Menu>
 
                                             {/* MS1 to MS2 */}
-                                            {/* <Nav.Menu eventKey="2" style={{ fontWeight: 400, color: 'white' }} placement="leftStart" className="menu-title-custom" title="MS1 To MS2" icon={<ArrowRightIcon />}  >
-                                                <Nav.Item eventKey="2-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/ms1_to_ms2_waterfall'); show(); setMenuButton(true) }}>
+                                            <Nav.Menu eventKey="2" style={{ fontWeight: 400, color: 'white' }} placement="leftStart" className="menu-title-custom" title="MS1 To MS2" icon={<ArrowRightIcon />}  >
+                                                <Nav.Item eventKey="2-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/upgrade_deployment/ms1_to_ms2_waterfall'); show(); setMenuButton(true) }}>
                                                     Waterfall Dashboard
                                                 </Nav.Item>
-                                                <Nav.Item eventKey="2-2" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/ms1_to_ms2_aging'); show(); setMenuButton(true) }}>
+                                                {/* <Nav.Item eventKey="2-2" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/ms1_to_ms2_aging'); show(); setMenuButton(true) }}>
                                                     Ageing Dashboard
                                                 </Nav.Item>
                                                 <Nav.Item eventKey="2-2" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/ms1_to_ms2_ftr_dashboard'); show(); setMenuButton(true) }}>
@@ -145,8 +148,8 @@ const UD = () => {
                                                 </Nav.Item>
                                                 <Nav.Item eventKey="2-4" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/ms1_to_ms2_upload_ftr'); show(); setMenuButton(true) }}>
                                                     Upload FTR
-                                                </Nav.Item>
-                                            </Nav.Menu> */}
+                                                </Nav.Item> */}
+                                            </Nav.Menu>
 
                                             {/* Dismantle */}
                                             {/* <Nav.Menu eventKey="3" style={{ fontWeight: 400, color: 'white' }} placement="leftStart" className="menu-title-custom" title="Dismantle" icon={<ArrowRightIcon />}  >
@@ -175,6 +178,8 @@ const UD = () => {
                                 {!userTypes?.includes('UDT_reader') && <Route element={<RFAItoMS1_UploadFile />} path="/rfai_to_ms1_upload_file" />}
                                 <Route element={<RFAItoMS1_DashboardTable />} path="/rfai_to_ms1_waterfall/*" />
                                 <Route element={<RFAItoMS1_FinalData />} path="/rfai_to_ms1_waterfall/:milestone" />
+                                <Route element={<RFAItoMS1_lifecycle />} path="/rfai_to_ms1_lifecycle" />
+                                <Route element={<MS1toMS2_Waterfall />} path="/ms1_to_ms2_waterfall/*" />
 
 
 

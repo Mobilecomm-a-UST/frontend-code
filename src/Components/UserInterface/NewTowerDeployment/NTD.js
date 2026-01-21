@@ -20,6 +20,10 @@ import AdminIcon from '@rsuite/icons/Admin';
 const NTDTool = lazy(() => import('./NTDTool'));
 const RFAItoMS1_UploadFile = lazy(() => import('./RFAItoMS1/UploadFile/Upload'));
 const RFAItoMS1_Waterfall_Dashboard = lazy(() => import('./RFAItoMS1/Dashboard/DashboardTable'));
+const RFAItoMS1_lifecycle = lazy(() => import('./RFAItoMS1/LifeCycleDashboard/LifeCycle'));
+const RFAItoMS1_FinalData = lazy(()=>import('./RFAItoMS1/Dashboard/FinalData'))
+
+const MS1toMS2_Waterfall = lazy(()=>import('./MS1toMS2/Dashboard/DashboardTable'))
 
 
 
@@ -111,9 +115,9 @@ const NTD = () => {
                                                     <Nav.Item eventKey="1-2" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/ntd/rfai_to_ms1_waterfall'); show(); setMenuButton(true) }}>
                                                         Waterfall Dashboard
                                                     </Nav.Item>
-                                                    {/* <Nav.Item eventKey="1-3" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/site_lifecycle'); show(); setMenuButton(true) }}>
+                                                    <Nav.Item eventKey="1-3" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/ntd/rfai_to_ms1_site_lifecycle'); show(); setMenuButton(true) }}>
                                                         Site Lifecycle
-                                                    </Nav.Item> */}
+                                                    </Nav.Item>
                                                     {/* <Nav.Item eventKey="1-4" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/rfai_to_ms1_ageing'); show(); setMenuButton(true) }}>
                                                         Ageing Dashboard
                                                     </Nav.Item> */}
@@ -123,17 +127,17 @@ const NTD = () => {
                                                 </Nav.Menu>
     
                                                 {/* MS1 to MS2 */}
-                                                {/* <Nav.Menu eventKey="2" style={{ fontWeight: 400, color: 'white' }} placement="leftStart" className="menu-title-custom" title="MS1 To MS2" icon={<ArrowRightIcon />}  >
-                                                    <Nav.Item eventKey="2-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/ms1_to_ms2_waterfall'); show(); setMenuButton(true) }}>
+                                                <Nav.Menu eventKey="2" style={{ fontWeight: 400, color: 'white' }} placement="leftStart" className="menu-title-custom" title="MS1 To MS2" icon={<ArrowRightIcon />}  >
+                                                    <Nav.Item eventKey="2-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/ntd/ms1_to_ms2_waterfall'); show(); setMenuButton(true) }}>
                                                         Waterfall Dashboard
                                                     </Nav.Item>
-                                                    <Nav.Item eventKey="2-2" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/ms1_to_ms2_ftr_dashboard'); show(); setMenuButton(true) }}>
+                                                    {/* <Nav.Item eventKey="2-2" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/ms1_to_ms2_ftr_dashboard'); show(); setMenuButton(true) }}>
                                                         FTR Dashboard
                                                     </Nav.Item>
                                                     <Nav.Item eventKey="2-3" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/ms1_to_ms2_upload_ftr'); show(); setMenuButton(true) }}>
                                                         Upload FTR
-                                                    </Nav.Item>
-                                                </Nav.Menu> */}
+                                                    </Nav.Item> */}
+                                                </Nav.Menu>
                                             </Nav>
                                         </Sidenav.Body>
     
@@ -149,7 +153,9 @@ const NTD = () => {
                                     <Route element={<NTDTool />} path="/" />
                                     <Route element={<RFAItoMS1_UploadFile />} path="/nt_upload" />
                                     <Route element={<RFAItoMS1_Waterfall_Dashboard />} path="/rfai_to_ms1_waterfall" />
-
+                                    <Route element={<RFAItoMS1_lifecycle />} path="/rfai_to_ms1_site_lifecycle" />
+                                    <Route element={<RFAItoMS1_FinalData />} path="/rfai_to_ms1_waterfall/:milestone" />                   
+                                    <Route element={<MS1toMS2_Waterfall/>} path='ms1_to_ms2_waterfall' />                 
                                   
                                     {/* <Route
                                         path="/rfai_to_ms1_upload_file"
