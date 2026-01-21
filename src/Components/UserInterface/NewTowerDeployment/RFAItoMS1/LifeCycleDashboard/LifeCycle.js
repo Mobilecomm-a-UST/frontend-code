@@ -50,7 +50,7 @@ const LifeCycle = () => {
     const { action, loading } = useLoadingDialog();
     console.log('issue table', milestoneData)
 
-
+// nt_tracker
 
     const handleSubmitSite = async (e) => {
         e.preventDefault()
@@ -62,7 +62,7 @@ const LifeCycle = () => {
             formData.append('userId', userID);
             formData.append('circle', selectCircle);
             const response = await axios.post
-                (`${ServerURL}/alok_tracker/lifecycle_display/`, formData, {
+                (`${ServerURL}/nt_tracker/lifecycle_display/`, formData, {
                     headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
                 });
 
@@ -100,7 +100,7 @@ const LifeCycle = () => {
             formData.append('userId', userID);
             formData.append('circle', selectCircle);
             const response = await axios.post
-                (`${ServerURL}/alok_tracker/lifecycle_display/`, formData, {
+                (`${ServerURL}/nt_tracker/lifecycle_display/`, formData, {
                     headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
                 });
 
@@ -160,15 +160,17 @@ const LifeCycle = () => {
             formData.append('circle', milestoneData?.[0]?.circle || "");
             // formData.append('timeline', JSON.stringify(issueTable));
             const response = await axios.post
-                (`${ServerURL}/alok_tracker/issue_timeline_add/`, formData, {
+                (`${ServerURL}/nt_tracker/issue_timeline_add/`, formData, {
                     headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
                 });
 
             if (response.status) {
                 // console.log('add list data responce ', response)
+                setTableForm({})
                 action(false)
                 refetchMilestoneAfterEdit();
                 refetchlifecycleData();
+               
                 // setMilestoneData(JSON.parse(response?.data?.json_data SER))
                 Swal.fire({
                     icon: "success",
@@ -203,11 +205,11 @@ const LifeCycle = () => {
             formData.append('issue', tempIssueTableData?.['Issue Name'] || "");
             formData.append('start_date', dateFormateChange(tempIssueTableData?.['Start Date']));
             formData.append('close_date', dateFormateChange(tempIssueTableData?.['Close Date']));
-            formData.append('remarks', tempIssueTableData?.['remarks'] || "");
+            formData.append('remarks', tempIssueTableData?.['Remarks'] || "");
             formData.append('owner', tempIssueTableData?.['Issue Owner'] || "");
 
             const response = await axios.post(
-                `${ServerURL}/alok_tracker/issue_timeline_update/`,
+                `${ServerURL}/nt_tracker/issue_timeline_update/`,
                 formData,
                 {
                     headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
@@ -372,8 +374,8 @@ const LifeCycle = () => {
                             <TextField
                                 variant="outlined"
                                 label="Remarks"
-                                name="remarks"
-                                value={tempIssueTableData?.['remarks'] || ''}
+                                name="Remarks"
+                                value={tempIssueTableData?.['Remarks'] || ''}
                                 onChange={handleChangeListDialog}
                                 type="text"
                                 size="small"
@@ -403,7 +405,7 @@ const LifeCycle = () => {
             formData.append("milestone", milestoneName);
 
             const response = await axios.post(
-                `${ServerURL}/alok_tracker/issue_timeline_display/`,
+                `${ServerURL}/nt_tracker/issue_timeline_display/`,
                 formData,
                 {
                     headers: {
@@ -437,7 +439,7 @@ const LifeCycle = () => {
             formData.append("milestone", milestoneSelectName);
 
             const response = await axios.post(
-                `${ServerURL}/alok_tracker/issue_timeline_display/`,
+                `${ServerURL}/nt_tracker/issue_timeline_display/`,
                 formData,
                 {
                     headers: {
@@ -470,7 +472,7 @@ const LifeCycle = () => {
             formData.append("circle", selectCircle);
 
             const response = await axios.post(
-                `${ServerURL}/alok_tracker/issue_timeline_delete/`,
+                `${ServerURL}/nt_tracker/issue_timeline_delete/`,
                 formData,
                 {
                     headers: {
@@ -510,7 +512,7 @@ const LifeCycle = () => {
             <div style={{ margin: 5, marginLeft: 10 }}>
                 <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
                     <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
-                    <Link underline="hover" onClick={() => { navigate('/tools/relocation_tracking') }}>Relocation Tracking</Link>
+                    <Link underline="hover" onClick={() => { navigate('/tools/ntd') }}>New Tower Deployment</Link>
                     <Typography color='text.primary'>Site Lifecycle</Typography>
                 </Breadcrumbs>
             </div>
@@ -741,7 +743,7 @@ const LifeCycle = () => {
                                                             <th style={{ color: 'black' }}>{it['Start Date']}</th>
                                                             <th style={{ color: 'black' }}>{it['Close Date']}</th>
                                                             <th style={{ color: 'black' }}>{it['Duration']}</th>
-                                                            <th style={{ color: 'black' }}>{it['remarks']}</th>
+                                                            <th style={{ color: 'black' }}>{it['Remarks']}</th>
                                                             <th style={{ color: 'black' }}>{it['Issue Owner']}</th>
                                                             <th style={{ color: 'black' }}>
                                                                 {it.Status == 'Closed' ? <IconButton >

@@ -98,6 +98,11 @@ const bandSiwaOptions = [
     'L2300',
     '3500',
 ];
+const configuration5GLookup = {
+    'NSA': 'NSA',
+    'SA': 'SA',
+    'NSA+SA': 'NSA+SA',
+};
 
 const activityTypeSiwaLookup = {
     FDD_SEC_ADDITION: 'FDD_SEC_ADDITION',
@@ -290,7 +295,7 @@ const ComanDashboard = () => {
                 );
             },
         },
-        // { title: '5G Configuration', field: 'Configuration_5G' },
+        { title: '5G Configuration', field: 'Configuration_5G',lookup: configuration5GLookup },
         { title: 'OSS Details', field: 'OSS_Details' },
         { title: 'Cell ID', field: 'Cell_ID' },
         { title: 'CELL COUNT', field: 'CELL_COUNT', type: 'numeric' },
@@ -453,7 +458,9 @@ const ComanDashboard = () => {
             }
         },
 
-        // { title: 'Old Site Tech', field: 'Old_Site_Tech' },
+        { title: 'NO OF BBU', field: 'NO_OF_BBU' },
+        { title: 'Uploaded By', field: 'uploaded_by',editable: 'never' },
+        { title: 'Upload Date', field: 'upload_date',editable: 'never' },
 
     ];
 

@@ -16,15 +16,215 @@ import { Grid, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux'
 import { getDecreyptedData } from '../../../utils/localstorage';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ClearIcon from '@mui/icons-material/Clear';
+import SaveIcon from '@mui/icons-material/Check';
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import {
+    Select,
+    MenuItem,
+    Checkbox,
+    ListItemText,
+} from '@mui/material';
 
 
 
+const circleLookup = {
+    AP: 'AP',
+    BIH: 'BIH',
+    CHN: 'CHN',
+    ROTN: 'ROTN',
+    DEL: 'DEL',
+    HRY: 'HRY',
+    JK: 'JK',
+    JRK: 'JRK',
+    KOL: 'KOL',
+    MAH: 'MAH',
+    MP: 'MP',
+    MUM: 'MUM',
+    ORI: 'ORI',
+    PUN: 'PUN',
+    RAJ: 'RAJ',
+    UPE: 'UPE',
+    UPW: 'UPW',
+    WB: 'WB',
+    KK: 'KK',
+    HP: 'HP',
+    NESA: 'NESA',
+    ASM: 'ASM',
+};
+const activityNameLookup = {
+    ULS_HPSC: 'ULS_HPSC',
+    RELOCATION: 'RELOCATION',
+    MACRO: 'MACRO',
+    'DE-GROW': 'DE-GROW',
+    RET: 'RET',
+    IBS: 'IBS',
+    ODSC: 'ODSC',
+    IDSC: 'IDSC',
+    'HT INCREMENT': 'HT INCREMENT',
+    FEMTO: 'FEMTO',
+    OTHERS: 'OTHERS',
+    UPGRADE: 'UPGRADE',
+    RECTIFICATION: 'RECTIFICATION',
+    '5G SECTOR ADDITION': '5G SECTOR ADDITION',
+    OPERATIONS: 'OPERATIONS',
+    '5G RELOCATION': '5G RELOCATION',
+    'TRAFFIC SHIFTING': 'TRAFFIC SHIFTING',
+    'RRU UPGRADE': 'RRU UPGRADE',
+    '5G RRU SWAP': '5G RRU SWAP',
+    '5G BW UPGRADE': '5G BW UPGRADE',
+    '5G AIR SWAP': '5G AIR SWAP',
+    'RRU SWAP': 'RRU SWAP',
+};
+const oemLookup = {
+    NOKIA: 'NOKIA',
+    ZTE: 'ZTE',
+    SAMSUNG: 'SAMSUNG',
+    ERICSSON: 'ERICSSON',
+    HUAWEI: 'HUAWEI',
+};
+const bandSiwaLookup = {
+    'G900': 'G900',
+    'G1800': 'G1800',
+    'L850': 'L850',
+    'L900': 'L900',
+    'L1800': 'L1800',
+    'L2100': 'L2100',
+    'L2300': 'L2300',
+    '3500': '3500',
+};
+const bandSiwaOptions = [
+    'G900',
+    'G1800',
+    'L850',
+    'L900',
+    'L1800',
+    'L2100',
+    'L2300',
+    '3500',
+];
+const configuration5GLookup = {
+    'NSA': 'NSA',
+    'SA': 'SA',
+    'NSA+SA': 'NSA+SA',
+};
 
-
-
-function toCamelCase(input) {
-    return input.charAt(0).toUpperCase() + input.slice(1).toLowerCase();
+const activityTypeSiwaLookup = {
+    FDD_SEC_ADDITION: 'FDD_SEC_ADDITION',
+    FDD_TWIN_BEAM: 'FDD_TWIN_BEAM',
+    FDD_UPGRADE: 'FDD_UPGRADE',
+    L2100_UPGRADE: 'L2100_UPGRADE',
+    L900_UPGRADE: 'L900_UPGRADE',
+    NEW_TOWER: 'NEW_TOWER',
+    NEW_TOWER_ULS: 'NEW_TOWER_ULS',
+    TDD_SEC_ADDITION: 'TDD_SEC_ADDITION',
+    TDD_TWIN_BEAM: 'TDD_TWIN_BEAM',
+    TDD_UPGRADE: 'TDD_UPGRADE',
+    UPGRADE_SW_ONLY: 'UPGRADE_SW_ONLY',
+    UPGRADE_ULS: 'UPGRADE_ULS',
+    '5G_SEC_ADDITION': '5G_SEC_ADDITION',
+    '5G_UPGRADE': '5G_UPGRADE',
+    RET: 'RET',
+    DEGROW: 'DEGROW',
+    OTHERS: 'OTHERS',
+    'CPRI addition': 'CPRI addition',
+    'SFP change': 'SFP change',
+    'BW upgradation': 'BW upgradation',
+    'BTS swap': 'BTS swap',
+    'IP modification': 'IP modification',
+    'Hot swap': 'Hot swap',
+    'Nomenclature change': 'Nomenclature change',
+    '2G deletion': '2G deletion',
+    'Carrier Addition': 'Carrier Addition',
+};
+const activityTypeSANSA = {
+    SA: 'SA',
+    NSA: 'NSA',
 }
+const technologyOptions = [
+    '2G',
+    'FDD',
+    'TDD',
+    '5G',
+    'Card Degrow',
+];
+const oldSiteTechOptions = [
+    'G900',
+    'G1800',
+    'L850',
+    'L900',
+    'L1800',
+    'L2100',
+    'L2300',
+    '3500',
+];
+const DEFAULT_ROW = {
+    OEM: "",
+    Integration_Date: null,
+    CIRCLE: "",
+    Activity_Name: "",
+    Site_ID: "",
+    MO_NAME: "",
+    LNBTS_ID: "",
+    Technology_SIWA: "",
+    Configuration_5G: "",
+    OSS_Details: "",
+    Cell_ID: "",
+    CELL_COUNT: "",
+    BSC_NAME: "",
+    BCF: "",
+    TRX_Count: "",
+    PRE_ALARM: "",
+    GPS_IP_CLK: "",
+    RET: "",
+    POST_VSWR: "",
+    POST_Alarms: "",
+    Activity_Mode: "",
+    Activity_Type_SIWA: "",
+    Band_SIWA: "",
+    CELL_STATUS: "",
+    CTR_STATUS: "",
+    Integration_Remark: "",
+    T2T4R: "",
+    BBU_TYPE: "",
+    BB_CARD: "",
+    RRU_Type: "",
+    Media_Status: "",
+    Mplane_IP: "",
+    SCF_PREPARED_BY: "",
+    SITE_INTEGRATE_BY: "",
+    Site_Status: "",
+    External_Alarm_Confirmation: "",
+    SOFT_AT_STATUS: "",
+    LICENCE_Status: "",
+    ESN_NO: "",
+    Responsibility_for_alarm_clearance: "",
+    TAC: "",
+    PCI_TDD_20: "",
+    PCI_TDD_10_20: "",
+    PCI_FDD_2100: "",
+    PCI_FDD_1800: "",
+    PCI_L900: "",
+    PCI_5G: "",
+    RSI_TDD_20: "",
+    RSI_TDD_10_20: "",
+    RSI_FDD_2100: "",
+    RSI_FDD_1800: "",
+    RSI_L900: "",
+    RSI_5G: "",
+    GPL: "",
+    Pre_Post_Check: "",
+    CRQ: "",
+    Customer_Approval: "",
+    FR_Date: "",
+    HOTO_Offered_Date_4g: "",
+    HOTO_Accepted_Date_4g: "",
+    HOTO_Offered_Date_2g: "",
+    HOTO_Accepted_Date_2g: "",
+};
+
 
 const ComanDashboard = () => {
     const listDataa = useSelector(state => state.IXtracker)
@@ -99,13 +299,6 @@ const ComanDashboard = () => {
     const userTypes = (getDecreyptedData('user_type')?.split(","))
     const [status, setStatus] = useState()
     const [selectedRows, setSelectedRows] = useState([])
-    // const params = useParams()
-
-
-    // console.log('redux data handler', listDataa)
-
-
-
     const handleChange = (e) => {
         setEditData({
             ...editData,
@@ -178,8 +371,6 @@ const ComanDashboard = () => {
             HOTO_Accepted_Date_4g: rowData.HOTO_Accepted_Date_4g,
             HOTO_Offered_Date_2g: rowData.HOTO_Offered_Date_2g,
             HOTO_Accepted_Date_2g: rowData.HOTO_Accepted_Date_2g,
-         
-
         })
         setEditDataID(rowData.id)
         setOpen(true)
@@ -210,8 +401,6 @@ const ComanDashboard = () => {
 
     }
 
-
-
     const handleDelete = async (rowData) => {
         axios.delete(`${ServerURL}/ix_tracker_vi/delete-integration-record/${rowData.id}/`, { headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }, })
             .then((res) => {
@@ -235,21 +424,76 @@ const ComanDashboard = () => {
             });
     }
 
+    const tableIcons = {
+        Edit: () => <EditIcon color="primary" />,
+        Delete: () => <DeleteIcon color="error" />,
+        Clear: () => <ClearIcon />,
+        Check: () => <SaveIcon color="success" />,
+        Add: () => <AddBoxIcon color="primary" />,
+    };
 
     const columnData = [
-        { title: 'OEM', field: 'OEM' },
-        { title: 'Integration Date', field: 'Integration_Date' },
-        { title: 'CIRCLE', field: 'CIRCLE' },
-        { title: 'Activity Name', field: 'Activity_Name' },
-        { title: 'Site ID', field: 'Site_ID' },
+        {
+            title: 'OEM', field: 'OEM', lookup: oemLookup,
+            validate: rowData =>
+                rowData.OEM ? true : 'OEM is required',
+        },
+        {
+            title: 'Integration Date', field: 'Integration_Date', type: 'date',
+            validate: rowData =>
+                rowData.Integration_Date ? true : 'Integration Date is required',
+        },
+        {
+            title: 'CIRCLE', field: 'CIRCLE', lookup: circleLookup,
+            validate: rowData =>
+                rowData.CIRCLE ? true : 'Circle is required',
+        },
+        {
+            title: 'Activity Name', field: 'Activity_Name', lookup: activityNameLookup,
+            validate: rowData =>
+                rowData.Activity_Name ? true : 'Activity Name is required',
+        },
+        {
+            title: 'Site ID', field: 'Site_ID',
+            validate: rowData =>
+                rowData.Site_ID ? true : 'Site ID is required',
+        },
         { title: 'MO NAME', field: 'MO_NAME' },
-
         { title: 'LNBTS ID', field: 'LNBTS_ID' },
-        { title: 'Technology (SIWA)', field: 'Technology_SIWA' },
-        { title: 'Configuration 5G', field: 'Configuration_5G' },
+        // { title: 'Technology (SIWA)', field: 'Technology_SIWA' },
+        {
+            title: 'Technology (SIWA)',
+            field: 'Technology_SIWA',
+
+            editComponent: props => {
+                const selectedValues = props.value
+                    ? props.value.split(',')
+                    : [];
+
+                return (
+                    <Select
+                        multiple
+                        fullWidth
+                        value={selectedValues}
+                        onChange={e =>
+                            props.onChange(e.target.value.join(','))
+                        }
+                        renderValue={selected => selected.join(', ')}
+                    >
+                        {technologyOptions.map(tech => (
+                            <MenuItem key={tech} value={tech}>
+                                <Checkbox checked={selectedValues.includes(tech)} />
+                                <ListItemText primary={tech} />
+                            </MenuItem>
+                        ))}
+                    </Select>
+                );
+            },
+        },
+        { title: '5G Configuration', field: 'Configuration_5G', lookup: configuration5GLookup },
         { title: 'OSS Details', field: 'OSS_Details' },
         { title: 'Cell ID', field: 'Cell_ID' },
-        { title: 'CELL COUNT', field: 'CELL_COUNT' },
+        { title: 'CELL COUNT', field: 'CELL_COUNT', type: 'numeric' },
         { title: 'BSC NAME', field: 'BSC_NAME' },
         { title: 'BCF', field: 'BCF' },
         { title: 'TRX Count', field: 'TRX_Count' },
@@ -258,11 +502,38 @@ const ComanDashboard = () => {
         { title: 'RET', field: 'RET' },
         { title: 'POST VSWR', field: 'POST_VSWR' },
         { title: 'POST Alarms', field: 'POST_Alarms' },
-        { title: 'Activity Mode (SA/NSA)', field: 'Activity_Mode' },
-        { title: 'Activity Type (SIWA)', field: 'Activity_Type_SIWA' },
-        { title: 'Band (SIWA)', field: 'Band_SIWA' },
+        { title: 'Activity Mode (SA/NSA)', field: 'Activity_Mode', lookup: activityTypeSANSA },
+        { title: 'Activity Type (SIWA)', field: 'Activity_Type_SIWA', lookup: activityTypeSiwaLookup },
+        // { title: 'Band (SIWA)', field: 'Band_SIWA', lookup: bandSiwaLookup },
+        {
+            title: 'Band (SIWA)',
+            field: 'Band_SIWA',
 
+            editComponent: props => {
+                const selectedValues = props.value
+                    ? props.value.split(',')
+                    : [];
 
+                return (
+                    <Select
+                        multiple
+                        fullWidth
+                        value={selectedValues}
+                        onChange={e =>
+                            props.onChange(e.target.value.join(','))
+                        }
+                        renderValue={selected => selected.join(', ')}
+                    >
+                        {bandSiwaOptions.map(band => (
+                            <MenuItem key={band} value={band}>
+                                <Checkbox checked={selectedValues.includes(band)} />
+                                <ListItemText primary={band} />
+                            </MenuItem>
+                        ))}
+                    </Select>
+                );
+            },
+        },
         { title: 'CELL STATUS', field: 'CELL_STATUS' },
         { title: 'CTR STATUS', field: 'CTR_STATUS' },
         { title: 'Integration Remark', field: 'Integration_Remark' },
@@ -308,43 +579,31 @@ const ComanDashboard = () => {
         { title: '4G HOTO Accepted Date.', field: 'HOTO_Accepted_Date_4g' },
         { title: '2G HOTO Offered Date.', field: 'HOTO_Offered_Date_2g' },
         { title: '2G HOTO Accepted Date.', field: 'HOTO_Accepted_Date_2g' },
+         { title: 'Uploaded By', field: 'uploaded_by',editable: 'never' },
+        { title: 'Upload Date', field: 'upload_date',editable: 'never' },
+        // {
+        //     title: 'Actions',
+        //     field: 'actions',
+        //     render: rowData => (
+        //         <>
+        //             {!userTypes?.includes('VI_IX_reader') && <IconButton aria-label="delete" title={'Edit'} size="large" onClick={() => { handleEdit(rowData) }}>
+        //                 <DriveFileRenameOutlineIcon
+        //                     style={{ cursor: 'pointer' }}
+        //                     color='success'
+        //                 />
+        //             </IconButton>}
+        //             {!userTypes?.includes('VI_IX_reader') && <IconButton aria-label="delete" title={'Delete'} size="large" onClick={() => { handleDelete(rowData) }}>
+        //                 <DeleteOutlineIcon
+        //                     style={{ cursor: 'pointer' }}
+        //                     color='error'
+        //                 />
+        //             </IconButton>}
+        //         </>
 
-        {
-            title: 'Actions',
-            field: 'actions',
-            render: rowData => (
-                <>
-                    {!userTypes?.includes('VI_IX_reader') && <IconButton aria-label="delete" title={'Edit'} size="large" onClick={() => { handleEdit(rowData) }}>
-                        <DriveFileRenameOutlineIcon
-                            style={{ cursor: 'pointer' }}
-                            color='success'
-                        />
-                    </IconButton>}
-                    {!userTypes?.includes('VI_IX_reader') && <IconButton aria-label="delete" title={'Delete'} size="large" onClick={() => { handleDelete(rowData) }}>
-                        <DeleteOutlineIcon
-                            style={{ cursor: 'pointer' }}
-                            color='error'
-                        />
-                    </IconButton>}
-                </>
-
-            )
-        }
+        //     )
+        // }
 
     ]
-
-
-    const getStatus = () => {
-        var arr = []
-        listData?.map((item) => {
-            // console.log('status oem', item.AT_STATUS)
-            arr.push(item.AT_STATUS)
-        })
-        setStatus(`( ${[...new Set(arr)]} )`);
-
-
-
-    }
 
 
     const handleDialogBox = useCallback(() => {
@@ -403,7 +662,6 @@ const ComanDashboard = () => {
             .setColumns(columnData.map(item => item.title))
             .addRows(data.map(row => columnData.map(col => row[col.field])))
             .exportFile();
-
     }
 
     return (
@@ -415,40 +673,144 @@ const ComanDashboard = () => {
                     data={listData}
                     onSelectionChange={(rows) => setSelectedRows(rows)}
                     // onRowClick={((evt, selectedRow) => console.log())}
+                     icons={tableIcons}
+                    editable={{
+                        onRowAdd: newData =>
+                            new Promise(async (resolve, reject) => {
+                                try {
+
+                                    const payload = {
+                                        ...DEFAULT_ROW,
+                                        ...newData,
+                                    };
+                                    const response = await axios.post(
+                                        `${ServerURL}/IntegrationTracker/add_integration_record/`,
+                                        payload,
+                                        {
+                                            headers: {
+                                                Authorization: `token ${getDecreyptedData('tokenKey')}`,
+                                            },
+                                        }
+                                    );
+                                    // If backend returns created object with ID
+                                    const savedData = response.data.data || newData;
+                                    setListData(prevData => [...prevData, savedData]);
+                                    navigate('/tools/Integration/dashboard')
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Added',
+                                        text: 'New row added successfully',
+                                        timer: 1500,
+                                        showConfirmButton: false,
+                                    });
+                                    resolve();
+                                } catch (error) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: error.response?.data?.message || error.message,
+                                    });
+                                    reject();
+                                }
+                            }),
+
+                        onRowUpdate: (newData, oldData) =>
+                            new Promise(async (resolve, reject) => {
+                                try {
+                                    await axios.put(
+                                        `${ServerURL}/IntegrationTracker/edit-integration-record/${oldData.id}/`,
+                                        newData,
+                                        {
+                                            headers: {
+                                                Authorization: `token ${getDecreyptedData('tokenKey')}`,
+                                            },
+                                        }
+                                    );
+                                    const updatedData = [...listData];
+                                    updatedData[oldData.tableData.id] = newData;
+                                    setListData(updatedData);
+                                    navigate('/tools/Integration/dashboard')
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Updated',
+                                        text: 'Row updated successfully',
+                                        timer: 1500,
+                                        showConfirmButton: false,
+                                    });
+
+                                    resolve();
+                                } catch (error) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: error.response?.data?.message || error.message,
+                                    });
+                                    reject();
+                                }
+                            }),
+
+                        onRowDelete: oldData =>
+                            new Promise(async (resolve, reject) => {
+                                try {
+                                    await axios.delete(
+                                        `${ServerURL}/ix_tracker_vi/delete-integration-record/${oldData.id}/`,
+                                        {
+                                            headers: {
+                                                Authorization: `token ${getDecreyptedData('tokenKey')}`,
+                                            },
+                                        }
+                                    );
+                                    const newData = listData.filter(item => item.id !== oldData.id);
+                                    setListData(newData);
+
+                                    // navigate('/tools/Integration/dashboard')
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Deleted',
+                                        text: 'Row deleted successfully',
+                                        timer: 1500,
+                                        showConfirmButton: false,
+                                    });
+
+                                    resolve();
+                                } catch (error) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: error.response?.data?.message || error.message,
+                                    });
+                                    reject();
+                                }
+                            }),
+                    }}
                     actions={[
                         {
                             icon: () => <DownloadIcon color='primary' fontSize='large' />,
                             tooltip: "Export to Excel",
                             onClick: () => downloadExcel(listData), isFreeAction: true
-                        },
-                        {
-                            tooltip: 'Selected Rows download',
-                            icon: () => <DownloadIcon color='error' fontSize='large' />,
-                            onClick: (evt, data) => downloadExcel(data),
                         }
                     ]}
 
                     options={{
-                        selection: true,
                         search: true,
-                        exportButton: true,
-                        grouping: true,
+                        paging: true,
+
+                        // 🔥 THIS LINE MOVES ACTION BUTTONS TO FIRST COLUMN
+                        actionsColumnIndex: 0,
+
                         headerStyle: {
                             backgroundColor: '#01579b',
                             color: '#FFF',
-                            width: 'auto',
-                            whiteSpace: 'nowrap'
+                            whiteSpace: 'nowrap',
                         },
                         rowStyle: {
-                            // backgroundColor: '#EEE',
-                            width: 'auto',
-                            whiteSpace: 'nowrap'
+                            whiteSpace: 'nowrap',
                         },
                     }}
                 />
             </div>
 
-            {handleDialogBox()}
+            {/* {handleDialogBox()} */}
         </>
     )
 }

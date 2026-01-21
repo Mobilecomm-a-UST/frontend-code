@@ -38,6 +38,7 @@ const LifeCycle = () => {
     const navigate = useNavigate()
     const userID = getDecreyptedData("userID")
     const [siteId, setSiteId] = useState('')
+    const [srNumber, setSrNumber] = useState('')
     const [selectCircle, setSelectCircle] = useState('')
     const [milestoneData, setMilestoneData] = useState([])
     const [milestoneSelectName, setMilestoneSelectName] = useState('')
@@ -46,6 +47,7 @@ const LifeCycle = () => {
     const [issueCount, setIssueCount] = useState([])
     const [tempIssueTableData, setTempIssueTableData] = useState()
     const [open, setOpen] = useState(false)
+    
     const userTypes = (getDecreyptedData('user_type')?.split(","))
     const { action, loading } = useLoadingDialog();
     console.log('issue table', milestoneData)
@@ -61,8 +63,9 @@ const LifeCycle = () => {
             formData.append('siteId', siteId);
             formData.append('userId', userID);
             formData.append('circle', selectCircle);
+            formData.append('sr_number', srNumber);
             const response = await axios.post
-                (`${ServerURL}/alok_tracker/lifecycle_display/`, formData, {
+                (`${ServerURL}/upgrade_tracker/lifecycle_display/`, formData, {
                     headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
                 });
 
@@ -99,8 +102,9 @@ const LifeCycle = () => {
             formData.append('siteId', siteId);
             formData.append('userId', userID);
             formData.append('circle', selectCircle);
+            formData.append('sr_number', srNumber);
             const response = await axios.post
-                (`${ServerURL}/alok_tracker/lifecycle_display/`, formData, {
+                (`${ServerURL}/upgrade_tracker/lifecycle_display/`, formData, {
                     headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
                 });
 
@@ -158,9 +162,10 @@ const LifeCycle = () => {
             formData.append('remarks', tableForm?.remarks || "");
             formData.append('milestone', milestoneSelectName);
             formData.append('circle', milestoneData?.[0]?.circle || "");
+             formData.append('sr_number', srNumber);
             // formData.append('timeline', JSON.stringify(issueTable));
             const response = await axios.post
-                (`${ServerURL}/alok_tracker/issue_timeline_add/`, formData, {
+                (`${ServerURL}/upgrade_tracker/issue_timeline_add/`, formData, {
                     headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
                 });
 
@@ -207,7 +212,7 @@ const LifeCycle = () => {
             formData.append('owner', tempIssueTableData?.['Issue Owner'] || "");
 
             const response = await axios.post(
-                `${ServerURL}/alok_tracker/issue_timeline_update/`,
+                `${ServerURL}/upgrade_tracker/issue_timeline_update/`,
                 formData,
                 {
                     headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
@@ -372,8 +377,8 @@ const LifeCycle = () => {
                             <TextField
                                 variant="outlined"
                                 label="Remarks"
-                                name="remarks"
-                                value={tempIssueTableData?.['remarks'] || ''}
+                                name="Remarks"
+                                value={tempIssueTableData?.['Remarks'] || ''}
                                 onChange={handleChangeListDialog}
                                 type="text"
                                 size="small"
@@ -401,9 +406,11 @@ const LifeCycle = () => {
             formData.append("userId", userID);
             formData.append("circle", milestoneData?.[0]?.circle ?? "");
             formData.append("milestone", milestoneName);
+            formData.append("sr_number", srNumber);
+
 
             const response = await axios.post(
-                `${ServerURL}/alok_tracker/issue_timeline_display/`,
+                `${ServerURL}/upgrade_tracker/issue_timeline_display/`,
                 formData,
                 {
                     headers: {
@@ -435,9 +442,10 @@ const LifeCycle = () => {
             formData.append("userId", userID);
             formData.append("circle", milestoneData?.[0]?.circle ?? "");
             formData.append("milestone", milestoneSelectName);
+            formData.append("sr_number", srNumber);
 
             const response = await axios.post(
-                `${ServerURL}/alok_tracker/issue_timeline_display/`,
+                `${ServerURL}/upgrade_tracker/issue_timeline_display/`,
                 formData,
                 {
                     headers: {
@@ -470,7 +478,7 @@ const LifeCycle = () => {
             formData.append("circle", selectCircle);
 
             const response = await axios.post(
-                `${ServerURL}/alok_tracker/issue_timeline_delete/`,
+                `${ServerURL}/upgrade_tracker/issue_timeline_delete/`,
                 formData,
                 {
                     headers: {
@@ -510,7 +518,7 @@ const LifeCycle = () => {
             <div style={{ margin: 5, marginLeft: 10 }}>
                 <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
                     <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
-                    <Link underline="hover" onClick={() => { navigate('/tools/relocation_tracking') }}>Relocation Tracking</Link>
+                    <Link underline="hover" onClick={() => { navigate('/tools/upgrade_deployment') }}>Upgrade Deployment</Link>
                     <Typography color='text.primary'>Site Lifecycle</Typography>
                 </Breadcrumbs>
             </div>
@@ -534,6 +542,7 @@ const LifeCycle = () => {
                                         ))}
                                     </Select>
                                 </FormControl>
+                                <TextField size='small' placeholder='SR Number' label="SR Number" required value={srNumber} onChange={(e) => setSrNumber(e.target.value)} />
                                 <Button type='submit' sx={{ backgroundColor: '#006e74' }} variant='contained'>search site</Button>
                             </form>
                         </Box>
@@ -741,7 +750,7 @@ const LifeCycle = () => {
                                                             <th style={{ color: 'black' }}>{it['Start Date']}</th>
                                                             <th style={{ color: 'black' }}>{it['Close Date']}</th>
                                                             <th style={{ color: 'black' }}>{it['Duration']}</th>
-                                                            <th style={{ color: 'black' }}>{it['remarks']}</th>
+                                                            <th style={{ color: 'black' }}>{it['Remarks']}</th>
                                                             <th style={{ color: 'black' }}>{it['Issue Owner']}</th>
                                                             <th style={{ color: 'black' }}>
                                                                 {it.Status == 'Closed' ? <IconButton >
