@@ -306,6 +306,8 @@ const ComanDashboard = () => {
         });
     }
 
+    console.log('localstorage data', listData)
+
     const handleEdit = async (rowData) => {
         // console.log(rowData)
         setEditData({
@@ -490,7 +492,7 @@ const ComanDashboard = () => {
                 );
             },
         },
-        { title: '5G Configuration', field: 'Configuration_5G', lookup: configuration5GLookup },
+        // { title: '5G Configuration', field: 'Configuration_5G', lookup: configuration5GLookup },
         { title: 'OSS Details', field: 'OSS_Details' },
         { title: 'Cell ID', field: 'Cell_ID' },
         { title: 'CELL COUNT', field: 'CELL_COUNT', type: 'numeric' },
@@ -737,7 +739,6 @@ const ComanDashboard = () => {
                                         timer: 1500,
                                         showConfirmButton: false,
                                     });
-
                                     resolve();
                                 } catch (error) {
                                     Swal.fire({
