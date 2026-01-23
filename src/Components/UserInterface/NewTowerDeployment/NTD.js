@@ -22,6 +22,7 @@ const RFAItoMS1_UploadFile = lazy(() => import('./RFAItoMS1/UploadFile/Upload'))
 const RFAItoMS1_Waterfall_Dashboard = lazy(() => import('./RFAItoMS1/Dashboard/DashboardTable'));
 const RFAItoMS1_lifecycle = lazy(() => import('./RFAItoMS1/LifeCycleDashboard/LifeCycle'));
 const RFAItoMS1_FinalData = lazy(()=>import('./RFAItoMS1/Dashboard/FinalData'))
+const RFAItoMS1_Ageing = lazy(()=>import('./RFAItoMS1/Aging/MainAging'))
 
 const MS1toMS2_Waterfall = lazy(()=>import('./MS1toMS2/Dashboard/DashboardTable'))
 
@@ -118,9 +119,9 @@ const NTD = () => {
                                                     <Nav.Item eventKey="1-3" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/ntd/rfai_to_ms1_site_lifecycle'); show(); setMenuButton(true) }}>
                                                         Site Lifecycle
                                                     </Nav.Item>
-                                                    {/* <Nav.Item eventKey="1-4" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/rfai_to_ms1_ageing'); show(); setMenuButton(true) }}>
+                                                    <Nav.Item eventKey="1-4" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/ntd/rfai_to_ms1_ageing'); show(); setMenuButton(true) }}>
                                                         Ageing Dashboard
-                                                    </Nav.Item> */}
+                                                    </Nav.Item>
                                                     {!userTypes?.includes('NTD_reader') && <Nav.Item eventKey="1-5" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/ntd/nt_upload'); show(); setMenuButton(true) }}>
                                                         Upload File
                                                     </Nav.Item>}
@@ -154,6 +155,7 @@ const NTD = () => {
                                     <Route element={<RFAItoMS1_UploadFile />} path="/nt_upload" />
                                     <Route element={<RFAItoMS1_Waterfall_Dashboard />} path="/rfai_to_ms1_waterfall" />
                                     <Route element={<RFAItoMS1_lifecycle />} path="/rfai_to_ms1_site_lifecycle" />
+                                    <Route element={<RFAItoMS1_Ageing />} path="/rfai_to_ms1_ageing" />
                                     <Route element={<RFAItoMS1_FinalData />} path="/rfai_to_ms1_waterfall/:milestone" />                   
                                     <Route element={<MS1toMS2_Waterfall/>} path='ms1_to_ms2_waterfall' />                 
                                   

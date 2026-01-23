@@ -19,7 +19,7 @@ const MainAging = () => {
             <div style={{ margin: 5, marginLeft: 10 }}>
                 <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
                     <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
-                    <Link underline="hover" onClick={() => { navigate('/tools/relocation_tracking') }}>Relocation Tracking</Link>
+                    <Link underline="hover" onClick={() => { navigate('/tools/ntd') }}>New Tower Deployment</Link>
                     <Typography color='text.primary'>Aging</Typography>
                 </Breadcrumbs>
             </div>
@@ -29,9 +29,9 @@ const MainAging = () => {
             <Box>
                 <MOS />
             </Box>
-            <Box>
+            {/* <Box>
                 <MOS2/>
-            </Box>
+            </Box> */}
             {/* <Box>
                 <Integration />
             </Box>
