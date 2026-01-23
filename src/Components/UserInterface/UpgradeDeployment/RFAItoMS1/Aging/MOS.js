@@ -132,7 +132,7 @@ const MOS = () => {
         {showIssueFilter &&  formData.append('issue', issue)}
         formData.append('type', typeFileter)
 
-        const res = await postData("alok_tracker/ageing_dashboard_file/", formData);
+        const res = await postData("upgrade_tracker/ms1_ageing_dashboard_table2/", formData);
         // const res =  tempData; //  remove this line when API is ready
         console.log('MOS response', res)
         if (res) {
@@ -143,7 +143,7 @@ const MOS = () => {
             setBreakpoint2(res.breakpoint2)
             if (currentStatusOption.length === 0 && site_taggingAgingOption.length === 0) {
                 setCurrentStatusOption(res.unique_data.unique_current_status)
-                setSite_taggingAgingOption(res.unique_data.unique_site_tagging)
+                // setSite_taggingAgingOption(res.unique_data.unique_site_tagging)
             }
             setDownloadExcelData(res.download_link)
 
@@ -348,12 +348,12 @@ const MOS = () => {
                                     ))}
                                 </Select>
                             </FormControl>
-                            <MultiSelectWithAll
+                            {/* <MultiSelectWithAll
                                 label="Site Tagging"
                                 options={site_taggingAgingOption}
                                 selectedValues={site_taggingAgingData}
                                 setSelectedValues={setSite_taggingAgingData}
-                            />
+                            /> */}
 
 
                             <MultiSelectWithAll
