@@ -133,14 +133,14 @@ const MonthWise = () => {
         action(true)
         var formData = new FormData()
         formData.append('circle', circle)
-        formData.append('site_tagging', tagging)
+        // formData.append('site_tagging', tagging)
         formData.append('relocation_method', relocationMethod)
         formData.append('new_toco_name', toco)
         formData.append('view', view)
         formData.append('milestone1', milestone1)
         formData.append('milestone2', milestone2)
         formData.append('type', typeFileter)
-        const res = await postData("alok_tracker/monthly_graph/", formData);
+        const res = await postData("upgrade_tracker/monthly_graph/", formData);
         // const res =  tempData; //  remove this line when API is read
         // console.log('responce data1' , res)
         // console.log('responce data2' , transformData(JSON.parse(res.json_data)))
@@ -150,7 +150,7 @@ const MonthWise = () => {
             if (circleOptions.length === 0) {
                 // setMonthArray((prev) => [...prev, ...res.unique_data.month_columns])
                 setCircleOptions(res.unique_data.unique_circle)
-                setTaggingOptions(res.unique_data.unique_site_tagging)
+                // setTaggingOptions(res.unique_data.unique_site_tagging)
                 setRelocationMethodOptions(res.unique_data.unique_relocation_method)
                 setTocoOptions(res.unique_data.unique_new_toco_name)
             }
@@ -609,12 +609,12 @@ to ${milestone2} (${getTitalValue(milestoneData?.onAirDone, view)})`,
                         setSelectedValues={setCircle}
                     />
                     {/* tagging */}
-                    <MultiSelectWithAll
+                    {/* <MultiSelectWithAll
                         label="Site Tagging"
                         options={taggingOptions}
                         selectedValues={tagging}
                         setSelectedValues={setTagging}
-                    />
+                    /> */}
 
                     {/* Current Status */}
                     <MultiSelectWithAll

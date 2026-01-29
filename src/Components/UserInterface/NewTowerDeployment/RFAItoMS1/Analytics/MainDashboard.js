@@ -51,7 +51,7 @@ const MainDashboard = () => {
         formData.append('from_date', ChangeDateFormate(new Date()))
         formData.append('to_date', ChangeDateFormate(new Date(Date.now() + 86400000)))
         formData.append('view', 'Cumulative')
-        const res = await postData("alok_tracker/daily_dashboard_file/", formData);
+        const res = await postData("nt_tracker/daily_dashboard_file/", formData);
         // const res =  tempData; //  remove this line when API is ready
         // console.log('box wise data ', res)
         if (res) {
@@ -101,7 +101,7 @@ const MainDashboard = () => {
             <div style={{ margin: 5, marginLeft: 10 }}>
                 <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
                     <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
-                    <Link underline="hover" onClick={() => { navigate('/tools/relocation_tracking') }}>Relocation Tracking</Link>
+                    <Link underline="hover" onClick={() => { navigate('/tools/ntd') }}>New Tower Deployment</Link>
                     <Typography color='text.primary'>Analytics Dashboard</Typography>
                 </Breadcrumbs>
             </div>

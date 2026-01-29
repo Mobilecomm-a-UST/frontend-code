@@ -51,7 +51,7 @@ const MainDashboard = () => {
         formData.append('from_date', ChangeDateFormate(new Date()))
         formData.append('to_date', ChangeDateFormate(new Date(Date.now() + 86400000)))
         formData.append('view', 'Cumulative')
-        const res = await postData("alok_tracker/daily_dashboard_file/", formData);
+        const res = await postData("upgrade_tracker/daily_dashboard_file/", formData);
         // const res =  tempData; //  remove this line when API is ready
         // console.log('box wise data ', res)
         if (res) {
