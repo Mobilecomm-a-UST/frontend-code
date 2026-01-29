@@ -24,10 +24,9 @@ const RFAItoMS1_DashboardTable = lazy(() => import('./RFAItoMS1/Dashboard/Dashbo
 const RFAItoMS1_FinalData = lazy(() => import('./RFAItoMS1/Dashboard/FinalData'))
 const RFAItoMS1_lifecycle = lazy(() => import('./RFAItoMS1/LifeCycleDashboard/LifeCycle'))
 const RFAItoMS1_Ageing = lazy(() => import('./RFAItoMS1/Aging/MainAging'))
+const RFAItoMS1_Analytics = lazy(() => import('./RFAItoMS1/Analytics/MainDashboard'))
 
 const MS1toMS2_Waterfall = lazy(() => import('./MS1toMS2/Dashboard/DashboardTable'))
-
-
 
 
 const ProtectedRoute = ({ allowed, children }) => {
@@ -117,9 +116,9 @@ const UD = () => {
                                                 </Nav.Item>} */}
                                             {/* RFAI To MS1 */}
                                             <Nav.Menu eventKey="1" style={{ fontWeight: 400, color: 'white' }} placement="leftStart" className="menu-title-custom" title="RFAI To MS1" icon={<ArrowRightIcon />}  >
-                                                {/* <Nav.Item eventKey="1-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/upgrade_deployment/'); show(); setMenuButton(true) }}>
+                                                <Nav.Item eventKey="1-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/upgrade_deployment/rfai_to_ms1_analytics'); show(); setMenuButton(true) }}>
                                                     Analytics Dashboard
-                                                </Nav.Item> */}
+                                                </Nav.Item>
                                                 <Nav.Item eventKey="1-2" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/upgrade_deployment/rfai_to_ms1_waterfall'); show(); setMenuButton(true) }}>
                                                     Waterfall Dashboard
                                                 </Nav.Item>
@@ -182,6 +181,7 @@ const UD = () => {
                                 <Route element={<RFAItoMS1_lifecycle />} path="/rfai_to_ms1_lifecycle" />
                                 <Route element={<RFAItoMS1_Ageing />} path="/rfai_to_ms1_ageing" />
                                 <Route element={<MS1toMS2_Waterfall />} path="/ms1_to_ms2_waterfall/*" />
+                                <Route element={<RFAItoMS1_Analytics />} path="/rfai_to_ms1_analytics" />
 
 
 

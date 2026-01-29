@@ -134,7 +134,7 @@ const CircleWiese = () => {
             formData.append('milestone2', milestone2)
             formData.append('month', month.split('-')[1] || '')
             formData.append('year', month.split('-')[0] || '')
-            const res = await postData("alok_tracker/graphs/", formData);
+            const res = await postData("nt_tracker/graphs/", formData);
             // const res =  tempData; //  remove this line when API is ready
             console.log(' circle wise data', (res))
             if (res) {

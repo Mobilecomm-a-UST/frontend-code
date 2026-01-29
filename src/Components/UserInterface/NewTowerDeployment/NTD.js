@@ -23,8 +23,9 @@ const RFAItoMS1_Waterfall_Dashboard = lazy(() => import('./RFAItoMS1/Dashboard/D
 const RFAItoMS1_lifecycle = lazy(() => import('./RFAItoMS1/LifeCycleDashboard/LifeCycle'));
 const RFAItoMS1_FinalData = lazy(()=>import('./RFAItoMS1/Dashboard/FinalData'))
 const RFAItoMS1_Ageing = lazy(()=>import('./RFAItoMS1/Aging/MainAging'))
-
+const RFAItoMS1_Analytics_Dashboard = lazy(()=>import('./RFAItoMS1/Analytics/MainDashboard'))
 const MS1toMS2_Waterfall = lazy(()=>import('./MS1toMS2/Dashboard/DashboardTable'))
+const MS1toMS2_Ageing = lazy(()=>import('./MS1toMS2/Aging/MainAging'))
 
 
 
@@ -110,9 +111,9 @@ const NTD = () => {
                                    
                                                 {/* RFAI To MS1 */}
                                                 <Nav.Menu eventKey="1" style={{ fontWeight: 400, color: 'white' }} placement="leftStart" className="menu-title-custom" title="RFAI To MS1" icon={<ArrowRightIcon />}  >
-                                                    {/* <Nav.Item eventKey="1-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/rfai_to_ms1_analytics'); show(); setMenuButton(true) }}>
+                                                    <Nav.Item eventKey="1-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/ntd/rfai_to_ms1_analytics'); show(); setMenuButton(true) }}>
                                                         Analytics Dashboard
-                                                    </Nav.Item> */}
+                                                    </Nav.Item>
                                                     <Nav.Item eventKey="1-2" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/ntd/rfai_to_ms1_waterfall'); show(); setMenuButton(true) }}>
                                                         Waterfall Dashboard
                                                     </Nav.Item>
@@ -132,6 +133,9 @@ const NTD = () => {
                                                     <Nav.Item eventKey="2-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/ntd/ms1_to_ms2_waterfall'); show(); setMenuButton(true) }}>
                                                         Waterfall Dashboard
                                                     </Nav.Item>
+                                                         {/* <Nav.Item eventKey="2-2" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/ntd/ms1_to_ms2_ageing'); show(); setMenuButton(true) }}>
+                                                        Ageing Dashboard
+                                                    </Nav.Item> */}
                                                     {/* <Nav.Item eventKey="2-2" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/ms1_to_ms2_ftr_dashboard'); show(); setMenuButton(true) }}>
                                                         FTR Dashboard
                                                     </Nav.Item>
@@ -157,7 +161,9 @@ const NTD = () => {
                                     <Route element={<RFAItoMS1_lifecycle />} path="/rfai_to_ms1_site_lifecycle" />
                                     <Route element={<RFAItoMS1_Ageing />} path="/rfai_to_ms1_ageing" />
                                     <Route element={<RFAItoMS1_FinalData />} path="/rfai_to_ms1_waterfall/:milestone" />                   
-                                    <Route element={<MS1toMS2_Waterfall/>} path='ms1_to_ms2_waterfall' />                 
+                                    <Route element={<MS1toMS2_Waterfall/>} path='ms1_to_ms2_waterfall' />
+                                    <Route element={<RFAItoMS1_Analytics_Dashboard />} path="/rfai_to_ms1_analytics" />      
+                                    <Route element={<MS1toMS2_Ageing />} path="/ms1_to_ms2_ageing" />           
                                   
                                     {/* <Route
                                         path="/rfai_to_ms1_upload_file"

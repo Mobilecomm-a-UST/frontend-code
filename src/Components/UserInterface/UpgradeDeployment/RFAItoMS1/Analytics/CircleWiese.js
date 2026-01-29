@@ -128,22 +128,22 @@ const CircleWiese = () => {
         if (milestone1 !== milestone2) {
             action(true)
             var formData = new FormData()
-            formData.append('site_tagging', site_taggingAgingData)
+            // formData.append('site_tagging', site_taggingAgingData)
             formData.append('current_status', currentStatus)
             formData.append('milestone1', milestone1)
             formData.append('milestone2', milestone2)
             formData.append('month', month.split('-')[1] || '')
             formData.append('year', month.split('-')[0] || '')
-            const res = await postData("alok_tracker/graphs/", formData);
+            const res = await postData("upgrade_tracker/graphs/", formData);
             // const res =  tempData; //  remove this line when API is ready
-            console.log(' circle wise data', (res))
+            // console.log(' circle wise data', (res))
             if (res) {
                 action(false)
                 setCircleWieseData(transformData(JSON.parse(res.json_data.graph_summary)))
                 if (currentStatusOption.length === 0 && site_taggingAgingOption.length === 0) {
                     setCircle(transformData(JSON.parse(res.json_data.graph_summary)).circle)
                     setCurrentStatusOption(res.unique_data.unique_current_status)
-                    setSite_taggingAgingOption(res.unique_data.unique_site_tagging)
+                    // setSite_taggingAgingOption(res.unique_data.unique_site_tagging)
                     // setMilestoneOptions(res.unique_data?.milestones)
                 }
 
@@ -632,12 +632,12 @@ const CircleWiese = () => {
                             ))}
                         </Select>
                     </FormControl>
-                    <MultiSelectWithAll
+                    {/* <MultiSelectWithAll
                         label="Site Tagging"
                         options={site_taggingAgingOption}
                         selectedValues={site_taggingAgingData}
                         setSelectedValues={setSite_taggingAgingData}
-                    />
+                    /> */}
                     <MultiSelectWithAll
                         label="Current Status"
                         options={currentStatusOption}
