@@ -133,13 +133,13 @@ const NTD = () => {
                                                     <Nav.Item eventKey="2-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/ntd/ms1_to_ms2_waterfall'); show(); setMenuButton(true) }}>
                                                         Waterfall Dashboard
                                                     </Nav.Item>
-                                                         {/* <Nav.Item eventKey="2-2" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/ntd/ms1_to_ms2_ageing'); show(); setMenuButton(true) }}>
+                                                         <Nav.Item eventKey="2-2" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/ntd/ms1_to_ms2_ageing'); show(); setMenuButton(true) }}>
                                                         Ageing Dashboard
-                                                    </Nav.Item> */}
+                                                    </Nav.Item>
                                                     {/* <Nav.Item eventKey="2-2" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/ms1_to_ms2_ftr_dashboard'); show(); setMenuButton(true) }}>
                                                         FTR Dashboard
-                                                    </Nav.Item>
-                                                    <Nav.Item eventKey="2-3" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/ms1_to_ms2_upload_ftr'); show(); setMenuButton(true) }}>
+                                                    </Nav.Item> */}
+                                                    {/* <Nav.Item eventKey="2-3" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/ms1_to_ms2_upload_ftr'); show(); setMenuButton(true) }}>
                                                         Upload FTR
                                                     </Nav.Item> */}
                                                 </Nav.Menu>

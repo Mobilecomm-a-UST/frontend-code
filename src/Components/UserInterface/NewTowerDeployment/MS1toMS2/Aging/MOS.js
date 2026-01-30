@@ -114,7 +114,7 @@ const MOS = () => {
         { showIssueFilter && formData.append('issue', issue) }
         formData.append('type', typeFileter)
 
-        const res = await postData("alok_tracker/ms2_ageing_dashboard_table2/", formData);
+        const res = await postData("nt_tracker/ms2_ageing_dashboard_table2/", formData);
         // const res =  tempData; //  remove this line when API is ready
         console.log('MOS response', res)
         if (res) {

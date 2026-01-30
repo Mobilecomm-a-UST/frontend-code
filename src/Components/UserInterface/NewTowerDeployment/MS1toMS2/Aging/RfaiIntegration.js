@@ -102,7 +102,7 @@ const RfaiIntegration = () => {
         formData.append('year', month.split('-')[0] || '')
 
 
-        const res = await postData("alok_tracker/ms2_ageing_dashboard_table1/", formData);
+        const res = await postData("nt_tracker/ms2_ageing_dashboard_table1/", formData);
         // const res =  tempData; //  remove this line when API is ready
         // console.log(' rfai data', transformData(JSON.parse(res.json_data.table_summary)))
         if (res) {
