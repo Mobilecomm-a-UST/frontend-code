@@ -94,7 +94,7 @@ const RfaiIntegration = () => {
         action(true)
         var formData = new FormData()
 
-        formData.append('site_tagging', site_taggingAgingData)
+        // formData.append('site_tagging', site_taggingAgingData)
         formData.append('current_status', currentStatus)
         formData.append('milestone1', milestone1)
         formData.append('milestone2', milestone2)
@@ -102,7 +102,7 @@ const RfaiIntegration = () => {
         formData.append('year', month.split('-')[0] || '')
 
 
-        const res = await postData("alok_tracker/ms2_ageing_dashboard_table1/", formData);
+        const res = await postData("upgrade_tracker/ms2_ageing_dashboard_table1/", formData);
         // const res =  tempData; //  remove this line when API is ready
         // console.log(' rfai data', transformData(JSON.parse(res.json_data.table_summary)))
         if (res) {
@@ -110,7 +110,7 @@ const RfaiIntegration = () => {
             setIntegrationToOnairData(transformData(JSON.parse(res.json_data.table_summary)))
             if (currentStatusOption.length === 0 && site_taggingAgingOption.length === 0) {
                 setCurrentStatusOption(res.unique_data.unique_current_status)
-                setSite_taggingAgingOption(res.unique_data.unique_site_tagging)
+                // setSite_taggingAgingOption(res.unique_data.unique_site_tagging)
                 setMilestoneOptions(res.unique_data.milestones)
             }
         }
@@ -285,12 +285,12 @@ const RfaiIntegration = () => {
                                     ))}
                                 </Select>
                             </FormControl>
-                            <MultiSelectWithAll
+                            {/* <MultiSelectWithAll
                                 label="Site Tagging"
                                 options={site_taggingAgingOption}
                                 selectedValues={site_taggingAgingData}
                                 setSelectedValues={setSite_taggingAgingData}
-                            />
+                            /> */}
 
 
                             <MultiSelectWithAll
