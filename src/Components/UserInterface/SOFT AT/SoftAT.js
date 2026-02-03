@@ -42,6 +42,7 @@ const G5parser = lazy(()=> import('./5Gparser/G5parser'))
 const NokiaSA_NSA = lazy(() => import('./Nokia_SA_NSA/ChecklistEditor'))
 const NokiaUploadAlarm = lazy(()=>import('./Nokia_SA_NSA/UploadNokiaAlarm'))
 const UserCount = lazy(()=>import('./NokiaStatus/UserCounter'))
+const Summary_5G = lazy(()=>import('./NokiaStatus/Summary_5G'))
 
 
 
@@ -173,11 +174,24 @@ const SoftAT = () => {
                       </Nav.Menu>
 
                        <Nav.Menu eventKey="6" title="Nokia Status" placement="rightStart" icon={<CheckOutlineIcon />} >
-                        <Nav.Item eventKey='6-1' onClick={() => { navigate('/tools/soft_at/nokia_checklist'); show(); setMenuButton(true) }} >Checklist</Nav.Item>
+                          <Nav.Menu eventKey="6-1" title="4G" placement="rightStart" >
+                            <Nav.Item eventKey='6-1-1' onClick={() => { navigate('/tools/soft_at/nokia_checklist'); show(); setMenuButton(true) }} >Checklist</Nav.Item>
+                            <Nav.Item eventKey='6-1-2' onClick={() => { navigate('/tools/soft_at/nokia_checklist_table'); show(); setMenuButton(true) }} >Checklist Table</Nav.Item>
+                            <Nav.Item eventKey='6-1-3' onClick={() => { navigate('/tools/soft_at/nokia_summary'); show(); setMenuButton(true) }} >Summary</Nav.Item>
+                            <Nav.Item eventKey='6-1-4' onClick={() => { navigate('/tools/soft_at/nokia_summary_table'); show(); setMenuButton(true) }} >Summary Table</Nav.Item>
+                        {userTypes?.includes('Admin') && <Nav.Item eventKey='6-5' onClick={() => { navigate('/tools/soft_at/nokia_user_count'); show(); setMenuButton(true) }} >User Counter</Nav.Item>}
+
+                          </Nav.Menu>
+                        <Nav.Menu eventKey="6-2" title="5G" placement="rightStart"  >
+                          {/* <Nav.Item eventKey='6-2-1' onClick={() => { navigate('/tools/soft_at/nokia_5g_checklist'); show(); setMenuButton(true) }} >Checklist</Nav.Item>
+                          <Nav.Item eventKey='6-2-2' onClick={() => { navigate('/tools/soft_at/nokia_5g_checklist_table'); show(); setMenuButton(true) }} >Checklist Table</Nav.Item> */}
+                          <Nav.Item eventKey='6-2-3' onClick={() => { navigate('/tools/soft_at/nokia_5g_summary'); show(); setMenuButton(true) }} >Summary</Nav.Item>
+                          {/* <Nav.Item eventKey='6-2-4' onClick={() => { navigate('/tools/soft_at/nokia_5g_summary_table'); show(); setMenuButton(true) }} >Summary Table</Nav.Item> */}
+                        </Nav.Menu>
+                        {/* <Nav.Item eventKey='6-1' onClick={() => { navigate('/tools/soft_at/nokia_checklist'); show(); setMenuButton(true) }} >Checklist</Nav.Item>
                         <Nav.Item eventKey='6-2' onClick={() => { navigate('/tools/soft_at/nokia_checklist_table'); show(); setMenuButton(true) }} >Checklist Table</Nav.Item>
                         <Nav.Item eventKey='6-3' onClick={() => { navigate('/tools/soft_at/nokia_summary'); show(); setMenuButton(true) }} >Summary</Nav.Item>
-                        <Nav.Item eventKey='6-4' onClick={() => { navigate('/tools/soft_at/nokia_summary_table'); show(); setMenuButton(true) }} >Summary Table</Nav.Item>
-                        {userTypes?.includes('Admin') && <Nav.Item eventKey='6-5' onClick={() => { navigate('/tools/soft_at/nokia_user_count'); show(); setMenuButton(true) }} >User Counter</Nav.Item>}
+                        <Nav.Item eventKey='6-4' onClick={() => { navigate('/tools/soft_at/nokia_summary_table'); show(); setMenuButton(true) }} >Summary Table</Nav.Item> */}
                       </Nav.Menu>
 
                       <Nav.Menu eventKey="8" title="Nokia SA/NSA" placement="rightStart" icon={<CheckOutlineIcon />} >
@@ -227,6 +241,7 @@ const SoftAT = () => {
                 <Route element={<G5parser />} path='/5g_parser' />
                 <Route element={<NokiaSA_NSA />} path='/nokia_sa_nsa_table' />
                 <Route element={<NokiaUploadAlarm />} path='/nokia_upload_alarm' />
+                <Route element={<Summary_5G />} path='/nokia_5g_summary' />
                 {userTypes?.includes('Admin') && <Route element={<UserCount />} path='/nokia_user_count' />}
 
               </Routes>
