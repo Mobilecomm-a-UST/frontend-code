@@ -34,6 +34,7 @@ const MS1toMS2_FTR_Dashboard = lazy(() => import('./MS1toMS2/FTR_Dashboard/Main_
 const MS1toMS2_Aging = lazy(() => import('./MS1toMS2/Aging/MainAging'))
 const Dismantle_dashboard = lazy(() => import('./Dismantle/Dashboard/DashboardTable'))
 const Dismantle_Aging = lazy(() => import('./Dismantle/Aging/MainAging'))
+const MS1toMS2_Analytics = lazy(() => import('./MS1toMS2/Analytics/MainDashboard'))
 
 
 
@@ -145,6 +146,9 @@ const PTracking = () => {
 
                                             {/* MS1 to MS2 */}
                                             <Nav.Menu eventKey="2" style={{ fontWeight: 400, color: 'white' }} placement="leftStart" className="menu-title-custom" title="MS1 To MS2" icon={<ArrowRightIcon />}  >
+                                                <Nav.Item eventKey="2-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/ms1_to_ms2_analytics'); show(); setMenuButton(true) }}>
+                                                    Analytics Dashboard
+                                                </Nav.Item>
                                                 <Nav.Item eventKey="2-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/ms1_to_ms2_waterfall'); show(); setMenuButton(true) }}>
                                                     Waterfall Dashboard
                                                 </Nav.Item>
@@ -201,6 +205,7 @@ const PTracking = () => {
                                 <Route element={<MS1toMS2_Upload_ftr />} path="/ms1_to_ms2_upload_ftr" />
                                 <Route element={<MS1toMS2_FTR_Dashboard />} path="/ms1_to_ms2_ftr_dashboard" />
                                 <Route element={<MS1toMS2_Aging />} path="/ms1_to_ms2_aging" />
+                                <Route element={<MS1toMS2_Analytics />} path="/ms1_to_ms2_analytics" />
 
 
                                 <Route element={<Dismantle_dashboard />} path="/dismantle_waterfall" />
