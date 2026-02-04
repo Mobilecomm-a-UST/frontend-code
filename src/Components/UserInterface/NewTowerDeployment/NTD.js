@@ -26,6 +26,7 @@ const RFAItoMS1_Ageing = lazy(()=>import('./RFAItoMS1/Aging/MainAging'))
 const RFAItoMS1_Analytics_Dashboard = lazy(()=>import('./RFAItoMS1/Analytics/MainDashboard'))
 const MS1toMS2_Waterfall = lazy(()=>import('./MS1toMS2/Dashboard/DashboardTable'))
 const MS1toMS2_Ageing = lazy(()=>import('./MS1toMS2/Aging/MainAging'))
+const MS1toMS2_Analytics= lazy(()=>import('./MS1toMS2/Analytics/MainDashboard'))
 
 
 
@@ -130,6 +131,9 @@ const NTD = () => {
     
                                                 {/* MS1 to MS2 */}
                                                 <Nav.Menu eventKey="2" style={{ fontWeight: 400, color: 'white' }} placement="leftStart" className="menu-title-custom" title="MS1 To MS2" icon={<ArrowRightIcon />}  >
+                                                    <Nav.Item eventKey="2-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/ntd/ms1_to_ms2_analytics'); show(); setMenuButton(true) }}>
+                                                        Analytics Dashboard
+                                                    </Nav.Item>
                                                     <Nav.Item eventKey="2-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/ntd/ms1_to_ms2_waterfall'); show(); setMenuButton(true) }}>
                                                         Waterfall Dashboard
                                                     </Nav.Item>
@@ -163,7 +167,8 @@ const NTD = () => {
                                     <Route element={<RFAItoMS1_FinalData />} path="/rfai_to_ms1_waterfall/:milestone" />                   
                                     <Route element={<MS1toMS2_Waterfall/>} path='ms1_to_ms2_waterfall' />
                                     <Route element={<RFAItoMS1_Analytics_Dashboard />} path="/rfai_to_ms1_analytics" />      
-                                    <Route element={<MS1toMS2_Ageing />} path="/ms1_to_ms2_ageing" />           
+                                    <Route element={<MS1toMS2_Ageing />} path="/ms1_to_ms2_ageing" />        
+                                    <Route element={<MS1toMS2_Analytics />} path="/ms1_to_ms2_analytics" />   
                                   
                                     {/* <Route
                                         path="/rfai_to_ms1_upload_file"

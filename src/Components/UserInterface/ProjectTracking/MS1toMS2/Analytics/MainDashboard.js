@@ -19,7 +19,7 @@ import { postData } from '../../../../services/FetchNodeServices';
 
 
 const colorType = [ '#A0DEFF', '#FF9F66','#ECB176', '#B0EBB4', '#CDE8E5']
-const requiredMilestones = ['RFAI', 'Integration', 'Site ONAIR', 'SCFT I-Deploy Offered'];
+const requiredMilestones = [ 'Site ONAIR','I-Deploy ONAIR','SCFT Accepted','KPI AT Accepted', 'Final MS2'];
 const MainDashboard = () => {
     const navigate = useNavigate()
     const { loading, action } = useLoadingDialog();
@@ -53,7 +53,7 @@ const MainDashboard = () => {
         formData.append('view', 'Cumulative')
         const res = await postData("alok_tracker/ms2_daily_dashboard/", formData);
         // const res =  tempData; //  remove this line when API is ready
-        // console.log('box wise data ', res)
+        console.log('box wise data ', res)
         if (res) {
             action(false)
             setDateArray(res.dates)

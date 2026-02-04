@@ -101,31 +101,32 @@ const MonthWise = () => {
     const [toco, setToco] = useState([])
     const [tocoOptions, setTocoOptions] = useState([])
     const [typeFileter, setTypeFilter] = useState('type1')
-    const milestoneOptions = [
-        "Allocation",
-        "RFAI",
-        "RFAI Survey",
-        "MO Punch",
-        "Material Dispatch",
-        "Material Delivered",
-        "Installation End",
-        "Integration",
-        "EMF Submission",
-        "Alarm Rectification Done",
-        "SCFT I-Deploy Offered",
-        "RAN PAT Offer",
-        "RAN SAT Offer",
-        "MW PAT Offer",
-        "MW SAT Offer",
-        "Site ONAIR",
-        "I-Deploy ONAIR"
-    ]
-    const [milestone1, setMilestone1] = useState('RFAI')
-    const [milestone2, setMilestone2] = useState('Site ONAIR')
+    // const milestoneOptions = [
+    //     "Allocation",
+    //     "RFAI",
+    //     "RFAI Survey",
+    //     "MO Punch",
+    //     "Material Dispatch",
+    //     "Material Delivered",
+    //     "Installation End",
+    //     "Integration",
+    //     "EMF Submission",
+    //     "Alarm Rectification Done",
+    //     "SCFT I-Deploy Offered",
+    //     "RAN PAT Offer",
+    //     "RAN SAT Offer",
+    //     "MW PAT Offer",
+    //     "MW SAT Offer",
+    //     "Site ONAIR",
+    //     "I-Deploy ONAIR"
+    // ]
+    const [milestoneOptions, setMilestoneOptions] = useState([])
+    const [milestone1, setMilestone1] = useState('Site ONAIR')
+    const [milestone2, setMilestone2] = useState('Final MS2')
     const [view, setView] = useState('Cumulative')
     let delayed;
 
-    console.log('data get', milestoneData)
+    // console.log('data get', milestoneData)
 
 
     const fetchDailyData = async () => {
@@ -142,7 +143,7 @@ const MonthWise = () => {
         formData.append('type', typeFileter)
         const res = await postData("alok_tracker/ms2_monthly_graph/", formData);
         // const res =  tempData; //  remove this line when API is read
-        // console.log('responce data1' , res)
+        // console.log('responce month wise' , res)
         // console.log('responce data2' , transformData(JSON.parse(res.json_data)))
         if (res) {
             action(false)
@@ -153,6 +154,7 @@ const MonthWise = () => {
                 setTaggingOptions(res.unique_data.unique_site_tagging)
                 setRelocationMethodOptions(res.unique_data.unique_relocation_method)
                 setTocoOptions(res.unique_data.unique_new_toco_name)
+                setMilestoneOptions(res.unique_data.milestones)
             }
 
 
@@ -534,6 +536,8 @@ to ${milestone2} (${getTitalValue(milestoneData?.onAirDone, view)})`,
             cancelRequest();
         }
     }, [circle, tagging, relocationMethod, toco, view, milestone1, milestone2, typeFileter])
+
+    
     return (
         <>
 
