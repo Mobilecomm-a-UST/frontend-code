@@ -87,27 +87,9 @@ const CircleWiese = () => {
     const [open, setOpen] = useState(false)
     const { makePostRequest, cancelRequest } = usePost()
     const { loading, action } = useLoadingDialog();
-    const milestoneOptions = [
-        "Allocation",
-        "RFAI",
-        "RFAI Survey",
-        "MO Punch",
-        "Material Dispatch",
-        "Material Delivered",
-        "Installation End",
-        "Integration",
-        "EMF Submission",
-        "Alarm Rectification Done",
-        "SCFT I-Deploy Offered",
-        "RAN PAT Offer",
-        "RAN SAT Offer",
-        "MW PAT Offer",
-        "MW SAT Offer",
-        "Site ONAIR",
-        "I-Deploy ONAIR"
-    ]
-    const [milestone1, setMilestone1] = useState('RFAI')
-    const [milestone2, setMilestone2] = useState('Site ONAIR')
+   const [milestoneOptions, setMilestoneOptions] = useState([])
+    const [milestone1, setMilestone1] = useState('Site ONAIR')
+    const [milestone2, setMilestone2] = useState('Final MS2')
     const [circle, setCircle] = useState([])
     const [site_taggingAgingData, setSite_taggingAgingData] = useState([]);
     const [site_taggingAgingOption, setSite_taggingAgingOption] = useState([]);
@@ -136,7 +118,7 @@ const CircleWiese = () => {
             formData.append('year', month.split('-')[0] || '')
             const res = await postData("alok_tracker/ms2_graphs/", formData);
             // const res =  tempData; //  remove this line when API is ready
-            console.log(' circle wise data', (res))
+            // console.log(' circle wise data', (res))
             if (res) {
                 action(false)
                 setCircleWieseData(transformData(JSON.parse(res.json_data.graph_summary)))
@@ -144,7 +126,8 @@ const CircleWiese = () => {
                     setCircle(transformData(JSON.parse(res.json_data.graph_summary)).circle)
                     setCurrentStatusOption(res.unique_data.unique_current_status)
                     setSite_taggingAgingOption(res.unique_data.unique_site_tagging)
-                    // setMilestoneOptions(res.unique_data?.milestones)
+                    setMilestoneOptions(res.unique_data.milestones)
+
                 }
 
                 // setMainDataT2(JSON.parse(res.data))
