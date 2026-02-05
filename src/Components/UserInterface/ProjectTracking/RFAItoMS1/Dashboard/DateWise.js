@@ -127,7 +127,7 @@ const DateWise = () => {
         formData.append('year', month.split('-')[0] || '')
         const res = await postData("alok_tracker/daily_dashboard_file/", formData);
         // const res =  tempData; //  remove this line when API is ready
-        console.log('date wise response', JSON.parse(res.data))
+        // console.log('date wise response', JSON.parse(res.data))
         if (res) {
             action(false)
             setDateArray(res.dates)
