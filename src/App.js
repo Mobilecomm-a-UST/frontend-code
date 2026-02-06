@@ -58,6 +58,7 @@ const RelocationPayload = lazy(() => import('./Components/UserInterface/Relocati
 const ProjectTracking = lazy(() => import('./Components/UserInterface/ProjectTracking/PTracking'))
 const IxTools = lazy(() => import('./Components/UserInterface/Integration_Tools/Ix_Tools'))
 const Vi_Integration = lazy(() => import('./Components/UserInterface/Vi_Integration_tool/Vi_Integration'))
+const SA_Slicing = lazy(()=>import('./Components/UserInterface/Integration_SA/SA'))
 const MicrowaveSoftAt = lazy(() => import('./Components/UserInterface/Microwave/Microwave'))
 const NTDTool = lazy(() => import('./Components/UserInterface/NewTowerDeployment/NTD'))
 const UpgradeDeployment = lazy(() => import('./Components/UserInterface/UpgradeDeployment/UD'))
@@ -330,6 +331,12 @@ function App() {
             <Route path="/tools/ix_tools/vi_integration/*" element={
               <Suspense fallback={<div>Loading...</div>}>
                 <ProtectedRoute element={Vi_Integration} allowedUserTypes={['admin', 'VI_IX', 'VI_IX_reader']} userType={userType} />
+              </Suspense>
+            } />
+
+            <Route path="/tools/ix_tools/sa_slicing/*" element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProtectedRoute element={SA_Slicing} allowedUserTypes={['admin', 'IX_SA']} userType={userType} />
               </Suspense>
             } />
 
