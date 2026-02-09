@@ -324,7 +324,7 @@ function App() {
 
             <Route path="/tools/ix_tools/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={IxTools} allowedUserTypes={['admin', 'IX', 'VI_IX', 'VI_IX_reader', 'soft_at_team']} userType={userType} />
+                <ProtectedRoute element={IxTools} allowedUserTypes={['admin', 'IX', 'VI_IX', 'VI_IX_reader', 'soft_at_team',"IX_SA"]} userType={userType} />
               </Suspense>
             } />
 
