@@ -118,7 +118,7 @@ const Upload = () => {
 
                                 <Box className={classes.Front_Box} >
                                     <div className={classes.Front_Box_Hading}>
-                                        Select EML Files:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{make4GFiles.filename}</span>
+                                        Select XML Files:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{make4GFiles.filename}</span>
                                     </div>
                                     <div className={classes.Front_Box_Select_Button} >
                                         <div style={{ float: "left" }}>
