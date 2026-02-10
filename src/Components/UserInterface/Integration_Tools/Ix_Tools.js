@@ -14,7 +14,8 @@ const Ix_Tools = () => {
     const navigate = useNavigate()
     const chackToken = getDecreyptedData("tokenKey")
     const userTypes = (getDecreyptedData('user_type')?.split(","))
-    const allowedAirtelRoles = ['Admin', 'IX', 'IX_reader', 'soft_at_team'];
+    const allowedAirtelRoles = ['Admin', 'IX', 'soft_at_team'];
+    const allowedAirtelReader = ['quality', 'IX_reader', 'quality-s']
     const allowedViRoles = ['Admin', 'VI_IX', 'VI_IX_reader', 'soft_at_team'];
     const allowedSaRoles = ['Admin', 'IX_SA']
 
@@ -30,6 +31,15 @@ const Ix_Tools = () => {
         }
         else {
             navigate('/tools/Integration')
+        }
+    }
+    const handleAirtelReader = () => {
+        if (chackToken == null) {
+            navigate('/login')
+            dispatch({ type: 'LINK_PAGES', payload: { linker } })
+        }
+        else {
+            navigate('/tools/IX_Tracker')
         }
     }
     const handleVi = () => {
@@ -112,6 +122,19 @@ const Ix_Tools = () => {
                                     </Box>
                                 </Grid>}
 
+                                {/* IX Airtel reader */}
+                                {userTypes?.some(role => allowedAirtelReader.map(r => r.toLowerCase()).includes(role?.toLowerCase())) && <Grid item xs={4}>
+                                    <Box sx={backgroundStyle} className={classes.des} onClick={handleAirtelReader}>
+                                        <div className={classes.centerIcon}>   <img src="/assets/AIRTEL.webp" alt="Airtel" style={{ width: "60px", height: "60px" }} /></div>
+                                        <div >
+                                            <div className={classes.center} >Airtel Tracker</div>
+                                            {/* <div>This is a FDD tool</div> */}
+                                        </div>
+                                        {/* <span className={classes.center}>FILE MERGE</span> */}
+                                    </Box>
+                                </Grid>}
+
+
                                 {userTypes?.some(role => allowedViRoles.map(r => r.toLowerCase()).includes(role?.toLowerCase())) && <Grid item xs={4}>
                                     <Box sx={backgroundStyle} className={classes.des} onClick={handleVi}>
                                         <div className={classes.centerIcon}> <img src="/assets/VI.webp" alt="VI" style={{ width: "60px", height: "60px" }} /></div>
@@ -126,8 +149,8 @@ const Ix_Tools = () => {
                                 {userTypes?.some(role => allowedSaRoles.map(r => r.toLowerCase()).includes(role?.toLowerCase())) && <Grid item xs={4}>
                                     <Box sx={backgroundStyle} className={classes.des} onClick={handleSA}>
                                         <div className={classes.centerIcon}>
-                                             {/* <img src="/assets/VI.webp" alt="VI" style={{ width: "60px", height: "60px" }} /> */}
-                                             <CodeIcon alt="SA" style={{ width: "50px", height: "60px" }} />
+                                            {/* <img src="/assets/VI.webp" alt="VI" style={{ width: "60px", height: "60px" }} /> */}
+                                            <CodeIcon alt="SA" style={{ width: "50px", height: "60px" }} />
                                         </div>
                                         <div >
                                             <div className={classes.center}>SA Slicing</div>
