@@ -151,7 +151,7 @@ const ToolData = [
         icons: DocPassIcon,
         fullname: 'Integration Tools',
         link: '/tools/ix_tools',
-        groupBy:['admin','IX','VI_IX','VI_IX_reader','soft_at_team','IX_SA']
+        groupBy:['admin','IX','VI_IX','VI_IX_reader','soft_at_team','IX_SA','quality','IX_reader','quality-s']
     },
     // {
     //     id: 12,
@@ -224,16 +224,17 @@ const ToolData = [
         link:  '/tools/rca',
         groupBy:['quality','admin','quality-s']
     },
-    {
-        id: 23,
-        name: 'IX Tracker',
-        title: 'This is a IX Tracker Tool',
-        icons: DocPassIcon,
-        fullname: 'Integration Tracker Tool',
-        link: '/tools/IX_Tracker',
-        groupBy:['quality','IX_reader','quality-s']
+    // IX reader only
+    // {
+    //     id: 23,
+    //     name: 'IX Tracker',
+    //     title: 'This is a IX Tracker Tool',
+    //     icons: DocPassIcon,
+    //     fullname: 'Integration Tracker Tool',
+    //     link: '/tools/IX_Tracker',
+    //     groupBy:['quality','IX_reader','quality-s']
 
-    }
+    // }
     ,
     {
         id: 24,

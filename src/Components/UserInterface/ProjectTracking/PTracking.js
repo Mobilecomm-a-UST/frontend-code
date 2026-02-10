@@ -35,6 +35,7 @@ const MS1toMS2_Aging = lazy(() => import('./MS1toMS2/Aging/MainAging'))
 const Dismantle_dashboard = lazy(() => import('./Dismantle/Dashboard/DashboardTable'))
 const Dismantle_Aging = lazy(() => import('./Dismantle/Aging/MainAging'))
 const MS1toMS2_Analytics = lazy(() => import('./MS1toMS2/Analytics/MainDashboard'))
+const Dismantle_Analytics = lazy(() => import('./Dismantle/Analytics/MainDashboard'))
 
 
 
@@ -165,10 +166,13 @@ const PTracking = () => {
 
                                             {/* Dismantle */}
                                             <Nav.Menu eventKey="3" style={{ fontWeight: 400, color: 'white' }} placement="leftStart" className="menu-title-custom" title="Dismantle" icon={<ArrowRightIcon />}  >
-                                                <Nav.Item eventKey="3-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/dismantle_waterfall'); show(); setMenuButton(true) }}>
+                                                <Nav.Item eventKey="3-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/dismantle_Ageing'); show(); setMenuButton(true) }}>
+                                                    Analytics Dashboard
+                                                </Nav.Item>
+                                                <Nav.Item eventKey="3-2" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/dismantle_waterfall'); show(); setMenuButton(true) }}>
                                                     Waterfall Dashboard
                                                 </Nav.Item>
-                                                <Nav.Item eventKey="3-2" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/dismantle_Ageing'); show(); setMenuButton(true) }}>
+                                                <Nav.Item eventKey="3-3" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/dismantle_Ageing'); show(); setMenuButton(true) }}>
                                                     Ageing Dashboard
                                                 </Nav.Item>
                                             </Nav.Menu>
@@ -206,6 +210,7 @@ const PTracking = () => {
                                 <Route element={<MS1toMS2_FTR_Dashboard />} path="/ms1_to_ms2_ftr_dashboard" />
                                 <Route element={<MS1toMS2_Aging />} path="/ms1_to_ms2_aging" />
                                 <Route element={<MS1toMS2_Analytics />} path="/ms1_to_ms2_analytics" />
+                                <Route element={<Dismantle_Analytics />} path="/dismantle_analytics" />
 
 
                                 <Route element={<Dismantle_dashboard />} path="/dismantle_waterfall" />

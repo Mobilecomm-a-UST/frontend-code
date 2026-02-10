@@ -21,12 +21,6 @@ export default function Tools() {
   const classes = useStyles()
   const navigate = useNavigate()
   const chackToken = getDecreyptedData("tokenKey")
-
-  //  navigator.geolocation.getCurrentPosition((item)=>{
-  //    console.log('ggggggggg', window.location.href ,item.coords  )
-  //   })
-
-  // const userType = JSON.parse(localStorage.getItem('user_type'))
   const userType = (getDecreyptedData('user_type')?.split(","))
 
   const linker = window.location.pathname;
