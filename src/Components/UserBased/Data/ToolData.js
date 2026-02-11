@@ -78,7 +78,7 @@ const ToolData = [
         icons: PcIcon,
         link: '/tools/soft_at',
         fullname: 'Soft AT Tool',
-        groupBy:['soft_at_team','admin']
+        groupBy:['soft_at_team','admin','soft_at']
     },
 
     {

@@ -127,7 +127,7 @@ function App() {
             } />
             <Route path="/tools/soft_at/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={SoftAT} allowedUserTypes={['soft_at_team', 'admin']} userType={userType} />
+                <ProtectedRoute element={SoftAT} allowedUserTypes={['soft_at_team', 'admin','soft_at']} userType={userType} />
               </Suspense>
             } />
             <Route path="/tools/physical_at/*" element={
