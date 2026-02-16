@@ -216,7 +216,7 @@ const FileManager = () => {
                                     alignItems: 'center',
                                     borderRadius: '5px',
                                     boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px',
-                                    '&:hover': { backgroundColor: '#223354', color: 'white' },
+                                    '&:hover': { backgroundColor: '#006e74', color: 'white' },
 
                                 }}
                             >

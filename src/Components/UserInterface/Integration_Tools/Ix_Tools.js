@@ -14,9 +14,9 @@ const Ix_Tools = () => {
     const navigate = useNavigate()
     const chackToken = getDecreyptedData("tokenKey")
     const userTypes = (getDecreyptedData('user_type')?.split(","))
-    const allowedAirtelRoles = ['Admin', 'IX', 'soft_at_team'];
+    const allowedAirtelRoles = ['Admin', 'IX'];
     const allowedAirtelReader = ['quality', 'IX_reader', 'quality-s']
-    const allowedViRoles = ['Admin', 'VI_IX', 'VI_IX_reader', 'soft_at_team'];
+    const allowedViRoles = ['Admin', 'VI_IX', 'VI_IX_reader'];
     const allowedSaRoles = ['Admin', 'IX_SA']
 
 

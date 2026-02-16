@@ -194,6 +194,7 @@ const UserCounter = () => {
                 >
                     <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{index+1}</StyledTableCell>
                     <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{row.user_name}</StyledTableCell>
+                    <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{row?.site_id}</StyledTableCell>
                     <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{row.api_name}</StyledTableCell>
                     <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{row.count}</StyledTableCell>
                     {/* <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{row.expected_value}</StyledTableCell> */}
@@ -251,6 +252,7 @@ const UserCounter = () => {
                                     <TableRow >
                                         <StyledTableCell align="center">Sr. No. </StyledTableCell>
                                         <StyledTableCell align="center">User ID <CheckPicker data={user.map(item => ({ label: item, value: item }))} value={selectUser} onChange={(value) => { setSelectUser(value) }} size="sm" appearance="subtle" style={{ width: 40 }} /></StyledTableCell>
+                                        <StyledTableCell align="center">Site ID</StyledTableCell>
                                         <StyledTableCell align="center">Tool Name</StyledTableCell>
                                         <StyledTableCell align="center">Use Count</StyledTableCell>
                                        

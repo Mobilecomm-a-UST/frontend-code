@@ -12,9 +12,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import DashboardIcon from '@rsuite/icons/legacy/Dashboard';
 import { useNavigate } from 'react-router-dom'
 import { Navigate } from "react-router-dom";
-import FunnelTrendIcon from '@rsuite/icons/FunnelTrend';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import App from '../../../App.css'
 import ArrowRightIcon from '@rsuite/icons/ArrowRight';
 import { getDecreyptedData } from '../../../Components/utils/localstorage';
 import AdminIcon from '@rsuite/icons/Admin';
