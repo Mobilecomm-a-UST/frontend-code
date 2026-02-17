@@ -148,7 +148,7 @@ const Upload = () => {
                                         <div style={{ float: "left" }}>
                                             <Button variant="contained" component="label" color={make4GFiles.state > 0 ? "warning" : "primary"}>
                                                 select file
-                                                <input required hidden accept=".xlsx,.xls" multiple type="file"
+                                                <input required hidden accept=".xlsx,.xls,.csv" multiple type="file"
                                                     // webkitdirectory="true"
                                                     // directory="true"
                                                     onChange={(e) => handle4GFileSelection(e)} />
