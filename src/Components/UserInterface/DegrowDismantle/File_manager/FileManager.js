@@ -30,6 +30,7 @@ const jsonData = [
     { folder_name: "Locator File", api: "degrow_dismental/upload_locator" ,back_folder:"locater" },
     { folder_name: "MS-MF File", api: "degrow_dismental/upload_msmf" ,back_folder:"msmf" },
     { folder_name: "RFS File", api: "degrow_dismental/upload_rfs" ,back_folder:"rfs" },
+    { folder_name: "Mobinet File", api: "degrow_dismental/upload_mobinet" ,back_folder:"mobinet" },
     // { folder_name: "Stock File", api: "mobinate_vs_cats/stock" ,back_folder:"stock_report_data" }
 ];
 

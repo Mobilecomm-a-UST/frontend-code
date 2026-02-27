@@ -42,6 +42,7 @@ export default function LoginPage() {
     const responce = await getData('get_user_circle')
     // console.log('user type' , responce)
     setEncreptedData("user_type", responce.user_catagory);
+    setEncreptedData("user_circle", responce.circle);
   }
 
   const handleSubmit = async (e) => {

@@ -6,6 +6,7 @@ import { Sidenav, Nav } from 'rsuite';
 import { useNavigate } from 'react-router-dom'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ArrowRightIcon from '@rsuite/icons/ArrowRight';
+import DashboardIcon from '@rsuite/icons/Dashboard';
 import { getDecreyptedData } from '../../../Components/utils/localstorage';
 import ListIcon from '@rsuite/icons/List';
 import './../../../App.css'
@@ -16,6 +17,9 @@ const DegrowTool = lazy(() => import('./DegrowTool'))
 const DegrowForm = lazy(() => import('./Degrow/DegrowForm'))
 const FileManager = lazy(() => import('./File_manager/FileManager'))
 const DismantleItemList = lazy(() => import('./Dismantle_Item_List/DismantleItemList'))
+const AddSiteDismantleItem = lazy(() => import('./AddSiteDismantle/DismantleItemList'))
+const SurveyDashboard = lazy(() => import('./SurveyDashboard/SurveyDashboard'))
+const ShowAllDismantleItem = lazy(() => import('./ShowAllDismantle/ShowAllDismantleItem'))
 
 
 
@@ -89,13 +93,17 @@ const DegrowDismantle = () => {
                                             <Nav.Item eventKey="1" placement="rightStart" className="single-item-custom" icon={<FolderIcon style={{}} />} onClick={() => { navigate('/tools/degrow_dismantle/file_manager'); show(); setMenuButton(true) }}>
                                                 File Manager
                                             </Nav.Item>
-                                            <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={<ListIcon style={{}} />} onClick={() => { navigate('/tools/degrow_dismantle/dismantle_item_list'); show(); setMenuButton(true) }}>
-                                                Dismantle Item List
+                                            <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={<DashboardIcon style={{}} />} onClick={() => { navigate('/tools/degrow_dismantle/survey_dashboard'); show(); setMenuButton(true) }}>
+                                                Survey Dashboard
                                             </Nav.Item>
-
+                                            <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={<ListIcon style={{}} />} onClick={() => { navigate('/tools/degrow_dismantle/survey_site_list'); show(); setMenuButton(true) }}>
+                                                Survey Site List
+                                            </Nav.Item>
+                                            <Nav.Item eventKey="3" placement="rightStart" className="single-item-custom" icon={<ListIcon style={{}} />} onClick={() => { navigate('/tools/degrow_dismantle/add_new_site_dismantle'); show(); setMenuButton(true) }}>
+                                                Add New Site
+                                            </Nav.Item>
                                         </Nav>
                                     </Sidenav.Body>
-
                                 </Sidenav>
                             </Box>
                         </Box>
@@ -108,9 +116,11 @@ const DegrowDismantle = () => {
                                 <Route element={<DegrowTool />} path="/" />
                                 <Route element={<DegrowForm />} path="/degrow" />
                                 <Route element={<FileManager />} path="/file_manager" />
-                                <Route element={<DismantleItemList />} path="/dismantle_item_list" />
+                                <Route element={<AddSiteDismantleItem />} path="/add_new_site_dismantle" />
 
-
+                                <Route element={<ShowAllDismantleItem />} path="/survey_site_list/*" />
+                                <Route element={<SurveyDashboard />} path="/survey_dashboard" />
+                                <Route element={<DismantleItemList />} path="/survey_site_list/:siteId" />
                             </Routes>
                         </Suspense>
                     </Grid>
@@ -120,4 +130,4 @@ const DegrowDismantle = () => {
     )
 }
 
-export default DegrowDismantle
+export default DegrowDismantle 
