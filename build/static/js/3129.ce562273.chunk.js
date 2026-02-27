@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkmobilecomm=self.webpackChunkmobilecomm||[]).push([[3129],{23129:(e,s,c)=>{c.r(s),c.d(s,{default:()=>l});c(72791);var a=c(80184);const l=()=>(0,a.jsx)("div",{children:"SurveyDashboard"})}}]);
+//# sourceMappingURL=3129.ce562273.chunk.js.map

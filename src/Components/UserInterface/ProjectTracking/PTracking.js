@@ -16,6 +16,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ArrowRightIcon from '@rsuite/icons/ArrowRight';
 import { getDecreyptedData } from '../../../Components/utils/localstorage';
 import AdminIcon from '@rsuite/icons/Admin';
+import "./../../../App.css"
 
 const PTtool = lazy(() => import('./PTtool'))
 const RFAItoMS1_UploadFile = lazy(() => import('./RFAItoMS1/UploadFile/Upload'))
@@ -34,6 +35,7 @@ const Dismantle_dashboard = lazy(() => import('./Dismantle/Dashboard/DashboardTa
 const Dismantle_Aging = lazy(() => import('./Dismantle/Aging/MainAging'))
 const MS1toMS2_Analytics = lazy(() => import('./MS1toMS2/Analytics/MainDashboard'))
 const Dismantle_Analytics = lazy(() => import('./Dismantle/Analytics/MainDashboard'))
+const Relocation2_0_UploadFile = lazy(() => import('./Relocation2.0/UploadFile/Upload'))
 
 
 
@@ -113,7 +115,7 @@ const PTracking = () => {
                         {/* THIS VIEW FOR PC  */}
                         <Box sx={{ display: { xs: 'none', md: 'inherit' } }} >
                             <Box sx={{ position: 'fixed', width: '16.5%' }} >
-                                <Sidenav expanded={expanded} defaultOpenKeys={['1']} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#006e74", marginTop: 8, borderRadius: 10 }}>
+                                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#006e74", marginTop: 8, borderRadius: 10 }}>
                                     <Sidenav.Body>
                                         <Nav activeKey={activeKey} onSelect={setActiveKey} >
                                             <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>Relocation Tracking</Nav>
@@ -174,6 +176,25 @@ const PTracking = () => {
                                                     Ageing Dashboard
                                                 </Nav.Item>
                                             </Nav.Menu>
+                                        {/* Relocation 2.0 */}
+                                        {userTypes?.includes('RLT_2') && <Nav.Menu eventKey="4" style={{ fontWeight: 400, color: 'white' }} placement="leftStart" className="menu-title-custom" title="Relocation 2.0" icon={<ArrowRightIcon />}  >
+                                                {/* <Nav.Item eventKey="4-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/rfai_to_ms1_analytics'); show(); setMenuButton(true) }}>
+                                                    Analytics Dashboard
+                                                </Nav.Item>
+                                                <Nav.Item eventKey="4-2" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/rfai_to_ms1_waterfall'); show(); setMenuButton(true) }}>
+                                                    Waterfall Dashboard
+                                                </Nav.Item>
+                                                <Nav.Item eventKey="4-3" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/site_lifecycle'); show(); setMenuButton(true) }}>
+                                                    Site Lifecycle
+                                                </Nav.Item>
+                                                <Nav.Item eventKey="4-4" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/rfai_to_ms1_ageing'); show(); setMenuButton(true) }}>
+                                                    Ageing Dashboard
+                                                </Nav.Item> */}
+                                                <Nav.Item eventKey="4-5" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/relocation_2.0_upload_file'); show(); setMenuButton(true) }}>
+                                                    Upload File
+                                                </Nav.Item>
+                                            </Nav.Menu>}
+                                        
 
                                         </Nav>
                                     </Sidenav.Body>
@@ -223,6 +244,9 @@ const PTracking = () => {
                                     }
                                 />
                                 <Route element={<Error />} path="/error" />
+
+                                {/* Relocation 2.0 */}
+                                {userTypes?.includes('RLT_2') && <Route element={<Relocation2_0_UploadFile/>} path='/relocation_2.0_upload_file' />}
 
 
                             </Routes>

@@ -48,7 +48,7 @@ const LifeCycle = () => {
     const [open, setOpen] = useState(false)
     const userTypes = (getDecreyptedData('user_type')?.split(","))
     const { action, loading } = useLoadingDialog();
-    console.log('issue table', milestoneData)
+
 
 
 
