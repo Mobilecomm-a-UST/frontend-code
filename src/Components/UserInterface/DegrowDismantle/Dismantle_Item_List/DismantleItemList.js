@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
     Box,
-    Breadcrumbs, Link, Typography, Button
+    Breadcrumbs, Link, Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions
 } from '@mui/material';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
@@ -16,9 +16,10 @@ import ItemList from './ItemList';
 import { useLoadingDialog } from '../../../Hooks/LoadingDialog';
 import axios from 'axios';
 import { getDecreyptedData } from '../../../utils/localstorage';
-import {useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { ServerURL } from '../../../services/FetchNodeServices';
+import { set } from 'lodash';
 
 
 
@@ -33,7 +34,16 @@ const DismantleItemList = () => {
     const [dismantleList, setDismantleList] = useState()
     const { loading, action } = useLoadingDialog()
     const navigate = useNavigate()
-    const CircleSiteData = JSON.parse(localStorage.getItem("DismantleSurveyData")) || {tableData:[],siteId:'',circle:''}
+    const surveyIssues = [
+        "Toco Issue",
+        "Owner Issue",
+        "Safety Issue",
+        "Access Not Available",
+        "Other"
+    ];
+    const [surveyReady, setSurveyReady] = useState(null);
+    const [surveyIssue, setSurveyIssue] = useState('');
+    const CircleSiteData = JSON.parse(localStorage.getItem("DismantleSurveyData")) || { tableData: [], siteId: '', circle: '' }
     const tempData = {
         "status": "success",
         "count": 19,
@@ -285,7 +295,7 @@ const DismantleItemList = () => {
     console.log('CircleSiteData', CircleSiteData)
 
 
-    const handleSubmitSite = async (e) => {
+    const handleIssueSubmitAPI = async (e) => {
         e.preventDefault()
         action(true)
         try {
@@ -320,12 +330,46 @@ const DismantleItemList = () => {
         }
     }
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value
-        }));
+    // const handleChange = (e) => {
+    //     const { name, value } = e.target;
+    //     setFormData((prevData) => ({
+    //         ...prevData,
+    //         [name]: value
+    //     }));
+    // }
+
+    const handleIssueSubmit = async () => {
+        // setSurveyReady(false);
+        // navigate('/tools/full_site_dismantle/survey_site_list');
+        action(true)
+        try {
+            const formData = new FormData();
+            formData.append('circle', CircleSiteData.circle);
+            formData.append('siteId', CircleSiteData.siteId);
+            formData.append('data', JSON.stringify(CircleSiteData.tableData));
+            formData.append('remark', surveyIssue);
+            const response = await axios.post
+                (`${ServerURL}/degrow_dismental/mobinet_data_submit_circle/`, formData, {
+                    headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
+                });
+
+            action(false)
+            Swal.fire({
+                icon: "success",
+                title: "Done",
+                text: `This Site-ID (${siteId}) data has been Updated successfully`,
+            });
+            navigate('/tools/full_site_dismantle/survey_site_list')
+
+        } catch (error) {
+            action(false)
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: ` ${error.response?.data?.error || error.message}`,
+            });
+        }
+
     }
 
     useEffect(() => {
@@ -335,6 +379,22 @@ const DismantleItemList = () => {
             .replaceAll("/", " | ")
             .toUpperCase();
         document.title = title;
+        Swal.fire({
+            title: "Survey Confirmation",
+            text: `Is this ${CircleSiteData.siteId} site ready for survey?`,
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonText: "Yes",
+            cancelButtonText: "No",
+            allowOutsideClick: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                setSurveyReady(true);
+                setSurveyIssue('Survey done')
+            } else {
+                setSurveyReady(false);
+            }
+        });
     }, []);
 
 
@@ -343,19 +403,118 @@ const DismantleItemList = () => {
             <Box m={1} ml={2}>
                 <Breadcrumbs separator={<KeyboardArrowRightIcon fontSize="small" />}>
                     <Link underline="hover" onClick={() => navigate("/tools")}>Tools</Link>
-                    <Link underline="hover" onClick={() => navigate("/tools/degrow_dismantle")}>Degrow Dismantle</Link>
-                    <Link underline="hover" onClick={() => navigate("/tools/degrow_dismantle/survey_site_list")}>Dismantle Item List</Link>
+                    <Link underline="hover" onClick={() => navigate("/tools/full_site_dismantle")}>Full Site Dismantle</Link>
+                    <Link underline="hover" onClick={() => navigate("/tools/full_site_dismantle/survey_site_list")}>Dismantle Item List</Link>
                     <Typography color="text.primary">{siteIdParam}</Typography>
                 </Breadcrumbs>
             </Box>
 
-            <Box>
+            {/* <Box>
                 <Stack direction="row" spacing={1} size="small" sx={{ m: 1, ml: 2 }}>
                     <Chip label={`Circle: ${CircleSiteData.circle}`} sx={{ backgroundColor: '#006e74', color: 'white', fontWeight: 'bold' }} />
                     <Chip label={`Site ID: ${CircleSiteData.siteId}`} sx={{ backgroundColor: '#006e74', color: 'white', fontWeight: 'bold' }} />
                 </Stack>
                 {CircleSiteData && <ItemList list={CircleSiteData.tableData} circle={CircleSiteData.circle} siteId={CircleSiteData.siteId} />}
-            </Box>
+            </Box> */}
+            {surveyReady === true && (
+                <Box>
+                    <Stack direction="row" spacing={1} sx={{ m: 1, ml: 2 }}>
+                        <Chip
+                            label={`Circle: ${CircleSiteData.circle}`}
+                            sx={{ backgroundColor: '#006e74', color: 'white', fontWeight: 'bold' }}
+                        />
+                        <Chip
+                            label={`Site ID: ${CircleSiteData.siteId}`}
+                            sx={{ backgroundColor: '#006e74', color: 'white', fontWeight: 'bold' }}
+                        />
+                    </Stack>
+
+                    <ItemList
+                        list={CircleSiteData.tableData}
+                        circle={CircleSiteData.circle}
+                        siteId={CircleSiteData.siteId}
+                        surveyRemarks={surveyIssue}
+                    />
+                </Box>
+            )}
+
+            {/* {surveyReady === false && (
+                <Box sx={{ m: 2, width: 400 }}>
+                    <FormControl fullWidth size="small">
+                        <InputLabel>Survey Issue</InputLabel>
+                        <Select
+                            value={surveyIssue}
+                            label="Survey Issue"
+                            onChange={(e) => setSurveyIssue(e.target.value)}
+                        >
+                            {surveyIssues.map((issue, index) => (
+                                <MenuItem key={index} value={issue}>
+                                    {issue}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+
+                    <Button
+                        variant="contained"
+                        sx={{ mt: 2, backgroundColor: '#006e74' }}
+                        disabled={!surveyIssue}
+                        onClick={() => {
+                            Swal.fire(
+                                "Submitted",
+                                `Survey marked as not ready due to: ${surveyIssue}`,
+                                "success"
+                            );
+                        }}
+                    >
+                        Submit
+                    </Button>
+                </Box>
+            )} */}
+
+            <Dialog
+                open={surveyReady === false}
+                disableEscapeKeyDown
+            >
+                <DialogTitle>
+                    Survey Issue Selection
+                </DialogTitle>
+
+                <DialogContent sx={{ width: 500, mt: 1 }}>
+                    <FormControl fullWidth size="small">
+                        <InputLabel>Survey Issue</InputLabel>
+                        <Select
+                            value={surveyIssue}
+                            label="Survey Issue"
+                            onChange={(e) => setSurveyIssue(e.target.value)}
+                        >
+                            {surveyIssues.map((issue, index) => (
+                                <MenuItem key={index} value={issue}>
+                                    {issue}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </DialogContent>
+
+                <DialogActions>
+                    <Button
+                        variant="contained"
+                        sx={{ backgroundColor: '#006e74' }}
+                        disabled={!surveyIssue}
+                        onClick={() => {
+                            handleIssueSubmit()
+                            // Swal.fire(
+                            //     "Submitted",
+                            //     `Survey marked as not ready due to: ${surveyIssue}`,
+                            //     "success"
+                            // );
+                        }}
+                    >
+                        Submit
+                    </Button>
+                </DialogActions>
+            </Dialog>
             {loading}
         </>
 

@@ -3,18 +3,10 @@ import {
     Box,
     Breadcrumbs, Link, Typography, Button
 } from '@mui/material';
-import Chip from '@mui/material/Chip';
-import Stack from '@mui/material/Stack';
 import { useNavigate } from 'react-router-dom';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import TextField from '@mui/material/TextField';
 import TableContainer from '@mui/material/TableContainer';
 import { useStyles } from '../../ToolsCss'
-import Checkbox from '@mui/material/Checkbox';
 import Paper from '@mui/material/Paper';
 import { useLoadingDialog } from '../../../Hooks/LoadingDialog';
 import axios from 'axios';
@@ -105,7 +97,7 @@ const ShowAllDismantleItem = () => {
             console.log('response data ', responce)
             localStorage.setItem("DismantleSurveyData", JSON.stringify({ tableData: responce?.data?.data || [], siteId: siteId, circle: circle }))
             if (responce?.data?.data) {
-                navigate(`/tools/degrow_dismantle/survey_site_list/${siteId}`)
+                navigate(`/tools/full_site_dismantle/survey_site_list/${siteId}`)
             } else {
                 Swal.fire({
                     icon: "error",
@@ -145,7 +137,7 @@ const ShowAllDismantleItem = () => {
             <Box m={1} ml={2}>
                 <Breadcrumbs separator={<KeyboardArrowRightIcon fontSize="small" />}>
                     <Link underline="hover" onClick={() => navigate("/tools")}>Tools</Link>
-                    <Link underline="hover" onClick={() => navigate("/tools/degrow_dismantle")}>Degrow Dismantle</Link>
+                    <Link underline="hover" onClick={() => navigate("/tools/full_site_dismantle")}>Full Site Dismantle</Link>
                     <Typography color="text.primary">Survey Sites List</Typography>
                 </Breadcrumbs>
             </Box>
@@ -154,9 +146,7 @@ const ShowAllDismantleItem = () => {
                     m: 1,
                     ml: 2,
                     display: 'flex',
-                    gap: 2,
-                    flexWrap: 'wrap',
-                    justifyContent: 'center'
+                    justifyContent:'space-around'
                 }}
             >
                 {/* Total Sites */}
@@ -222,13 +212,16 @@ const ShowAllDismantleItem = () => {
                                     Site ID
                                 </th>
                                 <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#CBCBCB', color: 'black' }}>
-                                    MobileComm Approval Date
+                                    NMS Data Fetch
                                 </th>
                                 <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#CBCBCB', color: 'black' }}>
                                     Survey Date
                                 </th>
+                                     <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#CBCBCB', color: 'black' }}>
+                                    SRN Done
+                                </th>
                                 <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#CBCBCB', color: 'black' }}>
-                                    Survey Remarks
+                                    Remarks
                                 </th>
                                 {/* <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#CBCBCB', color: 'black' }}>
                                         SRN Number
@@ -247,7 +240,8 @@ const ShowAllDismantleItem = () => {
                                         <th style={{ color: 'black', cursor: 'pointer' }} onClick={() => handleSurvey(it['Site ID'], it['Circle'])}><a>{it['Site ID']}</a></th>
                                         <th style={{ color: 'black' }}>{it['Is Approved']}</th>
                                         <th style={{ color: 'black' }}>{it['Is Surveyed']}</th>
-                                        <th style={{ color: 'black' }}>{it['Survey Remarks']}</th>
+                                        <th style={{ color: 'black' }}>{it['SRN Done']}</th>
+                                        <th style={{ color: 'black' }}>{it['Remarks']}</th>
                                         {/* <th style={{ color: 'black' }}>
                                                 <Checkbox size="small"
                                                     onChange={(e) => handleIsfound({ serial: it['Serial Number'], Is_Found: e.target.checked ? true : false })}

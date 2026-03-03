@@ -342,7 +342,7 @@ const DismantleItemList = () => {
             <Box m={1} ml={2}>
                 <Breadcrumbs separator={<KeyboardArrowRightIcon fontSize="small" />}>
                     <Link underline="hover" onClick={() => navigate("/tools")}>Tools</Link>
-                    <Link underline="hover" onClick={() => navigate("/tools/degrow_dismantle")}>Degrow Dismantle</Link>
+                    <Link underline="hover" onClick={() => navigate("/tools/full_site_dismantle")}>Full Site Dismantle</Link>
                     <Typography color="text.primary">Add New Dismantle Site</Typography>
                 </Breadcrumbs>
             </Box>

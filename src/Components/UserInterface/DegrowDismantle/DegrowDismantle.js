@@ -88,20 +88,21 @@ const DegrowDismantle = () => {
                                 <Sidenav expanded={expanded} defaultOpenKeys={['1']} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#006e74", marginTop: 8, borderRadius: 10 }}>
                                     <Sidenav.Body>
                                         <Nav activeKey={activeKey} onSelect={setActiveKey} >
-                                            <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>Degrow Dismantle</Nav>
+                                            <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>Full Site Dismantle</Nav>
 
-                                            <Nav.Item eventKey="1" placement="rightStart" className="single-item-custom" icon={<FolderIcon style={{}} />} onClick={() => { navigate('/tools/degrow_dismantle/file_manager'); show(); setMenuButton(true) }}>
+                                            <Nav.Item eventKey="1" placement="rightStart" className="single-item-custom" icon={<FolderIcon style={{}} />} onClick={() => { navigate('/tools/full_site_dismantle/file_manager'); show(); setMenuButton(true) }}>
                                                 File Manager
                                             </Nav.Item>
-                                            <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={<DashboardIcon style={{}} />} onClick={() => { navigate('/tools/degrow_dismantle/survey_dashboard'); show(); setMenuButton(true) }}>
+                                            <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={<DashboardIcon style={{}} />} onClick={() => { navigate('/tools/full_site_dismantle/survey_dashboard'); show(); setMenuButton(true) }}>
                                                 Survey Dashboard
                                             </Nav.Item>
-                                            <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={<ListIcon style={{}} />} onClick={() => { navigate('/tools/degrow_dismantle/survey_site_list'); show(); setMenuButton(true) }}>
-                                                Survey Site List
-                                            </Nav.Item>
-                                            <Nav.Item eventKey="3" placement="rightStart" className="single-item-custom" icon={<ListIcon style={{}} />} onClick={() => { navigate('/tools/degrow_dismantle/add_new_site_dismantle'); show(); setMenuButton(true) }}>
+                                            <Nav.Item eventKey="3" placement="rightStart" className="single-item-custom" icon={<ListIcon style={{}} />} onClick={() => { navigate('/tools/full_site_dismantle/add_new_site_dismantle'); show(); setMenuButton(true) }}>
                                                 Add New Site
                                             </Nav.Item>
+                                            <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={<ListIcon style={{}} />} onClick={() => { navigate('/tools/full_site_dismantle/survey_site_list'); show(); setMenuButton(true) }}>
+                                                Survey Site List
+                                            </Nav.Item>
+
                                         </Nav>
                                     </Sidenav.Body>
                                 </Sidenav>

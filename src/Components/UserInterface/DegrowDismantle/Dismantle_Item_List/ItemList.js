@@ -21,11 +21,31 @@ import { useNavigate } from 'react-router-dom';
 
 
 const ItemList = (props) => {
-    const { list, circle, siteId } = props;
+    const { list, circle, siteId ,surveyRemarks} = props;
     const { action, loading } = useLoadingDialog()
     const [lists, setLists] = useState([]);
     const [newItem, setNewItem] = React.useState([]);
     const classes = useStyles()
+    const [modelList , setModelList] = useState(["FibeAir IP-10G",
+        "Flexi Edge",
+        "Flexi LTE Base Station",
+        "Flexi Multiradio",
+        "IP-20A 1RU",
+        "IP-20C",
+        "IP-20F",
+        "IP-20G",
+        "IP-20GX",
+        "IP-20N 1RU",
+        "IP-20N 2RU",
+        "IP-20S",
+        "IP-50CX",
+        "IP-50E",
+        "IWAN BTS",
+        "NSN gNodeB",
+        "RW2000-Alpha INT",
+        "SAMSUNG gNodeB",
+        "SRAN NSN",
+        "ePMP Force 300-25"])
     const navigate = useNavigate()
     // console.log('props data ', list)
     // console.log('lists data ', lists)
@@ -39,6 +59,7 @@ const ItemList = (props) => {
             formData.append('circle', circle);
             formData.append('siteId', siteId);
             formData.append('data', JSON.stringify([...lists, ...newItem]));
+            formData.append('remark', surveyRemarks || '');
             const response = await axios.post
                 (`${ServerURL}/degrow_dismental/mobinet_data_submit_circle/`, formData, {
                     headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
@@ -52,7 +73,7 @@ const ItemList = (props) => {
                 title: "Done",
                 text: `This Site-ID (${siteId}) data has been Updated successfully`,
             });
-            navigate('/tools/degrow_dismantle/survey_site_list')
+            navigate('/tools/full_site_dismantle/survey_site_list')
 
         } catch (error) {
             action(false)
@@ -62,7 +83,20 @@ const ItemList = (props) => {
                 text: ` ${error.response?.data?.error || error.message}`,
             });
         }
+    }
 
+    const handleModelList = async()=>{
+        try {
+            let formData = new FormData();
+            formData.append('circle', circle);
+            const response = await axios.post(`${ServerURL}/degrow_dismental/get_model_list/`, formData, {
+                headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
+            });
+            setModelList(response?.data?.models || [])
+            console.log('model list response ', response)
+        } catch (error) {
+            console.log('model list error ', error)
+        }
     }
 
     const handleIsfound = (data) => {
@@ -104,6 +138,7 @@ const ItemList = (props) => {
     };
     useEffect(() => {
         setLists(list)
+        handleModelList()
     }, [list])
 
     return (
@@ -125,15 +160,14 @@ const ItemList = (props) => {
                                         Mobinet Quantity
                                     </th>
                                     <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#CBCBCB', color: 'black' }}>
-                                        Is Found
+                                        Is Material Found
                                     </th>
                                     <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#CBCBCB', color: 'black' }}>
                                         SRN Number
                                     </th>
                                     <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#CBCBCB', color: 'black' }}>
-                                        Remark
+                                       SRN Remark
                                     </th>
-
                                 </tr>
                             </thead>
                             <tbody>
@@ -252,7 +286,7 @@ const ItemList = (props) => {
                 <Box>
                     <AddNewItem onAdd={(newItem) => {
                         setNewItem((prev) => [...prev, newItem]);
-                    }} />
+                    }} modelList={modelList} />
                 </Box>
                 <Box>
                     <Button
