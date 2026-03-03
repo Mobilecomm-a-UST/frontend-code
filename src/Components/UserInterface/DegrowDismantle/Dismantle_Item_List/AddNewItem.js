@@ -9,8 +9,9 @@ import {
     Grid
 } from '@mui/material';
 import Swal from 'sweetalert2';
+import Autocomplete from '@mui/material/Autocomplete';
 
-const AddNewItem = ({ onAdd }) => {
+const AddNewItem = ({ onAdd, modelList }) => {
     const [open, setOpen] = useState(false);
 
     const [formData, setFormData] = useState({
@@ -21,7 +22,7 @@ const AddNewItem = ({ onAdd }) => {
         remarks: ''
     });
 
-    // console.log('formData', formData)
+    console.log('show model list data ', modelList)
 
     const handleOpen = () => {
         console.log('open')
@@ -87,13 +88,31 @@ const AddNewItem = ({ onAdd }) => {
                     <DialogContent>
                         <Grid container spacing={2} mt={1}>
                             <Grid item xs={12}>
-                                <TextField
+                                {/* <TextField
                                     label="Model Name"
                                     name="modelName"
                                     fullWidth
                                     required
                                     value={formData.modelName}
                                     onChange={handleChange}
+                                /> */}
+                                <Autocomplete
+                                    options={modelList}
+                                    value={formData.modelName || null}
+                                    onChange={(event, newValue) => {
+                                        setFormData((prev) => ({
+                                            ...prev,
+                                            modelName: newValue || ''
+                                        }));
+                                    }}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="Model Name"
+                                            required
+                                            fullWidth
+                                        />
+                                    )}
                                 />
                             </Grid>
 
@@ -114,7 +133,7 @@ const AddNewItem = ({ onAdd }) => {
                                     name="expectedQuantity"
                                     type="number"
                                     fullWidth
-                                    required
+                                    disabled={true}
                                     inputProps={{ min: 1 }}
                                     value={formData.expectedQuantity}
                                     onChange={handleChange}
@@ -126,7 +145,7 @@ const AddNewItem = ({ onAdd }) => {
                                     label="SRN Number"
                                     name="srnNumber"
                                     fullWidth
-                             
+
                                     value={formData.srnNumber}
                                     onChange={handleChange}
                                 />
@@ -134,7 +153,7 @@ const AddNewItem = ({ onAdd }) => {
 
                             <Grid item xs={12}>
                                 <TextField
-                                    label="Remarks"
+                                    label="SRN Remarks"
                                     name="remarks"
                                     multiline
                                     rows={3}

@@ -295,11 +295,11 @@ const ToolData = [
     } ,
     {
         id: 29,
-        name: 'Degrow Dismantle',
-        title: 'This is a Degrow Dismantle Tool',
+        name: 'Full Site Dismantle', //Degrow Dismantle
+        title: 'This is a Full Site Dismantle Tool',
         icons: IndirectIcon,
-        fullname: 'Degrow Dismantle Tool',  
-        link: '/tools/degrow_dismantle',
+        fullname: 'Full Site Dismantle Tool',
+        link: '/tools/full_site_dismantle',
         groupBy:['admin','ran']
     },
     // {

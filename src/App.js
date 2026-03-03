@@ -298,7 +298,7 @@ function App() {
               </Suspense>
             } />
 
-            <Route path="/tools/degrow_dismantle/*" element={
+            <Route path="/tools/full_site_dismantle/*" element={
               <Suspense fallback={<div>Loading...</div>}>
                 <ProtectedRoute element={DegrowDismantle} allowedUserTypes={['admin', 'ran']} userType={userType} />
               </Suspense>
