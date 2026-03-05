@@ -83,7 +83,7 @@ const ShowAllDismantleItem = () => {
         }
     }
 
-    const handleSurvey = async (siteId, circle) => {
+    const handleSurvey = async (siteId, circle,remark) => {
         action(true)
         try {
 
@@ -95,7 +95,7 @@ const ShowAllDismantleItem = () => {
             });
             action(false)
             console.log('response data ', responce)
-            localStorage.setItem("DismantleSurveyData", JSON.stringify({ tableData: responce?.data?.data || [], siteId: siteId, circle: circle }))
+            localStorage.setItem("DismantleSurveyData", JSON.stringify({ tableData: responce?.data?.data || [], siteId: siteId, circle: circle, remark: remark }))
             if (responce?.data?.data) {
                 navigate(`/tools/full_site_dismantle/survey_site_list/${siteId}`)
             } else {
@@ -146,7 +146,7 @@ const ShowAllDismantleItem = () => {
                     m: 1,
                     ml: 2,
                     display: 'flex',
-                    justifyContent:'space-around'
+                    justifyContent: 'space-around'
                 }}
             >
                 {/* Total Sites */}
@@ -212,12 +212,18 @@ const ShowAllDismantleItem = () => {
                                     Site ID
                                 </th>
                                 <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#CBCBCB', color: 'black' }}>
+                                    Partner Name
+                                </th>
+                                <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#CBCBCB', color: 'black' }}>
+                                    Partner Name
+                                </th>
+                                <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#CBCBCB', color: 'black' }}>
                                     NMS Data Fetch
                                 </th>
                                 <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#CBCBCB', color: 'black' }}>
                                     Survey Date
                                 </th>
-                                     <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#CBCBCB', color: 'black' }}>
+                                <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#CBCBCB', color: 'black' }}>
                                     SRN Done
                                 </th>
                                 <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#CBCBCB', color: 'black' }}>
@@ -237,7 +243,9 @@ const ShowAllDismantleItem = () => {
                                 return (
                                     <tr className={classes.hoverRT} style={{ textAlign: "center", fontWeight: 700 }} key={index}>
                                         <th style={{ position: 'sticky', left: 0, top: 0, backgroundColor: '#CBCBCB', color: 'black' }}>{it['Circle']}</th>
-                                        <th style={{ color: 'black', cursor: 'pointer' }} onClick={() => handleSurvey(it['Site ID'], it['Circle'])}><a>{it['Site ID']}</a></th>
+                                        <th style={{ color: 'black', cursor: 'pointer' }} onClick={() => handleSurvey(it['Site ID'], it['Circle'], it['Remarks'])}><a>{it['Site ID']}</a></th>
+                                        <th style={{ color: 'black' }}>{it['Partner']}</th>
+                                        <th style={{ color: 'black' }}>{it['Partner Code']}</th>
                                         <th style={{ color: 'black' }}>{it['Is Approved']}</th>
                                         <th style={{ color: 'black' }}>{it['Is Surveyed']}</th>
                                         <th style={{ color: 'black' }}>{it['SRN Done']}</th>

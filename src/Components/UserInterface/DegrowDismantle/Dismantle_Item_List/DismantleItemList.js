@@ -19,7 +19,7 @@ import { getDecreyptedData } from '../../../utils/localstorage';
 import { useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { ServerURL } from '../../../services/FetchNodeServices';
-import { set } from 'lodash';
+
 
 
 
@@ -379,22 +379,29 @@ const DismantleItemList = () => {
             .replaceAll("/", " | ")
             .toUpperCase();
         document.title = title;
-        Swal.fire({
-            title: "Survey Confirmation",
-            text: `Is this ${CircleSiteData.siteId} site ready for survey?`,
-            icon: "question",
-            showCancelButton: true,
-            confirmButtonText: "Yes",
-            cancelButtonText: "No",
-            allowOutsideClick: false
-        }).then((result) => {
-            if (result.isConfirmed) {
-                setSurveyReady(true);
-                setSurveyIssue('Survey done')
-            } else {
-                setSurveyReady(false);
-            }
-        });
+        let survey_type = JSON.parse(localStorage.getItem("DismantleSurveyData")).remark
+
+        if (survey_type == 'Survey done') {
+            setSurveyReady(true);
+        } else {
+            Swal.fire({
+                title: "Survey Confirmation",
+                text: `Is this ${CircleSiteData.siteId} site ready for survey?`,
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonText: "Yes",
+                cancelButtonText: "No",
+                allowOutsideClick: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    setSurveyReady(true);
+                    setSurveyIssue('Survey done')
+                } else {
+                    setSurveyReady(false);
+                }
+            });
+        }
+
     }, []);
 
 
@@ -437,41 +444,6 @@ const DismantleItemList = () => {
                     />
                 </Box>
             )}
-
-            {/* {surveyReady === false && (
-                <Box sx={{ m: 2, width: 400 }}>
-                    <FormControl fullWidth size="small">
-                        <InputLabel>Survey Issue</InputLabel>
-                        <Select
-                            value={surveyIssue}
-                            label="Survey Issue"
-                            onChange={(e) => setSurveyIssue(e.target.value)}
-                        >
-                            {surveyIssues.map((issue, index) => (
-                                <MenuItem key={index} value={issue}>
-                                    {issue}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-
-                    <Button
-                        variant="contained"
-                        sx={{ mt: 2, backgroundColor: '#006e74' }}
-                        disabled={!surveyIssue}
-                        onClick={() => {
-                            Swal.fire(
-                                "Submitted",
-                                `Survey marked as not ready due to: ${surveyIssue}`,
-                                "success"
-                            );
-                        }}
-                    >
-                        Submit
-                    </Button>
-                </Box>
-            )} */}
-
             <Dialog
                 open={surveyReady === false}
                 disableEscapeKeyDown
@@ -515,6 +487,42 @@ const DismantleItemList = () => {
                     </Button>
                 </DialogActions>
             </Dialog>
+
+            {/* {surveyReady === false && (
+                <Box sx={{ m: 2, width: 400 }}>
+                    <FormControl fullWidth size="small">
+                        <InputLabel>Survey Issue</InputLabel>
+                        <Select
+                            value={surveyIssue}
+                            label="Survey Issue"
+                            onChange={(e) => setSurveyIssue(e.target.value)}
+                        >
+                            {surveyIssues.map((issue, index) => (
+                                <MenuItem key={index} value={issue}>
+                                    {issue}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+
+                    <Button
+                        variant="contained"
+                        sx={{ mt: 2, backgroundColor: '#006e74' }}
+                        disabled={!surveyIssue}
+                        onClick={() => {
+                            Swal.fire(
+                                "Submitted",
+                                `Survey marked as not ready due to: ${surveyIssue}`,
+                                "success"
+                            );
+                        }}
+                    >
+                        Submit
+                    </Button>
+                </Box>
+            )} */}
+
+
             {loading}
         </>
 

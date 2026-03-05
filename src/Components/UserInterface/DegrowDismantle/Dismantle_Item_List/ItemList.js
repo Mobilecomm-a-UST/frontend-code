@@ -89,7 +89,7 @@ const ItemList = (props) => {
         try {
             let formData = new FormData();
             formData.append('circle', circle);
-            const response = await axios.post(`${ServerURL}/degrow_dismental/get_model_list/`, formData, {
+            const response = await axios.post(`${ServerURL}/degrow_dismental/fetch_model_name/`, formData, {
                 headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
             });
             setModelList(response?.data?.models || [])

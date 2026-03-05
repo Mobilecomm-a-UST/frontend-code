@@ -6,6 +6,9 @@ import { Sidenav, Nav } from 'rsuite';
 import { useNavigate } from 'react-router-dom'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ArrowRightIcon from '@rsuite/icons/ArrowRight';
+import Divider from '@mui/material/Divider';
+import ImportIcon from '@rsuite/icons/Import';
+import CreditCardPlusIcon from '@rsuite/icons/CreditCardPlus';
 import DashboardIcon from '@rsuite/icons/Dashboard';
 import { getDecreyptedData } from '../../../Components/utils/localstorage';
 import ListIcon from '@rsuite/icons/List';
@@ -89,18 +92,21 @@ const DegrowDismantle = () => {
                                     <Sidenav.Body>
                                         <Nav activeKey={activeKey} onSelect={setActiveKey} >
                                             <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>Full Site Dismantle</Nav>
-
-                                            <Nav.Item eventKey="1" placement="rightStart" className="single-item-custom" icon={<FolderIcon style={{}} />} onClick={() => { navigate('/tools/full_site_dismantle/file_manager'); show(); setMenuButton(true) }}>
-                                                File Manager
+                                            <Divider component="li" sx={{ backgroundColor: 'white' }} />
+                                            <Nav.Item eventKey="3" placement="rightStart" className="single-item-custom" icon={<ImportIcon style={{}} />} onClick={() => { navigate('/tools/full_site_dismantle/nms_dump_fetch'); show(); setMenuButton(true) }}>
+                                                NMS Dump Fetch
                                             </Nav.Item>
+
+                                            <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={<ListIcon style={{}} />} onClick={() => { navigate('/tools/full_site_dismantle/survey_site_list'); show(); setMenuButton(true) }}>
+                                                Survey Site List
+                                            </Nav.Item>
+                            
                                             <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={<DashboardIcon style={{}} />} onClick={() => { navigate('/tools/full_site_dismantle/survey_dashboard'); show(); setMenuButton(true) }}>
                                                 Survey Dashboard
                                             </Nav.Item>
-                                            <Nav.Item eventKey="3" placement="rightStart" className="single-item-custom" icon={<ListIcon style={{}} />} onClick={() => { navigate('/tools/full_site_dismantle/add_new_site_dismantle'); show(); setMenuButton(true) }}>
-                                                Add New Site
-                                            </Nav.Item>
-                                            <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={<ListIcon style={{}} />} onClick={() => { navigate('/tools/full_site_dismantle/survey_site_list'); show(); setMenuButton(true) }}>
-                                                Survey Site List
+                                   
+                                            <Nav.Item eventKey="1" placement="rightStart" className="single-item-custom" icon={<FolderIcon style={{}} />} onClick={() => { navigate('/tools/full_site_dismantle/file_manager'); show(); setMenuButton(true) }}>
+                                                File Manager
                                             </Nav.Item>
 
                                         </Nav>
@@ -117,7 +123,7 @@ const DegrowDismantle = () => {
                                 <Route element={<DegrowTool />} path="/" />
                                 <Route element={<DegrowForm />} path="/degrow" />
                                 <Route element={<FileManager />} path="/file_manager" />
-                                <Route element={<AddSiteDismantleItem />} path="/add_new_site_dismantle" />
+                                <Route element={<AddSiteDismantleItem />} path="/nms_dump_fetch" />
 
                                 <Route element={<ShowAllDismantleItem />} path="/survey_site_list/*" />
                                 <Route element={<SurveyDashboard />} path="/survey_dashboard" />
