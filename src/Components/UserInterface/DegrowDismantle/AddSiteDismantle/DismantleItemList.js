@@ -343,7 +343,7 @@ const DismantleItemList = () => {
                 <Breadcrumbs separator={<KeyboardArrowRightIcon fontSize="small" />}>
                     <Link underline="hover" onClick={() => navigate("/tools")}>Tools</Link>
                     <Link underline="hover" onClick={() => navigate("/tools/full_site_dismantle")}>Full Site Dismantle</Link>
-                    <Typography color="text.primary">Add New Dismantle Site</Typography>
+                    <Typography color="text.primary">NMS Dump Fetch</Typography>
                 </Breadcrumbs>
             </Box>
             <Box sx={{ display: 'flex', justifyContent: 'left', m: 1, ml: 2 }}>
@@ -364,7 +364,7 @@ const DismantleItemList = () => {
                         </Select>
                     </FormControl>
                     <TextField size='small' placeholder='Enter Site ID' label="Site ID" name='siteId' required value={formDatas.siteId} onChange={handleChange} />
-                    <TextField size='small' placeholder='Enter Board Model' label="Board Model" name='boardModel' value={formDatas.boardModel} onChange={handleChange} />
+                    {/* <TextField size='small' placeholder='Enter Board Model' label="Board Model" name='boardModel' value={formDatas.boardModel} onChange={handleChange} /> */}
 
                     <Button type='submit' sx={{ backgroundColor: '#006e74' }} variant='contained'>search site</Button>
                 </form>

@@ -1,5 +1,5 @@
 import React, { useMemo, useEffect, useState, useCallback } from "react";
-import { Box, Button, Paper, TableContainer } from "@mui/material";
+import { Box, Button, Paper, TableContainer, TextField } from "@mui/material";
 import { useStyles } from "../../ToolsCss";
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -7,6 +7,7 @@ import CheckPicker from "rsuite/CheckPicker";
 import { ServerURL } from "../../../services/FetchNodeServices";
 import { getDecreyptedData } from "../../../utils/localstorage";
 import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
+import { useAsyncError } from "react-router-dom";
 
 const ItemList = ({ list = [], circle, siteId ,handleClear}) => {
     const classes = useStyles();
@@ -14,6 +15,9 @@ const ItemList = ({ list = [], circle, siteId ,handleClear}) => {
 
     const [selectModule, setSelectModule] = useState([]);
     const [selectSerialNumber, setSelectSerialNumber] = useState([]);
+    const [partners , setPartners] = useState('')
+    const [partnerCode, setPartnerCode] = useState('')
+
 
     /* ---------------- MODULE OPTIONS ---------------- */
     const moduleArr = useMemo(() => {
@@ -40,43 +44,47 @@ const ItemList = ({ list = [], circle, siteId ,handleClear}) => {
     }, [list, selectModule, selectSerialNumber]);
 
     /* ---------------- API SUBMIT ---------------- */
-    const handleMobinerDataSubmit = useCallback(async () => {
-        action(true);
+    const handleMobinerDataSubmit = async () => {
+        console.log('out put ' , partners.length)
+        if(partners.length > 2 && partnerCode.length > 1){
+            action(true);
+            try {
+                const payload = new FormData();
+                payload.append("circle", circle);
+                payload.append("siteId", siteId);
+                payload.append("data", JSON.stringify(list));
+                payload.append("partner", partners)
+                payload.append("partner_code", partnerCode)
 
-        try {
-            const payload = new FormData();
-            payload.append("circle", circle);
-            payload.append("siteId", siteId);
-            payload.append("data", JSON.stringify(list));
-
-            const response = await axios.post(
-                `${ServerURL}/degrow_dismental/mobinet_data_submit_central/`,
-                payload,
-                {
-                    headers: {
-                        Authorization: `token ${getDecreyptedData("tokenKey")}`
+                const response = await axios.post(
+                    `${ServerURL}/degrow_dismental/mobinet_data_submit_central/`,
+                    payload,
+                    {
+                        headers: {
+                            Authorization: `token ${getDecreyptedData("tokenKey")}`
+                        }
                     }
-                }
-            );
+                );
+                // console.log("Mobinet Data Submit Response:", response);
+                handleClear();
+                Swal.fire({
+                    icon: "success",
+                    title: "Done",
+                    text: `${response.data.message}`,
+                });
 
-            console.log("Mobinet Data Submit Response:", response);
-            handleClear();
-            Swal.fire({
-                icon: "success",
-                title: "Done",
-                text: `Site (${siteId}) updated successfully`,
-            });
-
-        } catch (error) {
-            Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: error.response?.data?.error || error.message,
-            });
+            } catch (error) {
+                action(false);
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: error.response?.data?.error || error.message,
+                });
+            }
+        }else{
+            alert("!Please Enter Partner Name & Partner Code")
         }
-
-        action(false);
-    }, [circle, siteId, list]);
+    };
 
     /* ---------------- TABLE ROWS ---------------- */
     const tableRows = useMemo(() => {
@@ -133,11 +141,15 @@ const ItemList = ({ list = [], circle, siteId ,handleClear}) => {
                         <tbody>{tableRows}</tbody>
                     </table>
                 </TableContainer>
+                <Box sx={{mt:2,display:'flex' ,gap:2}}>
+                    <TextField fullWidth size='small' placeholder='Enter Partner Name' label="Enter Partner Name" name='partner' required value={partners} onChange={(e)=>setPartners(e.target.value)}  />
+                    <TextField fullWidth size='small' placeholder='Enter Partner Code' label="Enter Partner Code" name='partner' required value={partnerCode} onChange={(e)=>setPartnerCode(e.target.value)}  />
+                </Box>
 
                 <Button
                     variant="contained"
                     color="success"
-                    sx={{ mt: 2 }}
+                    sx={{ mt: 1 }}
                     fullWidth
                     onClick={handleMobinerDataSubmit}
                 >
