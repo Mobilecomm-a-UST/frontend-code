@@ -215,7 +215,7 @@ const ShowAllDismantleItem = () => {
                                     Partner Name
                                 </th>
                                 <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#CBCBCB', color: 'black' }}>
-                                    Partner Name
+                                    Partner Code
                                 </th>
                                 <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#CBCBCB', color: 'black' }}>
                                     NMS Data Fetch

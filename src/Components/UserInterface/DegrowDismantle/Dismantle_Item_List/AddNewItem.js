@@ -11,7 +11,7 @@ import {
 import Swal from 'sweetalert2';
 import Autocomplete from '@mui/material/Autocomplete';
 
-const AddNewItem = ({ onAdd, modelList }) => {
+const AddNewItem = ({ onAdd, modelList,surveyRemarks }) => {
     const [open, setOpen] = useState(false);
 
     const [formData, setFormData] = useState({
@@ -77,6 +77,7 @@ const AddNewItem = ({ onAdd, modelList }) => {
                 variant="contained"
                 sx={{ backgroundColor: '#006e74', mt: 2 }}
                 onClick={handleOpen}
+                disabled={surveyRemarks === 'Survey done' || surveyRemarks === 'SRN Pending' || surveyRemarks === 'SRN Done'}
             >
                 Add New Item
             </Button>
