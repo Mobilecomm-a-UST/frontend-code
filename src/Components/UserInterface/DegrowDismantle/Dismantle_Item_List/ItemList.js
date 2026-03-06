@@ -47,6 +47,8 @@ const ItemList = (props) => {
         "SRAN NSN",
         "ePMP Force 300-25"])
     const navigate = useNavigate()
+    console.log('check survey remoark ' , surveyRemarks)
+    console.log('hgdjgajsgd', surveyRemarks === 'Survey done')
     // console.log('props data ', list)
     // console.log('lists data ', lists)
     // console.log('newItem data ', [...list, ...newItem])
@@ -59,7 +61,7 @@ const ItemList = (props) => {
             formData.append('circle', circle);
             formData.append('siteId', siteId);
             formData.append('data', JSON.stringify([...lists, ...newItem]));
-            formData.append('remark', surveyRemarks || '');
+            formData.append('remark','Survey done');
             const response = await axios.post
                 (`${ServerURL}/degrow_dismental/mobinet_data_submit_circle/`, formData, {
                     headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
@@ -200,6 +202,7 @@ const ItemList = (props) => {
                                                                 color: '#004d4f',
                                                             },
                                                         }}
+                                                         disabled={surveyRemarks === 'Survey done' || surveyRemarks === 'SRN Pending' || surveyRemarks === 'SRN Done'}
                                                     />
                                                     <Typography>Yes</Typography>
                                                 </Stack>
@@ -286,7 +289,7 @@ const ItemList = (props) => {
                 <Box>
                     <AddNewItem onAdd={(newItem) => {
                         setNewItem((prev) => [...prev, newItem]);
-                    }} modelList={modelList} />
+                    }} modelList={modelList} surveyRemarks={surveyRemarks} />
                 </Box>
                 <Box>
                     <Button

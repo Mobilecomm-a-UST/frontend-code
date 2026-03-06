@@ -292,7 +292,7 @@ const DismantleItemList = () => {
     }
     const { siteId: siteIdParam } = useParams();
 
-    console.log('CircleSiteData', CircleSiteData)
+    // console.log('CircleSiteData', CircleSiteData)
 
 
     const handleIssueSubmitAPI = async (e) => {
@@ -357,7 +357,7 @@ const DismantleItemList = () => {
             Swal.fire({
                 icon: "success",
                 title: "Done",
-                text: `This Site-ID (${siteId}) data has been Updated successfully`,
+                text: `This Site-ID (${CircleSiteData.siteId}) data has been Updated successfully`,
             });
             navigate('/tools/full_site_dismantle/survey_site_list')
 
@@ -381,8 +381,10 @@ const DismantleItemList = () => {
         document.title = title;
         let survey_type = JSON.parse(localStorage.getItem("DismantleSurveyData")).remark
 
-        if (survey_type == 'Survey done') {
+
+        if (survey_type === 'Survey done' || survey_type === 'SRN Pending' || survey_type === 'SRN Done') {
             setSurveyReady(true);
+            setSurveyIssue(survey_type);
         } else {
             Swal.fire({
                 title: "Survey Confirmation",
@@ -395,7 +397,7 @@ const DismantleItemList = () => {
             }).then((result) => {
                 if (result.isConfirmed) {
                     setSurveyReady(true);
-                    setSurveyIssue('Survey done')
+                    // setSurveyIssue('Survey done')
                 } else {
                     setSurveyReady(false);
                 }
@@ -444,6 +446,9 @@ const DismantleItemList = () => {
                     />
                 </Box>
             )}
+
+
+
             <Dialog
                 open={surveyReady === false}
                 disableEscapeKeyDown
@@ -451,7 +456,6 @@ const DismantleItemList = () => {
                 <DialogTitle>
                     Survey Issue Selection
                 </DialogTitle>
-
                 <DialogContent sx={{ width: 500, mt: 1 }}>
                     <FormControl fullWidth size="small">
                         <InputLabel>Survey Issue</InputLabel>

@@ -21,7 +21,7 @@ import { ServerURL } from '../../../services/FetchNodeServices';
 
 
 
-const CircleList = ['AP', 'ASM', 'BR', 'CHN', 'DEL', 'HRY', 'JK', 'JRK', 'KK', 'KOL', 'MAH', 'MP', 'MUM', 'NE', 'ORI', 'PUN', 'RAJ', 'ROTN', 'UPE', 'UPW', 'WB']
+const CircleList = ['AP', 'AS', 'BR', 'CN', 'DL', 'HR', 'JK', 'JRK', 'KK', 'KO', 'MP', 'MU', 'NE', 'OR', 'PB', 'RJ', 'ROTN', 'UE', 'UW', 'WB']
 
 
 const DismantleItemList = () => {
