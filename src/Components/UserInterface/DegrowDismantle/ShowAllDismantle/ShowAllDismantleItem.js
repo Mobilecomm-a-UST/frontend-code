@@ -248,7 +248,7 @@ const ShowAllDismantleItem = () => {
                                         <th style={{ color: 'black' }}>{it['Partner Code']}</th>
                                         <th style={{ color: 'black' }}>{it['Is Approved']}</th>
                                         <th style={{ color: 'black' }}>{it['Is Surveyed']}</th>
-                                        <th style={{ color: 'black' }}>{it['SRN Done']}</th>
+                                        <th style={{ color: 'black' }}>{it['Is SRN Done']}</th>
                                         <th style={{ color: 'black' }}>{it['Remarks']}</th>
                                         {/* <th style={{ color: 'black' }}>
                                                 <Checkbox size="small"
