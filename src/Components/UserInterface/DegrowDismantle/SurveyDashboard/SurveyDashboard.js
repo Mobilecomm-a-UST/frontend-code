@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState,useEffect } from "react";
 import {
   Box,
   Breadcrumbs,
@@ -17,124 +17,40 @@ import { useNavigate } from "react-router-dom";
 import { useStyles } from '../../ToolsCss'
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import _ from "lodash";
+import { useLoadingDialog } from '../../../Hooks/LoadingDialog';
+import axios from 'axios';
+import { getDecreyptedData } from '../../../utils/localstorage';
+import Swal from 'sweetalert2';
+import { ServerURL } from '../../../services/FetchNodeServices';
 
 const SurveyDashboard = () => {
   const classes = useStyles()
-
-  const [data, setData] = useState([
-    {
-      "id": 9,
-      "Circle": "BR",
-      "Site ID": "BHUSX-01",
-      "Partner Code": null,
-      "Partner": null,
-      "Is Approved": "03-Mar-26",
-      "Is Surveyed": "03-Mar-26",
-      "Is SRN Done": null,
-      "Remarks": "Survey done"
-    },
-    {
-      "id": 8,
-      "Circle": "BR",
-      "Site ID": "BADHA-18",
-      "Partner Code": null,
-      "Partner": null,
-      "Is Approved": "02-Mar-26",
-      "Is Surveyed": "03-Mar-26",
-      "Is SRN Done": null,
-      "Remarks": "Survey done"
-    },
-    {
-      "id": 11,
-      "Circle": "BR",
-      "Site ID": "JHTIL-04",
-      "Partner Code": null,
-      "Partner": null,
-      "Is Approved": "03-Mar-26",
-      "Is Surveyed": "03-Mar-26",
-      "Is SRN Done": null,
-      "Remarks": "Survey done"
-    },
-    {
-      "id": 10,
-      "Circle": "BR",
-      "Site ID": "BHBBA-22",
-      "Partner Code": null,
-      "Partner": null,
-      "Is Approved": "03-Mar-26",
-      "Is Surveyed": "03-Mar-26",
-      "Is SRN Done": null,
-      "Remarks": "Survey done"
-    },
-    {
-      "id": 14,
-      "Circle": "DL",
-      "Site ID": "DEL28493",
-      "Partner Code": "qwer",
-      "Partner": "123",
-      "Is Approved": "06-Mar-26",
-      "Is Surveyed": "06-Mar-26",
-      "Is SRN Done": null,
-      "Remarks": "Survey done"
-    },
-    {
-      "id": 15,
-      "Circle": "DL",
-      "Site ID": "DEL28439",
-      "Partner Code": "6767",
-      "Partner": "vbnn",
-      "Is Approved": "06-Mar-26",
-      "Is Surveyed": "06-Mar-26",
-      "Is SRN Done": null,
-      "Remarks": "Survey done"
-    },
-    {
-      "id": 12,
-      "Circle": "BR",
-      "Site ID": "JHMKU-01",
-      "Partner Code": null,
-      "Partner": null,
-      "Is Approved": "05-Mar-26",
-      "Is Surveyed": "06-Mar-26",
-      "Is SRN Done": null,
-      "Remarks": "Survey done"
-    },
-    {
-      "id": 13,
-      "Circle": "BR",
-      "Site ID": "BHUFQ-02",
-      "Partner Code": "12345",
-      "Partner": "vnbvnnnbv",
-      "Is Approved": "05-Mar-26",
-      "Is Surveyed": "06-Mar-26",
-      "Is SRN Done": null,
-      "Remarks": "SRN Pending"
-    },
-    {
-      "id": 16,
-      "Circle": "DL",
-      "Site ID": "23208",
-      "Partner Code": "456",
-      "Partner": "DDT",
-      "Is Approved": "06-Mar-26",
-      "Is Surveyed": "06-Mar-26",
-      "Is SRN Done": "06-Mar-26",
-      "Remarks": "SRN Done"
-    },
-    {
-      "id": 17,
-      "Circle": "DL",
-      "Site ID": "11488",
-      "Partner Code": "1234",
-      "Partner": "test1",
-      "Is Approved": "06-Mar-26",
-      "Is Surveyed": "06-Mar-26",
-      "Is SRN Done": null,
-      "Remarks": "SRN Pending"
-    }
-  ])
+     const { loading, action } = useLoadingDialog()
+  const [data, setData] = useState([])
 
   const navigate = useNavigate();
+
+  const fetchSiteData = async () => {
+    action(true)
+    try {
+      let formData = new FormData();
+      formData.append('circle', getDecreyptedData("user_circle"));
+
+      const response = await axios.post(`${ServerURL}/degrow_dismental/fetch_site_status/`, formData, {
+        headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
+      });
+      action(false)
+      setData(response?.data?.data || [])
+
+    } catch (error) {
+      action(false)
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: ` ${error.response?.data?.error || error.message}`,
+      });
+    }
+  }
 
   /* ---------- SUMMARY ---------- */
 
@@ -205,6 +121,19 @@ const SurveyDashboard = () => {
       </Paper>
     </Grid>
   );
+
+
+  useEffect(() => {
+    const title = window.location.pathname
+      .slice(1)
+      .replaceAll("_", " ")
+      .replaceAll("/", " | ")
+      .toUpperCase();
+    document.title = title;
+
+    fetchSiteData()
+
+  }, []);
 
 
 
