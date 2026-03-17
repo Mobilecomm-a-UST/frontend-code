@@ -271,7 +271,7 @@ const ToolData = [
         icons: ModelIcon,
         fullname: 'Mobile Network Integration Tool',
         link: '/tools/mobile_network_integration',
-        groupBy:['admin']
+        groupBy:['admin','MNIT']
     } 
     ,
     {

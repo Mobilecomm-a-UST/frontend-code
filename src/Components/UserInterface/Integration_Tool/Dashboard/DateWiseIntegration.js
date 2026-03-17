@@ -51,7 +51,7 @@ const DateWiseIntegration = ({ onData }) => {
                 action(false)
                 ShortDate(res.latest_dates)
                 setTableData(JSON.parse(res.table_data))
-                // console.log('date wise data', JSON.parse(res.table_data))
+                console.log('date wise data', JSON.parse(res.table_data))
                 onData(res);
                 return res;
             }
@@ -342,13 +342,11 @@ const DateWiseIntegration = ({ onData }) => {
     }
 
     useEffect(() => {
-
         if (data) {
             ShortDate(data.latest_dates)
             setTableData(JSON.parse(data.table_data))
             onData(data);
         }
-        // setTotals(calculateColumnTotals(tableData))
     }, [])
 
     return (

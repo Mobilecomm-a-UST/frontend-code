@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { Breadcrumbs, Button, Link, Typography } from "@mui/material";
+import { Breadcrumbs, Button, Link, Typography, Autocomplete, CircularProgress } from "@mui/material";
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { json, useNavigate } from "react-router-dom";
 import { Box, Grid } from "@mui/material";
@@ -10,6 +10,8 @@ import Select from '@mui/material/Select';
 import CloseIcon from '@mui/icons-material/Close';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
 import DownloadIcon from '@mui/icons-material/Download';
 import TableContainer from '@mui/material/TableContainer';
 import Paper from '@mui/material/Paper';
@@ -26,7 +28,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import BlockIcon from '@mui/icons-material/Block';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Divider from '@mui/material/Divider';
-import axios from 'axios';
+import axios from "axios";
+import debounce from "lodash/debounce";
 import Swal from "sweetalert2";
 
 
@@ -39,6 +42,7 @@ const LifeCycle = () => {
     const userID = getDecreyptedData("userID")
     const [siteId, setSiteId] = useState('')
     const [selectCircle, setSelectCircle] = useState('')
+    const [tempCircleSiteid, setTempCircleSiteid] = useState({ circle: '', siteId: '' })
     const [milestoneData, setMilestoneData] = useState([])
     const [milestoneSelectName, setMilestoneSelectName] = useState('')
     const [tableForm, setTableForm] = useState({})
@@ -48,6 +52,56 @@ const LifeCycle = () => {
     const [open, setOpen] = useState(false)
     const userTypes = (getDecreyptedData('user_type')?.split(","))
     const { action, loading } = useLoadingDialog();
+    const [options, setOptions] = useState([]);
+    const [issueList, setIssueList] = useState([])
+    const ownerIssue = [
+        {
+            "owner": "Airtel",
+            "issue": [
+                "Fiber POP",
+                "Media Plan Pending",
+                "WH Issue",
+                "Locator",
+                "FTTH",
+                "I-Deploy",
+                "AW/CATS",
+                "BOQ Approval",
+                "CR Approval",
+                "Delay in Allocation",
+                "Non Circle Priority",
+                "Planning Hold",
+                "RF/Tx Input",
+                "SACFA",
+                "LKF",
+                "Material",
+                "LOS",
+                "TWAMP"
+            ]
+        },
+        {
+            "owner": "TOCO",
+            "issue": [
+                "NBD",
+                "BBM Site",
+                "PRI",
+                "MW Link dependent",
+                "RFAI Rejected",
+                "OHS",
+                "FAR End RFAI"
+            ]
+        },
+
+        {
+            "owner": "UST",
+            "issue": [
+                "Team Issue",
+                "History Alarm",
+                "Material",
+                "LOS",
+                "TWAMP"
+            ]
+        }
+    ]
 
 
 
@@ -71,11 +125,14 @@ const LifeCycle = () => {
             setIssueCount(response?.data?.issue_counts)
             setMilestoneSelectName('')
             setIssueTable([])
+            setTempCircleSiteid({ circle: selectCircle, siteId: siteId })
             Swal.fire({
                 icon: "success",
                 title: "Done",
                 text: `This Site-ID Found in database`,
             });
+
+            handleClearVar()
 
 
         } catch (error) {
@@ -92,13 +149,14 @@ const LifeCycle = () => {
         }
     }
 
+
     const refetchlifecycleData = async () => {
         try {
 
             const formData = new FormData();
-            formData.append('siteId', siteId);
+            formData.append('siteId', tempCircleSiteid.siteId);
             formData.append('userId', userID);
-            formData.append('circle', selectCircle);
+            formData.append('circle', tempCircleSiteid.circle);
             const response = await axios.post
                 (`${ServerURL}/alok_tracker/lifecycle_display/`, formData, {
                     headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
@@ -109,11 +167,11 @@ const LifeCycle = () => {
             // setIssueTable(JSON.parse(response2?.data?.json_data))
             setMilestoneData(JSON.parse(response?.data?.json_data))
             setIssueCount(response?.data?.issue_counts)
-            Swal.fire({
-                icon: "success",
-                title: "Done",
-                text: `This Site-ID Found in database`,
-            });
+            // Swal.fire({
+            //     icon: "success",
+            //     title: "Done",
+            //     text: `This Site-ID Found in database`,
+            // });
 
 
         } catch (error) {
@@ -135,6 +193,22 @@ const LifeCycle = () => {
         }));
     };
 
+    const handleOwner = (e) => {
+        const { name, value } = e.target;
+
+        ownerIssue.map((item) => {
+            if (item.owner == value) {
+                setIssueList(item.issue)
+            }
+        })
+
+        setTableForm((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+
+    }
+
     const handleChangeListDialog = (e) => {
         const { name, value } = e.target;
         setTempIssueTableData((prev) => ({
@@ -149,7 +223,7 @@ const LifeCycle = () => {
         try {
 
             const formData = new FormData();
-            formData.append('siteId', siteId);
+            formData.append('siteId', tempCircleSiteid.siteId);
             formData.append('userId', userID);
             formData.append('issue', tableForm?.issue);
             formData.append('start_date', tableForm?.start_date);
@@ -313,8 +387,8 @@ const LifeCycle = () => {
                                 onChange={handleChangeListDialog}
                                 disabled
                             >
-                                {['Airtel', 'Mobilecomm'].map((item, index) => (
-                                    <MenuItem key={index} value={item}>{item}</MenuItem>
+                                {ownerIssue.map((item, index) => (
+                                    <MenuItem key={index} value={item.owner}>{item.owner}</MenuItem>
                                 ))}
                             </Select>
                         </FormControl>
@@ -397,7 +471,7 @@ const LifeCycle = () => {
             action(true); // start loader
 
             const formData = new FormData();
-            formData.append("siteId", siteId);
+            formData.append("siteId", tempCircleSiteid.siteId);
             formData.append("userId", userID);
             formData.append("circle", milestoneData?.[0]?.circle ?? "");
             formData.append("milestone", milestoneName);
@@ -417,6 +491,8 @@ const LifeCycle = () => {
                 : [];
 
             setIssueTable(parsedData);
+            handleClearVar()
+
         } catch (error) {
             Swal.fire({
                 icon: "error",
@@ -431,7 +507,7 @@ const LifeCycle = () => {
     const refetchMilestoneAfterEdit = async () => {
         try {
             const formData = new FormData();
-            formData.append("siteId", siteId);
+            formData.append("siteId", tempCircleSiteid.siteId);
             formData.append("userId", userID);
             formData.append("circle", milestoneData?.[0]?.circle ?? "");
             formData.append("milestone", milestoneSelectName);
@@ -467,7 +543,7 @@ const LifeCycle = () => {
             const formData = new FormData();
             formData.append("id", issueId);
             formData.append("userId", userID);
-            formData.append("circle", selectCircle);
+            formData.append("circle", tempCircleSiteid.circle);
 
             const response = await axios.post(
                 `${ServerURL}/alok_tracker/issue_timeline_delete/`,
@@ -500,6 +576,40 @@ const LifeCycle = () => {
         }
     };
 
+    const handleClearVar = () => {
+        setTableForm({})
+        // setTempCircleSiteid({ circle: '', siteId: '' })
+        setSiteId('')
+        setSelectCircle('')
+    }
+
+    const fetchSites = async (value) => {
+        if (!value) return;
+        try {
+            const res = await axios.post
+                (`${ServerURL}/alok_tracker/fetch_sites/`, {
+                    circle: selectCircle,
+                    siteId: value,
+                }, {
+                    headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
+                });
+
+            if (res.data?.status) {
+                setOptions(res.data.data); // ["ADK010", "ADK013"]
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    useEffect(() => {
+        if (!siteId) return;
+        // ⏳ Debounce timer
+        const timer = setTimeout(() => {
+            fetchSites(siteId);
+        }, 500); // 500ms delay
+        return () => clearTimeout(timer);
+    }, [siteId]);
 
     useEffect(() => {
         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
@@ -519,7 +629,6 @@ const LifeCycle = () => {
                     <Grid item xs={10} style={{ display: "flex" }}>
                         <Box >
                             <form onSubmit={handleSubmitSite} style={{ display: 'flex', justifyContent: 'center', gap: 5 }}>
-                                <TextField size='small' placeholder='Enter Site ID' label="Site ID" required value={siteId} onChange={(e) => setSiteId(e.target.value)} />
                                 <FormControl size="small" sx={{ minWidth: 120 }}>
                                     <InputLabel id="issue-label">Circle</InputLabel>
                                     <Select
@@ -534,19 +643,52 @@ const LifeCycle = () => {
                                         ))}
                                     </Select>
                                 </FormControl>
+                                {/* <TextField size='small' placeholder='Enter Site ID' label="Site ID" required value={siteId} onChange={(e) => setSiteId(e.target.value)} /> */}
+
+                                {/* auto complete  */}
+                                <Autocomplete
+                                    freeSolo
+                                    options={options}
+                                    loading={loading}
+                                    inputValue={siteId}
+                                    onInputChange={(event, newValue) => {
+                                        setSiteId(newValue);
+                                    }}
+                                    onChange={(event, value) => {
+                                        setSiteId(value || "");
+                                    }}
+                                    sx={{ width: 300 }}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="Site ID"
+                                            size="small"
+                                            placeholder="Enter Site ID"
+                                            required
+                                            InputProps={{
+                                                ...params.InputProps,
+                                                endAdornment: (
+                                                    <>
+                                                        {/* {loading ? <CircularProgress size={20} /> : null} */}
+                                                        {params.InputProps.endAdornment}
+                                                    </>
+                                                ),
+                                            }}
+                                        />
+                                    )}
+                                />
+
                                 <Button type='submit' sx={{ backgroundColor: '#006e74' }} variant='contained'>search site</Button>
                             </form>
                         </Box>
 
                     </Grid>
                     <Grid item xs={2} >
-                        {/* <Box style={{ float: 'right' }}>
-                            <Tooltip title="Export Dashboard">
-                                <IconButton onClick={() => { handleExport(); }}>
-                                    <DownloadIcon fontSize='medium' color='primary' />
-                                </IconButton>
-                            </Tooltip>
-                        </Box> */}
+                        {milestoneData.length > 0 ? <Stack direction="row" spacing={1} sx={{ m: 1 }}>
+                            <Chip label={`Circle: ${tempCircleSiteid.circle}`} sx={{ backgroundColor: '#006e74', color: 'white', fontWeight: 'bold' }} />
+                            <Chip label={`Site ID: ${tempCircleSiteid.siteId}`} sx={{ backgroundColor: '#006e74', color: 'white', fontWeight: 'bold' }} />
+                        </Stack> : ''}
+
                     </Grid>
                 </Grid>
 
@@ -613,15 +755,15 @@ const LifeCycle = () => {
                                                 name="owner"
                                                 value={tableForm?.owner || ""}
                                                 label="Owner"
-                                                onChange={handleChange}
+                                                onChange={handleOwner}
                                                 required
                                             >
-                                                {['Airtel', 'Mobilecomm'].map((item, index) => (
-                                                    <MenuItem key={index} value={item}>{item}</MenuItem>
+                                                {ownerIssue.map((item, index) => (
+                                                    <MenuItem key={index} value={item.owner}>{item.owner}</MenuItem>
                                                 ))}
                                             </Select>
                                         </FormControl>
-                                        <FormControl fullWidth size="small" sx={{ flex: 1 }}>
+                                        {issueList && <FormControl fullWidth size="small" sx={{ flex: 1 }}>
                                             <InputLabel id="issue-label">Issue</InputLabel>
                                             <Select
                                                 labelId="issue-label"
@@ -631,11 +773,12 @@ const LifeCycle = () => {
                                                 onChange={handleChange}
                                                 required
                                             >
-                                                {issue.map((item, index) => (
+                                                {issueList?.map((item, index) => (
                                                     <MenuItem key={index} value={item}>{item}</MenuItem>
                                                 ))}
                                             </Select>
-                                        </FormControl>
+                                        </FormControl>}
+
 
                                         <FormControl fullWidth size="small" sx={{ flex: 1 }}>
                                             <TextField
@@ -670,7 +813,8 @@ const LifeCycle = () => {
                                                 }}
                                             />
                                         </FormControl>
-                                         <FormControl fullWidth size="small" sx={{ flex: 1 }}>
+
+                                        <FormControl fullWidth size="small" sx={{ flex: 1 }}>
                                             <TextField
                                                 variant="outlined"
                                                 label="Remarks"
