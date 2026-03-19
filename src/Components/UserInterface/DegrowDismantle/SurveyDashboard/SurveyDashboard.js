@@ -11,7 +11,8 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TableRow
+  TableRow,
+  Button
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useStyles } from '../../ToolsCss'
@@ -21,7 +22,9 @@ import { useLoadingDialog } from '../../../Hooks/LoadingDialog';
 import axios from 'axios';
 import { getDecreyptedData } from '../../../utils/localstorage';
 import Swal from 'sweetalert2';
-import { ServerURL } from '../../../services/FetchNodeServices';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import { ServerURL,postData } from '../../../services/FetchNodeServices';
+
 
 const SurveyDashboard = () => {
   const classes = useStyles()
@@ -122,6 +125,31 @@ const SurveyDashboard = () => {
     </Grid>
   );
 
+
+  const handleDownloadRelocation = async () => {
+          try {
+              action(true); // optional: show loader
+  
+              const response = await postData('degrow_dismental/master_file_download/', { circle: 'dl' });
+              console.log('Download file response:', response);
+  
+              if (response?.download_link) {
+                  // ✅ Automatically trigger file download
+                  const link = document.createElement('a');
+                  link.href = response.download_link;
+                  link.setAttribute('download', '');
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+              } else {
+                  console.warn('No download link found in response');
+              }
+          } catch (error) {
+              console.error('Error downloading relocation file:', error);
+          } finally {
+              action(false); // stop loader
+          }
+      };
 
   useEffect(() => {
     const title = window.location.pathname
@@ -258,6 +286,9 @@ const SurveyDashboard = () => {
             </tbody>
           </table>
         </TableContainer>
+      </Box>
+      <Box sx={{ m: 1, ml: 1, width: '98%' }}>
+       <Button variant="outlined" onClick={()=>handleDownloadRelocation()} title="Export Excel" startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />} sx={{ marginTop: "10px", width: "auto" }}><span style={{ fontFamily: "Poppins", fontSize: "22px", fontWeight: 800, textTransform: "none", textDecorationLine: "none" }}>Download Master file</span></Button>
       </Box>
     </>
   );

@@ -10,8 +10,21 @@ import {
 } from '@mui/material';
 import Swal from 'sweetalert2';
 import Autocomplete from '@mui/material/Autocomplete';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel'
 
-const AddNewItem = ({ onAdd, modelList,surveyRemarks }) => {
+const remarkOptions = [
+    "OK",
+    "Not OK",
+    "SREQ Deleted",
+    "SREQ Inserted",
+    "SREQ Error",
+    "New SREQ Entered"
+];
+
+const AddNewItem = ({ onAdd, modelList, surveyRemarks }) => {
     const [open, setOpen] = useState(false);
 
     const [formData, setFormData] = useState({
@@ -153,7 +166,7 @@ const AddNewItem = ({ onAdd, modelList,surveyRemarks }) => {
                             </Grid>
 
                             <Grid item xs={12}>
-                                <TextField
+                                {/* <TextField
                                     label="SRN Remarks"
                                     name="remarks"
                                     multiline
@@ -161,7 +174,27 @@ const AddNewItem = ({ onAdd, modelList,surveyRemarks }) => {
                                     fullWidth
                                     value={formData.remarks}
                                     onChange={handleChange}
-                                />
+                                /> */}
+
+                                <FormControl size="small" fullWidth >
+                                    <InputLabel id={`remark-label`}>
+                                        Remarks
+                                    </InputLabel>
+
+                                    <Select
+                                        labelId={`remark-label`}
+                                        value={formData.remarks}
+                                        label="SRN Remarks"
+                                        name="remarks"
+                                        onChange={handleChange}
+                                    >
+                                        {remarkOptions.map((option, index) => (
+                                            <MenuItem key={index} value={option}>
+                                                {option}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
                             </Grid>
                         </Grid>
                     </DialogContent>
