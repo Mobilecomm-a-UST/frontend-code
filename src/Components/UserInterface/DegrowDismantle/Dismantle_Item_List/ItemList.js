@@ -16,17 +16,27 @@ import Switch from '@mui/material/Switch';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 
 
-
+const remarkOptions = [
+    "OK",
+    "Not OK",
+    "SREQ Deleted",
+    "SREQ Inserted",
+    "SREQ Error",
+    "New SREQ Entered"
+];
 const ItemList = (props) => {
-    const { list, circle, siteId ,surveyRemarks} = props;
+    const { list, circle, siteId, surveyRemarks } = props;
     const { action, loading } = useLoadingDialog()
     const [lists, setLists] = useState([]);
     const [newItem, setNewItem] = React.useState([]);
     const classes = useStyles()
-    const [modelList , setModelList] = useState(["FibeAir IP-10G",
+    const [modelList, setModelList] = useState(["FibeAir IP-10G",
         "Flexi Edge",
         "Flexi LTE Base Station",
         "Flexi Multiradio",
@@ -47,8 +57,8 @@ const ItemList = (props) => {
         "SRAN NSN",
         "ePMP Force 300-25"])
     const navigate = useNavigate()
-    console.log('check survey remoark ' , surveyRemarks)
-    console.log('hgdjgajsgd', surveyRemarks === 'Survey done')
+    // console.log('check survey remoark ', surveyRemarks)
+    // console.log('hgdjgajsgd', surveyRemarks === 'Survey done')
     // console.log('props data ', list)
     // console.log('lists data ', lists)
     // console.log('newItem data ', [...list, ...newItem])
@@ -61,7 +71,7 @@ const ItemList = (props) => {
             formData.append('circle', circle);
             formData.append('siteId', siteId);
             formData.append('data', JSON.stringify([...lists, ...newItem]));
-            formData.append('remark','Survey done');
+            formData.append('remark', 'Survey done');
             const response = await axios.post
                 (`${ServerURL}/degrow_dismental/mobinet_data_submit_circle/`, formData, {
                     headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
@@ -87,7 +97,7 @@ const ItemList = (props) => {
         }
     }
 
-    const handleModelList = async()=>{
+    const handleModelList = async () => {
         try {
             let formData = new FormData();
             formData.append('circle', circle);
@@ -168,7 +178,7 @@ const ItemList = (props) => {
                                         SRN Number
                                     </th>
                                     <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#CBCBCB', color: 'black' }}>
-                                       SRN Remark
+                                        SRN Remark
                                     </th>
                                 </tr>
                             </thead>
@@ -202,7 +212,7 @@ const ItemList = (props) => {
                                                                 color: '#004d4f',
                                                             },
                                                         }}
-                                                         disabled={surveyRemarks === 'Survey done' || surveyRemarks === 'SRN Pending' || surveyRemarks === 'SRN Done'}
+                                                        disabled={surveyRemarks === 'Survey done' || surveyRemarks === 'SRN Pending' || surveyRemarks === 'SRN Done'}
                                                     />
                                                     <Typography>Yes</Typography>
                                                 </Stack>
@@ -218,13 +228,34 @@ const ItemList = (props) => {
                                             </th>
                                             <th style={{ color: 'black' }}>
 
-                                                <TextField
+                                                {/* <TextField
                                                     size="small"
                                                     value={it.Remarks}
                                                     onChange={(e) => handleRemarkChange(it['Serial Number'], e.target.value)}
                                                     fullWidth
                                                     disabled={!it['Is Found']}
-                                                />
+                                                /> */}
+
+                                                <FormControl size="small" fullWidth disabled={!it['Is Found']}>
+                                                    {/* <InputLabel id={`remark-label-${it['Serial Number']}`}>
+                                                        Remarks
+                                                    </InputLabel> */}
+
+                                                    <Select
+                                                        labelId={`remark-label-${it['Serial Number']}`}
+                                                        value={it.Remarks || ""}
+                                                        label="Remarks"
+                                                        onChange={(e) =>
+                                                            handleRemarkChange(it['Serial Number'], e.target.value)
+                                                        }
+                                                    >
+                                                        {remarkOptions.map((option, index) => (
+                                                            <MenuItem key={index} value={option}>
+                                                                {option}
+                                                            </MenuItem>
+                                                        ))}
+                                                    </Select>
+                                                </FormControl>
                                             </th>
                                         </tr>
                                     )

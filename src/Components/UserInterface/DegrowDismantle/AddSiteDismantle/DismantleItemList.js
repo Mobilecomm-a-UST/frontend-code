@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
     Box,
-    Breadcrumbs, Link, Typography, Button
+    Breadcrumbs, Link, Typography, Button,Autocomplete
 } from '@mui/material';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
@@ -30,6 +30,7 @@ const DismantleItemList = () => {
     const [formDatas, setFormDatas] = useState({ circle: '', siteId: '', boardModel: '' })
     const { loading, action } = useLoadingDialog()
     const [displayData, setDisplayData] = useState([])
+    const [options, setOptions] = useState([])
     const navigate = useNavigate()
     const tempData = {
         "status": "success",
@@ -278,7 +279,7 @@ const DismantleItemList = () => {
         ]
     }
 
-    console.log('tempData', displayData)
+    // console.log('tempData', displayData)
 
 
     const handleSubmitSite = async (e) => {
@@ -335,6 +336,34 @@ const DismantleItemList = () => {
         setSiteId('')
     }
 
+    const fetchSites = async (value) => {
+        if (!value) return;
+        try {
+            const res = await axios.post
+                (`${ServerURL}/degrow_dismental/fetch_sites/`, {
+                    circle: formDatas?.circle || '',
+                    siteId: value,
+                }, {
+                    headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
+                });
+
+            if (res.data?.status) {
+                setOptions(res.data.data); // ["ADK010", "ADK013"]
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    useEffect(() => {
+        if (!formDatas.siteId) return;
+        // ⏳ Debounce timer
+        const timer = setTimeout(() => {
+            fetchSites(formDatas.siteId);
+        }, 500); // 500ms delay
+        return () => clearTimeout(timer);
+    }, [formDatas.siteId]);
+
 
 
     return (
@@ -363,7 +392,44 @@ const DismantleItemList = () => {
                             ))}
                         </Select>
                     </FormControl>
-                    <TextField size='small' placeholder='Enter Site ID' label="Site ID" name='siteId' required value={formDatas.siteId} onChange={handleChange} />
+                    {/* <TextField size='small' placeholder='Enter Site ID' label="Site ID" name='siteId' required value={formDatas.siteId} onChange={handleChange} /> */}
+                    <Autocomplete
+                        freeSolo
+                        options={options}
+                        loading={loading}
+                        inputValue={formDatas.siteId}
+                        onInputChange={(event, newValue) => {
+                            setFormDatas((prev) => ({
+                                ...prev,
+                                siteId: newValue
+                            }));
+                        }}
+                        onChange={(event, value) => {
+                            setFormDatas((prev) => ({
+                                ...prev,
+                                siteId: value || ""
+                            }));
+                        }}
+                        sx={{ width: 250 }}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="Site ID"
+                                size="small"
+                                required
+                                placeholder="Enter Site ID"
+                                InputProps={{
+                                    ...params.InputProps,
+                                    endAdornment: (
+                                        <>
+                                            {/* {loading ? <CircularProgress size={20} /> : null} */}
+                                            {params.InputProps.endAdornment}
+                                        </>
+                                    ),
+                                }}
+                            />
+                        )}
+                    />
                     {/* <TextField size='small' placeholder='Enter Board Model' label="Board Model" name='boardModel' value={formDatas.boardModel} onChange={handleChange} /> */}
 
                     <Button type='submit' sx={{ backgroundColor: '#006e74' }} variant='contained'>search site</Button>
