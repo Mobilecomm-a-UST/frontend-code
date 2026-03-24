@@ -180,6 +180,7 @@ const AdminPanel = () => {
         setOpen(false);
         setColumnsArray(['ALL', ...response?.data?.columns])
         setTableData(response?.data?.json_data)
+        console.log('responce data ', response?.data?.json_data)
 
       }
     } catch (error) {
@@ -439,14 +440,38 @@ const AdminPanel = () => {
 
   }, [])
 
-  const downloadExcel = (data) => {
-    // **************** FILEFY DEPENDANCY *****************
-    var csvBuilder = new CsvBuilder(`RFAI-To-MS1_Tracker.csv`)
-      .setColumns(columnData.map(item => item.title))
-      .addRows(data.map(row => columnData.map(col => row[col.field])))
-      .exportFile();
+  // const downloadExcel = (data) => {
+  //   // **************** FILEFY DEPENDANCY *****************
+  //   var csvBuilder = new CsvBuilder(`RFAI-To-MS1_Tracker.csv`)
+  //     .setColumns(columnData.map(item => item.title))
+  //     .addRows(data.map(row => columnData.map(col => row[col.field])))
+  //     .exportFile();
 
-  }
+  // }
+
+  const downloadExcel = (data = []) => {
+    if (!Array.isArray(data)) return;
+
+    const exportColumns = columnData.filter(col => col.field !== "actions");
+
+    new CsvBuilder("Relocation_Admin.csv")
+      .setColumns(exportColumns.map(item => item.title))
+      .addRows(
+        data.map(row =>
+          exportColumns.map(col => {
+            let value = row?.[col.field];
+
+            // 🔥 KEY FIX: array ko string me convert karo
+            if (Array.isArray(value)) {
+              return value.join(", ");
+            }
+
+            return value ?? "";
+          })
+        )
+      )
+      .exportFile();
+  };
   return (
     <>
       <div style={{ margin: '1% 1%' }}>
@@ -465,7 +490,7 @@ const AdminPanel = () => {
             {
               icon: () => <DownloadIcon sx={{ color: '#006e74' }} fontSize='large' />,
               tooltip: "Export to Excel",
-              onClick: () => downloadExcel(listDataa.temp),
+              onClick: () => downloadExcel(tableData),
               isFreeAction: true
             }
           ]}

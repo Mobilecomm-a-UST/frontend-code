@@ -37,7 +37,7 @@ const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues 
         }
     };
 
-    const isAllSelected = options.length > 0 && selectedValues.length === options.length;
+    const isAllSelected = options?.length > 0 && selectedValues?.length === options?.length;
 
     return (
         <FormControl sx={{ minWidth: 150, maxWidth: 200 }} size="small">
@@ -103,7 +103,7 @@ const RfaiIntegration = () => {
     const [month, setMonth] = useState('')
     const dynamicHeaders = Object.keys(integrationToOnairData?.[0]?.data?.Done || []);
 
-    console.log('table data', dynamicHeaders)
+    // console.log('table data', dynamicHeaders)
 
     const classes = useStyles();
 
@@ -330,8 +330,6 @@ const RfaiIntegration = () => {
                     </Box>
 
                     <Box sx={{ marginTop: 0, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2 }}>
-
-
                         <TableContainer
                             sx={{ maxHeight: 600, boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }}
                             component={Paper}
