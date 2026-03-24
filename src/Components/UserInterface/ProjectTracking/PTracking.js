@@ -36,6 +36,7 @@ const Dismantle_Aging = lazy(() => import('./Dismantle/Aging/MainAging'))
 const MS1toMS2_Analytics = lazy(() => import('./MS1toMS2/Analytics/MainDashboard'))
 const Dismantle_Analytics = lazy(() => import('./Dismantle/Analytics/MainDashboard'))
 const Relocation2_0_UploadFile = lazy(() => import('./Relocation2.0/UploadFile/Upload'))
+const RFAItoMS1IssueTracker = lazy(()=>import('./RFAItoMS1/IssueTracker/IssueTracker'))
 
 
 
@@ -81,37 +82,7 @@ const PTracking = () => {
 
                 <Grid container spacing={2}>
                     <Grid item xs={0} md={2} sx={{}}>
-                        <Box sx={{ display: { xs: 'inherit', md: 'none' } }}>
-                            <Collapse in={!checked}>
-                                <Button onClick={() => { show() }} style={{ position: 'absolute', top: '60px', backgroundColor: '#223354' }}><SettingsIcon style={{ color: "white" }} /></Button>
-                            </Collapse>
-                            <Collapse in={checked} orientation="horizontal" timeout={'auto'}>
-                                <Box sx={{ width: 240, minHeight: "670px", height: "100hv", backgroundColor: "#223354", borderRadius: 5, position: 'fixed', zIndex: 10 }}>
-                                    <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle">
-                                        <Sidenav.Body>
-                                            <Nav activeKey={activeKey} onSelect={setActiveKey} style={{ width: 'auto', minHeight: "670px", height: "100hv", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
-                                                <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>Relocation Tracking</Nav>
-                                                <Nav.Item eventKey="1" placement="rightStart" icon={<DashboardIcon />} onClick={() => { navigate('/tools/project_tracking/'); show(); setMenuButton(true) }}>
-                                                    Dashboard
-                                                </Nav.Item>
-                                                {/* <Nav.Menu eventKey="3" placement="rightStart" title="NOM Audit" icon={<DocPassIcon />}>
-                                                    <Nav.Item eventKey="3-1" placement="rightStart" onClick={() => { navigate('/tools/nomenclature_scriptor/nom_audit_dashboard'); show(); setMenuButton(true) }}>
-                                                        Dashboard
-                                                    </Nav.Item>
-                                                    <Nav.Item eventKey="3-2" placement="rightStart" onClick={() => { navigate('/tools/nomenclature_scriptor/nom_audit'); show(); setMenuButton(true) }}>
-                                                        Pre-Post Audit
-                                                    </Nav.Item>
-                                                </Nav.Menu> */}
-
-
-                                            </Nav>
-                                        </Sidenav.Body>
-
-                                    </Sidenav>
-                                </Box>
-                            </Collapse>
-
-                        </Box>
+              
                         {/* THIS VIEW FOR PC  */}
                         <Box sx={{ display: { xs: 'none', md: 'inherit' } }} >
                             <Box sx={{ position: 'fixed', width: '16.5%' }} >
@@ -138,7 +109,10 @@ const PTracking = () => {
                                                 <Nav.Item eventKey="1-4" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/rfai_to_ms1_ageing'); show(); setMenuButton(true) }}>
                                                     Ageing Dashboard
                                                 </Nav.Item>
-                                                {!userTypes?.includes('RLT_reader') && <Nav.Item eventKey="1-5" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/rfai_to_ms1_upload_file'); show(); setMenuButton(true) }}>
+                                                 <Nav.Item eventKey="1-5" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/rfai_to_ms1_issue_tracker'); show(); setMenuButton(true) }}>
+                                                    Issue Tracker
+                                                </Nav.Item>
+                                                {!userTypes?.includes('RLT_reader') && <Nav.Item eventKey="1-6" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/rfai_to_ms1_upload_file'); show(); setMenuButton(true) }}>
                                                     Upload File
                                                 </Nav.Item>}
 
@@ -215,6 +189,7 @@ const PTracking = () => {
                                 <Route element={<RFAItoMS1_FinalData />} path="/rfai_to_ms1_waterfall/:milestone" />
                                 <Route element={<RFAItoMS1_MainAging />} path="/rfai_to_ms1_ageing" />
                                 <Route element={<RFAItoMS1_MainDashboard />} path="/rfai_to_ms1_analytics" />
+                                <Route element={<RFAItoMS1IssueTracker />} path="/rfai_to_ms1_issue_tracker" />
                                 <Route element={<LifeCycle />} path="/site_lifecycle" />
                                 <Route
                                     path="/rfai_to_ms1_upload_file"
