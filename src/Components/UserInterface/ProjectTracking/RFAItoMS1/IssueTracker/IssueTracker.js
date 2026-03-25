@@ -180,11 +180,59 @@ const IssueTracker = () => {
         fetchDailyData()
     }
 
+    const handleExportExcel = async () => {
+        if (!issueDatas || issueDatas.length === 0) {
+            alert("No data to export");
+            return;
+        }
+
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet("Issue Tracker");
+
+        // 🔥 Dynamic headers
+        const headers = Object.keys(issueDatas[0]);
+
+        // Add header row
+        worksheet.addRow(headers);
+
+        // Style header
+        worksheet.getRow(1).eachCell((cell) => {
+            cell.font = { bold: true };
+            cell.alignment = { vertical: "middle", horizontal: "center" };
+        });
+
+        // Add data rows
+        issueDatas.forEach((item) => {
+            const row = headers.map((key) => item[key] ?? 0);
+            worksheet.addRow(row);
+        });
+
+        // 🔥 Auto column width
+        worksheet.columns.forEach((column) => {
+            column.width = 15;
+        });
+
+        // Generate file
+        const buffer = await workbook.xlsx.writeBuffer();
+
+        const blob = new Blob([buffer], {
+            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        });
+
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "Issue_Tracker.xlsx";
+        a.click();
+
+        window.URL.revokeObjectURL(url);
+    };
+
     useEffect(() => {
         fetchDailyData()
         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
 
-    }, [status,milestoneSelect,ownerSelect])
+    }, [status, milestoneSelect, ownerSelect])
     return (
         <>
             <style>{"th{border:1px solid black;}"}</style>
@@ -245,7 +293,7 @@ const IssueTracker = () => {
 
                                     <MenuItem value='ALL'>ALL</MenuItem>
                                     <MenuItem value='Open'>OPEN</MenuItem>
-                                    <MenuItem value='Close'>CLOSE</MenuItem>
+                                    <MenuItem value='Closed'>CLOSE</MenuItem>
 
                                 </Select>
                             </FormControl>
@@ -295,16 +343,11 @@ const IssueTracker = () => {
                                 </FormControl>
                             </form>
 
-                            {/* <Tooltip title="Download Done Vs Pending Count">
-                                <IconButton
-                                    component="a"
-                                    // href={downloadExcelData}
-                                    onClick={(handleExportExcel)}
-                                    download
-                                >
+                            <Tooltip title="Download Excel">
+                                <IconButton onClick={handleExportExcel}>
                                     <DownloadIcon fontSize="large" color="primary" />
                                 </IconButton>
-                            </Tooltip> */}
+                            </Tooltip>
                         </Box>
                     </Box>
 
