@@ -21,18 +21,24 @@ import { usePost } from "../../../../Hooks/PostApis";
 
 const Degrow = () => {
     const { makePostRequest,cancelRequest,}  = usePost()
-    const [rawKpiFile,setRawKpiFile] = useState({ filename: "", bytes: "" })
+    // const [rawKpiFile,setRawKpiFile] = useState({ filename: "", bytes: "" })
+    const [preKpiFile,setPreKpiFile] = useState({ filename: "", bytes: "" })
+    const [postKpiFile,setPostKpiFile] = useState({ filename: "", bytes: "" })
     const [siteListFile,setSiteListFile] = useState({ filename: "", bytes: "" })
     const [open, setOpen] = useState(false);
-    const [offerDate,setOfferDate] = useState()
-    const [rawShow,setRawShow] = useState(false)
+    // const [offerDate,setOfferDate] = useState()
+    // const [rawShow,setRawShow] = useState(false)
+    const [preShow,setPreShow] = useState(false)
+    const [postShow,setPostShow] = useState(false)
     const [siteShow,setSiteShow] = useState(false)
-    const [fileData,setFileData] = useState()
+    const [fileData,setFileData] = useState(" ")
     const [dlink,setDlink] = useState(false)
     const [missingSiteOpen, setMissingSiteOpen] = useState(false)
     const [missingSite, setMissingSite] = useState([])
     const [missingBox,setMissingBox] = useState('')
-    const rawKpiLength = rawKpiFile.filename.length
+    // const rawKpiLength = rawKpiFile.filename.length
+    const preKpiLength = preKpiFile.filename.length
+    const postKpiLength = postKpiFile.filename.length
     const siteListLength = siteListFile.filename.length
     const classes =  OverAllCss();
 
@@ -40,11 +46,33 @@ const Degrow = () => {
 
 
 
+    
+    // const handleRawKpiFile=(event)=>
+    // {
+    //     setRawShow(false);
+    //     setRawKpiFile({
+    //       filename: event.target.files[0].name,
+    //       bytes: event.target.files[0],
+    //       state: true
+
+    //     })
+    // }
     var link = `${ServerURL}${fileData}`;
-    const handleRawKpiFile=(event)=>
+
+    const handlePreKpiFile=(event)=>
     {
-        setRawShow(false);
-        setRawKpiFile({
+        setPreShow(false);
+        setPreKpiFile({
+          filename: event.target.files[0].name,
+          bytes: event.target.files[0],
+          state: true
+
+        })
+    }
+     const handlePostKpiFile=(event)=>
+    {
+        setPostShow(false);
+        setPostKpiFile({
           filename: event.target.files[0].name,
           bytes: event.target.files[0],
           state: true
@@ -65,28 +93,28 @@ const Degrow = () => {
 
     console.log('size:',fileData);
 
-    const todayDate = () => {
-      // const d = new Date()
+//     const todayDate = () => {
+//       // const d = new Date()
 
-      var d = new Date(),
-      month = '' + (d.getMonth() + 1),
-      day = '' + d.getDate(),
-      year = d.getFullYear();
+//       var d = new Date(),
+//       month = '' + (d.getMonth() + 1),
+//       day = '' + d.getDate(),
+//       year = d.getFullYear();
 
-  if (month.length < 2)
-      month = '0' + month;
-  if (day.length < 2)
-      day = '0' + day;
+//   if (month.length < 2)
+//       month = '0' + month;
+//   if (day.length < 2)
+//       day = '0' + day;
 
-  setOfferDate( [year, month, day].join('-'))
+//   setOfferDate( [year, month, day].join('-'))
 
-  }
+//   }
 
-  const dateFun=(date)=>
-  {
-      setOfferDate(date)
-      // console.log('Date', date)
-  }
+//   const dateFun=(date)=>
+//   {
+//       setOfferDate(date)
+//       // console.log('Date', date)
+//   }
 
 // highlite driver js
 const startTour = () => {
@@ -107,25 +135,26 @@ const startTour = () => {
 
     driverObj.drive();
   };
-  useEffect(()=>{
-      todayDate();
-      document.title=`${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/',' | ').toUpperCase()}`
-  },[])
+//   useEffect(()=>{
+//       todayDate();
+//       document.title=`${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/',' | ').toUpperCase()}`
+//   },[])
 
   const handleSubmit=async()=>
   {
 
-    if(rawKpiLength > 0 && siteListLength > 0)
+    if(preKpiLength > 0 && postKpiLength > 0 && siteListLength > 0)
     {
 
     setOpen(true)
     var formData = new FormData();
-    formData.append("raw_kpi", rawKpiFile.bytes);
+    formData.append("pre_file", preKpiFile.bytes);
+    formData.append("post_file", postKpiFile.bytes);
     formData.append("site_list", siteListFile.bytes);
-    formData.append("offered_date", offerDate);
+    // formData.append("offered_date", offerDate);
     // const response = await postData('trend/bih/makeKpiTrend/old/degrow',formData, {headers: {Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` },signal : abortSignal })
-    const response = await makePostRequest('trend/bih/makeKpiTrend/old/degrow',formData,)
-    setFileData(response.Download_url)
+    const response = await makePostRequest('trend/bih/makeKpiTrend/new/degrow/',formData,)
+    setFileData(response.download_url)
      console.log('SAMSUNG DATA',response)
      setMissingSite(response.missing_sites)
 
@@ -157,9 +186,13 @@ const startTour = () => {
     }
 }
 else{
-    if(rawKpiLength == 0 )
+    if(preKpiLength == 0 )
     {
-        setRawShow(true)
+        setPreShow(true)
+    }
+    if(postKpiLength == 0 )
+    {
+        setPostShow(true)
     }
     if(siteListLength == 0)
     {
@@ -212,10 +245,11 @@ else{
 
   const handleCancel=()=>
   {
-    setRawKpiFile({filename:"",bytes:""})
+    setPreKpiFile({filename:"",bytes:""})
+    setPostKpiFile({filename:"",bytes:""})
     setSiteListFile({filename:"",bytes:""})
 
-    todayDate()
+    // todayDate()
 
   }
   return (
@@ -244,23 +278,39 @@ else{
             <Stack spacing={2} sx={{ marginTop: "-40px" }} >
                 <Box className={classes.Front_Box}id='step-1'>
                     <div className={classes.Front_Box_Hading}>
-                        Select RAW KPI File:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{rawKpiFile.filename}</span>
+                        Select Pre File:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{preKpiFile.filename}</span>
                     </div>
                     <div className={classes.Front_Box_Select_Button}>
                         <div style={{ float: "left" }}>
-                            <Button variant="contained" component="label" color={rawKpiFile.state ? "warning" : "primary"}>
+                            <Button variant="contained" component="label" color={preKpiFile.state ? "warning" : "primary"}>
                                 select file
-                                <input required onChange={handleRawKpiFile} hidden accept="/*" multiple type="file" />
+                                <input required onChange={handlePreKpiFile} hidden accept="/*" multiple type="file" />
                             </Button>
                         </div>
-                        <div>  <span style={{display:rawShow?'inherit':'none',color:'red',fontSize:'18px',fontWeight:600}}>This Field Is Required !</span> </div>
+                        <div>  <span style={{display:preShow?'inherit':'none',color:'red',fontSize:'18px',fontWeight:600}}>This Field Is Required !</span> </div>
+                        <div>
+                        </div>
+                    </div>
+                </Box>
+                <Box className={classes.Front_Box}id='step-1'>
+                    <div className={classes.Front_Box_Hading}>
+                        Select Post File:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{postKpiFile.filename}</span>
+                    </div>
+                    <div className={classes.Front_Box_Select_Button}>
+                        <div style={{ float: "left" }}>
+                            <Button variant="contained" component="label" color={postKpiFile.state ? "warning" : "primary"}>
+                                select file
+                                <input required onChange={handlePostKpiFile} hidden accept="/*" multiple type="file" />
+                            </Button>
+                        </div>
+                        <div>  <span style={{display:postShow?'inherit':'none',color:'red',fontSize:'18px',fontWeight:600}}>This Field Is Required !</span> </div>
                         <div>
                         </div>
                     </div>
                 </Box>
                 <Box className={classes.Front_Box}id='step-2'>
                     <div className={classes.Front_Box_Hading}>
-                        Select Site List File:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{siteListFile.filename}</span>
+                        Select Site List:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{siteListFile.filename}</span>
                     </div>
                     <div className={classes.Front_Box_Select_Button}>
                         <div style={{ float: "left" }}>
@@ -274,7 +324,7 @@ else{
                     </div>
                 </Box>
 
-                <Box className={classes.Front_Box} id='step-3'>
+                {/* <Box className={classes.Front_Box} id='step-3'>
                     <div className={classes.Front_Box_Hading}>
                       OFFERED DATE:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}></span>
                     </div>
@@ -290,13 +340,13 @@ else{
                         </div>
                         <div></div>
                     </div>
-                </Box>
+                </Box> */}
 
 
             </Stack>
             <Box sx={{ display: 'flex', justifyContent: "space-around",flexDirection:{xs:'column',md:'row'},gap:2, marginTop: "20px" }}>
 
-                    <Button variant="contained" color="success" onClick={handleSubmit} endIcon={<UploadIcon />}id='step-4'>upload</Button>
+                    <Button variant="contained" color="success" onClick={handleSubmit} endIcon={<UploadIcon />}id='step-4'>Submit</Button>
 
 
                     <Button variant="contained" onClick={handleCancel} style={{ backgroundColor: "red", color: 'white' }} endIcon={<DoDisturbIcon />} >cancel</Button>
@@ -304,7 +354,7 @@ else{
             </Box>
         </Box>
         <Box style={{display:dlink?"inherit":"none"}}>
-        <a download href={link}><Button variant="outlined" onClick='' startIcon={<FileDownloadIcon style={{fontSize:30,color:"green"}}/>}  sx={{marginTop:"10px",width:"auto"}}><span style={{fontFamily:"Poppins",fontSize:"22px",fontWeight:800,textTransform:"none",textDecorationLine:"none"}}>Download KPI Trend</span></Button></a>
+        <a download href={fileData}><Button variant="outlined" onClick='' startIcon={<FileDownloadIcon style={{fontSize:30,color:"green"}}/>}  sx={{marginTop:"10px",width:"auto"}}><span style={{fontFamily:"Poppins",fontSize:"22px",fontWeight:800,textTransform:"none",textDecorationLine:"none"}}>Download KPI Trend</span></Button></a>
         </Box>
 
 

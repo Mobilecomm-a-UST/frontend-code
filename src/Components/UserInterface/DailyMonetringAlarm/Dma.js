@@ -17,6 +17,7 @@ const RRUAlarm = lazy(() => import('./RRU/RRUstatus'))
 const Twamp = lazy(()=>import('./Twamp/TwampStatus'))
 const Alarm5G = lazy(() => import('./OldvsNew/Alarm5G'))
 const Alarm4G = lazy(() => import('./OldvsNew/Alarm4G'))
+const Twamp2 = lazy(()=>import('./Twamp2/TwampStatus'))
 
 const Dma = () => {
     const [expanded, setExpanded] = useState(true);
@@ -95,6 +96,9 @@ const Dma = () => {
                                             <Nav.Item eventKey="5" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/dma/twamp_ericsson'); show(); setMenuButton(true) }}>
                                                 Twamp Ericsson
                                             </Nav.Item>
+                                                  <Nav.Item eventKey="6" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/dma/twamp_2.0'); show(); setMenuButton(true) }}>
+                                                Twamp 2.0
+                                            </Nav.Item>
                                             {/* <Nav.Menu eventKey="3" placement="rightStart" title="NOM Audit" icon={<DocPassIcon />}>
                                                 <Nav.Item eventKey="3-1" placement="rightStart" onClick={() => { navigate('/tools/nomenclature_scriptor/nom_audit_dashboard'); show(); setMenuButton(true) }}>
                                                     Dashboard
@@ -130,6 +134,7 @@ const Dma = () => {
                                  <Route element={<Make5G />} path="/make_5g" />
                                  <Route element={<RRUAlarm />} path="/RRU_status" />
                                  <Route element={<Twamp />} path="/twamp_ericsson" />
+                                 <Route element={<Twamp2 />} path="/twamp_2.0" />
                                  <Route element={<Alarm4G />} path="/old_vs_new_4g" />
                                  <Route element={<Alarm5G />} path="/old_vs_new_5g" />
                           
