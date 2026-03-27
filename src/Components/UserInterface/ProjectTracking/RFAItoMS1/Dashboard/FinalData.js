@@ -164,7 +164,6 @@ const FinalData = () => {
         exit_notice_issue:"",
         commercial_issue:"",
         workable_sites:"",
-
         last_updated_date: "",
         last_updated_by: ""
     });
@@ -273,7 +272,6 @@ const FinalData = () => {
             mw_pat_accepted_date: rowData.mw_pat_accepted_date,
             mw_sat_accepted_date: rowData.mw_sat_accepted_date,
             scft_accepted_date: rowData.scft_accepted_date,
-
             kpi_at_offer_date: rowData.kpi_at_offer_date,
             kpi_at_accepted_date: rowData.kpi_at_accepted_date,
             four_g_ms2_date: rowData.four_g_ms2_date,
@@ -290,7 +288,6 @@ const FinalData = () => {
             exit_notice_issue: rowData.exit_notice_issue,
             commercial_issue: rowData.commercial_issue,
             workable_sites: rowData.workable_sites,
-            
             last_updated_date: rowData.last_updated_date,
             last_updated_by: rowData.last_updated_by,
         });
@@ -415,20 +412,23 @@ const FinalData = () => {
         { title: 'Site OnAir Date', field: 'site_onair_date' },
         { title: 'i-Deploy OnAir Date', field: 'i_deploy_onair_date' },
         { title: 'Current Status', field: 'current_status' },
+        { title: 'Detailed Remarks', field: 'detailed_remarks' },
         { title: 'RFAI Rejected Date', field: 'rfai_rejected_date' },
-        { title: 'Re-RFAI Date', field: 're_rfai_date' },
-        { title: 'PRI Start Date', field: 'pri_start_date' },
-        { title: 'PRI Close Date', field: 'pri_close_date' },
-        { title: 'PRI History', field: 'pri_history' },
+        { title: 'Clear RFAI Date', field: 'clear_rfai_date' },
+        // { title: 'PRI Start Date', field: 'pri_start_date' },
+        // { title: 'PRI Close Date', field: 'pri_close_date' },
+        // { title: 'PRI History', field: 'pri_history' },
         { title: 'PRI Count', field: 'pri_count' },
-        { title: 'Pri Issue Ageing', field: 'pri_issue_ageing' },
+        { title: 'PRI Issue Ageing', field: 'pri_issue_ageing' },
 
-        { title: 'Issue', field: 'issue' },
-        { title: 'Issue Start Date', field: 'issue_start_date' },
-        { title: 'Issue Close Date', field: 'issue_close_date' },
-        { title: 'Issue History', field: 'issue_history' },
-        { title: 'Other Issue Ageing', field: 'other_issue_ageing' },
-        { title: 'Total Issue Ageing', field: 'total_issue_ageing' },
+        // { title: 'Issue', field: 'issue' },
+        // { title: 'Issue Start Date', field: 'issue_start_date' },
+        // { title: 'Issue Close Date', field: 'issue_close_date' },
+        // { title: 'Issue History', field: 'issue_history' },
+        // { title: 'Other Issue Ageing', field: 'other_issue_ageing' },
+        // { title: 'Other Issue Ageing', field: 'other_issue_ageing' },
+        { title: 'Total UST Issue Ageing', field: 'other_ust_issue_ageing' },
+        { title: 'Total Airtel Issue Ageing', field: 'other_airtel_issue_ageing' },
 
         { title: 'Clear RFAI→MS1 Ageing', field: 'clear_rfai_to_ms1_ageing' },
         { title: 'RFAI→MS1 Ageing', field: 'rfai_to_ms1_ageing' },
@@ -451,10 +451,12 @@ const FinalData = () => {
         { title: 'Material Submission Date', field: 'material_submission_date' },
         { title: 'OCI Done Date', field: 'oci_done_date' },
         { title: 'Sign-off Date', field: 'sign_off_date' },
-        { title: 'TOCO/Owner Issue', field: 'toco_owner_issue' },
-        { title: 'EXIT Notice Issue', field: 'exit_notice_issue' },
-        { title: 'Commercial Issue', field: 'commercial_issue' },
-        { title: 'Workable Sites', field: 'workable_sites' },
+        { title: 'Dismantling Status', field: 'dismantling_status' },
+
+        // { title: 'TOCO/Owner Issue', field: 'toco_owner_issue' },
+        // { title: 'EXIT Notice Issue', field: 'exit_notice_issue' },
+        // { title: 'Commercial Issue', field: 'commercial_issue' },
+        // { title: 'Workable Sites', field: 'workable_sites' },
 
         { title: 'Last Updated Date', field: 'last_updated_date' },
         { title: 'Last Updated By', field: 'last_updated_by' },

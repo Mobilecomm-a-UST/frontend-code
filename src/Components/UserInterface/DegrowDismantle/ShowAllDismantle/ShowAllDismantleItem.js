@@ -83,7 +83,7 @@ const ShowAllDismantleItem = () => {
         }
     }
 
-    const handleSurvey = async (siteId, circle,remark) => {
+    const handleSurvey = async (siteId, circle, remark) => {
         action(true)
         try {
 
@@ -144,9 +144,11 @@ const ShowAllDismantleItem = () => {
             <Box
                 sx={{
                     m: 1,
-                    ml: 2,
+                    ml: 1,
                     display: 'flex',
-                    justifyContent: 'space-around'
+                    justifyContent: 'space-around',
+                    flexWrap: 'wrap',
+                    gap: '10px'
                 }}
             >
                 {/* Total Sites */}
@@ -154,6 +156,7 @@ const ShowAllDismantleItem = () => {
                     sx={{
                         p: 2,
                         minWidth: 220,
+                        maxWidth: '100%',
                         backgroundColor: '#223354',
                         color: 'white',
                         borderRadius: 2,
@@ -171,6 +174,7 @@ const ShowAllDismantleItem = () => {
                     sx={{
                         p: 2,
                         minWidth: 220,
+                        maxWidth: '100%',
                         backgroundColor: '#2e7d32',
                         color: 'white',
                         borderRadius: 2,
@@ -188,6 +192,7 @@ const ShowAllDismantleItem = () => {
                     sx={{
                         p: 2,
                         minWidth: 220,
+                        maxWidth: '100%',
                         backgroundColor: '#ed6c02',
                         color: 'white',
                         borderRadius: 2,
@@ -200,9 +205,22 @@ const ShowAllDismantleItem = () => {
                     </Typography>
                 </Box>
             </Box>
-            <Box sx={{ m: 1, ml: 1, width: '98%' }}>
-                <TableContainer sx={{ maxHeight: '58vh', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} component={Paper}>
-                    <table style={{ width: "100%", border: "1px solid black", borderCollapse: 'collapse', overflow: 'auto' }} >
+            <Box sx={{ m: 1, ml: 1, width: '99%' }}>
+                {/* <TableContainer sx={{ maxHeight: '58vh', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} component={Paper}> */}
+                <TableContainer component={Paper}
+                    sx={{
+                        maxHeight: '58vh',
+                        width: '99%',
+                        overflowX: 'auto',   // 🔥 horizontal scroll
+                        overflowY: 'auto',
+                        boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px'
+                    }}>
+                    <table style={{
+                        width: "100%",
+                        minWidth: "900px",   // 🔥 important for scroll
+                        border: "1px solid black",
+                        borderCollapse: 'collapse'
+                    }} >
                         <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
                             <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
                                 <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', position: 'sticky', left: 0, top: 0, backgroundColor: '#006e74' }}>

@@ -329,8 +329,10 @@ const ItemList = (props) => {
                         sx={{ mt: 2 }}
                         onClick={handleMobinerDataSubmit}
                         fullWidth
+                        disabled={surveyRemarks==='SRN Done'?true:false}
                     >
-                        Submit this survey data
+                        {surveyRemarks === 'Survey done' || surveyRemarks === 'SRN Pending'?'Submit SRN Pending data':'Submit this survey data'}
+                        
                     </Button>
                 </Box>
 
