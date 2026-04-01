@@ -87,6 +87,7 @@ const IssueTracker = () => {
     const [status, setStatus] = useState('ALL')
     const [d_start, setD_start] = useState('')
     const [d_end, setD_end] = useState('')
+    const [siteOnair, setSiteOnair] = useState('ALL')
     const IssueData = [
         {
             "Issue": "Delay in Allocation",
@@ -152,6 +153,7 @@ const IssueTracker = () => {
         formData.append('owner', ownerSelect)
         formData.append('duration_start', d_start)
         formData.append('duration_end', d_end)
+        formData.append('site_on_air', siteOnair)
         const res = await postData("alok_tracker/issue_summary/", formData);
         // const res =  tempData; //  remove this line when API is ready
         // console.log(' rfai data', transformData(JSON.parse(res.json_data.table_summary)))
@@ -232,7 +234,7 @@ const IssueTracker = () => {
         fetchDailyData()
         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
 
-    }, [status, milestoneSelect, ownerSelect])
+    }, [status, milestoneSelect, ownerSelect,siteOnair])
     return (
         <>
             <style>{"th{border:1px solid black;}"}</style>
@@ -294,6 +296,23 @@ const IssueTracker = () => {
                                     <MenuItem value='ALL'>ALL</MenuItem>
                                     <MenuItem value='Open'>OPEN</MenuItem>
                                     <MenuItem value='Closed'>CLOSE</MenuItem>
+
+                                </Select>
+                            </FormControl>
+
+                            <FormControl sx={{ minWidth: 100, maxWidth: 100 }} size="small">
+                                <InputLabel id="demo-simple-select-label">Site OnAir</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    value={siteOnair}
+                                    label="Site OnAir"
+                                    onChange={(e) => setSiteOnair(e.target.value)}
+                                >
+
+                                    <MenuItem value='ALL'>Both</MenuItem>
+                                    <MenuItem value='Yes'>Yes</MenuItem>
+                                    <MenuItem value='No'>No</MenuItem>
 
                                 </Select>
                             </FormControl>
