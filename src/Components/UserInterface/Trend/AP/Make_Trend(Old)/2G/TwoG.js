@@ -335,13 +335,11 @@ const TwoG = () => {
                 </div>
                 <div className={classes.Front_Box_Select_Button}>
                   <div style={{ float: "left" }}>
-
                     <input required value={offerDate}
                       onChange={(event) => dateFun(event.target.value)}
                       type="date"
                       style={{ width: '165px', height: '35px', fontSize: '20px', fontWeight: 'bold' }}
                     />
-
                   </div>
                   <div></div>
                 </div>

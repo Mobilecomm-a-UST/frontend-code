@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useRef } from 'react'
 import { useEffect } from 'react'
 import { styled } from '@mui/material/styles';
-import { Box, Grid, Stack, Button, Popover, List, ListItem, ListItemText, Link, Breadcrumbs, Typography } from "@mui/material";
+import { Box, Grid, Stack, Button, Popover, List, ListItem, ListItemText, Link, Breadcrumbs, Typography, FormControl } from "@mui/material";
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { useNavigate } from 'react-router-dom';
 import * as ExcelJS from 'exceljs'
@@ -18,6 +18,7 @@ import IconButton from '@mui/material/IconButton';
 import Slide from '@mui/material/Slide';
 import TextField from '@mui/material/TextField';
 import { useGet } from '../../../Hooks/GetApis';
+import { usePost } from '../../../Hooks/PostApis';
 import { useLoadingDialog } from '../../../Hooks/LoadingDialog';
 import { useStyles } from '../../ToolsCss';
 import { useQuery } from '@tanstack/react-query';
@@ -81,134 +82,149 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const UserCounter = () => {
     const navigate = useNavigate();
-        const { makeGetRequest } = useGet()
-        const { action, loading } = useLoadingDialog()
-        const classes = useStyles();
-        const [user,setUser]=useState([])
-        const [selectUser,setSelectUser] = useState([])
+    const { makeGetRequest } = useGet()
+    const {makePostRequest } = usePost()
+    const { action, loading } = useLoadingDialog()
+    const classes = useStyles();
+    const [user, setUser] = useState([])
+    const [selectUser, setSelectUser] = useState([])
+    const [startDate, setStartDate] = useState('')
+    const [endDate, setEndDate] = useState('')
 
 
-        const { isPending, data, refetch } = useQuery({
-            queryKey: ['SOFT_AT_Nokia_Counter'],
-            queryFn: async () => {
-                action(isPending)
-                const res = await makeGetRequest("Soft_AT_Checklist_Nokia/user_count/");
-                if (res) {
-                    action(false)
-                    setUser(_.uniq(_.map(res, 'user_name')))
-                    return res
-                }
-                else {
-                    action(false)
-                }
-            },
-            staleTime: 100000,
-            refetchOnReconnect: false,
+    const { isPending, data, refetch } = useQuery({
+        queryKey: ['SOFT_AT_Nokia_Counter'],
+        queryFn: async () => {
+            action(isPending)
+            let formData = new FormData();
+            formData.append('start_date', startDate);
+            formData.append('end_date', endDate);
+            const res = await makePostRequest("Soft_AT_Checklist_Nokia/user_count/", formData);
+            if (res) {
+                action(false)
+                setUser(_.uniq(_.map(res, 'user_name')))
+                return res
+            }
+            else {
+                action(false)
+            }
+        },
+        staleTime: 100000,
+        refetchOnReconnect: false,
+    })
+
+
+
+    const handleDownload = () => {
+        const workbook = new ExcelJS.Workbook();
+        const sheet1 = workbook.addWorksheet("Nokia Summary", { properties: { tabColor: { argb: 'B0EBB4' } } })
+
+
+        sheet1.getCell('A1').value = 'User ID';
+        sheet1.getCell('B1').value = 'Tool Name';
+        sheet1.getCell('C1').value = 'Use Count';
+        sheet1.columns = [
+            { key: 'user_name' },
+            { key: 'api_name' },
+            { key: 'count' },
+        ]
+
+        data?.map(item => {
+            sheet1.addRow({
+                user_name: item?.user_name,
+                api_name: item?.api_name,
+                count: item?.count,
+            })
         })
-    
-    
-    
-        const handleDownload = () => {
-            const workbook = new ExcelJS.Workbook();
-            const sheet1 = workbook.addWorksheet("Nokia Summary", { properties: { tabColor: { argb: 'B0EBB4' } } })
-    
-    
-            sheet1.getCell('A1').value = 'User ID';
-            sheet1.getCell('B1').value = 'Tool Name';
-            sheet1.getCell('C1').value = 'Use Count';
-            sheet1.columns = [
-                { key: 'user_name' },
-                { key: 'api_name' },
-                { key: 'count' },
-            ]
 
-            data?.map(item => {
-                sheet1.addRow({
-                    user_name: item?.user_name,
-                    api_name: item?.api_name,
-                    count: item?.count,
-                })
-            })
+        sheet1.eachRow({ includeEmpty: true }, (row, rowNumber) => {
+            const rows = sheet1.getColumn(1);
 
-            sheet1.eachRow({ includeEmpty: true }, (row, rowNumber) => {
-                const rows = sheet1.getColumn(1);
-    
-                row.eachCell({ includeEmpty: true }, (cell) => {
-                    cell.alignment = { vertical: 'middle', horizontal: 'center' }
-                    cell.border = {
-                        top: { style: 'thin' },
-                        left: { style: 'thin' },
-                        bottom: { style: 'thin' },
-                        right: { style: 'thin' }
+            row.eachCell({ includeEmpty: true }, (cell) => {
+                cell.alignment = { vertical: 'middle', horizontal: 'center' }
+                cell.border = {
+                    top: { style: 'thin' },
+                    left: { style: 'thin' },
+                    bottom: { style: 'thin' },
+                    right: { style: 'thin' }
+                }
+
+                if (rowNumber === 1) {
+                    // First set the background of header row
+                    cell.fill = {
+                        type: 'pattern',
+                        pattern: 'solid',
+                        fgColor: { argb: '223354' }
                     }
-    
-                    if (rowNumber === 1) {
-                        // First set the background of header row
-                        cell.fill = {
-                            type: 'pattern',
-                            pattern: 'solid',
-                            fgColor: { argb: '223354' }
-                        }
-                        cell.font = {
-                            color: { argb: 'FFFFFF' },
-                            bold: true,
-                            size: 12,
-                        }
-                        cell.views = [{ state: 'frozen', ySplit: 1 }]
+                    cell.font = {
+                        color: { argb: 'FFFFFF' },
+                        bold: true,
+                        size: 12,
                     }
-                });
-    
-    
-    
-            })
-            workbook.xlsx.writeBuffer().then(item => {
-                const blob = new Blob([item], {
-                    type: "application/vnd.openxmlformats-officedocument.spreadsheet.sheet"
-                })
-                const url = window.URL.createObjectURL(blob);
-                const anchor = document.createElement('a');
-                anchor.href = url;
-                anchor.download = "Nokia_User_Counter.xlsx";
-                anchor.click();
-                window.URL.revokeObjectURL(url);
-            })
-        }
-    
-    
-
-    
-        const filterRCAData = useCallback(() => {
-    
-            let filteredData = _.filter(data, item => {
-                const userMatch = selectUser.length === 0 || _.includes(selectUser, item.user_name);
-
-
-                return userMatch;
-
+                    cell.views = [{ state: 'frozen', ySplit: 1 }]
+                }
             });
-    
-            return filteredData?.map((row, index) => (
-                <StyledTableRow
-                    key={index}
-                    className={classes.hover}
-                >
-                    <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{index+1}</StyledTableCell>
-                    <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{row.user_name}</StyledTableCell>
-                    <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{row?.site_id}</StyledTableCell>
-                    <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{row.api_name}</StyledTableCell>
-                    <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{row.count}</StyledTableCell>
-                    {/* <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{row.expected_value}</StyledTableCell> */}
-                </StyledTableRow>
-            ))
 
-        }, [data, selectUser])
 
-        useEffect(() => {
-            refetch();
-            document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
-        }, [])
-  return (
-   <>
+
+        })
+        workbook.xlsx.writeBuffer().then(item => {
+            const blob = new Blob([item], {
+                type: "application/vnd.openxmlformats-officedocument.spreadsheet.sheet"
+            })
+            const url = window.URL.createObjectURL(blob);
+            const anchor = document.createElement('a');
+            anchor.href = url;
+            anchor.download = "Nokia_User_Counter.xlsx";
+            anchor.click();
+            window.URL.revokeObjectURL(url);
+        })
+    }
+
+    const formatDate = (inputDate) => {
+        if (!inputDate) return "";
+
+        const [year, month, day] = inputDate.split("-");
+
+        return `${day}-${month}-${year}`;
+    }
+
+
+
+
+    const filterRCAData = useCallback(() => {
+
+        let filteredData = _.filter(data, item => {
+            const userMatch = selectUser.length === 0 || _.includes(selectUser, item.user_name);
+
+
+            return userMatch;
+
+        });
+
+        return filteredData?.map((row, index) => (
+            <StyledTableRow
+                key={index}
+                className={classes.hover}
+            >
+                <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{index + 1}</StyledTableCell>
+                <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{row.user_name}</StyledTableCell>
+                <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{row?.site_id}</StyledTableCell>
+                <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{row.api_name}</StyledTableCell>
+                <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{formatDate(row.Date)}</StyledTableCell>
+                <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{row.count}</StyledTableCell>
+                {/* <StyledTableCell align="center" style={{ borderRight: "2px solid black", whiteSpace: 'nowrap' }}>{row.expected_value}</StyledTableCell> */}
+            </StyledTableRow>
+        ))
+
+    }, [data, selectUser])
+
+    useEffect(() => {
+        refetch();
+        document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
+    }, [endDate])
+    return (
+        <>
             <div style={{ margin: 10 }}>
                 <div style={{ margin: 5, marginLeft: 10 }}>
                     <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
@@ -219,10 +235,10 @@ const UserCounter = () => {
 
                     </Breadcrumbs>
                 </div>
-                <div style={{ height: 'auto', width: '100%', margin: '5px 0px', boxShadow: 'rgba(0, 0, 0, 0.5) 0px 3px 8px', backgroundColor: 'white', borderRadius: '10px', padding: '1px' }}>
+                {/* <div style={{ height: 'auto', width: '100%', margin: '5px 0px', boxShadow: 'rgba(0, 0, 0, 0.5) 0px 3px 8px', backgroundColor: 'white', borderRadius: '10px', padding: '1px' }}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Box >
-                           
+
                         </Box>
                         <Box>
                             <h3>User Counter Table</h3>
@@ -238,6 +254,50 @@ const UserCounter = () => {
 
                         </Box>
                     </Box>
+                </div> */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <h3>User Counter Table</h3>
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '10px 0px',gap:'2px' }}>
+                        <FormControl fullWidth size="small" sx={{ flex: 1 }}>
+                            <TextField
+                                variant="outlined"
+                                label="Start Date"
+                                name="start_date"
+                                value={startDate}
+                                onChange={(e) => setStartDate(e.target.value)}
+                                type="date"
+                                size="small"
+                                required
+                                InputLabelProps={{ shrink: true }}
+                                inputProps={{
+                                    max: new Date().toISOString().split("T")[0],
+                                }}
+                            />
+                        </FormControl>
+                         <FormControl fullWidth size="small" sx={{ flex: 1 }}>
+                            <TextField
+                                variant="outlined"
+                                label="End Date"
+                                name="end_date"
+                                value={endDate}
+                                onChange={(e) => setEndDate(e.target.value)}
+                                type="date"
+                                size="small"
+                                required
+                                InputLabelProps={{ shrink: true }}
+                                inputProps={{
+                                    max: new Date().toISOString().split("T")[0],
+                                    min: startDate,
+                                }}
+                                disabled={!startDate}
+                            />
+                        </FormControl>
+                        <Tooltip title="Export Excel">
+                            <IconButton onClick={() => { handleDownload() }}>
+                                <DownloadIcon fontSize='medium' color='primary' />
+                            </IconButton>
+                        </Tooltip>
+                    </div>
                 </div>
                 <Slide
                     direction='left'
@@ -254,8 +314,9 @@ const UserCounter = () => {
                                         <StyledTableCell align="center">User ID <CheckPicker data={user.map(item => ({ label: item, value: item }))} value={selectUser} onChange={(value) => { setSelectUser(value) }} size="sm" appearance="subtle" style={{ width: 40 }} /></StyledTableCell>
                                         <StyledTableCell align="center">Site ID</StyledTableCell>
                                         <StyledTableCell align="center">Tool Name</StyledTableCell>
+                                        <StyledTableCell align="center">Date</StyledTableCell>
                                         <StyledTableCell align="center">Use Count</StyledTableCell>
-                                       
+
 
                                     </TableRow>
                                 </TableHead>
@@ -277,7 +338,7 @@ const UserCounter = () => {
             </div>
 
         </>
-  )
+    )
 }
 
 export default UserCounter
