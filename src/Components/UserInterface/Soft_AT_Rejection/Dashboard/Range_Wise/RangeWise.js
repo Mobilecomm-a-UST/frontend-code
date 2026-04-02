@@ -23,7 +23,7 @@ import { Breadcrumbs, Link, Typography } from "@mui/material";
 import { useStyles } from './../../../ToolsCss'
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import MenuItem from '@mui/material/MenuItem';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import ListItemText from '@mui/material/ListItemText';
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table';
@@ -53,7 +53,7 @@ const RangeWise = () => {
 
 
     // ########### Handle CIRCLE table filter  ###########
-    const handleCircle = (event: SelectChangeEvent<typeof selectCircle>) => {
+    const handleCircle = (event) => {
         const {
             target: { value },
         } = event;
@@ -63,7 +63,7 @@ const RangeWise = () => {
     }
 
     // ########### HANDLE SITE ID TABLE FILTERE ##########
-    const handleSiteId = (event: SelectChangeEvent<typeof selectSiteId>) => {
+    const handleSiteId = (event) => {
         const {
             target: { value },
         } = event;
@@ -73,7 +73,7 @@ const RangeWise = () => {
     }
 
     // ########### HANDLE OEM TABLE FILTERE ##########
-    const handleOemData = (event: SelectChangeEvent<typeof selectOEM>) => {
+    const handleOemData = (event) => {
         const {
             target: { value },
         } = event;
@@ -617,7 +617,7 @@ const RangeWise = () => {
             <style>{"th{border:1px solid black;}"}</style>
             <Slide direction="left" in='true' timeout={700} style={{ transformOrigin: '1 1 1' }}>
                 <div style={{ margin: 20 }}>
-                    <div style={{ margin: 5, marginLeft: 10 }}>
+                    <div style={{ margin: 5, marginLeft: 10,marginTop:70 }}>
                         <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
                             <Link underline="hover" href='/tools'>Tools</Link>
                             <Link underline="hover" href='/tools/soft_at_rejection'>Soft AT Tracking</Link>

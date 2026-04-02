@@ -533,7 +533,7 @@ const OverAll = () => {
 
   return (
     <>
-      <div style={{ width: "100%", padding: '10px', display: 'flex', gap: '10px', justifyContent: 'flex-end', placeItems: 'center' }}>
+      <div style={{ width: "100%", padding: '10px', display: 'flex', gap: '10px', justifyContent: 'flex-end', placeItems: 'center', marginTop: 70}}>
         <div style={{ width: "60%", height: 360, borderRadius: 10, backgroundColor: "white", boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }}>
           <div>
             {/* <FormControlLabel control={<Switch size="small"/>} label="Label" /> */}

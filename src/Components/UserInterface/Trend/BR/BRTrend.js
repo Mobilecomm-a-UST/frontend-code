@@ -71,11 +71,7 @@ function BRTrend() {
                 <Route element={<Macro />} path="/macro" />
                 <Route element={<SmallCell />} path="/small_cell" />
                 {/* <Route element={<MakeKPITrend/>} path="/make_kpi_trend" /> */}
-
-
               </Routes>
-
-
             </Suspense>
           </Grid>
         </Grid>
