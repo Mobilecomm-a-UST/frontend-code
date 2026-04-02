@@ -1,5 +1,5 @@
 import React from 'react'
-import {useEffect} from 'react'
+import { useEffect } from 'react'
 import { Box, Grid } from '@mui/material'
 import { useStyles } from '../ToolsCss'
 import { useNavigate } from 'react-router-dom'
@@ -51,12 +51,12 @@ const MDPTool = () => {
         // border:"1px solid black"
     }
 
-    useEffect(()=>{
-        document.title=`${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/',' | ').toUpperCase()}`
+    useEffect(() => {
+        document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
 
-    },[])
+    }, [])
     return (
-        <div style={{ backgroundColor: '#FBEEE6' }}>
+        <div style={{ backgroundColor: '#FBEEE6'}}>
 
             <Box style={{ padding: "15px", marginTop: '60px' }}>
                 <Box sx={{ display: "flex", justifyContent: 'center' }}>
@@ -80,9 +80,9 @@ const MDPTool = () => {
                 <Zoom in='true' timeout={500}>
 
                     <Box sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
-                        <Box style={{ marginLeft: 90 , marginBottom:5 }}>
+                        <Box style={{ marginLeft: 90, marginBottom: 5 }}>
                             <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
-                                <Link underline="hover" onClick={()=>{ navigate('/tools')}}>Tools</Link>
+                                <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
                                 {/* <Link underline="hover" href='/trends'>Trend</Link> */}
                                 <Typography color='text.primary'>MDP Tools</Typography>
                             </Breadcrumbs>

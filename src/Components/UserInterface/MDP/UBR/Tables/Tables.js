@@ -98,7 +98,7 @@ const Tables = () => {
     <>
       <style>{"th,td{border:1px solid black;}"}</style>
       <Slide direction="left" in={true} timeout={800} style={{ transformOrigin: '1 1 1' }} mountOnEnter unmountOnExit>
-      <div style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px',marginTop:10, padding: 10, height: 'auto', width: "98%", borderRadius: 10, backgroundColor: "white", display: "flex", justifyContent: 'space-between', alignItems: 'center' }}>
+      <div style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px',marginTop:10, padding: 10, height: 'auto', width: "98%", borderRadius: 10, backgroundColor: "white", display: "flex", justifyContent: 'space-between', alignItems: 'center' ,marginTop:70}}>
         <div style={{ width: 200, height: 'auto', borderRadius: 5, padding: 10, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: "20px" }}>
           <div style={{ display: 'flex', alignItems: 'center', fontSize: '18px', fontWeight: 'bold', color: "black" }}>
             <FilterAltIcon />FILTER DATA

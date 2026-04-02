@@ -68,7 +68,7 @@ const Master_Dashbord = () => {
 
 
     // ########### HANDLE OEM TABLE FILTERE ##########
-    const handleOemData = (event: SelectChangeEvent<typeof selectOEM>) => {
+    const handleOemData = (event) => {
         const {
             target: { value },
         } = event;
@@ -78,7 +78,7 @@ const Master_Dashbord = () => {
     }
 
     // ########### Handle CIRCLE table filter  ###########
-    const handleCircle = (event: SelectChangeEvent<typeof selectCircle>) => {
+    const handleCircle = (event) => {
         const {
             target: { value },
         } = event;
@@ -922,7 +922,7 @@ const Master_Dashbord = () => {
             <style>{"th{border:1px solid black;}"}</style>
             <Slide direction="left" in='true' timeout={700} style={{ transformOrigin: '1 1 1' }}>
                 <div style={{ margin: 20 }}>
-                    <div style={{ margin: 5, marginLeft: 10 }}>
+                    <div style={{ margin: 5, marginLeft: 10,marginTop: 70 }}>
                         <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
                             <Link underline="hover" href='/tools'>Tools</Link>
                             <Link underline="hover" href='/tools/soft_at_rejection'>Soft AT Tracking</Link>

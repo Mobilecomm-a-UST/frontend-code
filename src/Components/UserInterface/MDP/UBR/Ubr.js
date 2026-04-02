@@ -29,16 +29,15 @@ const Ubr = () => {
 
     return (
         <>
-
-            <Box style={{ marginTop: '60px' }}>
+            <Box style={{ marginTop: states, transition: 'all 1s ease', marginTop: 2 }} >
                 <Grid container spacing={2}>
-                    <Slide direction="down" in={true} timeout={800} mountOnEnter unmountOnExit>
-                        <Grid item xs={0} md={2} sx={{}}>
-                            <div style={{ position: 'fixed' }}>
-                                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle">
+                    <Grid item xs={0} md={2} sx={{}}>
+                        <Box sx={{ display: { xs: 'none', md: 'inherit' } }} >
+                            <Box sx={{ position: 'fixed', width: '16.5%' }} >
+                                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#223354", marginTop: 70, borderRadius: 10 }}>
                                     <Sidenav.Body>
-                                        <Nav activeKey={activeKey} onSelect={setActiveKey} style={{ width: '200px', minHeight: "670px", height: "100hv", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
-                                            <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>MDP UBR</Nav>
+                                        <Nav activeKey={activeKey} onSelect={setActiveKey} >
+                                            <Nav style={{ fontWeight: 500, color: 'white', textAlign: 'center', fontSize: 20 }}>MDP UBR</Nav>
 
                                             {/* <Nav.Menu eventKey="1" placement="rightStart" title="Dashboard" icon={<DashboardIcon size="3em"/>} >
                       <Nav.Item eventKey='1-1' placement="rightStart"  onClick={() => navigate('/tools/physical_at/dashboard')}>
@@ -62,11 +61,13 @@ const Ubr = () => {
                                     </Sidenav.Body>
 
                                 </Sidenav>
-                            </div>
-                        </Grid>
-                    </Slide>
+                            </Box>
+                        </Box>
+                    </Grid>
                     <Grid item xs={12} md={10}>
-                        <Suspense fallback={<div>Loading...</div>}>
+
+                        <Suspense fallback={<div>loading............</div>}>
+
                             <Routes>
                                 <Route element={<MDPTool />} path="/" />
                                 <Route element={< OverAll />} path="/over_all" />

@@ -1,14 +1,14 @@
 import React from 'react'
-import{useEffect} from'react'
+import { useEffect } from 'react'
 import Tilt from 'react-parallax-tilt';
 import Grow from '@mui/material/Grow';
 import { Breadcrumbs, Link, Typography } from "@mui/material";
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
 const SchedularTools = () => {
-  useEffect(()=>{
-    document.title=`${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/',' | ').toUpperCase()}`
-  },[])
+  useEffect(() => {
+    document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
+  }, [])
   return (
     <>
       <Grow
@@ -17,13 +17,13 @@ const SchedularTools = () => {
         timeout={1500}
       >
         <div>
-          <div style={{ margin: 10, marginLeft: 10 }}>
+          <div style={{ margin: 10, marginLeft: 10, marginTop: 70 }}>
             <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
               <Link underline="hover" href='/tools'>Tools</Link>
               <Typography color='text.primary'>SCHEDULER</Typography>
             </Breadcrumbs>
           </div>
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: "20px" }}>
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: "100px" }}>
 
             <Tilt tiltReverse transitionSpeed={1000}>  <div style={{
               width: "auto", height: "400px", padding: "40px", backgroundColor: "#0093E9",
