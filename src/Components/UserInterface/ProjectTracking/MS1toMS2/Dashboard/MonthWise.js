@@ -22,14 +22,14 @@ import { postData } from '../../../../services/FetchNodeServices';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import * as ExcelJS from 'exceljs'
-
-
-
+ 
+ 
+ 
 const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues }) => {
     const handleChange = (event) => {
         const { value } = event.target;
         const selected = typeof value === 'string' ? value.split(',') : value;
-
+ 
         if (selected.includes('ALL')) {
             if (selectedValues.length === options.length) {
                 setSelectedValues([]);
@@ -40,9 +40,9 @@ const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues 
             setSelectedValues(selected);
         }
     };
-
+ 
     const isAllSelected = options.length > 0 && selectedValues.length === options.length;
-
+ 
     return (
         <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
             <InputLabel id={`${label}-label`}>{label}</InputLabel>
@@ -63,7 +63,7 @@ const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues 
                     />
                     <ListItemText primary="Select All" />
                 </MenuItem>
-
+ 
                 {options.map((name) => (
                     <MenuItem key={name} value={name}>
                         <Checkbox checked={selectedValues.includes(name)} />
@@ -74,10 +74,10 @@ const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues 
         </FormControl>
     );
 };
-
-
-
-
+ 
+ 
+ 
+const years = Array.from({ length: 27 }, (_, i) => 2000 + i).reverse();
 const MonthWise = () => {
     const classes = useStyles()
     const dispatch = useDispatch();
@@ -99,11 +99,13 @@ const MonthWise = () => {
     const [tocoOptions, setTocoOptions] = useState([])
     const [downloadExcelData, setDownloadExcelData] = useState('')
     const [view, setView] = useState('Cumulative')
+    const [year, setYear] = useState('2026')
+ 
     // const [totals, setTotals] = useState()
-
-
+ 
+ 
     // console.log('table data', tableData)
-
+ 
     const fetchDailyData = async () => {
         action(true)
         var formData = new FormData()
@@ -112,9 +114,10 @@ const MonthWise = () => {
         formData.append('relocation_method', relocationMethod)
         formData.append('new_toco_name', toco)
         formData.append('view', view)
+        formData.append('year2', year)
         const res = await postData("alok_tracker/ms2_weekly_monthly_dashboard/", formData);
         // const res =  tempData; //  remove this line when API is ready
-        console.log('month wise response', res)
+        // console.log('month wise response', res)
         if (res) {
             action(false)
             setMonthArray(res.unique_data.month_columns)
@@ -129,32 +132,32 @@ const MonthWise = () => {
         else {
             action(false)
         }
-
+ 
     }
-
-
+ 
+ 
     const handleViewChange = (event) => {
         setView(event.target.value)
     }
-
+ 
     const handleClose = () => {
         setOpen(false)
     }
-
-
-
+ 
+ 
+ 
     const handleExport = async () => {
         const workbook = new ExcelJS.Workbook();
         const sheet = workbook.addWorksheet("Yearly Progress", {
             properties: { tabColor: { argb: '223354' } }
         });
-
+ 
         // ------- BUILD DYNAMIC COLUMNS ----------
         const columns = [
             { header: 'Milestone Track/Site Count', key: 'milestone', width: 30 },
             { header: 'CF', key: 'CF', width: 10 },
         ];
-
+ 
         monthArray.forEach((month, index) => {
             columns.push({
                 header: month,
@@ -162,23 +165,23 @@ const MonthWise = () => {
                 width: 15
             });
         });
-
+ 
         sheet.columns = columns;
-
+ 
         // ------- ADD ROWS ----------
         tableData.forEach((item) => {
             const row = {
                 milestone: item["Milestone Track/Site Count"],
                 CF: item["CF"] ?? "",
             };
-
+ 
             monthArray.forEach((_, index) => {
                 row[`Month_${index + 1}`] = Number(item[`Month-${index + 1}`]) ?? "";
             });
-
+ 
             sheet.addRow(row);
         });
-
+ 
         // ------- STYLING ----------
         sheet.eachRow((row, rowNumber) => {
             row.eachCell((cell) => {
@@ -189,7 +192,7 @@ const MonthWise = () => {
                     bottom: { style: "thin" },
                     right: { style: "thin" }
                 };
-
+ 
                 // Header style
                 if (rowNumber === 1) {
                     cell.fill = {
@@ -205,13 +208,13 @@ const MonthWise = () => {
                 }
             });
         });
-
+ 
         // ------- CREATE & DOWNLOAD FILE ----------
         const buffer = await workbook.xlsx.writeBuffer();
         const blob = new Blob([buffer], {
             type: "application/vnd.openxmlformats-officedocument.spreadsheet.sheet"
         });
-
+ 
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
@@ -219,7 +222,7 @@ const MonthWise = () => {
         a.click();
         window.URL.revokeObjectURL(url);
     };
-
+ 
     const ClickDataGet = async (props) => {
         // console.log('aaaaaaaa', props)
         action(true)
@@ -233,13 +236,13 @@ const MonthWise = () => {
         formData.append('current_status', relocationMethod);
         formData.append('toco_name', toco);
         formData.append('view', view)
-
+ 
         const responce = await makePostRequest('alok_tracker/hyperlink_frontend_editing/', formData)
         if (responce) {
             console.log('response', JSON.parse(responce.data))
             action(false);
             const temp = JSON.parse(responce.data)
-
+ 
             dispatch({ type: 'RELOCATION_FINAL_TRACKER', payload: { temp } })
             navigate(`/tools/relocation_tracking/rfai_to_ms1_waterfall/${props.milestone}`)
         }
@@ -247,23 +250,39 @@ const MonthWise = () => {
             action(false)
         }
     }
-
-
+ 
+ 
     useEffect(() => {
         fetchDailyData()
         // setTotals(calculateColumnTotals(tableData))
-    }, [circle, tagging, relocationMethod, toco, view])
+    }, [circle, tagging, relocationMethod, toco, view, year])
     return (
         <>
             <style>{"th{border:1px solid black;}"}</style>
             <Slide direction="left" in='true' timeout={700} style={{ transformOrigin: '1 1 1' }}>
                 <div style={{ margin: 20 }}>
-
+ 
                     <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', alignContent: 'center' }}>
                         <Box style={{ fontSize: 22, fontWeight: 'bold' }}>
                             Yearly Progress - MS1 to MS2 Waterfall
                         </Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', gap: 1 }}>
+                            <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
+                                <InputLabel id="year-select-label">Year</InputLabel>
+                                <Select
+                                    labelId="year-select-label"
+                                    id="year-select"
+                                    value={year}
+                                    label="Year"
+                                    onChange={(e) => setYear(e.target.value)}
+                                >
+                                    {years.map((yr) => (
+                                        <MenuItem key={yr} value={yr}>
+                                            {yr}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
                             <FormControl sx={{ minWidth: 100, maxWidth: 100 }} size="small">
                                 <InputLabel id="demo-select-small-label">View</InputLabel>
                                 <Select
@@ -275,7 +294,7 @@ const MonthWise = () => {
                                 >
                                     <MenuItem value="Cumulative">Cumulative</MenuItem>
                                     <MenuItem value="Non-cumulative">Non-cumulative</MenuItem>
-
+ 
                                 </Select>
                             </FormControl>
                             {/* circle */}
@@ -285,7 +304,7 @@ const MonthWise = () => {
                                 selectedValues={circle}
                                 setSelectedValues={setCircle}
                             />
-
+ 
                             {/* tagging */}
                             <MultiSelectWithAll
                                 label="Site Tagging"
@@ -293,7 +312,7 @@ const MonthWise = () => {
                                 selectedValues={tagging}
                                 setSelectedValues={setTagging}
                             />
-
+ 
                             {/* Current Status */}
                             {/* <MultiSelectWithAll
                                 label="Current Status"
@@ -301,16 +320,16 @@ const MonthWise = () => {
                                 selectedValues={relocationMethod}
                                 setSelectedValues={setRelocationMethod}
                             /> */}
-
+ 
                             {/* Toco  */}
-
+ 
                             <MultiSelectWithAll
                                 label="TOCO"
                                 options={tocoOptions}
                                 selectedValues={toco}
                                 setSelectedValues={setToco}
                             />
-
+ 
                             <Tooltip title="Download Yearly MS1 to MS2 Waterfall">
                                 <IconButton
                                     component="a"
@@ -323,7 +342,7 @@ const MonthWise = () => {
                             </Tooltip>
                         </Box>
                     </Box>
-
+ 
                     <Box sx={{ marginTop: 0 }}>
                         <TableContainer sx={{ maxHeight: 600, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} component={Paper}>
                             <table style={{ width: "100%", border: "1px solid black", borderCollapse: 'collapse', overflow: 'auto' }} >
@@ -349,18 +368,18 @@ const MonthWise = () => {
                                                         onClick={() => ClickDataGet({ col_name: item, milestone: it['Milestone Track/Site Count'] })}
                                                     >{it[`Month-${index + 1}`]}</th>
                                                 ))}
-
+ 
                                             </tr>
                                         )
                                     }
                                     )}
-
-
+ 
+ 
                                 </tbody>
                             </table>
                         </TableContainer>
                     </Box>
-
+ 
                 </div>
             </Slide>
             {/* {filterDialog()} */}
@@ -368,5 +387,5 @@ const MonthWise = () => {
         </>
     )
 }
-
+ 
 export const MemoMonthWise = React.memo(MonthWise)

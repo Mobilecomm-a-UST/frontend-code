@@ -34,8 +34,6 @@ const AddCheckListData = (props) => {
     const { loading, action } = useLoadingDialog()
         const userID = getDecreyptedData("userID")
 
-
-
     const handle4GFileSelection = (event) => {
 
         setMake4GFiles({
@@ -45,8 +43,6 @@ const AddCheckListData = (props) => {
 
         })
     }
-
-
 
     const handleSubmit = async () => {
         if (make4GFiles.filename.length > 0) {
