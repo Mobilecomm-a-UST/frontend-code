@@ -21,6 +21,9 @@ import PendingSites from './Dashboard/PendingSites'
 import AlarmBucket from './Dashboard/AlarmBucket'
 import AgeingCircleWise from './Dashboard/AgeingCircleWise'
 import { getDecreyptedData } from '../../utils/localstorage';
+import Nokiacheclist5g from './NokiaStatus/nokiacheclist5g';
+
+
 const Circle_Wise = lazy(() => import('./Dashboard/Circle_Wise'))
 const Master_Dashboard = lazy(() => import('./Dashboard/Master_Dashboard'))
 const WeeklyComparision = lazy(() => import('./Dashboard/WeeklyComparision'))
@@ -180,10 +183,13 @@ const SoftAT = () => {
                             <Nav.Item eventKey='6-1-2' onClick={() => { navigate('/tools/soft_at/nokia_checklist_table'); show(); setMenuButton(true) }} >Checklist Table</Nav.Item>
                             <Nav.Item eventKey='6-1-3' onClick={() => { navigate('/tools/soft_at/nokia_summary'); show(); setMenuButton(true) }} >Summary</Nav.Item>
                             <Nav.Item eventKey='6-1-4' onClick={() => { navigate('/tools/soft_at/nokia_summary_table'); show(); setMenuButton(true) }} >Summary Table</Nav.Item>
+                           
+                            
                         {userTypes?.includes('Admin') && <Nav.Item eventKey='6-5' onClick={() => { navigate('/tools/soft_at/nokia_user_count'); show(); setMenuButton(true) }} >User Counter</Nav.Item>}
 
                           </Nav.Menu>
                         <Nav.Menu eventKey="6-2" title="5G" placement="rightStart"  >
+                           <Nav.Item eventKey='6-1-5' onClick={() => { navigate('/tools/soft_at/nokia_5g_checklist'); show(); setMenuButton(true) }} >Checklist</Nav.Item>
                           {/* <Nav.Item eventKey='6-2-1' onClick={() => { navigate('/tools/soft_at/nokia_5g_checklist'); show(); setMenuButton(true) }} >Checklist</Nav.Item>
                           <Nav.Item eventKey='6-2-2' onClick={() => { navigate('/tools/soft_at/nokia_5g_checklist_table'); show(); setMenuButton(true) }} >Checklist Table</Nav.Item> */}
                           <Nav.Item eventKey='6-2-3' onClick={() => { navigate('/tools/soft_at/nokia_5g_summary'); show(); setMenuButton(true) }} >Summary</Nav.Item>
@@ -207,6 +213,7 @@ const SoftAT = () => {
                       <Nav.Item eventKey="9" placement="rightStart" icon={<PageIcon />} onClick={() => { navigate('/tools/soft_at/5g_nrrel_parser'); show(); setMenuButton(true) }}>
                         5G NRREL Parser
                       </Nav.Item>
+                       
 
                     </Nav>
                   </Sidenav.Body>
@@ -247,6 +254,7 @@ const SoftAT = () => {
                 <Route element={<NokiaUploadAlarm />} path='/nokia_upload_alarm' />
                 <Route element={<Summary_5G />} path='/nokia_5g_summary' />
                 <Route element={<NRRELParser />} path='/5g_nrrel_parser' />
+                <Route element={<Nokiacheclist5g />} path='/nokia_5g_checklist' />
                 {userTypes?.includes('Admin') && <Route element={<UserCount />} path='/nokia_user_count' />}
 
               </Routes>
