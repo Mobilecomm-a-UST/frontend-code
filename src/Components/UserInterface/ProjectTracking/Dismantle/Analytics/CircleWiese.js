@@ -88,26 +88,17 @@ const CircleWiese = () => {
     const { makePostRequest, cancelRequest } = usePost()
     const { loading, action } = useLoadingDialog();
     const milestoneOptions = [
-        "Allocation",
-        "RFAI",
-        "RFAI Survey",
-        "MO Punch",
-        "Material Dispatch",
-        "Material Delivered",
-        "Installation End",
-        "Integration",
-        "EMF Submission",
-        "Alarm Rectification Done",
-        "SCFT I-Deploy Offered",
-        "RAN PAT Offer",
-        "RAN SAT Offer",
-        "MW PAT Offer",
-        "MW SAT Offer",
         "Site ONAIR",
-        "I-Deploy ONAIR"
+        "Dismantling Survey",
+        "SREQ/CREQ Raised",
+        "Dismantle",
+        'Material Pickup',
+        'Material Submission',
+        'OCI Done',
+        'Sign-off'
     ]
-    const [milestone1, setMilestone1] = useState('RFAI')
-    const [milestone2, setMilestone2] = useState('Site ONAIR')
+    const [milestone1, setMilestone1] = useState('Site ONAIR')
+    const [milestone2, setMilestone2] = useState('Sign-off')
     const [circle, setCircle] = useState([])
     const [site_taggingAgingData, setSite_taggingAgingData] = useState([]);
     const [site_taggingAgingOption, setSite_taggingAgingOption] = useState([]);

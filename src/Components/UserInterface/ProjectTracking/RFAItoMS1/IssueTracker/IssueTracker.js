@@ -22,14 +22,14 @@ import { postData } from '../../../../services/FetchNodeServices';
 import 'rsuite/dist/rsuite.min.css';
 import * as ExcelJS from 'exceljs'
 import { useNavigate } from "react-router-dom";
- 
- 
- 
+
+
+
 const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues }) => {
     const handleChange = (event) => {
         const { value } = event.target;
         const selected = typeof value === 'string' ? value.split(',') : value;
- 
+
         if (selected.includes('ALL')) {
             if (selectedValues.length === options.length) {
                 setSelectedValues([]);
@@ -40,9 +40,9 @@ const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues 
             setSelectedValues(selected);
         }
     };
- 
+
     const isAllSelected = options?.length > 0 && selectedValues?.length === options?.length;
- 
+
     return (
         <FormControl sx={{ minWidth: 150, maxWidth: 200 }} size="small">
             <InputLabel id={`${label}-label`}>{label}</InputLabel>
@@ -63,7 +63,7 @@ const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues 
                     />
                     <ListItemText primary="Select All" />
                 </MenuItem>
- 
+
                 {options.map((name) => (
                     <MenuItem key={name} value={name}>
                         <Checkbox checked={selectedValues.includes(name)} />
@@ -74,7 +74,7 @@ const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues 
         </FormControl>
     );
 };
- 
+
 const IssueTracker = () => {
     const navigate = useNavigate()
     const classes = useStyles()
@@ -134,17 +134,17 @@ const IssueTracker = () => {
             "Total": 199
         }
     ]
- 
+
     const dynamicHeaders =
         issueDatas.length > 0
             ? Object.keys(IssueData[0]).filter(
                 (key) => key !== "Issue" && key !== "Total"
             )
             : [];
- 
- 
- 
- 
+
+
+
+
     const fetchDailyData = async () => {
         action(true)
         var formData = new FormData()
@@ -173,67 +173,67 @@ const IssueTracker = () => {
     }
     const handleStartDuration = (e) => {
         e.preventDefault()
- 
+
         fetchDailyData()
     }
     const handleEndDuration = (e) => {
         e.preventDefault()
- 
+
         fetchDailyData()
     }
- 
+
     const handleExportExcel = async () => {
         if (!issueDatas || issueDatas.length === 0) {
             alert("No data to export");
             return;
         }
- 
+
         const workbook = new ExcelJS.Workbook();
         const worksheet = workbook.addWorksheet("Issue Tracker");
- 
+
         // 🔥 Dynamic headers
         const headers = Object.keys(issueDatas[0]);
- 
+
         // Add header row
         worksheet.addRow(headers);
- 
+
         // Style header
         worksheet.getRow(1).eachCell((cell) => {
             cell.font = { bold: true };
             cell.alignment = { vertical: "middle", horizontal: "center" };
         });
- 
+
         // Add data rows
         issueDatas.forEach((item) => {
             const row = headers.map((key) => item[key] ?? 0);
             worksheet.addRow(row);
         });
- 
+
         // 🔥 Auto column width
         worksheet.columns.forEach((column) => {
             column.width = 15;
         });
- 
+
         // Generate file
         const buffer = await workbook.xlsx.writeBuffer();
- 
+
         const blob = new Blob([buffer], {
             type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         });
- 
+
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
         a.download = "Issue_Tracker.xlsx";
         a.click();
- 
+
         window.URL.revokeObjectURL(url);
     };
- 
+
     useEffect(() => {
         fetchDailyData()
         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
- 
+
     }, [status, milestoneSelect, ownerSelect,siteOnair])
     return (
         <>
@@ -245,10 +245,10 @@ const IssueTracker = () => {
                     <Typography color='text.primary'>RFAI to MS1 Issue Tracker</Typography>
                 </Breadcrumbs>
             </div>
- 
+
             <Slide direction="left" in='true' timeout={700} style={{ transformOrigin: '1 1 1' }}>
                 <div style={{ margin: 20 }}>
- 
+
                     {/* ************* 2G  TABLE DATA ************** */}
                     <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', alignContent: 'center', margin: '5px 5px' }}>
                         <Box style={{ fontSize: 22, fontWeight: 'bold' }}>
@@ -292,14 +292,14 @@ const IssueTracker = () => {
                                     label="Status"
                                     onChange={(e) => setStatus(e.target.value)}
                                 >
- 
+
                                     <MenuItem value='ALL'>ALL</MenuItem>
                                     <MenuItem value='Open'>OPEN</MenuItem>
                                     <MenuItem value='Closed'>CLOSE</MenuItem>
- 
+
                                 </Select>
                             </FormControl>
- 
+
                             <FormControl sx={{ minWidth: 100, maxWidth: 100 }} size="small">
                                 <InputLabel id="demo-simple-select-label">Site OnAir</InputLabel>
                                 <Select
@@ -309,11 +309,11 @@ const IssueTracker = () => {
                                     label="Site OnAir"
                                     onChange={(e) => setSiteOnair(e.target.value)}
                                 >
- 
+
                                     <MenuItem value='ALL'>Both</MenuItem>
                                     <MenuItem value='Yes'>Yes</MenuItem>
                                     <MenuItem value='No'>No</MenuItem>
- 
+
                                 </Select>
                             </FormControl>
                             <MultiSelectWithAll
@@ -322,8 +322,8 @@ const IssueTracker = () => {
                                 selectedValues={milestoneSelect}
                                 setSelectedValues={setMilestoneSelect}
                             />
- 
- 
+
+
                             <MultiSelectWithAll
                                 label="Owner"
                                 options={ownerOption}
@@ -345,7 +345,7 @@ const IssueTracker = () => {
                                     />
                                 </FormControl>
                             </form>
- 
+
                             <form onSubmit={handleEndDuration}>
                                 <FormControl sx={{ minWidth: 100, maxWidth: 100 }} size="small">
                                     <TextField
@@ -361,7 +361,7 @@ const IssueTracker = () => {
                                     />
                                 </FormControl>
                             </form>
- 
+
                             <Tooltip title="Download Excel">
                                 <IconButton onClick={handleExportExcel}>
                                     <DownloadIcon fontSize="large" color="primary" />
@@ -369,7 +369,7 @@ const IssueTracker = () => {
                             </Tooltip>
                         </Box>
                     </Box>
- 
+
                     <Box sx={{ display: "flex", justifyContent: "center" }}>
                         <TableContainer
                             component={Paper}
@@ -386,7 +386,7 @@ const IssueTracker = () => {
                             >
                                 {/* 🔥 HEADER */}
                                 <thead style={{ position: "sticky", top: 0, zIndex: 1 }}>
- 
+
                                     {/* Top Header */}
                                     <tr style={{ backgroundColor: "#223354", color: "white" }}>
                                         <th
@@ -405,7 +405,7 @@ const IssueTracker = () => {
                                             Circles
                                         </th>
                                     </tr>
- 
+
                                     {/* Sub Header */}
                                     <tr style={{ backgroundColor: "#CBCBCB" }}>
                                         {dynamicHeaders.map((col) => (
@@ -414,12 +414,12 @@ const IssueTracker = () => {
                                         <th>Total</th>
                                     </tr>
                                 </thead>
- 
+
                                 {/* 🔥 BODY */}
                                 <tbody>
                                     {issueDatas.map((row, index) => (
                                         <tr key={index} className={classes.hoverRT} style={{ textAlign: "center" }}>
- 
+
                                             {/* Issue */}
                                             <th
                                                 style={{
@@ -431,30 +431,30 @@ const IssueTracker = () => {
                                             >
                                                 {row.Issue}
                                             </th>
- 
+
                                             {/* Dynamic Columns */}
                                             {dynamicHeaders.map((col) => (
                                                 <th key={col}>{row[col] ?? 0}</th>
                                             ))}
- 
+
                                             {/* Total */}
                                             <th>{row.Total}</th>
                                         </tr>
                                     ))}
                                 </tbody>
- 
+
                             </table>
                         </TableContainer>
                     </Box>
- 
+
                 </div>
             </Slide>
             {loading}
- 
- 
+
+
         </>
- 
+
     )
 }
- 
+
 export default IssueTracker

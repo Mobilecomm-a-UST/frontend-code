@@ -569,7 +569,7 @@ const Dashboard = () => {
 
 
     // ########### Handle OEM table filter  ###########
-    const handleOem = (event: SelectChangeEvent<typeof oemData>) => {
+    const handleOem = (event) => {
         const {
             target: { value },
         } = event;
@@ -580,7 +580,7 @@ const Dashboard = () => {
 
 
     // ########### Handle Hardware table filter  ###########
-    const handleHardware = (event: SelectChangeEvent<typeof hardwareData>) => {
+    const handleHardware = (event) => {
         const {
             target: { value },
         } = event;

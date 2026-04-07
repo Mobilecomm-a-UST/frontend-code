@@ -140,7 +140,7 @@ const PTracking = () => {
 
                                             {/* Dismantle */}
                                             <Nav.Menu eventKey="3" style={{ fontWeight: 400, color: 'white' }} placement="leftStart" className="menu-title-custom" title="Dismantle" icon={<ArrowRightIcon />}  >
-                                                <Nav.Item eventKey="3-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/dismantle_Ageing'); show(); setMenuButton(true) }}>
+                                                <Nav.Item eventKey="3-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/dismantle_analytics'); show(); setMenuButton(true) }}>
                                                     Analytics Dashboard
                                                 </Nav.Item>
                                                 <Nav.Item eventKey="3-2" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/relocation_tracking/dismantle_waterfall'); show(); setMenuButton(true) }}>
