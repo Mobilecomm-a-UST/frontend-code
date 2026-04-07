@@ -123,9 +123,10 @@ const MonthWise = () => {
     const [milestone1, setMilestone1] = useState('RFAI')
     const [milestone2, setMilestone2] = useState('Site ONAIR')
     const [view, setView] = useState('Cumulative')
+      const [year, setYear] = useState('2026')
     let delayed;
 
-    console.log('data get', milestoneData)
+    // console.log('data get', milestoneData)
 
 
     const fetchDailyData = async () => {
@@ -140,10 +141,11 @@ const MonthWise = () => {
         formData.append('milestone1', milestone1)
         formData.append('milestone2', milestone2)
         formData.append('type', typeFileter)
+        formData.append('year2', year)
         const res = await postData("alok_tracker/monthly_graph/", formData);
         // const res =  tempData; //  remove this line when API is read
         // console.log('responce data1' , res)
-        // console.log('responce data2' , transformData(JSON.parse(res.json_data)))
+        console.log('responce data2' , transformData(JSON.parse(res.json_data)))
         if (res) {
             action(false)
             setMilestoneData(transformData(JSON.parse(res.json_data)))
@@ -169,10 +171,10 @@ const MonthWise = () => {
 
         const RFAI_done = arr.map(item => Number(item[`${milestone1} Done Count`]));
         const onAirDone = arr.map(item => Number(item[`${milestone2} Done Count`]));
-        if (monthArray == 0) {
+        // if (monthArray == 0) {
             setMonthArray(arr.map(item => (item['month_name'])))
-        }
-        const monthArrays = arr.map(item => (item['month_name']));
+        // }
+        let monthArrays = arr.map(item => (item['month_name']));
 
         // ✅ Calculate percentage array
         const percentage = onAirDone.map((done, index) => {
@@ -322,11 +324,11 @@ const MonthWise = () => {
         ]
     }
 
-const getTitalValue = (arr, condition) => {
-  return condition === 'Cumulative'
-    ? arr?.at(-1) ?? 0
-    : arr?.reduce((s, n) => s + n, 0) || 0;
-};
+    const getTitalValue = (arr, condition) => {
+        return condition === 'Cumulative'
+            ? arr?.at(-1) ?? 0
+            : arr?.reduce((s, n) => s + n, 0) || 0;
+    };
 
     const options = {
         responsive: true,
@@ -353,7 +355,7 @@ const getTitalValue = (arr, condition) => {
             },
             title: {
                 display: true,
-                text:  `Monthly Progress - ${milestone1} (${getTitalValue(milestoneData?.RFAI_done, view)})
+                text: `Monthly Progress - ${milestone1} (${getTitalValue(milestoneData?.RFAI_done, view)})
 to ${milestone2} (${getTitalValue(milestoneData?.onAirDone, view)})`,
                 font: {
                     size: 16,
@@ -429,7 +431,7 @@ to ${milestone2} (${getTitalValue(milestoneData?.onAirDone, view)})`,
                 },
                 // stacked: true
             },
-            y1:{
+            y1: {
                 position: 'right',
                 grid: {
                     display: false
@@ -533,7 +535,7 @@ to ${milestone2} (${getTitalValue(milestoneData?.onAirDone, view)})`,
         return () => {
             cancelRequest();
         }
-    }, [circle, tagging, relocationMethod, toco, view, milestone1, milestone2, typeFileter])
+    }, [circle, tagging, relocationMethod, toco, view, milestone1, milestone2, typeFileter,year])
     return (
         <>
 
@@ -545,6 +547,24 @@ to ${milestone2} (${getTitalValue(milestoneData?.onAirDone, view)})`,
                         <InputLabel style={{ fontSize: 15 }}>Select Month</InputLabel>
                         <input type='month' value={date} onChange={(e) => handleMonthData(e.target.value)} />
                     </div> */}
+
+                    <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
+                        <InputLabel id="year-select-label">Financial Year</InputLabel>
+                        <Select
+                            labelId="year-select-label"
+                            id="year-select"
+                            value={year}
+                            label="Financial Year"
+                            onChange={(e) => setYear(e.target.value)}
+                        >
+
+                            <MenuItem value='2026'>2026 - 2027</MenuItem>
+                            <MenuItem value='2025'>2025 - 2026</MenuItem>
+                            <MenuItem value='2024'>2024 - 2025</MenuItem>
+                            <MenuItem value='2023'>2023 - 2024</MenuItem>
+
+                        </Select>
+                    </FormControl>
                     <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
                         <InputLabel id="demo-select-small-label">View</InputLabel>
                         <Select
