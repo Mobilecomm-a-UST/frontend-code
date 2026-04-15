@@ -28,6 +28,7 @@ import StopOutlineIcon from '@rsuite/icons/StopOutline';
 import ProjectIcon from '@rsuite/icons/Project';
 import FlowStopIcon from '@rsuite/icons/FlowStop';
 import SortAscIcon from '@rsuite/icons/SortAsc';
+import TrafficOutlinedIcon from '@mui/icons-material/TrafficOutlined';
 
 
 import { groupBy } from 'lodash';
@@ -44,7 +45,7 @@ const ToolData = [
         icons: TrendIcon,
         link: '/trends',
         fullname: 'Trend Analysis Tool',
-        groupBy:['quality','admin','quality-s','trend_tool']
+        groupBy: ['quality', 'admin', 'quality-s', 'trend_tool']
     },
     // {
     //     id: 1,
@@ -78,7 +79,7 @@ const ToolData = [
         icons: PcIcon,
         link: '/tools/soft_at',
         fullname: 'Soft AT Tool',
-        groupBy:['soft_at_team','admin','soft_at']
+        groupBy: ['soft_at_team', 'admin', 'soft_at']
     },
 
     {
@@ -88,7 +89,7 @@ const ToolData = [
         icons: PcIcon,
         link: '/tools/soft_at_rejection',
         fullname: 'Soft AT Tracking Tool',
-        groupBy:['soft_at_team','admin']
+        groupBy: ['soft_at_team', 'admin']
     },
 
     // {
@@ -114,7 +115,7 @@ const ToolData = [
         icons: CalendarIcon,
         link: '/tools/mdp',
         fullname: 'MDP Tool',
-        groupBy:['central','circle','admin']
+        groupBy: ['central', 'circle', 'admin']
     },
     // {
     //     id: 9,
@@ -131,7 +132,7 @@ const ToolData = [
         icons: PageIcon,
         fullname: 'Mcom Scripting Tool',
         link: '/tools/mcom-scripting',
-        groupBy:['central','circle','admin']
+        groupBy: ['central', 'circle', 'admin']
     },
 
     {
@@ -141,7 +142,7 @@ const ToolData = [
         icons: DocPassIcon,
         fullname: 'Audit Tool',
         link: '/tools/audit',
-        groupBy:['quality','admin','quality-s']
+        groupBy: ['quality', 'admin', 'quality-s']
 
     },
     {
@@ -151,7 +152,7 @@ const ToolData = [
         icons: DocPassIcon,
         fullname: 'Integration Tools',
         link: '/tools/ix_tools',
-        groupBy:['admin','IX','VI_IX','VI_IX_reader','soft_at_team','IX_SA','quality','IX_reader','quality-s']
+        groupBy: ['admin', 'IX', 'VI_IX', 'VI_IX_reader', 'soft_at_team', 'IX_SA', 'quality', 'IX_reader', 'quality-s']
     },
     // {
     //     id: 12,
@@ -170,7 +171,7 @@ const ToolData = [
         icons: SingleSourceIcon,
         fullname: 'File Merge Tool',
         link: '/tools/file_merge',
-        groupBy:['admin','quality','quality-s','ran']
+        groupBy: ['admin', 'quality', 'quality-s', 'ran']
     },
     {
         id: 15,
@@ -179,7 +180,7 @@ const ToolData = [
         icons: TimeIcon,
         fullname: 'Scheduler Tool',
         link: '/tools/schedular',
-        groupBy:['admin']
+        groupBy: ['admin']
     },
     // {
     //     id: 18,
@@ -204,8 +205,8 @@ const ToolData = [
         title: 'This is a CATS Tracker',
         icons: RelatedMapIcon,
         fullname: 'CATS Tracker Tool',
-        link:  '/tools/cats_tracker',
-        groupBy:['quality','admin','quality-s']
+        link: '/tools/cats_tracker',
+        groupBy: ['quality', 'admin', 'quality-s']
 
     },
     // {
@@ -221,8 +222,8 @@ const ToolData = [
         title: 'This is a RCA Tool',
         icons: TreeIcon,
         fullname: 'RCA Genie Tool',
-        link:  '/tools/rca',
-        groupBy:['quality','admin','quality-s']
+        link: '/tools/rca',
+        groupBy: ['quality', 'admin', 'quality-s']
     },
     // IX reader only
     // {
@@ -243,36 +244,36 @@ const ToolData = [
         icons: CellTowerIcon,
         fullname: 'Mcom Physical AT Tool',
         link: '/tools/mcom_physical_at',
-        groupBy:['soft_at_team', 'admin']
+        groupBy: ['soft_at_team', 'admin']
 
-    },{
+    }, {
         id: 25,
         name: 'NOM Scriptor',
         title: 'This is a IX Tracker Tool',
         icons: ParagraphIcon,
         fullname: 'Nomenclature Scriptor Tool',
         link: '/tools/nomenclature_scriptor',
-        groupBy:['soft_at_team', 'admin']
+        groupBy: ['soft_at_team', 'admin']
 
     },
-    ,{
+    , {
         id: 26,
         name: 'DSA',
         title: 'This is a Daily Status Alarm Tool',
         icons: NoticeIcon,
         fullname: 'Daily Status Alarm Tool',
         link: '/tools/dma',
-        groupBy:['soft_at_team', 'admin']
+        groupBy: ['soft_at_team', 'admin']
     }
-    ,{
+    , {
         id: 27,
         name: 'MNIT',
         title: 'This is a MNI Tool',
         icons: ModelIcon,
         fullname: 'Mobile Network Integration Tool',
         link: '/tools/mobile_network_integration',
-        groupBy:['admin','MNIT']
-    } 
+        groupBy: ['admin', 'MNIT']
+    }
     ,
     {
         id: 27,
@@ -281,7 +282,7 @@ const ToolData = [
         icons: CharacterLockIcon,
         fullname: 'License Key File Status Tool',
         link: '/tools/lkf_status',
-        groupBy:['admin']
+        groupBy: ['admin']
     }
     ,
     {
@@ -291,8 +292,8 @@ const ToolData = [
         icons: FunnelStepsIcon,
         fullname: 'Mobinet VS CATS Tool',
         link: '/tools/mobinet_vs_cats',
-        groupBy:['admin','ran']
-    } ,
+        groupBy: ['admin', 'ran']
+    },
     {
         id: 29,
         name: 'Full Site Dismantle', //Degrow Dismantle
@@ -300,7 +301,7 @@ const ToolData = [
         icons: IndirectIcon,
         fullname: 'Full Site Dismantle Tool',
         link: '/tools/full_site_dismantle',
-        groupBy:['admin','ran']
+        groupBy: ['admin', 'ran','ran_admin']
     },
     // {
     //     id: 30,
@@ -318,8 +319,8 @@ const ToolData = [
         icons: AbTestIcon,
         fullname: 'Relocation Payload Tracker Tool',
         link: '/tools/relocation_payload_tracker',
-        groupBy:['admin','quality-s','quality']
-    }    ,
+        groupBy: ['admin', 'quality-s', 'quality']
+    },
     {
         id: 32,
         name: 'Relocation Tracking',
@@ -327,9 +328,9 @@ const ToolData = [
         icons: ProjectIcon,
         fullname: 'Relocation Tracking Tool',
         link: '/tools/relocation_tracking',
-        groupBy:['admin','RLT','RLT_reader','RLT_Admin']
+        groupBy: ['admin', 'RLT', 'RLT_reader', 'RLT_Admin']
     }
-     ,
+    ,
     {
         id: 33,
         name: 'Microwave Soft-At',
@@ -337,8 +338,8 @@ const ToolData = [
         icons: StopOutlineIcon,
         fullname: 'Microwave Soft-At Tool',
         link: '/tools/microwave_soft_at',
-        groupBy:['admin','microwave']
-    } ,
+        groupBy: ['admin', 'microwave']
+    },
     {
         id: 34,
         name: 'NTD',
@@ -346,9 +347,9 @@ const ToolData = [
         icons: FlowStopIcon,
         fullname: 'New Tower Deployment Tool',
         link: '/tools/ntd',
-        groupBy:['admin','NTD']
+        groupBy: ['admin', 'NTD']
     }
-,
+    ,
     {
         id: 35,
         name: 'UDT',
@@ -356,7 +357,16 @@ const ToolData = [
         icons: SortAscIcon,
         fullname: 'Upgrade Deployment Tool',
         link: '/tools/upgrade_deployment',
-        groupBy:['admin','UDT','UDT_reader']
+        groupBy: ['admin', 'UDT', 'UDT_reader']
+    },
+    {
+        id: 36,
+        name: 'Payload Traffic',
+        title: 'This is Payload Traffic System',
+        icons: TrafficOutlinedIcon,
+        fullname: 'Payload traffic system',
+        link: '/tools/payload_traffic',
+        groupBy:['admin','PTS','PTS_Admin']
     }
 
 ]

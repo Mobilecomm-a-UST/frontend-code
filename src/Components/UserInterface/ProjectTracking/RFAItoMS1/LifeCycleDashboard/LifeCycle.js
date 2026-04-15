@@ -885,7 +885,7 @@ const LifeCycle = () => {
                                                             <th style={{ color: 'black' }}>{it['Start Date']}</th>
                                                             <th style={{ color: 'black' }}>{it['Close Date']}</th>
                                                             <th style={{ color: 'black' }}>{it['Duration']}</th>
-                                                            <th style={{ color: 'black' }}>{it['remarks']}</th>
+                                                            <th style={{ color: 'black' }}>{it['Remarks']}</th>
                                                             <th style={{ color: 'black' }}>{it['Issue Owner']}</th>
                                                             <th style={{ color: 'black' }}>
                                                                 {it.Status == 'Closed' ? <IconButton >

@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import FTR_Table from './FTR_Table';
 import Soft_AT_FTR from './Soft_AT_FTR';
 import Phy_At_FTR from './Phy_At_FTR';
+import Scft_At_FTR from './Scft_At_FTR';
 
 
 const Main_FTR = () => {
@@ -35,6 +36,9 @@ const Main_FTR = () => {
             </Box>
             <Box>
                 <Phy_At_FTR />
+            </Box>
+            <Box>
+                <Scft_At_FTR />
             </Box>
             {/* <Box>
                   <Integration />
