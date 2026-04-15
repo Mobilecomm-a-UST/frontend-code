@@ -72,6 +72,56 @@ const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues,
     );
 };
 
+const MultiSelectWithAll2 = ({ label, options, selectedValues, setSelectedValues }) => {
+    const handleChange = (event) => {
+        const { value } = event.target;
+        const selected = typeof value === 'string' ? value.split(',') : value;
+
+        if (selected.includes('ALL')) {
+            if (selectedValues.length === options.length) {
+                setSelectedValues([]);
+            } else {
+                setSelectedValues(options);
+            }
+        } else {
+            setSelectedValues(selected);
+        }
+    };
+
+    const isAllSelected = options.length > 0 && selectedValues.length === options.length;
+
+    return (
+        <FormControl fullWidth size="small">
+            <InputLabel id={`${label}-label`}>{label}</InputLabel>
+            <Select
+                labelId={`${label}-label`}
+                multiple
+                value={selectedValues}
+                onChange={handleChange}
+                input={<OutlinedInput label={label} />}
+                renderValue={(selected) => selected.join(', ')}
+            >
+                <MenuItem value="ALL">
+                    <Checkbox
+                        checked={isAllSelected}
+                        indeterminate={
+                            selectedValues.length > 0 && selectedValues.length < options.length
+                        }
+                    />
+                    <ListItemText primary="Select All" />
+                </MenuItem>
+
+                {options.map((name) => (
+                    <MenuItem key={name} value={name}>
+                        <Checkbox checked={selectedValues.includes(name)} />
+                        <ListItemText primary={name} />
+                    </MenuItem>
+                ))}
+            </Select>
+        </FormControl>
+    );
+};
+
 
 const circleOptions = ['CENTRAL', 'AP', 'ASM', 'BIH', 'CHN', 'DEL', 'HRY', 'JK', 'JRK', 'KK', 'KOL', 'MAH', 'MP', 'MUM', 'NE', 'ORI', 'PUN', 'RAJ', 'ROTN', 'UPE', 'UPW', 'WB']
 
@@ -84,8 +134,9 @@ const DialogForm = (props) => {
         right: '',
     })
 
-    console.log('props in dialog form', formDatas);
+    // console.log('props in dialog form', formDatas);
     const { close, column, refetch } = props;
+    console.log('column in dialog form', column);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -187,10 +238,11 @@ const DialogForm = (props) => {
                                 circles: value
                             }))}
                         />
+
                         {/* columns */}
-                        <MultiSelectWithAll
+                        <MultiSelectWithAll2
                             label="Columns"
-                            options={column}
+                            options={column.filter(col => col !== 'ALL')}
                             name="columns"
                             required={true}
                             selectedValues={formDatas.columns}

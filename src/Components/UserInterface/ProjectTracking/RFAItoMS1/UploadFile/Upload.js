@@ -17,8 +17,8 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
- 
- 
+
+
 const Upload = () => {
     const [make4GFiles, setMake4GFiles] = useState({ filename: "", bytes: "" })
     const [selectCircle, setSelectCircle] = useState('')
@@ -33,8 +33,8 @@ const Upload = () => {
     const userID = getDecreyptedData("userID")
     const userTypes = (getDecreyptedData('user_type')?.split(","))
     const link = `${ServerURL}${fileData}`;
- 
- 
+
+
     const handle4GFileSelection = (event) => {
         console.log('event target files', event)
         setShow4G(false);
@@ -42,18 +42,18 @@ const Upload = () => {
             filename: event.target.files[0].name,
             bytes: event.target.files[0],
             state: true
- 
+
         })
     }
- 
+
     const handleDownloadRelocation = async () => {
         try {
             action(true); // optional: show loader
- 
- 
+
+
             const response = await postData('alok_tracker/download_tracker_file/', { userId: userID, year: year });
             console.log('Download file response:', response);
- 
+
             if (response?.download_link) {
                 // ✅ Automatically trigger file download
                 const link = document.createElement('a');
@@ -71,10 +71,10 @@ const Upload = () => {
             action(false); // stop loader
         }
     };
- 
- 
- 
- 
+
+
+
+
     // const handleSubmit = async () => {
     //     if (make4GFiles) {
     //         action(true)
@@ -94,7 +94,7 @@ const Upload = () => {
     //             // console.log('sssssssssssssssssssss', response)
     //         } else {
     //             action(false)
- 
+
     //             Swal.fire({
     //                 icon: "error",
     //                 title: "Oops...",
@@ -108,22 +108,22 @@ const Upload = () => {
     //         } else {
     //             setShow4G(false)
     //         }
- 
- 
- 
+
+
+
     //     }
     // }
- 
- 
+
+
     const dateFormat = (inputDate) => {
         if (!inputDate) return "";
- 
+
         const date = new Date(inputDate);
- 
+
         const day = String(date.getDate()).padStart(2, "0");
         const month = String(date.getMonth() + 1).padStart(2, "0");
         const year = date.getFullYear();
- 
+
         return `${day}-${month}-${year}`;
     }
     const handleSubmit = async () => {
@@ -132,23 +132,23 @@ const Upload = () => {
                 setShow4G(true);
                 return;
             }
- 
+
             setShow4G(false);
             action(true);
- 
+
             const formData = new FormData();
             formData.append("tracker_file", make4GFiles.bytes);
             formData.append("userId", userID);
- 
+
             const response = await axios.post(`${ServerURL}/alok_tracker/upload_file/`,
                 formData,
                 {
                     headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
                 }
             );
- 
+
             const data = response.data;
- 
+
             if (data.status === true) {
                 setDownload(true);
                 Swal.fire({
@@ -165,18 +165,18 @@ const Upload = () => {
             }
         } catch (error) {
             console.error("Upload Error:", error);
- 
+
             const errData = error.response?.data;
- 
+
             if (errData) {
                 const { error: errorMsg, details } = errData;
- 
+
                 Swal.fire({
                     icon: "error",
                     title: "Upload Failed",
                     html: `
                 <p><b>Error:</b> ${errorMsg || "Unknown error"}</p>
- 
+
         <p><b>Details:</b></p>
         <table style="width:100%; border-collapse: collapse; text-align:center;border: 1px solid black;">
             <tr style="border: 1px solid black;">
@@ -209,18 +209,18 @@ const Upload = () => {
             action(false);
         }
     };
- 
+
     const handleCancel = () => {
         setMake4GFiles({ filename: "", bytes: "" })
         setShow4G(false)
- 
+
     }
- 
+
     useEffect(() => {
         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
- 
+
     }, [])
- 
+
     return (
         <>
             <div style={{ margin: 5, marginLeft: 10 }}>
@@ -242,8 +242,8 @@ const Upload = () => {
                             Upload Relocation File
                         </Box>
                         <Stack spacing={2} sx={{ marginTop: "-40px" }} direction={'column'}>
- 
- 
+
+
                             <Box className={classes.Front_Box} >
                                 <div className={classes.Front_Box_Hading}>
                                     Select Excel Files:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{make4GFiles.filename}</span>
@@ -258,19 +258,19 @@ const Upload = () => {
                                                 onChange={(e) => handle4GFileSelection(e)} />
                                         </Button>
                                     </div>
- 
+
                                     {/* {make4GFiles.state > 0 && <span style={{ color: 'green', fontSize: '18px', fontWeight: 600 }}>{make4GFiles.filename}</span>} */}
- 
+
                                     <div>  <span style={{ display: show4G ? 'inherit' : 'none', color: 'red', fontSize: '18px', fontWeight: 600 }}>This Field Is Required !</span> </div>
                                 </div>
                             </Box>
                         </Stack>
                         <Stack direction={{ xs: "column", sm: "column", md: "row" }} spacing={2} style={{ display: 'flex', justifyContent: "space-around", marginTop: "20px" }}>
- 
+
                             <Button variant="contained" color="success" onClick={handleSubmit} endIcon={<UploadIcon />}>Submit</Button>
- 
+
                             <Button variant="contained" onClick={handleCancel} style={{ backgroundColor: "red", color: 'white' }} endIcon={<DoDisturbIcon />} >cancel</Button>
- 
+
                         </Stack>
                     </Box>
                 </Box>}
@@ -287,24 +287,24 @@ const Upload = () => {
                                     label="Financial Year"
                                     onChange={(e) => setYear(e.target.value)}
                                 >
- 
+
+                                    <MenuItem value=''>ALL</MenuItem>
                                     <MenuItem value='2026'>2026 - 2027</MenuItem>
                                     <MenuItem value='2025'>2025 - 2026</MenuItem>
                                     <MenuItem value='2024'>2024 - 2025</MenuItem>
                                     <MenuItem value='2023'>2023 - 2024</MenuItem>
- 
+
                                 </Select>
                             </FormControl>
                             <Button variant="outlined" onClick={() => handleDownloadRelocation()} title="Export Excel" size="small" startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />} ><span style={{ fontFamily: "Poppins", fontSize: "22px", fontWeight: 800, textTransform: "none", textDecorationLine: "none" }}>Download Relocation Tracking Data</span></Button>
                         </Box>
                     </Box>
- 
+
                 </Box>
             </Slide>
             {loading}
         </>
     )
 }
- 
+
 export default Upload
- 

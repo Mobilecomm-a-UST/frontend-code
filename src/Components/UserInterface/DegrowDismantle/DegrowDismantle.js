@@ -14,6 +14,9 @@ import { getDecreyptedData } from '../../../Components/utils/localstorage';
 import ListIcon from '@rsuite/icons/List';
 import './../../../App.css'
 import FolderIcon from '@rsuite/icons/Folder';
+import { Admin } from '@rsuite/icons';
+import { use } from 'react';
+
 
 
 const DegrowTool = lazy(() => import('./DegrowTool'))
@@ -23,7 +26,8 @@ const DismantleItemList = lazy(() => import('./Dismantle_Item_List/DismantleItem
 const AddSiteDismantleItem = lazy(() => import('./AddSiteDismantle/DismantleItemList'))
 const SurveyDashboard = lazy(() => import('./SurveyDashboard/SurveyDashboard'))
 const ShowAllDismantleItem = lazy(() => import('./ShowAllDismantle/ShowAllDismantleItem'))
-
+const FinalMailPage = lazy(() => import('./AdminPanel/EmailAdd/FinalMailPage'))
+const Module = lazy(() => import('./AdminPanel/Module/Module'))
 
 
 const DegrowDismantle = () => {
@@ -93,6 +97,17 @@ const DegrowDismantle = () => {
                                         <Nav activeKey={activeKey} onSelect={setActiveKey} >
                                             <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>Full Site Dismantle</Nav>
                                             <Divider component="li" sx={{ backgroundColor: 'white' }} />
+                                            {userTypes?.includes('ran_admin') &&
+                                                <Nav.Menu eventKey="1" style={{ fontWeight: 400, color: 'white' }} placement="leftStart" className="menu-title-custom" title="Admin Panel" icon={<ArrowRightIcon />}  >
+                                                    <Nav.Item eventKey="1-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/full_site_dismantle/email_dashboard'); show(); setMenuButton(true) }}>
+                                                        EmailAdd
+                                                    </Nav.Item>
+                                                    <Nav.Item eventKey="1-2" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/full_site_dismantle/module'); show(); setMenuButton(true) }}>
+                                                        Module
+                                                    </Nav.Item>
+                                                </Nav.Menu>
+                                            }
+
                                             <Nav.Item eventKey="3" placement="rightStart" className="single-item-custom" icon={<ImportIcon style={{}} />} onClick={() => { navigate('/tools/full_site_dismantle/nms_dump_fetch'); show(); setMenuButton(true) }}>
                                                 NMS Dump Fetch
                                             </Nav.Item>
@@ -100,11 +115,11 @@ const DegrowDismantle = () => {
                                             <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={<ListIcon style={{}} />} onClick={() => { navigate('/tools/full_site_dismantle/survey_site_list'); show(); setMenuButton(true) }}>
                                                 Survey Site List
                                             </Nav.Item>
-                            
+
                                             <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={<DashboardIcon style={{}} />} onClick={() => { navigate('/tools/full_site_dismantle/survey_dashboard'); show(); setMenuButton(true) }}>
                                                 Survey Dashboard
                                             </Nav.Item>
-                                   
+
                                             <Nav.Item eventKey="1" placement="rightStart" className="single-item-custom" icon={<FolderIcon style={{}} />} onClick={() => { navigate('/tools/full_site_dismantle/file_manager'); show(); setMenuButton(true) }}>
                                                 File Manager
                                             </Nav.Item>
@@ -128,6 +143,14 @@ const DegrowDismantle = () => {
                                 <Route element={<ShowAllDismantleItem />} path="/survey_site_list/*" />
                                 <Route element={<SurveyDashboard />} path="/survey_dashboard" />
                                 <Route element={<DismantleItemList />} path="/survey_site_list/:siteId" />
+                                {userTypes?.includes('ran_admin') && 
+                                <Route element={<FinalMailPage />} path="/email_dashboard" />
+                                }
+                                
+                                {userTypes?.includes('ran_admin') &&
+                                <Route element={<Module />} path="/module" />
+                                }
+
                             </Routes>
                         </Suspense>
                     </Grid>

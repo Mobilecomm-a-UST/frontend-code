@@ -62,6 +62,7 @@ const SA_Slicing = lazy(()=>import('./Components/UserInterface/Integration_SA/SA
 const MicrowaveSoftAt = lazy(() => import('./Components/UserInterface/Microwave/Microwave'))
 const NTDTool = lazy(() => import('./Components/UserInterface/NewTowerDeployment/NTD'))
 const UpgradeDeployment = lazy(() => import('./Components/UserInterface/UpgradeDeployment/UD'))
+const payloadTraffic = lazy(() => import('./Components/UserInterface/Payload Traffic/Payload'))
 
 const queryClient = new QueryClient()
 
@@ -300,7 +301,7 @@ function App() {
 
             <Route path="/tools/full_site_dismantle/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={DegrowDismantle} allowedUserTypes={['admin', 'ran']} userType={userType} />
+                <ProtectedRoute element={DegrowDismantle} allowedUserTypes={['admin', 'ran','ran_admin']} userType={userType} />
               </Suspense>
             } />
 
@@ -357,8 +358,16 @@ function App() {
                 <ProtectedRoute element={UpgradeDeployment} allowedUserTypes={['admin', 'UDT','UDT_reader']} userType={userType} />
               </Suspense>
             } />
+            <Route path="/tools/payload_traffic/*" element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProtectedRoute element={payloadTraffic} allowedUserTypes={['admin','PTS','PTS_Admin']} userType={userType} />
+              </Suspense>
+            } />
+
 
           </Routes>
+          
+        
 
         </Router>
         {/* <Box sx={{ position: 'fixed',
