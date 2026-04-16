@@ -83,10 +83,10 @@ const Payload = () => {
 
                                                 <Nav.Menu eventKey="1" placement="rightStart" icon={<FileUploadIcon />} title="Upload Payload">
                                                     <Nav.Item eventKey="1-1" placement="rightStart" onClick={() => { navigate('/tools/Payload_Traffic/Upload_4G_Payload'); show(); setMenuButton(true) }}>
-                                                        Upload_4G_Payload
+                                                        Upload 4G Payload
                                                     </Nav.Item>
                                                     <Nav.Item eventKey="1-2" placement="rightStart" onClick={() => { navigate('/tools/Payload_Traffic/Upload_5G_Payload'); show(); setMenuButton(true) }}>
-                                                        Upload_5G_Payload
+                                                        Upload 5G Payload
                                                     </Nav.Item>
                                                 </Nav.Menu>
                                                 <Nav.Item eventKey="2" placement="rightStart" icon={<SearchIcon />} onClick={() => { navigate('/tools/Payload_Traffic/Query_Traffic'); show(); setMenuButton(true) }}>
