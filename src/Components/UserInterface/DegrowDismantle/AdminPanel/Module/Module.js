@@ -52,7 +52,7 @@ const Module = () => {
         // 👉 If using backend
 
         let formData = new FormData();
-        formData.append("module", trimmed);
+        formData.append("model", trimmed);
         await postData("degrow_dismental/add_model/", formData);
         fetchModules();
 
