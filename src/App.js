@@ -366,7 +366,7 @@ function App() {
             } />
              <Route path="/tools/2g_scripting/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={G2Scripting} allowedUserTypes={['admin']} userType={userType} />
+                <ProtectedRoute element={G2Scripting} allowedUserTypes={['admin','2G_Script']} userType={userType} />
               </Suspense>
             } />
 
