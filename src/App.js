@@ -63,6 +63,7 @@ const MicrowaveSoftAt = lazy(() => import('./Components/UserInterface/Microwave/
 const NTDTool = lazy(() => import('./Components/UserInterface/NewTowerDeployment/NTD'))
 const UpgradeDeployment = lazy(() => import('./Components/UserInterface/UpgradeDeployment/UD'))
 const payloadTraffic = lazy(() => import('./Components/UserInterface/Payload Traffic/Payload'))
+const G2Scripting = lazy(() => import('./Components/UserInterface/2G Scripting/2GScripting'))
 
 const queryClient = new QueryClient()
 
@@ -361,6 +362,11 @@ function App() {
             <Route path="/tools/payload_traffic/*" element={
               <Suspense fallback={<div>Loading...</div>}>
                 <ProtectedRoute element={payloadTraffic} allowedUserTypes={['admin','PTS','PTS_Admin']} userType={userType} />
+              </Suspense>
+            } />
+             <Route path="/tools/2g_scripting/*" element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProtectedRoute element={G2Scripting} allowedUserTypes={['admin']} userType={userType} />
               </Suspense>
             } />
 
