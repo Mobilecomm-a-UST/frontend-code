@@ -375,7 +375,7 @@ const ToolData = [
         icons: PageIcon,
         fullname: '2G Scripting system',
         link: '/tools/2g_scripting',
-        groupBy:['admin']
+        groupBy:['admin','2G_Script']
     }
 
 ]
