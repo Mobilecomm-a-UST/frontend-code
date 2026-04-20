@@ -202,7 +202,6 @@ const QueryTraffic = () => {
                                                     type="date"
                                                     style={{ width: '165px', height: '35px', fontSize: '20px', fontWeight: 'bold' }}
                                                 />
-
                                             </div>
                                             <div></div>
                                         </div>

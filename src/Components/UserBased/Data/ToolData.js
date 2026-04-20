@@ -367,6 +367,15 @@ const ToolData = [
         fullname: 'Payload traffic system',
         link: '/tools/payload_traffic',
         groupBy:['admin','PTS','PTS_Admin']
+    },
+    {
+        id: 37,
+        name: '2G Scripting',
+        title: 'This is 2G Scripting System',
+        icons: PageIcon,
+        fullname: '2G Scripting system',
+        link: '/tools/2g_scripting',
+        groupBy:['admin']
     }
 
 ]
