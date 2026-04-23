@@ -22,6 +22,11 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { setEncreptedData } from '../../../utils/localstorage';
 import { DiscFull } from '@mui/icons-material';
 
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+
 const RangeWiseDashboard = ({ onData }) => {
     const classes = useStyles()
     const [open, setOpen] = useState(false)
@@ -31,12 +36,14 @@ const RangeWiseDashboard = ({ onData }) => {
     const [mainDataT2, setMainDataT2] = useState([])
     const [dateArray, setDateArray] = useState([])
     const [tableData, setTableData] = useState([])
+    // const dashboardTypeOption = ['Integration_Name', 'HOTO_Accepted_Date_4g', 'HOTO_Accepted_Date_2g']
+    const [dashboardType, setDashboardType] = useState('Integration_Date')
     const [givenDate, setGivenDate] = useState('')
     const [fromDate, setFromDate] = useState('')
     const [toDate, setToDate] = useState('')
     const [fullData, setFullData] = useState([])
     // const activityArray = ['DE-GROW', 'MACRO', 'OTHER', 'RELOCATION', 'RET', 'ULS-HPSC', 'UPGRADE', 'MEMTO', 'HT-INCREMENT', 'IBS', 'IDSC', 'ODSC', 'RECTIFICATION', 'OPERATION', 'RRU UPGRADE', '5G BW UPGRADE', '5G RRU SWAP', '5G SECTOR ADDITION', '5G RELOCATION', 'TRAFFIC SHIFTING', 'RRU SWAP', 'FR COUNT', '2G HOTO OFFERED COUNT', '2G HOTO ACCEPTED COUNT', '4G HOTO OFFERED COUNT', '4G HOTO ACCEPTED COUNT']
-    const activityArray = [ 'MACRO',  'RELOCATION', 'ULS-HPSC', 'UPGRADE','RRU UPGRADE',  '5G SECTOR ADDITION', '5G RELOCATION',  'RRU SWAP', 'FR COUNT', '2G HOTO OFFERED COUNT', '2G HOTO ACCEPTED COUNT', '4G HOTO OFFERED COUNT', '4G HOTO ACCEPTED COUNT']
+    const activityArray = ['MACRO', 'RELOCATION', 'ULS-HPSC', 'UPGRADE', 'RRU UPGRADE', '5G SECTOR ADDITION', '5G RELOCATION', 'RRU SWAP', 'FR COUNT', '2G HOTO OFFERED COUNT', '2G HOTO ACCEPTED COUNT', '4G HOTO OFFERED COUNT', '4G HOTO ACCEPTED COUNT']
 
     // const [totals, setTotals] = useState()
 
@@ -76,6 +83,7 @@ const RangeWiseDashboard = ({ onData }) => {
         var formData = new FormData()
         formData.append('from_date', fromDate)
         formData.append('to_date', toDate)
+        formData.append('dashboard_type', dashboardType)
         const res = await makePostRequest("ix_tracker_vi/date-range-integration-data/", formData);
         if (res) {
             action(false)
@@ -85,7 +93,7 @@ const RangeWiseDashboard = ({ onData }) => {
             setToDate(res.date_range[1])
             setTableData(JSON.parse(res.table_data))
             setFullData(res.download_data)
-            console.log('range wise data',res)
+            // console.log('range wise data',res)
             onData(res);
             return res;
         }
@@ -325,7 +333,7 @@ const RangeWiseDashboard = ({ onData }) => {
 
     useEffect(() => {
         fetchRangeWiseDashboard()
-    }, [fromDate,toDate])
+    }, [fromDate, toDate, dashboardType])
 
 
     return (
@@ -365,7 +373,7 @@ const RangeWiseDashboard = ({ onData }) => {
                     {/* ************* 2G  TABLE DATA ************** */}
                     <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', alignContent: 'center' }}>
                         <Box style={{ fontSize: 22, fontWeight: 'bold' }}>
-                            Range Wise Integration Site Count
+                            Range Wise {dashboardType === 'Integration_Date' ? 'Integration' : dashboardType === 'HOTO_Accepted_Date_4g' ? 'HOTO Accepted 4G' : 'HOTO Accepted 2G'} Site Count
                         </Box>
                         <Box>
                             {/* <LocalizationProvider dateAdapter={AdapterDayjs} >
@@ -374,6 +382,21 @@ const RangeWiseDashboard = ({ onData }) => {
                                     onChange={handleDate}
                                 />
                             </LocalizationProvider> */}
+                            <FormControl whiteSpace='nowrap' size='small' sx={{ minWidth: 150, marginRight: 2 }}>
+                                <InputLabel id="demo-simple-select-label">Dashboard Type</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    value={dashboardType}
+                                    label="Dashboard Type"
+                                    size='small'
+                                    onChange={(e)=> setDashboardType(e.target.value)}
+                                >
+                                    <MenuItem value={'Integration_Date'}>Integration</MenuItem>
+                                    <MenuItem value={'HOTO_Accepted_Date_4g'}>HOTO Accepted 4G</MenuItem>
+                                    <MenuItem value={'HOTO_Accepted_Date_2g'}>HOTO Accepted 2G</MenuItem>
+                                </Select>
+                            </FormControl>  
                             <TextField
                                 size='small'
                                 value={fromDate}
@@ -468,7 +491,7 @@ const RangeWiseDashboard = ({ onData }) => {
                 </div>
             </Slide>
             {/* {filterDialog()} */}
-            { loading}
+            {loading}
         </>
     )
 }
