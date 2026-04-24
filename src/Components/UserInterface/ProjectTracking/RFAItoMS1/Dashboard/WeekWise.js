@@ -106,6 +106,9 @@ const WeekWise = () => {
     const [view, setView] = useState('Cumulative')
 
 
+    
+
+
     const fetchDailyData = async () => {
         action(true)
         var formData = new FormData()

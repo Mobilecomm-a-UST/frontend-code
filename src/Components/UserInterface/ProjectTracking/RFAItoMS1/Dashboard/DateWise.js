@@ -110,7 +110,7 @@ const DateWise = () => {
     const { afterToday, combine } = DateRangePicker;
     // const [totals, setTotals] = useState()
 
-    // console.log('table data', tableData)
+   
 
     const fetchDailyData = async () => {
         action(true)

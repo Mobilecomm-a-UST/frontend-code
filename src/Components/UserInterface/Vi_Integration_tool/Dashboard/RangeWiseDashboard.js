@@ -373,7 +373,7 @@ const RangeWiseDashboard = ({ onData }) => {
                     {/* ************* 2G  TABLE DATA ************** */}
                     <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', alignContent: 'center' }}>
                         <Box style={{ fontSize: 22, fontWeight: 'bold' }}>
-                            Range Wise {dashboardType === 'Integration_Date' ? 'Integration' : dashboardType === 'HOTO_Accepted_Date_4g' ? 'HOTO Accepted 4G' : 'HOTO Accepted 2G'} Site Count
+                            Range Wise {dashboardType === 'Integration_Date' ? 'Integration' : dashboardType === 'HOTO_Accepted_Date_4g' ? 'HOTO Accepted 4G' : dashboardType === 'HOTO_Accepted_Date_2g' ? 'HOTO Accepted 2G' : dashboardType === 'HOTO_Offered_Date_4g' ? 'HOTO Offered 4G' : dashboardType === 'HOTO_Offered_Date_2g' ? 'HOTO Offered 2G' : 'FR Date'} Site Count
                         </Box>
                         <Box>
                             {/* <LocalizationProvider dateAdapter={AdapterDayjs} >
@@ -395,6 +395,9 @@ const RangeWiseDashboard = ({ onData }) => {
                                     <MenuItem value={'Integration_Date'}>Integration</MenuItem>
                                     <MenuItem value={'HOTO_Accepted_Date_4g'}>HOTO Accepted 4G</MenuItem>
                                     <MenuItem value={'HOTO_Accepted_Date_2g'}>HOTO Accepted 2G</MenuItem>
+                                    <MenuItem value={'HOTO_Offered_Date_4g'}>HOTO Offered 4G</MenuItem>
+                                    <MenuItem value={'HOTO_Offered_Date_2g'}>HOTO Offered 2G</MenuItem>
+                                    <MenuItem value={'FR_Date'}>FR Date</MenuItem>
                                 </Select>
                             </FormControl>  
                             <TextField
