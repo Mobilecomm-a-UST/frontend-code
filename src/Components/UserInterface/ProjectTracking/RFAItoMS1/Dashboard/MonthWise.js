@@ -103,6 +103,8 @@ const MonthWise = () => {
     const [year, setYear] = useState('2026')
 
 
+        console.log('print month wise data')
+
     const fetchDailyData = async () => {
         action(true)
         var formData = new FormData()

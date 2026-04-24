@@ -120,6 +120,7 @@ const CircleWiese = () => {
 
     console.log('data get', circleWieseData)
 
+   
 
 
 
@@ -710,4 +711,4 @@ const CircleWiese = () => {
     )
 }
 
-export default CircleWiese
+export const MemoCircleWiese = React.memo(CircleWiese)
