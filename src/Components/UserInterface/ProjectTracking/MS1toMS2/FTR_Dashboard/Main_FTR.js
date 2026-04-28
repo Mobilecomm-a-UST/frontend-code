@@ -3,10 +3,10 @@ import { Box } from '@mui/material'
 import { Breadcrumbs, Link, Typography } from "@mui/material";
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { useNavigate } from "react-router-dom";
-import FTR_Table from './FTR_Table';
-import Soft_AT_FTR from './Soft_AT_FTR';
-import Phy_At_FTR from './Phy_At_FTR';
-import Scft_At_FTR from './Scft_At_FTR';
+import {MemoFTR_Table} from './FTR_Table';
+import {MemoSoft_AT_FTR} from './Soft_AT_FTR';
+import  { MemoPhy_At_FTR } from './Phy_At_FTR';
+import  { MemoScft_At_FTR } from './Scft_At_FTR';
 
 
 const Main_FTR = () => {
@@ -29,16 +29,16 @@ const Main_FTR = () => {
                 {/* <RfaiIntegration /> */}
             </Box>
             <Box>
-                <FTR_Table />
+                <MemoFTR_Table />
             </Box>
             <Box>
-                <Soft_AT_FTR />
+                <MemoScft_At_FTR />
             </Box>
             <Box>
-                <Phy_At_FTR />
+                <MemoPhy_At_FTR />
             </Box>
             <Box>
-                <Scft_At_FTR />
+                <MemoScft_At_FTR />
             </Box>
             {/* <Box>
                   <Integration />

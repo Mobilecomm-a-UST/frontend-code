@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { useGet } from '../../../Hooks/GetApis'
 import { useQuery } from '@tanstack/react-query';
 import { useLoadingDialog } from '../../../Hooks/LoadingDialog';
-import RcaOutput from './RcaOutput';
+import { MemoRcaOutput } from './RcaOutput';
 import FileDownload from './FileDownload';
 import { getDecreyptedData } from '../../../utils/localstorage';
 
@@ -87,7 +87,7 @@ const Generate_rca = () => {
             </Box>} */}
 
             <Box sx={{ marginTop: 4 }}>
-                <RcaOutput />
+                <MemoRcaOutput />
             </Box>
 
         </div>

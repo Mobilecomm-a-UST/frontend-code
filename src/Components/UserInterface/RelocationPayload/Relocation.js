@@ -10,6 +10,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import FolderIcon from '@rsuite/icons/Folder';
 import ChangeListIcon from '@rsuite/icons/ChangeList';
+import Loader from  '../../Skeleton/Loader'
 
 
 const RelocationTool = lazy(()=>import('./RelocationTool'))
@@ -121,7 +122,7 @@ const Relocation = () => {
                     <Grid item xs={12} md={10}>
 
 
-                        <Suspense fallback={<div>loading............</div>}>
+                        <Suspense fallback={<Loader/>}>
                             <Routes>
                                 <Route element={<RelocationTool />} path="/" />
                                 <Route element={<Reference />} path="/reference" />

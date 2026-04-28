@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AbTestIcon from '@rsuite/icons/AbTest';
 import Slide from '@mui/material/Slide';
+import Loader from '../../../Skeleton/Loader'
+
 const G2Tool = lazy(() => import('./G2Tool'))
 const ComparisonHR = lazy(() => import('./ComperisonHR/Comperison'))
 const ComparisonKK = lazy(()=>import('./ComperisonKK/Comperison'))
@@ -52,7 +54,7 @@ const G2Audit = () => {
                         </Grid>
                     </Slide>
                     <Grid item xs={12} md={10}>
-                        <Suspense fallback={<div>loading............</div>}>
+                        <Suspense fallback={<Loader/>}>
                             <Routes>
                                 <Route element={<G2Tool/>} path="/" />
                                 <Route element={<ComparisonHR />} path="/haryana" />

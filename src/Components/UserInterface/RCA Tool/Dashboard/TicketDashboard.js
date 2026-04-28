@@ -735,4 +735,4 @@ const TicketDashboard = () => {
   )
 }
 
-export default TicketDashboard
+export const MemoTicketDashboard = React.memo(TicketDashboard)

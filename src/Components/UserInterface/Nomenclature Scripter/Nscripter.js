@@ -18,6 +18,8 @@ import AddOutlineIcon from '@rsuite/icons/AddOutline';
 import DocPassIcon from '@rsuite/icons/DocPass';
 import CheckOutlineIcon from '@rsuite/icons/CheckOutline';
 import ChangeListIcon from '@rsuite/icons/ChangeList';
+import Loader from '../../Skeleton/Loader'
+
 const NscripterTool = lazy(() => import('./NscripterTool'))
 const UploadData = lazy(() => import('./Generate/UploadData'))
 const NomAudit = lazy(() => import('./Audit/NomAudit'))
@@ -129,7 +131,7 @@ const Nscripter = () => {
                     <Grid item xs={12} md={10}>
 
 
-                        <Suspense fallback={<div>loading............</div>}>
+                        <Suspense fallback={<Loader/>}>
                             <Routes>
                                 <Route element={<NscripterTool />} path="/" />
                                 <Route element={<UploadData />} path="/generate_script" />

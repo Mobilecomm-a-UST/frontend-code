@@ -8,6 +8,8 @@ import { useNavigate } from 'react-router-dom';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import FileUploadIcon from '@rsuite/icons/FileUpload';
 import PushMessageIcon from '@rsuite/icons/PushMessage';
+import Loader from '../../Skeleton/Loader'
+
 const CatsTrackerTool = lazy(() => import('./CatsTrackerTool'))
 const Upload = lazy(() => import('./Upload Data/Upload'))
 const Dashboard = lazy(() => import('./Dashboard/Dashboard'))
@@ -55,7 +57,7 @@ const CatsTracker = () => {
                         </div>
                     </Grid>
                     <Grid item xs={12} md={10}>
-                    <Suspense fallback={<div>Loading...</div>}>
+                    <Suspense fallback={<Loader/>}>
                         <Routes>
                             <Route element={<CatsTrackerTool />} path="/" />
                             <Route element={<Upload />} path="/upload_data" />

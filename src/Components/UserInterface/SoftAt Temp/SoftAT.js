@@ -20,6 +20,8 @@ import Upload_Soft_AT_Status from './Upload_Soft_AT/Upload_Soft_AT_Status'
 import PendingSites from './Dashboard/PendingSites'
 import AlarmBucket from './Dashboard/AlarmBucket'
 import AgeingCircleWise from './Dashboard/AgeingCircleWise'
+import Loader from '../../Skeleton/Loader'
+
 const Circle_Wise = lazy(() => import('./Dashboard/Circle_Wise'))
 const Master_Dashboard = lazy(() => import('./Dashboard/Master_Dashboard'))
 const WeeklyComparision = lazy(() => import('./Dashboard/WeeklyComparision'))
@@ -143,7 +145,7 @@ const SoftAT = () => {
           <Grid item xs={12} md={10}>
 
 
-            <Suspense fallback={<div>loading............</div>}>
+            <Suspense fallback={<Loader/>}>
               <Routes>
                 <Route element={<SoftAtTool />} path="/" />
                 <Route element={<Circle_Wise />} path="/circle_wise" />

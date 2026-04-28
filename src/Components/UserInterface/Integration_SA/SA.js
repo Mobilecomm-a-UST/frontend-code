@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import FileUploadIcon from '@rsuite/icons/FileUpload';
 import ConversionIcon from '@rsuite/icons/Conversion';
+import Loader from '../../Skeleton/Loader';
 
 const SA_upload = lazy(()=>import('./Upload/Upload'))
 const SA_tool = lazy(()=>import('./SA_tool'))
@@ -46,7 +47,7 @@ const SA = () => {
                         </Box>
                     </Grid>
                     <Grid item xs={12} md={10}>
-                        <Suspense fallback={<div>loading............</div>}>
+                        <Suspense fallback={<Loader/>}>
                             <Routes>
                                 <Route element={<SA_tool />} path="/" />
                                 <Route element={<SA_upload/>} path='/sa_upload_xml' />

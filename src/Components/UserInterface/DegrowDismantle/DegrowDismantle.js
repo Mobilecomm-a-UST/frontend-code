@@ -16,6 +16,7 @@ import './../../../App.css'
 import FolderIcon from '@rsuite/icons/Folder';
 import { Admin } from '@rsuite/icons';
 import { use } from 'react';
+import Loader from '../../Skeleton/Loader';
 
 
 
@@ -133,7 +134,7 @@ const DegrowDismantle = () => {
                     <Grid item xs={12} md={10}>
 
 
-                        <Suspense fallback={<div>loading............</div>}>
+                        <Suspense fallback={<Loader/>}>
                             <Routes>
                                 <Route element={<DegrowTool />} path="/" />
                                 <Route element={<DegrowForm />} path="/degrow" />

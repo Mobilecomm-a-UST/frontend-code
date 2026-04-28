@@ -16,6 +16,7 @@ import HistoryIcon from '@rsuite/icons/History';
 import { IconButton, ButtonToolbar } from 'rsuite';
 import { Query } from '@tanstack/react-query';
 import { getDecreyptedData } from '../../utils/localstorage';
+import Loader from '../../Skeleton/Loader'
 // import { Search } from '@mui/icons-material';
 // import { Query } from '@tanstack/react-query';
 
@@ -113,7 +114,7 @@ const Payload = () => {
                     <Grid item xs={12} md={10}>
 
 
-                        <Suspense fallback={<div>loading...</div>}>
+                        <Suspense fallback={<Loader/>}>
                             <Routes>
 
                                 <Route element={<PayloadTool />} path="/" />

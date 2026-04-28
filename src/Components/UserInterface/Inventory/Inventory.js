@@ -7,6 +7,8 @@ import { Sidenav, Nav } from 'rsuite';
 import DashboardIcon from '@rsuite/icons/legacy/Dashboard';
 import { useNavigate } from 'react-router-dom';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Loader from '../../Skeleton/Loader'
+
 const InventoryTool = lazy(() => import('./InventoryTool'))
 const UploadData = lazy(() => import('./UploadData/UploadData'))
 const Dashboard = lazy(() => import('./Dashboard/Dashboard'))
@@ -46,7 +48,7 @@ const Inventory = () => {
                         </div>
                     </Grid>
                     <Grid item xs={12} md={10}>
-                        <Suspense fallback={<div>Loading...</div>}>
+                        <Suspense fallback={<Loader/>}>
                             <Routes>
                                 <Route element={<InventoryTool />} path="/" />
                                 <Route element={<UploadData />} path="/submit_data" />

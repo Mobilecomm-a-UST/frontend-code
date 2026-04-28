@@ -573,4 +573,4 @@ const OemBar = () => {
     )
 }
 
-export default OemBar
+export const MemoOemBar = React.memo(OemBar)

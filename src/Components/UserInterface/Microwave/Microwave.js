@@ -10,6 +10,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import FolderIcon from '@rsuite/icons/Folder';
 import ChangeListIcon from '@rsuite/icons/ChangeList';
+import Loader from '../../Skeleton/Loader'
 
 const MicrowaveTool = lazy(() => import('./MicrowaveTool'))
 const MicrowaveAVIATUpload = lazy(() => import('./MicrowaveAVIAT/MicrowaveAVIATUpload'))
@@ -119,7 +120,7 @@ const Microwave = () => {
                     <Grid item xs={12} md={10}>
 
 
-                        <Suspense fallback={<div>loading............</div>}>
+                        <Suspense fallback={<Loader/>}>
                             <Routes>
                                 <Route element={<MicrowaveTool />} path="/" />
                                 <Route element={<MicrowaveAVIATUpload />} path="/microwave_aviat_upload" />

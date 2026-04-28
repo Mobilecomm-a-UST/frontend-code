@@ -7,6 +7,8 @@ import { Sidenav, Nav } from 'rsuite';
 import FileUploadIcon from '@rsuite/icons/FileUpload';
 import { useNavigate } from 'react-router-dom';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Loader from '../../Skeleton/Loader'
+
 const SchedularTools = lazy(() => import('./SchedularTools'))
 const MakeAlaramTrend = lazy(() => import('./MakeAlaramTrend/MakeAlaramTrend'))
 const FormPage = lazy(() => import('./Form/FormPage'))
@@ -60,7 +62,7 @@ const Schedular = () => {
           </Grid>
           <Grid item xs={12} md={10}>
 
-            <Suspense fallback={<div>loading............</div>}>
+            <Suspense fallback={<Loader/>}>
 
               <Routes>
                 <Route element={<SchedularTools />} path="/" />

@@ -1,4 +1,4 @@
-import React,{useEffect, useState} from 'react';
+import React,{Suspense, useEffect, useState} from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import TrendState from './TrendState'
 import Trend from './TMCH/Trend'
@@ -16,6 +16,7 @@ import KTKTrend from './KTK/KTKTrend';
 import UPWTrend from './UPW/UPWTrend';
 import MUMTrend from './MUM/MUMTrend';
 import UPETrend from './UPE/UPETrend';
+import Loader from '../../Skeleton/Loader'
 
 
 function Trends() {
@@ -35,6 +36,7 @@ function Trends() {
     </head>
             {/* <div style={{position:'static'}}><Home /></div> */}
           <div style={{marginTop:'60px'}}>
+            <Suspense fallback ={<Loader/>}>
             <Routes>
                 <Route element={<TrendState />} path="/*" />
                 <Route element={<Trend />} path="/tn_ch/*" />
@@ -54,6 +56,7 @@ function Trends() {
                 <Route element={<UPETrend/>} path="/upe/*"/>
 
             </Routes>
+            </Suspense>
             </div>
         </>
     )

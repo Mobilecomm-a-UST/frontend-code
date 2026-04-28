@@ -47,6 +47,7 @@
     "rsuite": "^5.23.3",
     "rxjs": "^7.8.1",
     "source-map-explorer": "^2.5.3",
+    "styled-components": "^6.4.1",
     "sweetalert2": "^11.4.8",
     "tsparticles": "^2.9.3",
     "web-vitals": "^2.1.4",

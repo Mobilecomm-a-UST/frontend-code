@@ -652,4 +652,4 @@ const ActivityBar = () => {
   )
 }
 
-export default ActivityBar
+export const MemoActivityBar = React.memo(ActivityBar)

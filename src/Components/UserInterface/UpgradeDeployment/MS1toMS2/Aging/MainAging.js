@@ -3,8 +3,8 @@ import { Box } from '@mui/material'
 import { Breadcrumbs, Link, Typography } from "@mui/material";
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { useNavigate } from "react-router-dom";
-import MOS from './MOS';
-import RfaiIntegration from './RfaiIntegration';
+import { MemoMOS } from './MOS';
+import { MemoRfaiIntegration } from './RfaiIntegration';
 import MOS2 from './MOS2';
 
 const MainAging = () => {
@@ -24,10 +24,10 @@ const MainAging = () => {
                 </Breadcrumbs>
             </div>
             <Box>
-                <RfaiIntegration />
+                <MemoRfaiIntegration />
             </Box>
             <Box>
-                <MOS />
+                <MemoMOS />
             </Box>
             {/* <Box>
                 <MOS2/>

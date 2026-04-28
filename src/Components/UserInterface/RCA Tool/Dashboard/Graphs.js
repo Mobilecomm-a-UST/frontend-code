@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import SleepingCell from './SleepingCell'
-import TicketDashboard from './TicketDashboard'
+import  { MemoSleepingCell } from './SleepingCell'
+import { MemoTicketDashboard } from './TicketDashboard'
 import { Slide } from '@mui/material'
 
 const Graphs = () => {
@@ -14,10 +14,10 @@ const Graphs = () => {
   return (
     <>
         <div>
-            {type && <TicketDashboard/>}
+            {type && <MemoTicketDashboard/>}
         </div>
         <div>
-            {type && <SleepingCell/>}
+            {type && <MemoSleepingCell/>}
         </div>
         
     </>

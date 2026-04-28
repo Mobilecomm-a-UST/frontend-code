@@ -471,4 +471,4 @@ const MOS = () => {
     )
 }
 
-export default MOS
+export const MemoMos = React.memo(MOS)

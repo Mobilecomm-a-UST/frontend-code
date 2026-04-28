@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import FileUploadIcon from '@rsuite/icons/FileUpload';
 import ConversionIcon from '@rsuite/icons/Conversion';
+import Loader from '../../Skeleton/Loader';
 
 const Integration_Tool = lazy(() => import('./Integration_Tool'))
 const UploadFile = lazy(() => import('./Upload/UploadFile'))
@@ -82,7 +83,7 @@ const Integration = () => {
                         </Box>
                     </Grid>
                     <Grid item xs={12} md={10}>
-                        <Suspense fallback={<div>loading............</div>}>
+                        <Suspense fallback={<Loader/>}>
                             <Routes>
                                 <Route element={<Integration_Tool />} path="/" />
                                 <Route element={<UploadFile />} path="/upload_file" />

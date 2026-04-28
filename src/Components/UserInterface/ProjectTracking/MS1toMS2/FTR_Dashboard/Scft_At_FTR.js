@@ -338,4 +338,4 @@ const Scft_At_FTR = () => {
   )
 }
 
-export default Scft_At_FTR
+export const MemoScft_At_FTR = React.memo(Scft_At_FTR)

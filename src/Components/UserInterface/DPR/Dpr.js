@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, Suspense } from 'react'
 import { useState } from 'react'
 import Home from '../Home'
 import { Box } from '@mui/material'
@@ -27,8 +27,7 @@ import DprReportStatus from './DPR_report/DprReportStatus'
 import ProjectWiseRelocation from './ProjectWiseRelocation'
 import { getData } from '../../services/FetchNodeServices'
 import MasterDasboard from './MasterDasboard'
-
-
+import Loader from '../../Skeleton/Loader'
 
 export default function Dpr() {
   const [expanded, setExpanded] = useState(true);
@@ -47,13 +46,13 @@ export default function Dpr() {
 
   useEffect(() => {
     // navigate('/dpr');
-        fetchViewDPR();
+    fetchViewDPR();
   }, [])
 
 
   return (
     <div >
-      <Box style={{position: 'static'}}><Home /></Box>
+      <Box style={{ position: 'static' }}><Home /></Box>
       <Grid container spacing={1} style={{ marginTop: '50px' }}>
         <Grid item xs={2}>
           <div style={{ height: "670px", backgroundColor: "#223354", marginTop: 8, borderRadius: 10, position: 'fixed' }}>
@@ -100,27 +99,26 @@ export default function Dpr() {
         </Grid>
         <Grid item xs={10}>
           <div >
-
-            <Routes>
-
-              <Route element={<Dashboard />} path="/dashboard" />
-              <Route element={<NewTable />} path="/view_site_list" />
-              <Route element={<UploadDprKey />} path="/upload_dpr_key" />
-              <Route element={<UploadDprMapa />} path="/upload_dpr_mapa" />
-              <Route element={<EditData />} path="/edit_data" />
-              <Route element={<CircleWise />} path="/circle_wise" />
-              <Route element={<DprTool />} path="/" />
-              <Route element={<DprAllData />} path="/dpr_all_data" />
-              <Route element={<ProjectWiseNT />} path="/project_wise_NT" />
-              <Route element={<ProjectWiseUls />} path="/project_wise_ULS" />
-              <Route element={<ProjectWiseCU />} path="/project_wise_CU" />
-              <Route element={<ProjectWiseRelocation />} path="/project_wise_Relocation" />
-              <Route element={<MapaUploadStatus />} path="/mapa_status" />
-              <Route element={<DprReport />} path="/dpr_report" />
-              <Route element={<DprReportStatus />} path="/dpr_report_status" />
-              <Route element={<MasterDasboard />} path="/master_dasboard" />
-            </Routes>
-
+            <Suspense fallback={<Loader />}>
+              <Routes>
+                <Route element={<Dashboard />} path="/dashboard" />
+                <Route element={<NewTable />} path="/view_site_list" />
+                <Route element={<UploadDprKey />} path="/upload_dpr_key" />
+                <Route element={<UploadDprMapa />} path="/upload_dpr_mapa" />
+                <Route element={<EditData />} path="/edit_data" />
+                <Route element={<CircleWise />} path="/circle_wise" />
+                <Route element={<DprTool />} path="/" />
+                <Route element={<DprAllData />} path="/dpr_all_data" />
+                <Route element={<ProjectWiseNT />} path="/project_wise_NT" />
+                <Route element={<ProjectWiseUls />} path="/project_wise_ULS" />
+                <Route element={<ProjectWiseCU />} path="/project_wise_CU" />
+                <Route element={<ProjectWiseRelocation />} path="/project_wise_Relocation" />
+                <Route element={<MapaUploadStatus />} path="/mapa_status" />
+                <Route element={<DprReport />} path="/dpr_report" />
+                <Route element={<DprReportStatus />} path="/dpr_report_status" />
+                <Route element={<MasterDasboard />} path="/master_dasboard" />
+              </Routes>
+            </Suspense>
           </div>
 
         </Grid>

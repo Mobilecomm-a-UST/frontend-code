@@ -221,7 +221,7 @@ import PageIcon from '@rsuite/icons/Page';
 import FileDownloadIcon from '@rsuite/icons/FileDownload';
 import { Box, Button } from '@mui/material'
 import { Grid } from '@mui/material'
-import { Sidenav, Nav } from 'rsuite';
+import { Sidenav, Nav, Loader } from 'rsuite';
 import Collapse from '@mui/material/Collapse';
 import SettingsIcon from '@mui/icons-material/Settings';
 import DashboardIcon from '@rsuite/icons/legacy/Dashboard';
@@ -233,7 +233,8 @@ import AddOutlineIcon from '@rsuite/icons/AddOutline';
 import DocPassIcon from '@rsuite/icons/DocPass';
 import CheckOutlineIcon from '@rsuite/icons/CheckOutline';
 import ChangeListIcon from '@rsuite/icons/ChangeList';
-import ChangeList from '@rsuite/icons/ChangeList';  
+import ChangeList from '@rsuite/icons/ChangeList'; 
+
 
 const G2ScriptingTool = lazy(() => import('./2GScriptingTool'))
 const G2Script = lazy(() => import('./2GScript/2GScript'))
@@ -279,6 +280,9 @@ const G2Scripting = () => {
                                                 <Nav.Item eventKey="3-2" placement="rightStart" onClick={() => { navigate('/tools/2g_scripting/2g_script'); show(); setMenuButton(true) }}>
                                                     2G Script
                                                 </Nav.Item>
+                                                 {/* <Nav.Item eventKey="3-2" placement="rightStart" onClick={() => { navigate('/tools/2g_scripting/skl'); show(); setMenuButton(true) }}>
+                                                    Skl
+                                                </Nav.Item> */}
                                             </Nav>
                                         </Sidenav.Body>
 
@@ -307,6 +311,18 @@ const G2Scripting = () => {
                                             >
                                                 2G Script
                                             </Nav.Item>
+                                            {/* <Nav.Item
+                                                eventKey="3-3"
+                                                placement="rightStart"
+                                                icon={<ChangeListIcon />}
+                                                onClick={() => {
+                                                    navigate('/tools/2g_scripting/skl');
+                                                    show();
+                                                    setMenuButton(true);
+                                                }}
+                                            >
+                                                Skl
+                                            </Nav.Item> */}
                                         </Nav>
                                     </Sidenav.Body>
 
@@ -317,12 +333,11 @@ const G2Scripting = () => {
                     <Grid item xs={12} md={10}>
 
 
-                        <Suspense fallback={<div>loading............</div>}>
+                        <Suspense fallback={<Loader/>}>
                             <Routes>
                                 <Route element={<G2ScriptingTool />} path="/" />
                                 <Route element={<G2Script />} path="/2g_script" />
-
-
+                                {/* <Route element={<Skl />} path="/skl" /> */}
                             </Routes>
                         </Suspense>
                     </Grid>
