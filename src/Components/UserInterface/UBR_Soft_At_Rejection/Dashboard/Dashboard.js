@@ -23,13 +23,6 @@ const Dashboard = () => {
 
   var circleSite = [];
 
-
-
-
-
-
-
-
    console.log('qqq' ,window.location.pathname.slice(1).replaceAll('_',' '))
 
 

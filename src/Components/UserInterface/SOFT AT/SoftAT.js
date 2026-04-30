@@ -50,8 +50,6 @@ const Summary_5G = lazy(()=>import('./NokiaStatus/Summary_5G'))
 const NRRELParser = lazy(()=>import('./5G NRREL Parser/NRRELParser'))
 
 
-
-
 const SoftAT = () => {
   const [expanded, setExpanded] = useState(true);
   const [activeKey, setActiveKey] = useState();

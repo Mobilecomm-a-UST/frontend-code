@@ -1,6 +1,5 @@
-
 import React from 'react'
-import { useState, useEffect, Suspense } from 'react'
+import { useState, useEffect, Suspense ,lazy} from 'react'
 import { Box } from '@mui/material'
 import { Grid } from '@mui/material'
 import { Sidenav, Nav } from 'rsuite';
@@ -8,14 +7,15 @@ import DashboardIcon from '@rsuite/icons/legacy/Dashboard';
 import FileUploadIcon from '@rsuite/icons/FileUpload';
 import { useNavigate } from 'react-router-dom'
 import { Routes, Route } from "react-router-dom";
-import WprTool from './WprTool'
-import UploadReport from './UPLOAD_REPORT/UploadReport'
-import OverAll from './DASHBOARD/OverAll';
-import UploadReportStatus from './UPLOAD_REPORT/UploadReportStatus'
-import WeeklyComparision from './DASHBOARD/WeeklyComparision'
-import Site_List from './Project_site_list/Site_List'
-import WeeklyComparisionTable from './DASHBOARD/WeeklyComparisionTable'
 import Loader from '../../Skeleton/Loader'
+
+const WprTool = lazy(() => import('./WprTool'));
+const UploadReport = lazy(() => import('./UPLOAD_REPORT/UploadReport'));
+const OverAll = lazy(() => import('./DASHBOARD/OverAll'));
+const UploadReportStatus = lazy(() => import('./UPLOAD_REPORT/UploadReportStatus'));
+const WeeklyComparision = lazy(() => import('./DASHBOARD/WeeklyComparision'));
+const Site_List = lazy(() => import('./Project_site_list/Site_List'));
+const WeeklyComparisionTable = lazy(() => import('./DASHBOARD/WeeklyComparisionTable'));
 
 const Wpr = () => {
   const [expanded, setExpanded] = useState(true);

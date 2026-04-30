@@ -1,4 +1,4 @@
-import React, { useEffect, Suspense } from 'react'
+import React, { useEffect, Suspense ,lazy} from 'react'
 import { useState } from 'react'
 import Home from '../Home'
 import { Box } from '@mui/material'
@@ -10,24 +10,26 @@ import ListIcon from '@rsuite/icons/List';
 import DetailIcon from '@rsuite/icons/Detail';
 import { useNavigate } from 'react-router-dom'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Dashboard from './Dashboard'
-import NewTable from './NewTable'
-import UploadDprKey from './UploadDprKey'
-import UploadDprMapa from './UploadDprMapa'
-import EditData from './EditData'
-import CircleWise from './CircleWise'
-import DprTool from './DprTool'
-import DprAllData from '../ViewDPR/DprAllData'
-import ProjectWiseNT from './ProjectWiseNT'
-import ProjectWiseUls from './ProjectWiseUls'
-import ProjectWiseCU from './ProjectWiseCU'
-import MapaUploadStatus from './MapaUploadStatus'
-import DprReport from './DPR_report/DprReport'
-import DprReportStatus from './DPR_report/DprReportStatus'
-import ProjectWiseRelocation from './ProjectWiseRelocation'
 import { getData } from '../../services/FetchNodeServices'
-import MasterDasboard from './MasterDasboard'
 import Loader from '../../Skeleton/Loader'
+
+const Dashboard = lazy(() => import('./Dashboard'));
+const NewTable = lazy(() => import('./NewTable'));
+const UploadDprKey = lazy(() => import('./UploadDprKey'));
+const UploadDprMapa = lazy(() => import ('./UploadDprMapa'));
+const EditData = lazy(() => import ('./EditData'));
+const CircleWise = lazy(() => import("./CircleWise"));
+const DprTool = lazy(() => import("./DprTool"));
+const DprAllData = lazy(() => import("../ViewDPR/DprAllData"));
+const ProjectWiseNT = lazy(() => import("./ProjectWiseNT"));
+const ProjectWiseUls = lazy(() => import("./ProjectWiseUls"));
+const ProjectWiseCU = lazy(() => import("./ProjectWiseCU"));
+const MapaUploadStatus = lazy(() => import("./MapaUploadStatus"));
+const DprReport = lazy(() => import("./DPR_report/DprReport"));
+const DprReportStatus = lazy(() => import("./DPR_report/DprReportStatus"));
+const ProjectWiseRelocation = lazy(() => import("./ProjectWiseRelocation"));
+const MasterDasboard = lazy(() => import("./MasterDasboard"));
+
 
 export default function Dpr() {
   const [expanded, setExpanded] = useState(true);

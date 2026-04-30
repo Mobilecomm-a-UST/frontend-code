@@ -29,9 +29,6 @@ const ViewReport = lazy(() => import('./View Report/ViewReport'));
 const DownloadSoftAtTemplate = lazy(() => import('./DownloadTemp/DownloadSoftAtTemp'));
 
 
-
-
-
 const SoftAT = () => {
   const [expanded, setExpanded] = useState(true);
   const [activeKey, setActiveKey] = useState();

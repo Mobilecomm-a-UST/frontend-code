@@ -172,4 +172,4 @@ const To = () => {
     );
 };
 
-export default To;
+export const  MemoTo = React.memo(To);

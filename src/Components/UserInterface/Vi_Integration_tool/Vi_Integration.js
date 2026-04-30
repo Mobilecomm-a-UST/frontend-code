@@ -19,9 +19,6 @@ const ComanDashboard = lazy(() => import('./Dashboard/ComanDashboard'))
 const MDashboard = lazy(() => import('./MasterDashboard/MDashboard'))
 const TotalDataDashboard = lazy(() => import('./Dashboard/TotalDataDashboard'));
 
-
-
-
 const Vi_Integration = () => {
     const [expanded, setExpanded] = useState(true);
     const [activeKey, setActiveKey] = useState();

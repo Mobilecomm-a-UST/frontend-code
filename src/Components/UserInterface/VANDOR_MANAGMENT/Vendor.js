@@ -1,8 +1,7 @@
 
 
-import React, { Suspense, useEffect } from 'react'
+import React, { Suspense, useEffect ,lazy} from 'react'
 import { useState } from 'react'
-
 import { Box } from '@mui/material'
 import { Grid } from '@mui/material'
 import { Sidenav, Nav } from 'rsuite';
@@ -12,20 +11,21 @@ import ListIcon from '@rsuite/icons/List';
 import DetailIcon from '@rsuite/icons/Detail';
 import { useNavigate } from 'react-router-dom'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import VendorTool from './VendorTool'
-import UploadReport from "./CIRCLE TEAM/UPLOAD_REPORT/UploadReport"
-import ViewReport from "./CIRCLE TEAM/VIEW_REPORT/ViewReport"
-import Vendor_PO_Approval from "./VENDOR PO APPROVAL/Vendor PO Approve/Vendor_PO_Approval"
-import Vendor_OP_Approval_Status from './VENDOR PO APPROVAL/Vendor PO Approve/Vendor_OP_Approval_Status'
-import UploadReportStatus from "./CIRCLE TEAM/UPLOAD_REPORT/UploadReportStatus"
-import VendorPoApproveView from "./VENDOR PO APPROVAL/Vendor PO Approve View/VendorPoApproveView";
-import PeoplesIcon from '@rsuite/icons/Peoples';
-import OperatePeopleIcon from '@rsuite/icons/OperatePeople';
-import AllUploadReport from './ALLOCATE PO/UPLOAD_REPORT/AllUploadReport'
-import AllUploadReportStatus from './ALLOCATE PO/UPLOAD_REPORT/AllUploadReportStatus'
-import AllViewReport from './ALLOCATE PO/VIEW_REPORT/AllViewReport'
 import BranchIcon from '@rsuite/icons/Branch';
 import Loader from '../../Skeleton/Loader'
+import PeoplesIcon from '@rsuite/icons/Peoples';
+import OperatePeopleIcon from '@rsuite/icons/OperatePeople';
+
+const VendorTool = lazy(() => import('./VendorTool'));
+const UploadReport = lazy(() => import("./CIRCLE TEAM/UPLOAD_REPORT/UploadReport"));
+const ViewReport = lazy(() => import("./CIRCLE TEAM/VIEW_REPORT/ViewReport"));
+const Vendor_PO_Approval = lazy(() => import("./VENDOR PO APPROVAL/Vendor PO Approve/Vendor_PO_Approval"));
+const Vendor_OP_Approval_Status = lazy(() => import("./VENDOR PO APPROVAL/Vendor PO Approve/Vendor_OP_Approval_Status"));
+const UploadReportStatus = lazy(() => import("./CIRCLE TEAM/UPLOAD_REPORT/UploadReportStatus"));
+const VendorPoApproveView = lazy(() => import("./VENDOR PO APPROVAL/Vendor PO Approve View/VendorPoApproveView"));
+const AllUploadReport = lazy(() =>  import("./ALLOCATE PO/UPLOAD_REPORT/AllUploadReport"));
+const AllUploadReportStatus = lazy(() => import("./ALLOCATE PO/UPLOAD_REPORT/AllUploadReportStatus"));
+const AllViewReport = lazy(() => import("./ALLOCATE PO/VIEW_REPORT/AllViewReport"));
 
 const Vendor = () => {
   const [expanded, setExpanded] = useState(true);

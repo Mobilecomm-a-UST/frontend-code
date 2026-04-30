@@ -1,22 +1,24 @@
-import React,{Suspense, useEffect, useState} from 'react';
+import React,{Suspense, useEffect, useState, lazy} from 'react';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import TrendState from './TrendState'
-import Trend from './TMCH/Trend'
-import RJTrend from './RJ/RJTrend'
-import APTrend from './AP/APTrend'
-import BRTrend from './BR/BRTrend'
-import HRTrend from './HR/HRTrend'
-import ORTrend from './OR/ORTrend'
-import WBKOL_Trend from './WB_KOL/WBKOL_Trend'
-import PBTrend from './PB/PBTrend';
-import MPTrend from './MP/MPTrend';
-import DLTrend from './DL/DLTrend';
-import JKTrend from './JK/JKTrend';
-import KTKTrend from './KTK/KTKTrend';
-import UPWTrend from './UPW/UPWTrend';
-import MUMTrend from './MUM/MUMTrend';
-import UPETrend from './UPE/UPETrend';
 import Loader from '../../Skeleton/Loader'
+
+const TrendState = lazy(() => import("./TrendState"));
+const Trend = lazy(() => import("./TMCH/Trend"));
+const RJTrend = lazy(() => import("./RJ/RJTrend"));
+const APTrend = lazy(() => import("./AP/APTrend"));
+const BRTrend = lazy(() => import("./BR/BRTrend"));
+const HRTrend = lazy(() => import("./HR/HRTrend"));
+const ORTrend = lazy(() => import("./OR/ORTrend"));
+const WBKOL_Trend = lazy(() => import("./WB_KOL/WBKOL_Trend"));
+const PBTrend = lazy(() => import("./PB/PBTrend"));
+const MPTrend = lazy(() => import("./MP/MPTrend"));
+const DLTrend = lazy(() => import("./DL/DLTrend"));
+const JKTrend = lazy(() => import("./JK/JKTrend"));
+const KTKTrend = lazy(() => import("./KTK/KTKTrend"));
+const UPWTrend = lazy(() => import("./UPW/UPWTrend"));
+const MUMTrend = lazy(() => import("./MUM/MUMTrend"));
+const UPETrend = lazy(() => import("./UPE/UPETrend"));
+
 
 
 function Trends() {

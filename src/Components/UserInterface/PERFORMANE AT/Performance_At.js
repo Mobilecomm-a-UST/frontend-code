@@ -1,5 +1,5 @@
 
-import React, { Suspense, useEffect } from 'react'
+import React, { Suspense, useEffect, lazy} from 'react'
 import { useState } from 'react'
 import { Box } from '@mui/material'
 import { Grid } from '@mui/material'
@@ -8,12 +8,14 @@ import DashboardIcon from '@rsuite/icons/legacy/Dashboard';
 import FileUploadIcon from '@rsuite/icons/FileUpload';
 import { useNavigate } from 'react-router-dom'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import PerformanceAtTool from './PerformanceAtTool'
-import UploadPerformanceAt from './Upload_Performance_At/UploadPerformanceAt';
-import Dashboard from './Dashboard/Dashboard';
-import UploadPerformanceAtStatus from './Upload_Performance_At/UploadPerformanceAtStatus';
-import AgeingSiteList from './Ageing_site_list/AgeingSiteList';
 import Loader from '../../Skeleton/Loader'
+
+const PerformanceAtTool = lazy(() => import("./PerformanceAtTool"));
+const UploadPerformanceAt = lazy(() => import("./Upload_Performance_At/UploadPerformanceAt"));
+const Dashboard = lazy(() => import("./Dashboard/Dashboard"));
+const UploadPerformanceAtStatus = lazy(() => import("./Upload_Performance_At/UploadPerformanceAtStatus"));
+const AgeingSiteList = lazy(() => import("./Ageing_site_list/AgeingSiteList"));
+
 
 const Performance_At = () => {
   const [expanded, setExpanded] = useState(true);

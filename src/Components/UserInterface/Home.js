@@ -29,9 +29,6 @@ import { getData } from "../services/FetchNodeServices";
 import { getDecreyptedData } from "../utils/localstorage";
 
 
-
-
-
 export default function Home() {
 
   const [anchorElUser, setAnchorElUser] = React.useState(null);
