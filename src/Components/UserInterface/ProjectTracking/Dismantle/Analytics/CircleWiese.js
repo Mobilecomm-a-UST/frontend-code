@@ -701,4 +701,4 @@ const CircleWiese = () => {
     )
 }
 
-export default CircleWiese
+export const MemoCircleWiese = React.memo(CircleWiese)

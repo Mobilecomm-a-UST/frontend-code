@@ -16,6 +16,9 @@ import AddOutlineIcon from '@rsuite/icons/AddOutline';
 import DocPassIcon from '@rsuite/icons/DocPass';
 import CheckOutlineIcon from '@rsuite/icons/CheckOutline';
 import ChangeListIcon from '@rsuite/icons/ChangeList';
+import Loader from '../../Skeleton/Loader'
+
+
 const GplTool = lazy(() => import('./GplTool'));
 const GenerateGpl = lazy(() => import('./Generate/GenerateGpl'));
 const Gplauditparse = lazy(() => import('./GplAuditParse/GAP'))
@@ -127,7 +130,7 @@ const GPL = () => {
                     <Grid item xs={12} md={10}>
 
 
-                        <Suspense fallback={<div>loading............</div>}>
+                        <Suspense fallback={<Loader/>}>
                             <Routes>
                                 <Route element={<GplTool />} path="/" />
                                 <Route element={<Gplauditparse />} path="/gpl_audit_parse" />

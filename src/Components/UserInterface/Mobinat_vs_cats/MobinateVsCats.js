@@ -10,6 +10,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import FolderIcon from '@rsuite/icons/Folder';
 import ChangeListIcon from '@rsuite/icons/ChangeList';
+import Loader from '../../Skeleton/Loader';
 
 const MobinateTool = lazy(() => import('./MobinateTool'))
 const MobinateFileHandle = lazy(() => import('./Mobinate/Mobinate'))
@@ -129,7 +130,7 @@ const MobinateVsCate = () => {
                     <Grid item xs={12} md={10}>
 
 
-                        <Suspense fallback={<div>loading............</div>}>
+                        <Suspense fallback={<Loader/>}>
                             <Routes>
                                 <Route element={<MobinateTool />} path="/" />
                                 <Route element={<MobinateFileHandle />} path="/mobinet" />

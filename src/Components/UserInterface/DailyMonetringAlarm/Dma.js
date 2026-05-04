@@ -8,6 +8,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import { useNavigate } from 'react-router-dom'
 import { Routes, Route } from "react-router-dom";
 import CombinationIcon from '@rsuite/icons/Combination';
+import Loader from '../../Skeleton/Loader';
 
 import ChangeListIcon from '@rsuite/icons/ChangeList';
 const Make4G = lazy(() => import('./MakeAlarm/Make4G'))
@@ -127,7 +128,7 @@ const Dma = () => {
                     <Grid item xs={12} md={10}>
 
 
-                        <Suspense fallback={<div>loading............</div>}>
+                        <Suspense fallback={<Loader/>}>
                             <Routes>
                                  <Route element={<DmaTool />} path="/" />
                                  <Route element={<Make4G />} path="/make_4g" />

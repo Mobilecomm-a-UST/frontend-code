@@ -16,6 +16,7 @@ import App from '../../../App.css'
 import ArrowRightIcon from '@rsuite/icons/ArrowRight';
 import { getDecreyptedData } from '../../../Components/utils/localstorage';
 import AdminIcon from '@rsuite/icons/Admin';
+import Loader from '../../Skeleton/Loader'
 
 const NTDTool = lazy(() => import('./NTDTool'));
 const RFAItoMS1_UploadFile = lazy(() => import('./RFAItoMS1/UploadFile/Upload'));
@@ -157,7 +158,7 @@ const NTD = () => {
                         <Grid item xs={12} md={10}>
     
     
-                            <Suspense fallback={<div>loading............</div>}>
+                            <Suspense fallback={<Loader/>}>
                                 <Routes>
                                     <Route element={<NTDTool />} path="/" />
                                     <Route element={<RFAItoMS1_UploadFile />} path="/nt_upload" />

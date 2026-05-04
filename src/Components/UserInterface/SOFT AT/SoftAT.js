@@ -22,6 +22,7 @@ import AlarmBucket from './Dashboard/AlarmBucket'
 import AgeingCircleWise from './Dashboard/AgeingCircleWise'
 import { getDecreyptedData } from '../../utils/localstorage';
 import Nokiacheclist5g from './NokiaStatus/nokiacheclist5g';
+import Loader from '../../Skeleton/Loader'
 
 
 const Circle_Wise = lazy(() => import('./Dashboard/Circle_Wise'))
@@ -47,8 +48,6 @@ const NokiaUploadAlarm = lazy(()=>import('./Nokia_SA_NSA/UploadNokiaAlarm'))
 const UserCount = lazy(()=>import('./NokiaStatus/UserCounter'))
 const Summary_5G = lazy(()=>import('./NokiaStatus/Summary_5G'))
 const NRRELParser = lazy(()=>import('./5G NRREL Parser/NRRELParser'))
-
-
 
 
 const SoftAT = () => {
@@ -225,7 +224,7 @@ const SoftAT = () => {
           <Grid item xs={12} md={10}>
 
 
-            <Suspense fallback={<div>loading............</div>}>
+            <Suspense fallback={<Loader/>}>
               <Routes>
                 <Route element={<SoftAtTool />} path="/" />
                 <Route element={<Circle_Wise />} path="/circle_wise/*" />

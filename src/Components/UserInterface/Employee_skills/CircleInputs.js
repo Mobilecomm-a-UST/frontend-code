@@ -12,6 +12,8 @@ import SentToUserIcon from '@rsuite/icons/SentToUser';
 import AppSelectIcon from '@rsuite/icons/AppSelect';
 import FileUploadIcon from '@rsuite/icons/FileUpload';
 import EventDetailIcon from '@rsuite/icons/EventDetail';
+import Loader from '../../Skeleton/Loader'
+
 const EmployeeTool = lazy(() => import('./EmployeeTool'))
 const Dashboard = lazy(() => import('./Dashboard/Dashboard'))
 const Upload = lazy(() => import("./UploadReport/UploadReport"))
@@ -121,7 +123,7 @@ const CircleInputs = () => {
                     </Grid>
                     <Grid item md={10}>
 
-                        <Suspense fallback={<div>loading............</div>}>
+                        <Suspense fallback={<Loader/>}>
 
                             <Routes>
                                 <Route element={<EmployeeTool />} path="/" />

@@ -525,4 +525,4 @@ const UnicCount = () => {
     )
 }
 
-export default UnicCount
+export const MemoUnicCount = React.memo(UnicCount)

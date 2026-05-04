@@ -269,4 +269,4 @@ const RcaOutput = () => {
     )
 }
 
-export default React.memo(RcaOutput);
+export const MemoRcaOutput = React.memo(RcaOutput);

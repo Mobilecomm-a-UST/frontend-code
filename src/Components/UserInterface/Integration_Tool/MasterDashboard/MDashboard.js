@@ -1,18 +1,18 @@
 import React from 'react'
-import OemBar from './OemBar';
+import { MemoOemBar } from './OemBar';
 import { Box } from '@mui/material';
-import ActivityBar from './ActivityBar';
-import UnicCount from './UnicCount';
+import { MemoActivityBar } from './ActivityBar';
+import { MemoUnicCount } from './UnicCount';
 
 const MDashboard = () => {
     return (
         <>
             <Box sx={{ margin:2}}>
-                <ActivityBar />
+                <MemoActivityBar />
                 <br/>
-                <OemBar/>
+                <MemoOemBar/>
                 <br/>
-                <UnicCount/>
+                <MemoUnicCount/>
             </Box>
         </>
 

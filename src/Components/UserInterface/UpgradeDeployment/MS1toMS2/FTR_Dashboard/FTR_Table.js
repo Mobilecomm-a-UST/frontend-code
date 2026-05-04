@@ -369,4 +369,4 @@ const FTR_Table = () => {
     )
 }
 
-export default FTR_Table
+export const MemoFTR_Table = React.memo(FTR_Table)

@@ -11,6 +11,7 @@ import FileUploadIcon from '@rsuite/icons/FileUpload';
 import ConversionIcon from '@rsuite/icons/Conversion';
 import { getDecreyptedData } from '../../utils/localstorage';
 import { use } from 'react';
+import Loader from '../../Skeleton/Loader';
 
 const Integration_Tool = lazy(() => import('./Integration_Tool'))
 const FinalDashboard = lazy(() => import('./Dashboard/FinalDashboard'))
@@ -70,7 +71,7 @@ const IntegrationRead = () => {
                         </div>
                     </Grid>
                     <Grid item xs={12} md={10}>
-                        <Suspense fallback={<div>loading............</div>}>
+                        <Suspense fallback={<Loader/>}>
                             <Routes>
                                 <Route element={<Integration_Tool />} path="/" />
                                 <Route element={<FinalDashboard />} path="/dashboard/*" />

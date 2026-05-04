@@ -16,6 +16,7 @@ import App from '../../../App.css'
 import ArrowRightIcon from '@rsuite/icons/ArrowRight';
 import { getDecreyptedData } from '../../../Components/utils/localstorage';
 import AdminIcon from '@rsuite/icons/Admin';
+import Loader from '../../Skeleton/Loader'
 
 const UDTool = lazy(() => import('./UDTool'))
 const Error = lazy(() => import('../../../Components/csss/Error'));
@@ -176,7 +177,7 @@ const UD = () => {
                     <Grid item xs={12} md={10}>
 
 
-                        <Suspense fallback={<div>loading............</div>}>
+                        <Suspense fallback={<Loader/>}>
                             <Routes>
                                 <Route element={<UDTool />} path="/" />
 

@@ -9,12 +9,9 @@ import { useNavigate } from 'react-router-dom'
 import { Routes, Route } from "react-router-dom";
 import ChangeListIcon from '@rsuite/icons/ChangeList';
 import TextImageIcon from '@rsuite/icons/TextImage';
-
+import Loader from '../../Skeleton/Loader'
 
 const KPImatrixTool = lazy(()=>import('./KPImatrixTool'))
-
-
-
 
 const KPImatrix = () => {
     const [expanded, setExpanded] = useState(true);
@@ -92,7 +89,7 @@ const KPImatrix = () => {
                     <Grid item xs={12} md={10}>
 
 
-                        <Suspense fallback={<div>loading............</div>}>
+                        <Suspense fallback={<Loader/>}>
                             <Routes>
                                 <Route element={<KPImatrixTool />} path="/" />
                                 {/* <Route element={<UploadLKFile />} path="/make_status" /> */}

@@ -159,7 +159,7 @@ const SiwaTemp = () => {
                         <Stack spacing={2} sx={{ marginTop: "-40px" }} direction={'column'}>
                             <Box className={classes.Front_Box} >
                                 <Box className={classes.Front_Box_Hading}>
-                                    {toggalValue == 'Date' ? 'Select Date' : 'Select Range'}  <span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}></span>
+                                    {toggalValue === 'Date' ? 'Select Date' : 'Select Range'}  <span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}></span>
                                 </Box>
                                 <Box className={classes.Front_Box_Select_Button} >
                                     <ToggleButtonGroup
@@ -173,7 +173,7 @@ const SiwaTemp = () => {
                                         <ToggleButton value="Range">Range</ToggleButton>
 
                                     </ToggleButtonGroup>
-                                    {toggalValue == 'Date' ? <><Box sx={{ textAlign: 'center' }}>
+                                    {toggalValue === 'Date' ? <><Box sx={{ textAlign: 'center' }}>
                                         <LocalizationProvider dateAdapter={AdapterDayjs} size="small">
                                             <DatePicker label="Select Date" size="small" value={date} onChange={(e) => setDate(e)} />
                                         </LocalizationProvider>
@@ -239,4 +239,4 @@ const SiwaTemp = () => {
     )
 }
 
-export default SiwaTemp;
+export const MemoSiwaTemp = React.memo(SiwaTemp);

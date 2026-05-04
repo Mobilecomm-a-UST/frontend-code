@@ -1,13 +1,13 @@
 import React from 'react'
 import SoftAtStatus from './SoftAtStatus';
-import SiwaTemp from './SiwaTemp';
+import { MemoSiwaTemp } from './SiwaTemp';
 
 const DownloadSoftAtTemp = () => {
   return (
     <>
     <SoftAtStatus />
     <br/>
-    <SiwaTemp />
+    <MemoSiwaTemp />
     </>
   )
 }

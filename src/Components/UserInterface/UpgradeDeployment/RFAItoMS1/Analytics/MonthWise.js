@@ -681,4 +681,4 @@ to ${milestone2} (${getTitalValue(milestoneData?.onAirDone, view)})`,
     )
 }
 
-export default MonthWise
+export const MemoMonthWise = React.memo(MonthWise)

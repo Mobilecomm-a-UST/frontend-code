@@ -12,6 +12,8 @@ import { useNavigate } from 'react-router-dom'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import SoftAtTool from './SoftAtTool'
 import ViewsUnauthorizeIcon from '@rsuite/icons/ViewsUnauthorize';
+import Loader from '../../Skeleton/Loader'
+
 const Rejected_Report = lazy(() => import('../Soft_AT_Rejection/Rejected/RejectedReport'))
 const OEM = lazy(() => import('../Soft_AT_Rejection/Dashboard/OEM'))
 const Dashboard = lazy(() => import('./Dashboard/Dashboard'))
@@ -145,7 +147,7 @@ function Ubr_Soft_at_Rejection() {
                     <Grid item xs={12} md={10}>
 
 
-                        <Suspense fallback={<div>loading............</div>}>
+                        <Suspense fallback={<Loader/>}>
                             <Routes>
                                 <Route element={<SoftAtTool />} path="/" />
                                 <Route element={<Rejected_Report />} path='/rejected_report' />

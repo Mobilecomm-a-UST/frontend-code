@@ -728,4 +728,4 @@ const SleepingCell = () => {
   )
 }
 
-export default SleepingCell
+export const MemoSleepingCell = React.memo(SleepingCell)

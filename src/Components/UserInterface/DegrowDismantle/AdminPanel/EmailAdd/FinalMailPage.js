@@ -1,12 +1,13 @@
-import React from "react";
+import React, { lazy } from "react";
 import { Box, Stack } from "@mui/material";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { useNavigate } from "react-router-dom";
-import To from "./To";
-import Cc from "./Cc";
+
+const MemoTo = lazy(() => import("./To"));
+const MemoCc = lazy(() => import("./Cc"));
 
 const FinalMailPage = () => {
   const navigate = useNavigate();
@@ -14,7 +15,6 @@ const FinalMailPage = () => {
     <Box
       sx={{
         p: 3,
-        
         minHeight: "100vh"
       }}
     >
@@ -47,11 +47,11 @@ const FinalMailPage = () => {
         }}
       >
         <Box sx={{ mb: 1 }}>
-          <To />
+          <MemoTo />
         </Box>
 
         <Box sx={{ mt: 1 }}>
-          <Cc />
+          <MemoCc />
         </Box>
       </Stack>
     </Box>

@@ -9,6 +9,7 @@ import DashboardIcon from '@rsuite/icons/legacy/Dashboard';
 import FileUploadIcon from '@rsuite/icons/FileUpload';
 import { useNavigate } from 'react-router-dom'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Loader from '../../Skeleton/Loader'
 // import PhysicalAtTool from './PhysicalAtTool';
 // import UploadPhysicalAt from './Upload_Physical_AT/UploadPhysicalAt';
 // import Dashoard from './Dashboard/Dashoard';
@@ -88,7 +89,7 @@ useEffect(()=>{
             </div>
           </Grid>
           <Grid item xs={12} md={10}>
-          <Suspense fallback={<div>loading............</div>}>
+          <Suspense fallback={<Loader/>}>
             <Routes>
               <Route element={<PhysicalAtTool />} path="/" />
               <Route element={<UploadPhysicalAt />} path="/upload_physical_at/*" />

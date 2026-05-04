@@ -336,4 +336,4 @@ const Phy_At_FTR = () => {
     )
 }
 
-export default Phy_At_FTR
+export const MemoPhy_At_FTR = React.memo(Phy_At_FTR)

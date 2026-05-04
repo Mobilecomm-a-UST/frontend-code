@@ -8,6 +8,8 @@ import { useNavigate } from 'react-router-dom';
 import { BrowserRouter as Router,  Routes, Route } from "react-router-dom";
 import AbTestIcon from '@rsuite/icons/AbTest';
 import Slide from '@mui/material/Slide';
+import Loader from '../../../Skeleton/Loader'
+
 const TDDTool = lazy(()=>import('./TDDTool'))
 const Comparison = lazy(()=>import('./Comperison/Comperison'))
 
@@ -51,7 +53,7 @@ const TDD = () => {
                         </Grid>
                     </Slide>
                     <Grid item xs={12} md={10}>
-                    <Suspense fallback={<div>loading............</div>}>
+                    <Suspense fallback={<Loader/>}>
                         <Routes>
                             <Route element={<TDDTool />} path="/" />
                             <Route element={<Comparison />} path="/comperison" />

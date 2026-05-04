@@ -16,6 +16,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ViewsUnauthorizeIcon from '@rsuite/icons/ViewsUnauthorize';
 import AddOutlineIcon from '@rsuite/icons/AddOutline';
 import CheckOutlineIcon from '@rsuite/icons/CheckOutline';
+import Loader from '../../Skeleton/Loader'
+
 const McomTool = lazy(() => import('./McomTool'));
 const UploadData = lazy(() => import('./Upload/UploadData'));
 const AcceptanceSummary = lazy(() => import('./Dashboard/AcceptanceSummary'));
@@ -129,7 +131,7 @@ const McomePhycical = () => {
                     <Grid item xs={12} md={10}>
 
 
-                        <Suspense fallback={<div>loading............</div>}>
+                        <Suspense fallback={<Loader/>}>
                             <Routes>
                                 <Route element={<McomTool />} path="/" />
                                 <Route element={<UploadData />} path="/add_new_site" />

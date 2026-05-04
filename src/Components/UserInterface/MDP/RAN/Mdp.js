@@ -8,6 +8,8 @@ import DashboardIcon from '@rsuite/icons/legacy/Dashboard';
 import { useNavigate } from 'react-router-dom';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import FileUploadIcon from '@rsuite/icons/FileUpload';
+import Loader from '../../../Skeleton/Loader'
+
 // import Slide from '@mui/material/Slide';
 const MDPTool = lazy(() => import('./MDPTool'))
 const OverAll = lazy(() => import('./Dashboard/OverAll'))
@@ -67,7 +69,7 @@ const Mdp = () => {
                     </Grid>
                     <Grid item xs={12} md={10}>
 
-                        <Suspense fallback={<div>loading............</div>}>
+                        <Suspense fallback={<Loader/>}>
 
                             <Routes>
                                 <Route element={<MDPTool />} path="/" />

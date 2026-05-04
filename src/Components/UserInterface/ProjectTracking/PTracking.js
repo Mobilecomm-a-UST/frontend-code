@@ -16,7 +16,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ArrowRightIcon from '@rsuite/icons/ArrowRight';
 import { getDecreyptedData } from '../../../Components/utils/localstorage';
 import AdminIcon from '@rsuite/icons/Admin';
-import "./../../../App.css"
+import "./../../../App.css";
+import Loader from '../../Skeleton/Loader';
 
 const PTtool = lazy(() => import('./PTtool'))
 const RFAItoMS1_UploadFile = lazy(() => import('./RFAItoMS1/UploadFile/Upload'))
@@ -180,7 +181,7 @@ const PTracking = () => {
                     <Grid item xs={12} md={10}>
 
 
-                        <Suspense fallback={<div>loading............</div>}>
+                        <Suspense fallback={<Loader/>}>
                             <Routes>
                                 <Route element={<PTtool />} path="/" />
 

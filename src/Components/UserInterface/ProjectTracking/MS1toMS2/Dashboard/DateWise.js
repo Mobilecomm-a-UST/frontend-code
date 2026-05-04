@@ -502,4 +502,4 @@ const DateWise = () => {
     )
 }
 
-export const MDateWise = React.memo(DateWise)
+export const MemoDateWise = React.memo(DateWise)

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { MDateWise } from './DateWise'
+import { MemoDateWise } from './DateWise'
 import { Box } from '@mui/material'
 import { MemoMonthWise } from './MonthWise'
 import { MemoWeekWise } from './WeekWise'
@@ -23,7 +23,7 @@ const DashboardTable = () => {
                     </Breadcrumbs>
                 </div>
         <Box>
-            <MDateWise />
+            <MemoDateWise />
         </Box>
         <Box>
             <MemoWeekWise />

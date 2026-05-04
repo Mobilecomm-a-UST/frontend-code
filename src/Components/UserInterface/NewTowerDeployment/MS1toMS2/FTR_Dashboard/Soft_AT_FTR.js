@@ -347,4 +347,4 @@ const Soft_AT_FTR = () => {
     )
 }
 
-export default Soft_AT_FTR
+export const MemoSoft_AT_FTR = React.memo(Soft_AT_FTR)

@@ -10,6 +10,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import FileUploadIcon from '@rsuite/icons/FileUpload';
 import ConversionIcon from '@rsuite/icons/Conversion';
 import { getDecreyptedData } from '../../utils/localstorage'
+import Loader from '../../Skeleton/Loader';
 
 const Integration_Tool = lazy(() => import('./Vi_Integration_Tool'))
 const UploadFile = lazy(() => import('./Upload/UploadFile'))
@@ -17,9 +18,6 @@ const FinalDashboard = lazy(() => import('./Dashboard/FinalDashboard'))
 const ComanDashboard = lazy(() => import('./Dashboard/ComanDashboard'))
 const MDashboard = lazy(() => import('./MasterDashboard/MDashboard'))
 const TotalDataDashboard = lazy(() => import('./Dashboard/TotalDataDashboard'));
-
-
-
 
 const Vi_Integration = () => {
     const [expanded, setExpanded] = useState(true);
@@ -64,7 +62,7 @@ const Vi_Integration = () => {
                         </Box>
                     </Grid>
                     <Grid item xs={12} md={10}>
-                        <Suspense fallback={<div>loading............</div>}>
+                        <Suspense fallback={<Loader/>}>
                             <Routes>
                                 <Route element={<Integration_Tool />} path="/" />
                                 {!userTypes?.includes('VI_IX_reader') && <Route element={<UploadFile />} path="/upload_file" />}

@@ -409,4 +409,4 @@ const RfaiIntegration = () => {
     )
 }
 
-export default RfaiIntegration
+export const MemoRfaiIntegration = React.memo(RfaiIntegration)

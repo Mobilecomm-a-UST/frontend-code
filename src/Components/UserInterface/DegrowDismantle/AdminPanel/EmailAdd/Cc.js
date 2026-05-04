@@ -526,4 +526,4 @@ const Cc = () => {
   );
 };
 
-export default Cc;
+export const MemoCc = React.memo(Cc);

@@ -12,10 +12,7 @@ import TrendIcon from '@rsuite/icons/Trend';
 import ViewsAuthorizeIcon from '@rsuite/icons/ViewsAuthorize';
 import { getDecreyptedData } from '../../utils/localstorage';
 import WaitIcon from '@rsuite/icons/Wait';
-
-
-
-
+import Loader from '../../Skeleton/Loader';
 
 const Kpi_Data = lazy(() => import('./Kpi_table/Kpi_Data'));
 const Rca_tool = lazy(() => import('./Rca_tool'));
@@ -140,7 +137,7 @@ const Rca = () => {
                         </div>
                     </Grid>
                     <Grid item xs={10}>
-                        <Suspense fallback={<div>Loading...</div>}>
+                        <Suspense fallback={<Loader/>}>
                             <Routes>
                                 <Route element={<Rca_tool />} path="/" />
 

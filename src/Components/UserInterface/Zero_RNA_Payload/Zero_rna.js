@@ -1,4 +1,4 @@
-import React,{Suspense, lazy} from 'react'
+import React, { Suspense, lazy } from 'react'
 import { useState, useEffect } from 'react'
 import { Box } from '@mui/material'
 import { Grid } from '@mui/material'
@@ -8,6 +8,8 @@ import FileUploadIcon from '@rsuite/icons/FileUpload';
 import AppSelectIcon from '@rsuite/icons/AppSelect';
 import { useNavigate } from 'react-router-dom'
 import { Routes, Route } from "react-router-dom";
+import Loader from '../../Skeleton/Loader'
+
 const Zero_rna_tool = lazy(() => import('./Zero_rna_tool'));
 const Upload_RNA_2G = lazy(() => import('./Upload_RNA/Upload_RNA_2G'));
 const Uploas_RNA_4G = lazy(() => import('./Upload_RNA/Uploas_RNA_4G'));
@@ -20,8 +22,8 @@ const Dip_Track_A_A = lazy(() => import('./Dashboard/Dip_Track_A_A'));
 const TicketStatus = lazy(() => import('./Dashboard/TicketStatus'));
 const TicketStatusData = lazy(() => import('./Dashboard/Ticket Status/TicketStatusExpend'));
 const Ms1_Done = lazy(() => import('./Upload_RNA/MS1-Done-site/Ms1_Done'));
-const TicketCounter = lazy(()=> import('./Upload_RNA/TicketCounter'));
-const PayloadDip = lazy(()=> import('./MasterDashboard/PayloadDip'));
+const TicketCounter = lazy(() => import('./Upload_RNA/TicketCounter'));
+const PayloadDip = lazy(() => import('./MasterDashboard/PayloadDip'));
 
 
 const Zero_rna = () => {
@@ -38,7 +40,7 @@ const Zero_rna = () => {
       <Box style={{ marginTop: '60px' }}>
         <Grid container spacing={1}>
           <Grid item xs={2} >
-            <div style={{ position: 'fixed' ,width:'16%',overflow:"scroll",scrollbarWidth:"2px"}}>
+            <div style={{ position: 'fixed', width: '16%', overflow: "scroll", scrollbarWidth: "2px" }}>
               <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#223354", marginTop: 5, borderRadius: 10 }}>
                 <Sidenav.Body>
                   <Nav activeKey={activeKey} onSelect={setActiveKey} >
@@ -70,7 +72,7 @@ const Zero_rna = () => {
                         Ticket Status
                       </Nav.Item>
                       <Nav.Item eventKey="1-7" placement="rightStart" onClick={() => navigate('/tools/zero_RNA_payload/week_wise_payload_Analysis')}>
-                      Week Wise Payload
+                        Week Wise Payload
                       </Nav.Item>
                     </Nav.Menu>
 
@@ -97,7 +99,7 @@ const Zero_rna = () => {
             </div>
           </Grid>
           <Grid item xs={10}>
-            <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<Loader />}>
               <Routes>
                 <Route element={<Zero_rna_tool />} path="/" />
                 <Route element={<Upload_RNA_2G />} path="/report_upload_2G" />
@@ -115,7 +117,7 @@ const Zero_rna = () => {
                 <Route element={< PayloadDip />} path="/payload_dip" />
 
               </Routes>
-          </Suspense>
+            </Suspense>
           </Grid>
         </Grid>
       </Box>
