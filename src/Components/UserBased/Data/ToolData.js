@@ -29,7 +29,9 @@ import ProjectIcon from '@rsuite/icons/Project';
 import FlowStopIcon from '@rsuite/icons/FlowStop';
 import SortAscIcon from '@rsuite/icons/SortAsc';
 import TrafficOutlinedIcon from '@mui/icons-material/TrafficOutlined';
-
+import { HugeiconsIcon } from "@hugeicons/react";
+import { DashboardCircleEditIcon } from "@hugeicons/core-free-icons";
+import { FileScriptIcon } from "@hugeicons/core-free-icons";
 
 import { groupBy } from 'lodash';
 
@@ -301,7 +303,7 @@ const ToolData = [
         icons: IndirectIcon,
         fullname: 'Full Site Dismantle Tool',
         link: '/tools/full_site_dismantle',
-        groupBy: ['admin', 'ran','ran_admin']
+        groupBy: ['admin', 'ran', 'ran_admin']
     },
     // {
     //     id: 30,
@@ -366,20 +368,43 @@ const ToolData = [
         icons: TrafficOutlinedIcon,
         fullname: 'Payload traffic system',
         link: '/tools/payload_traffic',
-        groupBy:['admin','PTS','PTS_Admin']
+        groupBy: ['admin', 'PTS', 'PTS_Admin']
     },
+
     {
         id: 37,
         name: '2G Scripting',
         title: 'This is 2G Scripting System',
-        icons: PageIcon,
+        icons: () => (
+            <HugeiconsIcon icon={FileScriptIcon} size={30} />
+        ),
         fullname: '2G Scripting system',
         link: '/tools/2g_scripting',
-        groupBy:['admin','2G_Script']
+        groupBy: ['admin', '2G_Script']
+         
+    },
+    // {
+    //     id: 38,
+    //     name: 'Performance AT TAT',
+    //     title: 'This is Performance AT TAT Tool',
+    //     icons: PageIcon,
+    //     fullname: 'Performance AT TAT',
+    //     link: '/tools/performance_at_tat',
+    //     groupBy:['admin']
+    // }
+    {
+        id: 38,
+        name: 'Performance AT TAT',
+        title: 'This is Performance AT TAT Tool',
+
+        icons: () => (
+            <HugeiconsIcon icon={DashboardCircleEditIcon} size={30} />
+        ),
+
+        fullname: 'Performance AT TAT',
+        link: '/tools/performance_at_tat',
+        groupBy: ['admin']
     }
-
 ]
-
-
 
 export default ToolData

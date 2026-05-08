@@ -30,7 +30,7 @@ const jsonData = [
     { folder_name: "Locator File", api: "mobinate_vs_cats/locator" ,back_folder:"locator_data" },
     { folder_name: "MS-MF File", api: "mobinate_vs_cats/msmf" ,back_folder:"msmf_data" },
     { folder_name: "RFS File", api: "mobinate_vs_cats/rfs" ,back_folder:"rfs_data" },
-    { folder_name: "Stock File", api: "mobinate_vs_cats/stock" ,back_folder:"stock_report_data" }
+    { folder_name: "Stock File", api: "mobinate_vs_cats/stock" ,back_folder:"stock_report_data" },
 ];
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -58,11 +58,6 @@ const FileManager = () => {
         selectfile: false,
     });
 
-
-
-
-
-
     const fetchApiData = async (api) => {
         action(true)
 
@@ -75,7 +70,6 @@ const FileManager = () => {
         }
 
         
-
     }
 
     const handleOpen = (foldername, apikey , back_folder) => {
@@ -122,7 +116,6 @@ const FileManager = () => {
         }
 
     }
-
     const handleDelete = async (api) => {
         const confirmResult = await Swal.fire({
             title: "Are you sure?",
@@ -155,7 +148,6 @@ const FileManager = () => {
     };
 
     const OneFileDelete = async(fileName,api,back_folder) => {
-
        const confirmResult = await Swal.fire({
             title: "Are you sure?",
             text: `Want to delete ${fileName} file!`,
@@ -185,9 +177,6 @@ const FileManager = () => {
             console.log("Deletion cancelled.");
         }
     }
-
-
-
 
     useEffect(() => {
         const title = window.location.pathname

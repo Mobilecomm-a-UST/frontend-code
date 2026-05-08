@@ -64,6 +64,7 @@ const NTDTool = lazy(() => import('./Components/UserInterface/NewTowerDeployment
 const UpgradeDeployment = lazy(() => import('./Components/UserInterface/UpgradeDeployment/UD'))
 const payloadTraffic = lazy(() => import('./Components/UserInterface/Payload Traffic/Payload'))
 const G2Scripting = lazy(() => import('./Components/UserInterface/2G Scripting/2GScripting'))
+const PerformanceTAT = lazy(() => import('./Components/UserInterface/Performance AT TAT/PerformanceAt'))
 
 const queryClient = new QueryClient()
 
@@ -367,6 +368,12 @@ function App() {
              <Route path="/tools/2g_scripting/*" element={
               <Suspense fallback={<div>Loading...</div>}>
                 <ProtectedRoute element={G2Scripting} allowedUserTypes={['admin','2G_Script']} userType={userType} />
+              </Suspense>
+            } />
+
+             <Route path="/tools/performance_at_tat/*" element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProtectedRoute element={PerformanceTAT} allowedUserTypes={['admin']} userType={userType} />
               </Suspense>
             } />
 
