@@ -403,7 +403,7 @@ const ToolData = [
 
         fullname: 'Performance AT TAT',
         link: '/tools/performance_at_tat',
-        groupBy: ['admin']
+        groupBy: ['admin','PAT']
     }
 ]
 
