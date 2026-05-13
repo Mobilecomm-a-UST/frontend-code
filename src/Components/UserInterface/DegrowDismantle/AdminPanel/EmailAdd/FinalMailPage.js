@@ -1,4 +1,4 @@
-import React, { lazy } from "react";
+import { lazy } from "react";
 import { Box, Stack } from "@mui/material";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Link from "@mui/material/Link";
@@ -6,8 +6,11 @@ import Typography from "@mui/material/Typography";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { useNavigate } from "react-router-dom";
 
-const MemoTo = lazy(() => import("./To"));
-const MemoCc = lazy(() => import("./Cc"));
+import {MemoTo} from "./To";
+import {MemoCc} from "./Cc";
+
+// const MemoTo = lazy(() => import("./To"));   // ✅ picks up default export
+// const MemoCc = lazy(() => import("./Cc"));
 
 const FinalMailPage = () => {
   const navigate = useNavigate();
@@ -59,3 +62,4 @@ const FinalMailPage = () => {
 };
 
 export default FinalMailPage;
+
