@@ -17,7 +17,7 @@ import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 
 
-const circleArray = ['AP', 'CH', 'KK', 'DL', 'HR', 'RJ', 'JK', 'WB', 'OD', 'MU', 'TN', 'UE', 'BH', 'UW', 'MP', 'PB', 'KO', 'WB', 'JH','AS']
+const circleArray = ['AP', 'CHN', 'KK', 'DEL', 'HR', 'RJ', 'JK', 'WB', 'OD', 'MU', 'TN', 'UE', 'BH', 'UPW', 'MP', 'PB', 'KO', 'WB', 'JH','AS','NE']
 
 const ScriptGen = () => {
     const [make4GFiles, setMake4GFiles] = useState([])
