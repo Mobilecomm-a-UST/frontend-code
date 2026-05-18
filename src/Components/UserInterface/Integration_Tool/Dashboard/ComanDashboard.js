@@ -161,6 +161,7 @@ const DEFAULT_ROW = {
     Site_ID: "",
     MO_NAME: "",
     LNBTS_ID: "",
+    New_NRBTS_ID:"",
     Technology_SIWA: "",
     Configuration_5G: "",
     OSS_Details: "",
@@ -213,6 +214,7 @@ const DEFAULT_ROW = {
     Customer_Approval: "",
     Old_Site_ID: "",
     Old_Site_LNBTS: "",
+    Old_NRBTS_ID: "",
     Old_Site_OSS: "",
     Old_Site_MPlane_IP: "",
     Old_Site_Tech: "",
@@ -268,6 +270,7 @@ const ComanDashboard = () => {
         },
         { title: 'MO NAME', field: 'MO_NAME' },
         { title: 'LNBTS ID', field: 'LNBTS_ID' },
+        { title: 'New NRBTS ID', field: 'New_NRBTS_ID' },
         // { title: 'Technology (SIWA)', field: 'Technology_SIWA' },
         {
             title: 'Technology (SIWA)',
@@ -384,6 +387,7 @@ const ComanDashboard = () => {
         { title: 'Customer Approval', field: 'Customer_Approval' },
         { title: 'Old Site ID', field: 'Old_Site_ID' },
         { title: 'Old Site LNBTS', field: 'Old_Site_LNBTS' },
+        { title: 'Old NRBTS ID', field: 'Old_NRBTS_ID' },
         { title: 'Old Site OSS', field: 'Old_Site_OSS' },
         { title: 'Old Site MPlane IP', field: 'Old_Site_MPlane_IP' },
         {

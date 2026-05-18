@@ -20,7 +20,7 @@ import { useLoadingDialog } from '../../../../Hooks/LoadingDialog';
 const readOnlyFields = [
     "unique_id",
     "circle",
-    "site_tagging",
+    // "site_tagging",
     "old_toco_name",
     "old_site_id",
     "new_site_id",
@@ -86,7 +86,7 @@ const FinalData = () => {
     const [editData, setEditData] = useState({
         unique_id: "",
         circle: "",
-        site_tagging: "",
+        // site_tagging: "",
         old_toco_name: "",
         old_site_id: "",
         new_site_id: "",
@@ -222,7 +222,7 @@ const FinalData = () => {
         setEditData({
             unique_id: rowData["Unique ID"],
             circle: rowData.circle,
-            site_tagging: rowData.site_tagging,
+            // site_tagging: rowData.site_tagging,
             old_toco_name: rowData.old_toco_name,
             old_site_id: rowData.old_site_id,
             new_site_id: rowData.new_site_id,
@@ -387,7 +387,7 @@ const FinalData = () => {
         },
         // { title: 'Unique ID', field: 'Unique ID' },
         { title: 'Circle', field: 'circle' },
-        { title: 'Site Tagging', field: 'site_tagging' },
+        // { title: 'Site Tagging', field: 'site_tagging' },
         { title: 'Old TOCO Name', field: 'old_toco_name' },
         { title: 'Old Site ID', field: 'old_site_id' },
         { title: 'New Site ID', field: 'new_site_id' },

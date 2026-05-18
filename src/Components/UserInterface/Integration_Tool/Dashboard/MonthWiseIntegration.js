@@ -274,8 +274,9 @@ const MonthWiseIntegration = ({ onData }) => {
         { title: 'MO NAME', field: 'MO_NAME' },
 
         { title: 'LNBTS ID', field: 'LNBTS_ID' },
+        { title: 'New NRBTS ID', field: 'New_NRBTS_ID' },
         { title: 'Technology (SIWA)', field: 'Technology_SIWA' },
-           { title: 'Configuration 5G', field: 'Configuration_5G' },
+        { title: 'Configuration 5G', field: 'Configuration_5G' },
         { title: 'OSS Details', field: 'OSS_Details' },
         { title: 'Cell ID', field: 'Cell_ID' },
         { title: 'CELL COUNT', field: 'CELL_COUNT' },
@@ -332,10 +333,15 @@ const MonthWiseIntegration = ({ onData }) => {
         { title: 'Pre/Post Check', field: 'Pre_Post_Check' },
         { title: 'CRQ', field: 'CRQ' },
         { title: 'Customer Approval', field: 'Customer_Approval' },
+        { title: 'Old Site ID', field: 'Old_Site_ID' },
+        { title: 'Old Site LNBTS', field: 'Old_Site_LNBTS' },
+        { title:'Old NRBTS ID', field: 'Old_NRBTS_ID' },
+        { title: 'Old Site OSS', field: 'Old_Site_OSS' },
+        { title: 'Old Site MPlane IP', field: 'Old_Site_MPlane_IP' },
+        { title: 'Old Site Tech', field: 'Old_Site_Tech' },
         { title: 'Allocated Tech.', field: 'Allocated_Tech' },
         { title: 'Deployed Tech.', field: 'Deployed_Tech' },
-        { title: 'Old Site ID', field: 'Old_Site_ID' },
-        { title: 'Old Site Tech', field: 'Old_Site_Tech' },
+
 
     ]
     // handleExport Range wise table in excel formet.........
@@ -455,7 +461,7 @@ const MonthWiseIntegration = ({ onData }) => {
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: '5G RELOCATION' })}>{it?.M1_5G_RELOCATION}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'TRAFFIC SHIFTING' })}>{it?.M1_TRAFFIC_SHIFTING}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[0], yea: years[0], circle: it?.cir, activity: 'RRU SWAP' })}>{it?.M1_RRU_SWAP}</th>
-                                       
+
 
 
                                                 <th className={classes.hover} style={{ cursor: 'pointer' }} onClick={() => ClickDataGet({ mont: months[1], yea: years[1], circle: it?.cir, activity: 'DE-GROW' })}>{it?.M2_DE_GROW}</th>

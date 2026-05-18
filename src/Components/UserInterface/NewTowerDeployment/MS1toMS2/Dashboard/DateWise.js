@@ -115,7 +115,7 @@ const DateWise = () => {
         var formData = new FormData()
 
         formData.append('circle', circle)
-        formData.append('site_tagging', tagging)
+        // formData.append('site_tagging', tagging)
         formData.append('relocation_method', relocationMethod)
         formData.append('new_toco_name', toco)
         formData.append('from_date', selectDate[0] || '')
@@ -131,7 +131,7 @@ const DateWise = () => {
             setDateArray(res.dates)
             setTableData(JSON.parse(res.data))
             setCircleOptions(res.unique_data.unique_circle)
-            setTaggingOptions(res.unique_data.unique_site_tagging)
+            // setTaggingOptions(res.unique_data.unique_site_tagging)
             setRelocationMethodOptions(res.unique_data.unique_relocation_method)
             setTocoOptions(res.unique_data.unique_new_toco_name)
             setMilestone(res.unique_data.Milestone)
@@ -207,7 +207,7 @@ const DateWise = () => {
                 var formData = new FormData()
                 formData.append('userId', userID);
                 formData.append('circle', circle)
-                formData.append('site_tagging', tagging)
+                // formData.append('site_tagging', tagging)
                 formData.append('relocation_method', relocationMethod)
                 formData.append('new_toco_name', toco)
                 formData.append('milestone1', milestone1)
@@ -340,7 +340,7 @@ const DateWise = () => {
         formData.append("day_type", 'daily');
         formData.append("milestone", props.milestone);
         formData.append("col_name", props.col_name);
-        formData.append('site_tagging', tagging);
+        // formData.append('site_tagging', tagging);
         formData.append('current_status', relocationMethod);
         formData.append('toco_name', toco);
         formData.append('view', view)
@@ -415,12 +415,12 @@ const DateWise = () => {
                             />
 
                             {/* tagging */}
-                            <MultiSelectWithAll
+                            {/* <MultiSelectWithAll
                                 label="Site Tagging"
                                 options={taggingOptions}
                                 selectedValues={tagging}
                                 setSelectedValues={setTagging}
-                            />
+                            /> */}
 
                             {/* Current Status */}
                             {/* <MultiSelectWithAll

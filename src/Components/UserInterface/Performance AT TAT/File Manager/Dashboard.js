@@ -1150,12 +1150,33 @@ const formatGrandTotal = (val) => {
 };
 
 // ── Tech tab accent colours ───────────────────────────────────────────────────
+// const TECH_COLORS = {
+//     "4G":   { active: "#1a3558", hover: "#1565c0", header: "#223354", subHeader: "#2F75B5" },
+//     "5G":   { active: "#1b5e20", hover: "#2e7d32", header: "#2e4a2e", subHeader: "#388e3c" },
+//     "4G+5G": { active: "#4a148c", hover: "#6a1b9a", header: "#3b2063", subHeader: "#7b1fa2" },
+// };
 const TECH_COLORS = {
-    "4G":   { active: "#1a3558", hover: "#1565c0", header: "#223354", subHeader: "#2F75B5" },
-    "5G":   { active: "#1b5e20", hover: "#2e7d32", header: "#2e4a2e", subHeader: "#388e3c" },
-    "4G+5G": { active: "#4a148c", hover: "#6a1b9a", header: "#3b2063", subHeader: "#7b1fa2" },
-};
+    "4G": {
+        active: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+        hover: "linear-gradient(135deg, #1565c0 0%, #42a5f5 100%)",
+        header: "linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%)",
+        subHeader: "linear-gradient(135deg, #2F75B5 0%, #4facfe 100%)"
+    },
 
+    "5G": {
+        active: "linear-gradient(135deg, #134e5e 0%, #71b280 100%)",
+        hover: "linear-gradient(135deg, #11998e 0%, #38ef7d 100%)",
+        header: "linear-gradient(135deg, #0b3d2e 0%, #1f4037 100%)",
+        subHeader: "linear-gradient(135deg, #43cea2 0%, #185a9d 100%)"
+    },
+
+   "4G+5G": {
+        active: "linear-gradient(135deg, #41295a 0%, #2F0743 100%)",
+        hover: "linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%)",
+        header: "linear-gradient(135deg, #252326 0%, #414345 100%)",
+        subHeader: "linear-gradient(135deg, #DA22FF 0%, #9733EE 100%)"
+    }
+};
 // ── Single technology table ───────────────────────────────────────────────────
 const TechTable = ({ tech, apiResponse, selectedMonth }) => {
     const columns = [
