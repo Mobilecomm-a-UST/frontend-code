@@ -25,12 +25,20 @@ import * as ExcelJS from 'exceljs'
 
 
 
-const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues }) => {
+const MultiSelectWithAll = ({
+    label,
+    options = [],
+    selectedValues = [],
+    setSelectedValues
+}) => {
     const handleChange = (event) => {
         const { value } = event.target;
-        const selected = typeof value === 'string' ? value.split(',') : value;
+        const selected =
+            typeof value === "string"
+                ? value.split(",")
+                : value;
 
-        if (selected.includes('ALL')) {
+        if (selected.includes("ALL")) {
             if (selectedValues.length === options.length) {
                 setSelectedValues([]);
             } else {
@@ -41,32 +49,42 @@ const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues 
         }
     };
 
-    const isAllSelected = options.length > 0 && selectedValues.length === options.length;
+    const isAllSelected =
+        options?.length > 0 &&
+        selectedValues?.length === options?.length;
 
     return (
         <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
-            <InputLabel id={`${label}-label`}>{label}</InputLabel>
+            <InputLabel id={`${label}-label`}>
+                {label}
+            </InputLabel>
+
             <Select
                 labelId={`${label}-label`}
                 multiple
                 value={selectedValues}
                 onChange={handleChange}
                 input={<OutlinedInput label={label} />}
-                renderValue={(selected) => selected.join(', ')}
+                renderValue={(selected) =>
+                    selected?.join(", ")
+                }
             >
                 <MenuItem value="ALL">
                     <Checkbox
                         checked={isAllSelected}
                         indeterminate={
-                            selectedValues.length > 0 && selectedValues.length < options.length
+                            selectedValues?.length > 0 &&
+                            selectedValues?.length < options?.length
                         }
                     />
                     <ListItemText primary="Select All" />
                 </MenuItem>
 
-                {options.map((name) => (
+                {options?.map((name) => (
                     <MenuItem key={name} value={name}>
-                        <Checkbox checked={selectedValues.includes(name)} />
+                        <Checkbox
+                            checked={selectedValues?.includes(name)}
+                        />
                         <ListItemText primary={name} />
                     </MenuItem>
                 ))}
@@ -287,12 +305,12 @@ const MonthWise = () => {
                             />
 
                             {/* tagging */}
-                            {/* <MultiSelectWithAll
+                            <MultiSelectWithAll
                                 label="Site Tagging"
                                 options={taggingOptions}
                                 selectedValues={tagging}
                                 setSelectedValues={setTagging}
-                            /> */}
+                            />
 
                             {/* Current Status */}
                             {/* <MultiSelectWithAll

@@ -3,9 +3,9 @@ import { Box } from '@mui/material'
 import { Breadcrumbs, Link, Typography } from "@mui/material";
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { useNavigate } from "react-router-dom";
-import { MemoFTR_Table } from './FTR_Table';
-import { MemoSoft_AT_FTR } from './Soft_AT_FTR';
-import { MemoPhy_At_FTR } from './Phy_At_FTR';
+import FTR_Table from './FTR_Table';
+import Soft_AT_FTR from './Soft_AT_FTR';
+import Phy_At_FTR from './Phy_At_FTR';
 
 
 const Main_FTR = () => {
@@ -28,13 +28,13 @@ const Main_FTR = () => {
                 {/* <RfaiIntegration /> */}
             </Box>
             <Box>
-                <MemoFTR_Table />
+                <FTR_Table />
             </Box>
             <Box>
-                <MemoSoft_AT_FTR />
+                <Soft_AT_FTR />
             </Box>
             <Box>
-                <MemoPhy_At_FTR />
+                <Phy_At_FTR />
             </Box>
             {/* <Box>
                   <Integration />
