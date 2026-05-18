@@ -4,8 +4,10 @@ import Tilt from 'react-parallax-tilt';
 import Grow from '@mui/material/Grow';
 import { Breadcrumbs, Link, Typography } from "@mui/material";
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import { useNavigate } from 'react-router-dom';
 
 const Integration_Tool = () => {
+  const navigate = useNavigate()
     useEffect(()=>{
         document.title=`${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/',' | ').toUpperCase()}`
       },[])
@@ -20,6 +22,7 @@ const Integration_Tool = () => {
         <div style={{ margin: 10, marginLeft: 10 }}>
           <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
             <Link underline="hover" href='/tools'>Tools</Link>
+            <Link underline="hover" onClick={() => { navigate('/tools/ix_tools') }}>IX Tools</Link>
             {/* <Link underline="hover" href='/trends'>Trend</Link> */}
             <Typography color='text.primary'>IX Tracker Tool</Typography>
           </Breadcrumbs>

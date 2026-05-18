@@ -11,9 +11,9 @@ import { usePost } from '../../../../Hooks/PostApis';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 import CountUp from 'react-countup';
-import { MemoMonthWise } from './MonthWise';
+import MonthWise from './MonthWise';
 // import IntegrationTableOnAir from './IntegrationTableOnAir';
-import { MemoCircleWiese } from './CircleWiese';
+import CircleWiese from './CircleWiese';
 import { useLoadingDialog } from '../../../../Hooks/LoadingDialog';
 import { postData } from '../../../../services/FetchNodeServices';
 
@@ -120,10 +120,10 @@ const MainDashboard = () => {
 
             </Box>
             <Box>
-                <MemoMonthWise />
+                <MonthWise />
             </Box>
             <Box>
-                <MemoCircleWiese />
+                <CircleWiese />
             </Box>
             {/* <Box>
                 <RfaiIntegration />

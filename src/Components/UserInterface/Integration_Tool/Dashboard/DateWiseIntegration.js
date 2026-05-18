@@ -34,7 +34,7 @@ const DateWiseIntegration = ({ onData }) => {
     const [dateArray, setDateArray] = useState([])
     const [tableData, setTableData] = useState([])
     const [givenDate, setGivenDate] = useState('')
-    const activityArray = ['DE-GROW','MACRO','OTHER','RELOCATION','RET','ULS-HPSC','UPGRADE','MEMTO','HT-INCREMENT','IBS','IDSC','ODSC','RECTIFICATION','OPERATION','RRU UPGRADE','5G BW UPGRADE','5G RRU SWAP','5G SECTOR ADDITION','5G RELOCATION','TRAFFIC SHIFTING','RRU SWAP'] 
+    const activityArray = ['DE-GROW', 'MACRO', 'OTHER', 'RELOCATION', 'RET', 'ULS-HPSC', 'UPGRADE', 'MEMTO', 'HT-INCREMENT', 'IBS', 'IDSC', 'ODSC', 'RECTIFICATION', 'OPERATION', 'RRU UPGRADE', '5G BW UPGRADE', '5G RRU SWAP', '5G SECTOR ADDITION', '5G RELOCATION', 'TRAFFIC SHIFTING', 'RRU SWAP']
     // const [totals, setTotals] = useState()
 
 
@@ -186,8 +186,9 @@ const DateWiseIntegration = ({ onData }) => {
         { title: 'MO NAME', field: 'MO_NAME' },
 
         { title: 'LNBTS ID', field: 'LNBTS_ID' },
+        { title: 'New NRBTS ID', field: 'New_NRBTS_ID' },
         { title: 'Technology (SIWA)', field: 'Technology_SIWA' },
-           { title: 'Configuration 5G', field: 'Configuration_5G' },
+        { title: 'Configuration 5G', field: 'Configuration_5G' },
         { title: 'OSS Details', field: 'OSS_Details' },
         { title: 'Cell ID', field: 'Cell_ID' },
         { title: 'CELL COUNT', field: 'CELL_COUNT' },
@@ -242,10 +243,17 @@ const DateWiseIntegration = ({ onData }) => {
         { title: 'Pre/Post Check', field: 'Pre_Post_Check' },
         { title: 'CRQ', field: 'CRQ' },
         { title: 'Customer Approval', field: 'Customer_Approval' },
+        { title: 'Old Site ID', field: 'Old_Site_ID' },
+        { title: 'Old Site LNBTS', field: 'Old_Site_LNBTS' },
+        { title: 'Old NRBTS ID', field: 'Old_NRBTS_ID' },
+        {title: 'Old Site OSS', field: 'Old_Site_OSS'},
+        {title: 'Old Site MPlane IP', field: 'Old_Site_MPlane_IP'},
+        { title: 'Old Site Tech', field: 'Old_Site_Tech' },
         { title: 'Allocated Tech.', field: 'Allocated_Tech' },
         { title: 'Deployed Tech.', field: 'Deployed_Tech' },
-        { title: 'Old Site ID', field: 'Old_Site_ID' },
-        { title: 'Old Site Tech', field: 'Old_Site_Tech' },
+
+
+
 
     ]
     // handleExport Range wise table in excel formet.........
@@ -354,7 +362,7 @@ const DateWiseIntegration = ({ onData }) => {
             <style>{"th{border:1px solid black;}"}</style>
             <Slide direction="left" in='true' timeout={700} style={{ transformOrigin: '1 1 1' }}>
                 <div style={{ margin: 20 }}>
-                   
+
                     {/* ************* 2G  TABLE DATA ************** */}
                     <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', alignContent: 'center' }}>
                         <Box style={{ fontSize: 22, fontWeight: 'bold' }}>
@@ -387,13 +395,13 @@ const DateWiseIntegration = ({ onData }) => {
                                     </tr>
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
                                         {activityArray.map((item, index) => (
-                                             <th key={index} style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>{item}</th>
+                                            <th key={index} style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#5AB2FF' }}>{item}</th>
                                         ))}
-                                         {activityArray.map((item, index) => (
-                                             <th key={index} style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>{item}</th>
+                                        {activityArray.map((item, index) => (
+                                            <th key={index} style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#FF9933' }}>{item}</th>
                                         ))}
-                                         {activityArray.map((item, index) => (
-                                             <th key={index} style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>{item}</th>
+                                        {activityArray.map((item, index) => (
+                                            <th key={index} style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#68D2E8' }}>{item}</th>
                                         ))}
 
                                     </tr>
@@ -440,7 +448,7 @@ const DateWiseIntegration = ({ onData }) => {
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D2_RECTIFICATION > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: 'RECTIFICATION' })}>{it?.D2_RECTIFICATION}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D2_OPERATIONS > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: 'OPERATIONS' })}>{it?.D2_OPERATIONS || 0}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D2_RRU_UPGRADE > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: 'RRU UPGRADE' })}>{it?.D2_RRU_UPGRADE || 0}</th>
-                                                <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D2_5G_BW_UPGRADE > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: '5G BW UPGRADE' })}>{it?.D2_5G_BW_UPGRADE  || 0}</th>
+                                                <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D2_5G_BW_UPGRADE > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: '5G BW UPGRADE' })}>{it?.D2_5G_BW_UPGRADE || 0}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D2_5G_RRU_SWAP > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: '5G RRU SWAP' })}>{it?.D2_5G_RRU_SWAP || 0}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D2_5G_SECTOR_ADDITION > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: '5G SECTOR ADDITION' })}>{it?.D2_5G_SECTOR_ADDITION || 0}</th>
                                                 <th className={classes.hover} style={{ cursor: 'pointer', backgroundColor: it.D2_5G_RELOCATION > 0 ? '#FEEFAD' : '' }} onClick={() => ClickDataGet({ date: dateArray[1], circle: it?.cir, activity: '5G RELOCATION' })}>{it?.D2_5G_RELOCATION || 0}</th>

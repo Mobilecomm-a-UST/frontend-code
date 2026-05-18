@@ -539,6 +539,12 @@
 // }
 
 // export const MemoDateWiseIntegration = React.memo(DateWiseIntegration)
+
+
+
+
+
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { Box } from "@mui/material";
 import Tooltip from '@mui/material/Tooltip';
@@ -561,6 +567,14 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import { setEncreptedData } from '../../../utils/localstorage';
 
+// ── Row-level hover styles ────────────────────────────────────────────────────
+const ROW_HOVER_STYLE = `
+    .dw-data-row:hover td,
+    .dw-data-row:hover th {
+        background-color: #d0e8ff !important;
+        transition: background-color 0.15s ease;
+    }
+`;
 
 const DateWiseIntegration = ({ onData }) => {
     const classes = useStyles()
@@ -573,7 +587,6 @@ const DateWiseIntegration = ({ onData }) => {
     const [givenDate, setGivenDate] = useState('')
     const [fullData, setFullData] = useState([])
 
-    // ✅ DE-GROW added back as the first column to match tbody data order
     const activityArray = [
         'DE-GROW',
         'MACRO',
@@ -589,7 +602,7 @@ const DateWiseIntegration = ({ onData }) => {
         '2G HOTO ACCEPTED COUNT',
         '4G HOTO OFFERED COUNT',
         '4G HOTO ACCEPTED COUNT'
-    ]  // 14 columns now
+    ]
 
     const fetchDateWiseDashboard = async () => {
         action(true)
@@ -603,8 +616,7 @@ const DateWiseIntegration = ({ onData }) => {
             setFullData(res.download_data)
             onData(res);
             return res;
-        }
-        else {
+        } else {
             action(false)
         }
     }
@@ -620,7 +632,7 @@ const DateWiseIntegration = ({ onData }) => {
 
     const calculateColumnTotals = (datass) => {
         const totals = {
-            D1_DE_GROW: 0,      // ✅ enabled
+            D1_DE_GROW: 0,
             D1_MACRO: 0,
             D1_RELOCATION: 0,
             D1_ULS_HPSC: 0,
@@ -634,7 +646,7 @@ const DateWiseIntegration = ({ onData }) => {
             D1_HOTO_Accepted_2g: 0,
             D1_HOTO_Offered_4g: 0,
             D1_HOTO_Accepted_4g: 0,
-            D2_DE_GROW: 0,      // ✅ enabled
+            D2_DE_GROW: 0,
             D2_MACRO: 0,
             D2_RELOCATION: 0,
             D2_ULS_HPSC: 0,
@@ -648,7 +660,7 @@ const DateWiseIntegration = ({ onData }) => {
             D2_HOTO_Accepted_2g: 0,
             D2_HOTO_Offered_4g: 0,
             D2_HOTO_Accepted_4g: 0,
-            D3_DE_GROW: 0,      // ✅ enabled
+            D3_DE_GROW: 0,
             D3_MACRO: 0,
             D3_RELOCATION: 0,
             D3_ULS_HPSC: 0,
@@ -663,13 +675,11 @@ const DateWiseIntegration = ({ onData }) => {
             D3_HOTO_Offered_4g: 0,
             D3_HOTO_Accepted_4g: 0,
         };
-
         datass.forEach(item => {
             for (let key in totals) {
                 totals[key] += Number(item[key]) || 0;
             }
         });
-
         return totals;
     };
 
@@ -682,24 +692,23 @@ const DateWiseIntegration = ({ onData }) => {
         setDateArray(sortedDates)
     }
 
-    const handleClose = () => {
-        setOpen(false)
+    const handleClose = () => { setOpen(false) }
+
+    // ✅ Only fire click if value is non-zero (same as RangeWise)
+    const handleCellClick = (value, clickParams) => {
+        const numVal = Number(value) || 0;
+        if (numVal === 0) return;
+        ClickDataGet(clickParams);
     }
 
-    // ✅ Helper: disables click and dims cell when value is 0 or empty
-    const getCellProps = (value, clickParams, bgColor = '#FEEFAD') => {
-        const isDisabled = !value || Number(value) === 0;
+    // ✅ Dim + no-pointer cursor when value is 0 (same as RangeWise)
+    const cellStyle = (value) => {
+        const numVal = Number(value) || 0;
         return {
-            style: {
-                cursor: isDisabled ? 'default' : 'pointer',
-                opacity: isDisabled ? 0.4 : 1,
-                pointerEvents: isDisabled ? 'none' : 'auto',
-                backgroundColor: isDisabled ? '' : bgColor,
-            },
-            onClick: isDisabled ? undefined : () => ClickDataGet(clickParams),
-            className: isDisabled ? undefined : classes.hover,
+            cursor: numVal === 0 ? 'not-allowed' : 'pointer',
+            opacity: numVal === 0 ? 0.4 : 1,
         };
-    };
+    }
 
     const columnData = [
         { title: 'Unique Key', field: 'unique_key' },
@@ -764,8 +773,7 @@ const DateWiseIntegration = ({ onData }) => {
         { title: '4G HOTO Offered Date.', field: 'HOTO_Offered_Date_4g' },
         { title: '4G HOTO Accepted Date.', field: 'HOTO_Accepted_Date_4g' },
         { title: '2G HOTO Offered Date.', field: 'HOTO_Offered_Date_2g' },
-        { title: '2G HOTO Accepted Date.', field: 'HOTO_Accepted_Date_2g' }
-        
+        { title: '2G HOTO Accepted Date.', field: 'HOTO_Accepted_Date_2g' },
     ]
 
     const handleExport = () => {
@@ -798,8 +806,8 @@ const DateWiseIntegration = ({ onData }) => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {mainDataT2?.data?.map((item) => (
-                                    <tr className={classes.hover} style={{ textAlign: "center", fontWeigth: 700 }}>
+                                {mainDataT2?.data?.map((item, i) => (
+                                    <tr key={i} className={classes.hover} style={{ textAlign: "center", fontWeigth: 700 }}>
                                         <th>{item.Circle}</th>
                                         <th>{item.Short_name}</th>
                                         <th>{item.current_date}</th>
@@ -827,8 +835,7 @@ const DateWiseIntegration = ({ onData }) => {
             action(false)
             setEncreptedData("integration_final_tracker", responce.data);
             window.open(`${window.location.href}/${props.activity}`, "_blank")
-        }
-        else {
+        } else {
             action(false)
         }
     }
@@ -846,7 +853,11 @@ const DateWiseIntegration = ({ onData }) => {
 
     return (
         <>
-            <style>{"th{border:1px solid black;}"}</style>
+            <style>{`
+                th { border: 1px solid black; }
+                ${ROW_HOVER_STYLE}
+            `}</style>
+
             <Slide direction="left" in='true' timeout={700} style={{ transformOrigin: '1 1 1' }}>
                 <div style={{ margin: 20 }}>
                     <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', alignContent: 'center' }}>
@@ -854,12 +865,10 @@ const DateWiseIntegration = ({ onData }) => {
                             Date Wise Integration Site Count
                         </Box>
                         <Box>
-                            {/* ✅ disableFuture prevents selecting any future date */}
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DatePicker
                                     value={givenDate ? dayjs(givenDate) : null}
                                     onChange={handleDate}
-                                    disableFuture
                                 />
                             </LocalizationProvider>
                             <Tooltip title="Download Integration Records">
@@ -876,7 +885,6 @@ const DateWiseIntegration = ({ onData }) => {
                                 <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
                                         <th rowSpan='2' style={{ padding: '5px 20px', whiteSpace: 'nowrap', position: 'sticky', left: 0, top: 0, backgroundColor: '#223354' }}>CIRCLE</th>
-                                        {/* ✅ colSpan updated to 14 to include DE-GROW */}
                                         <th colSpan='14' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#2F75B5' }}>{ChangeDateFormate(dateArray[2])}</th>
                                         <th colSpan='14' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: "#DD761C" }}>{ChangeDateFormate(dateArray[1])}</th>
                                         <th colSpan='14' style={{ padding: '5px 20px', whiteSpace: 'nowrap', backgroundColor: '#03AED2' }}>{ChangeDateFormate(dateArray[0])}</th>
@@ -893,63 +901,63 @@ const DateWiseIntegration = ({ onData }) => {
                                         ))}
                                     </tr>
                                 </thead>
+
                                 <tbody>
                                     {tableData?.map((it, index) => (
-                                        <tr style={{ textAlign: "center", fontWeigth: 700 }} key={index}>
+                                        <tr className={classes.hover} style={{ textAlign: "center", fontWeigth: 700 }} key={index}>
                                             <th style={{ position: 'sticky', left: 0, top: 0, backgroundColor: 'rgb(197 214 246)', color: 'black' }}>{it?.cir}</th>
 
-                                            {/* ===== D1 (latest date) ===== */}
-                                            {/* ✅ DE-GROW now visible & clickable when > 0 */}
-                                            <th {...getCellProps(it?.D1_DE_GROW, { date: dateArray[2], circle: it?.cir, activity: 'DE-GROW' })}>{it?.D1_DE_GROW}</th>
-                                            <th {...getCellProps(it?.D1_MACRO, { date: dateArray[2], circle: it?.cir, activity: 'MACRO' })}>{it?.D1_MACRO}</th>
-                                            <th {...getCellProps(it?.D1_RELOCATION, { date: dateArray[2], circle: it?.cir, activity: 'RELOCATION' })}>{it?.D1_RELOCATION}</th>
-                                            <th {...getCellProps(it?.D1_ULS_HPSC, { date: dateArray[2], circle: it?.cir, activity: 'ULS_HPSC' })}>{it?.D1_ULS_HPSC}</th>
-                                            <th {...getCellProps(it?.D1_UPGRADE, { date: dateArray[2], circle: it?.cir, activity: 'UPGRADE' })}>{it?.D1_UPGRADE}</th>
-                                            <th {...getCellProps(it?.D1_RRU_UPGRADE, { date: dateArray[2], circle: it?.cir, activity: 'RRU UPGRADE' })}>{it?.D1_RRU_UPGRADE || 0}</th>
-                                            <th {...getCellProps(it?.D1_5G_SECTOR_ADDITION, { date: dateArray[2], circle: it?.cir, activity: '5G SECTOR ADDITION' })}>{it?.D1_5G_SECTOR_ADDITION || 0}</th>
-                                            <th {...getCellProps(it?.D1_5G_RELOCATION, { date: dateArray[2], circle: it?.cir, activity: '5G RELOCATION' })}>{it?.D1_5G_RELOCATION || 0}</th>
-                                            <th {...getCellProps(it?.D1_RRU_SWAP, { date: dateArray[2], circle: it?.cir, activity: 'RRU SWAP' })}>{it?.D1_RRU_SWAP || 0}</th>
-                                            <th {...getCellProps(it?.D1_FR_Date, { date: dateArray[2], circle: it?.cir, activity: 'FR_Date' })}>{it?.D1_FR_Date || 0}</th>
-                                            <th {...getCellProps(it?.D1_HOTO_Offered_2g, { date: dateArray[2], circle: it?.cir, activity: 'HOTO_Offered_2g' })}>{it?.D1_HOTO_Offered_2g || 0}</th>
-                                            <th {...getCellProps(it?.D1_HOTO_Accepted_2g, { date: dateArray[2], circle: it?.cir, activity: 'HOTO_Accepted_2g' })}>{it?.D1_HOTO_Accepted_2g || 0}</th>
-                                            <th {...getCellProps(it?.D1_HOTO_Offered_4g, { date: dateArray[2], circle: it?.cir, activity: 'HOTO_Offered_4g' })}>{it?.D1_HOTO_Offered_4g || 0}</th>
-                                            <th {...getCellProps(it?.D1_HOTO_Accepted_4g, { date: dateArray[2], circle: it?.cir, activity: 'HOTO_Accepted_4g' })}>{it?.D1_HOTO_Accepted_4g || 0}</th>
+                                            {/* ===== D1 ===== */}
+                                            <th className={classes.hover} style={cellStyle(it?.D1_DE_GROW)}            onClick={() => handleCellClick(it?.D1_DE_GROW,            { date: dateArray[2], circle: it?.cir, activity: 'DE-GROW' })}>{it?.D1_DE_GROW}</th>
+                                            <th className={classes.hover} style={cellStyle(it?.D1_MACRO)}              onClick={() => handleCellClick(it?.D1_MACRO,              { date: dateArray[2], circle: it?.cir, activity: 'MACRO' })}>{it?.D1_MACRO}</th>
+                                            <th className={classes.hover} style={cellStyle(it?.D1_RELOCATION)}         onClick={() => handleCellClick(it?.D1_RELOCATION,         { date: dateArray[2], circle: it?.cir, activity: 'RELOCATION' })}>{it?.D1_RELOCATION}</th>
+                                            <th className={classes.hover} style={cellStyle(it?.D1_ULS_HPSC)}           onClick={() => handleCellClick(it?.D1_ULS_HPSC,           { date: dateArray[2], circle: it?.cir, activity: 'ULS_HPSC' })}>{it?.D1_ULS_HPSC}</th>
+                                            <th className={classes.hover} style={cellStyle(it?.D1_UPGRADE)}            onClick={() => handleCellClick(it?.D1_UPGRADE,            { date: dateArray[2], circle: it?.cir, activity: 'UPGRADE' })}>{it?.D1_UPGRADE}</th>
+                                            <th className={classes.hover} style={cellStyle(it?.D1_RRU_UPGRADE)}        onClick={() => handleCellClick(it?.D1_RRU_UPGRADE,        { date: dateArray[2], circle: it?.cir, activity: 'RRU UPGRADE' })}>{it?.D1_RRU_UPGRADE}</th>
+                                            <th className={classes.hover} style={cellStyle(it?.D1_5G_SECTOR_ADDITION)} onClick={() => handleCellClick(it?.D1_5G_SECTOR_ADDITION, { date: dateArray[2], circle: it?.cir, activity: '5G SECTOR ADDITION' })}>{it?.D1_5G_SECTOR_ADDITION}</th>
+                                            <th className={classes.hover} style={cellStyle(it?.D1_5G_RELOCATION)}      onClick={() => handleCellClick(it?.D1_5G_RELOCATION,      { date: dateArray[2], circle: it?.cir, activity: '5G RELOCATION' })}>{it?.D1_5G_RELOCATION}</th>
+                                            <th className={classes.hover} style={cellStyle(it?.D1_RRU_SWAP)}           onClick={() => handleCellClick(it?.D1_RRU_SWAP,           { date: dateArray[2], circle: it?.cir, activity: 'RRU SWAP' })}>{it?.D1_RRU_SWAP}</th>
+                                            <th className={classes.hover} style={cellStyle(it?.D1_FR_Date)}            onClick={() => handleCellClick(it?.D1_FR_Date,            { date: dateArray[2], circle: it?.cir, activity: 'FR_Date' })}>{it?.D1_FR_Date}</th>
+                                            <th className={classes.hover} style={cellStyle(it?.D1_HOTO_Offered_2g)}    onClick={() => handleCellClick(it?.D1_HOTO_Offered_2g,    { date: dateArray[2], circle: it?.cir, activity: 'HOTO_Offered_2g' })}>{it?.D1_HOTO_Offered_2g}</th>
+                                            <th className={classes.hover} style={cellStyle(it?.D1_HOTO_Accepted_2g)}   onClick={() => handleCellClick(it?.D1_HOTO_Accepted_2g,   { date: dateArray[2], circle: it?.cir, activity: 'HOTO_Accepted_2g' })}>{it?.D1_HOTO_Accepted_2g}</th>
+                                            <th className={classes.hover} style={cellStyle(it?.D1_HOTO_Offered_4g)}    onClick={() => handleCellClick(it?.D1_HOTO_Offered_4g,    { date: dateArray[2], circle: it?.cir, activity: 'HOTO_Offered_4g' })}>{it?.D1_HOTO_Offered_4g}</th>
+                                            <th className={classes.hover} style={cellStyle(it?.D1_HOTO_Accepted_4g)}   onClick={() => handleCellClick(it?.D1_HOTO_Accepted_4g,   { date: dateArray[2], circle: it?.cir, activity: 'HOTO_Accepted_4g' })}>{it?.D1_HOTO_Accepted_4g}</th>
 
-                                            {/* ===== D2 (middle date) ===== */}
-                                            {/* ✅ DE-GROW now visible & clickable when > 0 */}
-                                            <th {...getCellProps(it?.D2_DE_GROW, { date: dateArray[1], circle: it?.cir, activity: 'DE-GROW' })}>{it?.D2_DE_GROW}</th>
-                                            <th {...getCellProps(it?.D2_MACRO, { date: dateArray[1], circle: it?.cir, activity: 'MACRO' })}>{it?.D2_MACRO}</th>
-                                            <th {...getCellProps(it?.D2_RELOCATION, { date: dateArray[1], circle: it?.cir, activity: 'RELOCATION' })}>{it?.D2_RELOCATION}</th>
-                                            <th {...getCellProps(it?.D2_ULS_HPSC, { date: dateArray[1], circle: it?.cir, activity: 'ULS_HPSC' })}>{it?.D2_ULS_HPSC}</th>
-                                            <th {...getCellProps(it?.D2_UPGRADE, { date: dateArray[1], circle: it?.cir, activity: 'UPGRADE' })}>{it?.D2_UPGRADE}</th>
-                                            <th {...getCellProps(it?.D2_RRU_UPGRADE, { date: dateArray[1], circle: it?.cir, activity: 'RRU UPGRADE' })}>{it?.D2_RRU_UPGRADE || 0}</th>
-                                            <th {...getCellProps(it?.D2_5G_SECTOR_ADDITION, { date: dateArray[1], circle: it?.cir, activity: '5G SECTOR ADDITION' })}>{it?.D2_5G_SECTOR_ADDITION || 0}</th>
-                                            <th {...getCellProps(it?.D2_5G_RELOCATION, { date: dateArray[1], circle: it?.cir, activity: '5G RELOCATION' })}>{it?.D2_5G_RELOCATION || 0}</th>
-                                            <th {...getCellProps(it?.D2_RRU_SWAP, { date: dateArray[1], circle: it?.cir, activity: 'RRU SWAP' })}>{it?.D2_RRU_SWAP || 0}</th>
-                                            <th {...getCellProps(it?.D2_FR_Date, { date: dateArray[1], circle: it?.cir, activity: 'FR_Date' })}>{it?.D2_FR_Date || 0}</th>
-                                            <th {...getCellProps(it?.D2_HOTO_Offered_2g, { date: dateArray[1], circle: it?.cir, activity: 'HOTO_Offered_2g' })}>{it?.D2_HOTO_Offered_2g || 0}</th>
-                                            <th {...getCellProps(it?.D2_HOTO_Accepted_2g, { date: dateArray[1], circle: it?.cir, activity: 'HOTO_Accepted_2g' })}>{it?.D2_HOTO_Accepted_2g || 0}</th>
-                                            <th {...getCellProps(it?.D2_HOTO_Offered_4g, { date: dateArray[1], circle: it?.cir, activity: 'HOTO_Offered_4g' })}>{it?.D2_HOTO_Offered_4g || 0}</th>
-                                            <th {...getCellProps(it?.D2_HOTO_Accepted_4g, { date: dateArray[1], circle: it?.cir, activity: 'HOTO_Accepted_4g' })}>{it?.D2_HOTO_Accepted_4g || 0}</th>
+                                            {/* ===== D2 ===== */}
+                                            <th className={classes.hover} style={cellStyle(it?.D2_DE_GROW)}            onClick={() => handleCellClick(it?.D2_DE_GROW,            { date: dateArray[1], circle: it?.cir, activity: 'DE-GROW' })}>{it?.D2_DE_GROW}</th>
+                                            <th className={classes.hover} style={cellStyle(it?.D2_MACRO)}              onClick={() => handleCellClick(it?.D2_MACRO,              { date: dateArray[1], circle: it?.cir, activity: 'MACRO' })}>{it?.D2_MACRO}</th>
+                                            <th className={classes.hover} style={cellStyle(it?.D2_RELOCATION)}         onClick={() => handleCellClick(it?.D2_RELOCATION,         { date: dateArray[1], circle: it?.cir, activity: 'RELOCATION' })}>{it?.D2_RELOCATION}</th>
+                                            <th className={classes.hover} style={cellStyle(it?.D2_ULS_HPSC)}           onClick={() => handleCellClick(it?.D2_ULS_HPSC,           { date: dateArray[1], circle: it?.cir, activity: 'ULS_HPSC' })}>{it?.D2_ULS_HPSC}</th>
+                                            <th className={classes.hover} style={cellStyle(it?.D2_UPGRADE)}            onClick={() => handleCellClick(it?.D2_UPGRADE,            { date: dateArray[1], circle: it?.cir, activity: 'UPGRADE' })}>{it?.D2_UPGRADE}</th>
+                                            <th className={classes.hover} style={cellStyle(it?.D2_RRU_UPGRADE)}        onClick={() => handleCellClick(it?.D2_RRU_UPGRADE,        { date: dateArray[1], circle: it?.cir, activity: 'RRU UPGRADE' })}>{it?.D2_RRU_UPGRADE}</th>
+                                            <th className={classes.hover} style={cellStyle(it?.D2_5G_SECTOR_ADDITION)} onClick={() => handleCellClick(it?.D2_5G_SECTOR_ADDITION, { date: dateArray[1], circle: it?.cir, activity: '5G SECTOR ADDITION' })}>{it?.D2_5G_SECTOR_ADDITION}</th>
+                                            <th className={classes.hover} style={cellStyle(it?.D2_5G_RELOCATION)}      onClick={() => handleCellClick(it?.D2_5G_RELOCATION,      { date: dateArray[1], circle: it?.cir, activity: '5G RELOCATION' })}>{it?.D2_5G_RELOCATION}</th>
+                                            <th className={classes.hover} style={cellStyle(it?.D2_RRU_SWAP)}           onClick={() => handleCellClick(it?.D2_RRU_SWAP,           { date: dateArray[1], circle: it?.cir, activity: 'RRU SWAP' })}>{it?.D2_RRU_SWAP}</th>
+                                            <th className={classes.hover} style={cellStyle(it?.D2_FR_Date)}            onClick={() => handleCellClick(it?.D2_FR_Date,            { date: dateArray[1], circle: it?.cir, activity: 'FR_Date' })}>{it?.D2_FR_Date}</th>
+                                            <th className={classes.hover} style={cellStyle(it?.D2_HOTO_Offered_2g)}    onClick={() => handleCellClick(it?.D2_HOTO_Offered_2g,    { date: dateArray[1], circle: it?.cir, activity: 'HOTO_Offered_2g' })}>{it?.D2_HOTO_Offered_2g}</th>
+                                            <th className={classes.hover} style={cellStyle(it?.D2_HOTO_Accepted_2g)}   onClick={() => handleCellClick(it?.D2_HOTO_Accepted_2g,   { date: dateArray[1], circle: it?.cir, activity: 'HOTO_Accepted_2g' })}>{it?.D2_HOTO_Accepted_2g}</th>
+                                            <th className={classes.hover} style={cellStyle(it?.D2_HOTO_Offered_4g)}    onClick={() => handleCellClick(it?.D2_HOTO_Offered_4g,    { date: dateArray[1], circle: it?.cir, activity: 'HOTO_Offered_4g' })}>{it?.D2_HOTO_Offered_4g}</th>
+                                            <th className={classes.hover} style={cellStyle(it?.D2_HOTO_Accepted_4g)}   onClick={() => handleCellClick(it?.D2_HOTO_Accepted_4g,   { date: dateArray[1], circle: it?.cir, activity: 'HOTO_Accepted_4g' })}>{it?.D2_HOTO_Accepted_4g}</th>
 
-                                            {/* ===== D3 (oldest date) ===== */}
-                                            {/* ✅ DE-GROW now visible & clickable when > 0 */}
-                                            <th {...getCellProps(it?.D3_DE_GROW, { date: dateArray[0], circle: it?.cir, activity: 'DE-GROW' })}>{it?.D3_DE_GROW}</th>
-                                            <th {...getCellProps(it?.D3_MACRO, { date: dateArray[0], circle: it?.cir, activity: 'MACRO' })}>{it?.D3_MACRO}</th>
-                                            <th {...getCellProps(it?.D3_RELOCATION, { date: dateArray[0], circle: it?.cir, activity: 'RELOCATION' })}>{it?.D3_RELOCATION}</th>
-                                            <th {...getCellProps(it?.D3_ULS_HPSC, { date: dateArray[0], circle: it?.cir, activity: 'ULS_HPSC' })}>{it?.D3_ULS_HPSC}</th>
-                                            <th {...getCellProps(it?.D3_UPGRADE, { date: dateArray[0], circle: it?.cir, activity: 'UPGRADE' })}>{it?.D3_UPGRADE}</th>
-                                            <th {...getCellProps(it?.D3_RRU_UPGRADE, { date: dateArray[0], circle: it?.cir, activity: 'RRU UPGRADE' })}>{it?.D3_RRU_UPGRADE || 0}</th>
-                                            <th {...getCellProps(it?.D3_5G_SECTOR_ADDITION, { date: dateArray[0], circle: it?.cir, activity: '5G SECTOR ADDITION' })}>{it?.D3_5G_SECTOR_ADDITION || 0}</th>
-                                            <th {...getCellProps(it?.D3_5G_RELOCATION, { date: dateArray[0], circle: it?.cir, activity: '5G RELOCATION' })}>{it?.D3_5G_RELOCATION || 0}</th>
-                                            <th {...getCellProps(it?.D3_RRU_SWAP, { date: dateArray[0], circle: it?.cir, activity: 'RRU SWAP' })}>{it?.D3_RRU_SWAP || 0}</th>
-                                            <th {...getCellProps(it?.D3_FR_Date, { date: dateArray[0], circle: it?.cir, activity: 'FR_Date' })}>{it?.D3_FR_Date || 0}</th>
-                                            <th {...getCellProps(it?.D3_HOTO_Offered_2g, { date: dateArray[0], circle: it?.cir, activity: 'HOTO_Offered_2g' })}>{it?.D3_HOTO_Offered_2g || 0}</th>
-                                            <th {...getCellProps(it?.D3_HOTO_Accepted_2g, { date: dateArray[0], circle: it?.cir, activity: 'HOTO_Accepted_2g' })}>{it?.D3_HOTO_Accepted_2g || 0}</th>
-                                            <th {...getCellProps(it?.D3_HOTO_Offered_4g, { date: dateArray[0], circle: it?.cir, activity: 'HOTO_Offered_4g' })}>{it?.D3_HOTO_Offered_4g || 0}</th>
-                                            <th {...getCellProps(it?.D3_HOTO_Accepted_4g, { date: dateArray[0], circle: it?.cir, activity: 'HOTO_Accepted_4g' })}>{it?.D3_HOTO_Accepted_4g || 0}</th>
+                                            {/* ===== D3 ===== */}
+                                            <th className={classes.hover} style={cellStyle(it?.D3_DE_GROW)}            onClick={() => handleCellClick(it?.D3_DE_GROW,            { date: dateArray[0], circle: it?.cir, activity: 'DE-GROW' })}>{it?.D3_DE_GROW}</th>
+                                            <th className={classes.hover} style={cellStyle(it?.D3_MACRO)}              onClick={() => handleCellClick(it?.D3_MACRO,              { date: dateArray[0], circle: it?.cir, activity: 'MACRO' })}>{it?.D3_MACRO}</th>
+                                            <th className={classes.hover} style={cellStyle(it?.D3_RELOCATION)}         onClick={() => handleCellClick(it?.D3_RELOCATION,         { date: dateArray[0], circle: it?.cir, activity: 'RELOCATION' })}>{it?.D3_RELOCATION}</th>
+                                            <th className={classes.hover} style={cellStyle(it?.D3_ULS_HPSC)}           onClick={() => handleCellClick(it?.D3_ULS_HPSC,           { date: dateArray[0], circle: it?.cir, activity: 'ULS_HPSC' })}>{it?.D3_ULS_HPSC}</th>
+                                            <th className={classes.hover} style={cellStyle(it?.D3_UPGRADE)}            onClick={() => handleCellClick(it?.D3_UPGRADE,            { date: dateArray[0], circle: it?.cir, activity: 'UPGRADE' })}>{it?.D3_UPGRADE}</th>
+                                            <th className={classes.hover} style={cellStyle(it?.D3_RRU_UPGRADE)}        onClick={() => handleCellClick(it?.D3_RRU_UPGRADE,        { date: dateArray[0], circle: it?.cir, activity: 'RRU UPGRADE' })}>{it?.D3_RRU_UPGRADE}</th>
+                                            <th className={classes.hover} style={cellStyle(it?.D3_5G_SECTOR_ADDITION)} onClick={() => handleCellClick(it?.D3_5G_SECTOR_ADDITION, { date: dateArray[0], circle: it?.cir, activity: '5G SECTOR ADDITION' })}>{it?.D3_5G_SECTOR_ADDITION}</th>
+                                            <th className={classes.hover} style={cellStyle(it?.D3_5G_RELOCATION)}      onClick={() => handleCellClick(it?.D3_5G_RELOCATION,      { date: dateArray[0], circle: it?.cir, activity: '5G RELOCATION' })}>{it?.D3_5G_RELOCATION}</th>
+                                            <th className={classes.hover} style={cellStyle(it?.D3_RRU_SWAP)}           onClick={() => handleCellClick(it?.D3_RRU_SWAP,           { date: dateArray[0], circle: it?.cir, activity: 'RRU SWAP' })}>{it?.D3_RRU_SWAP}</th>
+                                            <th className={classes.hover} style={cellStyle(it?.D3_FR_Date)}            onClick={() => handleCellClick(it?.D3_FR_Date,            { date: dateArray[0], circle: it?.cir, activity: 'FR_Date' })}>{it?.D3_FR_Date}</th>
+                                            <th className={classes.hover} style={cellStyle(it?.D3_HOTO_Offered_2g)}    onClick={() => handleCellClick(it?.D3_HOTO_Offered_2g,    { date: dateArray[0], circle: it?.cir, activity: 'HOTO_Offered_2g' })}>{it?.D3_HOTO_Offered_2g}</th>
+                                            <th className={classes.hover} style={cellStyle(it?.D3_HOTO_Accepted_2g)}   onClick={() => handleCellClick(it?.D3_HOTO_Accepted_2g,   { date: dateArray[0], circle: it?.cir, activity: 'HOTO_Accepted_2g' })}>{it?.D3_HOTO_Accepted_2g}</th>
+                                            <th className={classes.hover} style={cellStyle(it?.D3_HOTO_Offered_4g)}    onClick={() => handleCellClick(it?.D3_HOTO_Offered_4g,    { date: dateArray[0], circle: it?.cir, activity: 'HOTO_Offered_4g' })}>{it?.D3_HOTO_Offered_4g}</th>
+                                            <th className={classes.hover} style={cellStyle(it?.D3_HOTO_Accepted_4g)}   onClick={() => handleCellClick(it?.D3_HOTO_Accepted_4g,   { date: dateArray[0], circle: it?.cir, activity: 'HOTO_Accepted_4g' })}>{it?.D3_HOTO_Accepted_4g}</th>
                                         </tr>
                                     ))}
+
+                                    {/* Total row */}
                                     <tr style={{ textAlign: "center", fontWeigth: 700, backgroundColor: '#B0EBB4', color: '#000000', fontSize: 17 }}>
                                         <th style={{ position: 'sticky', left: 0, top: 0, backgroundColor: '#B0EBB4' }}>Total</th>
                                         {totals && Object.keys(totals).map((key) => (

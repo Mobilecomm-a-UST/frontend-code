@@ -30,56 +30,64 @@ import { useNavigate } from 'react-router-dom';
 import * as ExcelJS from 'exceljs'
 
 
-const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues }) => {
-    const handleChange = (event) => {
-        const { value } = event.target;
-        const selected = typeof value === 'string' ? value.split(',') : value;
+const MultiSelectWithAll = ({
+  label,
+  options = [],
+  selectedValues = [],
+  setSelectedValues,
+}) => {
+  const handleChange = (event) => {
+    const { value } = event.target;
+    const selected = typeof value === "string" ? value.split(",") : value;
 
-        if (selected.includes('ALL')) {
-            if (selectedValues.length === options.length) {
-                setSelectedValues([]);
-            } else {
-                setSelectedValues(options);
+    if (selected.includes("ALL")) {
+      if (selectedValues.length === options.length) {
+        setSelectedValues([]);
+      } else {
+        setSelectedValues(options);
+      }
+    } else {
+      setSelectedValues(selected);
+    }
+  };
+
+  const isAllSelected =
+    options?.length > 0 &&
+    selectedValues?.length === options?.length;
+
+  return (
+    <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
+      <InputLabel id={`${label}-label`}>{label}</InputLabel>
+
+      <Select
+        labelId={`${label}-label`}
+        multiple
+        value={selectedValues}
+        onChange={handleChange}
+        input={<OutlinedInput label={label} />}
+        renderValue={(selected) => selected.join(", ")}
+      >
+        <MenuItem value="ALL">
+          <Checkbox
+            checked={isAllSelected}
+            indeterminate={
+              selectedValues?.length > 0 &&
+              selectedValues?.length < options?.length
             }
-        } else {
-            setSelectedValues(selected);
-        }
-    };
+          />
+          <ListItemText primary="Select All" />
+        </MenuItem>
 
-    const isAllSelected = options.length > 0 && selectedValues.length === options.length;
-
-    return (
-        <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
-            <InputLabel id={`${label}-label`}>{label}</InputLabel>
-            <Select
-                labelId={`${label}-label`}
-                multiple
-                value={selectedValues}
-                onChange={handleChange}
-                input={<OutlinedInput label={label} />}
-                renderValue={(selected) => selected.join(', ')}
-            >
-                <MenuItem value="ALL">
-                    <Checkbox
-                        checked={isAllSelected}
-                        indeterminate={
-                            selectedValues.length > 0 && selectedValues.length < options.length
-                        }
-                    />
-                    <ListItemText primary="Select All" />
-                </MenuItem>
-
-                {options.map((name) => (
-                    <MenuItem key={name} value={name}>
-                        <Checkbox checked={selectedValues.includes(name)} />
-                        <ListItemText primary={name} />
-                    </MenuItem>
-                ))}
-            </Select>
-        </FormControl>
-    );
+        {(options || []).map((name) => (
+          <MenuItem key={name} value={name}>
+            <Checkbox checked={selectedValues?.includes(name)} />
+            <ListItemText primary={name} />
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+  );
 };
-
 
 
 

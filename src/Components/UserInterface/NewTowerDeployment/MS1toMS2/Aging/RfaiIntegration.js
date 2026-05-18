@@ -21,10 +21,18 @@ import 'rsuite/dist/rsuite.min.css';
 import * as ExcelJS from 'exceljs'
 
 
-const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues }) => {
+const MultiSelectWithAll = ({
+    label,
+    options = [],
+    selectedValues = [],
+    setSelectedValues
+}) => {
     const handleChange = (event) => {
         const { value } = event.target;
-        const selected = typeof value === 'string' ? value.split(',') : value;
+        const selected =
+            typeof value === 'string'
+                ? value.split(',')
+                : value;
 
         if (selected.includes('ALL')) {
             if (selectedValues.length === options.length) {
@@ -37,11 +45,16 @@ const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues 
         }
     };
 
-    const isAllSelected = options.length > 0 && selectedValues.length === options.length;
+    const isAllSelected =
+        options?.length > 0 &&
+        selectedValues?.length === options?.length;
 
     return (
         <FormControl sx={{ minWidth: 150, maxWidth: 200 }} size="small">
-            <InputLabel id={`${label}-label`}>{label}</InputLabel>
+            <InputLabel id={`${label}-label`}>
+                {label}
+            </InputLabel>
+
             <Select
                 labelId={`${label}-label`}
                 multiple
@@ -54,15 +67,18 @@ const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues 
                     <Checkbox
                         checked={isAllSelected}
                         indeterminate={
-                            selectedValues.length > 0 && selectedValues.length < options.length
+                            selectedValues?.length > 0 &&
+                            selectedValues?.length < options?.length
                         }
                     />
                     <ListItemText primary="Select All" />
                 </MenuItem>
 
-                {options.map((name) => (
+                {options?.map((name) => (
                     <MenuItem key={name} value={name}>
-                        <Checkbox checked={selectedValues.includes(name)} />
+                        <Checkbox
+                            checked={selectedValues?.includes(name)}
+                        />
                         <ListItemText primary={name} />
                     </MenuItem>
                 ))}
@@ -392,4 +408,4 @@ const RfaiIntegration = () => {
     )
 }
 
-export const MemoRfaiIntegration = React.memo(RfaiIntegration)
+export default RfaiIntegration

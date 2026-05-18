@@ -45,7 +45,7 @@ const Integration = () => {
                             <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
                                 <Sidenav.Body>
                                     <Nav activeKey={activeKey} onSelect={setActiveKey} >
-                                        <Nav style={{ fontWeight: 550, color: 'white', textAlign: 'center', fontSize: 19 }}>IX Tracker Tool</Nav>
+                                        <Nav style={{ fontWeight: 550, color: 'white', textAlign: 'center', fontSize: 19 }}>Airtel Tracker Tool</Nav>
                                         {/* <Nav.Men eventKey="1" placement="rightStart" icon={<DashboardIcon />} title="Dashboard">
                                          <Nav.Item>dfdf</Nav.Item>
                                         </Nav.Men > */}
