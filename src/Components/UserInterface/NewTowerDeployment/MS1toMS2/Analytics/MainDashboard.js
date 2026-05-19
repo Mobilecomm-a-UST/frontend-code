@@ -19,7 +19,7 @@ import { postData } from '../../../../services/FetchNodeServices';
 
 
 const colorType = [ '#A0DEFF', '#FF9F66','#ECB176', '#B0EBB4', '#CDE8E5']
-const requiredMilestones = [ 'Site ONAIR','I-Deploy ONAIR','SCFT Accepted','KPI AT Accepted', 'Final MS2'];
+const requiredMilestones = [ 'Site ONAIR','I-Deploy ONAIR','SCFT Accepted','KPI AT Accepted'];
 const MainDashboard = () => {
     const navigate = useNavigate()
     const { loading, action } = useLoadingDialog();

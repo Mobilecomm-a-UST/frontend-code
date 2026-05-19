@@ -16,7 +16,7 @@ const milestones = [
     { title: "Integration", dateKey: "integration_date" },
     { title: "EMF Submission", dateKey: "emf_submission_date" },
     { title: "Alarm Rectification Done", dateKey: "alarm_rectification_done_date" },
-    { title: "SCFT I-Deploy Offered", dateKey: "scft_i_deploy_offered_date" },
+    { title: "SCFT Offered", dateKey: "scft_offered_date" },
     { title: "RAN PAT Offer", dateKey: "ran_pat_offer_date" },
     { title: "RAN SAT Offer", dateKey: "ran_sat_offer_date" },
     { title: "MW PAT Offer", dateKey: "mw_pat_offer_date" },
