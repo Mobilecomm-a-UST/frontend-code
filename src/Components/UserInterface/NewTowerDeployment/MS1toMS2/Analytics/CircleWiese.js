@@ -30,12 +30,18 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="down" timeout={2500} style={{ transformOrigin: '0 0 0' }} mountOnEnter unmountOnExit ref={ref} {...props} />;
 });
 
-const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues }) => {
+const MultiSelectWithAll = ({
+    label,
+    options = [],
+    selectedValues = [],
+    setSelectedValues
+}) => {
     const handleChange = (event) => {
         const { value } = event.target;
-        const selected = typeof value === 'string' ? value.split(',') : value;
+        const selected =
+            typeof value === "string" ? value.split(",") : value;
 
-        if (selected.includes('ALL')) {
+        if (selected.includes("ALL")) {
             if (selectedValues.length === options.length) {
                 setSelectedValues([]);
             } else {
@@ -46,24 +52,30 @@ const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues 
         }
     };
 
-    const isAllSelected = options.length > 0 && selectedValues.length === options.length;
+    const isAllSelected =
+        options.length > 0 &&
+        selectedValues.length === options.length;
 
     return (
         <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
-            <InputLabel id={`${label}-label`}>{label}</InputLabel>
+            <InputLabel id={`${label}-label`}>
+                {label}
+            </InputLabel>
+
             <Select
                 labelId={`${label}-label`}
                 multiple
                 value={selectedValues}
                 onChange={handleChange}
                 input={<OutlinedInput label={label} />}
-                renderValue={(selected) => selected.join(', ')}
+                renderValue={(selected) => selected.join(", ")}
             >
                 <MenuItem value="ALL">
                     <Checkbox
                         checked={isAllSelected}
                         indeterminate={
-                            selectedValues.length > 0 && selectedValues.length < options.length
+                            selectedValues.length > 0 &&
+                            selectedValues.length < options.length
                         }
                     />
                     <ListItemText primary="Select All" />
@@ -71,7 +83,9 @@ const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues 
 
                 {options.map((name) => (
                     <MenuItem key={name} value={name}>
-                        <Checkbox checked={selectedValues.includes(name)} />
+                        <Checkbox
+                            checked={selectedValues.includes(name)}
+                        />
                         <ListItemText primary={name} />
                     </MenuItem>
                 ))}
@@ -89,7 +103,7 @@ const CircleWiese = () => {
     const { loading, action } = useLoadingDialog();
    const [milestoneOptions, setMilestoneOptions] = useState([])
     const [milestone1, setMilestone1] = useState('Site ONAIR')
-    const [milestone2, setMilestone2] = useState('Final MS2')
+    const [milestone2, setMilestone2] = useState('4G MS2')
     const [circle, setCircle] = useState([])
     const [site_taggingAgingData, setSite_taggingAgingData] = useState([]);
     const [site_taggingAgingOption, setSite_taggingAgingOption] = useState([]);
@@ -615,12 +629,12 @@ const CircleWiese = () => {
                             ))}
                         </Select>
                     </FormControl>
-                    <MultiSelectWithAll
+                    {/* <MultiSelectWithAll
                         label="Site Tagging"
                         options={site_taggingAgingOption}
                         selectedValues={site_taggingAgingData}
                         setSelectedValues={setSite_taggingAgingData}
-                    />
+                    /> */}
                     <MultiSelectWithAll
                         label="Current Status"
                         options={currentStatusOption}

@@ -640,12 +640,12 @@ to ${milestone2} (${getTitalValue(milestoneData?.onAirDone, view)})`,
                         setSelectedValues={setCircle}
                     />
                     {/* tagging */}
-                    <MultiSelectWithAll
+                    {/* <MultiSelectWithAll
                         label="Site Tagging"
                         options={taggingOptions}
                         selectedValues={tagging}
                         setSelectedValues={setTagging}
-                    />
+                    /> */}
 
                     {/* Current Status */}
                     <MultiSelectWithAll

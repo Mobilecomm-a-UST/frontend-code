@@ -361,12 +361,12 @@ const WeekWise = () => {
                             />
 
                             {/* tagging */}
-                            <MultiSelectWithAll
+                            {/* <MultiSelectWithAll
                                 label="Site Tagging"
                                 options={taggingOptions}
                                 selectedValues={tagging}
                                 setSelectedValues={setTagging}
-                            />
+                            /> */}
 
                             {/* Current Status */}
                             {/* <MultiSelectWithAll

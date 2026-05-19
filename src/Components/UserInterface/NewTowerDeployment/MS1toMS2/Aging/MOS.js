@@ -100,7 +100,7 @@ const MOS = () => {
     const [mos_done, setMos_done] = useState([]);
     const [mos_pending, setMos_pending] = useState([]);
     const [milestone1, setMilestone1] = useState('Site ONAIR');
-    const [milestone2, setMilestone2] = useState('Final MS2');
+    const [milestone2, setMilestone2] = useState('4G MS2');
     const [milestoneOptions, setMilestoneOptions] = useState([]);
     const [breakpoint1, setBreakpoint1] = useState(3);
     const [breakpoint2, setBreakpoint2] = useState(8);
@@ -349,12 +349,12 @@ const MOS = () => {
                                     ))}
                                 </Select>
                             </FormControl>
-                            <MultiSelectWithAll
+                            {/* <MultiSelectWithAll
                                 label="Site Tagging"
                                 options={site_taggingAgingOption}
                                 selectedValues={site_taggingAgingData}
                                 setSelectedValues={setSite_taggingAgingData}
-                            />
+                            /> */}
 
 
                             <MultiSelectWithAll

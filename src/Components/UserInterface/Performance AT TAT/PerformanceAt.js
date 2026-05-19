@@ -12,6 +12,8 @@ import Loader from '../../Skeleton/Loader'
 const PerformanceTool = lazy(() => import("./PerformanceTool"));
 const FileManager = lazy(() => import("./File Manager/File_Manager"));
 const Dashboard = lazy(() => import("./File Manager/Dashboard"));
+const FTR_Aging = lazy(() => import("./File Manager/FTR_Aging"));
+const SCFT_FTR = lazy(() => import("./File Manager/SCFT_FTR"));
 // const UploadPerformanceAt = lazy(() => import("./Upload_Performance_At/UploadPerformanceAt"));
 // const Dashboard = lazy(() => import("./Dashboard/Dashboard"));
 
@@ -48,7 +50,7 @@ const PerformanceAt = () => {
                                         onSelect={setActiveKey}
                                         style={{
                                             width: 'auto',
-                                            minHeight: "670px",
+                                            minHeight: "700px",
                                             backgroundColor: "#223354",
                                             marginTop: 8,
                                             borderRadius: 10,
@@ -73,6 +75,22 @@ const PerformanceAt = () => {
                                         >
                                             Dashboard
                                         </Nav.Item>
+                                        <Nav.Item
+                                            eventKey="3"
+                                            placement="rightStart"
+                                            icon={<DashboardIcon />}
+                                            onClick={() => navigate('/tools/performance_at_tat/FTR_Aging')}
+                                        >
+                                            FTR Ageing
+                                        </Nav.Item>
+                                        <Nav.Item
+                                            eventKey="4"
+                                            placement="rightStart"
+                                            icon={<DashboardIcon />}
+                                            onClick={() => navigate('/tools/performance_at_tat/SCFT_FTR')}
+                                        >
+                                            SCFT FTR
+                                        </Nav.Item>
                                     </Nav>
                                 </Sidenav.Body>
                             </Sidenav>
@@ -86,6 +104,8 @@ const PerformanceAt = () => {
                                 <Route element={<PerformanceTool />} path="/" />
                                 <Route element={<FileManager />} path="/file_manager/*" />
                                 <Route element={<Dashboard />} path="/Dashboard/*" />
+                                <Route element={<FTR_Aging />} path="/FTR_Aging/*" />
+                                <Route element={<SCFT_FTR />} path="/SCFT_FTR/*" />
                             </Routes>
                         </Suspense>
                     </Grid>

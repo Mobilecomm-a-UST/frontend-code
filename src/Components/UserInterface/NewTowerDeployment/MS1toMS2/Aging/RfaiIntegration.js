@@ -96,7 +96,7 @@ const RfaiIntegration = () => {
     const [currentStatusOption, setCurrentStatusOption] = useState([])
     const [integrationToOnairData, setIntegrationToOnairData] = useState([]);
     const [milestone1, setMilestone1] = useState('Site ONAIR');
-    const [milestone2, setMilestone2] = useState('Final MS2');
+    const [milestone2, setMilestone2] = useState('4G MS2');
     const [milestoneOptions, setMilestoneOptions] = useState([]);
     const [month, setMonth] = useState('')
     const dynamicHeaders = Object.keys(integrationToOnairData?.[0]?.data?.Done || []);
@@ -301,12 +301,12 @@ const RfaiIntegration = () => {
                                     ))}
                                 </Select>
                             </FormControl>
-                            <MultiSelectWithAll
+                            {/* <MultiSelectWithAll
                                 label="Site Tagging"
                                 options={site_taggingAgingOption}
                                 selectedValues={site_taggingAgingData}
                                 setSelectedValues={setSite_taggingAgingData}
-                            />
+                            /> */}
 
 
                             <MultiSelectWithAll

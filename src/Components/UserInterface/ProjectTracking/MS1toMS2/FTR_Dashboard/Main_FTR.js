@@ -37,9 +37,9 @@ const Main_FTR = () => {
             <Box>
                 <MemoPhy_At_FTR />
             </Box>
-            <Box>
+            {/* <Box>
                 <MemoScft_At_FTR />
-            </Box>
+            </Box> */}
             {/* <Box>
                   <Integration />
               </Box>
