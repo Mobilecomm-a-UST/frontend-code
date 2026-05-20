@@ -27,12 +27,13 @@ const RFAItoMS1_Analytics_Dashboard = lazy(()=>import('./RFAItoMS1/Analytics/Mai
 const MS1toMS2_Waterfall = lazy(()=>import('./MS1toMS2/Dashboard/DashboardTable'))
 const MS1toMS2_Ageing = lazy(()=>import('./MS1toMS2/Aging/MainAging'))
 const MS1toMS2_Analytics= lazy(()=>import('./MS1toMS2/Analytics/MainDashboard'))
+const MS1toMS2_FinalData = lazy(()=>import('./MS1toMS2/Dashboard/FinalData'))
 
 
 
 const ProtectedRoute = ({ allowed, children }) => {
     if (!allowed) {
-        return <Navigate to="/tools/relocation_tracking/error" replace />;
+        return <Navigate to="/tools/ntd/error" replace />;
     }
     return children;
 }
@@ -80,8 +81,8 @@ const NTD = () => {
                                         <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle">
                                             <Sidenav.Body>
                                                 <Nav activeKey={activeKey} onSelect={setActiveKey} style={{ width: 'auto', minHeight: "670px", height: "100hv", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
-                                                    <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>Relocation Tracking</Nav>
-                                                    <Nav.Item eventKey="1" placement="rightStart" icon={<DashboardIcon />} onClick={() => { navigate('/tools/project_tracking/'); show(); setMenuButton(true) }}>
+                                                    <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>New Tower Deployment</Nav>
+                                                    <Nav.Item eventKey="1" placement="rightStart" icon={<DashboardIcon />} onClick={() => { navigate('/tools/ntd/'); show(); setMenuButton(true) }}>
                                                         Dashboard
                                                     </Nav.Item>
                                                     {/* <Nav.Menu eventKey="3" placement="rightStart" title="NOM Audit" icon={<DocPassIcon />}>
@@ -165,6 +166,7 @@ const NTD = () => {
                                     <Route element={<RFAItoMS1_lifecycle />} path="/rfai_to_ms1_site_lifecycle" />
                                     <Route element={<RFAItoMS1_Ageing />} path="/rfai_to_ms1_ageing" />
                                     <Route element={<RFAItoMS1_FinalData />} path="/rfai_to_ms1_waterfall/:milestone" />                   
+                                    <Route element={<MS1toMS2_FinalData />} path="/ms1_to_ms2_waterfall/:milestone" />                   
                                     <Route element={<MS1toMS2_Waterfall/>} path='ms1_to_ms2_waterfall' />
                                     <Route element={<RFAItoMS1_Analytics_Dashboard />} path="/rfai_to_ms1_analytics" />      
                                     <Route element={<MS1toMS2_Ageing />} path="/ms1_to_ms2_ageing" />        

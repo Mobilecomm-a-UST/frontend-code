@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Box } from '@mui/material'
 import { Grid } from '@mui/material'
 import { Sidenav, Nav } from 'rsuite';
+import ArrowRightIcon from '@rsuite/icons/ArrowRight';
 import DashboardIcon from '@rsuite/icons/legacy/Dashboard';
 import FileUploadIcon from '@rsuite/icons/FileUpload';
 import { useNavigate } from 'react-router-dom'
@@ -14,6 +15,8 @@ const FileManager = lazy(() => import("./File Manager/File_Manager"));
 const Dashboard = lazy(() => import("./File Manager/Dashboard"));
 const FTR_Aging = lazy(() => import("./File Manager/FTR_Aging"));
 const SCFT_FTR = lazy(() => import("./File Manager/SCFT_FTR"));
+const Datewise = lazy(() => import("./File Manager/Datewise"));
+const MasterDashboard = lazy(() => import("./File Manager/MasterDashboard"));
 // const UploadPerformanceAt = lazy(() => import("./Upload_Performance_At/UploadPerformanceAt"));
 // const Dashboard = lazy(() => import("./Dashboard/Dashboard"));
 
@@ -67,21 +70,24 @@ const PerformanceAt = () => {
                                         >
                                             Upload Performance AT TAT
                                         </Nav.Item>
+
+                                         {/* <Nav.Menu eventKey="3" style={{ fontWeight: 400, color: 'white' }} placement="leftStart" className="menu-title-custom" title="Master Dashboard" icon={<ArrowRightIcon />}  ></Nav.Menu> */}
                                         <Nav.Item
                                             eventKey="2"
                                             placement="rightStart"
                                             icon={<DashboardIcon />}
-                                            onClick={() => navigate('/tools/performance_at_tat/Dashboard')}
+                                            onClick={() => navigate('/tools/performance_at_tat/MasterDashboard')}
                                         >
-                                            Dashboard
+                                            Performance Aging
                                         </Nav.Item>
+                                        
                                         <Nav.Item
                                             eventKey="3"
                                             placement="rightStart"
                                             icon={<DashboardIcon />}
                                             onClick={() => navigate('/tools/performance_at_tat/FTR_Aging')}
                                         >
-                                            FTR Ageing
+                                            Performance FTR
                                         </Nav.Item>
                                         <Nav.Item
                                             eventKey="4"
@@ -103,9 +109,11 @@ const PerformanceAt = () => {
                             <Routes>
                                 <Route element={<PerformanceTool />} path="/" />
                                 <Route element={<FileManager />} path="/file_manager/*" />
-                                <Route element={<Dashboard />} path="/Dashboard/*" />
+                                {/* <Route element={<Dashboard />} path="/Dashboard/*" /> */}
                                 <Route element={<FTR_Aging />} path="/FTR_Aging/*" />
                                 <Route element={<SCFT_FTR />} path="/SCFT_FTR/*" />
+                                {/* <Route element={<Datewise />} path="/Datewise/*" /> */}
+                                <Route element={<MasterDashboard />} path="/MasterDashboard/*" />
                             </Routes>
                         </Suspense>
                     </Grid>

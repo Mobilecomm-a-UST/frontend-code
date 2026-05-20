@@ -17,6 +17,7 @@ import { Breadcrumbs, Link } from "@mui/material";
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { useNavigate } from "react-router-dom";
 
+
 // ── Constants ────────────────────────────────────────────────────────────────
 const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 const currentYear  = new Date().getFullYear();
@@ -399,13 +400,13 @@ const Dashboard = () => {
 
     return (
         <>
-            <div style={{ margin: 5, marginLeft: 10, marginTop: 10 }}>
+            {/* <div style={{ margin: 5, marginLeft: 10, marginTop: 10 }}>
                 <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
                     <Link underline="hover" onClick={() => navigate('/tools')}>Tools</Link>
                     <Link underline="hover" onClick={() => navigate('/tools/performance_at_tat')}>Performance At Tat</Link>
                     <Typography color="text.primary">Dashboard</Typography>
                 </Breadcrumbs>
-            </div>
+            </div> */}
 
             <Box p={1}>
                 {/* ── Top bar ── */}
@@ -496,4 +497,4 @@ const Dashboard = () => {
     );
 };
 
-export default Dashboard;
+export const MemoDashboard = React.memo(Dashboard);

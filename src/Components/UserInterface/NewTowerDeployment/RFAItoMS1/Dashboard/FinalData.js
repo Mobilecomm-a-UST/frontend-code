@@ -20,21 +20,14 @@ import { useLoadingDialog } from '../../../../Hooks/LoadingDialog';
 const readOnlyFields = [
     "unique_id",
     "circle",
-    "site_tagging",
-    "old_toco_name",
-    "old_site_id",
-    "new_site_id",
-    "pri_history",
+    "site_id",
     "pri_count",
     "pri_issue_ageing",
-    "issue_history",
-    "other_issue_ageing",
     "total_issue_ageing",
     "clear_rfai_to_ms1_ageing",
     "last_updated_date",
     "last_updated_by",
-    "clear_rfai_to_ms1_ageing"
-
+    "rfai_to_ms1_ageing"
 ];
 
 const dateTypeKey = [
@@ -50,7 +43,6 @@ const dateTypeKey = [
     "emf_submission_date",
     "alarm_rectification_done_date",
     "scft_done_date",
-    "scft_i_deploy_offered_date",
     "ran_pat_offer_date",
     "ran_sat_offer_date",
     "mw_pat_offer_date",
@@ -60,10 +52,6 @@ const dateTypeKey = [
     "i_deploy_onair_date",
     "rfai_rejected_date",
     "re_rfai_date",
-    "pri_start_date",
-    "pri_close_date",
-    "issue_start_date",
-    "issue_close_date",
     "ran_pat_accepted_date",
     "ran_sat_accepted_date",
     "mw_pat_accepted_date",
@@ -72,12 +60,11 @@ const dateTypeKey = [
     "kpi_at_offer_date",
     "kpi_at_accepted_date",
     "four_g_ms2_date",
-    "five_g_ms2_date",
-    "final_ms2_date",
 ]
 
 const FinalData = () => {
-    const listDataa = useSelector(state => state.relocationFinalTracker)
+    const listDataa = useSelector(state => state.ntdFinalTracker)
+    // console.log('list data' , listDataa)
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const userID = getDecreyptedData('userID')
@@ -86,34 +73,38 @@ const FinalData = () => {
     const [editData, setEditData] = useState({
         unique_id: "",
         circle: "",
-        site_tagging: "",
-        old_toco_name: "",
-        old_site_id: "",
-        new_site_id: "",
+        site_id: "",
+        project_nt: "",
+        tur_breakup: "",
         new_toco_name: "",
         sr_number: "",
         ran_oem: "",
         media_type: "",
         mw_oem: "",
-        relocation_method: "",
-        relocation_type: "",
-        old_site_band: "",
-        new_site_band: "",
+        mw_nstallation_partner: "",
+        site_band: "",
         rfai_date: "",
         allocation_date: "",
         rfai_survey_date: "",
+        wrfai: "",
         mo_punch_date: "",
         material_dispatch_date: "",
         material_delivered_date: "",
+        material_type_hw: "",
+        material_type_im: "",
         installation_start_date: "",
         installation_end_date: "",
         integration_date: "",
+        Sacfa_Appied_date: "",
+        wpc_no: "",
+        wpc_date: "",
         emf_submission_date: "",
+        nep_id: "",
         ran_lkf_status: "",
         alarm_status: "",
         alarm_rectification_done_date: "",
         scft_done_date: "",
-        scft_i_deploy_offered_date: "",
+        scft_offered_date: "",
         ran_pat_offer_date: "",
         ran_sat_offer_date: "",
         mw_plan_id: "",
@@ -123,38 +114,49 @@ const FinalData = () => {
         mw_lkf: "",
         mw_sat_offer_date: "",
         mw_ms1_mids_date: "",
+        mw_sacfa_a_end: "",
+        mw_wpc_a_end: "",
+        mw_sacfa_b_end: "",
+        mw_wpc_b_end: "",
+
         site_onair_date: "",
         i_deploy_onair_date: "",
+
         current_status: "",
+        ideploy_status: "",
         detailed_remarks: "",
-        history: "",
+
         rfai_rejected_date: "",
+        ideploy_pri_taging: "",
         re_rfai_date: "",
-        pri_start_date: "",
-        pri_close_date: "",
-        pri_history: "",
+
         pri_count: "",
         pri_issue_ageing: "",
-        issue: "",
-        issue_start_date: "",
-        issue_close_date: "",
-        issue_history: "",
-        other_issue_ageing: "",
+        other_ust_issue_ageing: "",
+        other_airtel_issue_ageing: "",
         total_issue_ageing: "",
-        clear_rfai_to_ms1_ageing: "",
+
+        clear_rfai_ms1_ageing: "",
         rfai_to_ms1_ageing: "",
+
         ran_pat_accepted_date: "",
         ran_sat_accepted_date: "",
         mw_pat_accepted_date: "",
         mw_sat_accepted_date: "",
         scft_accepted_date: "",
+
         kpi_at_offer_date: "",
         kpi_at_accepted_date: "",
+
         four_g_ms2_date: "",
-        five_g_ms2_date: "",
-        final_ms2_date: "",
+        ssid: "",
+        pmis_month: "",
+
+        airtel_sign_off: "",
+
         last_updated_date: "",
         last_updated_by: ""
+
     });
     const [editDataID, setEditDataID] = useState('')
     const [open, setOpen] = useState(false)
@@ -220,75 +222,87 @@ const FinalData = () => {
     const handleEdit = async (rowData) => {
         // console.log(rowData)
         setEditData({
-            unique_id: rowData["Unique ID"],
+           unique_id: rowData["Unique ID"],
             circle: rowData.circle,
-            site_tagging: rowData.site_tagging,
-            old_toco_name: rowData.old_toco_name,
-            old_site_id: rowData.old_site_id,
-            new_site_id: rowData.new_site_id,
+            site_id: rowData.site_id,
+            project_nt: rowData.project_nt,
+            tur_breakup: rowData.tur_breakup,
             new_toco_name: rowData.new_toco_name,
             sr_number: rowData.sr_number,
+
             ran_oem: rowData.ran_oem,
             media_type: rowData.media_type,
             mw_oem: rowData.mw_oem,
-            relocation_method: rowData.relocation_method,
-            relocation_type: rowData.relocation_type,
-            old_site_band: rowData.old_site_band,
-            new_site_band: rowData.new_site_band,
+            mw_nstallation_partner: rowData.mw_nstallation_partner,
 
+            site_band: rowData.site_band,
             rfai_date: rowData.rfai_date,
             allocation_date: rowData.allocation_date,
             rfai_survey_date: rowData.rfai_survey_date,
+
+            wrfai: rowData.wrfai,
+
             mo_punch_date: rowData.mo_punch_date,
             material_dispatch_date: rowData.material_dispatch_date,
             material_delivered_date: rowData.material_delivered_date,
 
+            material_type_hw: rowData.material_type_hw,
+            material_type_im: rowData.material_type_im,
+
             installation_start_date: rowData.installation_start_date,
             installation_end_date: rowData.installation_end_date,
             integration_date: rowData.integration_date,
+
+            Sacfa_Appied_date: rowData.Sacfa_Appied_date,
+            wpc_no: rowData.wpc_no,
+            wpc_date: rowData.wpc_date,
+
             emf_submission_date: rowData.emf_submission_date,
+            nep_id: rowData.nep_id,
 
             ran_lkf_status: rowData.ran_lkf_status,
             alarm_status: rowData.alarm_status,
             alarm_rectification_done_date: rowData.alarm_rectification_done_date,
 
             scft_done_date: rowData.scft_done_date,
-            scft_i_deploy_offered_date: rowData.scft_i_deploy_offered_date,
+            scft_offered_date: rowData.scft_offered_date,
+
             ran_pat_offer_date: rowData.ran_pat_offer_date,
             ran_sat_offer_date: rowData.ran_sat_offer_date,
 
             mw_plan_id: rowData.mw_plan_id,
             mw_pat_offer_date: rowData.mw_pat_offer_date,
+
             rsl_value_status: rowData.rsl_value_status,
             enm_status: rowData.enm_status,
             mw_lkf: rowData.mw_lkf,
+
             mw_sat_offer_date: rowData.mw_sat_offer_date,
             mw_ms1_mids_date: rowData.mw_ms1_mids_date,
+
+            mw_sacfa_a_end: rowData.mw_sacfa_a_end,
+            mw_wpc_a_end: rowData.mw_wpc_a_end,
+            mw_sacfa_b_end: rowData.mw_sacfa_b_end,
+            mw_wpc_b_end: rowData.mw_wpc_b_end,
 
             site_onair_date: rowData.site_onair_date,
             i_deploy_onair_date: rowData.i_deploy_onair_date,
 
             current_status: rowData.current_status,
+            ideploy_status: rowData.ideploy_status,
             detailed_remarks: rowData.detailed_remarks,
-            history: rowData.history,
 
             rfai_rejected_date: rowData.rfai_rejected_date,
+            ideploy_pri_taging: rowData.ideploy_pri_taging,
             re_rfai_date: rowData.re_rfai_date,
 
-            pri_start_date: rowData.pri_start_date,
-            pri_close_date: rowData.pri_close_date,
-            pri_history: rowData.pri_history,
             pri_count: rowData.pri_count,
             pri_issue_ageing: rowData.pri_issue_ageing,
-
-            issue: rowData.issue,
-            issue_start_date: rowData.issue_start_date,
-            issue_close_date: rowData.issue_close_date,
-            issue_history: rowData.issue_history,
-            other_issue_ageing: rowData.other_issue_ageing,
+            other_ust_issue_ageing: rowData.other_ust_issue_ageing,
+            other_airtel_issue_ageing: rowData.other_airtel_issue_ageing,
             total_issue_ageing: rowData.total_issue_ageing,
 
-            clear_rfai_to_ms1_ageing: rowData.clear_rfai_to_ms1_ageing,
+            clear_rfai_ms1_ageing: rowData.clear_rfai_ms1_ageing,
             rfai_to_ms1_ageing: rowData.rfai_to_ms1_ageing,
 
             ran_pat_accepted_date: rowData.ran_pat_accepted_date,
@@ -299,12 +313,15 @@ const FinalData = () => {
 
             kpi_at_offer_date: rowData.kpi_at_offer_date,
             kpi_at_accepted_date: rowData.kpi_at_accepted_date,
+
             four_g_ms2_date: rowData.four_g_ms2_date,
-            five_g_ms2_date: rowData.five_g_ms2_date,
-            final_ms2_date: rowData.final_ms2_date,
+            ssid: rowData.ssid,
+            pmis_month: rowData.pmis_month,
+
+            airtel_sign_off: rowData.airtel_sign_off,
 
             last_updated_date: rowData.last_updated_date,
-            last_updated_by: rowData.last_updated_by,
+            last_updated_by: rowData.last_updated_by
         });
         setEditDataID(rowData.id)
         setOpen(true)
@@ -329,7 +346,7 @@ const FinalData = () => {
                     title: "Done",
                     text: `Data Updated Successfully`,
                 });
-                navigate('/tools/relocation_tracking/rfai_to_ms1_waterfall/')
+                navigate('/tools/ntd/rfai_to_ms1_waterfall/')
             }
             // console.log('update response', response);
 
@@ -386,81 +403,108 @@ const FinalData = () => {
             )
         },
         // { title: 'Unique ID', field: 'Unique ID' },
+
         { title: 'Circle', field: 'circle' },
-        { title: 'Site Tagging', field: 'site_tagging' },
-        { title: 'Old TOCO Name', field: 'old_toco_name' },
-        { title: 'Old Site ID', field: 'old_site_id' },
-        { title: 'New Site ID', field: 'new_site_id' },
-        { title: 'New TOCO Name', field: 'new_toco_name' },
+        { title: 'Site ID', field: 'site_id' },
+
+        { title: 'Project', field: 'project_nt' },
+        { title: 'TUR Breakup', field: 'tur_breakup' },
+
+        { title: 'TOCO Name', field: 'new_toco_name' },
         { title: 'SR Number', field: 'sr_number' },
+
         { title: 'RAN OEM', field: 'ran_oem' },
         { title: 'Media Type', field: 'media_type' },
         { title: 'MW OEM', field: 'mw_oem' },
-        { title: 'Relocation Method', field: 'relocation_method' },
-        { title: 'Relocation Type', field: 'relocation_type' },
-        { title: 'Old Site Band', field: 'old_site_band' },
-        { title: 'New Site Band', field: 'new_site_band' },
+        { title: 'MW Installation Partner', field: 'mw_nstallation_partner' },
+
+        { title: 'Site Band', field: 'site_band' },
         { title: 'RFAI Date', field: 'rfai_date' },
         { title: 'Allocation Date', field: 'allocation_date' },
         { title: 'RFAI Survey Date', field: 'rfai_survey_date' },
+
+        { title: 'WRFAI (YES/NO)', field: 'wrfai' },
+
         { title: 'MO Punch Date', field: 'mo_punch_date' },
         { title: 'Material Dispatch Date', field: 'material_dispatch_date' },
         { title: 'Material Delivered Date', field: 'material_delivered_date' },
+
+        { title: 'Material Type - HW(Fresh/SRN)', field: 'material_type_hw' },
+        { title: 'Material Type - IM(Fresh/SRN)', field: 'material_type_im' },
+
         { title: 'Installation Start Date', field: 'installation_start_date' },
         { title: 'Installation End Date', field: 'installation_end_date' },
         { title: 'Integration Date', field: 'integration_date' },
+
+        { title: 'Sacfa Appied date', field: 'Sacfa_Appied_date' },
+        { title: 'WPC No', field: 'wpc_no' },
+        { title: 'WPC Date', field: 'wpc_date' },
+
         { title: 'EMF Submission Date', field: 'emf_submission_date' },
+        { title: 'NEP ID', field: 'nep_id' },
+
         { title: 'RAN LKF Status', field: 'ran_lkf_status' },
         { title: 'Alarm Status', field: 'alarm_status' },
-        { title: 'Alarm Rectif. Done Date', field: 'alarm_rectification_done_date' },
+        { title: 'Alarm Rectification Done Date', field: 'alarm_rectification_done_date' },
+
         { title: 'SCFT Done Date', field: 'scft_done_date' },
-        { title: 'SCFT i-Deploy Offered', field: 'scft_i_deploy_offered_date' },
+        { title: 'SCFT Offered Date', field: 'scft_offered_date' },
+
         { title: 'RAN PAT Offer Date', field: 'ran_pat_offer_date' },
         { title: 'RAN SAT Offer Date', field: 'ran_sat_offer_date' },
+
         { title: 'MW Plan ID', field: 'mw_plan_id' },
         { title: 'MW PAT Offer Date', field: 'mw_pat_offer_date' },
+
         { title: 'RSL Value Status', field: 'rsl_value_status' },
         { title: 'ENM Status', field: 'enm_status' },
         { title: 'MW LKF', field: 'mw_lkf' },
-        { title: 'MW SAT Offer Date', field: 'mw_sat_offer_date' },
-        { title: 'MW MS1 / MIDS Date', field: 'mw_ms1_mids_date' },
-        { title: 'Site OnAir Date', field: 'site_onair_date' },
-        { title: 'i-Deploy OnAir Date', field: 'i_deploy_onair_date' },
-        { title: 'Current Status', field: 'current_status' },
-        { title: 'RFAI Rejected Date', field: 'rfai_rejected_date' },
-        { title: 'Re-RFAI Date', field: 're_rfai_date' },
-        { title: 'PRI Start Date', field: 'pri_start_date' },
-        { title: 'PRI Close Date', field: 'pri_close_date' },
-        { title: 'PRI History', field: 'pri_history' },
-        { title: 'PRI Count', field: 'pri_count' },
-        { title: 'Pri Issue Ageing', field: 'pri_issue_ageing' },
 
-        { title: 'Issue', field: 'issue' },
-        { title: 'Issue Start Date', field: 'issue_start_date' },
-        { title: 'Issue Close Date', field: 'issue_close_date' },
-        { title: 'Issue History', field: 'issue_history' },
-        { title: 'Other Issue Ageing', field: 'other_issue_ageing' },
+        { title: 'MW SAT Offer Date', field: 'mw_sat_offer_date' },
+        { title: 'MW MS1 MIDS Date', field: 'mw_ms1_mids_date' },
+
+        { title: 'MW Sacfa - A End', field: 'mw_sacfa_a_end' },
+        { title: 'MW WPC - A End', field: 'mw_wpc_a_end' },
+        { title: 'MW Sacfa - B End', field: 'mw_sacfa_b_end' },
+        { title: 'MW WPC - B End', field: 'mw_wpc_b_end' },
+
+        { title: 'Site ONAIR Date', field: 'site_onair_date' },
+        { title: 'I-Deploy ONAIR Date', field: 'i_deploy_onair_date' },
+
+        { title: 'Current Status', field: 'current_status' },
+        { title: 'Ideploy Status', field: 'ideploy_status' },
+        { title: 'Detailed Remarks', field: 'detailed_remarks' },
+
+        { title: 'RFAI Rejected Date', field: 'rfai_rejected_date' },
+        { title: 'Ideploy PRI Taging', field: 'ideploy_pri_taging' },
+        { title: 'Re RFAI Date', field: 're_rfai_date' },
+
+        { title: 'PRI Count', field: 'pri_count' },
+        { title: 'PRI Issue Ageing', field: 'pri_issue_ageing' },
+        { title: 'Other UST Issue Ageing', field: 'other_ust_issue_ageing' },
+        { title: 'Other Airtel Issue Ageing', field: 'other_airtel_issue_ageing' },
         { title: 'Total Issue Ageing', field: 'total_issue_ageing' },
 
-        { title: 'Clear RFAI→MS1 Ageing', field: 'clear_rfai_to_ms1_ageing' },
-        { title: 'RFAI→MS1 Ageing', field: 'rfai_to_ms1_ageing' },
+        { title: 'Clear RFAI to MS1 Ageing', field: 'clear_rfai_ms1_ageing' },
+        { title: 'RFAI to MS1 Ageing', field: 'rfai_to_ms1_ageing' },
 
-        { title: 'RAN PAT Accepted', field: 'ran_pat_accepted_date' },
-        { title: 'RAN SAT Accepted', field: 'ran_sat_accepted_date' },
-        { title: 'MW PAT Accepted', field: 'mw_pat_accepted_date' },
-        { title: 'MW SAT Accepted', field: 'mw_sat_accepted_date' },
+        { title: 'RAN PAT Accepted Date', field: 'ran_pat_accepted_date' },
+        { title: 'RAN SAT Accepted Date', field: 'ran_sat_accepted_date' },
+        { title: 'MW PAT Accepted Date', field: 'mw_pat_accepted_date' },
+        { title: 'MW SAT Accepted Date', field: 'mw_sat_accepted_date' },
         { title: 'SCFT Accepted Date', field: 'scft_accepted_date' },
 
-        { title: 'KPI AT Offer Date', field: 'kpi_at_offer_date' },
+        { title: 'KPI AT offer Date', field: 'kpi_at_offer_date' },
         { title: 'KPI AT Accepted Date', field: 'kpi_at_accepted_date' },
+
         { title: '4G MS2 Date', field: 'four_g_ms2_date' },
-        { title: '5G MS2 Date', field: 'five_g_ms2_date' },
-        { title: 'Final MS2 Date', field: 'final_ms2_date' },
+        { title: 'SSID', field: 'ssid' },
+        { title: 'PMIS Month', field: 'pmis_month' },
+
+        { title: 'Airtel Sign off( Yes/No)', field: 'airtel_sign_off' },
 
         { title: 'Last Updated Date', field: 'last_updated_date' },
-        { title: 'Last Updated By', field: 'last_updated_by' },
-
-
+        { title: 'Last Updated By', field: 'last_updated_by' }
     ];
 
 
@@ -573,7 +617,7 @@ const FinalData = () => {
         <>
             <div style={{ margin: '1% 1%' }}>
                 <MaterialTable
-                    title="Relocation Site Details"
+                    title="NTD Site Details"
                     columns={columnData}
                     data={listDataa.temp}
                     actions={[
