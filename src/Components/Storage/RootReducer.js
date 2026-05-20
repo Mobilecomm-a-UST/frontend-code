@@ -52,6 +52,10 @@ export default function RootReducer(state=initialState,actions)
         case 'RELOCATION_FINAL_TRACKER':
             state.relocationFinalTracker=actions.payload
             return({relocationFinalTracker:state.relocationFinalTracker})
+        
+        case 'NTD_FINAL_TRACKER':
+            state.ntdFinalTracker=actions.payload
+            return({ntdFinalTracker:state.ntdFinalTracker})
 
         default:
             return state
