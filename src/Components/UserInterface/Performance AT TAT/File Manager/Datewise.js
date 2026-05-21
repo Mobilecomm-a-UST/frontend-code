@@ -463,9 +463,10 @@ const TechTable = ({ tech, apiResponse, dateRangeLabel }) => {
         { label: ">30days", key: ">30days" },
         { label: "Pending", key: "Pending" },
         { label: "Total", key: "Total" },
-        { label: "%<12", key: "%<12" },
-        { label: "%<21", key: "%<21" },
-        { label: "%<22-30", key: "%<22-30" },
+        { label: "<12%", key: "<12%" },
+        { label: "13-21%", key: "13-21%" },
+        { label: "22-30%", key: "22-30%" },
+        { label: ">30days%", key: ">30days%" },
     ];
 
     const colors = TECH_COLORS[tech];
@@ -581,7 +582,7 @@ const TechTable = ({ tech, apiResponse, dateRangeLabel }) => {
                                             background:
                                                 idx %
                                                     2 ===
-                                                0
+                                                    0
                                                     ? "#fff"
                                                     : STRIPE,
                                         }}
@@ -592,7 +593,7 @@ const TechTable = ({ tech, apiResponse, dateRangeLabel }) => {
                                                 background:
                                                     idx %
                                                         2 ===
-                                                    0
+                                                        0
                                                         ? "#fff"
                                                         : STRIPE,
                                                 textAlign:
@@ -656,7 +657,7 @@ const TechTable = ({ tech, apiResponse, dateRangeLabel }) => {
                                     >
                                         {formatGrandTotal(
                                             grandTotal?.[
-                                                col.key
+                                            col.key
                                             ]
                                         )}
                                     </td>
@@ -800,7 +801,7 @@ const Datewise = () => {
                 <Box>
                     <Typography variant="h5">
                         {activeType ===
-                        "performance"
+                            "performance"
                             ? "Performance vs OA TAT"
                             : "Offered vs OA TAT"}
                     </Typography>
@@ -819,7 +820,7 @@ const Datewise = () => {
                             }
                             variant={
                                 activeType ===
-                                "performance"
+                                    "performance"
                                     ? "contained"
                                     : "outlined"
                             }
@@ -836,7 +837,7 @@ const Datewise = () => {
                             }
                             variant={
                                 activeType ===
-                                "offered"
+                                    "offered"
                                     ? "contained"
                                     : "outlined"
                             }
