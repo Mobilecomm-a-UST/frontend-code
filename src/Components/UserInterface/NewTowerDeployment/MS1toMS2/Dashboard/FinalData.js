@@ -421,7 +421,7 @@ const FinalData = () => {
             formData.append('data', JSON.stringify(editData));
             formData.append('userId', userID);
             const response = await axios.post
-                (`${ServerURL}/alok_tracker/hyperlink_frontend_editing_update/`, formData, {
+                (`${ServerURL}/nt_tracker/frontend_nt_update_view/`, formData, {
                     headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` }
                 });
             console.log('weeee', response)
@@ -460,7 +460,7 @@ const FinalData = () => {
                 });
                 const newData = listDataa.filter(item => item.id !== rowData.id);
                 // setListDataa(newData);
-                dispatch({ type: 'RELOCATION_FINAL_TRACKER', payload: { newData } })
+                dispatch({ type: 'NTD_FINAL_TRACKER', payload: { newData } })
                 // console.log('Data deleted successfully');
             })
             .catch(error => {

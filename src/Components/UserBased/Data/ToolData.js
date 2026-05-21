@@ -394,14 +394,14 @@ const ToolData = [
     // }
     {
         id: 38,
-        name: 'Performance AT TAT',
-        title: 'This is Performance AT TAT Tool',
+        name: 'Performance And SCFT TAT/FTR',
+        title: 'This is Performance And SCFT TAT/FTR Tool',
 
         icons: () => (
             <HugeiconsIcon icon={DashboardCircleEditIcon} size={30} />
         ),
 
-        fullname: 'Performance AT TAT',
+        fullname: 'Performance And SCFT TAT/FTR',
         link: '/tools/performance_at_tat',
         groupBy: ['admin','PAT']
     }

@@ -53,7 +53,7 @@ const PerformanceAt = () => {
                                         onSelect={setActiveKey}
                                         style={{
                                             width: 'auto',
-                                            minHeight: "700px",
+                                            minHeight: "800px",
                                             backgroundColor: "#223354",
                                             marginTop: 8,
                                             borderRadius: 10,
