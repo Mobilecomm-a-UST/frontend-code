@@ -464,8 +464,8 @@ const TechTable = ({ tech, apiResponse, dateRangeLabel }) => {
         { label: "Pending", key: "Pending" },
         { label: "Total", key: "Total" },
         { label: "<12%", key: "<12%" },
-        { label: "13-21%", key: "13-21%" },
-        { label: "22-30%", key: "22-30%" },
+        { label: "<13-21%", key: "<13-21%" },
+        { label: "<22-30%", key: "<22-30%" },
         { label: ">30days%", key: ">30days%" },
     ];
 
