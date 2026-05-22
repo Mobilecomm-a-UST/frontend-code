@@ -32,6 +32,7 @@ import TrafficOutlinedIcon from '@mui/icons-material/TrafficOutlined';
 import { HugeiconsIcon } from "@hugeicons/react";
 import { DashboardCircleEditIcon } from "@hugeicons/core-free-icons";
 import { FileScriptIcon } from "@hugeicons/core-free-icons";
+import DateTaskIcon from '@rsuite/icons/DateTask';
 
 import { groupBy } from 'lodash';
 
@@ -381,7 +382,7 @@ const ToolData = [
         fullname: '2G Scripting system',
         link: '/tools/2g_scripting',
         groupBy: ['admin', '2G_Script']
-         
+
     },
     // {
     //     id: 38,
@@ -392,19 +393,35 @@ const ToolData = [
     //     link: '/tools/performance_at_tat',
     //     groupBy:['admin']
     // }
+   {
+    id: 38,
+
+    name: 
+            'Performance AT TAT',
+    title: 'This is Performance And SCFT TAT/FTR Tool',
+
+    icons: () => (
+        <HugeiconsIcon
+            icon={DashboardCircleEditIcon}
+            size={30}
+        />
+    ),
+
+    fullname: 'Performance And SCFT TAT/FTR',
+
+    link: '/tools/performance_at_tat',
+
+    groupBy: ['admin', 'PAT']
+},
     {
-        id: 38,
-        name: 'Performance And SCFT TAT/FTR',
-        title: 'This is Performance And SCFT TAT/FTR Tool',
-
-        icons: () => (
-            <HugeiconsIcon icon={DashboardCircleEditIcon} size={30} />
-        ),
-
-        fullname: 'Performance And SCFT TAT/FTR',
-        link: '/tools/performance_at_tat',
-        groupBy: ['admin','PAT']
-    }
+        id: 39,
+        name: 'Daily Task Review',
+        title: 'This is Daily Task Review System',
+        icons: DateTaskIcon,
+        fullname: 'Daily Task Review system',
+        link: '/tools/daily_task_review',
+        groupBy: ['admin', 'DTR']
+    },
 ]
 
 export default ToolData

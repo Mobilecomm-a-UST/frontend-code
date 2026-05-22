@@ -467,6 +467,7 @@ const TechTable = ({ tech, apiResponse, dateRangeLabel }) => {
         { label: "<13-21%", key: "<13-21%" },
         { label: "<22-30%", key: "<22-30%" },
         { label: ">30days%", key: ">30days%" },
+        { label: "Pending%", key: "Pending%" },
     ];
 
     const colors = TECH_COLORS[tech];
