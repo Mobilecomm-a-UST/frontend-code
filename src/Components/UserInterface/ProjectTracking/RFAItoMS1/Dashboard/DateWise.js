@@ -108,9 +108,10 @@ const DateWise = () => {
     const [selectDate, setSelectDate] = useState([])
     const [month, setMonth] = useState('')
     const { afterToday, combine } = DateRangePicker;
+    const [year, setYear] = useState('2026')
     // const [totals, setTotals] = useState()
 
-   
+
 
     const fetchDailyData = async () => {
         action(true)
@@ -125,6 +126,7 @@ const DateWise = () => {
         formData.append('view', view)
         formData.append('month', month.split('-')[1] || '')
         formData.append('year', month.split('-')[0] || '')
+        formData.append('year', year)
         const res = await postData("alok_tracker/daily_dashboard_file/", formData);
         // const res =  tempData; //  remove this line when API is ready
         // console.log('date wise response', JSON.parse(res.data))
@@ -274,7 +276,7 @@ const DateWise = () => {
         tableData.forEach((row, rowIndex) => {
             const excelRow = {
                 milestone: row["Milestone Track/Site Count"],
-                 cf: row["CF"] ?? "",
+                cf: row["CF"] ?? "",
                 AOP: row["AOP"] ?? ""
             };
 
@@ -393,6 +395,23 @@ const DateWise = () => {
                                     InputLabelProps={{ shrink: true }}
                                 />
                             </FormControl>
+                            {/* <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
+                                <InputLabel id="year-select-label">Financial Year</InputLabel>
+                                <Select
+                                    labelId="year-select-label"
+                                    id="year-select"
+                                    value={year}
+                                    label="Financial Year"
+                                    onChange={(e) => setYear(e.target.value)}
+                                >
+                                    <MenuItem value='2027'>2027 - 2028</MenuItem>
+                                    <MenuItem value='2026'>2026 - 2027</MenuItem>
+                                    <MenuItem value='2025'>2025 - 2026</MenuItem>
+                                    <MenuItem value='2024'>2024 - 2025</MenuItem>
+                                    <MenuItem value='2023'>2023 - 2024</MenuItem>
+
+                                </Select>
+                            </FormControl> */}
                             <FormControl sx={{ minWidth: 100, maxWidth: 100 }} size="small">
                                 <InputLabel id="demo-select-small-label">View</InputLabel>
                                 <Select
@@ -462,10 +481,10 @@ const DateWise = () => {
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
                                         <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', position: 'sticky', left: 0, top: 0, backgroundColor: '#006e74' }}>
                                             Milestone Track/Site Count</th>
-                                         <th style={{ padding: '5px 15px', whiteSpace: 'nowrap', backgroundColor: '#006e74' }}>
+                                        <th style={{ padding: '5px 15px', whiteSpace: 'nowrap', backgroundColor: '#006e74' }}>
                                             AOP</th>
-                                            {month &&  <th style={{ padding: '5px 15px', whiteSpace: 'nowrap', backgroundColor: '#006e74' }}>
-                                            CF</th>} 
+                                        {month && <th style={{ padding: '5px 15px', whiteSpace: 'nowrap', backgroundColor: '#006e74' }}>
+                                            CF</th>}
                                         {dateArray?.map((item, index) => (
                                             <th key={index} style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#CBCBCB', color: 'black' }}>{item}</th>
                                         ))}
@@ -477,7 +496,7 @@ const DateWise = () => {
                                         return (
                                             <tr className={classes.hoverRT} style={{ textAlign: "center", fontWeigth: 700 }} key={index}>
                                                 <th style={{ position: 'sticky', left: 0, top: 0, backgroundColor: '#CBCBCB', color: 'black' }}>{it['Milestone Track/Site Count']}</th>
-                                               <th style={{ backgroundColor: '#CBCBCB', color: 'black' }}>{it['AOP']}</th>
+                                                <th style={{ backgroundColor: '#CBCBCB', color: 'black' }}>{it['AOP']}</th>
                                                 {month && <th style={{ backgroundColor: '#CBCBCB', color: 'black' }}>{it['CF']}</th>}
                                                 {dateArray?.map((item, index) => (
                                                     // <th key={index} style={{ backgroundColor: it[`date_${index + 1}`] > 0 ? '#FEEFAD' : '' }} >{it[`date_${index + 1}`]}</th>

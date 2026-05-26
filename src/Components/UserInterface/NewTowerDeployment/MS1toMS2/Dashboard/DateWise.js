@@ -115,6 +115,7 @@ const DateWise = () => {
     const [selectDate, setSelectDate] = useState([])
     const [month, setMonth] = useState('')
     const { afterToday, combine } = DateRangePicker;
+    const [year, setYear] = useState('2026');
 
 
 
@@ -131,6 +132,7 @@ const DateWise = () => {
         formData.append('view', view)
         formData.append('month', month.split('-')[1] || '')
         formData.append('year', month.split('-')[0] || '')
+        formData.append('year', year)
         const res = await postData("nt_tracker/ms2_daily_dashboard/", formData);
         // const res =  tempData; //  remove this line when API is ready
         // console.log('date wise response', res)
@@ -400,6 +402,23 @@ const DateWise = () => {
                                     InputLabelProps={{ shrink: true }}
                                 />
                             </FormControl>
+                            {/* <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
+                                                                        <InputLabel id="year-select-label">Financial Year</InputLabel>
+                                                                        <Select
+                                                                            labelId="year-select-label"
+                                                                            id="year-select"
+                                                                            value={year}
+                                                                            label="Financial Year"
+                                                                            onChange={(e) => setYear(e.target.value)}
+                                                                        >
+                                                                            <MenuItem value='2027'>2027 - 2028</MenuItem>
+                                                                            <MenuItem value='2026'>2026 - 2027</MenuItem>
+                                                                            <MenuItem value='2025'>2025 - 2026</MenuItem>
+                                                                            <MenuItem value='2024'>2024 - 2025</MenuItem>
+                                                                            <MenuItem value='2023'>2023 - 2024</MenuItem>
+                                                
+                                                                        </Select>
+                                                                    </FormControl> */}
                             <FormControl sx={{ minWidth: 100, maxWidth: 100 }} size="small">
                                 <InputLabel id="demo-select-small-label">View</InputLabel>
                                 <Select

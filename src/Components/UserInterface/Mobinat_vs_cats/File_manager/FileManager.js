@@ -22,17 +22,17 @@ import { useNavigate } from 'react-router-dom';
 import Swal from "sweetalert2";
 import TopicIcon from '@mui/icons-material/Topic';
 import OverAllCss from "../../../csss/OverAllCss";
-import { postData, getData, deleteData } from "../../../services/FetchNodeServices";
+import { postData, getData, deleteData, ServerURL } from "../../../services/FetchNodeServices";
 import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
-
+ 
 const jsonData = [
-    { folder_name: "Mobinet Dump Files", api: "mobinate_vs_cats/mobinet_dump",back_folder:"mobinet_dump_data" },
-    { folder_name: "Locator File", api: "mobinate_vs_cats/locator" ,back_folder:"locator_data" },
-    { folder_name: "MS-MF File", api: "mobinate_vs_cats/msmf" ,back_folder:"msmf_data" },
-    { folder_name: "RFS File", api: "mobinate_vs_cats/rfs" ,back_folder:"rfs_data" },
-    { folder_name: "Stock File", api: "mobinate_vs_cats/stock" ,back_folder:"stock_report_data" },
+    { folder_name: "Mobinet Dump Files", api: "mobinate_vs_cats/mobinet_dump", back_folder: "mobinet_dump_data" },
+    { folder_name: "Locator File", api: "mobinate_vs_cats/locator", back_folder: "locator_data" },
+    { folder_name: "MS-MF File", api: "mobinate_vs_cats/msmf", back_folder: "msmf_data" },
+    { folder_name: "RFS File", api: "mobinate_vs_cats/rfs", back_folder: "rfs_data" },
+    { folder_name: "Stock File", api: "mobinate_vs_cats/stock", back_folder: "stock_report_data" },
 ];
-
+ 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return (
         <Slide
@@ -46,7 +46,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
         />
     );
 });
-
+ 
 const FileManager = () => {
     const [open2, setOpen2] = useState(false);
     const [dialogData, setDialogData] = useState()
@@ -57,25 +57,25 @@ const FileManager = () => {
     const [showError, setShowError] = useState({
         selectfile: false,
     });
-
+ 
     const fetchApiData = async (api) => {
         action(true)
-
+ 
         const response = await getData(`${api}/`);
-
+ 
         if (response?.status) {
             action(false);
             setShoweFiles(response.files);
-
+ 
         }
-
-        
+ 
+ 
     }
-
-    const handleOpen = (foldername, apikey , back_folder) => {
+ 
+    const handleOpen = (foldername, apikey, back_folder) => {
         fetchApiData(apikey)
         setOpen2(true);
-        setDialogData({ foldername: foldername, apikey: apikey , back_folder: back_folder })
+        setDialogData({ foldername: foldername, apikey: apikey, back_folder: back_folder })
         // console.log('data', foldername, apikey)
     }
     const handleClose = () => {
@@ -84,20 +84,20 @@ const FileManager = () => {
         setDialogData()
         setShowError({ selectfile: false })
         setSeletctFiles([])
-
+ 
     }
-
+ 
     const handleSubmit = async (api) => {
         const isValid = selectFiles.length > 0;
-
+ 
         if (!isValid) {
             setShowError({
                 selectfile: selectFiles.length === 0,
-
+ 
             });
             return;
         }
-
+ 
         action(true);
         const formData = new FormData();
         Array.from(selectFiles).forEach((file) => {
@@ -105,7 +105,7 @@ const FileManager = () => {
         });
         const response = await postData(`${api}/`, formData);
         action(false);
-
+ 
         if (response.status) {
             fetchApiData(api);
             setShowError({ selectfile: false })
@@ -114,7 +114,7 @@ const FileManager = () => {
         } else {
             Swal.fire({ icon: "error", title: "Oops...", text: response.message });
         }
-
+ 
     }
     const handleDelete = async (api) => {
         const confirmResult = await Swal.fire({
@@ -126,15 +126,15 @@ const FileManager = () => {
             cancelButtonColor: "#3085d6",
             confirmButtonText: "Yes, delete it!",
         });
-
+ 
         if (confirmResult.isConfirmed) {
             action(true);
-
+ 
             const response = await deleteData(`${api}/`);
             console.log("response", response);
-
+ 
             action(false);
-
+ 
             if (response?.status) {
                 setShoweFiles([]);
                 Swal.fire({ icon: "success", title: "Deleted!", text: response.message });
@@ -146,38 +146,136 @@ const FileManager = () => {
             console.log("Deletion cancelled.");
         }
     };
-
-    const OneFileDelete = async(fileName,api,back_folder) => {
-       const confirmResult = await Swal.fire({
-            title: "Are you sure?",
-            text: `Want to delete ${fileName} file!`,
-            icon: "warning",
+ 
+    // const OneFileDelete = async(fileName,api,back_folder) => {
+    //    const confirmResult = await Swal.fire({
+    //         title: "Are you sure?",
+    //         text: `Want to delete ${fileName} file!`,
+    //         icon: "warning",
+    //         showCancelButton: true,
+    //         confirmButtonColor: "#d33",
+    //         cancelButtonColor: "#3085d6",
+    //         confirmButtonText: "Yes, delete it!",
+    //     });
+ 
+    //     if (confirmResult.isConfirmed) {
+    //         action(true);
+ 
+    //         const response = await deleteData(`mobinate_vs_cats/delete_mobinet_file/`, {
+    //             data: { filename: `${fileName}`, foldername: `${back_folder}`}
+    //         });
+ 
+    //         action(false);
+    //         if (response?.status) {
+    //             fetchApiData(api)
+    //             Swal.fire({ icon: "success", title: "Deleted!", text: response.message });
+    //         } else {
+    //             Swal.fire({ icon: "error", title: "Oops...", text: response.message });
+    //         }
+    //     } else {
+    //         // Optional: do something when deletion is cancelled
+    //         console.log("Deletion cancelled.");
+    //     }
+    // }
+ 
+    const OneFileDelete = async (fileName, api, back_folder) => {
+ 
+        const result = await Swal.fire({
+            title: "Choose Action",
+            text: `What do you want to do with ${fileName}?`,
+            icon: "question",
+ 
             showCancelButton: true,
+            showConfirmButton: true,
+            showDenyButton: true,
+ 
+            confirmButtonText: "Delete",
+            denyButtonText: "Download",
+            cancelButtonText: "Cancel",
+ 
             confirmButtonColor: "#d33",
+            denyButtonColor: "#28a745",
             cancelButtonColor: "#3085d6",
-            confirmButtonText: "Yes, delete it!",
         });
-
-        if (confirmResult.isConfirmed) {
+ 
+        // DELETE
+        if (result.isConfirmed) {
+ 
             action(true);
-
-            const response = await deleteData(`mobinate_vs_cats/delete_mobinet_file/`, {
-                data: { filename: `${fileName}`, foldername: `${back_folder}`}
-            });
-
+ 
+            const response = await deleteData(
+                `mobinate_vs_cats/delete_mobinet_file/`,
+                {
+                    data: {
+                        filename: fileName,
+                        foldername: back_folder
+                    }
+                }
+            );
+ 
             action(false);
+ 
             if (response?.status) {
-                fetchApiData(api)
-                Swal.fire({ icon: "success", title: "Deleted!", text: response.message });
+                fetchApiData(api);
+ 
+                Swal.fire({
+                    icon: "success",
+                    title: "Deleted!",
+                    text: response.message
+                });
+ 
             } else {
-                Swal.fire({ icon: "error", title: "Oops...", text: response.message });
+ 
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: response.message
+                });
             }
-        } else {
-            // Optional: do something when deletion is cancelled
-            console.log("Deletion cancelled.");
         }
-    }
-
+ 
+        // DOWNLOAD
+        else if (result.isDenied) {
+ 
+            try {
+ 
+                const fileUrl = `${ServerURL}/media/Mobinet_CATs_TOOL/${back_folder}/${fileName}`;
+ 
+                // Create download link
+                const link = document.createElement("a");
+ 
+                link.href = fileUrl;
+                link.download = fileName;
+                link.target = "_blank";
+ 
+                document.body.appendChild(link);
+ 
+                link.click();
+ 
+                link.remove();
+ 
+                Swal.fire({
+                    icon: "success",
+                    title: "Downloaded!",
+                    text: `${fileName} downloaded successfully`
+                });
+ 
+            } catch (error) {
+ 
+                Swal.fire({
+                    icon: "error",
+                    title: "Download Failed",
+                    text: error.message
+                });
+            }
+        }
+ 
+        // CANCEL
+        else {
+            console.log("Action cancelled");
+        }
+    };
+ 
     useEffect(() => {
         const title = window.location.pathname
             .slice(1)
@@ -186,7 +284,7 @@ const FileManager = () => {
             .toUpperCase();
         document.title = title;
     }, []);
-
+ 
     return (
         <>
             <Box m={1} ml={2}>
@@ -212,7 +310,7 @@ const FileManager = () => {
                                     borderRadius: '5px',
                                     boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px',
                                     '&:hover': { backgroundColor: '#223354', color: 'white' },
-
+ 
                                 }}
                             >
                                 <FolderIcon sx={{ color: '#FEA405', fontSize: 35 }} />
@@ -222,7 +320,7 @@ const FileManager = () => {
                     ))}
                 </Grid>
             </Box>
-
+ 
             {/* Dialog Rendered Normally */}
             {open2 && <Dialog
                 fullWidth
@@ -256,7 +354,7 @@ const FileManager = () => {
                                 error={showError.selectfile}
                                 selectedText={selectFiles.length > 0 ? `Selected File(s): ${selectFiles.length}` : ""}
                             />
-
+ 
                         </Box>
                         <Box><Button variant="contained" color="success" onClick={() => handleSubmit(dialogData?.apikey)} endIcon={<UploadIcon />}>Upload</Button></Box>
                     </Box>
@@ -264,13 +362,14 @@ const FileManager = () => {
                         <Grid container rowSpacing={2} columnSpacing={3} direction={{ xs: "column", sm: "column", md: "row" }}>
                             {showFiles.map((item, index) => (
                                 <Grid item xs={4} key={index}>
-                                    <Box key={item} sx={{ display: "flex", 
-                                    justifyContent: 'flex-start', alignItems: 'center', 
-                                    cursor: 'pointer', border: '0px solid black', borderRadius: '5px',
-                                     padding: 0.5, background: '#e9e9e9',
-                                     '&:hover': { backgroundColor: '#223354', color: 'white' }
-                                     }}
-                                        onClick={() => OneFileDelete(item, dialogData?.apikey , dialogData?.back_folder)}
+                                    <Box key={item} sx={{
+                                        display: "flex",
+                                        justifyContent: 'flex-start', alignItems: 'center',
+                                        cursor: 'pointer', border: '0px solid black', borderRadius: '5px',
+                                        padding: 0.5, background: '#e9e9e9',
+                                        '&:hover': { backgroundColor: '#223354', color: 'white' }
+                                    }}
+                                        onClick={() => OneFileDelete(item, dialogData?.apikey, dialogData?.back_folder)}
                                     >
                                         <TopicIcon sx={{ color: '#FEA405' }} />{item}
                                     </Box>
@@ -281,17 +380,17 @@ const FileManager = () => {
                             <Button onClick={() => handleDelete(dialogData?.apikey)} variant="contained" fullWidth color="error" endIcon={<DeleteIcon />}>Delete All</Button>
                         </Box>
                     </Box>}
-
-
+ 
+ 
                 </DialogContent>
             </Dialog>}
-
+ 
             {loading}
-
+ 
         </>
     );
 };
-
+ 
 const UploadSection = ({ label, color, onChange, error, multiple = false, selectedText }) => {
     return (
         <Box >
@@ -322,5 +421,5 @@ const UploadSection = ({ label, color, onChange, error, multiple = false, select
         </Box>
     );
 };
-
+ 
 export default FileManager;
