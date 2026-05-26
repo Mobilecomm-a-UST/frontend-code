@@ -137,6 +137,7 @@ const MonthWise = () => {
     const [milestone1, setMilestone1] = useState('Site ONAIR')
     const [milestone2, setMilestone2] = useState('4G MS2')
     const [view, setView] = useState('Cumulative')
+    const [year, setYear] = useState('2026')
     let delayed;
 
     // console.log('data get', milestoneData)
@@ -154,6 +155,7 @@ const MonthWise = () => {
         formData.append('milestone1', milestone1)
         formData.append('milestone2', milestone2)
         formData.append('type', typeFileter)
+        formData.append('year', year)
         const res = await postData("nt_tracker/ms2_monthly_graph/", formData);
         // const res =  tempData; //  remove this line when API is read
         // console.log('responce month wise' , res)
@@ -562,6 +564,24 @@ to ${milestone2} (${getTitalValue(milestoneData?.onAirDone, view)})`,
                         <InputLabel style={{ fontSize: 15 }}>Select Month</InputLabel>
                         <input type='month' value={date} onChange={(e) => handleMonthData(e.target.value)} />
                     </div> */}
+{/* 
+                     <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
+                                                                <InputLabel id="year-select-label">Financial Year</InputLabel>
+                                                                <Select
+                                                                    labelId="year-select-label"
+                                                                    id="year-select"
+                                                                    value={year}
+                                                                    label="Financial Year"
+                                                                    onChange={(e) => setYear(e.target.value)}
+                                                                >
+                                                                    <MenuItem value='2027'>2027 - 2028</MenuItem>
+                                                                    <MenuItem value='2026'>2026 - 2027</MenuItem>
+                                                                    <MenuItem value='2025'>2025 - 2026</MenuItem>
+                                                                    <MenuItem value='2024'>2024 - 2025</MenuItem>
+                                                                    <MenuItem value='2023'>2023 - 2024</MenuItem>
+                                        
+                                                                </Select>
+                                                            </FormControl> */}
                     <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
                         <InputLabel id="demo-select-small-label">View</InputLabel>
                         <Select

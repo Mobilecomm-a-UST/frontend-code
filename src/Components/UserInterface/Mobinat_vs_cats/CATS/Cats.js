@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { postData,getData, ServerURL } from "../../../services/FetchNodeServices";
 import OverAllCss from "../../../csss/OverAllCss";
 import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
-
+ 
 const Cats = () => {
   const [mobinateDump, setMobinateDump] = useState({ filename: "", bytes: "" });
   const [siteList, setSiteList] = useState({ filename: "", bytes: "" });
@@ -23,7 +23,7 @@ const Cats = () => {
   const [fileData, setFileData] = useState();
   const [download, setDownload] = useState(false);
   const [showFiles, setShoweFiles] = useState({locator:[],stock:[],msmf:[],rfs:[]})
-
+ 
   const [showError, setShowError] = useState({
     mobinate: false,
     siteList: false,
@@ -34,13 +34,13 @@ const Cats = () => {
     // stock: false,
     // locater: false
   });
-
+ 
   const { loading, action } = useLoadingDialog();
   const navigate = useNavigate();
   const classes = OverAllCss();
-
+ 
   const link = `${ServerURL}${fileData}`;
-
+ 
   const updateFile = (event, setFileState, errorKey) => {
     const file = event.target.files[0];
     if (file) {
@@ -48,15 +48,15 @@ const Cats = () => {
       setFileState({ filename: file.name, bytes: file });
     }
   };
-
+ 
   const fetchMobinetFileData = async () => {
       action(true)
-  
+ 
       const response1 = await getData('mobinate_vs_cats/rfs/');
       const response2 = await getData('mobinate_vs_cats/msmf/');
       const response3 = await getData('mobinate_vs_cats/stock/');
       const response4 = await getData('mobinate_vs_cats/locator/');
-  
+ 
       if (response4.status) {
         action(false);
         // setShoweFiles(response.files);
@@ -64,35 +64,35 @@ const Cats = () => {
                         stock:response3?.files?response3?.files:[],
                         msmf:response2?.files?response2?.files:[],
                         rfs:response1?.files?response1?.files:[]})
-  
+ 
       }
-
+ 
     }
-
+ 
   const handleSubmit = async () => {
     const isValid =
       mobinateDump.filename &&
       siteList.filename &&
-      hardWareFile.filename &&
-      olmidFile.filename ;
+      hardWareFile.filename ;
+      // olmidFile.filename ;
       // rfsFile.filename &&
       // msmfFile.filename &&
       // stockFile.filename;
-
+ 
     if (!isValid) {
       setShowError({
         // mobinate: mobinateDump.length === 0,
         mobinate: !mobinateDump.filename,
         siteList: !siteList.filename,
         hardware: !hardWareFile.filename,
-        olmId: !olmidFile.filename,
+        // olmId: !olmidFile.filename,
         // rfs: !rfsFile.filename,
         // msmf: !msmfFile.filename,
         // stock: !stockFile.filename,
       });
       return;
     }
-
+ 
     action(true);
     const formData = new FormData();
     // locaterFiles.forEach((file) => formData.append("locator_file", file));
@@ -102,14 +102,14 @@ const Cats = () => {
     formData.append("mobinet_dump_file", mobinateDump.bytes)
     formData.append("site_list_file", siteList.bytes);
     formData.append("hw_file", hardWareFile.bytes);
-    formData.append("olm_id_file", olmidFile.bytes);
+    // formData.append("olm_id_file", olmidFile.bytes);
     // formData.append("rfs_file", rfsFile.bytes);
     // formData.append("msmf_file", msmfFile.bytes);
     // formData.append("stock_report_file", stockFile.bytes)
-
+ 
     const response = await postData("mobinate_vs_cats/cats/", formData);
     action(false);
-
+ 
     if (response.status) {
       setDownload(true);
       setFileData(response.download_url);
@@ -118,7 +118,7 @@ const Cats = () => {
       Swal.fire({ icon: "error", title: "Oops...", text: response.message });
     }
   };
-
+ 
   const handleCancel = () => {
     setMobinateDump({ filename: "", bytes: "" });
     setSiteList({ filename: "", bytes: "" });
@@ -130,7 +130,7 @@ const Cats = () => {
     setDownload(false);
     setShowError({ mobinate: false, siteList: false, hardware: false });
   };
-
+ 
   useEffect(() => {
     const title = window.location.pathname
       .slice(1)
@@ -149,13 +149,13 @@ const Cats = () => {
           <Typography color="text.primary">CATS</Typography>
         </Breadcrumbs>
       </Box>
-
+ 
       <Slide direction="left" in timeout={1000}>
         <Box>
           <Box className={classes.main_Box}>
             <Box className={classes.Back_Box} sx={{ width: { md: "75%", xs: "100%" } }}>
               <Box className={classes.Box_Hading}>Make CATS Summary Data</Box>
-
+ 
               <Stack spacing={2} sx={{ mt: "-40px" }}>
                 {/* Mobinate Dump */}
                 <UploadSection
@@ -170,7 +170,7 @@ const Cats = () => {
                   error={showError.mobinate}
                   selectedText={mobinateDump.filename}
                 />
-
+ 
                 {/* Site List */}
                 <UploadSection
                   label="Select Site List File"
@@ -179,7 +179,7 @@ const Cats = () => {
                   error={showError.siteList}
                   selectedText={siteList.filename}
                 />
-
+ 
                 {/* Hardware File */}
                 <UploadSection
                   label="Select Hardware File"
@@ -188,16 +188,16 @@ const Cats = () => {
                   error={showError.hardware}
                   selectedText={hardWareFile.filename}
                 />
-
+ 
                 {/* OLM ID File */}
-                <UploadSection
+                {/* <UploadSection
                   label="Select OLM ID File"
                   color={olmidFile.filename ? "warning" : "primary"}
                   onChange={(e) => updateFile(e, setOlmidFile, "olmidFile")}
                   error={showError.olmId}
                   selectedText={olmidFile.filename}
-                />
-
+                /> */}
+ 
                 {/* RFS File */}
                 {/* <UploadSection
                   label="Select RFS File"
@@ -218,11 +218,11 @@ const Cats = () => {
                         </Grid>
                       ))}
                     </Grid>
-
+ 
                   </div>
                 </Box>
-
-
+ 
+ 
                 {/* MS-MF File */}
                 {/* <UploadSection
                   label="Select MS-MF File"
@@ -231,7 +231,7 @@ const Cats = () => {
                   error={showError.olmId}
                   selectedText={msmfFile.filename}
                 /> */}
-
+ 
                  <Box className={OverAllCss().Front_Box}>
                   <div className={OverAllCss().Front_Box_Hading}>MS-MF File :</div>
                   <div className={OverAllCss().Front_Box_Select_Button}>
@@ -244,10 +244,10 @@ const Cats = () => {
                         </Grid>
                       ))}
                     </Grid>
-
+ 
                   </div>
                 </Box>
-    
+   
                 {/* Locater files Dump */}
                 {/* <UploadSection
                   label="Select Locator Files"
@@ -273,7 +273,7 @@ const Cats = () => {
                         </Grid>
                       ))}
                     </Grid>
-
+ 
                   </div>
                 </Box>
                             {/* Stock File */}
@@ -296,13 +296,13 @@ const Cats = () => {
                         </Grid>
                       ))}
                     </Grid>
-
+ 
                   </div>
                 </Box>
-
-
+ 
+ 
               </Stack>
-
+ 
               <Stack
                 direction={{ xs: "column", md: "row" }}
                 spacing={2}
@@ -314,7 +314,7 @@ const Cats = () => {
               </Stack>
             </Box>
           </Box>
-
+ 
           {download && (
             <Box textAlign="center">
               <a href={fileData} download>
@@ -330,12 +330,12 @@ const Cats = () => {
           )}
         </Box>
       </Slide>
-
+ 
       {loading}
     </>
   )
 }
-
+ 
 const UploadSection = ({ label, color, onChange, error, multiple = false, selectedText }) => {
   return (
     <Box className={OverAllCss().Front_Box}>
@@ -366,5 +366,5 @@ const UploadSection = ({ label, color, onChange, error, multiple = false, select
     </Box>
   );
 };
-
+ 
 export default Cats

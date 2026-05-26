@@ -108,6 +108,7 @@ const DateWise = () => {
     const [selectDate, setSelectDate] = useState([])
     const [month, setMonth] = useState('')
     const { afterToday, combine } = DateRangePicker;
+    const [year, setYear] = useState('2026')
     // const [totals, setTotals] = useState()
 
     // console.log('table data', tableData)
@@ -125,6 +126,7 @@ const DateWise = () => {
         formData.append('view', view)
         formData.append('month', month.split('-')[1] || '')
         formData.append('year', month.split('-')[0] || '')
+        formData.append('year', year)
         const res = await postData("nt_tracker/daily_dashboard_file/", formData);
         // const res =  tempData; //  remove this line when API is ready
         console.log('date wise response', JSON.parse(res.data))
@@ -414,6 +416,23 @@ const DateWise = () => {
                                     InputLabelProps={{ shrink: true }}
                                 />
                             </FormControl>
+                            {/* <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
+                                <InputLabel id="year-select-label">Financial Year</InputLabel>
+                                <Select
+                                    labelId="year-select-label"
+                                    id="year-select"
+                                    value={year}
+                                    label="Financial Year"
+                                    onChange={(e) => setYear(e.target.value)}
+                                >
+                                    <MenuItem value='2027'>2027 - 2028</MenuItem>
+                                    <MenuItem value='2026'>2026 - 2027</MenuItem>
+                                    <MenuItem value='2025'>2025 - 2026</MenuItem>
+                                    <MenuItem value='2024'>2024 - 2025</MenuItem>
+                                    <MenuItem value='2023'>2023 - 2024</MenuItem>
+
+                                </Select>
+                            </FormControl> */}
                             {/* circle */}
                             <MultiSelectWithAll
                                 label="Circle"
@@ -471,9 +490,9 @@ const DateWise = () => {
                                             Milestone Track/Site Count</th>
                                         <th style={{ padding: '5px 15px', whiteSpace: 'nowrap', backgroundColor: '#006e74' }}>
                                             AOP</th>
-                                            {month &&  <th style={{ padding: '5px 15px', whiteSpace: 'nowrap', backgroundColor: '#006e74' }}>
-                                            CF</th>} 
-                                       
+                                        {month && <th style={{ padding: '5px 15px', whiteSpace: 'nowrap', backgroundColor: '#006e74' }}>
+                                            CF</th>}
+
                                         {dateArray?.map((item, index) => (
                                             <th key={index} style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#CBCBCB', color: 'black' }}>{item}</th>
                                         ))}

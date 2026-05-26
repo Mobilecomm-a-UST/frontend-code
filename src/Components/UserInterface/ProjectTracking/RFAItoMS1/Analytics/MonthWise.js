@@ -141,7 +141,7 @@ const MonthWise = () => {
         formData.append('milestone1', milestone1)
         formData.append('milestone2', milestone2)
         formData.append('type', typeFileter)
-        formData.append('year2', year)
+        formData.append('year', year)
         const res = await postData("alok_tracker/monthly_graph/", formData);
         // const res =  tempData; //  remove this line when API is read
         // console.log('responce data1' , res)
@@ -548,7 +548,7 @@ to ${milestone2} (${getTitalValue(milestoneData?.onAirDone, view)})`,
                         <input type='month' value={date} onChange={(e) => handleMonthData(e.target.value)} />
                     </div> */}
 
-                    <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
+                    {/* <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
                         <InputLabel id="year-select-label">Financial Year</InputLabel>
                         <Select
                             labelId="year-select-label"
@@ -564,7 +564,7 @@ to ${milestone2} (${getTitalValue(milestoneData?.onAirDone, view)})`,
                             <MenuItem value='2023'>2023 - 2024</MenuItem>
 
                         </Select>
-                    </FormControl>
+                    </FormControl> */}
                     <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
                         <InputLabel id="demo-select-small-label">View</InputLabel>
                         <Select

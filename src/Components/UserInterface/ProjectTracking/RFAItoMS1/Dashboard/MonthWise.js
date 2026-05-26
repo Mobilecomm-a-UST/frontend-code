@@ -113,7 +113,7 @@ const MonthWise = () => {
         formData.append('relocation_method', relocationMethod)
         formData.append('new_toco_name', toco)
         formData.append('view', view)
-        formData.append('year2', year)
+        
 
         const res = await postData("alok_tracker/weekly_monthly_dashboard_file/", formData);
         // const res =  tempData; //  remove this line when API is ready
@@ -267,23 +267,7 @@ const MonthWise = () => {
                             Yearly Progress - RFAI to MS1 Waterfall
                         </Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', gap: 1 }}>
-                            <FormControl sx={{ minWidth: 120, maxWidth: 150 }} size="small">
-                                <InputLabel id="year-select-label">Financial Year</InputLabel>
-                                <Select
-                                    labelId="year-select-label"
-                                    id="year-select"
-                                    value={year}
-                                    label="Financial Year"
-                                    onChange={(e) => setYear(e.target.value)}
-                                >
-
-                                    <MenuItem value='2026'>2026 - 2027</MenuItem>
-                                    <MenuItem value='2025'>2025 - 2026</MenuItem>
-                                    <MenuItem value='2024'>2024 - 2025</MenuItem>
-                                    <MenuItem value='2023'>2023 - 2024</MenuItem>
-
-                                </Select>
-                            </FormControl>
+                           
                             <FormControl sx={{ minWidth: 100, maxWidth: 100 }} size="small">
                                 <InputLabel id="demo-select-small-label">View</InputLabel>
                                 <Select

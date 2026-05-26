@@ -98,6 +98,7 @@ const CircleWiese = () => {
     const [circleWieseData, setCircleWieseData] = useState([])
     const [milestoneData, setMilestoneData] = useState({})
     const [month, setMonth] = useState('')
+    const [year, setYear] = useState('2026')
     let delayed;
 
     console.log('data get', circleWieseData)
@@ -116,6 +117,7 @@ const CircleWiese = () => {
             formData.append('milestone2', milestone2)
             formData.append('month', month.split('-')[1] || '')
             formData.append('year', month.split('-')[0] || '')
+            formData.append('year', year)
             const res = await postData("alok_tracker/ms2_graphs/", formData);
             // const res =  tempData; //  remove this line when API is ready
             // console.log(' circle wise data', (res))
@@ -585,7 +587,23 @@ const CircleWiese = () => {
                         <input type='month' value={date} onChange={(e) => handleMonthData(e.target.value)} />
                     
                 </div> */}
-
+                    {/* <FormControl sx={{ minWidth: 120, maxWidth: 150 }} size="small">
+                                                                    <InputLabel id="year-select-label">Financial Year</InputLabel>
+                                                                    <Select
+                                                                        labelId="year-select-label"
+                                                                        id="year-select"
+                                                                        value={year}
+                                                                        label="Financial Year"
+                                                                        onChange={(e) => setYear(e.target.value)}
+                                                                    >
+                                    
+                                                                        <MenuItem value='2026'>2026 - 2027</MenuItem>
+                                                                        <MenuItem value='2025'>2025 - 2026</MenuItem>
+                                                                        <MenuItem value='2024'>2024 - 2025</MenuItem>
+                                                                        <MenuItem value='2023'>2023 - 2024</MenuItem>
+                                    
+                                                                    </Select>
+                                                                </FormControl> */}
 
                     <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
                         <InputLabel id="demo-simple-select-label">milestone1</InputLabel>

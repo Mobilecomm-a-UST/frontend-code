@@ -25,62 +25,62 @@ import * as ExcelJS from 'exceljs'
 
 
 const MultiSelectWithAll = ({
-  label,
-  options = [],
-  selectedValues = [],
-  setSelectedValues,
+    label,
+    options = [],
+    selectedValues = [],
+    setSelectedValues,
 }) => {
-  const handleChange = (event) => {
-    const { value } = event.target;
-    const selected = typeof value === "string" ? value.split(",") : value;
+    const handleChange = (event) => {
+        const { value } = event.target;
+        const selected = typeof value === "string" ? value.split(",") : value;
 
-    if (selected.includes("ALL")) {
-      if (selectedValues.length === options.length) {
-        setSelectedValues([]);
-      } else {
-        setSelectedValues(options);
-      }
-    } else {
-      setSelectedValues(selected);
-    }
-  };
-
-  const isAllSelected =
-    options?.length > 0 &&
-    selectedValues?.length === options?.length;
-
-  return (
-    <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
-      <InputLabel id={`${label}-label`}>{label}</InputLabel>
-
-      <Select
-        labelId={`${label}-label`}
-        multiple
-        value={selectedValues}
-        onChange={handleChange}
-        input={<OutlinedInput label={label} />}
-        renderValue={(selected) => selected.join(", ")}
-      >
-        <MenuItem value="ALL">
-          <Checkbox
-            checked={isAllSelected}
-            indeterminate={
-              selectedValues?.length > 0 &&
-              selectedValues?.length < options?.length
+        if (selected.includes("ALL")) {
+            if (selectedValues.length === options.length) {
+                setSelectedValues([]);
+            } else {
+                setSelectedValues(options);
             }
-          />
-          <ListItemText primary="Select All" />
-        </MenuItem>
+        } else {
+            setSelectedValues(selected);
+        }
+    };
 
-        {options?.map((name) => (
-          <MenuItem key={name} value={name}>
-            <Checkbox checked={selectedValues?.includes(name)} />
-            <ListItemText primary={name} />
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
-  );
+    const isAllSelected =
+        options?.length > 0 &&
+        selectedValues?.length === options?.length;
+
+    return (
+        <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
+            <InputLabel id={`${label}-label`}>{label}</InputLabel>
+
+            <Select
+                labelId={`${label}-label`}
+                multiple
+                value={selectedValues}
+                onChange={handleChange}
+                input={<OutlinedInput label={label} />}
+                renderValue={(selected) => selected.join(", ")}
+            >
+                <MenuItem value="ALL">
+                    <Checkbox
+                        checked={isAllSelected}
+                        indeterminate={
+                            selectedValues?.length > 0 &&
+                            selectedValues?.length < options?.length
+                        }
+                    />
+                    <ListItemText primary="Select All" />
+                </MenuItem>
+
+                {options?.map((name) => (
+                    <MenuItem key={name} value={name}>
+                        <Checkbox checked={selectedValues?.includes(name)} />
+                        <ListItemText primary={name} />
+                    </MenuItem>
+                ))}
+            </Select>
+        </FormControl>
+    );
 };
 
 
@@ -108,6 +108,7 @@ const WeekWise = () => {
     const [month, setMonth] = useState('')
     const [downloadExcelData, setDownloadExcelData] = useState('')
     const [view, setView] = useState('Cumulative')
+    const [year, setYear] = useState('2026')
 
 
     const fetchDailyData = async () => {
@@ -120,6 +121,7 @@ const WeekWise = () => {
         formData.append('month', month.split('-')[1] || '')
         formData.append('year', month.split('-')[0] || '')
         formData.append('view', view)
+        formData.append('year', year)
         const res = await postData("nt_tracker/weekly_monthly_dashboard_file/", formData);
         // const res =  tempData; //  remove this line when API is ready
         console.log('week wise response', JSON.parse(res.week_data), res.unique_data.week_columns)
@@ -327,6 +329,23 @@ const WeekWise = () => {
                                     InputLabelProps={{ shrink: true }}
                                 />
                             </FormControl>
+                            {/* <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
+                                <InputLabel id="year-select-label">Financial Year</InputLabel>
+                                <Select
+                                    labelId="year-select-label"
+                                    id="year-select"
+                                    value={year}
+                                    label="Financial Year"
+                                    onChange={(e) => setYear(e.target.value)}
+                                >
+                                    <MenuItem value='2027'>2027 - 2028</MenuItem>
+                                    <MenuItem value='2026'>2026 - 2027</MenuItem>
+                                    <MenuItem value='2025'>2025 - 2026</MenuItem>
+                                    <MenuItem value='2024'>2024 - 2025</MenuItem>
+                                    <MenuItem value='2023'>2023 - 2024</MenuItem>
+
+                                </Select>
+                            </FormControl> */}
                             <FormControl sx={{ minWidth: 100, maxWidth: 100 }} size="small">
                                 <InputLabel id="demo-select-small-label">View</InputLabel>
                                 <Select
