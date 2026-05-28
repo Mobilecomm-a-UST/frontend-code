@@ -128,18 +128,37 @@ const RangeWiseDashboard = ({ onData }) => {
     // Download Key and value
     const columnData = [
         { title: 'Unique Key', field: 'unique_key' },
-        { title: 'OEM', field: 'OEM' },
-        { title: 'Integration Date', field: 'Integration_Date' },
-        { title: 'CIRCLE', field: 'CIRCLE' },
-        { title: 'Activity Name', field: 'Activity_Name' },
-        { title: 'Site ID', field: 'Site_ID' },
+       {
+            title: 'OEM', field: 'OEM',
+
+        },
+        {
+            title: 'Integration Date', field: 'Integration_Date',
+
+        },
+        {
+            title: 'CIRCLE', field: 'CIRCLE',
+
+        },
+        {
+            title: 'Activity Name', field: 'Activity_Name',
+
+        },
+        {
+            title: 'Site ID', field: 'Site_ID',
+        },
         { title: 'MO NAME', field: 'MO_NAME' },
         { title: 'LNBTS ID', field: 'LNBTS_ID' },
-        { title: 'Technology (SIWA)', field: 'Technology_SIWA' },
-        { title: 'Configuration 5G', field: 'Configuration_5G' },
+        { title: 'New NRBTS ID', field: 'New_NRBTS_ID' },
+        // { title: 'Technology (SIWA)', field: 'Technology_SIWA' },
+        {
+            title: 'Technology (SIWA)',
+            field: 'Technology_SIWA',
+        },
+        { title: '5G Configuration', field: 'Configuration_5G'},
         { title: 'OSS Details', field: 'OSS_Details' },
         { title: 'Cell ID', field: 'Cell_ID' },
-        { title: 'CELL COUNT', field: 'CELL_COUNT' },
+        { title: 'CELL COUNT', field: 'CELL_COUNT', type: 'numeric' },
         { title: 'BSC NAME', field: 'BSC_NAME' },
         { title: 'BCF', field: 'BCF' },
         { title: 'TRX Count', field: 'TRX_Count' },
@@ -150,7 +169,12 @@ const RangeWiseDashboard = ({ onData }) => {
         { title: 'POST Alarms', field: 'POST_Alarms' },
         { title: 'Activity Mode (SA/NSA)', field: 'Activity_Mode' },
         { title: 'Activity Type (SIWA)', field: 'Activity_Type_SIWA' },
-        { title: 'Band (SIWA)', field: 'Band_SIWA' },
+        // { title: 'Band (SIWA)', field: 'Band_SIWA', lookup: bandSiwaLookup },
+        {
+            title: 'Band (SIWA)',
+            field: 'Band_SIWA',
+
+        },
         { title: 'CELL STATUS', field: 'CELL_STATUS' },
         { title: 'CTR STATUS', field: 'CTR_STATUS' },
         { title: 'Integration Remark', field: 'Integration_Remark' },
@@ -191,19 +215,26 @@ const RangeWiseDashboard = ({ onData }) => {
         { title: 'Pre/Post Check', field: 'Pre_Post_Check' },
         { title: 'CRQ', field: 'CRQ' },
         { title: 'Customer Approval', field: 'Customer_Approval' },
-        { title: 'Allocated Tech.', field: 'Allocated_Tech' },
-        { title: 'Deployed Tech.', field: 'Deployed_Tech' },
         { title: 'Old Site ID', field: 'Old_Site_ID' },
-
         { title: 'Old Site LNBTS', field: 'Old_Site_LNBTS' },
         { title: 'Old NRBTS ID', field: 'Old_NRBTS_ID' },
         { title: 'Old Site OSS', field: 'Old_Site_OSS' },
         { title: 'Old Site MPlane IP', field: 'Old_Site_MPlane_IP' },
+        {
+            title: 'Old Site Tech',
+            field: 'Old_Site_Tech',
 
- 
-        { title: 'Old Site Tech', field: 'Old_Site_Tech' },
-        { title: 'Allocated Tech', field: 'Allocated_Tech' },
-        { title: 'Deployed Tech', field: 'Deployed_Tech' },
+        },
+        {
+            title: 'Allocated Tech.', field: 'Allocated_Tech',
+        },
+        {
+            title: 'Deployed Tech.', field: 'Deployed_Tech',
+        },
+
+        { title: 'NO OF BBU', field: 'NO_OF_BBU' },
+        { title: 'Uploaded By', field: 'uploaded_by' },
+        { title: 'Upload Date', field: 'upload_date' },
 
     ]
     // handleExport Range wise table in excel formet.........
