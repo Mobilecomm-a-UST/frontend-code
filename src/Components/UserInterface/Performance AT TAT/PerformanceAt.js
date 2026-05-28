@@ -110,14 +110,14 @@ const PerformanceAt = () => {
                                         >
                                             SCFT FTR
                                         </Nav.Item>
-                                        {/* <Nav.Item
+                                        <Nav.Item
                                             eventKey="5"
                                             placement="rightStart"
                                             icon={<DashboardIcon />}
                                             onClick={() => navigate('/tools/performance_at_tat/Performance_SR_Wise')}
                                         >
                                             Performance AT SR Wise Tracking
-                                        </Nav.Item> */}
+                                        </Nav.Item>
                                     </Nav>
                                 </Sidenav.Body>
                             </Sidenav>

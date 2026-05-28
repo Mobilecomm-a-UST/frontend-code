@@ -23,7 +23,7 @@ const Scft_At_FTR = () => {
      const { loading, action } = useLoadingDialog();
         const [tableData, setTableData] = useState([]);
         const [typeFileter, setTypeFilter] = useState('Overall')
-        const [year, setYear] = useState('2025');
+        const [year, setYear] = useState('2026');
         const columns = tableData?.length
             ? Object.keys(tableData[0]).filter(key => key !== 'Circle')
             : [];

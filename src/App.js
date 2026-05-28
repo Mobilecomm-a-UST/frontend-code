@@ -65,6 +65,7 @@ const UpgradeDeployment = lazy(() => import('./Components/UserInterface/UpgradeD
 const payloadTraffic = lazy(() => import('./Components/UserInterface/Payload Traffic/Payload'))
 const G2Scripting = lazy(() => import('./Components/UserInterface/2G Scripting/2GScripting'))
 const PerformanceTAT = lazy(() => import('./Components/UserInterface/Performance AT TAT/PerformanceAt'))
+const DailyTaskReview = lazy(() => import('./Components/UserInterface/DailyTaskReview/DailyTaskReview'))  
 
 const queryClient = new QueryClient()
 
@@ -374,6 +375,12 @@ function App() {
              <Route path="/tools/performance_at_tat/*" element={
               <Suspense fallback={<div>Loading...</div>}>
                 <ProtectedRoute element={PerformanceTAT} allowedUserTypes={['admin','PAT']} userType={userType} />
+              </Suspense>
+            } />
+
+            <Route path="/tools/daily_task_review/*" element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProtectedRoute element={DailyTaskReview} allowedUserTypes={['admin','DTR']} userType={userType} />
               </Suspense>
             } />
 
