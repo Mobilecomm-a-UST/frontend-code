@@ -106,9 +106,9 @@ const DailyTaskReview = () => {
                                                 Dashboard
                                             </Nav.Item>
 
-                                            {/* <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={<ListIcon style={{}} />} onClick={() => { navigate('/tools/daily_task_review/AssignTask'); show(); setMenuButton(true) }}>
+                                            <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={<ListIcon style={{}} />} onClick={() => { navigate('/tools/daily_task_review/AssignTask'); show(); setMenuButton(true) }}>
                                                 Assign Task
-                                            </Nav.Item> */}
+                                            </Nav.Item>
 
                                             <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={< ImportIcon style={{}} />} onClick={() => { navigate('/tools/daily_task_review/'); show(); setMenuButton(true) }}>
                                                 Task Templates

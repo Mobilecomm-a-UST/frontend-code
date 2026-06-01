@@ -432,7 +432,7 @@ const AddTask = () => {
                             Tools
                         </Link>
                         <Link underline="hover" onClick={() => navigate("/tools/daily_task_review")}>
-                            Add Task
+                            Daily Task Review
                         </Link>
                         <Typography color="text.primary">Add Task</Typography>
                     </Breadcrumbs>
