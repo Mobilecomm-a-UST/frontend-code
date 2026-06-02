@@ -50,7 +50,7 @@ const LifeCycle = () => {
     const { action, loading } = useLoadingDialog();
     console.log('issue table', milestoneData)
 
-// nt_tracker
+    // nt_tracker
 
     const handleSubmitSite = async (e) => {
         e.preventDefault()
@@ -170,7 +170,7 @@ const LifeCycle = () => {
                 action(false)
                 refetchMilestoneAfterEdit();
                 refetchlifecycleData();
-               
+
                 // setMilestoneData(JSON.parse(response?.data?.json_data SER))
                 Swal.fire({
                     icon: "success",
@@ -520,8 +520,11 @@ const LifeCycle = () => {
                 <Grid container spacing={1}>
                     <Grid item xs={10} style={{ display: "flex" }}>
                         <Box >
-                            <form onSubmit={handleSubmitSite} style={{ display: 'flex', justifyContent: 'center', gap: 5 }}>
-                                <TextField size='small' placeholder='Enter Site ID' label="Site ID" required value={siteId} onChange={(e) => setSiteId(e.target.value)} />
+                            <form
+                                onSubmit={handleSubmitSite}
+                                style={{ display: 'flex', justifyContent: 'center', gap: 5 }}
+                            >
+                                {/* First Circle */}
                                 <FormControl size="small" sx={{ minWidth: 120 }}>
                                     <InputLabel id="issue-label">Circle</InputLabel>
                                     <Select
@@ -532,11 +535,30 @@ const LifeCycle = () => {
                                         required
                                     >
                                         {CircleList.map((item, index) => (
-                                            <MenuItem key={index} value={item}>{item}</MenuItem>
+                                            <MenuItem key={index} value={item}>
+                                                {item}
+                                            </MenuItem>
                                         ))}
                                     </Select>
                                 </FormControl>
-                                <Button type='submit' sx={{ backgroundColor: '#006e74' }} variant='contained'>search site</Button>
+
+                                {/* Then Site ID */}
+                                <TextField
+                                    size="small"
+                                    placeholder="Enter Site ID"
+                                    label="Site ID"
+                                    required
+                                    value={siteId}
+                                    onChange={(e) => setSiteId(e.target.value)}
+                                />
+
+                                <Button
+                                    type="submit"
+                                    sx={{ backgroundColor: '#006e74' }}
+                                    variant="contained"
+                                >
+                                    Search Site
+                                </Button>
                             </form>
                         </Box>
 
@@ -672,7 +694,7 @@ const LifeCycle = () => {
                                                 }}
                                             />
                                         </FormControl>
-                                         <FormControl fullWidth size="small" sx={{ flex: 1 }}>
+                                        <FormControl fullWidth size="small" sx={{ flex: 1 }}>
                                             <TextField
                                                 variant="outlined"
                                                 label="Remarks"

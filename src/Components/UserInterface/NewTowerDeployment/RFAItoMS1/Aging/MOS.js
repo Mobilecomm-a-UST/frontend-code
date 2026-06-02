@@ -101,6 +101,7 @@ const MOS = () => {
     const [milestoneOptions, setMilestoneOptions] = useState([
         "Allocation",
         "RFAI",
+        "WRFAI",
         "RFAI Survey",
         "MO Punch",
         "Material Dispatch",

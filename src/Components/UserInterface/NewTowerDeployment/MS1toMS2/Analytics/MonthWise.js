@@ -29,18 +29,12 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="down" timeout={2500} style={{ transformOrigin: '0 0 0' }} mountOnEnter unmountOnExit ref={ref} {...props} />;
 });
 
-const MultiSelectWithAll = ({
-    label,
-    options = [],
-    selectedValues = [],
-    setSelectedValues
-}) => {
+const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues }) => {
     const handleChange = (event) => {
         const { value } = event.target;
-        const selected =
-            typeof value === "string" ? value.split(",") : value;
+        const selected = typeof value === 'string' ? value.split(',') : value;
 
-        if (selected.includes("ALL")) {
+        if (selected.includes('ALL')) {
             if (selectedValues.length === options.length) {
                 setSelectedValues([]);
             } else {
@@ -51,41 +45,33 @@ const MultiSelectWithAll = ({
         }
     };
 
-    const isAllSelected =
-        options?.length > 0 &&
-        selectedValues?.length === options?.length;
+    const isAllSelected = options.length > 0 && selectedValues.length === options.length;
 
     return (
         <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
-            <InputLabel id={`${label}-label`}>
-                {label}
-            </InputLabel>
-
+            <InputLabel id={`${label}-label`}>{label}</InputLabel>
             <Select
                 labelId={`${label}-label`}
                 multiple
                 value={selectedValues}
                 onChange={handleChange}
                 input={<OutlinedInput label={label} />}
-                renderValue={(selected) => selected.join(", ")}
-                size="small"
+                renderValue={(selected) => selected.join(', ')}
+                size='small'
             >
                 <MenuItem value="ALL">
                     <Checkbox
                         checked={isAllSelected}
                         indeterminate={
-                            selectedValues?.length > 0 &&
-                            selectedValues?.length < options?.length
+                            selectedValues.length > 0 && selectedValues.length < options.length
                         }
                     />
                     <ListItemText primary="Select All" />
                 </MenuItem>
 
-                {options?.map((name) => (
+                {options.map((name) => (
                     <MenuItem key={name} value={name}>
-                        <Checkbox
-                            checked={selectedValues?.includes(name)}
-                        />
+                        <Checkbox checked={selectedValues.includes(name)} />
                         <ListItemText primary={name} />
                     </MenuItem>
                 ))}
@@ -93,6 +79,7 @@ const MultiSelectWithAll = ({
         </FormControl>
     );
 };
+
 
 const MonthWise = () => {
     const chartRef = useRef(null);
@@ -148,14 +135,14 @@ const MonthWise = () => {
         action(true)
         var formData = new FormData()
         formData.append('circle', circle)
-        formData.append('site_tagging', tagging)
+        // formData.append('site_tagging', tagging)
         formData.append('relocation_method', relocationMethod)
         formData.append('new_toco_name', toco)
         formData.append('view', view)
         formData.append('milestone1', milestone1)
         formData.append('milestone2', milestone2)
         formData.append('type', typeFileter)
-        formData.append('year', year)
+        formData.append('years', year)
         const res = await postData("nt_tracker/ms2_monthly_graph/", formData);
         // const res =  tempData; //  remove this line when API is read
         // console.log('responce month wise' , res)
@@ -166,7 +153,7 @@ const MonthWise = () => {
             if (circleOptions.length === 0) {
                 // setMonthArray((prev) => [...prev, ...res.unique_data.month_columns])
                 setCircleOptions(res.unique_data.unique_circle)
-                setTaggingOptions(res.unique_data.unique_site_tagging)
+                // setTaggingOptions(res.unique_data.unique_site_tagging)
                 setRelocationMethodOptions(res.unique_data.unique_relocation_method)
                 setTocoOptions(res.unique_data.unique_new_toco_name)
                 setMilestoneOptions(res.unique_data.milestones)
@@ -186,9 +173,9 @@ const MonthWise = () => {
 
         const RFAI_done = arr.map(item => Number(item[`${milestone1} Done Count`]));
         const onAirDone = arr.map(item => Number(item[`${milestone2} Done Count`]));
-        if (monthArray == 0) {
+        // if (monthArray == 0) {
             setMonthArray(arr.map(item => (item['month_name'])))
-        }
+        // }
         const monthArrays = arr.map(item => (item['month_name']));
 
         // ✅ Calculate percentage array
@@ -339,11 +326,11 @@ const MonthWise = () => {
         ]
     }
 
-const getTitalValue = (arr, condition) => {
-  return condition === 'Cumulative'
-    ? arr?.at(-1) ?? 0
-    : arr?.reduce((s, n) => s + n, 0) || 0;
-};
+    const getTitalValue = (arr, condition) => {
+        return condition === 'Cumulative'
+            ? arr?.at(-1) ?? 0
+            : arr?.reduce((s, n) => s + n, 0) || 0;
+    };
 
     const options = {
         responsive: true,
@@ -370,7 +357,7 @@ const getTitalValue = (arr, condition) => {
             },
             title: {
                 display: true,
-                text:  `Monthly Progress - ${milestone1} (${getTitalValue(milestoneData?.RFAI_done, view)})
+                text: `Monthly Progress - ${milestone1} (${getTitalValue(milestoneData?.RFAI_done, view)})
 to ${milestone2} (${getTitalValue(milestoneData?.onAirDone, view)})`,
                 font: {
                     size: 16,
@@ -446,7 +433,7 @@ to ${milestone2} (${getTitalValue(milestoneData?.onAirDone, view)})`,
                 },
                 // stacked: true
             },
-            y1:{
+            y1: {
                 position: 'right',
                 grid: {
                     display: false
@@ -550,9 +537,9 @@ to ${milestone2} (${getTitalValue(milestoneData?.onAirDone, view)})`,
         return () => {
             cancelRequest();
         }
-    }, [circle, tagging, relocationMethod, toco, view, milestone1, milestone2, typeFileter])
+    }, [circle, tagging, relocationMethod, toco, view, milestone1, milestone2, typeFileter,year])
 
-    
+
     return (
         <>
 
@@ -564,24 +551,24 @@ to ${milestone2} (${getTitalValue(milestoneData?.onAirDone, view)})`,
                         <InputLabel style={{ fontSize: 15 }}>Select Month</InputLabel>
                         <input type='month' value={date} onChange={(e) => handleMonthData(e.target.value)} />
                     </div> */}
-{/* 
-                     <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
-                                                                <InputLabel id="year-select-label">Financial Year</InputLabel>
-                                                                <Select
-                                                                    labelId="year-select-label"
-                                                                    id="year-select"
-                                                                    value={year}
-                                                                    label="Financial Year"
-                                                                    onChange={(e) => setYear(e.target.value)}
-                                                                >
-                                                                    <MenuItem value='2027'>2027 - 2028</MenuItem>
-                                                                    <MenuItem value='2026'>2026 - 2027</MenuItem>
-                                                                    <MenuItem value='2025'>2025 - 2026</MenuItem>
-                                                                    <MenuItem value='2024'>2024 - 2025</MenuItem>
-                                                                    <MenuItem value='2023'>2023 - 2024</MenuItem>
-                                        
-                                                                </Select>
-                                                            </FormControl> */}
+
+                    <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
+                        <InputLabel id="year-select-label">Financial Year</InputLabel>
+                        <Select
+                            labelId="year-select-label"
+                            id="year-select"
+                            value={year}
+                            label="Financial Year"
+                            onChange={(e) => setYear(e.target.value)}
+                        >
+
+                            <MenuItem value='2026'>2026 - 2027</MenuItem>
+                            <MenuItem value='2025'>2025 - 2026</MenuItem>
+                            <MenuItem value='2024'>2024 - 2025</MenuItem>
+                            <MenuItem value='2023'>2023 - 2024</MenuItem>
+
+                        </Select>
+                    </FormControl>
                     <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
                         <InputLabel id="demo-select-small-label">View</InputLabel>
                         <Select
@@ -645,13 +632,13 @@ to ${milestone2} (${getTitalValue(milestoneData?.onAirDone, view)})`,
                         selectedValues={circle}
                         setSelectedValues={setCircle}
                     />
-                    {/* tagging */}
-                    {/* <MultiSelectWithAll
+                    tagging
+                    <MultiSelectWithAll
                         label="Site Tagging"
                         options={taggingOptions}
                         selectedValues={tagging}
                         setSelectedValues={setTagging}
-                    /> */}
+                    />
 
                     {/* Current Status */}
                     <MultiSelectWithAll

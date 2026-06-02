@@ -10,6 +10,10 @@ import Swal from "sweetalert2";
 import { postData, ServerURL } from "../../../../services/FetchNodeServices";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import OverAllCss from "../../../../csss/OverAllCss";
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 import { useLoadingDialog } from "../../../../Hooks/LoadingDialog";
 import { getDecreyptedData } from "../../../../utils/localstorage";
 
@@ -21,6 +25,7 @@ const Upload = () => {
     const [fileData, setFileData] = useState()
     const [download, setDownload] = useState(false);
     const { loading, action } = useLoadingDialog()
+    const [year, setYear] = useState('')
     const navigate = useNavigate()
     const classes = OverAllCss()
     const userID = getDecreyptedData("userID")
@@ -43,7 +48,10 @@ const Upload = () => {
         try {
             action(true); // optional: show loader
 
-            const response = await postData('nt_tracker/download_tracker_file/', { userId: userID });
+            const response = await postData('nt_tracker/download_tracker_file/', {
+                userId: userID,
+                year: year
+            });
             console.log('Download file response:', response);
 
             if (response?.download_link) {
@@ -132,47 +140,96 @@ const Upload = () => {
                 // style={{ transformOrigin: '0 0 0' }}
                 timeout={1000}
             >
-                <Box>{!userTypes?.includes('RLT_reader') &&   <Box className={classes.main_Box}>
-                        <Box className={classes.Back_Box} sx={{ width: { md: '75%', xs: '100%' } }}>
-                            <Box className={classes.Box_Hading} >
-                                Upload NTD File
-                            </Box>
-                            <Stack spacing={2} sx={{ marginTop: "-40px" }} direction={'column'}>
-
-
-                                <Box className={classes.Front_Box} >
-                                    <div className={classes.Front_Box_Hading}>
-                                        Select Excel Files:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{make4GFiles.filename}</span>
-                                    </div>
-                                    <div className={classes.Front_Box_Select_Button} >
-                                        <div style={{ float: "left" }}>
-                                            <Button variant="contained" component="label" color={make4GFiles.state > 0 ? "warning" : "primary"}>
-                                                select file
-                                                <input required hidden accept=".xlsx,.xls,.csv" multiple type="file"
-                                                    // webkitdirectory="true"
-                                                    // directory="true"
-                                                    onChange={(e) => handle4GFileSelection(e)} />
-                                            </Button>
-                                        </div>
-
-                                        {/* {make4GFiles.state > 0 && <span style={{ color: 'green', fontSize: '18px', fontWeight: 600 }}>{make4GFiles.filename}</span>} */}
-
-                                        <div>  <span style={{ display: show4G ? 'inherit' : 'none', color: 'red', fontSize: '18px', fontWeight: 600 }}>This Field Is Required !</span> </div>
-                                    </div>
-                                </Box>
-                            </Stack>
-                            <Stack direction={{ xs: "column", sm: "column", md: "row" }} spacing={2} style={{ display: 'flex', justifyContent: "space-around", marginTop: "20px" }}>
-
-                                <Button variant="contained" color="success" onClick={handleSubmit} endIcon={<UploadIcon />}>Submit</Button>
-
-                                <Button variant="contained" onClick={handleCancel} style={{ backgroundColor: "red", color: 'white' }} endIcon={<DoDisturbIcon />} >cancel</Button>
-
-                            </Stack>
+                <Box>{!userTypes?.includes('RLT_reader') && <Box className={classes.main_Box}>
+                    <Box className={classes.Back_Box} sx={{ width: { md: '75%', xs: '100%' } }}>
+                        <Box className={classes.Box_Hading} >
+                            Upload NTD File
                         </Box>
-                    </Box>}
-                 
-                    <Box sx={{ textAlign: 'center' }}>
-                        <Button variant="outlined" onClick={()=>handleDownloadRelocation()} title="Export Excel" startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />} sx={{ marginTop: "10px", width: "auto" }}><span style={{ fontFamily: "Poppins", fontSize: "22px", fontWeight: 800, textTransform: "none", textDecorationLine: "none" }}>Download NTD Data</span></Button>
+                        <Stack spacing={2} sx={{ marginTop: "-40px" }} direction={'column'}>
+
+
+                            <Box className={classes.Front_Box} >
+                                <div className={classes.Front_Box_Hading}>
+                                    Select Excel Files:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{make4GFiles.filename}</span>
+                                </div>
+                                <div className={classes.Front_Box_Select_Button} >
+                                    <div style={{ float: "left" }}>
+                                        <Button variant="contained" component="label" color={make4GFiles.state > 0 ? "warning" : "primary"}>
+                                            select file
+                                            <input required hidden accept=".xlsx,.xls,.csv" multiple type="file"
+                                                // webkitdirectory="true"
+                                                // directory="true"
+                                                onChange={(e) => handle4GFileSelection(e)} />
+                                        </Button>
+                                    </div>
+
+                                    {/* {make4GFiles.state > 0 && <span style={{ color: 'green', fontSize: '18px', fontWeight: 600 }}>{make4GFiles.filename}</span>} */}
+
+                                    <div>  <span style={{ display: show4G ? 'inherit' : 'none', color: 'red', fontSize: '18px', fontWeight: 600 }}>This Field Is Required !</span> </div>
+                                </div>
+                            </Box>
+                        </Stack>
+                        <Stack direction={{ xs: "column", sm: "column", md: "row" }} spacing={2} style={{ display: 'flex', justifyContent: "space-around", marginTop: "20px" }}>
+
+                            <Button variant="contained" color="success" onClick={handleSubmit} endIcon={<UploadIcon />}>Submit</Button>
+
+                            <Button variant="contained" onClick={handleCancel} style={{ backgroundColor: "red", color: 'white' }} endIcon={<DoDisturbIcon />} >cancel</Button>
+
+                        </Stack>
+                    </Box>
+                </Box>}
+
+                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                        <Box sx={{
+                            textAlign: 'center',
+                            border: '0px solid black',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            gap: 4,
+                            padding: '10px',
+                            borderRadius: '5px',
+                            width: '78%',
+                            boxShadow: 'rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset'
+                        }}>
+
+                            <FormControl sx={{ minWidth: 150, maxWidth: 150 }} size="small">
+                                <InputLabel id="year-select-label">Financial Year</InputLabel>
+
+                                <Select
+                                    labelId="year-select-label"
+                                    id="year-select"
+                                    value={year}
+                                    label="Financial Year"
+                                    onChange={(e) => setYear(e.target.value)}
+                                >
+                                    <MenuItem value=''>ALL</MenuItem>
+                                    <MenuItem value='2027'>2026 - 2027</MenuItem>
+                                    <MenuItem value='2026'>2026 - 2027</MenuItem>
+                                    <MenuItem value='2025'>2025 - 2026</MenuItem>
+                                    <MenuItem value='2024'>2024 - 2025</MenuItem>
+                                    <MenuItem value='2023'>2023 - 2024</MenuItem>
+                                </Select>
+                            </FormControl>
+
+                            <Button
+                                variant="outlined"
+                                onClick={() => handleDownloadRelocation()}
+                                title="Export Excel"
+                                startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />}
+                            >
+                                <span style={{
+                                    fontFamily: "Poppins",
+                                    fontSize: "22px",
+                                    fontWeight: 800,
+                                    textTransform: "none",
+                                    textDecorationLine: "none"
+                                }}>
+                                    Download NTD Data
+                                </span>
+                            </Button>
+
+                        </Box>
                     </Box>
                 </Box>
             </Slide>
