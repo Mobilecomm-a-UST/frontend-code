@@ -18,8 +18,8 @@ import { useLoadingDialog } from '../../../../Hooks/LoadingDialog';
 import { postData } from '../../../../services/FetchNodeServices';
 
 
-const colorType = [ '#A0DEFF', '#FF9F66','#ECB176', '#B0EBB4', '#CDE8E5']
-const requiredMilestones = ['RFAI', 'Integration', 'Site ONAIR', 'SCFT I-Deploy Offered'];
+const colorType = [ '#A0DEFF','#B0EBB4', '#78cad8','#ECB176', '#cddfe8']
+const requiredMilestones = ['RFAI', 'WRFAI','Integration', 'Site ONAIR', 'SCFT Offered'];
 const MainDashboard = () => {
     const navigate = useNavigate()
     const { loading, action } = useLoadingDialog();

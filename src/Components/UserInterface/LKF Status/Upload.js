@@ -1,4 +1,193 @@
-import React, { useState, useEffect, useCallback } from "react";
+// import React, { useState, useEffect, useCallback } from "react";
+// import { Box, Button, Stack } from "@mui/material";
+// import { Breadcrumbs, Link, Typography } from "@mui/material";
+// import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+// import { useNavigate } from "react-router-dom";
+// import Slide from '@mui/material/Slide';
+// import UploadIcon from '@mui/icons-material/Upload';
+// import DoDisturbIcon from '@mui/icons-material/DoDisturb';
+// import Swal from "sweetalert2";
+// import { postData, ServerURL } from "../../services/FetchNodeServices";
+// import FileDownloadIcon from '@mui/icons-material/FileDownload';
+// import OverAllCss from "../../csss/OverAllCss";
+// import { useLoadingDialog } from "../../Hooks/LoadingDialog";
+
+
+// const Upload = () => {
+//     const [make4GFiles, setMake4GFiles] = useState([])
+//     const [siteMapping, setSiteMapping] = useState([])
+//     const [selectCircle, setSelectCircle] = useState('')
+//     const [show4G, setShow4G] = useState(false)
+//     const [show, setShow] = useState(false)
+//     const [fileData, setFileData] = useState()
+//     const [download, setDownload] = useState(false);
+//     const { loading, action } = useLoadingDialog()
+//     const navigate = useNavigate()
+//     const classes = OverAllCss()
+//     const link = `${ServerURL}${fileData}`;
+
+
+//     const handle4GFileSelection = (event) => {
+
+//         setMake4GFiles(event.target.files)
+//     }
+
+
+//     const handleSubmit = async () => {
+//         if (make4GFiles.length > 0 ) {
+//             action(true)
+//             var formData = new FormData();
+
+//             for (let i = 0; i < make4GFiles.length; i++) {
+//                 // console.log('pre files' , preFiles[i])
+//                 formData.append(`files`, make4GFiles[i]);
+//             }
+
+//              for (let i = 0; i < siteMapping.length; i++) {
+
+//             formData.append(`site_file`, siteMapping[i]);
+
+//         }
+
+//             const response = await postData('LKF/LKF_status/', formData)
+
+//             // console.log('response data', response)
+
+
+//             if (response.status === true) {
+//                 action(false)
+//                 setDownload(true)
+
+//                 setFileData(response.download_url)
+//                 Swal.fire({
+//                     icon: "success",
+//                     title: "Done",
+//                     text: `${response.message}`,
+//                 });
+//                 // console.log('sssssssssssssssssssss', response)
+
+
+
+//             } else {
+//                 action(false)
+
+//                 Swal.fire({
+//                     icon: "error",
+//                     title: "Oops...",
+//                     text: `${response.message}`,
+//                 });
+//             }
+//         }
+//         else {
+//             if (make4GFiles.length === 0) {
+//                 setShow4G(true)
+//             } else {
+//                 setShow4G(false)
+//             }
+           
+//         }
+//     }
+
+//     const handleCancel = () => {
+//         setMake4GFiles([])
+
+//         setShow4G(false)
+   
+//     }
+
+//     useEffect(() => {
+//         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
+
+//     }, [])
+
+//     return (
+//         <>
+//             <div style={{ margin: 5, marginLeft: 10 }}>
+//                 <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
+//                     <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
+//                     <Link underline="hover" onClick={() => { navigate('/tools/lkf_status') }}>LKF/RCC Status Tool</Link>
+//                     <Typography color='text.primary'>Make LKF Status</Typography>
+//                 </Breadcrumbs>
+//             </div>
+//             <Slide
+//                 direction='left'
+//                 in='true'
+//                 // style={{ transformOrigin: '0 0 0' }}
+//                 timeout={1000}
+//             >
+//                 <Box>
+//                     <Box className={classes.main_Box}>
+//                         <Box className={classes.Back_Box} sx={{ width: { md: '75%', xs: '100%' } }}>
+//                             <Box className={classes.Box_Hading} >
+//                                 Make LKF Status
+//                             </Box>
+//                             <Stack spacing={2} sx={{ marginTop: "-40px" }} direction={'column'}>
+                        
+//                                 <Box className={classes.Front_Box} >
+//                                     <div className={classes.Front_Box_Hading}>
+//                                         Select Logs Files:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{ }</span>
+//                                     </div>
+//                                     <div className={classes.Front_Box_Select_Button} >
+//                                         <div style={{ float: "left" }}>
+//                                             <Button variant="contained" component="label" color={make4GFiles.length > 0 ? "warning" : "primary"}>
+//                                                 select file
+//                                                 <input required hidden accept=".log,.txt" multiple type="file"
+//                                                     // webkitdirectory="true"
+//                                                     // directory="true"
+//                                                     onChange={(e) => { handle4GFileSelection(e); setShow4G(false); }} />
+//                                             </Button>
+                                            
+//                                         </div>
+
+//                                         {make4GFiles.length > 0 && <span style={{ color: 'green', fontSize: '18px', fontWeight: 600 }}>Selected File(s) : {make4GFiles.length}</span>}
+
+//                                         <div>  <span style={{ display: show4G ? 'inherit' : 'none', color: 'red', fontSize: '18px', fontWeight: 600 }}>This Field Is Required !</span> </div>
+//                                     </div>
+//                                 </Box>
+//                                 <Box className={classes.Front_Box} >
+//                                     <div className={classes.Front_Box_Hading}>
+//                                         Select Site Mapping:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{ }</span>
+//                                     </div>
+//                                     <div className={classes.Front_Box_Select_Button} >
+//                                         <div style={{ float: "left" }}>
+//                                             <Button variant="contained" component="label" color={make4GFiles.length > 0 ? "warning" : "primary"}>
+//                                                 select file
+//                                                 <input required hidden accept=".xlsx,.xls" multiple type="file"
+//                                                     // webkitdirectory="true"
+//                                                     // directory="true"
+//                                                     onChange={(e) => { handle4GFileSelection(e); setShow4G(false); }} />
+//                                             </Button>
+                                            
+//                                         </div>
+
+//                                         {make4GFiles.length > 0 && <span style={{ color: 'green', fontSize: '18px', fontWeight: 600 }}>Selected File(s) : {make4GFiles.length}</span>}
+
+//                                         {/* <div>  <span style={{ display: show4G ? 'inherit' : 'none', color: 'red', fontSize: '18px', fontWeight: 600 }}>This Field Is Required !</span> </div> */}
+//                                     </div>
+//                                 </Box>
+//                             </Stack>
+//                             <Stack direction={{ xs: "column", sm: "column", md: "row" }} spacing={2} style={{ display: 'flex', justifyContent: "space-around", marginTop: "20px" }}>
+
+//                                 <Button variant="contained" color="success" onClick={handleSubmit} endIcon={<UploadIcon />}>Submit</Button>
+
+//                                 <Button variant="contained" onClick={handleCancel} style={{ backgroundColor: "red", color: 'white' }} endIcon={<DoDisturbIcon />} >cancel</Button>
+
+//                             </Stack>
+//                         </Box>
+//                     </Box>
+//                     <Box sx={{ display: download ? 'block' : 'none', textAlign: 'center' }}>
+//                         <a download href={fileData}><Button variant="outlined" onClick='' title="Export Excel" startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />} sx={{ marginTop: "10px", width: "auto" }}><span style={{ fontFamily: "Poppins", fontSize: "22px", fontWeight: 800, textTransform: "none", textDecorationLine: "none" }}>Download LKF Status</span></Button></a>
+//                     </Box>
+//                 </Box>
+//             </Slide>
+//             {loading}
+//         </>
+//     )
+// }
+
+// export default Upload
+
+import React, { useState, useEffect } from "react";
 import { Box, Button, Stack } from "@mui/material";
 import { Breadcrumbs, Link, Typography } from "@mui/material";
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
@@ -12,146 +201,451 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import OverAllCss from "../../csss/OverAllCss";
 import { useLoadingDialog } from "../../Hooks/LoadingDialog";
 
-
 const Upload = () => {
+
+    // ─────────────────────────────────────────────
+    // STATES
+    // ─────────────────────────────────────────────
     const [make4GFiles, setMake4GFiles] = useState([])
-    const [selectCircle, setSelectCircle] = useState('')
-    const [show4G, setShow4G] = useState(false)
-    const [show, setShow] = useState(false)
+
+    const [siteMapping, setSiteMapping] = useState([])
+
     const [fileData, setFileData] = useState()
+
     const [download, setDownload] = useState(false);
+
     const { loading, action } = useLoadingDialog()
+
     const navigate = useNavigate()
+
     const classes = OverAllCss()
-    const link = `${ServerURL}${fileData}`;
 
-
+    // ─────────────────────────────────────────────
+    // LOG FILE SELECTION
+    // ─────────────────────────────────────────────
     const handle4GFileSelection = (event) => {
 
         setMake4GFiles(event.target.files)
+
     }
 
+    // ─────────────────────────────────────────────
+    // SITE MAPPING FILE SELECTION
+    // ─────────────────────────────────────────────
+    const handleSiteMappingSelection = (event) => {
 
+        setSiteMapping(event.target.files)
+
+    }
+
+    // ─────────────────────────────────────────────
+    // SUBMIT
+    // ─────────────────────────────────────────────
     const handleSubmit = async () => {
-        if (make4GFiles.length > 0 ) {
-            action(true)
-            var formData = new FormData();
+
+        // If no file selected
+        if (make4GFiles.length === 0 && siteMapping.length === 0) {
+
+            Swal.fire({
+                icon: "warning",
+                title: "Required",
+                text: "Please select at least one file",
+            });
+
+            return;
+        }
+
+        action(true)
+
+        var formData = new FormData();
+
+        // ─────────────────────────────
+        // LOG FILES (OPTIONAL)
+        // ─────────────────────────────
+        if (make4GFiles.length > 0) {
 
             for (let i = 0; i < make4GFiles.length; i++) {
-                // console.log('pre files' , preFiles[i])
+
                 formData.append(`files`, make4GFiles[i]);
+
             }
 
-            const response = await postData('LKF/LKF_status/', formData)
-
-            // console.log('response data', response)
-
-
-            if (response.status === true) {
-                action(false)
-                setDownload(true)
-
-                setFileData(response.download_url)
-                Swal.fire({
-                    icon: "success",
-                    title: "Done",
-                    text: `${response.message}`,
-                });
-                // console.log('sssssssssssssssssssss', response)
-
-
-
-            } else {
-                action(false)
-
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: `${response.message}`,
-                });
-            }
         }
-        else {
-            if (make4GFiles.length === 0) {
-                setShow4G(true)
-            } else {
-                setShow4G(false)
+
+        // ─────────────────────────────
+        // SITE MAPPING FILES (OPTIONAL)
+        // ─────────────────────────────
+        if (siteMapping.length > 0) {
+
+            for (let i = 0; i < siteMapping.length; i++) {
+
+                formData.append(`site_file`, siteMapping[i]);
+
             }
-           
+
+        }
+
+        const response = await postData('LKF/LKF_status/', formData)
+
+        if (response.status === true) {
+
+            action(false)
+
+            setDownload(true)
+
+            setFileData(response.download_url)
+
+            Swal.fire({
+                icon: "success",
+                title: "Done",
+                text: `${response.message}`,
+            });
+
+        } else {
+
+            action(false)
+
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: `${response.message}`,
+            });
         }
     }
 
+    // ─────────────────────────────────────────────
+    // CANCEL
+    // ─────────────────────────────────────────────
     const handleCancel = () => {
+
         setMake4GFiles([])
 
-        setShow4G(false)
-   
+        setSiteMapping([])
+
+        setDownload(false)
+
+        setFileData()
+
     }
 
+    // ─────────────────────────────────────────────
+    // PAGE TITLE
+    // ─────────────────────────────────────────────
     useEffect(() => {
-        document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
+
+        document.title = `${window.location.pathname
+            .slice(1)
+            .replaceAll('_', ' ')
+            .replaceAll('/', ' | ')
+            .toUpperCase()}`
 
     }, [])
 
     return (
         <>
+            {/* ───────────────────────────── */}
+            {/* BREADCRUMB */}
+            {/* ───────────────────────────── */}
             <div style={{ margin: 5, marginLeft: 10 }}>
-                <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
-                    <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
-                    <Link underline="hover" onClick={() => { navigate('/tools/lkf_status') }}>LKF/RCC Status Tool</Link>
-                    <Typography color='text.primary'>Make LKF Status</Typography>
+
+                <Breadcrumbs
+                    aria-label="breadcrumb"
+                    itemsBeforeCollapse={2}
+                    maxItems={3}
+                    separator={<KeyboardArrowRightIcon fontSize="small" />}
+                >
+
+                    <Link
+                        underline="hover"
+                        onClick={() => { navigate('/tools') }}
+                    >
+                        Tools
+                    </Link>
+
+                    <Link
+                        underline="hover"
+                        onClick={() => { navigate('/tools/lkf_status') }}
+                    >
+                        LKF/RCC Status Tool
+                    </Link>
+
+                    <Typography color='text.primary'>
+                        Make LKF Status
+                    </Typography>
+
                 </Breadcrumbs>
+
             </div>
+
+            {/* ───────────────────────────── */}
+            {/* MAIN SECTION */}
+            {/* ───────────────────────────── */}
             <Slide
                 direction='left'
                 in='true'
-                // style={{ transformOrigin: '0 0 0' }}
                 timeout={1000}
             >
+
                 <Box>
+
                     <Box className={classes.main_Box}>
-                        <Box className={classes.Back_Box} sx={{ width: { md: '75%', xs: '100%' } }}>
-                            <Box className={classes.Box_Hading} >
+
+                        <Box
+                            className={classes.Back_Box}
+                            sx={{
+                                width: {
+                                    md: '75%',
+                                    xs: '100%'
+                                }
+                            }}
+                        >
+
+                            {/* ───────────────────────────── */}
+                            {/* HEADING */}
+                            {/* ───────────────────────────── */}
+                            <Box className={classes.Box_Hading}>
+
                                 Make LKF Status
+
                             </Box>
-                            <Stack spacing={2} sx={{ marginTop: "-40px" }} direction={'column'}>
-                        
-                                <Box className={classes.Front_Box} >
+
+                            <Stack
+                                spacing={2}
+                                sx={{ marginTop: "-40px" }}
+                                direction={'column'}
+                            >
+
+                                {/* ───────────────────────────── */}
+                                {/* LOG FILES */}
+                                {/* ───────────────────────────── */}
+                                <Box className={classes.Front_Box}>
+
                                     <div className={classes.Front_Box_Hading}>
-                                        Select Logs Files:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{ }</span>
+
+                                        Select Logs Files:-
+
                                     </div>
-                                    <div className={classes.Front_Box_Select_Button} >
+
+                                    <div className={classes.Front_Box_Select_Button}>
+
                                         <div style={{ float: "left" }}>
-                                            <Button variant="contained" component="label" color={make4GFiles.length > 0 ? "warning" : "primary"}>
-                                                select file
-                                                <input required hidden accept=".log,.txt" multiple type="file"
-                                                    // webkitdirectory="true"
-                                                    // directory="true"
-                                                    onChange={(e) => { handle4GFileSelection(e); setShow4G(false); }} />
+
+                                            <Button
+                                                variant="contained"
+                                                component="label"
+                                                color={
+                                                    make4GFiles.length > 0
+                                                        ? "warning"
+                                                        : "primary"
+                                                }
+                                            >
+
+                                                Select File
+
+                                                <input
+                                                    hidden
+                                                    accept=".log,.txt"
+                                                    multiple
+                                                    type="file"
+                                                    onChange={(e) => {
+
+                                                        handle4GFileSelection(e);
+
+                                                    }}
+                                                />
+
                                             </Button>
+
                                         </div>
 
-                                        {make4GFiles.length > 0 && <span style={{ color: 'green', fontSize: '18px', fontWeight: 600 }}>Selected File(s) : {make4GFiles.length}</span>}
+                                        {make4GFiles.length > 0 &&
 
-                                        <div>  <span style={{ display: show4G ? 'inherit' : 'none', color: 'red', fontSize: '18px', fontWeight: 600 }}>This Field Is Required !</span> </div>
+                                            <span
+                                                style={{
+                                                    color: 'green',
+                                                    fontSize: '18px',
+                                                    fontWeight: 600
+                                                }}
+                                            >
+
+                                                Selected File(s) : {make4GFiles.length}
+
+                                            </span>
+
+                                        }
+
                                     </div>
+
                                 </Box>
+
+                                {/* ───────────────────────────── */}
+                                {/* SITE MAPPING */}
+                                {/* ───────────────────────────── */}
+                                <Box className={classes.Front_Box}>
+
+                                    <div className={classes.Front_Box_Hading}>
+
+                                        Select Site Mapping Files:-
+
+                                    </div>
+
+                                    <div className={classes.Front_Box_Select_Button}>
+
+                                        <div style={{ float: "left" }}>
+
+                                            <Button
+                                                variant="contained"
+                                                component="label"
+                                                color={
+                                                    siteMapping.length > 0
+                                                        ? "warning"
+                                                        : "primary"
+                                                }
+                                            >
+
+                                                Select File
+
+                                                <input
+                                                    hidden
+                                                    accept=".xlsx,.xls"
+                                                    multiple
+                                                    type="file"
+                                                    onChange={(e) => {
+
+                                                        handleSiteMappingSelection(e);
+
+                                                    }}
+                                                />
+
+                                            </Button>
+
+                                        </div>
+
+                                        {siteMapping.length > 0 &&
+
+                                            <span
+                                                style={{
+                                                    color: 'green',
+                                                    fontSize: '18px',
+                                                    fontWeight: 600
+                                                }}
+                                            >
+
+                                                Selected File(s) : {siteMapping.length}
+
+                                            </span>
+
+                                        }
+
+                                    </div>
+
+                                </Box>
+
                             </Stack>
-                            <Stack direction={{ xs: "column", sm: "column", md: "row" }} spacing={2} style={{ display: 'flex', justifyContent: "space-around", marginTop: "20px" }}>
 
-                                <Button variant="contained" color="success" onClick={handleSubmit} endIcon={<UploadIcon />}>Submit</Button>
+                            {/* ───────────────────────────── */}
+                            {/* BUTTONS */}
+                            {/* ───────────────────────────── */}
+                            <Stack
+                                direction={{
+                                    xs: "column",
+                                    sm: "column",
+                                    md: "row"
+                                }}
+                                spacing={2}
+                                style={{
+                                    display: 'flex',
+                                    justifyContent: "space-around",
+                                    marginTop: "20px"
+                                }}
+                            >
 
-                                <Button variant="contained" onClick={handleCancel} style={{ backgroundColor: "red", color: 'white' }} endIcon={<DoDisturbIcon />} >cancel</Button>
+                                <Button
+                                    variant="contained"
+                                    color="success"
+                                    onClick={handleSubmit}
+                                    endIcon={<UploadIcon />}
+                                >
+
+                                    Submit
+
+                                </Button>
+
+                                <Button
+                                    variant="contained"
+                                    onClick={handleCancel}
+                                    style={{
+                                        backgroundColor: "red",
+                                        color: 'white'
+                                    }}
+                                    endIcon={<DoDisturbIcon />}
+                                >
+
+                                    Cancel
+
+                                </Button>
 
                             </Stack>
+
                         </Box>
+
                     </Box>
-                    <Box sx={{ display: download ? 'block' : 'none', textAlign: 'center' }}>
-                        <a download href={fileData}><Button variant="outlined" onClick='' title="Export Excel" startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />} sx={{ marginTop: "10px", width: "auto" }}><span style={{ fontFamily: "Poppins", fontSize: "22px", fontWeight: 800, textTransform: "none", textDecorationLine: "none" }}>Download LKF Status</span></Button></a>
+
+                    {/* ───────────────────────────── */}
+                    {/* DOWNLOAD BUTTON */}
+                    {/* ───────────────────────────── */}
+                    <Box
+                        sx={{
+                            display: download ? 'block' : 'none',
+                            textAlign: 'center'
+                        }}
+                    >
+
+                        <a download href={fileData}>
+
+                            <Button
+                                variant="outlined"
+                                title="Export Excel"
+                                startIcon={
+                                    <FileDownloadIcon
+                                        style={{
+                                            fontSize: 30,
+                                            color: "green"
+                                        }}
+                                    />
+                                }
+                                sx={{
+                                    marginTop: "10px",
+                                    width: "auto"
+                                }}
+                            >
+
+                                <span
+                                    style={{
+                                        fontFamily: "Poppins",
+                                        fontSize: "22px",
+                                        fontWeight: 800,
+                                        textTransform: "none",
+                                        textDecorationLine: "none"
+                                    }}
+                                >
+
+                                    Download LKF Status
+
+                                </span>
+
+                            </Button>
+
+                        </a>
+
                     </Box>
+
                 </Box>
+
             </Slide>
+
             {loading}
+
         </>
     )
 }

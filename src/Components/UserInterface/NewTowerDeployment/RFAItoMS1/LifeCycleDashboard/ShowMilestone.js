@@ -8,6 +8,7 @@ import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 const milestones = [
     { title: "Allocation", dateKey: "allocation_date" },
     { title: "RFAI", dateKey: "rfai_date" },
+    { title: "WFAI", dateKey: "wrfai_date" },
     { title: "RFAI Survey", dateKey: "rfai_survey_date" },
     { title: "MO Punch", dateKey: "mo_punch_date" },
     { title: "Material Dispatch", dateKey: "material_dispatch_date" },
