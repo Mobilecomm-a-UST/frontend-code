@@ -857,7 +857,7 @@ const Datewise = () => {
                 >
                     <TextField
                         size="small"
-                        label="From Date"
+                        label="Start Date"
                         type="date"
                         value={startDate}
                         onChange={(e) => {
@@ -892,7 +892,7 @@ const Datewise = () => {
 
                     <TextField
                         size="small"
-                        label="To Date"
+                        label="End Date"
                         type="date"
                         value={endDate}
                         onChange={(e) => {
