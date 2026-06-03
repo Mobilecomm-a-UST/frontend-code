@@ -85,14 +85,14 @@ const PerformanceAt = () => {
                                             Performance Aging
                                         </Nav.Item>
 
-                                        {/* <Nav.Item
+                                        <Nav.Item
                                             eventKey="2"
                                             placement="rightStart"
                                             icon={<DashboardIcon />}
                                             onClick={() => navigate('/tools/performance_at_tat/SCFT_Aging')}
                                         >
                                             SCFT Aging
-                                        </Nav.Item> */}
+                                        </Nav.Item>
                                         
                                         <Nav.Item
                                             eventKey="3"

@@ -628,7 +628,7 @@ const Performance_SR_Wise = () => {
                     <Box display="flex" gap={1} alignItems="center" flexWrap="wrap">
                         <TextField
                             size="small"
-                            label="From Date"
+                            label="Start Date"
                             type="date"
                             value={startDate}
                             onChange={(e) => {
@@ -644,7 +644,7 @@ const Performance_SR_Wise = () => {
 
                         <TextField
                             size="small"
-                            label="To Date"
+                            label="End Date"
                             type="date"
                             value={endDate}
                             onChange={(e) => {

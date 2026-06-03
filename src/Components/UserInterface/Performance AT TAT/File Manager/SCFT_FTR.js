@@ -1177,7 +1177,7 @@ const SCFT_FTR = () => {
                     >
                         <TextField
                             size="small"
-                            label="From Date"
+                            label="Start Date"
                             type="date"
                             value={
                                 startDate
@@ -1220,7 +1220,7 @@ const SCFT_FTR = () => {
 
                         <TextField
                             size="small"
-                            label="To Date"
+                            label="End Date"
                             type="date"
                             value={
                                 endDate

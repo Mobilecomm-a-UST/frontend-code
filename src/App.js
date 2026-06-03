@@ -66,6 +66,7 @@ const payloadTraffic = lazy(() => import('./Components/UserInterface/Payload Tra
 const G2Scripting = lazy(() => import('./Components/UserInterface/2G Scripting/2GScripting'))
 const PerformanceTAT = lazy(() => import('./Components/UserInterface/Performance AT TAT/PerformanceAt'))
 const DailyTaskReview = lazy(() => import('./Components/UserInterface/DailyTaskReview/DailyTaskReview'))  
+const PerformaceATPendingAging = lazy(() => import('./Components/UserInterface/Performance AT Pending Aging/PerformancePending'))
 
 const queryClient = new QueryClient()
 
@@ -383,6 +384,12 @@ function App() {
                 <ProtectedRoute element={DailyTaskReview} allowedUserTypes={['admin','DTR']} userType={userType} />
               </Suspense>
             } />
+
+            {/* <Route path="/tools/performance_at_pending_aging/*" element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProtectedRoute element={PerformaceATPendingAging} allowedUserTypes={['admin','PAP']} userType={userType} />
+              </Suspense>
+            } /> */}
 
 
           </Routes>
