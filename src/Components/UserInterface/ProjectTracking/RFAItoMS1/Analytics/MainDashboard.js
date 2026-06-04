@@ -105,7 +105,7 @@ const MainDashboard = () => {
                     <Typography color='text.primary'>Analytics Dashboard</Typography>
                 </Breadcrumbs>
             </div>
-            <Box sx={{ display: 'Daily Progress - RFAI to MS1 Waterfallflex', justifyContent: 'space-evenly', flexWrap: "wrap", flexDirection: 'row', gap: 1, marginBottom: 2 }}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-evenly', flexWrap: "wrap", flexDirection: 'row', gap: 1, marginBottom: 2 }}>
                 {tableData.length > 0 && tableData.map((item, index) => (
                     <Box sx={{ height: 'auto', width: '30vh', padding: 1.5, borderRadius: 1.5, boxShadow: " rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px", backgroundColor: `${colorType[index]}`, textAlign: 'center' }} key={index}
                         // onClick={() => { HandleDashboard(data.OEM) }}
