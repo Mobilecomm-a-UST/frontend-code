@@ -475,7 +475,7 @@ const FTR_Aging = () => {
                             )
                         }
                     >
-                        Performance At Tat
+                        Performance AT
                     </Link>
 
                     <Typography color="text.primary">

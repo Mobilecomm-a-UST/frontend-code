@@ -18,7 +18,7 @@ const MasterDashboard = () => {
      <div style={{ margin: 5, marginLeft: 10 }}>
                     <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
                         <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
-                        <Link underline="hover" onClick={() => { navigate('/tools/performance_at_tat') }}>Performace At Tat</Link>
+                        <Link underline="hover" onClick={() => { navigate('/tools/performance_at_tat') }}>Performace AT</Link>
                         <Typography color='text.primary'>Performance Aging</Typography>
                     </Breadcrumbs>
                 </div>
