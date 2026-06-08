@@ -134,27 +134,15 @@ const TechTable = ({
     // ─────────────────────────────
     const columns = [
 
-        { label: "0-3days", key: "0-3days" },
+        { label: "Circle", key: "Circle" },
 
-        { label: "3-5days", key: "3-5days" },
+        { label: "<7", key: "<7" },
 
-        { label: "5-7days", key: "5-7days" },
+        { label: "8-12", key: "8-12" },
 
-        { label: ">7days", key: ">7days" },
-
-        { label: "Pending", key: "Pending" },
-
+        { label: "13-21", key: "13-21" },
+        { label: ">21", key: ">21" },
         { label: "Total", key: "Total" },
-
-        { label: "0-3days%", key: "0-3days%" },
-
-        { label: "3-5days%", key: "3-5days%" },
-
-        { label: "5-7days%", key: "5-7days%" },
-
-        { label: ">7days%", key: ">7days%" },
-
-        { label: "Pending%", key: "Pending%" },
 
     ];
 
@@ -164,13 +152,13 @@ const TechTable = ({
 
     const STRIPE = "#f4f7fb";
 
-    const data =
-        apiResponse?.data?.[tech]?.circles || {};
+    const data = apiResponse?.data?.[tech] || {};
 
-    const grandTotal =
-        apiResponse?.data?.[tech]?.grand_total || {};
+    const grandTotal = apiResponse?.data?.[tech] || {};
 
     const entries = Object.entries(data);
+
+    console.log("API Response : ",apiResponse, data, grandTotal , entries);
 
     return (
 
@@ -215,7 +203,7 @@ const TechTable = ({
                         </th>
 
                         <th
-                            colSpan={columns.length}
+                            colSpan={columns.length-1}
                             style={{
                                 ...cellStyle,
                                 background: colors.active,
@@ -241,7 +229,7 @@ const TechTable = ({
                         }}
                     >
 
-                        <th
+                        {/* <th
                             style={{
                                 ...stickyCell,
                                 background: colors.header,
@@ -254,7 +242,7 @@ const TechTable = ({
 
                             Circle
 
-                        </th>
+                        </th> */}
 
                         {columns.map((col) => (
 
@@ -299,7 +287,7 @@ const TechTable = ({
                                     }}
                                 >
 
-                                    <td
+                                    {/* <td
                                         style={{
                                             ...stickyCell,
                                             background:
@@ -312,7 +300,7 @@ const TechTable = ({
 
                                         {circle}
 
-                                    </td>
+                                    </td> */}
 
                                     {columns.map((col) => (
 
@@ -334,7 +322,7 @@ const TechTable = ({
                             {/* ───────────────────────────── */}
                             {/* GRAND TOTAL */}
                             {/* ───────────────────────────── */}
-                            <tr
+                            {/* <tr
                                 style={{
                                     background: TOTAL_BG,
                                 }}
@@ -371,7 +359,7 @@ const TechTable = ({
 
                                 ))}
 
-                            </tr>
+                            </tr> */}
 
                         </>
 
@@ -414,8 +402,7 @@ const SCFT_Aging = () => {
     const { loading, action } =
         useLoadingDialog();
 
-    const [apiResponse, setApiResponse] =
-        useState(null);
+    const [apiResponse, setApiResponse] = useState(null);
 
     const [activeType, setActiveType] =
         useState("performance");
@@ -447,9 +434,8 @@ const SCFT_Aging = () => {
             // ─────────────────────────────
             // NEW SCFT APIs
             // ─────────────────────────────
-            const api = activeType === "performance"
-                    ? "performance_idploy/generate-scft-performance/"
-                    : "performance_idploy/generate-scft-offered/";
+            const api =
+                activeType === "performance"? "performance_tat/generate-tat-report/": "performance_idploy/generate-scft-offered/";
 
             const formData = new FormData();
 
@@ -537,22 +523,7 @@ const SCFT_Aging = () => {
     return (
 
         <Box p={1}>
-            {/* Breadcrumb */}
-            <div style={{ margin: 5, marginLeft: 10, marginTop: 10 }}>
-                <Breadcrumbs
-                    aria-label="breadcrumb"
-                    maxItems={3}
-                    separator={<KeyboardArrowRightIcon fontSize="small" />}
-                >
-                    <Link underline="hover" onClick={() => navigate("/tools")}>
-                        Tools
-                    </Link>
-                    <Link underline="hover" onClick={() => navigate("/tools/performance_at_tat")}>
-                        Performance AT
-                    </Link>
-                    <Typography color="text.primary">Performance SR Wise</Typography>
-                </Breadcrumbs>
-            </div>
+           
 
             {/* ───────────────────────────── */}
             {/* TOP BAR */}
@@ -571,7 +542,7 @@ const SCFT_Aging = () => {
                     <Typography variant="h5">
 
                         {activeType === "performance"
-                            ? "SCFT Aging Performance"
+                            ? "AT Pending Aging"
                             : "SCFT Aging Offered"}
 
                     </Typography>
@@ -582,7 +553,7 @@ const SCFT_Aging = () => {
                         gap={1}
                     >
 
-                        <Button
+                        {/* <Button
                             size="small"
                             onClick={() =>
                                 setActiveType("performance")
@@ -612,7 +583,7 @@ const SCFT_Aging = () => {
 
                             Offered
 
-                        </Button>
+                        </Button> */}
 
                     </Box>
 
