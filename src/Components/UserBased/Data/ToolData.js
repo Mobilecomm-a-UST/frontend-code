@@ -443,6 +443,16 @@ const ToolData = [
 
     //     groupBy: ['admin', 'PAP']
     // },
+
+    {
+        id: 41,
+        name: 'SOFT AT Tools',
+        title: 'This is a SOFT AT tool',
+        icons: PcIcon,
+        link: '/tools/soft_at_tools',
+        fullname: 'Soft AT Tool',
+        groupBy: ['soft_at_team', 'admin', 'soft_at']
+    },
 ]
 
 export default ToolData

@@ -87,7 +87,7 @@ const CircleWiese = () => {
     const [open, setOpen] = useState(false)
     const { makePostRequest, cancelRequest } = usePost()
     const { loading, action } = useLoadingDialog();
-   const [milestoneOptions, setMilestoneOptions] = useState([])
+    const [milestoneOptions, setMilestoneOptions] = useState([])
     const [milestone1, setMilestone1] = useState('Site ONAIR')
     const [milestone2, setMilestone2] = useState('Final MS2')
     const [circle, setCircle] = useState([])
@@ -358,143 +358,143 @@ const CircleWiese = () => {
     // };
 
 
-        const options = {
-            responsive: true,
-            // events: ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove'],
-            maintainApectRatio: false,
-            interaction: {
-                mode: 'index',
-                intersect: false,
-                // axis:'x',
-            },
-            plugins: {
-                // backgroundImageUrl:'https://www.msoutlook.info/pictures/bgconfidential.png',
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        // This more specific font property overrides the global property
-                        font: {
-                            size: 13,
-                            // weight: 'bold',
-                        },
-                        color: "black",
-                        boxWidth: 18,
-                    }
-                },
-                title: {
-                    display: true,
-                    text: `Circlewise Progress - ${milestone1} (${circleWieseData?.RFAI_done?.reduce((sum, num) => sum + num, 0) || 0}) to ${milestone2} (${circleWieseData?.onAirDone?.reduce((sum, num) => sum + num, 0) || 0})`,
+    const options = {
+        responsive: true,
+        // events: ['mousemove', 'mouseout', 'click', 'touchstart', 'touchmove'],
+        maintainApectRatio: false,
+        interaction: {
+            mode: 'index',
+            intersect: false,
+            // axis:'x',
+        },
+        plugins: {
+            // backgroundImageUrl:'https://www.msoutlook.info/pictures/bgconfidential.png',
+            legend: {
+                position: 'bottom',
+                labels: {
+                    // This more specific font property overrides the global property
                     font: {
-                        size: 16,
-                        weight: 'bold',
-    
+                        size: 13,
+                        // weight: 'bold',
                     },
-                    color: 'black'
-    
-                },
-                datalabels: {
-                    display: true,
-                    color: 'black',
-                    anchor: 'end',
-                    align: 'top',
-                    offset: 0.5,
-                    font: {
-                        size: 12,
-                        weight: 'bold'
-                    },
-    
-                    // ⭐ Add % Symbol for Percentage Dataset ⭐
-                    formatter: (value, context) => {
-                        if (context.dataset.label === "Sites Converted %") {
-                            return value + "%";       // show 45%
-                        }
-                        return value;                 // keep normal values for others
-                    }
-                },
-                zoom: {
-                    zoom: {
-                        wheel: {
-                            enabled: true,
-                            speed: 0.01,
-                        },
-                        pinch: {
-                            enabled: true,
-                            speed: 0.01,
-                        },
-                        mode: 'x',
-                        // mode:'y',
-                    },
-                    pan: {
-                        enabled: true,
-                        mode: 'x'
-                    },
-                },
-    
-            },
-            scales: {
-                x: {
-                    grid: {
-                        display: false
-                    },
-                    ticks: {
-                        color: 'black',   // 👈 month labels color
-                        // font: {
-                        //     size: 12,
-                        //     weight: 'bold'
-                        // }
-                    },
-                    // stacked: true
-    
-                },
-                y: {
-                    grid: {
-                        display: true,
-                        // color:'white'
-                    },
-                    ticks: {
-                        // forces step size to be 50 units
-                        color: 'black',
-                        stepSize: 10,
-                    },
-                    // stacked: true
-                },
-                y1:{
-                    position: 'right',
-                    grid: {
-                        display: false
-                    },
-                    ticks: {
-                        color: '#881e87',
-                        callback: (value) => `${value}%`
-                    }
+                    color: "black",
+                    boxWidth: 18,
                 }
             },
-            watermark: {
-                image: `${ServerURL}/media/assets/logo-new.png`,
-                x: 50,
-                y: 50,
-                width: 300,
-                height: 150,
-                opacity: 0.25,
-                alignX: "right",
-                alignY: "top",
-                alignToChartArea: false,
-                position: "back"
-    
-            },
-            animation: {
-                onComplete: () => {
-                    delayed = true;
+            title: {
+                display: true,
+                text: `Circlewise Progress - ${milestone1} (${circleWieseData?.RFAI_done?.reduce((sum, num) => sum + num, 0) || 0}) to ${milestone2} (${circleWieseData?.onAirDone?.reduce((sum, num) => sum + num, 0) || 0})`,
+                font: {
+                    size: 16,
+                    weight: 'bold',
+
                 },
-                delay: (context) => {
-                    let delay = 0;
-                    if (context.type === 'data' && context.mode === 'default' && !delayed) {
-                        delay = context.dataIndex * 300 + context.datasetIndex * 100;
+                color: 'black'
+
+            },
+            datalabels: {
+                display: true,
+                color: 'black',
+                anchor: 'end',
+                align: 'top',
+                offset: 0.5,
+                font: {
+                    size: 12,
+                    weight: 'bold'
+                },
+
+                // ⭐ Add % Symbol for Percentage Dataset ⭐
+                formatter: (value, context) => {
+                    if (context.dataset.label === "Sites Converted %") {
+                        return value + "%";       // show 45%
                     }
-                    return delay;
+                    return value;                 // keep normal values for others
+                }
+            },
+            zoom: {
+                zoom: {
+                    wheel: {
+                        enabled: true,
+                        speed: 0.01,
+                    },
+                    pinch: {
+                        enabled: true,
+                        speed: 0.01,
+                    },
+                    mode: 'x',
+                    // mode:'y',
+                },
+                pan: {
+                    enabled: true,
+                    mode: 'x'
                 },
             },
-        }
+
+        },
+        scales: {
+            x: {
+                grid: {
+                    display: false
+                },
+                ticks: {
+                    color: 'black',   // 👈 month labels color
+                    // font: {
+                    //     size: 12,
+                    //     weight: 'bold'
+                    // }
+                },
+                // stacked: true
+
+            },
+            y: {
+                grid: {
+                    display: true,
+                    // color:'white'
+                },
+                ticks: {
+                    // forces step size to be 50 units
+                    color: 'black',
+                    stepSize: 10,
+                },
+                // stacked: true
+            },
+            y1: {
+                position: 'right',
+                grid: {
+                    display: false
+                },
+                ticks: {
+                    color: '#881e87',
+                    callback: (value) => `${value}%`
+                }
+            }
+        },
+        watermark: {
+            image: `${ServerURL}/media/assets/logo-new.png`,
+            x: 50,
+            y: 50,
+            width: 300,
+            height: 150,
+            opacity: 0.25,
+            alignX: "right",
+            alignY: "top",
+            alignToChartArea: false,
+            position: "back"
+
+        },
+        animation: {
+            onComplete: () => {
+                delayed = true;
+            },
+            delay: (context) => {
+                let delay = 0;
+                if (context.type === 'data' && context.mode === 'default' && !delayed) {
+                    delay = context.dataIndex * 300 + context.datasetIndex * 100;
+                }
+                return delay;
+            },
+        },
+    }
 
 
 
@@ -574,12 +574,12 @@ const CircleWiese = () => {
         return () => {
             cancelRequest();
         }
-    }, [site_taggingAgingData, currentStatus, milestone1, milestone2,month])
+    }, [site_taggingAgingData, currentStatus, milestone1, milestone2, month])
     return (
         <>
 
             <div style={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', padding: 10, height: 'auto', width: "96%", margin: 20, borderRadius: 10, backgroundColor: "white", display: "flex", justifyContent: 'space-around', alignItems: 'center' }}>
-                <div style={{ width: 200, height: 350, borderRadius: 5, padding: 10, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: "10px",overflowY:'auto' }}>
+                <div style={{ width: 200, height: 350, borderRadius: 5, padding: 10, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: "10px", overflowY: 'auto' }}>
                     <div style={{ display: 'flex', alignItems: 'center', fontSize: '18px', fontWeight: 'bold', color: "black" }}><FilterAltIcon />FILTER DATA</div>
                     {/* select month */}
                     {/* <div>
