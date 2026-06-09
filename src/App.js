@@ -67,6 +67,8 @@ const G2Scripting = lazy(() => import('./Components/UserInterface/2G Scripting/2
 const PerformanceTAT = lazy(() => import('./Components/UserInterface/Performance AT TAT/PerformanceAt'))
 const DailyTaskReview = lazy(() => import('./Components/UserInterface/DailyTaskReview/DailyTaskReview'))  
 const PerformaceATPendingAging = lazy(() => import('./Components/UserInterface/Performance AT Pending Aging/PerformancePending'))
+const Soft_AT_Tool = lazy(() => import('./Components/UserInterface/Soft_AT_Tool/Soft_AT_Tool'))
+const VI_SoftAT = lazy(() => import('./Components/UserInterface/VI_SoftAT/VI_SoftAT'))
 
 const queryClient = new QueryClient()
 
@@ -130,11 +132,7 @@ function App() {
                 <ProtectedRoute element={Vendor} allowedUserTypes={['central', 'admin']} userType={userType} />
               </Suspense>
             } />
-            <Route path="/tools/soft_at/*" element={
-              <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={SoftAT} allowedUserTypes={['soft_at_team', 'admin','soft_at']} userType={userType} />
-              </Suspense>
-            } />
+  
             <Route path="/tools/physical_at/*" element={
               <Suspense fallback={<div>Loading...</div>}>
                 <ProtectedRoute element={Physical_At} allowedUserTypes={['central', 'admin']} userType={userType} />
@@ -390,6 +388,24 @@ function App() {
                 <ProtectedRoute element={PerformaceATPendingAging} allowedUserTypes={['admin','PAP']} userType={userType} />
               </Suspense>
             } /> */}
+
+            <Route path="/tools/soft_at_tools/*" element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProtectedRoute element={Soft_AT_Tool} allowedUserTypes={['admin','soft_at']} userType={userType} />
+              </Suspense>
+            } />
+
+             <Route path="/tools/soft_at_tools/vi_soft_at/*" element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProtectedRoute element={VI_SoftAT} allowedUserTypes={['admin','vi_soft_at']} userType={userType} />
+              </Suspense>
+            } />
+
+             <Route path="/tools/soft_at_tools/airtel_soft_at/*" element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProtectedRoute element={SoftAT} allowedUserTypes={['soft_at_team', 'admin','soft_at']} userType={userType} />
+              </Suspense>
+            } />
 
 
           </Routes>
