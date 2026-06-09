@@ -47,7 +47,7 @@ const ShowMilestone = (props) => {
                         onClick={() => handleClick(item)}>
                         <div className="timeline-circle" />
                         <div className="timeline-content" >
-                            <h4>{item.title}</h4>
+                            <h4 style={{color: issueCount?.[item.title]?.open > 0 ? 'red' : 'black'}}>{item.title}</h4>
                             {/* <p style={{display:'flex',alignContent:'center'}}>
                                 {mileston?.[0]?.[item.dateKey] || "—"} <FiberManualRecordIcon size='small' color='error'/>{issueCount?.[item.title]?.open || 0} <FiberManualRecordIcon size='small' color='success'/>{issueCount?.[item.title]?.close || 0}</p> */}
                             <div className="milestone-meta">

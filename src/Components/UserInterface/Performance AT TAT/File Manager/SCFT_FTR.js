@@ -532,7 +532,7 @@
 //         genForm.append("start_date", apiStart);
 //         genForm.append("end_date", apiEnd);
 //        const res = await postData("performance_idploy/generate-scft/", genForm);
-       
+
 //         if (res?.status) setApiResponse(res);
 //         action(false);
 //     };
@@ -893,7 +893,7 @@ const TechTable = ({
                                             background:
                                                 idx %
                                                     2 ===
-                                                0
+                                                    0
                                                     ? "#fff"
                                                     : STRIPE,
                                         }}
@@ -904,7 +904,7 @@ const TechTable = ({
                                                 background:
                                                     idx %
                                                         2 ===
-                                                    0
+                                                        0
                                                         ? "#fff"
                                                         : STRIPE,
                                             }}
@@ -1142,7 +1142,7 @@ const SCFT_FTR = () => {
                             )
                         }
                     >
-                        Performance At Tat
+                        Performance AT
                     </Link>
 
                     <Typography color="text.primary">
@@ -1291,7 +1291,7 @@ const SCFT_FTR = () => {
 
                             const tColor =
                                 TECH_COLORS[
-                                    tab.key
+                                tab.key
                                 ];
 
                             return (
@@ -1333,12 +1333,12 @@ const SCFT_FTR = () => {
                                         transition:
                                             "all 0.2s",
                                         "&:hover":
-                                            {
-                                                background:
-                                                    isActive
-                                                        ? tColor.active
-                                                        : "#f0f4ff",
-                                            },
+                                        {
+                                            background:
+                                                isActive
+                                                    ? tColor.active
+                                                    : "#f0f4ff",
+                                        },
                                     }}
                                 >
                                     {

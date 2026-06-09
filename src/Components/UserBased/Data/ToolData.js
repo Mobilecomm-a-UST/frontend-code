@@ -397,7 +397,7 @@ const ToolData = [
         id: 38,
 
         name:
-            'Performance AT TAT',
+            'Performance AT',
         title: 'This is Performance And SCFT TAT/FTR Tool',
 
         icons: () => (
