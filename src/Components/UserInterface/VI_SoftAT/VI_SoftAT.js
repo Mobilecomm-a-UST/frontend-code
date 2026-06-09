@@ -1,0 +1,75 @@
+import React, { Suspense, lazy } from 'react'
+import { useState, useEffect } from 'react'
+import { Box } from '@mui/material'
+import { Grid } from '@mui/material'
+import { Sidenav, Nav } from 'rsuite';
+import DashboardIcon from '@rsuite/icons/legacy/Dashboard';
+import AppSelectIcon from '@rsuite/icons/AppSelect';
+import { useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import FileUploadIcon from '@rsuite/icons/FileUpload';
+import ConversionIcon from '@rsuite/icons/Conversion';
+import { getDecreyptedData } from '../../utils/localstorage'
+import Loader from '../../Skeleton/Loader';
+
+const VI_SoftAT_Tool = lazy(() => import('./VI_SoftAT_Tool'))
+const Vi_Checklist = lazy(() => import('./VI_Checklist/Vi_checklist'))
+
+const VI_SoftAT = () => {
+    const [expanded, setExpanded] = useState(true);
+    const [activeKey, setActiveKey] = useState();
+    const [states, setStates] = useState([])
+    const userTypes = (getDecreyptedData('user_type')?.split(","))
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
+    }, [])
+
+    // onClick={() => navigate('/tools/Integration/relocation')} 
+    return (
+        <>
+
+            <Box style={{ marginTop: '60px' }}>
+                <Grid container spacing={2}>
+                    <Grid item xs={0} md={2} sx={{}}>
+                        <Box style={{ position: 'fixed', width: '16.5%' }}>
+                            <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
+                                <Sidenav.Body>
+                                    <Nav activeKey={activeKey} onSelect={setActiveKey} >
+                                        <Nav style={{ fontWeight: 550, color: 'white', textAlign: 'center', fontSize: 19 }}>VI Soft AT Tool</Nav>
+                                        {/* <Nav.Men eventKey="1" placement="rightStart" icon={<DashboardIcon />} title="Dashboard">
+                                         <Nav.Item>dfdf</Nav.Item>
+                                        </Nav.Men > */}
+                                        <Nav.Item eventKey="1" placement="rightStart" icon={<AppSelectIcon />} onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/Vi_checklist')}>
+                                            VI Checklist
+                                        </Nav.Item>
+                                        <Nav.Item eventKey="2" placement="rightStart" icon={<DashboardIcon />} onClick={() => navigate('/tools/soft_at_tools')}>
+                                            VI FTR Dashboard
+                                        </Nav.Item>
+                                         <Nav.Item eventKey="3" placement="rightStart" icon={<FileUploadIcon />} onClick={() => navigate('/tools/soft_at_tools')} >
+                                            Upload FTR
+                                        </Nav.Item>
+                                     
+                                    </Nav>
+                                </Sidenav.Body>
+
+                            </Sidenav>
+                        </Box>
+                    </Grid>
+                    <Grid item xs={12} md={10}>
+                        <Suspense fallback={<Loader/>}>
+                            <Routes>
+                                <Route element={<VI_SoftAT_Tool />} path="/" />
+                                <Route element={<Vi_Checklist />} path="/vi_checklist" />
+                               
+                            </Routes>
+                        </Suspense>
+                    </Grid>
+                </Grid>
+            </Box>
+        </>
+    )
+}
+
+export default VI_SoftAT

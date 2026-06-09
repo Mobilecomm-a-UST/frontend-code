@@ -16,7 +16,7 @@ const Soft_AT_Tool = () => {
     const userTypes = (getDecreyptedData('user_type')?.split(","))
     const allowedAirtelRoles = ['soft_at_team', 'admin', 'soft_at'];
     // const allowedAirtelReader = ['quality', 'IX_reader', 'quality-s']
-   
+
 
 
     // console.log('ggggggggg', userTypes)
@@ -29,18 +29,19 @@ const Soft_AT_Tool = () => {
             dispatch({ type: 'LINK_PAGES', payload: { linker } })
         }
         else {
-            navigate('/tools/SoftAT')
+            navigate('/tools/soft_at_tools/airtel_soft_at')
         }
     }
-    // const handleAirtelReader = () => {
-    //     if (chackToken == null) {
-    //         navigate('/login')
-    //         dispatch({ type: 'LINK_PAGES', payload: { linker } })
-    //     }
-    //     else {
-    //         navigate('/tools/SoftAT')
-    //     }
-    // }
+
+    const handleVI = () => {
+        if (chackToken == null) {
+            navigate('/login')
+            dispatch({ type: 'LINK_PAGES', payload: { linker } })
+        }
+        else {
+            navigate('/tools/soft_at_tools/vi_soft_at')
+        }
+    }
 
     const backgroundStyle = {
         height: "auto",
@@ -78,7 +79,7 @@ const Soft_AT_Tool = () => {
                             // border:'2px solid blue'
                         }}
                     >
-                        Soft AT TOOL
+                        Soft AT TOOLS
                     </Box></Box>
                 <Zoom in='true' timeout={500}>
 
@@ -91,6 +92,8 @@ const Soft_AT_Tool = () => {
                         </Box> */}
                         <Box sx={{ width: '90%', marginLeft: 'auto', marginRight: 'auto' }}>
                             <Grid container rowSpacing={2} columnSpacing={1} direction={{ xs: "column", sm: "column", md: "row" }} style={{}}>
+
+
                                 {userTypes?.some(role => allowedAirtelRoles.map(r => r.toLowerCase()).includes(role?.toLowerCase())) && <Grid item xs={4}>
                                     <Box sx={backgroundStyle} className={classes.des} onClick={handleAirtel}>
                                         <div className={classes.centerIcon}>   <img src="/assets/AIRTEL.webp" alt="Airtel" style={{ width: "60px", height: "60px" }} /></div>
@@ -102,17 +105,19 @@ const Soft_AT_Tool = () => {
                                     </Box>
                                 </Grid>}
 
-                                IX Airtel reader
-                                {userTypes?.some(role => allowedAirtelReader.map(r => r.toLowerCase()).includes(role?.toLowerCase())) && <Grid item xs={4}>
-                                    <Box sx={backgroundStyle} className={classes.des} onClick={handleAirtelReader}>
-                                        <div className={classes.centerIcon}>   <img src="/assets/AIRTEL.webp" alt="Airtel" style={{ width: "60px", height: "60px" }} /></div>
+
+                                {userTypes?.some(role => allowedAirtelRoles.map(r => r.toLowerCase()).includes(role?.toLowerCase())) && <Grid item xs={4}>
+                                    <Box sx={backgroundStyle} className={classes.des} onClick={handleVI}>
+                                        <div className={classes.centerIcon}>   <img src="/assets/VI.webp" alt="VI   " style={{ width: "60px", height: "60px" }} /></div>
                                         <div >
-                                            <div className={classes.center} >Airtel Soft AT Reader</div>
+                                            <div className={classes.center} >VI Soft AT</div>
                                             {/* <div>This is a FDD tool</div> */}
                                         </div>
                                         {/* <span className={classes.center}>FILE MERGE</span> */}
                                     </Box>
                                 </Grid>}
+
+                                {/* IX Airtel reader */}
 
                             </Grid>
                         </Box>
