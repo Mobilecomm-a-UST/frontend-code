@@ -17,6 +17,9 @@ import ListItemText from '@mui/material/ListItemText';
 import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
 import { postData } from '../../../../services/FetchNodeServices';
+import { useNavigate } from 'react-router-dom';
+import { usePost } from '../../../../Hooks/PostApis';
+import { useDispatch } from 'react-redux';
 import 'rsuite/dist/rsuite.min.css';
 import * as ExcelJS from 'exceljs'
 
@@ -89,6 +92,11 @@ const MultiSelectWithAll = ({
 
 const RfaiIntegration = () => {
     const { loading, action } = useLoadingDialog();
+    const navigate = useNavigate();
+    const { makePostRequest } = usePost()
+    const dispatch = useDispatch();
+    const [circle, setCircle] = useState();
+    const [year, setYear] = useState('2026')
     const [site_taggingAgingData, setSite_taggingAgingData] = useState([]);
     const [site_taggingAgingOption, setSite_taggingAgingOption] = useState([]);
     const [currentStatus, setCurrentStatus] = useState([])
@@ -119,7 +127,7 @@ const RfaiIntegration = () => {
     const [month, setMonth] = useState('')
     const dynamicHeaders = Object.keys(integrationToOnairData?.[0]?.data?.Done || []);
 
-    console.log('table data', dynamicHeaders)
+    // console.log('table data', dynamicHeaders)
 
     const classes = useStyles();
 
@@ -133,7 +141,7 @@ const RfaiIntegration = () => {
         formData.append('milestone1', milestone1)
         formData.append('milestone2', milestone2)
         formData.append('month', month.split('-')[1] || '')
-        formData.append('year', month.split('-')[0] || '')
+       formData.append('year', year || '')
 
 
         const res = await postData("nt_tracker/ms1_ageing_dashboard_table1/", formData);
@@ -189,80 +197,109 @@ const RfaiIntegration = () => {
         setMonth(event.target.value)
     }
 
-        const handleExportExcel = async () => {
-            const workbook = new ExcelJS.Workbook();
-            const sheet = workbook.addWorksheet("Done Vs Pending Count");
-    
-            // ----------------- HEADER -----------------
-            const columns = [
-                { header: "Circle", key: "circle", width: 15 },
-                { header: "Type", key: "type", width: 10 },
-            ];
-    
+    const handleExportExcel = async () => {
+        const workbook = new ExcelJS.Workbook();
+        const sheet = workbook.addWorksheet("Done Vs Pending Count");
+
+        // ----------------- HEADER -----------------
+        const columns = [
+            { header: "Circle", key: "circle", width: 15 },
+            { header: "Type", key: "type", width: 10 },
+        ];
+
+        dynamicHeaders.forEach((h) => {
+            columns.push({ header: h, key: h, width: 15 });
+        });
+
+        sheet.columns = columns;
+
+        // ----------------- ROWS -------------------
+        integrationToOnairData.forEach((item) => {
+            const { Circle, data } = item;
+            const done = data.Done || {};
+            const pending = data.Pending || {};
+
+            // DONE row
+            const doneRow = { circle: Circle, type: "Done" };
             dynamicHeaders.forEach((h) => {
-                columns.push({ header: h, key: h, width: 15 });
+                doneRow[h] = done[h] ?? "-";
             });
-    
-            sheet.columns = columns;
-    
-            // ----------------- ROWS -------------------
-            integrationToOnairData.forEach((item) => {
-                const { Circle, data } = item;
-                const done = data.Done || {};
-                const pending = data.Pending || {};
-    
-                // DONE row
-                const doneRow = { circle: Circle, type: "Done" };
-                dynamicHeaders.forEach((h) => {
-                    doneRow[h] = done[h] ?? "-";
-                });
-                sheet.addRow(doneRow);
-    
-                // PENDING row
-                const pendingRow = { circle: Circle, type: "Pending" };
-                dynamicHeaders.forEach((h) => {
-                    pendingRow[h] = pending[h] ?? "-";
-                });
-                sheet.addRow(pendingRow);
+            sheet.addRow(doneRow);
+
+            // PENDING row
+            const pendingRow = { circle: Circle, type: "Pending" };
+            dynamicHeaders.forEach((h) => {
+                pendingRow[h] = pending[h] ?? "-";
             });
-    
-            // ----------------- STYLING -----------------
-            sheet.eachRow((row, rowNumber) => {
-                row.eachCell((cell) => {
-                    cell.alignment = { horizontal: "center", vertical: "middle" };
-                    cell.border = {
-                        top: { style: "thin" },
-                        left: { style: "thin" },
-                        bottom: { style: "thin" },
-                        right: { style: "thin" },
-                    };
-    
-                    // Header styling
-                    if (rowNumber === 1) {
-                        cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "223354" } };
-                        cell.font = { color: { argb: "FFFFFF" }, bold: true };
-                    }
-                });
+            sheet.addRow(pendingRow);
+        });
+
+        // ----------------- STYLING -----------------
+        sheet.eachRow((row, rowNumber) => {
+            row.eachCell((cell) => {
+                cell.alignment = { horizontal: "center", vertical: "middle" };
+                cell.border = {
+                    top: { style: "thin" },
+                    left: { style: "thin" },
+                    bottom: { style: "thin" },
+                    right: { style: "thin" },
+                };
+
+                // Header styling
+                if (rowNumber === 1) {
+                    cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "223354" } };
+                    cell.font = { color: { argb: "FFFFFF" }, bold: true };
+                }
             });
-    
-            // ----------------- EXPORT -----------------
-            const buffer = await workbook.xlsx.writeBuffer();
-            const blob = new Blob([buffer], {
-                type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            });
-    
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = `${milestone1}_to_${milestone2}.xlsx`;
-            a.click();
-            window.URL.revokeObjectURL(url);
-        };
+        });
+
+        // ----------------- EXPORT -----------------
+        const buffer = await workbook.xlsx.writeBuffer();
+        const blob = new Blob([buffer], {
+            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        });
+
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${milestone1}_to_${milestone2}.xlsx`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+    };
+
+    const ClickDataGet = async (props) => {
+        console.log('aaaaaaaa', props)
+        // action(true)
+        var formData = new FormData();
+        formData.append("circle", props.circle);
+        formData.append("site_status", props.site_status);
+        formData.append("milestone", props.milestone);
+        // formData.append("col_name", props.col_name);
+        // formData.append('site_tagging', tagging);
+        formData.append('milestone1', milestone1);
+        formData.append('milestone2', milestone2);
+        formData.append('month', month.split('-')[1] || '');
+        formData.append('year', year.split('-')[0] || '');
+
+        const responce = await makePostRequest('nt_tracker/nt_issue_frontend_hyperlink/', formData)
+        
+        if (responce) {
+            console.log('response', responce)
+            action(false);
+            const temp = JSON.parse(responce.data)
+
+            dispatch({ type: 'NTD_FINAL_TRACKER', payload: { temp } })
+            navigate(`/tools/ntd/rfai_to_ms1_ageing/${props.milestone}`)
+        }
+        else {
+            action(false)
+        }
+    }
 
 
     useEffect(() => {
         fetchDailyData()
-    }, [site_taggingAgingData, currentStatus, milestone1, milestone2,month])
+    }, [site_taggingAgingData, currentStatus, milestone1, milestone2, month])
 
     return (
         <>
@@ -271,7 +308,7 @@ const RfaiIntegration = () => {
                 <div style={{ margin: 20 }}>
 
                     {/* ************* 2G  TABLE DATA ************** */}
-                    <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', alignContent: 'center',margin:'5px 5px' }}>
+                    <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', alignContent: 'center', margin: '5px 5px' }}>
                         <Box style={{ fontSize: 22, fontWeight: 'bold' }}>
                             Done Vs Pending Count - {milestone1} to {milestone2}
                         </Box>
@@ -400,7 +437,7 @@ const RfaiIntegration = () => {
                                                     </th>
                                                     <th>Done</th>
                                                     {dynamicHeaders.map((h) => (
-                                                        <th key={h}>{done[h] ?? "-"}</th>
+                                                        <th key={h} onClick={()=>ClickDataGet({site_status:'Done',circle:Circle,milestone:h})}>{done[h] ?? "-"}</th>
                                                     ))}
                                                 </tr>
 
@@ -408,7 +445,7 @@ const RfaiIntegration = () => {
                                                 <tr className={classes.tableRow} style={{ textAlign: "center" }}>
                                                     <th>Pending</th>
                                                     {dynamicHeaders.map((h) => (
-                                                        <th key={h}>{pending[h] ?? "-"}</th>
+                                                        <th key={h} onClick={()=>ClickDataGet({site_status:'Pending',circle:Circle,milestone:h})}>{pending[h] ?? "-"}</th>
                                                     ))}
                                                 </tr>
                                             </React.Fragment>

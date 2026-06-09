@@ -22,6 +22,7 @@ const RFAItoMS1_UploadFile = lazy(() => import('./RFAItoMS1/UploadFile/Upload'))
 const RFAItoMS1_Waterfall_Dashboard = lazy(() => import('./RFAItoMS1/Dashboard/DashboardTable'));
 const RFAItoMS1_lifecycle = lazy(() => import('./RFAItoMS1/LifeCycleDashboard/LifeCycle'));
 const RFAItoMS1_FinalData = lazy(() => import('./RFAItoMS1/Dashboard/FinalData'))
+
 const RFAItoMS1_Ageing = lazy(() => import('./RFAItoMS1/Aging/MainAging'))
 const RFAItoMS1_Analytics_Dashboard = lazy(() => import('./RFAItoMS1/Analytics/MainDashboard'))
 const RFAItoMS1_IssueTracker = lazy(() => import('./RFAItoMS1/IssueTracker/IssueTracker'))
@@ -176,6 +177,7 @@ const NTD = () => {
                                 <Route element={<MS1toMS2_Ageing />} path="/ms1_to_ms2_ageing" />
                                 <Route element={<MS1toMS2_Analytics />} path="/ms1_to_ms2_analytics" />
                                 <Route element={<RFAItoMS1_IssueTracker />} path="/rfai_to_ms1_issue_tracker" />
+                                
 
                                 {/* <Route
                                         path="/rfai_to_ms1_upload_file"

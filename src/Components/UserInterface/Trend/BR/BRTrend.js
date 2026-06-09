@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState, useEffect, Suspense ,lazy} from 'react'
+import { useState, useEffect, Suspense, lazy } from 'react'
 import { Grid } from '@mui/material'
 import { Box } from '@mui/material'
 import { Sidenav, Nav } from 'rsuite';
@@ -66,13 +66,20 @@ function BRTrend() {
             <Suspense fallback={<div>loading............</div>}>
 
               <Routes>
+
+
                 <Route element={<TrendBox data={'BR'} />} path="/" />
                 <Route element={<Degrow />} path="/degrow" />
                 <Route element={<Macro />} path="/macro" />
                 <Route element={<SmallCell />} path="/small_cell" />
                 {/* <Route element={<MakeKPITrend/>} path="/make_kpi_trend" /> */}
+
+
               </Routes>
-            </Suspense>
+              </Suspense>
+
+    
+
           </Grid>
         </Grid>
       </Box>
