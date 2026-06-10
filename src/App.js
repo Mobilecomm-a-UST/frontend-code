@@ -383,11 +383,11 @@ function App() {
               </Suspense>
             } />
 
-            {/* <Route path="/tools/performance_at_pending_aging/*" element={
+            <Route path="/tools/performance_at_pending_aging/*" element={
               <Suspense fallback={<div>Loading...</div>}>
                 <ProtectedRoute element={PerformaceATPendingAging} allowedUserTypes={['admin','PAP']} userType={userType} />
               </Suspense>
-            } /> */}
+            } />
 
             <Route path="/tools/soft_at_tools/*" element={
               <Suspense fallback={<div>Loading...</div>}>
