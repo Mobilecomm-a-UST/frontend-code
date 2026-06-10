@@ -350,7 +350,8 @@ import { postData, getData, deleteData } from "../../../services/FetchNodeServic
 import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
 
 const jsonData = [
-    { folder_name: "Performance AT", api: "performance_idploy/upload" ,back_folder:"stock_report_data" }
+    { folder_name: "Performance AT TAT", api: "performance_idploy/upload" ,back_folder:"stock_report_data" },
+    { folder_name: "Performance AT Pending Aging", api: "performance_tat/upload", back_folder:"performance_tat" }
 ];
 
 const Transition = React.forwardRef(function Transition(props, ref) {
