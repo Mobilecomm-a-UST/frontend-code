@@ -391,13 +391,13 @@ function App() {
 
             <Route path="/tools/soft_at_tools/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={Soft_AT_Tool} allowedUserTypes={['admin','soft_at']} userType={userType} />
+                <ProtectedRoute element={Soft_AT_Tool} allowedUserTypes={['soft_at_team','admin','soft_at']} userType={userType} />
               </Suspense>
             } />
 
              <Route path="/tools/soft_at_tools/vi_soft_at/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={VI_SoftAT} allowedUserTypes={['admin','vi_soft_at']} userType={userType} />
+                <ProtectedRoute element={VI_SoftAT} allowedUserTypes={['soft_at_team','admin','vi_soft_at']} userType={userType} />
               </Suspense>
             } />
 
