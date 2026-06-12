@@ -18,6 +18,8 @@ const MasterDashboard = lazy(() => import("./File Manager/MasterDashboard"));
 const SCFT_Aging = lazy(() => import("./File Manager/SCFT_Aging"));
 const Performance_SR_Wise = lazy(() => import("./File Manager/Performance_SR_Wise"));
 const PerformanceAtPendingAging = lazy(() => import("./perATPendingAging/MasterDashboard"));
+const Performance_Aging_Graph = lazy(() => import("./File Manager/Performance_Aging_Graph"));
+const SCFT_Aging_Graph = lazy(() => import("./perATPendingAging/SCFT_Aging_Graph"));
 // const UploadPerformanceAt = lazy(() => import("./Upload_Performance_At/UploadPerformanceAt"));
 // const Dashboard = lazy(() => import("./Dashboard/Dashboard"));
 
@@ -72,9 +74,7 @@ const PerformanceAt = () => {
                                             File Manager
                                         </Nav.Item>
 
-
-
-                                        <Nav.Menu eventKey="2" style={{ fontWeight: 400, color: 'white' }} placement="leftStart" className="menu-title-custom" title="Per. AT TAT" icon={<DashboardIcon />}  >
+                                        <Nav.Menu eventKey="2" style={{ fontWeight: 400, color: 'white' }} placement="leftStart" className="menu-title-custom" title="Performance AT" icon={<DashboardIcon />}  >
                                             <Nav.Item
                                                 eventKey="2-1"
                                                 placement="rightStart"
@@ -83,14 +83,13 @@ const PerformanceAt = () => {
                                             >
                                                 Performance Aging
                                             </Nav.Item>
-
-                                            <Nav.Item
+                                             <Nav.Item
                                                 eventKey="2-2"
                                                 placement="rightStart"
                                                 // icon={<DashboardIcon />}
-                                                onClick={() => navigate('/tools/performance_at_tat/SCFT_Aging')}
+                                                onClick={() => navigate('/tools/performance_at_tat/performance_at_pending_aging')}
                                             >
-                                                SCFT Aging
+                                                Pending Aging
                                             </Nav.Item>
 
                                             <Nav.Item
@@ -105,30 +104,52 @@ const PerformanceAt = () => {
                                                 eventKey="2-4"
                                                 placement="rightStart"
                                                 // icon={<DashboardIcon />}
+                                                onClick={() => navigate('/tools/performance_at_tat/Performance_Aging_Graph')}
+                                            >
+                                                Performance Graph
+                                            </Nav.Item>
+                                            
+                                        </Nav.Menu>
+
+                                        <Nav.Menu eventKey="3" style={{ fontWeight: 400, color: 'white' }} placement="leftStart" className="menu-title-custom" title="SCFT AT" icon={<DashboardIcon />}  >
+                                             <Nav.Item
+                                                eventKey="3-1"
+                                                placement="rightStart"
+                                                // icon={<DashboardIcon />}
+                                                onClick={() => navigate('/tools/performance_at_tat/SCFT_Aging')}
+                                            >
+                                                SCFT Aging
+                                            </Nav.Item>
+
+                                             <Nav.Item
+                                                eventKey="3-2"
+                                                placement="rightStart"
+                                                // icon={<DashboardIcon />}
                                                 onClick={() => navigate('/tools/performance_at_tat/SCFT_FTR')}
                                             >
                                                 SCFT FTR
                                             </Nav.Item>
+
                                             <Nav.Item
-                                                eventKey="2-5"
+                                                eventKey="3-3"
                                                 placement="rightStart"
                                                 // icon={<DashboardIcon />}
                                                 onClick={() => navigate('/tools/performance_at_tat/Performance_SR_Wise')}
                                             >
                                                 SR Wise Tracking
                                             </Nav.Item>
-                                        </Nav.Menu>
 
-                                        <Nav.Menu eventKey="3" style={{ fontWeight: 400, color: 'white' }} placement="leftStart" className="menu-title-custom" title="Per. AT Pending Aging" icon={<DashboardIcon />}  >
-                                            <Nav.Item
-                                                eventKey="3-1"
+                                             <Nav.Item
+                                                eventKey="3-4"
                                                 placement="rightStart"
                                                 // icon={<DashboardIcon />}
-                                                onClick={() => navigate('/tools/performance_at_tat/performance_at_pending_aging')}
+                                                onClick={() => navigate('/tools/performance_at_tat/SCFT_Aging_Graph')}
                                             >
-                                                Pending Aging
+                                                SCFT Aging Graph
                                             </Nav.Item>
 
+                                            
+                                            
                                             {/* <Nav.Item
                                                 eventKey="3-2"
                                                 placement="rightStart"
@@ -182,6 +203,8 @@ const PerformanceAt = () => {
                                 <Route element={<Performance_SR_Wise />} path="/Performance_SR_Wise" />
                                 <Route element={<MasterDashboard />} path="/MasterDashboard" />
                                 <Route element={<PerformanceAtPendingAging />} path="/performance_at_pending_aging" />
+                                <Route element={<Performance_Aging_Graph />} path="/Performance_Aging_Graph" />
+                                <Route element={<SCFT_Aging_Graph />} path="/SCFT_Aging_Graph" />
                             </Routes>
                         </Suspense>
                     </Grid>
