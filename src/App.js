@@ -58,14 +58,14 @@ const RelocationPayload = lazy(() => import('./Components/UserInterface/Relocati
 const ProjectTracking = lazy(() => import('./Components/UserInterface/ProjectTracking/PTracking'))
 const IxTools = lazy(() => import('./Components/UserInterface/Integration_Tools/Ix_Tools'))
 const Vi_Integration = lazy(() => import('./Components/UserInterface/Vi_Integration_tool/Vi_Integration'))
-const SA_Slicing = lazy(()=>import('./Components/UserInterface/Integration_SA/SA'))
+const SA_Slicing = lazy(() => import('./Components/UserInterface/Integration_SA/SA'))
 const MicrowaveSoftAt = lazy(() => import('./Components/UserInterface/Microwave/Microwave'))
 const NTDTool = lazy(() => import('./Components/UserInterface/NewTowerDeployment/NTD'))
 const UpgradeDeployment = lazy(() => import('./Components/UserInterface/UpgradeDeployment/UD'))
 const payloadTraffic = lazy(() => import('./Components/UserInterface/Payload Traffic/Payload'))
 const G2Scripting = lazy(() => import('./Components/UserInterface/2G Scripting/2GScripting'))
 const PerformanceTAT = lazy(() => import('./Components/UserInterface/Performance AT TAT/PerformanceAt'))
-const DailyTaskReview = lazy(() => import('./Components/UserInterface/DailyTaskReview/DailyTaskReview'))  
+const DailyTaskReview = lazy(() => import('./Components/UserInterface/DailyTaskReview/DailyTaskReview'))
 const PerformaceATPendingAging = lazy(() => import('./Components/UserInterface/Performance AT Pending Aging/PerformancePending'))
 const Soft_AT_Tool = lazy(() => import('./Components/UserInterface/Soft_AT_Tool/Soft_AT_Tool'))
 const VI_SoftAT = lazy(() => import('./Components/UserInterface/VI_SoftAT/VI_SoftAT'))
@@ -132,7 +132,7 @@ function App() {
                 <ProtectedRoute element={Vendor} allowedUserTypes={['central', 'admin']} userType={userType} />
               </Suspense>
             } />
-  
+
             <Route path="/tools/physical_at/*" element={
               <Suspense fallback={<div>Loading...</div>}>
                 <ProtectedRoute element={Physical_At} allowedUserTypes={['central', 'admin']} userType={userType} />
@@ -285,7 +285,7 @@ function App() {
             } />
             <Route path="/tools/mobile_network_integration/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={Gpl} allowedUserTypes={['admin','MNIT']} userType={userType} />
+                <ProtectedRoute element={Gpl} allowedUserTypes={['admin', 'MNIT']} userType={userType} />
               </Suspense>
             } />
 
@@ -303,7 +303,7 @@ function App() {
 
             <Route path="/tools/full_site_dismantle/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={DegrowDismantle} allowedUserTypes={['admin', 'ran','ran_admin']} userType={userType} />
+                <ProtectedRoute element={DegrowDismantle} allowedUserTypes={['admin', 'ran', 'ran_admin']} userType={userType} />
               </Suspense>
             } />
 
@@ -327,7 +327,7 @@ function App() {
 
             <Route path="/tools/ix_tools/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={IxTools} allowedUserTypes={['admin', 'IX', 'VI_IX', 'VI_IX_reader', 'soft_at_team',"IX_SA",'quality','IX_reader','quality-s']} userType={userType} />
+                <ProtectedRoute element={IxTools} allowedUserTypes={['admin', 'IX', 'VI_IX', 'VI_IX_reader', 'soft_at_team', "IX_SA", 'quality', 'IX_reader', 'quality-s']} userType={userType} />
               </Suspense>
             } />
 
@@ -349,37 +349,37 @@ function App() {
               </Suspense>
             } />
 
-             <Route path="/tools/ntd/*" element={
+            <Route path="/tools/ntd/*" element={
               <Suspense fallback={<div>Loading...</div>}>
                 <ProtectedRoute element={NTDTool} allowedUserTypes={['admin', 'NTD']} userType={userType} />
               </Suspense>
             } />
 
-             <Route path="/tools/upgrade_deployment/*" element={
+            <Route path="/tools/upgrade_deployment/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={UpgradeDeployment} allowedUserTypes={['admin', 'UDT','UDT_reader']} userType={userType} />
+                <ProtectedRoute element={UpgradeDeployment} allowedUserTypes={['admin', 'UDT', 'UDT_reader']} userType={userType} />
               </Suspense>
             } />
             <Route path="/tools/payload_traffic/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={payloadTraffic} allowedUserTypes={['admin','PTS','PTS_Admin']} userType={userType} />
+                <ProtectedRoute element={payloadTraffic} allowedUserTypes={['admin', 'PTS', 'PTS_Admin']} userType={userType} />
               </Suspense>
             } />
-             <Route path="/tools/2g_scripting/*" element={
+            <Route path="/tools/2g_scripting/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={G2Scripting} allowedUserTypes={['admin','2G_Script']} userType={userType} />
+                <ProtectedRoute element={G2Scripting} allowedUserTypes={['admin', '2G_Script']} userType={userType} />
               </Suspense>
             } />
 
-             <Route path="/tools/performance_at_tat/*" element={
+            <Route path="/tools/performance_at_tat/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={PerformanceTAT} allowedUserTypes={['admin','PAT']} userType={userType} />
+                <ProtectedRoute element={PerformanceTAT} allowedUserTypes={['admin', 'PAT']} userType={userType} />
               </Suspense>
             } />
 
             <Route path="/tools/daily_task_review/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={DailyTaskReview} allowedUserTypes={['admin','DTR']} userType={userType} />
+                <ProtectedRoute element={DailyTaskReview} allowedUserTypes={['admin', 'DTR']} userType={userType} />
               </Suspense>
             } />
 
@@ -391,26 +391,26 @@ function App() {
 
             <Route path="/tools/soft_at_tools/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={Soft_AT_Tool} allowedUserTypes={['soft_at_team','admin','soft_at']} userType={userType} />
+                <ProtectedRoute element={Soft_AT_Tool} allowedUserTypes={['soft_at_team', 'admin', 'soft_at']} userType={userType} />
               </Suspense>
             } />
 
-             <Route path="/tools/soft_at_tools/vi_soft_at/*" element={
+            <Route path="/tools/soft_at_tools/vi_soft_at/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={VI_SoftAT} allowedUserTypes={['soft_at_team','admin','vi_soft_at']} userType={userType} />
+                <ProtectedRoute element={VI_SoftAT} allowedUserTypes={['soft_at_team', 'admin', 'vi_soft_at']} userType={userType} />
               </Suspense>
             } />
 
-             <Route path="/tools/soft_at_tools/airtel_soft_at/*" element={
+            <Route path="/tools/soft_at_tools/airtel_soft_at/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={SoftAT} allowedUserTypes={['soft_at_team', 'admin','soft_at']} userType={userType} />
+                <ProtectedRoute element={SoftAT} allowedUserTypes={['soft_at_team', 'admin', 'soft_at']} userType={userType} />
               </Suspense>
             } />
 
 
           </Routes>
-          
-        
+
+
 
         </Router>
         {/* <Box sx={{ position: 'fixed',
