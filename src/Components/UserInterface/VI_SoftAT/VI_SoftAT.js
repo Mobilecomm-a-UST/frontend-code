@@ -15,6 +15,7 @@ import Loader from '../../Skeleton/Loader';
 const VI_SoftAT_Tool = lazy(() => import('./VI_SoftAT_Tool'))
 const Vi_Checklist = lazy(() => import('./VI_Checklist/Vi_checklist'))
 const UploadFile = lazy(() => import('./VI_Checklist/UploadFile'))
+const VI_FTR_Dashboard = lazy(() => import('./VI_Checklist/VI_FTR_Dashboard/VI_FTR_Dashboard'))
 
 const VI_SoftAT = () => {
     const [expanded, setExpanded] = useState(true);
@@ -45,7 +46,7 @@ const VI_SoftAT = () => {
                                         <Nav.Item eventKey="1" placement="rightStart" icon={<AppSelectIcon />} onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/Vi_checklist')}>
                                             VI Checklist
                                         </Nav.Item>
-                                        <Nav.Item eventKey="2" placement="rightStart" icon={<DashboardIcon />} onClick={() => navigate('/tools/soft_at_tools')}>
+                                        <Nav.Item eventKey="2" placement="rightStart" icon={<DashboardIcon />} onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/vi_ftr_dashboard')}>
                                             VI FTR Dashboard
                                         </Nav.Item>
                                          <Nav.Item eventKey="3" placement="rightStart" icon={<FileUploadIcon />} onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/upload_file')} >
@@ -64,7 +65,7 @@ const VI_SoftAT = () => {
                                 <Route element={<VI_SoftAT_Tool />} path="/" />
                                 <Route element={<Vi_Checklist />} path="/vi_checklist" />
                                 <Route element={<UploadFile />} path="/upload_file" />
-                               
+                                <Route element={<VI_FTR_Dashboard />} path="/vi_ftr_dashboard" />
                             </Routes>
                         </Suspense>
                     </Grid>
