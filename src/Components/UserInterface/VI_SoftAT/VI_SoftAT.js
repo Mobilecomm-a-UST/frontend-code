@@ -9,11 +9,12 @@ import { useNavigate } from 'react-router-dom';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import FileUploadIcon from '@rsuite/icons/FileUpload';
 import ConversionIcon from '@rsuite/icons/Conversion';
-import { getDecreyptedData } from '../../utils/localstorage'
+import { getDecreyptedData } from '../../utils/localstorage';
 import Loader from '../../Skeleton/Loader';
 
 const VI_SoftAT_Tool = lazy(() => import('./VI_SoftAT_Tool'))
 const Vi_Checklist = lazy(() => import('./VI_Checklist/Vi_checklist'))
+const UploadFile = lazy(() => import('./VI_Checklist/UploadFile'))
 
 const VI_SoftAT = () => {
     const [expanded, setExpanded] = useState(true);
@@ -47,7 +48,7 @@ const VI_SoftAT = () => {
                                         <Nav.Item eventKey="2" placement="rightStart" icon={<DashboardIcon />} onClick={() => navigate('/tools/soft_at_tools')}>
                                             VI FTR Dashboard
                                         </Nav.Item>
-                                         <Nav.Item eventKey="3" placement="rightStart" icon={<FileUploadIcon />} onClick={() => navigate('/tools/soft_at_tools')} >
+                                         <Nav.Item eventKey="3" placement="rightStart" icon={<FileUploadIcon />} onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/upload_file')} >
                                             Upload FTR
                                         </Nav.Item>
                                      
@@ -62,6 +63,7 @@ const VI_SoftAT = () => {
                             <Routes>
                                 <Route element={<VI_SoftAT_Tool />} path="/" />
                                 <Route element={<Vi_Checklist />} path="/vi_checklist" />
+                                <Route element={<UploadFile />} path="/upload_file" />
                                
                             </Routes>
                         </Suspense>
