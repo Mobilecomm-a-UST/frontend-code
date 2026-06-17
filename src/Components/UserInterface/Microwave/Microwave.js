@@ -10,11 +10,15 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import FolderIcon from '@rsuite/icons/Folder';
 import ChangeListIcon from '@rsuite/icons/ChangeList';
+import BytedanceMicroappIcon from '@rsuite/icons/BytedanceMicroapp';
+import FileUploadIcon from '@rsuite/icons/FileUpload';
 import Loader from '../../Skeleton/Loader'
+import { Upload } from '@hugeicons/core-free-icons';
 
 const MicrowaveTool = lazy(() => import('./MicrowaveTool'))
 const MicrowaveAVIATUpload = lazy(() => import('./MicrowaveAVIAT/MicrowaveAVIATUpload'))
 const MicrowaveAviatTable = lazy(()=>import('./MicrowaveTable/MicrowaveAviatTable'))
+const MicrowaveCeragonUpload = lazy(() => import('./MicrowaveCeragon/MicrowaveCeragonUpload'))
 
 const Microwave = () => {
       const [expanded, setExpanded] = useState(true);
@@ -93,12 +97,22 @@ const Microwave = () => {
                                             {/* <Nav.Item eventKey="1" placement="rightStart" icon={<FolderIcon style={{}} />} onClick={() => { navigate('/tools/mobinet_vs_cats/file_manager'); show(); setMenuButton(true) }}>
                                                 File Manager
                                             </Nav.Item> */}
-                                            <Nav.Item eventKey="2" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/microwave_soft_at/microwave_aviat_upload'); show(); setMenuButton(true) }}>
-                                                Step 1: Microwave(AVIAT)
+                                            <Nav.Menu eventKey="1" placement="rightStart" title="Microwave AVIAT" icon={<BytedanceMicroappIcon size="3em" />}>
+                                            <Nav.Item eventKey="1-1" placement="rightStart" icon={<FileUploadIcon />} onClick={() => { navigate('/tools/microwave_soft_at/microwave_aviat_upload'); show(); setMenuButton(true) }}>
+                                                Upload Files
                                             </Nav.Item>
-                                               <Nav.Item eventKey="3" placement="rightStart" icon={<DashboardIcon />} onClick={() => { navigate('/tools/microwave_soft_at/microwave_aviat_table'); show(); setMenuButton(true) }}>
+                                               <Nav.Item eventKey="1-2" placement="rightStart" icon={<DashboardIcon />} onClick={() => { navigate('/tools/microwave_soft_at/microwave_aviat_table'); show(); setMenuButton(true) }}>
                                                 Microwave(AVIAT) Dashboard
                                             </Nav.Item>
+                                             </Nav.Menu>
+                                             <Nav.Menu eventKey="2" placement="rightStart" title="Microwave Ceragon" icon={<BytedanceMicroappIcon size="3em" />}>
+                                            <Nav.Item eventKey="2-1" placement="rightStart" icon={<FileUploadIcon />} onClick={() => { navigate('/tools/microwave_soft_at/microwave_ceragon_upload'); show(); setMenuButton(true) }}>
+                                                Upload Files
+                                            </Nav.Item>
+                                               {/* <Nav.Item eventKey="2-2" placement="rightStart" icon={<DashboardIcon />} onClick={() => { navigate('/tools/microwave_soft_at/microwave_aviat_table'); show(); setMenuButton(true) }}>
+                                                Microwave(AVIAT) Dashboard
+                                            </Nav.Item> */}
+                                             </Nav.Menu>
                                             {/* <Nav.Item eventKey="3" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/CATS'); show(); setMenuButton(true) }}>
                                                 Step 2: CATS
                                             </Nav.Item>
@@ -125,6 +139,7 @@ const Microwave = () => {
                                 <Route element={<MicrowaveTool />} path="/" />
                                 <Route element={<MicrowaveAVIATUpload />} path="/microwave_aviat_upload" />
                                 <Route element={<MicrowaveAviatTable />} path="/microwave_aviat_table" />
+                                <Route element={<MicrowaveCeragonUpload />} path="/microwave_ceragon_upload" />
                             
 
 

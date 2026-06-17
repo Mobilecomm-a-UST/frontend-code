@@ -22,6 +22,7 @@ import Loader from '../../Skeleton/Loader';
 const DailyTaskTool = lazy(() => import("./DailyTaskTool"));
 const AddTask = lazy(() => import("./AdminPanel/AddTask/AddTask"));
 const AssignTask = lazy(() => import("./AssignTask/AssignTask"));
+const MyTask = lazy(() => import("./MyTask/MyTask"));
 
 
 const DailyTaskReview = () => {
@@ -106,11 +107,16 @@ const DailyTaskReview = () => {
                                                 Dashboard
                                             </Nav.Item>
 
-                                            <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={<ListIcon style={{}} />} onClick={() => { navigate('/tools/daily_task_review/AssignTask'); show(); setMenuButton(true) }}>
+                                            <Nav.Item eventKey="3" placement="rightStart" className="single-item-custom" icon={<ListIcon style={{}} />} onClick={() => { navigate('/tools/daily_task_review/AssignTask'); show(); setMenuButton(true) }}>
                                                 Assign Task
                                             </Nav.Item>
 
-                                            <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={< ImportIcon style={{}} />} onClick={() => { navigate('/tools/daily_task_review/'); show(); setMenuButton(true) }}>
+                                            
+                                            <Nav.Item eventKey="3" placement="rightStart" className="single-item-custom" icon={<ListIcon style={{}} />} onClick={() => { navigate('/tools/daily_task_review/MyTask'); show(); setMenuButton(true) }}>
+                                                 My Task
+                                            </Nav.Item>
+
+                                            <Nav.Item eventKey="4" placement="rightStart" className="single-item-custom" icon={< ImportIcon style={{}} />} onClick={() => { navigate('/tools/daily_task_review/'); show(); setMenuButton(true) }}>
                                                 Task Templates
                                             </Nav.Item>
 
@@ -132,6 +138,7 @@ const DailyTaskReview = () => {
                                 <Route path="/" element={<DailyTaskTool />} />
                                 <Route path="/AddTask" element={<AddTask />} />
                                 <Route path="/AssignTask" element={<AssignTask />} />
+                                <Route path="/MyTask" element={<MyTask />} />
 
 
                                 {/* {userTypes?.includes('ran_admin') && 
