@@ -14,7 +14,6 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { getDecreyptedData } from "../../../../utils/localstorage";
- 
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
  
@@ -48,7 +47,6 @@ const AddTask = () => {
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
     const userName = getDecreyptedData("userID")
- 
     // ─────────────────────────────────────────────────────────
     // FETCH ALL TASKS
     // ─────────────────────────────────────────────────────────
@@ -58,7 +56,6 @@ const AddTask = () => {
             const formData = new FormData();
             formData.append("userID", userName);
             const res = await postData(API.GET_ALL, formData);
- 
             console.log("GET TASK RESPONSE:", res);
  
             if (Array.isArray(res)) {
@@ -111,7 +108,6 @@ const AddTask = () => {
             const formData = new FormData();
             formData.append("task", trimmed);
             formData.append("userID", userName);
- 
             const res = await postData(API.CREATE, formData);
  
             console.log("CREATE RESPONSE:", res);

@@ -1,3 +1,7 @@
+
+
+
+
 import React, { useEffect, useState, useCallback, useRef, useMemo } from "react";
 import {
     Box, Typography, Paper, Button, Dialog, DialogTitle, DialogContent,
@@ -574,8 +578,29 @@ const AssignTaskDialog = ({ open, onClose, editId, initialForm, onSaved, taskOpt
 
             const payload = {
                 task: taskName,
-                oem: form.oem || "",
-                slot: form.slot || "",
+                // task_id: typeof form.task === "object" ? form.task?.id : undefined,
+                assignee: form.assignee,
+                owner: form.recipients.map(r => r.name),
+                recipient_emails: form.recipients.map(r => r.email),
+                oem: form.oem,
+                slot: form.slot,
+                priority: form.priority,
+                status: form.status,
+                deadline: form.deadline ? new Date(form.deadline).toISOString() : null,
+                reminder_frequency: form.reminderFrequency,
+                remarks: form.remarks,
+                assigned_at: nowISO(),
+                // updated_by: userName,
+
+            };
+            const payloadUpdate = {
+                task: taskName,
+                task_id: typeof form.task === "object" ? form.task?.id : undefined,
+                assignee: form.assignee,
+                owner: form.recipients.map(r => r.name),
+                recipient_emails: form.recipients.map(r => r.email),
+                oem: form.oem,
+                slot: form.slot,
                 priority: form.priority,
                 status: form.status,
                 owner: form.recipients.map(r => r.email),
@@ -899,15 +924,20 @@ const AssignTask = () => {
     const [viewMode, setViewMode] = useState("table");
     const [analyticsOpen, setAnalyticsOpen] = useState(false);
 
-    const [selectedDate, setSelectedDate] = useState(todayStr());
+    const loggedInUser = useMemo(() => getLoggedInUser(), []);
+    const userName = getDecreyptedData("userID")
 
     const fetchAll = useCallback(async (isRefresh = false) => {
         isRefresh ? setRefreshing(true) : setLoading(true);
         try {
-            const body = {
-                assigned_by: userEmail,
-                assigned_at: selectedDate,
-            };
+            const formData = new FormData();
+            formData.append("userID", userName);
+            const [taskRes, userRes, taskOptionRes] =
+                await Promise.allSettled([
+                    getData(API.GET_TASKS),
+                    getData(API.GET_USERS),
+                    postData(API.GET_TASK_OPTIONS, formData),
+                ]);
 
             console.log("Fetching tasks with:", body);
 
