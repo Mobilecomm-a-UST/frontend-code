@@ -15,6 +15,8 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
+import { getDecreyptedData } from "../../../utils/localstorage";
+
 
 
 const circleArray = ['AP', 'CHN', 'KK', 'DEL', 'HR', 'RJ', 'JK', 'WB', 'OD', 'MU', 'TN', 'UE', 'BH', 'UPW', 'MP', 'PB', 'KO', 'WB', 'JH','AS','NE']
@@ -30,6 +32,9 @@ const ScriptGen = () => {
     const navigate = useNavigate()
     const classes = OverAllCss()
     const link = `${ServerURL}${fileData}`;
+    const userName = getDecreyptedData("userID")
+
+    // console.log('user name ' , userName)
 
 
     const handle4GFileSelection = (event) => {
@@ -48,6 +53,7 @@ const ScriptGen = () => {
                 formData.append(`integration_input_file`, make4GFiles[i]);
             }
             formData.append(`Circle`, selectCircle);
+            formData.append(`user_id`, userName);
         
             const response = await postData('LTE/Integration/generating_scripts/', formData)
 
@@ -105,8 +111,9 @@ const ScriptGen = () => {
 
     useEffect(() => {
         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
-
     }, [])
+
+
     return (
         <>
             <div style={{ margin: 5, marginLeft: 10 }}>
