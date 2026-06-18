@@ -23,6 +23,7 @@ const DailyTaskTool = lazy(() => import("./DailyTaskTool"));
 const AddTask = lazy(() => import("./AdminPanel/AddTask/AddTask"));
 const AssignTask = lazy(() => import("./AssignTask/AssignTask"));
 const MyTask = lazy(() => import("./MyTask/MyTask"));
+const Dashboard = lazy(() => import("./Dashboard/Dashboard"));
 
 
 const DailyTaskReview = () => {
@@ -103,7 +104,7 @@ const DailyTaskReview = () => {
                                                 </Nav.Menu>
                                             {/* } */}
 
-                                            <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={<DashboardIcon style={{}} />} onClick={() => { navigate('/tools/daily_task_review/'); show(); setMenuButton(true) }}>
+                                            <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={<DashboardIcon style={{}} />} onClick={() => { navigate('/tools/daily_task_review/Dashboard'); show(); setMenuButton(true) }}>
                                                 Dashboard
                                             </Nav.Item>
 
@@ -139,7 +140,7 @@ const DailyTaskReview = () => {
                                 <Route path="/AddTask" element={<AddTask />} />
                                 <Route path="/AssignTask" element={<AssignTask />} />
                                 <Route path="/MyTask" element={<MyTask />} />
-
+                                <Route path="/Dashboard" element={<Dashboard />} />
 
                                 {/* {userTypes?.includes('ran_admin') && 
                                 <Route element={<FinalMailPage />} path="/email_dashboard" />

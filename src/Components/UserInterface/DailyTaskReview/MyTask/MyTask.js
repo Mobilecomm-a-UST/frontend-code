@@ -59,11 +59,11 @@ const PRIORITY_OPTIONS = [
     { value: "Low",      color: "#2e7d32", bg: "#e8f5e9" },
 ];
 
-const MY_STATUS_OPTIONS = ["Pending", "In Progress", "Completed", "Cancelled"];
+const MY_STATUS_OPTIONS = ["Active", "In Progress", "Completed", "Cancelled"];
 const STATUS_FILTERS    = ["All", ...MY_STATUS_OPTIONS];
 
 const KANBAN_COLS = [
-    { key: "Pending",     label: "Pending",     color: "#f57c00", bg: "#fff8f0", icon: <HourglassEmptyIcon    sx={{ fontSize: 16 }} /> },
+    { key: "Active",      label: "Active",      color: "#f57c00", bg: "#fff8f0", icon: <HourglassEmptyIcon    sx={{ fontSize: 16 }} /> },
     { key: "In Progress", label: "In Progress", color: "#2e7d32", bg: "#f0f9f0", icon: <PlayCircleOutlineIcon  sx={{ fontSize: 16 }} /> },
     { key: "Completed",   label: "Done",        color: "#1565c0", bg: "#f0f5ff", icon: <CheckCircleOutlineIcon sx={{ fontSize: 16 }} /> },
     { key: "Cancelled",   label: "Cancelled",   color: "#c62828", bg: "#fff5f5", icon: <CancelOutlinedIcon     sx={{ fontSize: 16 }} /> },
@@ -95,7 +95,7 @@ const fmtDate = (iso) =>
 const isOverdue   = (iso, status) =>
     iso && !["Completed", "Cancelled"].includes(status) && new Date(iso) < new Date();
 const statusColor  = (s) =>
-    ({ Pending: "#f57c00", "In Progress": "#2e7d32", Completed: "#1565c0", Cancelled: "#c62828" }[s] ?? TEAL);
+    ({ Active: "#f57c00", "In Progress": "#2e7d32", Completed: "#1565c0", Cancelled: "#c62828" }[s] ?? TEAL);
 const priorityMeta = (p) => PRIORITY_OPTIONS.find((o) => o.value === p) ?? { color: "#777", bg: "#f5f5f5" };
 const slotMeta     = (v) => SLOT_OPTIONS.find((o) => o.value?.toLowerCase() === v?.toLowerCase());
 const getFrequency = (row) => row.frequency ?? row.reminder_frequency ?? "None";
@@ -210,7 +210,7 @@ const StatCard = ({ label, count, icon, color, bg, active, onClick, loading }) =
 const AnalyticsPanel = ({ tasks, open, onClose }) => {
     const stats = useMemo(() => {
         const total      = tasks.length;
-        const byStatus   = { Pending: 0, "In Progress": 0, Completed: 0, Cancelled: 0 };
+        const byStatus   = { Active: 0, "In Progress": 0, Completed: 0, Cancelled: 0 };
         const byPriority = { Critical: 0, High: 0, Medium: 0, Low: 0 };
         const bySlot     = { Morning: 0, Afternoon: 0, Evening: 0, Night: 0 };
         const overdueCount = tasks.filter(t => isOverdue(t.deadline, t.status)).length;
@@ -280,7 +280,7 @@ const AnalyticsPanel = ({ tasks, open, onClose }) => {
                 </Paper>
                 <Paper elevation={0} sx={{ p: 2.5, borderRadius: "14px", mb: 2, border: "1px solid #e8ecf0", bgcolor: "#fff" }}>
                     <Typography fontSize={12.5} fontWeight={600} color="text.secondary" mb={1.5}>Status Breakdown</Typography>
-                    <ProgressRow label="Pending"     value={stats.byStatus["Pending"]}     max={stats.total} color="#f57c00" />
+                    <ProgressRow label="Active"      value={stats.byStatus["Active"]}      max={stats.total} color="#f57c00" />
                     <ProgressRow label="In Progress" value={stats.byStatus["In Progress"]} max={stats.total} color="#2e7d32" />
                     <ProgressRow label="Completed"   value={stats.byStatus["Completed"]}   max={stats.total} color="#1565c0" />
                     <ProgressRow label="Cancelled"   value={stats.byStatus["Cancelled"]}   max={stats.total} color="#c62828" />
@@ -420,13 +420,13 @@ const KanbanColumn = ({ col, cards, onEdit, onStatusChange }) => {
 // UPDATE MY TASK DIALOG — only Status + Remarks editable
 // ═════════════════════════════════════════════════════════════════════════════
 const UpdateMyTaskDialog = ({ open, onClose, row, onSaved, userEmail }) => {
-    const [status,  setStatus]  = useState("Pending");
+    const [status,  setStatus]  = useState("Active");
     const [remarks, setRemarks] = useState("");
     const [saving,  setSaving]  = useState(false);
 
     useEffect(() => {
         if (open && row) {
-            setStatus(row.status   ?? "Pending");
+            setStatus(row.status   ?? "Active");
             setRemarks(row.remarks ?? "");
         }
     }, [open, row]);
@@ -672,7 +672,7 @@ const MyTask = () => {
     // ── stats ──────────────────────────────────────────────────────────────────
     const stats = useMemo(() => ({
         total:      tasks.length,
-        pending:    tasks.filter(t => t.status === "Pending").length,
+        active:    tasks.filter(t => t.status === "Active").length,
         inProgress: tasks.filter(t => t.status === "In Progress").length,
         completed:  tasks.filter(t => t.status === "Completed").length,
         cancelled:  tasks.filter(t => t.status === "Cancelled").length,
@@ -811,7 +811,7 @@ const MyTask = () => {
                 <Box sx={{ px: 3, py: 2.5, borderBottom: "1px solid #f0f2f5", bgcolor: alpha("#f8fafc", 0.7) }}>
                     <Box display="flex" gap={2} flexWrap="wrap">
                         <StatCard label="Total"       count={stats.total}      icon={<AssignmentIndOutlinedIcon />} color={TEAL}    bg={TEAL_LIGHT} active={activeStatCard === "All"}         loading={loading} onClick={() => handleStatClick("All")} />
-                        <StatCard label="Pending"     count={stats.pending}    icon={<HourglassEmptyIcon />}       color="#f57c00" bg="#fff3e0"    active={activeStatCard === "Pending"}     loading={loading} onClick={() => handleStatClick("Pending")} />
+                        <StatCard label="Active"      count={stats.active}     icon={<HourglassEmptyIcon />}       color="#f57c00" bg="#fff3e0"    active={activeStatCard === "Active"}      loading={loading} onClick={() => handleStatClick("Active")} />
                         <StatCard label="In Progress" count={stats.inProgress} icon={<PlayCircleOutlineIcon />}   color="#2e7d32" bg="#e8f5e9"    active={activeStatCard === "In Progress"} loading={loading} onClick={() => handleStatClick("In Progress")} />
                         <StatCard label="Completed"   count={stats.completed}  icon={<CheckCircleOutlineIcon />}  color="#1565c0" bg="#e3f2fd"    active={activeStatCard === "Completed"}   loading={loading} onClick={() => handleStatClick("Completed")} />
                         <StatCard label="Cancelled"   count={stats.cancelled}  icon={<CancelOutlinedIcon />}      color="#c62828" bg="#fdecea"    active={activeStatCard === "Cancelled"}   loading={loading} onClick={() => handleStatClick("Cancelled")} />
@@ -1015,7 +1015,7 @@ const MyTask = () => {
 
                                                 {/* Status */}
                                                 <TableCell>
-                                                    <Chip label={row.status ?? "Pending"} size="small"
+                                                    <Chip label={row.status ?? "Active"} size="small"
                                                         sx={{ bgcolor: alpha(statusColor(row.status), 0.1), color: statusColor(row.status), fontWeight: 700, fontSize: 11, border: `1px solid ${alpha(statusColor(row.status), 0.25)}` }} />
                                                 </TableCell>
 
