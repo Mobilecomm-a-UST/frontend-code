@@ -3,47 +3,48 @@ import {
     Box,
     Typography,
     IconButton,
+    Select,
+    MenuItem,
+    FormControl,
+    InputLabel,
 } from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
 import { postData } from "../../../../services/FetchNodeServices";
 import { useLoadingDialog } from "../../../../Hooks/LoadingDialog";
 
-// ── Financial Year tabs ──────────────────────────────────────────────────────
-const YEAR_TABS = [
-    { key: "2025-26", label: "FY 2025-26" },
-    { key: "2026-27", label: "FY 2026-27" },
+// ── Generate year list dynamically (2000 → current year) ────────────────────
+const generateYearList = () => {
+    const currentYear = new Date().getFullYear();
+    const list = [];
+    for (let y = 2000; y <= currentYear; y++) {
+        list.push(y);
+    }
+    return list;
+};
+
+const YEAR_LIST = generateYearList();
+
+// ── Generate columns for any selected year ───────────────────────────────────
+// FY logic: Apr'YY → Mar'(YY+1)
+const MONTH_NAMES = [
+    "Apr", "May", "Jun", "Jul", "Aug", "Sep",
+    "Oct", "Nov", "Dec", "Jan", "Feb", "Mar",
 ];
 
-// ── Columns per FY ───────────────────────────────────────────────────────────
-const FY_COLUMNS = {
-    "2025-26": [
-        { label: "Apr'25", key: "Apr'25" },
-        { label: "May'25", key: "May'25" },
-        { label: "Jun'25", key: "Jun'25" },
-        { label: "Jul'25", key: "Jul'25" },
-        { label: "Aug'25", key: "Aug'25" },
-        { label: "Sep'25", key: "Sep'25" },
-        { label: "Oct'25", key: "Oct'25" },
-        { label: "Nov'25", key: "Nov'25" },
-        { label: "Dec'25", key: "Dec'25" },
-        { label: "Jan'26", key: "Jan'26" },
-        { label: "Feb'26", key: "Feb'26" },
-        { label: "Mar'26", key: "Mar'26" },
-    ],
-    "2026-27": [
-        { label: "Apr'26", key: "Apr'26" },
-        { label: "May'26", key: "May'26" },
-        { label: "Jun'26", key: "Jun'26" },
-        { label: "Jul'26", key: "Jul'26" },
-        { label: "Aug'26", key: "Aug'26" },
-        { label: "Sep'26", key: "Sep'26" },
-        { label: "Oct'26", key: "Oct'26" },
-        { label: "Nov'26", key: "Nov'26" },
-        { label: "Dec'26", key: "Dec'26" },
-        { label: "Jan'27", key: "Jan'27" },
-        { label: "Feb'27", key: "Feb'27" },
-        { label: "Mar'27", key: "Mar'27" },
-    ],
+const getFYColumns = (year) => {
+    return MONTH_NAMES.map((mon, idx) => {
+        const yr = idx < 9 ? year : year + 1;
+        const key = `${mon}'${String(yr).slice(2)}`;
+        return { label: key, key };
+    });
+};
+
+// ── Get current year ──────────────────────────────────────────────────────────
+const getCurrentYear = () => {
+    const now = new Date();
+    const month = now.getMonth(); // 0=Jan
+    // If before April, FY started last year
+    return month >= 3 ? now.getFullYear() : now.getFullYear() - 1;
 };
 
 // ── Shared Cell Styles ───────────────────────────────────────────────────────
@@ -75,24 +76,17 @@ const formatVal = (val) => {
     return Number.isInteger(num) ? num : num.toFixed(1);
 };
 
-// ── Get current FY ────────────────────────────────────────────────────────────
-const getCurrentFY = () => {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = now.getMonth(); // 0=Jan
-    // FY starts April (month 3)
-    return month >= 3 ? `${year}-${String(year + 1).slice(2)}` : `${year - 1}-${String(year).slice(2)}`;
-};
-
 // ── Table Component ───────────────────────────────────────────────────────────
-const MonthTable = ({ apiResponse, activeFY }) => {
-    const columns = FY_COLUMNS[activeFY] || [];
+const MonthTable = ({ apiResponse, activeYear }) => {
+    const columns = getFYColumns(activeYear);
     const TOTAL_BG = "#b2f0c5";
     const STRIPE = "#f4f7fb";
 
     const data = apiResponse?.data?.circles || {};
     const grandTotal = apiResponse?.data?.grand_total || {};
     const entries = Object.entries(data);
+
+    const fyLabel = `${activeYear}-${String(activeYear + 1).slice(2)}`;
 
     return (
         <Box
@@ -135,7 +129,7 @@ const MonthTable = ({ apiResponse, activeFY }) => {
                                 fontWeight: 700,
                             }}
                         >
-                            FY {activeFY}
+                            FY {fyLabel}
                         </th>
                     </tr>
                     <tr>
@@ -172,12 +166,16 @@ const MonthTable = ({ apiResponse, activeFY }) => {
                             {entries.map(([circle, val], idx) => (
                                 <tr
                                     key={circle}
-                                    style={{ background: idx % 2 === 0 ? "#fff" : STRIPE }}
+                                    style={{
+                                        background:
+                                            idx % 2 === 0 ? "#fff" : STRIPE,
+                                    }}
                                 >
                                     <td
                                         style={{
                                             ...stickyCell,
-                                            background: idx % 2 === 0 ? "#fff" : STRIPE,
+                                            background:
+                                                idx % 2 === 0 ? "#fff" : STRIPE,
                                         }}
                                     >
                                         {circle}
@@ -202,7 +200,10 @@ const MonthTable = ({ apiResponse, activeFY }) => {
                                 {columns.map((col) => (
                                     <td
                                         key={col.key}
-                                        style={{ ...cellStyle, fontWeight: 700 }}
+                                        style={{
+                                            ...cellStyle,
+                                            fontWeight: 700,
+                                        }}
                                     >
                                         {formatVal(grandTotal?.[col.key])}
                                     </td>
@@ -213,7 +214,11 @@ const MonthTable = ({ apiResponse, activeFY }) => {
                         <tr>
                             <td
                                 colSpan={columns.length + 1}
-                                style={{ ...cellStyle, textAlign: "center", padding: 15 }}
+                                style={{
+                                    ...cellStyle,
+                                    textAlign: "center",
+                                    padding: 15,
+                                }}
                             >
                                 No Data Available
                             </td>
@@ -230,7 +235,7 @@ const Monthwise = () => {
     const { loading, action } = useLoadingDialog();
 
     const [apiResponse, setApiResponse] = useState(null);
-    const [activeFY, setActiveFY] = useState(getCurrentFY());
+    const [activeYear, setActiveYear] = useState(getCurrentYear());
 
     // ── Fetch Data ────────────────────────────────────────────────────────
     const fetchData = async () => {
@@ -238,7 +243,11 @@ const Monthwise = () => {
             action(true);
 
             const formData = new FormData();
-            formData.append("fy", activeFY); // e.g. "2026-27"
+            // Send as "2026-27" format to API
+            formData.append(
+                "fy",
+                `${activeYear}-${String(activeYear + 1).slice(2)}`
+            );
 
             const res = await postData("vi_ftr/monthftr/", formData);
 
@@ -254,7 +263,7 @@ const Monthwise = () => {
 
     useEffect(() => {
         fetchData();
-    }, [activeFY]);
+    }, [activeYear]);
 
     // ── Download ──────────────────────────────────────────────────────────
     const handleDownload = () => {
@@ -282,46 +291,48 @@ const Monthwise = () => {
                     FTR Monthwise Dashboard
                 </Typography>
 
-                <IconButton
-                    onClick={handleDownload}
-                    title="Download Excel"
-                    disabled={!apiResponse?.download_url}
-                >
-                    <DownloadIcon
-                        color={apiResponse?.download_url ? "primary" : "disabled"}
-                    />
-                </IconButton>
-            </Box>
-
-            {/* ── FY Filter Tabs ───────────────────────────────────── */}
-            <Box mt={1.5} display="flex" gap={1} flexWrap="wrap">
-                {YEAR_TABS.map((tab) => {
-                    const isActive = activeFY === tab.key;
-                    return (
-                        <Box
-                            key={tab.key}
-                            onClick={() => setActiveFY(tab.key)}
-                            sx={{
-                                px: 2,
-                                py: 0.5,
-                                cursor: "pointer",
-                                borderRadius: "16px",
-                                fontSize: 13,
-                                fontWeight: isActive ? 700 : 500,
-                                color: isActive ? "#fff" : "#1976d2",
-                                background: isActive ? "#1976d2" : "#e3eaf5",
-                                transition: "all 0.2s",
-                                userSelect: "none",
+                {/* ── Right side: Year dropdown + Download ── */}
+                <Box display="flex" alignItems="center" gap={1.5}>
+                    <FormControl size="small" sx={{ minWidth: 120 }}>
+                        <InputLabel>Year</InputLabel>
+                        <Select
+                            value={activeYear}
+                            label="Year"
+                            onChange={(e) => setActiveYear(e.target.value)}
+                            MenuProps={{
+                                PaperProps: {
+                                    style: { maxHeight: 250 },
+                                },
                             }}
                         >
-                            {tab.label}
-                        </Box>
-                    );
-                })}
+                            {[...YEAR_LIST].reverse().map((yr) => (
+                                <MenuItem key={yr} value={yr}>
+                                    {yr}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+
+                    <IconButton
+                        onClick={handleDownload}
+                        title="Download Excel"
+                        disabled={!apiResponse?.download_url}
+                        sx={{
+                            border: "1px solid #d0d7de",
+                            borderRadius: "8px",
+                        }}
+                    >
+                        <DownloadIcon
+                            color={
+                                apiResponse?.download_url ? "primary" : "disabled"
+                            }
+                        />
+                    </IconButton>
+                </Box>
             </Box>
 
             {/* ── Table ───────────────────────────────────────────── */}
-            <MonthTable apiResponse={apiResponse} activeFY={activeFY} />
+            <MonthTable apiResponse={apiResponse} activeYear={activeYear} />
 
             {loading}
         </Box>
