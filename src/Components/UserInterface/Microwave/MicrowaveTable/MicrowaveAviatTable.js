@@ -348,7 +348,7 @@ const MicrowaveAviatTable = () => {
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site Z Max Configured Modulation</th>
  
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>ATPC Status (Link)</th>
-                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff', width: '450px', minWidth: '450px', maxWidth: '450px', textAlign: 'center' }}>Remark</th>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff', width: '450px', minWidth: '450px', maxWidth: '450px', textAlign: 'center' }}>SoftAt-Output</th>
  
                                     </tr>
                                 </thead >

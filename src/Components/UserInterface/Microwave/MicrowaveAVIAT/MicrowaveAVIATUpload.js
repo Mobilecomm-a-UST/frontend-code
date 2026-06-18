@@ -303,7 +303,7 @@ const MicrowaveAVIATUpload = () => {
                   }
                   sx={{ mt: 2, textTransform: "none", fontWeight: 800, fontSize: "22px", fontFamily: "Poppins" }}
                 >
-                  Download Microwave(AVIAT) Report
+                  Download AVIAT Report
                 </Button>
               </a>
             </Box>
