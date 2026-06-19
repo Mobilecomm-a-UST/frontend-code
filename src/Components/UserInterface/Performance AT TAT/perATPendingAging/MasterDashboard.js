@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 import { MemoDashboard } from './Dashboard'
 import { MemoDatewise } from './Datewise';
-import SCFT_Aging from './SCFT_Aging'
+import SCFT_Aging from './Pending_Aging'
 
 const MasterDashboard = () => {
     const navigate = useNavigate()

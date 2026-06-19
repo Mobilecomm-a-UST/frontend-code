@@ -145,8 +145,8 @@ const GradientDefs = () => (
     <defs>
         {SERIES_GRADIENTS.map((g) => (
             <linearGradient key={g.id} id={g.id} x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%"   stopColor={g.from} stopOpacity={0.95} />
-                <stop offset="100%" stopColor={g.to}   stopOpacity={0.75} />
+                <stop offset="0"   stopColor={g.from} stopOpacity={0.95} />
+                <stop offset="100" stopColor={g.to}   stopOpacity={0.75} />
             </linearGradient>
         ))}
     </defs>

@@ -19,11 +19,11 @@ import { postData, getData } from "../../../services/FetchNodeServices";
 import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
 
 // ── Constants ────────────────────────────────────────────────────────────────
-const MONTH_SHORT = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-const MONTH_FULL  = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-const CURRENT_YEAR  = new Date().getFullYear();
+const MONTH_SHORT = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const MONTH_FULL = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const CURRENT_YEAR = new Date().getFullYear();
 const CURRENT_MONTH = new Date().getMonth(); // 0-indexed
-const START_YEAR    = 2000;
+const START_YEAR = 2000;
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 // Converts { year:2026, month:5 } → "Jun 2026"  (what backend expects: %b %Y)
@@ -37,7 +37,7 @@ const parseApiMonth = (str) => {
     const parts = String(str).trim().split(" ");
     if (parts.length === 2) {
         const mIdx = MONTH_SHORT.indexOf(parts[0]);
-        const yr   = parseInt(parts[1]);
+        const yr = parseInt(parts[1]);
         if (mIdx !== -1 && !isNaN(yr)) return { year: yr, month: mIdx };
     }
     // Shape: "2026-06"
@@ -48,62 +48,65 @@ const parseApiMonth = (str) => {
 
 // ── Tech tabs ────────────────────────────────────────────────────────────────
 const TECH_TABS = [
-    { key: "4G",    label: "4G"    },
-    { key: "5G",    label: "5G"    },
+    { key: "4G", label: "4G" },
+    { key: "5G", label: "5G" },
     { key: "4G+5G", label: "4G+5G" },
 ];
 
 // ── Fixed columns ────────────────────────────────────────────────────────────
 const COLUMNS = [
-    { label: "Total Site",                        key: "Total Site"                        },
-    { label: "Pending",                           key: "Pending"                           },
-    { label: "Accepted with 0 counter",           key: "Accepted with 0 counter"           },
-    { label: "Acceptance pending with 0 Counter", key: "Acceptance pending with 0 Counter" },
-    { label: "FTR",                               key: "FTR"                               },
+    { label: "<=12 days", key: "<=12 days" },
+    { label: "13-21 days", key: "13-21 days" },
+    { label: "22-30 days", key: "22-30 days" },
+    { label: "<=12%>", key: "<=12%>" },
+    { label: "13-21%", key: "13-21%" },
+    { label: "22-30%", key: "22-30%" },
+    { label: ">30%", key: ">30%" },
+    { label: "Pending", key: "Pending" },
 ];
 
 // ── Tech colours ─────────────────────────────────────────────────────────────
 const TECH_COLORS = {
     "4G": {
-        active:   "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
-        header:   "linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%)",
+        active: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+        header: "linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%)",
         tabColor: "#1e3c72",
     },
     "5G": {
-        active:   "linear-gradient(135deg, #134e5e 0%, #71b280 100%)",
-        header:   "linear-gradient(135deg, #0b3d2e 0%, #1f4037 100%)",
+        active: "linear-gradient(135deg, #134e5e 0%, #71b280 100%)",
+        header: "linear-gradient(135deg, #0b3d2e 0%, #1f4037 100%)",
         tabColor: "#134e5e",
     },
     "4G+5G": {
-        active:   "linear-gradient(135deg, #41295a 0%, #2F0743 100%)",
-        header:   "linear-gradient(135deg, #252326 0%, #414345 100%)",
+        active: "linear-gradient(135deg, #41295a 0%, #2F0743 100%)",
+        header: "linear-gradient(135deg, #252326 0%, #414345 100%)",
         tabColor: "#41295a",
     },
 };
 
 // ── Shared cell styles ──────────────────────────────────────────────────────
 const cellSt = {
-    padding:    "4px 8px",
-    border:     "1px solid #c0c0c0",
-    textAlign:  "center",
-    fontSize:   13,
+    padding: "4px 8px",
+    border: "1px solid #c0c0c0",
+    textAlign: "center",
+    fontSize: 13,
     whiteSpace: "nowrap",
 };
 
 const stickySt = {
     ...cellSt,
-    position:   "sticky",
-    left:       0,
-    zIndex:     2,
-    textAlign:  "center",
+    position: "sticky",
+    left: 0,
+    zIndex: 2,
+    textAlign: "center",
     fontWeight: 600,
 };
 
 // ── Year-Month Picker ────────────────────────────────────────────────────────
 const YearMonthPicker = ({ value, onChange, apiMonths }) => {
-    const [open,        setOpen]        = useState(false);
+    const [open, setOpen] = useState(false);
     const [hoveredYear, setHoveredYear] = useState(value?.year ?? CURRENT_YEAR);
-    const yearListRef                   = useRef(null);
+    const yearListRef = useRef(null);
 
     const years = [];
     for (let y = START_YEAR; y <= CURRENT_YEAR; y++) years.push(y);
@@ -152,18 +155,18 @@ const YearMonthPicker = ({ value, onChange, apiMonths }) => {
                 <Box
                     onClick={() => setOpen((p) => !p)}
                     sx={{
-                        display:      "flex",
-                        alignItems:   "center",
-                        gap:          1,
-                        px:           1.5,
-                        py:           0.7,
-                        border:       open ? "2px solid #1e3c72" : "1px solid #c4c4c4",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 1,
+                        px: 1.5,
+                        py: 0.7,
+                        border: open ? "2px solid #1e3c72" : "1px solid #c4c4c4",
                         borderRadius: "8px",
-                        cursor:       "pointer",
-                        bgcolor:      "#fff",
-                        minWidth:     180,
-                        userSelect:   "none",
-                        "&:hover":    { borderColor: "#1e3c72" },
+                        cursor: "pointer",
+                        bgcolor: "#fff",
+                        minWidth: 180,
+                        userSelect: "none",
+                        "&:hover": { borderColor: "#1e3c72" },
                     }}
                 >
                     <Box sx={{ flex: 1 }}>
@@ -182,14 +185,14 @@ const YearMonthPicker = ({ value, onChange, apiMonths }) => {
                     <Paper
                         elevation={8}
                         sx={{
-                            position:     "absolute",
-                            top:          "calc(100% + 6px)",
-                            right:        0,
-                            zIndex:       1400,
+                            position: "absolute",
+                            top: "calc(100% + 6px)",
+                            right: 0,
+                            zIndex: 1400,
                             borderRadius: "12px",
-                            overflow:     "hidden",
-                            minWidth:     310,
-                            boxShadow:    "0 8px 32px rgba(0,0,0,0.18)",
+                            overflow: "hidden",
+                            minWidth: 310,
+                            boxShadow: "0 8px 32px rgba(0,0,0,0.18)",
                         }}
                     >
                         <Box display="flex" sx={{ height: 240 }}>
@@ -198,37 +201,37 @@ const YearMonthPicker = ({ value, onChange, apiMonths }) => {
                             <Box
                                 ref={yearListRef}
                                 sx={{
-                                    width:       80,
-                                    overflowY:   "auto",
-                                    bgcolor:     "#f5f7fa",
+                                    width: 80,
+                                    overflowY: "auto",
+                                    bgcolor: "#f5f7fa",
                                     borderRight: "1px solid #e8ecf0",
-                                    py:          0.5,
-                                    "&::-webkit-scrollbar":       { width: 4 },
+                                    py: 0.5,
+                                    "&::-webkit-scrollbar": { width: 4 },
                                     "&::-webkit-scrollbar-thumb": { bgcolor: "#ccc", borderRadius: 2 },
                                 }}
                             >
                                 {years.map((yr) => {
                                     const isSelected = value?.year === yr;
-                                    const isHovered  = hoveredYear === yr;
+                                    const isHovered = hoveredYear === yr;
                                     return (
                                         <Box
                                             key={yr}
                                             data-year={yr}
                                             onClick={() => setHoveredYear(yr)}
                                             sx={{
-                                                px:           2,
-                                                py:           0.9,
-                                                cursor:       "pointer",
-                                                fontSize:     13.5,
-                                                fontWeight:   isSelected || isHovered ? 700 : 400,
-                                                color:        isSelected ? "#fff" : isHovered ? "#1e3c72" : "#374151",
-                                                bgcolor:      isSelected ? "#1e3c72" : isHovered ? "#e8edf8" : "transparent",
+                                                px: 2,
+                                                py: 0.9,
+                                                cursor: "pointer",
+                                                fontSize: 13.5,
+                                                fontWeight: isSelected || isHovered ? 700 : 400,
+                                                color: isSelected ? "#fff" : isHovered ? "#1e3c72" : "#374151",
+                                                bgcolor: isSelected ? "#1e3c72" : isHovered ? "#e8edf8" : "transparent",
                                                 borderRadius: "6px",
-                                                mx:           0.5,
-                                                transition:   "all .12s",
-                                                "&:hover":    {
+                                                mx: 0.5,
+                                                transition: "all .12s",
+                                                "&:hover": {
                                                     bgcolor: isSelected ? "#1e3c72" : "#dde4f5",
-                                                    color:   isSelected ? "#fff"    : "#1e3c72",
+                                                    color: isSelected ? "#fff" : "#1e3c72",
                                                 },
                                             }}
                                         >
@@ -241,18 +244,18 @@ const YearMonthPicker = ({ value, onChange, apiMonths }) => {
                             {/* Month grid */}
                             <Box
                                 sx={{
-                                    flex:           1,
-                                    p:              1.5,
-                                    display:        "flex",
-                                    flexDirection:  "column",
+                                    flex: 1,
+                                    p: 1.5,
+                                    display: "flex",
+                                    flexDirection: "column",
                                     justifyContent: "center",
                                 }}
                             >
                                 <Box
                                     sx={{
-                                        display:             "grid",
+                                        display: "grid",
                                         gridTemplateColumns: "repeat(4, 1fr)",
-                                        gap:                 0.8,
+                                        gap: 0.8,
                                     }}
                                 >
                                     {MONTH_SHORT.map((mn, mIdx) => {
@@ -264,19 +267,19 @@ const YearMonthPicker = ({ value, onChange, apiMonths }) => {
                                                 key={mn}
                                                 onClick={() => handleMonthClick(hoveredYear, mIdx)}
                                                 sx={{
-                                                    textAlign:    "center",
-                                                    py:           0.8,
+                                                    textAlign: "center",
+                                                    py: 0.8,
                                                     borderRadius: "8px",
-                                                    fontSize:     13,
-                                                    fontWeight:   isActive ? 700 : 400,
-                                                    cursor:       disabled ? "not-allowed" : "pointer",
-                                                    color:        disabled ? "#ccc" : isActive ? "#fff" : "#374151",
-                                                    bgcolor:      isActive ? "#1e3c72" : "transparent",
-                                                    border:       isActive ? "none" : "1px solid transparent",
-                                                    transition:   "all .12s",
-                                                    "&:hover":    disabled ? {} : {
-                                                        bgcolor:     isActive ? "#1e3c72" : "#e8edf8",
-                                                        color:       isActive ? "#fff"    : "#1e3c72",
+                                                    fontSize: 13,
+                                                    fontWeight: isActive ? 700 : 400,
+                                                    cursor: disabled ? "not-allowed" : "pointer",
+                                                    color: disabled ? "#ccc" : isActive ? "#fff" : "#374151",
+                                                    bgcolor: isActive ? "#1e3c72" : "transparent",
+                                                    border: isActive ? "none" : "1px solid transparent",
+                                                    transition: "all .12s",
+                                                    "&:hover": disabled ? {} : {
+                                                        bgcolor: isActive ? "#1e3c72" : "#e8edf8",
+                                                        color: isActive ? "#fff" : "#1e3c72",
                                                         borderColor: "#bcd0f0",
                                                     },
                                                 }}
@@ -320,13 +323,13 @@ const YearMonthPicker = ({ value, onChange, apiMonths }) => {
 
 // ── Table Component ─────────────────────────────────────────────────────────
 const TechTable = ({ tech, apiResponse, monthLabel }) => {
-    const colors   = TECH_COLORS[tech];
+    const colors = TECH_COLORS[tech];
     const TOTAL_BG = "#b2f0c5";
-    const STRIPE   = "#f4f7fb";
+    const STRIPE = "#f4f7fb";
 
-    const rawData    = apiResponse?.data?.[tech] || [];
+    const rawData = apiResponse?.data?.[tech] || [];
     const circleRows = rawData.filter((row) => row.Circle !== "Grand Total");
-    const grandTotal = rawData.find((row)  => row.Circle === "Grand Total") || {};
+    const grandTotal = rawData.find((row) => row.Circle === "Grand Total") || {};
 
     const titleLabel = monthLabel
         ? `FTR | ${monthLabel} | ${tech}`
@@ -387,17 +390,17 @@ const TechTable = ({ tech, apiResponse, monthLabel }) => {
 };
 
 // ── Main Component ──────────────────────────────────────────────────────────
-const FTR_Aging = () => {
+const Aging5G = () => {
     const { loading, action } = useLoadingDialog();
     const navigate = useNavigate();
 
     const [apiResponse, setApiResponse] = useState(null);
-    const [activeTech,  setActiveTech]  = useState("4G");
-    const [apiMonths,   setApiMonths]   = useState([]); // raw strings from API e.g. ["Jun 2026","May 2026"]
+    const [activeTech, setActiveTech] = useState("4G");
+    const [apiMonths, setApiMonths] = useState([]); // raw strings from API e.g. ["Jun 2026","May 2026"]
 
     // Default to current month
     const [selected, setSelected] = useState({
-        year:  CURRENT_YEAR,
+        year: CURRENT_YEAR,
         month: CURRENT_MONTH,
     });
 
@@ -405,12 +408,12 @@ const FTR_Aging = () => {
     useEffect(() => {
         const fetchMonths = async () => {
             try {
-                const res  = await getData("idploy/months/");
+                const res = await getData("idploy/months/");
                 const list =
-                    Array.isArray(res)          ? res        :
-                    Array.isArray(res?.data)    ? res.data   :
-                    Array.isArray(res?.months)  ? res.months :
-                    Array.isArray(res?.results) ? res.results: [];
+                    Array.isArray(res) ? res :
+                        Array.isArray(res?.data) ? res.data :
+                            Array.isArray(res?.months) ? res.months :
+                                Array.isArray(res?.results) ? res.results : [];
 
                 if (list.length > 0) {
                     // Normalise everything to "Mon YYYY" string
@@ -448,7 +451,7 @@ const FTR_Aging = () => {
             const formData = new FormData();
             formData.append("month", apiValue); // ✅ sends "Jun 2026" → matches %b %Y
 
-            const res = await postData("performance_idploy/generate-ftr/", formData);
+            const res = await postData("performance_tat/aging-softat-generate/", formData);
 
             if (res?.status) {
                 setApiResponse(res);
@@ -486,7 +489,7 @@ const FTR_Aging = () => {
                 <Breadcrumbs aria-label="breadcrumb" maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
                     <Link underline="hover" onClick={() => navigate("/tools")}>Tools</Link>
                     <Link underline="hover" onClick={() => navigate("/tools/performance_at_tat")}>Performance AT</Link>
-                    <Typography color="text.primary">FTR Aging</Typography>
+                    <Typography color="text.primary">5G Aging</Typography>
                 </Breadcrumbs>
             </div>
 
@@ -494,7 +497,7 @@ const FTR_Aging = () => {
                 {/* Top Bar */}
                 <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap={1}>
                     <Typography variant="h5" fontWeight={700}>
-                        Performance FTR Dashboard
+                        5G Aging Dashboard
                     </Typography>
 
                     <Box display="flex" gap={1} alignItems="center" flexWrap="wrap">
@@ -517,23 +520,23 @@ const FTR_Aging = () => {
                 <Box mt={2} sx={{ display: "flex", borderBottom: "2px solid #e0e0e0" }}>
                     {TECH_TABS.map((tab) => {
                         const isActive = activeTech === tab.key;
-                        const tColor   = TECH_COLORS[tab.key];
+                        const tColor = TECH_COLORS[tab.key];
                         return (
                             <Box
                                 key={tab.key}
                                 onClick={() => setActiveTech(tab.key)}
                                 sx={{
                                     px: 3, py: 1,
-                                    cursor:       "pointer",
-                                    userSelect:   "none",
-                                    fontWeight:   isActive ? 700 : 500,
-                                    fontSize:     14,
-                                    color:        isActive ? "#fff" : tColor.tabColor,
-                                    background:   isActive ? tColor.active : "transparent",
+                                    cursor: "pointer",
+                                    userSelect: "none",
+                                    fontWeight: isActive ? 700 : 500,
+                                    fontSize: 14,
+                                    color: isActive ? "#fff" : tColor.tabColor,
+                                    background: isActive ? tColor.active : "transparent",
                                     borderRadius: "6px 6px 0 0",
                                     borderBottom: isActive ? `3px solid ${tColor.tabColor}` : "3px solid transparent",
-                                    transition:   "all 0.2s",
-                                    "&:hover":    { background: isActive ? tColor.active : "#f0f4ff" },
+                                    transition: "all 0.2s",
+                                    "&:hover": { background: isActive ? tColor.active : "#f0f4ff" },
                                 }}
                             >
                                 {tab.label}
@@ -555,4 +558,4 @@ const FTR_Aging = () => {
     );
 };
 
-export default FTR_Aging;
+export default Aging5G;
