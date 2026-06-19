@@ -9,6 +9,7 @@ import FileUploadIcon from '@rsuite/icons/FileUpload';
 import { useNavigate } from 'react-router-dom'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Loader from '../../Skeleton/Loader'
+import { Garage } from '@mui/icons-material';
 
 const PerformanceTool = lazy(() => import("./PerformanceTool"));
 const FileManager = lazy(() => import("./File Manager/File_Manager"));
@@ -20,6 +21,7 @@ const Performance_SR_Wise = lazy(() => import("./File Manager/Performance_SR_Wis
 const PerformanceAtPendingAging = lazy(() => import("./perATPendingAging/MasterDashboard"));
 const Performance_Aging_Graph = lazy(() => import("./File Manager/Performance_Aging_Graph"));
 const SCFT_Aging_Graph = lazy(() => import("./perATPendingAging/SCFT_Aging_Graph"));
+const Aging5G = lazy(() => import("./Soft AT/Aging5G"));
 // const UploadPerformanceAt = lazy(() => import("./Upload_Performance_At/UploadPerformanceAt"));
 // const Dashboard = lazy(() => import("./Dashboard/Dashboard"));
 
@@ -148,41 +150,18 @@ const PerformanceAt = () => {
                                                 SCFT Aging Graph
                                             </Nav.Item>
 
-                                            
-                                            
-                                            {/* <Nav.Item
-                                                eventKey="3-2"
+                                        </Nav.Menu>
+                                        
+                                        <Nav.Menu eventKey="4" style={{ fontWeight: 400, color: 'white' }} placement="leftStart" className="menu-title-custom" title=" Soft AT" icon={<DashboardIcon />}  >
+                                            <Nav.Item
+                                                eventKey="4-1"
                                                 placement="rightStart"
                                                 // icon={<DashboardIcon />}
-                                                onClick={() => navigate('/tools/performance_at_tat/SCFT_Aging')}
+                                                onClick={() => navigate('/tools/performance_at_tat/Aging5G')}
                                             >
-                                                SCFT Aging
-                                            </Nav.Item> */}
+                                                5G Aging
+                                            </Nav.Item>
 
-                                            {/* <Nav.Item
-                                                eventKey="3-3"
-                                                placement="rightStart"
-                                                // icon={<DashboardIcon />}
-                                                onClick={() => navigate('/tools/performance_at_tat/FTR_Aging')}
-                                            >
-                                                Performance FTR
-                                            </Nav.Item> */}
-                                            {/* <Nav.Item
-                                                eventKey="3-4"
-                                                placement="rightStart"
-                                                // icon={<DashboardIcon />}
-                                                onClick={() => navigate('/tools/performance_at_tat/SCFT_FTR')}
-                                            >
-                                                SCFT FTR
-                                            </Nav.Item> */}
-                                            {/* <Nav.Item
-                                                eventKey="3-5"
-                                                placement="rightStart"
-                                                // icon={<DashboardIcon />}
-                                                onClick={() => navigate('/tools/performance_at_tat/Performance_SR_Wise')}
-                                            >
-                                                SR Wise Tracking
-                                            </Nav.Item> */}
                                         </Nav.Menu>
 
                                     </Nav>
@@ -205,6 +184,7 @@ const PerformanceAt = () => {
                                 <Route element={<PerformanceAtPendingAging />} path="/performance_at_pending_aging" />
                                 <Route element={<Performance_Aging_Graph />} path="/Performance_Aging_Graph" />
                                 <Route element={<SCFT_Aging_Graph />} path="/SCFT_Aging_Graph" />
+                                <Route element={<Aging5G />} path="/Aging5G" />
                             </Routes>
                         </Suspense>
                     </Grid>
