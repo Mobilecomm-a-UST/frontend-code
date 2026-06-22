@@ -153,7 +153,7 @@ const Ix_Tools = () => {
                                             <CodeIcon alt="SA" style={{ width: "50px", height: "60px" }} />
                                         </div>
                                         <div >
-                                            <div className={classes.center}>SA Slicing</div>
+                                            <div className={classes.center}>5G GPL</div>
                                             {/* <div>This is a TDD tool</div> */}
                                         </div>
                                         {/* <span className={classes.center}>SCHEDULER</span> */}

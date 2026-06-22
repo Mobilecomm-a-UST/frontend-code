@@ -1,3 +1,5 @@
+
+
 // import React, { useEffect, useState } from "react";
 // import {
 //     Box,
@@ -19,55 +21,33 @@
 
 // // ── Constants ────────────────────────────────────────────────────────────────
 // const todayStr = new Date().toISOString().split("T")[0];
-// const MAX_ROWS = 50;
 
 // const getDefaultStartDate = () => {
 //     const now = new Date();
 //     return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-01`;
 // };
 
-// // ── Technology Tabs ──────────────────────────────────────────────────────────
-// const TECH_TABS = [
-//     { key: "4G", label: "4G" },
-//     { key: "5G", label: "5G" },
-//     { key: "4G+5G", label: "4G+5G" },
-// ];
-
-// // ── Table Columns (matches Excel screenshot) ─────────────────────────────────
+// // ── Table Columns ─────────────────────────────────────────────────────────────
 // const COLUMNS = [
-//     { label: "SR_Site ID", key: "SR_Site ID" },
-//     { label: "Site ID", key: "Site ID" },
-//     { label: "Circle", key: "Circle" },
-//     { label: "PAT", key: "PAT" },
-//     { label: "SAT", key: "SAT" },
-//     { label: "KAT", key: "KAT" },
-//     { label: "SCFT", key: "SCFT" },
-//     { label: "PAT Date", key: "PAT Date" },
-//     { label: "SAT Date", key: "SAT Date" },
-//     { label: "KAT Date", key: "KAT Date" },
-//     { label: "SCFT Date", key: "SCFT Date" },
+//     // { label: "SR_Site ID", key: "SR_Site ID" },
+//     // { label: "Site ID",    key: "Site ID" },
+//     { label: "Circle",     key: "Circle" },
+//     { label: "PAT",        key: "PAT" },
+//     { label: "SAT",        key: "SAT" },
+//     { label: "KAT",        key: "KAT" },
+//     { label: "SCFT",       key: "SCFT" },
+//     // { label: "PAT Date",   key: "PAT Date" },
+//     // { label: "SAT Date",   key: "SAT Date" },
+//     // { label: "KAT Date",   key: "KAT Date" },
+//     // { label: "SCFT Date",  key: "SCFT Date" },
 // ];
 
-// // ── Tech Colours ─────────────────────────────────────────────────────────────
-// const TECH_COLORS = {
-//     "4G": {
-//         active: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
-//         header: "linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%)",
-//         tabColor: "#1e3c72",
-//         badge: "#1976d2",
-//     },
-//     "5G": {
-//         active: "linear-gradient(135deg, #134e5e 0%, #71b280 100%)",
-//         header: "linear-gradient(135deg, #0b3d2e 0%, #1f4037 100%)",
-//         tabColor: "#134e5e",
-//         badge: "#2e7d32",
-//     },
-//     "4G+5G": {
-//         active: "linear-gradient(135deg, #41295a 0%, #2F0743 100%)",
-//         header: "linear-gradient(135deg, #252326 0%, #414345 100%)",
-//         tabColor: "#41295a",
-//         badge: "#6a1b9a",
-//     },
+// // ── 5G Colour Theme ───────────────────────────────────────────────────────────
+// const COLORS = {
+//     titleBg:  "linear-gradient(135deg, #134e5e 0%, #71b280 100%)",
+//     headerBg: "linear-gradient(135deg, #0b3d2e 0%, #1f4037 100%)",
+//     badge:    "#2e7d32",
+//     border:   "#1f4037",
 // };
 
 // // ── Status Cell Colour Helper ─────────────────────────────────────────────────
@@ -75,8 +55,8 @@
 //     if (!value || value === "-" || value === "") return {};
 //     const v = String(value).toLowerCase();
 //     if (v === "accepted") return { color: "#1b5e20", fontWeight: 600 };
-//     if (v === "pending") return { color: "#e65100", fontWeight: 600 };
-//     if (v === "offered") return { color: "#0d47a1", fontWeight: 600 };
+//     if (v === "pending")  return { color: "#e65100", fontWeight: 600 };
+//     if (v === "offered")  return { color: "#0d47a1", fontWeight: 600 };
 //     return {};
 // };
 
@@ -99,173 +79,6 @@
 //     fontSize: 12,
 // };
 
-// // ── Table Component ───────────────────────────────────────────────────────────
-// const TechTable = ({ tech, apiResponse, dateRangeLabel }) => {
-//     const colors = TECH_COLORS[tech];
-//     const STRIPE = "#f4f7fb";
-
-//     // API returns array of row objects per tech key
-//     const rawData = apiResponse?.data?.[tech] || [];
-
-//     // Limit to MAX_ROWS (50)
-//     const tableRows = rawData.slice(0, MAX_ROWS);
-
-//     const titleLabel = dateRangeLabel
-//         ? `AT Report  |  ${dateRangeLabel}`
-//         : "AT Report";
-
-//     return (
-//         <Box
-//             mt={1}
-//             sx={{
-//                 overflowX: "auto",
-//                 borderRadius: 2,
-//                 border: "1px solid #c0c0c0",
-//                 boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-//             }}
-//         >
-//             <table
-//                 style={{
-//                     width: "100%",
-//                     borderCollapse: "collapse",
-//                     tableLayout: "auto",
-//                     minWidth: 900,
-//                 }}
-//             >
-//                 <thead>
-//                     {/* ── Title row ── */}
-//                     <tr>
-//                         <th
-//                             colSpan={COLUMNS.length}
-//                             style={{
-//                                 ...cellSt,
-//                                 background: colors.active,
-//                                 color: "#fff",
-//                                 fontSize: 14,
-//                                 fontWeight: 700,
-//                                 textAlign: "center",
-//                                 padding: "10px 12px",
-//                                 border: "1px solid #2e4a70",
-//                             }}
-//                         >
-//                             {titleLabel}
-//                         </th>
-//                     </tr>
-
-//                     {/* ── Column header row ── */}
-//                     <tr>
-//                         {COLUMNS.map((col) => (
-//                             <th
-//                                 key={col.key}
-//                                 style={{
-//                                     ...cellSt,
-//                                     background: colors.header,
-//                                     color: "#fff",
-//                                     fontWeight: 700,
-//                                     fontSize: 12,
-//                                     border: "1px solid #2e4a70",
-//                                     padding: "6px 10px",
-//                                     // Make first col sticky in header too
-//                                     ...(col.key === "SR_Site ID"
-//                                         ? { position: "sticky", left: 0, zIndex: 3 }
-//                                         : {}),
-//                                 }}
-//                             >
-//                                 {col.label}
-//                             </th>
-//                         ))}
-//                     </tr>
-//                 </thead>
-
-//                 <tbody>
-//                     {tableRows.length > 0 ? (
-//                         tableRows.map((row, idx) => (
-//                             <tr
-//                                 key={`${row["SR_Site ID"]}-${idx}`}
-//                                 style={{ background: idx % 2 === 0 ? "#fff" : STRIPE }}
-//                             >
-//                                 {COLUMNS.map((col) => {
-//                                     const val = row?.[col.key] ?? "-";
-//                                     const isStatus =
-//                                         col.key === "PAT" ||
-//                                         col.key === "SAT" ||
-//                                         col.key === "KAT" ||
-//                                         col.key === "SCFT";
-//                                     const isFirst = col.key === "SR_Site ID";
-
-//                                     return (
-//                                         <td
-//                                             key={col.key}
-//                                             style={{
-//                                                 ...(isFirst ? stickySt : cellSt),
-//                                                 background: isFirst
-//                                                     ? idx % 2 === 0 ? "#fff" : STRIPE
-//                                                     : undefined,
-//                                                 ...(isStatus ? getStatusStyle(val) : {}),
-//                                             }}
-//                                         >
-//                                             {val || "-"}
-//                                         </td>
-//                                     );
-//                                 })}
-//                             </tr>
-//                         ))
-//                     ) : (
-//                         <tr>
-//                             <td
-//                                 colSpan={COLUMNS.length}
-//                                 style={{
-//                                     ...cellSt,
-//                                     padding: 20,
-//                                     color: "#9e9e9e",
-//                                     fontSize: 14,
-//                                     textAlign: "center",
-//                                 }}
-//                             >
-//                                 No Data Available
-//                             </td>
-//                         </tr>
-//                     )}
-//                 </tbody>
-//             </table>
-
-//             {/* Row count badge */}
-//             {tableRows.length > 0 && (
-//                 <Box
-//                     sx={{
-//                         display: "flex",
-//                         justifyContent: "flex-end",
-//                         alignItems: "center",
-//                         px: 2, py: 0.8,
-//                         borderTop: "1px solid #e0e0e0",
-//                         background: "#fafafa",
-//                         gap: 1,
-//                     }}
-//                 >
-//                     <Typography variant="caption" color="text.secondary">
-//                         Showing
-//                     </Typography>
-//                     <Chip
-//                         label={`${tableRows.length} / ${rawData.length} rows`}
-//                         size="small"
-//                         sx={{
-//                             background: colors.badge,
-//                             color: "#fff",
-//                             fontWeight: 600,
-//                             fontSize: 11,
-//                         }}
-//                     />
-//                     {rawData.length > MAX_ROWS && (
-//                         <Typography variant="caption" color="error">
-//                             (limited to first {MAX_ROWS} rows)
-//                         </Typography>
-//                     )}
-//                 </Box>
-//             )}
-//         </Box>
-//     );
-// };
-
 // // ── Main Component ────────────────────────────────────────────────────────────
 // const Performance_SR_Wise = () => {
 //     const { loading, action } = useLoadingDialog();
@@ -273,8 +86,7 @@
 
 //     const [apiResponse, setApiResponse] = useState(null);
 //     const [startDate, setStartDate] = useState(getDefaultStartDate());
-//     const [endDate, setEndDate] = useState(todayStr);
-//     const [activeTech, setActiveTech] = useState("4G");
+//     const [endDate, setEndDate]     = useState(todayStr);
 
 //     // ── Fetch ─────────────────────────────────────────────────────────────
 //     const fetchData = async () => {
@@ -286,10 +98,10 @@
 
 //             const formData = new FormData();
 //             formData.append("start_date", startDate);
-//             formData.append("end_date", endDate);
+//             formData.append("end_date",   endDate);
 
 //             const res = await postData(
-//                 "performance_idploy/generate-performance-at-srwise-report/",   // ← update endpoint if different
+//                 "performance_idploy/generate-performance-at-srwise-report/",
 //                 formData
 //             );
 
@@ -324,8 +136,10 @@
 //         document.body.removeChild(link);
 //     };
 
-//     const dateRangeLabel =
-//         startDate && endDate ? `${startDate} to ${endDate}` : "";
+//     const tableRows    = apiResponse?.data || [];
+//     const dateRangeLabel = startDate && endDate ? `${startDate}  to  ${endDate}` : "";
+//     const titleLabel   = dateRangeLabel ? `AT Report  |  ${dateRangeLabel}` : "AT Report";
+//     const STRIPE       = "#f4f7fb";
 
 //     return (
 //         <>
@@ -340,7 +154,7 @@
 //                         Tools
 //                     </Link>
 //                     <Link underline="hover" onClick={() => navigate("/tools/performance_at_tat")}>
-//                         Performance At TAT
+//                         Performance At
 //                     </Link>
 //                     <Typography color="text.primary">Performance SR Wise</Typography>
 //                 </Breadcrumbs>
@@ -355,16 +169,14 @@
 //                     flexWrap="wrap"
 //                     gap={1}
 //                 >
-//                     {/* Left */}
 //                     <Typography variant="h5" fontWeight={700}>
-//                         Performance SR Wise
+//                         Performance SR Wise Tracking Dashboard
 //                     </Typography>
 
-//                     {/* Right — date pickers + download */}
 //                     <Box display="flex" gap={1} alignItems="center" flexWrap="wrap">
 //                         <TextField
 //                             size="small"
-//                             label="From Date"
+//                             label="Start Date"
 //                             type="date"
 //                             value={startDate}
 //                             onChange={(e) => {
@@ -380,7 +192,7 @@
 
 //                         <TextField
 //                             size="small"
-//                             label="To Date"
+//                             label="End Date"
 //                             type="date"
 //                             value={endDate}
 //                             onChange={(e) => {
@@ -404,45 +216,147 @@
 //                     </Box>
 //                 </Box>
 
-//                 {/* ── Technology Tabs ── */}
-//                 <Box mt={2} sx={{ display: "flex", borderBottom: "2px solid #e0e0e0" }}>
-//                     {TECH_TABS.map((tab) => {
-//                         const isActive = activeTech === tab.key;
-//                         const tColor = TECH_COLORS[tab.key];
-//                         return (
-//                             <Box
-//                                 key={tab.key}
-//                                 onClick={() => setActiveTech(tab.key)}
-//                                 sx={{
-//                                     px: 3, py: 1,
-//                                     cursor: "pointer",
-//                                     userSelect: "none",
-//                                     fontWeight: isActive ? 700 : 500,
-//                                     fontSize: 14,
-//                                     color: isActive ? "#fff" : tColor.tabColor,
-//                                     background: isActive ? tColor.active : "transparent",
-//                                     borderRadius: "6px 6px 0 0",
-//                                     borderBottom: isActive
-//                                         ? `3px solid ${tColor.tabColor}`
-//                                         : "3px solid transparent",
-//                                     transition: "all 0.2s",
-//                                     "&:hover": {
-//                                         background: isActive ? tColor.active : "#f0f4ff",
-//                                     },
-//                                 }}
-//                             >
-//                                 {tab.label}
-//                             </Box>
-//                         );
-//                     })}
-//                 </Box>
-
 //                 {/* ── Table ── */}
-//                 <TechTable
-//                     tech={activeTech}
-//                     apiResponse={apiResponse}
-//                     dateRangeLabel={dateRangeLabel}
-//                 />
+//                 <Box
+//                     mt={2}
+//                     sx={{
+//                         overflowX: "auto",
+//                         borderRadius: 2,
+//                         border: "1px solid #c0c0c0",
+//                         boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+//                     }}
+//                 >
+//                     <table
+//                         style={{
+//                             width: "100%",
+//                             borderCollapse: "collapse",
+//                             tableLayout: "auto",
+//                             minWidth: 900,
+//                         }}
+//                     >
+//                         <thead>
+//                             {/* Title row */}
+//                             <tr>
+//                                 <th
+//                                     colSpan={COLUMNS.length}
+//                                     style={{
+//                                         ...cellSt,
+//                                         background: COLORS.titleBg,
+//                                         color: "#fff",
+//                                         fontSize: 14,
+//                                         fontWeight: 700,
+//                                         textAlign: "center",
+//                                         padding: "10px 12px",
+//                                         border: `1px solid ${COLORS.border}`,
+//                                     }}
+//                                 >
+//                                     {titleLabel}
+//                                 </th>
+//                             </tr>
+
+//                             {/* Column header row */}
+//                             <tr>
+//                                 {COLUMNS.map((col) => (
+//                                     <th
+//                                         key={col.key}
+//                                         style={{
+//                                             ...cellSt,
+//                                             background: COLORS.headerBg,
+//                                             color: "#fff",
+//                                             fontWeight: 700,
+//                                             fontSize: 12,
+//                                             border: `1px solid ${COLORS.border}`,
+//                                             padding: "6px 10px",
+//                                             ...(col.key === "SR_Site ID"
+//                                                 ? { position: "sticky", left: 0, zIndex: 3 }
+//                                                 : {}),
+//                                         }}
+//                                     >
+//                                         {col.label}
+//                                     </th>
+//                                 ))}
+//                             </tr>
+//                         </thead>
+
+//                         <tbody>
+//                             {tableRows.length > 0 ? (
+//                                 tableRows.map((row, idx) => (
+//                                     <tr
+//                                         key={`${row["SR_Site ID"]}-${idx}`}
+//                                         style={{ background: idx % 2 === 0 ? "#fff" : STRIPE }}
+//                                     >
+//                                         {COLUMNS.map((col) => {
+//                                             const val      = row?.[col.key] ?? "-";
+//                                             const isStatus = ["PAT", "SAT", "KAT", "SCFT"].includes(col.key);
+//                                             const isFirst  = col.key === "SR_Site ID";
+
+//                                             return (
+//                                                 <td
+//                                                     key={col.key}
+//                                                     style={{
+//                                                         ...(isFirst ? stickySt : cellSt),
+//                                                         background: isFirst
+//                                                             ? idx % 2 === 0 ? "#fff" : STRIPE
+//                                                             : undefined,
+//                                                         ...(isStatus ? getStatusStyle(val) : {}),
+//                                                     }}
+//                                                 >
+//                                                     {val !== null && val !== undefined && val !== ""
+//                                                         ? val
+//                                                         : "-"}
+//                                                 </td>
+//                                             );
+//                                         })}
+//                                     </tr>
+//                                 ))
+//                             ) : (
+//                                 <tr>
+//                                     <td
+//                                         colSpan={COLUMNS.length}
+//                                         style={{
+//                                             ...cellSt,
+//                                             padding: 20,
+//                                             color: "#9e9e9e",
+//                                             fontSize: 14,
+//                                             textAlign: "center",
+//                                         }}
+//                                     >
+//                                         No Data Available
+//                                     </td>
+//                                 </tr>
+//                             )}
+//                         </tbody>
+//                     </table>
+
+//                     {/* Row count badge */}
+//                     {tableRows.length > 0 && (
+//                         <Box
+//                             sx={{
+//                                 display: "flex",
+//                                 justifyContent: "flex-end",
+//                                 alignItems: "center",
+//                                 px: 2, py: 0.8,
+//                                 borderTop: "1px solid #e0e0e0",
+//                                 background: "#fafafa",
+//                                 gap: 1,
+//                             }}
+//                         >
+//                             <Typography variant="caption" color="text.secondary">
+//                                 Showing
+//                             </Typography>
+//                             <Chip
+//                                 label={`${tableRows.length} / ${apiResponse?.total_sites ?? tableRows.length} rows`}
+//                                 size="small"
+//                                 sx={{
+//                                     background: COLORS.badge,
+//                                     color: "#fff",
+//                                     fontWeight: 600,
+//                                     fontSize: 11,
+//                                 }}
+//                             />
+//                         </Box>
+//                     )}
+//                 </Box>
 
 //                 {loading}
 //             </Box>
@@ -451,6 +365,7 @@
 // };
 
 // export default Performance_SR_Wise;
+
 
 import React, { useEffect, useState } from "react";
 import {
@@ -481,18 +396,14 @@ const getDefaultStartDate = () => {
 
 // ── Table Columns ─────────────────────────────────────────────────────────────
 const COLUMNS = [
-    { label: "SR_Site ID", key: "SR_Site ID" },
-    { label: "Site ID",    key: "Site ID" },
-    { label: "Circle",     key: "Circle" },
-    { label: "PAT",        key: "PAT" },
-    { label: "SAT",        key: "SAT" },
-    { label: "KAT",        key: "KAT" },
-    { label: "SCFT",       key: "SCFT" },
-    { label: "PAT Date",   key: "PAT Date" },
-    { label: "SAT Date",   key: "SAT Date" },
-    { label: "KAT Date",   key: "KAT Date" },
-    { label: "SCFT Date",  key: "SCFT Date" },
+    { label: "Circle", key: "Circle" },
+    { label: "PAT",    key: "PAT"    },
+    { label: "SAT",    key: "SAT"    },
+    { label: "KAT",    key: "KAT"    },
+    { label: "SCFT",   key: "SCFT"   },
 ];
+
+const STATUS_COLS = ["PAT", "SAT", "KAT", "SCFT"];
 
 // ── 5G Colour Theme ───────────────────────────────────────────────────────────
 const COLORS = {
@@ -503,6 +414,14 @@ const COLORS = {
 };
 
 // ── Status Cell Colour Helper ─────────────────────────────────────────────────
+// When value is a word (old behaviour) — keep colours.
+// When value is a number  — the whole cell becomes a clickable link chip.
+const STATUS_COLORS = {
+    accepted: { color: "#1b5e20", bg: "#e8f5e9", border: "#a5d6a7" },
+    pending:  { color: "#e65100", bg: "#fff3e0", border: "#ffcc80" },
+    offered:  { color: "#0d47a1", bg: "#e3f2fd", border: "#90caf9" },
+};
+
 const getStatusStyle = (value) => {
     if (!value || value === "-" || value === "") return {};
     const v = String(value).toLowerCase();
@@ -530,6 +449,45 @@ const stickySt = {
     fontWeight: 600,
     fontSize: 12,
 };
+
+// ── Clickable Count Chip ──────────────────────────────────────────────────────
+// Rendered when the cell value is a number (future API).
+// statusKey: "pending" | "offered" | "accepted"
+const CountChip = ({ count, statusKey, onClick }) => {
+    const theme = STATUS_COLORS[statusKey] ?? { color: "#333", bg: "#eee", border: "#ccc" };
+    return (
+        <Box
+            component="span"
+            onClick={onClick}
+            sx={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                minWidth: 32,
+                px: 1.2,
+                py: 0.3,
+                borderRadius: "12px",
+                fontSize: 12,
+                fontWeight: 700,
+                cursor: "pointer",
+                userSelect: "none",
+                color: theme.color,
+                background: theme.bg,
+                border: `1.5px solid ${theme.border}`,
+                transition: "all .15s",
+                "&:hover": {
+                    filter: "brightness(0.92)",
+                    boxShadow: `0 2px 8px ${theme.border}88`,
+                },
+            }}
+        >
+            {count}
+        </Box>
+    );
+};
+
+// ── Helper: is the value a pure number? ──────────────────────────────────────
+const isNumeric = (val) => val !== null && val !== undefined && val !== "" && val !== "-" && !isNaN(Number(val));
 
 // ── Main Component ────────────────────────────────────────────────────────────
 const Performance_SR_Wise = () => {
@@ -588,10 +546,108 @@ const Performance_SR_Wise = () => {
         document.body.removeChild(link);
     };
 
-    const tableRows    = apiResponse?.data || [];
+    // ── Navigate to detail page on chip click ─────────────────────────────
+    // Passes: circle, column (PAT/SAT/KAT/SCFT), statusKey, date range
+    const handleCountClick = ({ circle, column, statusKey, count }) => {
+        navigate("/tools/performance_at_tat/sr_wise_hyperlink", {
+            state: {
+                circle,
+                column,        // "PAT" | "SAT" | "KAT" | "SCFT"
+                statusKey,     // "pending" | "offered" | "accepted"
+                count,
+                startDate,
+                endDate,
+            },
+        });
+    };
+
+    const tableRows      = apiResponse?.data || [];
     const dateRangeLabel = startDate && endDate ? `${startDate}  to  ${endDate}` : "";
-    const titleLabel   = dateRangeLabel ? `AT Report  |  ${dateRangeLabel}` : "AT Report";
-    const STRIPE       = "#f4f7fb";
+    const titleLabel     = dateRangeLabel ? `AT Report  |  ${dateRangeLabel}` : "AT Report";
+    const STRIPE         = "#f4f7fb";
+
+    // ── Cell renderer ─────────────────────────────────────────────────────
+    // For STATUS columns:
+    //   • If value is a NUMBER  → render clickable CountChip(s) per status
+    //   • If value is a STRING  → render coloured text (current behaviour)
+    //
+    // Future API shape expected for numeric mode (one example):
+    //   row.PAT = { pending: 3, offered: 1, accepted: 12 }
+    //   — OR —
+    //   row.PAT_pending = 3, row.PAT_offered = 1, row.PAT_accepted = 12
+    //
+    // For now the API still returns a string ("Pending" / "Offered" / "Accepted"),
+    // so the string branch runs. When the API changes, only the numeric branch
+    // will activate — no other code needs changing.
+
+    const renderStatusCell = (row, col) => {
+        const val = row?.[col.key];
+
+        // ── Numeric mode (future API) ──────────────────────────────────────
+        // Expected shape: row[col.key] = { pending: N, offered: N, accepted: N }
+        if (val && typeof val === "object" && !Array.isArray(val)) {
+            const chips = Object.entries(val)
+                .filter(([, n]) => Number(n) > 0)
+                .map(([statusKey, n]) => (
+                    <CountChip
+                        key={statusKey}
+                        count={n}
+                        statusKey={statusKey}
+                        onClick={() =>
+                            handleCountClick({
+                                circle:    row["Circle"],
+                                column:    col.key,
+                                statusKey,
+                                count: n,
+                            })
+                        }
+                    />
+                ));
+            return (
+                <Box display="flex" gap={0.5} justifyContent="center" flexWrap="wrap">
+                    {chips.length ? chips : "-"}
+                </Box>
+            );
+        }
+
+        // ── Flat numeric mode (alternate future API) ──────────────────────
+        // Expected shape: row["PAT_pending"] = 3, row["PAT_offered"] = 1 …
+        const flatKeys = ["pending", "offered", "accepted"].map((s) => ({
+            statusKey: s,
+            flatKey:   `${col.key}_${s}`,
+        }));
+        const hasFlatNums = flatKeys.some(({ flatKey }) => isNumeric(row[flatKey]));
+        if (hasFlatNums) {
+            const chips = flatKeys
+                .filter(({ flatKey }) => isNumeric(row[flatKey]) && Number(row[flatKey]) > 0)
+                .map(({ statusKey, flatKey }) => (
+                    <CountChip
+                        key={statusKey}
+                        count={row[flatKey]}
+                        statusKey={statusKey}
+                        onClick={() =>
+                            handleCountClick({
+                                circle:    row["Circle"],
+                                column:    col.key,
+                                statusKey,
+                                count: row[flatKey],
+                            })
+                        }
+                    />
+                ));
+            return (
+                <Box display="flex" gap={0.5} justifyContent="center" flexWrap="wrap">
+                    {chips.length ? chips : "-"}
+                </Box>
+            );
+        }
+
+        // ── String mode (current API) ─────────────────────────────────────
+        const strVal = val !== null && val !== undefined && val !== "" ? String(val) : "-";
+        return (
+            <span style={getStatusStyle(strVal)}>{strVal}</span>
+        );
+    };
 
     return (
         <>
@@ -683,7 +739,7 @@ const Performance_SR_Wise = () => {
                             width: "100%",
                             borderCollapse: "collapse",
                             tableLayout: "auto",
-                            minWidth: 900,
+                            minWidth: 700,
                         }}
                     >
                         <thead>
@@ -719,9 +775,6 @@ const Performance_SR_Wise = () => {
                                             fontSize: 12,
                                             border: `1px solid ${COLORS.border}`,
                                             padding: "6px 10px",
-                                            ...(col.key === "SR_Site ID"
-                                                ? { position: "sticky", left: 0, zIndex: 3 }
-                                                : {}),
                                         }}
                                     >
                                         {col.label}
@@ -734,28 +787,28 @@ const Performance_SR_Wise = () => {
                             {tableRows.length > 0 ? (
                                 tableRows.map((row, idx) => (
                                     <tr
-                                        key={`${row["SR_Site ID"]}-${idx}`}
+                                        key={`${row["Circle"]}-${idx}`}
                                         style={{ background: idx % 2 === 0 ? "#fff" : STRIPE }}
                                     >
                                         {COLUMNS.map((col) => {
-                                            const val      = row?.[col.key] ?? "-";
-                                            const isStatus = ["PAT", "SAT", "KAT", "SCFT"].includes(col.key);
-                                            const isFirst  = col.key === "SR_Site ID";
+                                            const isStatus = STATUS_COLS.includes(col.key);
+                                            const isCircle = col.key === "Circle";
+                                            const val = row?.[col.key] ?? "-";
 
                                             return (
                                                 <td
                                                     key={col.key}
                                                     style={{
-                                                        ...(isFirst ? stickySt : cellSt),
-                                                        background: isFirst
+                                                        ...(isCircle ? stickySt : cellSt),
+                                                        background: isCircle
                                                             ? idx % 2 === 0 ? "#fff" : STRIPE
                                                             : undefined,
-                                                        ...(isStatus ? getStatusStyle(val) : {}),
                                                     }}
                                                 >
-                                                    {val !== null && val !== undefined && val !== ""
-                                                        ? val
-                                                        : "-"}
+                                                    {isStatus
+                                                        ? renderStatusCell(row, col)
+                                                        : (val !== null && val !== undefined && val !== ""
+                                                            ? val : "-")}
                                                 </td>
                                             );
                                         })}
