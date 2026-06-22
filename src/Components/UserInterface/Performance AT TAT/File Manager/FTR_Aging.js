@@ -402,40 +402,40 @@ const FTR_Aging = () => {
     });
 
     // ── Load available months from API ────────────────────────────────────
-    useEffect(() => {
-        const fetchMonths = async () => {
-            try {
-                const res  = await getData("idploy/months/");
-                const list =
-                    Array.isArray(res)          ? res        :
-                    Array.isArray(res?.data)    ? res.data   :
-                    Array.isArray(res?.months)  ? res.months :
-                    Array.isArray(res?.results) ? res.results: [];
+    // useEffect(() => {
+    //     const fetchMonths = async () => {
+    //         try {
+    //             const res  = await getData("idploy/months/");
+    //             const list =
+    //                 Array.isArray(res)          ? res        :
+    //                 Array.isArray(res?.data)    ? res.data   :
+    //                 Array.isArray(res?.months)  ? res.months :
+    //                 Array.isArray(res?.results) ? res.results: [];
 
-                if (list.length > 0) {
-                    // Normalise everything to "Mon YYYY" string
-                    const normalised = list.map((item) => {
-                        const str = typeof item === "object" ? (item.value ?? item.label ?? "") : String(item);
-                        // Already "Jun 2026"
-                        if (/^[A-Za-z]{3} \d{4}$/.test(str.trim())) return str.trim();
-                        // "2026-06" → "Jun 2026"
-                        const ym = str.match(/^(\d{4})-(\d{2})$/);
-                        if (ym) return `${MONTH_SHORT[parseInt(ym[2]) - 1]} ${ym[1]}`;
-                        return str;
-                    });
-                    setApiMonths(normalised);
+    //             if (list.length > 0) {
+    //                 // Normalise everything to "Mon YYYY" string
+    //                 const normalised = list.map((item) => {
+    //                     const str = typeof item === "object" ? (item.value ?? item.label ?? "") : String(item);
+    //                     // Already "Jun 2026"
+    //                     if (/^[A-Za-z]{3} \d{4}$/.test(str.trim())) return str.trim();
+    //                     // "2026-06" → "Jun 2026"
+    //                     const ym = str.match(/^(\d{4})-(\d{2})$/);
+    //                     if (ym) return `${MONTH_SHORT[parseInt(ym[2]) - 1]} ${ym[1]}`;
+    //                     return str;
+    //                 });
+    //                 setApiMonths(normalised);
 
-                    // Auto-select first available month
-                    const first = parseApiMonth(normalised[0]);
-                    if (first) setSelected(first);
-                }
-            } catch (err) {
-                console.warn("Months API failed:", err);
-                // No apiMonths set → picker shows all months up to today (no restriction)
-            }
-        };
-        fetchMonths();
-    }, []);
+    //                 // Auto-select first available month
+    //                 const first = parseApiMonth(normalised[0]);
+    //                 if (first) setSelected(first);
+    //             }
+    //         } catch (err) {
+    //             console.warn("Months API failed:", err);
+    //             // No apiMonths set → picker shows all months up to today (no restriction)
+    //         }
+    //     };
+    //     fetchMonths();
+    // }, []);
 
     // ── Derived API string: "Jun 2026" ────────────────────────────────────
     const apiValue = toApiFormat(selected); // e.g. "Jun 2026"

@@ -26,9 +26,16 @@ const CURRENT_MONTH = new Date().getMonth(); // 0-indexed
 const START_YEAR = 2000;
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
-// Converts { year:2026, month:5 } → "Jun 2026"  (what backend expects: %b %Y)
-const toApiFormat = (sel) =>
+// Display label only, e.g. { year:2026, month:5 } → "Jun 2026"
+const toDisplayLabel = (sel) =>
     sel ? `${MONTH_SHORT[sel.month]} ${sel.year}` : "";
+
+// Backend wants year + month as SEPARATE fields (not a combined string).
+// month is sent as a zero-padded numeric string: "06" for June.
+const toApiMonthNum = (sel) =>
+    sel ? String(sel.month + 1).padStart(2, "0") : "";
+
+const toApiYear = (sel) => (sel ? String(sel.year) : "");
 
 // Converts "Jun 2026" → { year:2026, month:5 }
 const parseApiMonth = (str) => {
@@ -40,29 +47,57 @@ const parseApiMonth = (str) => {
         const yr = parseInt(parts[1]);
         if (mIdx !== -1 && !isNaN(yr)) return { year: yr, month: mIdx };
     }
-    // Shape: "2026-06"
+    // Shape: "2026-06" or "06-2026"
     const ym = String(str).match(/^(\d{4})-(\d{2})$/);
     if (ym) return { year: parseInt(ym[1]), month: parseInt(ym[2]) - 1 };
+    const my = String(str).match(/^(\d{2})-(\d{4})$/);
+    if (my) return { year: parseInt(my[2]), month: parseInt(my[1]) - 1 };
     return null;
 };
 
+// Zero-pad a number to 2 digits, e.g. 5 → "05"
+const pad2 = (n) => String(n).padStart(2, "0");
+
+// Format a JS Date as "YYYY-MM-DD"
+const toISODate = (d) => `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`;
+
+// Computes the same 30-day-style window shown in the title, e.g. selecting
+// "May 2026" → "2026-04-26 to 2026-05-25" (ends on the 25th of the selected
+// month, starts the day after the 25th of the previous month).
+// This is ONLY used as a fallback for display if the backend doesn't return
+// its own `date_range` string in the response.
+const computeFallbackDateRange = (sel) => {
+    if (!sel) return "";
+    const end = new Date(sel.year, sel.month, 25);
+    const start = new Date(sel.year, sel.month - 1, 26);
+    return `${toISODate(start)} to ${toISODate(end)}`;
+};
+
 // ── Tech tabs ────────────────────────────────────────────────────────────────
+// 5G only — kept as an array (rather than a single constant) so re-enabling
+// 4G / 4G+5G later is just uncommenting these lines.
 const TECH_TABS = [
-    { key: "4G", label: "4G" },
+    // { key: "4G", label: "4G" },
     { key: "5G", label: "5G" },
-    { key: "4G+5G", label: "4G+5G" },
+    // { key: "4G+5G", label: "4G+5G" },
 ];
 
 // ── Fixed columns ────────────────────────────────────────────────────────────
+// Keys below match the API response exactly, e.g.:
+// { Circle, "<=12 days", "13-21 days", "22-30 days", ">30 days", Pending, Total,
+//   "<=12%", "13-21%", "22-30%", ">30%", "Pending%" }
 const COLUMNS = [
     { label: "<=12 days", key: "<=12 days" },
     { label: "13-21 days", key: "13-21 days" },
     { label: "22-30 days", key: "22-30 days" },
-    { label: "<=12%>", key: "<=12%>" },
+    { label: ">30 days", key: ">30 days" },
+    { label: "Pending", key: "Pending" },
+    { label: "Total", key: "Total" },
+    { label: "<=12%", key: "<=12%" },
     { label: "13-21%", key: "13-21%" },
     { label: "22-30%", key: "22-30%" },
     { label: ">30%", key: ">30%" },
-    { label: "Pending", key: "Pending" },
+    { label: "Pending%", key: "Pending%" },
 ];
 
 // ── Tech colours ─────────────────────────────────────────────────────────────
@@ -322,17 +357,26 @@ const YearMonthPicker = ({ value, onChange, apiMonths }) => {
 };
 
 // ── Table Component ─────────────────────────────────────────────────────────
-const TechTable = ({ tech, apiResponse, monthLabel }) => {
+const TechTable = ({ tech, apiResponse, dateRangeLabel }) => {
     const colors = TECH_COLORS[tech];
     const TOTAL_BG = "#b2f0c5";
     const STRIPE = "#f4f7fb";
 
-    const rawData = apiResponse?.data?.[tech] || [];
+    // The API response's `data` can come back in two shapes depending on
+    // backend version:
+    //   1. Flat array for the currently selected tech: [{Circle:"AP",...}, ...]
+    //   2. Object keyed by tech: { "4G": [...], "5G": [...], "4G+5G": [...] }
+    // Handle both so the table never silently shows "No Data Available".
+    const rawDataSrc = apiResponse?.data;
+    const rawData = Array.isArray(rawDataSrc)
+        ? rawDataSrc
+        : (rawDataSrc?.[tech] || []);
     const circleRows = rawData.filter((row) => row.Circle !== "Grand Total");
     const grandTotal = rawData.find((row) => row.Circle === "Grand Total") || {};
 
-    const titleLabel = monthLabel
-        ? `FTR | ${monthLabel} | ${tech}`
+    // ✅ Title format: "5G  |  2026-04-26 to 2026-05-25"
+    const titleLabel = dateRangeLabel
+        ? `${tech}  |  ${dateRangeLabel}`
         : "Select a month to load data";
 
     return (
@@ -395,7 +439,8 @@ const Aging5G = () => {
     const navigate = useNavigate();
 
     const [apiResponse, setApiResponse] = useState(null);
-    const [activeTech, setActiveTech] = useState("4G");
+    // 5G is the only tab now, so it's always the active tech.
+    const [activeTech, setActiveTech] = useState("5G");
     const [apiMonths, setApiMonths] = useState([]); // raw strings from API e.g. ["Jun 2026","May 2026"]
 
     // Default to current month
@@ -405,51 +450,63 @@ const Aging5G = () => {
     });
 
     // ── Load available months from API ────────────────────────────────────
-    useEffect(() => {
-        const fetchMonths = async () => {
-            try {
-                const res = await getData("idploy/months/");
-                const list =
-                    Array.isArray(res) ? res :
-                        Array.isArray(res?.data) ? res.data :
-                            Array.isArray(res?.months) ? res.months :
-                                Array.isArray(res?.results) ? res.results : [];
+    // useEffect(() => {
+    //     const fetchMonths = async () => {
+    //         try {
+    //             const res = await getData("idploy/months/");
+    //             const list =
+    //                 Array.isArray(res) ? res :
+    //                     Array.isArray(res?.data) ? res.data :
+    //                         Array.isArray(res?.months) ? res.months :
+    //                             Array.isArray(res?.results) ? res.results : [];
 
-                if (list.length > 0) {
-                    // Normalise everything to "Mon YYYY" string
-                    const normalised = list.map((item) => {
-                        const str = typeof item === "object" ? (item.value ?? item.label ?? "") : String(item);
-                        // Already "Jun 2026"
-                        if (/^[A-Za-z]{3} \d{4}$/.test(str.trim())) return str.trim();
-                        // "2026-06" → "Jun 2026"
-                        const ym = str.match(/^(\d{4})-(\d{2})$/);
-                        if (ym) return `${MONTH_SHORT[parseInt(ym[2]) - 1]} ${ym[1]}`;
-                        return str;
-                    });
-                    setApiMonths(normalised);
+    //             if (list.length > 0) {
+    //                 // Normalise everything to "Mon YYYY" string
+    //                 const normalised = list.map((item) => {
+    //                     const str = typeof item === "object" ? (item.value ?? item.label ?? "") : String(item);
+    //                     // Already "Jun 2026"
+    //                     if (/^[A-Za-z]{3} \d{4}$/.test(str.trim())) return str.trim();
+    //                     // "2026-06" → "Jun 2026"
+    //                     const ym = str.match(/^(\d{4})-(\d{2})$/);
+    //                     if (ym) return `${MONTH_SHORT[parseInt(ym[2]) - 1]} ${ym[1]}`;
+    //                     // "06-2026" → "Jun 2026"
+    //                     const my = str.match(/^(\d{2})-(\d{4})$/);
+    //                     if (my) return `${MONTH_SHORT[parseInt(my[1]) - 1]} ${my[2]}`;
+    //                     return str;
+    //                 });
+    //                 setApiMonths(normalised);
 
-                    // Auto-select first available month
-                    const first = parseApiMonth(normalised[0]);
-                    if (first) setSelected(first);
-                }
-            } catch (err) {
-                console.warn("Months API failed:", err);
-                // No apiMonths set → picker shows all months up to today (no restriction)
-            }
-        };
-        fetchMonths();
-    }, []);
+    //                 // Auto-select first available month
+    //                 const first = parseApiMonth(normalised[0]);
+    //                 if (first) setSelected(first);
+    //             }
+    //         } catch (err) {
+    //             console.warn("Months API failed:", err);
+    //             // No apiMonths set → picker shows all months up to today (no restriction)
+    //         }
+    //     };
+    //     fetchMonths();
+    // }, []);
 
-    // ── Derived API string: "Jun 2026" ────────────────────────────────────
-    const apiValue = toApiFormat(selected); // e.g. "Jun 2026"
+    // ── Title date range ────────────────────────────────────────────────
+    // Prefer the backend's own date_range string (most accurate / exact),
+    // fall back to a locally computed 30-day window if the backend hasn't
+    // returned one (e.g. before the first successful fetch, or older API
+    // versions that don't send date_range).
+    const dateRangeLabel = apiResponse?.date_range || computeFallbackDateRange(selected);
 
     // ── Fetch table data ──────────────────────────────────────────────────
+    // `tech` is fixed to "5G" and sent to the backend so the request always
+    // asks for the 5G dataset for the selected year + month.
     const fetchData = useCallback(async () => {
-        if (!apiValue) return;
+        if (!selected) return;
         try {
             action(true);
             const formData = new FormData();
-            formData.append("month", apiValue); // ✅ sends "Jun 2026" → matches %b %Y
+            // ✅ Backend wants year + month as SEPARATE fields, not a combined date.
+            formData.append("year", toApiYear(selected));   // e.g. "2026"
+            formData.append("month", toApiMonthNum(selected)); // e.g. "06"
+            formData.append("tech", activeTech); // fixed: "5G"
 
             const res = await postData("performance_tat/aging-softat-generate/", formData);
 
@@ -464,7 +521,7 @@ const Aging5G = () => {
         } finally {
             action(false);
         }
-    }, [apiValue]);
+    }, [selected, activeTech]);
 
     useEffect(() => {
         const timer = setTimeout(() => fetchData(), 400);
@@ -516,7 +573,7 @@ const Aging5G = () => {
                     </Box>
                 </Box>
 
-                {/* Tech Tabs */}
+                {/* Tech Tabs (5G only) */}
                 <Box mt={2} sx={{ display: "flex", borderBottom: "2px solid #e0e0e0" }}>
                     {TECH_TABS.map((tab) => {
                         const isActive = activeTech === tab.key;
@@ -549,7 +606,7 @@ const Aging5G = () => {
                 <TechTable
                     tech={activeTech}
                     apiResponse={apiResponse}
-                    monthLabel={apiValue}
+                    dateRangeLabel={dateRangeLabel}
                 />
 
                 {loading}

@@ -936,7 +936,7 @@ const MicrowaveCeragonUpload = () => {
 
                                 {/* ── SELECT DUMP ── */}
                                 <Box className={classes.Front_Box}>
-                                    <div className={classes.Front_Box_Hading}>Select Dump:</div>
+                                    <div className={classes.Front_Box_Hading}>Select Dump A:</div>
                                     <div className={classes.Front_Box_Select_Button}>
                                         <Button
                                             variant="contained"
@@ -957,7 +957,7 @@ const MicrowaveCeragonUpload = () => {
 
                                 {/* ── SELECT DUMP 2 ── */}
                                 <Box className={classes.Front_Box}>
-                                    <div className={classes.Front_Box_Hading}>Select Dump 2:</div>
+                                    <div className={classes.Front_Box_Hading}>Select Dump B:</div>
                                     <div className={classes.Front_Box_Select_Button}>
                                         <Button
                                             variant="contained"
