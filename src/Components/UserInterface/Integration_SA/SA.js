@@ -34,10 +34,10 @@ const SA = () => {
                             <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
                                 <Sidenav.Body>
                                     <Nav activeKey={activeKey} onSelect={setActiveKey} >
-                                        <Nav style={{ fontWeight: 550, color: 'white', textAlign: 'center', fontSize: 19 }}>SA Slicing Tool</Nav>
+                                        <Nav style={{ fontWeight: 550, color: 'white', textAlign: 'center', fontSize: 19 }}>5G GPL Tool</Nav>
                                    
                                         <Nav.Item eventKey="1" placement="rightStart" icon={<FileUploadIcon />} onClick={() => navigate('/tools/ix_tools/sa_slicing/sa_upload_xml')}>
-                                            XML Upload
+                                            Upload  GPL
                                         </Nav.Item>
                                    
                                     </Nav>

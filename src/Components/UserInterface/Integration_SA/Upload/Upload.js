@@ -97,8 +97,8 @@ const Upload = () => {
                 <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
                     <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
                     <Link underline='hover' onClick={() => { navigate('/tools/ix_tools') }}>IX Tools</Link>
-                    <Link underline='hover' onClick={() => { navigate('/tools/ix_tools/sa_slicing') }}>SA Slicing</Link>
-                    <Typography color='text.primary'>XML Upload</Typography>
+                    <Link underline='hover' onClick={() => { navigate('/tools/ix_tools/sa_slicing') }}>5G GPL</Link>
+                    <Typography color='text.primary'>GPL Upload</Typography>
                 </Breadcrumbs>
             </div>
             <Slide
@@ -111,7 +111,7 @@ const Upload = () => {
                     <Box className={classes.main_Box}>
                         <Box className={classes.Back_Box} sx={{ width: { md: '75%', xs: '100%' } }}>
                             <Box className={classes.Box_Hading} >
-                                Upload XML for SA Slicing
+                                Upload XML for 5G GPL
                             </Box>
                             <Stack spacing={2} sx={{ marginTop: "-40px" }} direction={'column'}>
 
@@ -173,7 +173,7 @@ const Upload = () => {
                                     textDecoration: "none"
                                 }}
                             >
-                                Download SA Slicing Report
+                                Download 5G GPL Report
                             </span>
                         </Button>
                     </Box>
