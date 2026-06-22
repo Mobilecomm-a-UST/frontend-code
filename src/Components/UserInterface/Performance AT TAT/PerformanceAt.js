@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Loader from '../../Skeleton/Loader'
 import { Garage } from '@mui/icons-material';
+import { getDecreyptedData } from '../../utils/localstorage'
 
 const PerformanceTool = lazy(() => import("./PerformanceTool"));
 const FileManager = lazy(() => import("./File Manager/File_Manager"));
@@ -33,6 +34,7 @@ const PerformanceAt = () => {
     const [activeKey, setActiveKey] = useState();
     const [states, setStates] = useState([])
     const navigate = useNavigate()
+      const userTypes = (getDecreyptedData('user_type')?.split(","))
 
     useEffect(() => {
         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
@@ -67,14 +69,14 @@ const PerformanceAt = () => {
                                         <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 19 }}>
                                             PERFORMANCE AT
                                         </Nav>
-                                        <Nav.Item
+                                            {!userTypes?.includes('PAT') &&<Nav.Item
                                             eventKey="1"
                                             placement="rightStart"
                                             icon={<FileUploadIcon />}
                                             onClick={() => navigate('/tools/performance_at_tat/file_manager')}
                                         >
                                             File Manager
-                                        </Nav.Item>
+                                        </Nav.Item>}
 
                                         <Nav.Menu eventKey="2" style={{ fontWeight: 400, color: 'white' }} placement="leftStart" className="menu-title-custom" title="Performance AT" icon={<DashboardIcon />}  >
                                             <Nav.Item
@@ -175,7 +177,7 @@ const PerformanceAt = () => {
                         <Suspense fallback={<Loader />}>
                             <Routes>
                                 <Route element={<PerformanceTool />} path="/" />
-                                <Route element={<FileManager />} path="/file_manager" />
+                                 {!userTypes?.includes('PAT') &&<Route element={<FileManager />} path="/file_manager" />}
                                 <Route element={<FTR_Aging />} path="/FTR_Aging" />
                                 <Route element={<SCFT_FTR />} path="/SCFT_FTR" />
                                 <Route element={<SCFT_Aging />} path="/SCFT_Aging" />

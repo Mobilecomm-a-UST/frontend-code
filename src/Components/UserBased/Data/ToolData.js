@@ -421,7 +421,7 @@ const ToolData = [
 
         link: '/tools/performance_at_tat',
 
-        groupBy: ['admin', 'PAT']
+        groupBy: ['admin', 'PAT','PAT_Admin']
     },
     {
         id: 39,

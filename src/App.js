@@ -373,7 +373,7 @@ function App() {
 
             <Route path="/tools/performance_at_tat/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={PerformanceTAT} allowedUserTypes={['admin', 'PAT']} userType={userType} />
+                <ProtectedRoute element={PerformanceTAT} allowedUserTypes={['admin', 'PAT','PAT_Admin']} userType={userType} />
               </Suspense>
             } />
 
