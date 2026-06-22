@@ -16,12 +16,14 @@ const FileManager = lazy(() => import("./File Manager/File_Manager"));
 const FTR_Aging = lazy(() => import("./File Manager/FTR_Aging"));
 const SCFT_FTR = lazy(() => import("./File Manager/SCFT_FTR"));
 const MasterDashboard = lazy(() => import("./File Manager/MasterDashboard"));
+
 const SCFT_Aging = lazy(() => import("./File Manager/SCFT_Aging"));
 const Performance_SR_Wise = lazy(() => import("./File Manager/Performance_SR_Wise"));
 const PerformanceAtPendingAging = lazy(() => import("./perATPendingAging/MasterDashboard"));
 const Performance_Aging_Graph = lazy(() => import("./File Manager/Performance_Aging_Graph"));
 const SCFT_Aging_Graph = lazy(() => import("./perATPendingAging/SCFT_Aging_Graph"));
 const Aging5G = lazy(() => import("./Soft AT/Aging5G"));
+
 // const UploadPerformanceAt = lazy(() => import("./Upload_Performance_At/UploadPerformanceAt"));
 // const Dashboard = lazy(() => import("./Dashboard/Dashboard"));
 

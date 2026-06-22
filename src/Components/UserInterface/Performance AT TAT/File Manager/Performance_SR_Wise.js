@@ -397,20 +397,20 @@ const getDefaultStartDate = () => {
 // ── Table Columns ─────────────────────────────────────────────────────────────
 const COLUMNS = [
     { label: "Circle", key: "Circle" },
-    { label: "PAT",    key: "PAT"    },
-    { label: "SAT",    key: "SAT"    },
-    { label: "KAT",    key: "KAT"    },
-    { label: "SCFT",   key: "SCFT"   },
+    { label: "PAT", key: "PAT" },
+    { label: "SAT", key: "SAT" },
+    { label: "KAT", key: "KAT" },
+    { label: "SCFT", key: "SCFT" },
 ];
 
 const STATUS_COLS = ["PAT", "SAT", "KAT", "SCFT"];
 
 // ── 5G Colour Theme ───────────────────────────────────────────────────────────
 const COLORS = {
-    titleBg:  "linear-gradient(135deg, #134e5e 0%, #71b280 100%)",
+    titleBg: "linear-gradient(135deg, #134e5e 0%, #71b280 100%)",
     headerBg: "linear-gradient(135deg, #0b3d2e 0%, #1f4037 100%)",
-    badge:    "#2e7d32",
-    border:   "#1f4037",
+    badge: "#2e7d32",
+    border: "#1f4037",
 };
 
 // ── Status Cell Colour Helper ─────────────────────────────────────────────────
@@ -418,16 +418,16 @@ const COLORS = {
 // When value is a number  — the whole cell becomes a clickable link chip.
 const STATUS_COLORS = {
     accepted: { color: "#1b5e20", bg: "#e8f5e9", border: "#a5d6a7" },
-    pending:  { color: "#e65100", bg: "#fff3e0", border: "#ffcc80" },
-    offered:  { color: "#0d47a1", bg: "#e3f2fd", border: "#90caf9" },
+    pending: { color: "#e65100", bg: "#fff3e0", border: "#ffcc80" },
+    offered: { color: "#0d47a1", bg: "#e3f2fd", border: "#90caf9" },
 };
 
 const getStatusStyle = (value) => {
     if (!value || value === "-" || value === "") return {};
     const v = String(value).toLowerCase();
     if (v === "accepted") return { color: "#1b5e20", fontWeight: 600 };
-    if (v === "pending")  return { color: "#e65100", fontWeight: 600 };
-    if (v === "offered")  return { color: "#0d47a1", fontWeight: 600 };
+    if (v === "pending") return { color: "#e65100", fontWeight: 600 };
+    if (v === "offered") return { color: "#0d47a1", fontWeight: 600 };
     return {};
 };
 
@@ -496,7 +496,7 @@ const Performance_SR_Wise = () => {
 
     const [apiResponse, setApiResponse] = useState(null);
     const [startDate, setStartDate] = useState(getDefaultStartDate());
-    const [endDate, setEndDate]     = useState(todayStr);
+    const [endDate, setEndDate] = useState(todayStr);
 
     // ── Fetch ─────────────────────────────────────────────────────────────
     const fetchData = async () => {
@@ -508,10 +508,10 @@ const Performance_SR_Wise = () => {
 
             const formData = new FormData();
             formData.append("start_date", startDate);
-            formData.append("end_date",   endDate);
+            formData.append("end_date", endDate);
 
             const res = await postData(
-                "performance_idploy/generate-performance-at-srwise-report/",
+                "performance_idploy/generate-atsrwise-summary/",
                 formData
             );
 
@@ -561,10 +561,10 @@ const Performance_SR_Wise = () => {
         });
     };
 
-    const tableRows      = apiResponse?.data || [];
+    const tableRows = apiResponse?.summary || [];
     const dateRangeLabel = startDate && endDate ? `${startDate}  to  ${endDate}` : "";
-    const titleLabel     = dateRangeLabel ? `AT Report  |  ${dateRangeLabel}` : "AT Report";
-    const STRIPE         = "#f4f7fb";
+    const titleLabel = dateRangeLabel ? `AT Report  |  ${dateRangeLabel}` : "AT Report";
+    const STRIPE = "#f4f7fb";
 
     // ── Cell renderer ─────────────────────────────────────────────────────
     // For STATUS columns:
@@ -595,8 +595,8 @@ const Performance_SR_Wise = () => {
                         statusKey={statusKey}
                         onClick={() =>
                             handleCountClick({
-                                circle:    row["Circle"],
-                                column:    col.key,
+                                circle: row["Circle"],
+                                column: col.key,
                                 statusKey,
                                 count: n,
                             })
@@ -614,7 +614,7 @@ const Performance_SR_Wise = () => {
         // Expected shape: row["PAT_pending"] = 3, row["PAT_offered"] = 1 …
         const flatKeys = ["pending", "offered", "accepted"].map((s) => ({
             statusKey: s,
-            flatKey:   `${col.key}_${s}`,
+            flatKey: `${col.key}_${s}`,
         }));
         const hasFlatNums = flatKeys.some(({ flatKey }) => isNumeric(row[flatKey]));
         if (hasFlatNums) {
@@ -627,8 +627,8 @@ const Performance_SR_Wise = () => {
                         statusKey={statusKey}
                         onClick={() =>
                             handleCountClick({
-                                circle:    row["Circle"],
-                                column:    col.key,
+                                circle: row["Circle"],
+                                column: col.key,
                                 statusKey,
                                 count: row[flatKey],
                             })
@@ -643,6 +643,30 @@ const Performance_SR_Wise = () => {
         }
 
         // ── String mode (current API) ─────────────────────────────────────
+        // ── Plain number mode (current API returns a single count) ────────
+        // e.g. row.PAT = 3  →  show as a clickable "Pending" chip (all counts
+        //      from summary are pending counts, adjust statusKey as needed)
+        if (isNumeric(val) && Number(val) > 0) {
+            return (
+                <CountChip
+                    count={Number(val)}
+                    statusKey="pending"
+                    onClick={() =>
+                        handleCountClick({
+                            circle: row["Circle"],
+                            column: col.key,
+                            statusKey: "pending",
+                            count: Number(val),
+                        })
+                    }
+                />
+            );
+        }
+        if (isNumeric(val) && Number(val) === 0) {
+            return <span style={{ color: "#9e9e9e", fontSize: 12 }}>0</span>;
+        }
+
+        // ── String mode ───────────────────────────────────────────────────
         const strVal = val !== null && val !== undefined && val !== "" ? String(val) : "-";
         return (
             <span style={getStatusStyle(strVal)}>{strVal}</span>
