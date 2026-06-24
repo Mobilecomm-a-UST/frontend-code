@@ -69,6 +69,7 @@ const DailyTaskReview = lazy(() => import('./Components/UserInterface/DailyTaskR
 const PerformaceATPendingAging = lazy(() => import('./Components/UserInterface/Performance AT Pending Aging/PerformancePending'))
 const Soft_AT_Tool = lazy(() => import('./Components/UserInterface/Soft_AT_Tool/Soft_AT_Tool'))
 const VI_SoftAT = lazy(() => import('./Components/UserInterface/VI_SoftAT/VI_SoftAT'))
+const IX_Ericsson = lazy(()=> import('./Components/UserInterface/IX Audit Ericsson/Audit_Ericsson'))
 
 const queryClient = new QueryClient()
 
@@ -327,7 +328,7 @@ function App() {
 
             <Route path="/tools/ix_tools/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={IxTools} allowedUserTypes={['admin', 'IX', 'VI_IX', 'VI_IX_reader', 'soft_at_team', "IX_SA", 'quality', 'IX_reader', 'quality-s']} userType={userType} />
+                <ProtectedRoute element={IxTools} allowedUserTypes={['admin', 'IX', 'VI_IX', 'VI_IX_reader', 'soft_at_team', "IX_SA", "IX_ER",'quality', 'IX_reader', 'quality-s']} userType={userType} />
               </Suspense>
             } />
 
@@ -340,6 +341,12 @@ function App() {
             <Route path="/tools/ix_tools/sa_slicing/*" element={
               <Suspense fallback={<div>Loading...</div>}>
                 <ProtectedRoute element={SA_Slicing} allowedUserTypes={['admin', 'IX_SA']} userType={userType} />
+              </Suspense>
+            } />
+
+            <Route path="/tools/ix_tools/ix_ericsson/*" element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProtectedRoute element={IX_Ericsson} allowedUserTypes={['admin', 'IX_ER']} userType={userType} />
               </Suspense>
             } />
 
