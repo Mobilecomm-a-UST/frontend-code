@@ -24,6 +24,8 @@ const PerformanceAtPendingAging = lazy(() => import("./perATPendingAging/MasterD
 const Performance_Aging_Graph = lazy(() => import("./File Manager/Performance_Aging_Graph"));
 const SCFT_Aging_Graph = lazy(() => import("./perATPendingAging/SCFT_Aging_Graph"));
 const Aging5G = lazy(() => import("./Soft AT/Aging5G"));
+const SR_Wise_Hyper =lazy(()=> import ("./File Manager/SR_Wise_Hyperlink"));
+
 
 // const UploadPerformanceAt = lazy(() => import("./Upload_Performance_At/UploadPerformanceAt"));
 // const Dashboard = lazy(() => import("./Dashboard/Dashboard"));
@@ -189,6 +191,7 @@ const PerformanceAt = () => {
                                 <Route element={<Performance_Aging_Graph />} path="/Performance_Aging_Graph" />
                                 <Route element={<SCFT_Aging_Graph />} path="/SCFT_Aging_Graph" />
                                 <Route element={<Aging5G />} path="/Aging5G" />
+                                <Route element ={<SR_Wise_Hyper/>} path= "/SR_Wise_Hyperlink"/>
                             </Routes>
                         </Suspense>
                     </Grid>
