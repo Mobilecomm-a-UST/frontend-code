@@ -70,6 +70,7 @@ const PerformaceATPendingAging = lazy(() => import('./Components/UserInterface/P
 const Soft_AT_Tool = lazy(() => import('./Components/UserInterface/Soft_AT_Tool/Soft_AT_Tool'))
 const VI_SoftAT = lazy(() => import('./Components/UserInterface/VI_SoftAT/VI_SoftAT'))
 const IX_Ericsson = lazy(()=> import('./Components/UserInterface/IX Audit Ericsson/Audit_Ericsson'))
+const ResourceManagement = lazy(() => import('./Components/UserInterface/ResourceManagement/Resource_management'));
 
 const queryClient = new QueryClient()
 
@@ -411,6 +412,12 @@ function App() {
             <Route path="/tools/soft_at_tools/airtel_soft_at/*" element={
               <Suspense fallback={<div>Loading...</div>}>
                 <ProtectedRoute element={SoftAT} allowedUserTypes={['soft_at_team', 'admin', 'soft_at']} userType={userType} />
+              </Suspense>
+            } />
+
+            <Route path="/tools/resource_management/*" element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProtectedRoute element={ResourceManagement} allowedUserTypes={['admin', 'RM']} userType={userType} />
               </Suspense>
             } />
 
