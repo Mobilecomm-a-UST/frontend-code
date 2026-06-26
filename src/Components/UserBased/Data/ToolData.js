@@ -432,36 +432,17 @@ const ToolData = [
         link: '/tools/daily_task_review',
         groupBy: ['admin', 'DTR']
     },
-    {
-        id: 40,
-        name: 'Resource Mgt',
-        title: 'Resource Management System',
-        icons: DateTaskIcon,
-        fullname: 'Resource Management',
-        link: '/tools/resource_management',
-        groupBy: ['admin',"RM"]
-    },
-
     // {
     //     id: 40,
-
-    //     name:
-    //         'Performance Aging',
-    //     title: 'This is Performance AT Pending Aging Tool',
-
-    //     icons: () => (
-    //         <HugeiconsIcon
-    //             icon={DashboardCircleEditIcon}
-    //             size={30}
-    //         />
-    //     ),
-
-    //     fullname: 'Performance AT Pending Aging',
-
-    //     link: '/tools/performance_at_pending_aging',
-
-    //     groupBy: ['admin', 'PAP']
+    //     name: 'Resource Mgt',
+    //     title: 'Resource Management System',
+    //     icons: DateTaskIcon,
+    //     fullname: 'Resource Management',
+    //     link: '/tools/resource_management',
+    //     groupBy: ['admin',"RM"]
     // },
+
+  
 
 
 ]

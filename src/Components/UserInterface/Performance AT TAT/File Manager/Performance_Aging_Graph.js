@@ -2107,7 +2107,7 @@ const METRIC_THEME = {
         chartFrom: "#1e3c72",
         chartTo: "#2a5298",
         icon: <BarChartIcon sx={{ color: "#fff", fontSize: 20 }} />,
-        label: "SCFT Aging — Performance",
+        label: "Performance Aging — Performance",
     },
     offered: {
         active: "linear-gradient(135deg,#134e5e,#71b280)",
@@ -2115,7 +2115,7 @@ const METRIC_THEME = {
         chartFrom: "#134e5e",
         chartTo: "#71b280",
         icon: <SignalCellularAltIcon sx={{ color: "#fff", fontSize: 20 }} />,
-        label: "SCFT Aging — Offered",
+        label: "Performance Aging — Offered",
     },
 };
 

@@ -23,6 +23,7 @@ const DailyTaskTool = lazy(() => import("./DailyTaskTool"));
 const AddTask = lazy(() => import("./AdminPanel/AddTask/AddTask"));
 const AssignTask = lazy(() => import("./AssignTask/AssignTask"));
 const MyTask = lazy(() => import("./MyTask/MyTask"));
+const AddEmail = lazy(()=> import("./AdminPanel/AddTask/AddEmail"));
 const Dashboard = lazy(() => import("./Dashboard/Dashboard"));
 
 
@@ -101,6 +102,10 @@ const DailyTaskReview = () => {
                                                     <Nav.Item eventKey="1-1" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/daily_task_review/AddTask'); show(); setMenuButton(true) }}>
                                                         Add Task
                                                     </Nav.Item>
+
+                                                     <Nav.Item eventKey="1-2" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} onClick={() => { navigate('/tools/daily_task_review/AddEmail'); show(); setMenuButton(true) }}>
+                                                        Add Email
+                                                    </Nav.Item>
                                                 </Nav.Menu>
                                             {/* } */}
 
@@ -138,6 +143,7 @@ const DailyTaskReview = () => {
                             <Routes>
                                 <Route path="/" element={<DailyTaskTool />} />
                                 <Route path="/AddTask" element={<AddTask />} />
+                                <Route path='/AddEmail' element={<AddEmail/>}/>
                                 <Route path="/AssignTask" element={<AssignTask />} />
                                 <Route path="/MyTask" element={<MyTask />} />
                                 <Route path="/Dashboard" element={<Dashboard />} />

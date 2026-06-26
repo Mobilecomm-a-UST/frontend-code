@@ -19,6 +19,7 @@ const SCFT_FTR = lazy(() => import("./File Manager/SCFT_FTR"));
 const MasterDashboard = lazy(() => import("./File Manager/MasterDashboard"));
 
 const SCFT_Aging = lazy(() => import("./File Manager/SCFT_Aging"));
+const SCFT_Pending_Aging = lazy(()=> import("./perATPendingAging/Scft_Pending_Aging"));
 const Performance_SR_Wise = lazy(() => import("./File Manager/Performance_SR_Wise"));
 const PerformanceAtPendingAging = lazy(() => import("./perATPendingAging/MasterDashboard"));
 const Performance_Aging_Graph = lazy(() => import("./File Manager/Performance_Aging_Graph"));
@@ -129,8 +130,17 @@ const PerformanceAt = () => {
                                                 SCFT Aging
                                             </Nav.Item>
 
-                                             <Nav.Item
+                                             {/* <Nav.Item
                                                 eventKey="3-2"
+                                                placement="rightStart"
+                                                // icon={<DashboardIcon />}
+                                                onClick={() => navigate('/tools/performance_at_tat/SCFT_Pending_Aging')}
+                                            >
+                                             SCFT Pending Aging
+                                            </Nav.Item> */}
+
+                                             <Nav.Item
+                                                eventKey="3-3"
                                                 placement="rightStart"
                                                 // icon={<DashboardIcon />}
                                                 onClick={() => navigate('/tools/performance_at_tat/SCFT_FTR')}
@@ -139,7 +149,7 @@ const PerformanceAt = () => {
                                             </Nav.Item>
 
                                             <Nav.Item
-                                                eventKey="3-3"
+                                                eventKey="3-4"
                                                 placement="rightStart"
                                                 // icon={<DashboardIcon />}
                                                 onClick={() => navigate('/tools/performance_at_tat/Performance_SR_Wise')}
@@ -148,7 +158,7 @@ const PerformanceAt = () => {
                                             </Nav.Item>
 
                                              <Nav.Item
-                                                eventKey="3-4"
+                                                eventKey="3-5"
                                                 placement="rightStart"
                                                 // icon={<DashboardIcon />}
                                                 onClick={() => navigate('/tools/performance_at_tat/SCFT_Aging_Graph')}
@@ -185,6 +195,7 @@ const PerformanceAt = () => {
                                 <Route element={<FTR_Aging />} path="/FTR_Aging" />
                                 <Route element={<SCFT_FTR />} path="/SCFT_FTR" />
                                 <Route element={<SCFT_Aging />} path="/SCFT_Aging" />
+                                <Route element={<SCFT_Pending_Aging/>} path="/SCFT_Pending_Aging"/>
                                 <Route element={<Performance_SR_Wise />} path="/Performance_SR_Wise" />
                                 <Route element={<MasterDashboard />} path="/MasterDashboard" />
                                 <Route element={<PerformanceAtPendingAging />} path="/performance_at_pending_aging" />
