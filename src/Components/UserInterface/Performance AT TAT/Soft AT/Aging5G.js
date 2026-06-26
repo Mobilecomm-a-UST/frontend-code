@@ -691,13 +691,14 @@ const COLUMNS = [
     { label: "13-21 days", key: "13-21 days" },
     { label: "22-30 days", key: "22-30 days" },
     { label: ">30 days", key: ">30 days" },
-    { label: "Pending", key: "Pending" },
+    { label: "Performance Pending", key: "Performance Pending" },
+    { label: "Soft AT Pending", key: "Soft AT Pending" },
     { label: "Total", key: "Total" },
     { label: "<=12%", key: "<=12%" },
     { label: "13-21%", key: "13-21%" },
     { label: "22-30%", key: "22-30%" },
     { label: ">30%", key: ">30%" },
-    { label: "Pending%", key: "Pending%" },
+    { label: "Performance Pending%", key: "Performance Pending%" },
 ];
 
 // ── Tech colours ─────────────────────────────────────────────────────────────
