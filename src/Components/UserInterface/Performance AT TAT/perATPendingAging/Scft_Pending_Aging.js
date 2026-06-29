@@ -29,8 +29,9 @@ const CURRENT_MONTH = new Date().getMonth(); // 0-indexed
 const START_YEAR = 2000;
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
-const toApiFormat = (sel) =>
-    sel ? `${MONTH_SHORT[sel.month]} ${sel.year}` : "";
+
+// FIX: Removed toApiFormat — API now requires separate year + month fields,
+// not a combined "Mon YYYY" string. Use getApiYear() and getApiMonth() instead.
 
 const parseApiMonth = (str) => {
     if (!str) return null;
@@ -154,7 +155,7 @@ const SingleDatePicker = ({ value, onChange, label, maxDate, minDate }) => {
     for (let y = START_YEAR; y <= CURRENT_YEAR; y++) years.push(y);
 
     const getDaysInMonth = (y, m) => new Date(y, m + 1, 0).getDate();
-    const getFirstDayOfMonth = (y, m) => new Date(y, m, 1).getDay(); // 0=Sun
+    const getFirstDayOfMonth = (y, m) => new Date(y, m, 1).getDay();
 
     const isDateDisabled = (d) => {
         if (maxDate && d > maxDate) return true;
@@ -185,7 +186,6 @@ const SingleDatePicker = ({ value, onChange, label, maxDate, minDate }) => {
 
     const daysInMonth = getDaysInMonth(viewYear, viewMonth);
     const firstDayOfWeek = getFirstDayOfMonth(viewYear, viewMonth);
-
     const displayText = value ? toDisplayDate(value) : `Select ${label}`;
 
     return (
@@ -195,24 +195,16 @@ const SingleDatePicker = ({ value, onChange, label, maxDate, minDate }) => {
                 <Box
                     onClick={() => setOpen(p => !p)}
                     sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 1,
-                        px: 1.5,
-                        py: 0.7,
+                        display: "flex", alignItems: "center", gap: 1,
+                        px: 1.5, py: 0.7,
                         border: open ? "2px solid #1e3c72" : "1px solid #c4c4c4",
-                        borderRadius: "8px",
-                        cursor: "pointer",
-                        bgcolor: "#fff",
-                        minWidth: 160,
-                        userSelect: "none",
+                        borderRadius: "8px", cursor: "pointer", bgcolor: "#fff",
+                        minWidth: 160, userSelect: "none",
                         "&:hover": { borderColor: "#1e3c72" },
                     }}
                 >
                     <Box sx={{ flex: 1 }}>
-                        <Typography sx={{ fontSize: 10, color: "#888", lineHeight: 1, mb: 0.2 }}>
-                            {label}
-                        </Typography>
+                        <Typography sx={{ fontSize: 10, color: "#888", lineHeight: 1, mb: 0.2 }}>{label}</Typography>
                         <Typography sx={{ fontSize: 13, fontWeight: 600, color: value ? "#1a1a2e" : "#aaa", lineHeight: 1 }}>
                             {displayText}
                         </Typography>
@@ -222,51 +214,24 @@ const SingleDatePicker = ({ value, onChange, label, maxDate, minDate }) => {
 
                 {/* Dropdown */}
                 {open && (
-                    <Paper
-                        elevation={8}
-                        sx={{
-                            position: "absolute",
-                            top: "calc(100% + 6px)",
-                            right: 0,
-                            zIndex: 1400,
-                            borderRadius: "12px",
-                            overflow: "hidden",
-                            minWidth: 260,
-                            boxShadow: "0 8px 32px rgba(0,0,0,0.18)",
-                        }}
-                    >
+                    <Paper elevation={8} sx={{ position: "absolute", top: "calc(100% + 6px)", right: 0, zIndex: 1400, borderRadius: "12px", overflow: "hidden", minWidth: 260, boxShadow: "0 8px 32px rgba(0,0,0,0.18)" }}>
                         {/* Calendar Header */}
-                        <Box
-                            display="flex"
-                            alignItems="center"
-                            justifyContent="space-between"
-                            sx={{ px: 1.5, py: 1, borderBottom: "1px solid #e8ecf0", bgcolor: "#f5f7fa" }}
-                        >
+                        <Box display="flex" alignItems="center" justifyContent="space-between"
+                            sx={{ px: 1.5, py: 1, borderBottom: "1px solid #e8ecf0", bgcolor: "#f5f7fa" }}>
                             <IconButton size="small" onClick={prevMonth} sx={{ p: 0.5 }}>
                                 <KeyboardArrowRightIcon sx={{ transform: "rotate(180deg)", fontSize: 18 }} />
                             </IconButton>
-
-                            {/* Month/Year header — click year to open year list */}
                             <Box display="flex" alignItems="center" gap={0.5}>
                                 <Typography sx={{ fontSize: 13, fontWeight: 700, color: "#1a1a2e" }}>
                                     {MONTH_SHORT[viewMonth]}
                                 </Typography>
                                 <Box
                                     onClick={(e) => { e.stopPropagation(); setYearListOpen(p => !p); }}
-                                    sx={{
-                                        fontSize: 13,
-                                        fontWeight: 700,
-                                        color: "#1e3c72",
-                                        cursor: "pointer",
-                                        px: 0.5,
-                                        borderRadius: "4px",
-                                        "&:hover": { bgcolor: "#e8edf8" },
-                                    }}
+                                    sx={{ fontSize: 13, fontWeight: 700, color: "#1e3c72", cursor: "pointer", px: 0.5, borderRadius: "4px", "&:hover": { bgcolor: "#e8edf8" } }}
                                 >
                                     {viewYear} ▾
                                 </Box>
                             </Box>
-
                             <IconButton size="small" onClick={nextMonth} sx={{ p: 0.5 }}>
                                 <KeyboardArrowRightIcon sx={{ fontSize: 18 }} />
                             </IconButton>
@@ -274,40 +239,11 @@ const SingleDatePicker = ({ value, onChange, label, maxDate, minDate }) => {
 
                         {/* Year quick-select overlay */}
                         {yearListOpen && (
-                            <Box
-                                ref={yearListRef}
-                                onClick={(e) => e.stopPropagation()}
-                                sx={{
-                                    position: "absolute",
-                                    top: 44,
-                                    left: 0,
-                                    right: 0,
-                                    zIndex: 10,
-                                    maxHeight: 180,
-                                    overflowY: "auto",
-                                    bgcolor: "#fff",
-                                    border: "1px solid #e0e0e0",
-                                    boxShadow: "0 4px 12px rgba(0,0,0,0.12)",
-                                    "&::-webkit-scrollbar": { width: 4 },
-                                    "&::-webkit-scrollbar-thumb": { bgcolor: "#ccc", borderRadius: 2 },
-                                }}
-                            >
+                            <Box ref={yearListRef} onClick={(e) => e.stopPropagation()}
+                                sx={{ position: "absolute", top: 44, left: 0, right: 0, zIndex: 10, maxHeight: 180, overflowY: "auto", bgcolor: "#fff", border: "1px solid #e0e0e0", boxShadow: "0 4px 12px rgba(0,0,0,0.12)", "&::-webkit-scrollbar": { width: 4 }, "&::-webkit-scrollbar-thumb": { bgcolor: "#ccc", borderRadius: 2 } }}>
                                 {years.map((yr) => (
-                                    <Box
-                                        key={yr}
-                                        data-year={yr}
-                                        onClick={() => { setViewYear(yr); setYearListOpen(false); }}
-                                        sx={{
-                                            px: 2,
-                                            py: 0.7,
-                                            fontSize: 13,
-                                            cursor: "pointer",
-                                            fontWeight: viewYear === yr ? 700 : 400,
-                                            color: viewYear === yr ? "#fff" : "#374151",
-                                            bgcolor: viewYear === yr ? "#1e3c72" : "transparent",
-                                            "&:hover": { bgcolor: viewYear === yr ? "#1e3c72" : "#e8edf8" },
-                                        }}
-                                    >
+                                    <Box key={yr} data-year={yr} onClick={() => { setViewYear(yr); setYearListOpen(false); }}
+                                        sx={{ px: 2, py: 0.7, fontSize: 13, cursor: "pointer", fontWeight: viewYear === yr ? 700 : 400, color: viewYear === yr ? "#fff" : "#374151", bgcolor: viewYear === yr ? "#1e3c72" : "transparent", "&:hover": { bgcolor: viewYear === yr ? "#1e3c72" : "#e8edf8" } }}>
                                         {yr}
                                     </Box>
                                 ))}
@@ -315,65 +251,24 @@ const SingleDatePicker = ({ value, onChange, label, maxDate, minDate }) => {
                         )}
 
                         {/* Day-of-week headers */}
-                        <Box
-                            sx={{
-                                display: "grid",
-                                gridTemplateColumns: "repeat(7, 1fr)",
-                                px: 1,
-                                pt: 1,
-                            }}
-                        >
+                        <Box sx={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", px: 1, pt: 1 }}>
                             {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map(d => (
-                                <Box key={d} sx={{ textAlign: "center", fontSize: 11, color: "#9e9e9e", fontWeight: 600, py: 0.5 }}>
-                                    {d}
-                                </Box>
+                                <Box key={d} sx={{ textAlign: "center", fontSize: 11, color: "#9e9e9e", fontWeight: 600, py: 0.5 }}>{d}</Box>
                             ))}
                         </Box>
 
                         {/* Days grid */}
-                        <Box
-                            sx={{
-                                display: "grid",
-                                gridTemplateColumns: "repeat(7, 1fr)",
-                                px: 1,
-                                pb: 1,
-                                gap: 0.3,
-                            }}
-                        >
-                            {Array.from({ length: firstDayOfWeek }).map((_, i) => (
-                                <Box key={`empty-${i}`} />
-                            ))}
+                        <Box sx={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", px: 1, pb: 1, gap: 0.3 }}>
+                            {Array.from({ length: firstDayOfWeek }).map((_, i) => <Box key={`empty-${i}`} />)}
                             {Array.from({ length: daysInMonth }).map((_, i) => {
                                 const day = i + 1;
                                 const thisDate = new Date(viewYear, viewMonth, day);
                                 const disabled = isDateDisabled(thisDate);
-                                const isSelected = value &&
-                                    value.getFullYear() === viewYear &&
-                                    value.getMonth() === viewMonth &&
-                                    value.getDate() === day;
+                                const isSelected = value && value.getFullYear() === viewYear && value.getMonth() === viewMonth && value.getDate() === day;
                                 const isToday = thisDate.toDateString() === new Date().toDateString();
-
                                 return (
-                                    <Box
-                                        key={day}
-                                        onClick={() => handleDayClick(day)}
-                                        sx={{
-                                            textAlign: "center",
-                                            py: 0.6,
-                                            borderRadius: "6px",
-                                            fontSize: 12.5,
-                                            fontWeight: isSelected ? 700 : isToday ? 600 : 400,
-                                            cursor: disabled ? "not-allowed" : "pointer",
-                                            color: disabled ? "#ccc" : isSelected ? "#fff" : isToday ? "#1e3c72" : "#374151",
-                                            bgcolor: isSelected ? "#1e3c72" : "transparent",
-                                            border: isToday && !isSelected ? "1px solid #1e3c72" : "1px solid transparent",
-                                            transition: "all .1s",
-                                            "&:hover": disabled ? {} : {
-                                                bgcolor: isSelected ? "#1e3c72" : "#e8edf8",
-                                                color: isSelected ? "#fff" : "#1e3c72",
-                                            },
-                                        }}
-                                    >
+                                    <Box key={day} onClick={() => handleDayClick(day)}
+                                        sx={{ textAlign: "center", py: 0.6, borderRadius: "6px", fontSize: 12.5, fontWeight: isSelected ? 700 : isToday ? 600 : 400, cursor: disabled ? "not-allowed" : "pointer", color: disabled ? "#ccc" : isSelected ? "#fff" : isToday ? "#1e3c72" : "#374151", bgcolor: isSelected ? "#1e3c72" : "transparent", border: isToday && !isSelected ? "1px solid #1e3c72" : "1px solid transparent", transition: "all .1s", "&:hover": disabled ? {} : { bgcolor: isSelected ? "#1e3c72" : "#e8edf8", color: isSelected ? "#fff" : "#1e3c72" } }}>
                                         {day}
                                     </Box>
                                 );
@@ -381,24 +276,14 @@ const SingleDatePicker = ({ value, onChange, label, maxDate, minDate }) => {
                         </Box>
 
                         {/* Footer */}
-                        <Box
-                            display="flex"
-                            justifyContent="space-between"
-                            alignItems="center"
-                            sx={{ px: 2, py: 1, borderTop: "1px solid #e8ecf0", bgcolor: "#fafbfc" }}
-                        >
-                            <Button
-                                size="small"
-                                onClick={() => { onChange(null); setOpen(false); }}
-                                sx={{ textTransform: "none", fontSize: 12, color: "#374151", fontWeight: 600, "&:hover": { color: "#c62828" } }}
-                            >
+                        <Box display="flex" justifyContent="space-between" alignItems="center"
+                            sx={{ px: 2, py: 1, borderTop: "1px solid #e8ecf0", bgcolor: "#fafbfc" }}>
+                            <Button size="small" onClick={() => { onChange(null); setOpen(false); }}
+                                sx={{ textTransform: "none", fontSize: 12, color: "#374151", fontWeight: 600, "&:hover": { color: "#c62828" } }}>
                                 Clear
                             </Button>
-                            <Button
-                                size="small"
-                                onClick={() => { onChange(today()); setOpen(false); }}
-                                sx={{ textTransform: "none", fontSize: 12, color: "#1e3c72", fontWeight: 700, "&:hover": { bgcolor: "#e8edf8" } }}
-                            >
+                            <Button size="small" onClick={() => { onChange(today()); setOpen(false); }}
+                                sx={{ textTransform: "none", fontSize: 12, color: "#1e3c72", fontWeight: 700, "&:hover": { bgcolor: "#e8edf8" } }}>
                                 Today
                             </Button>
                         </Box>
@@ -441,94 +326,32 @@ const YearMonthPicker = ({ value, onChange, apiMonths }) => {
         setOpen(false);
     };
 
-    const displayText = value
-        ? `${MONTH_SHORT[value.month]} ${value.year}`
-        : "Select month";
+    const displayText = value ? `${MONTH_SHORT[value.month]} ${value.year}` : "Select month";
 
     return (
         <ClickAwayListener onClickAway={() => setOpen(false)}>
             <Box sx={{ position: "relative", display: "inline-block" }}>
-                <Box
-                    onClick={() => setOpen((p) => !p)}
-                    sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 1,
-                        px: 1.5,
-                        py: 0.7,
-                        border: open ? "2px solid #1e3c72" : "1px solid #c4c4c4",
-                        borderRadius: "8px",
-                        cursor: "pointer",
-                        bgcolor: "#fff",
-                        minWidth: 180,
-                        userSelect: "none",
-                        "&:hover": { borderColor: "#1e3c72" },
-                    }}
-                >
+                <Box onClick={() => setOpen((p) => !p)}
+                    sx={{ display: "flex", alignItems: "center", gap: 1, px: 1.5, py: 0.7, border: open ? "2px solid #1e3c72" : "1px solid #c4c4c4", borderRadius: "8px", cursor: "pointer", bgcolor: "#fff", minWidth: 180, userSelect: "none", "&:hover": { borderColor: "#1e3c72" } }}>
                     <Box sx={{ flex: 1 }}>
-                        <Typography sx={{ fontSize: 10, color: "#888", lineHeight: 1, mb: 0.2 }}>
-                            Month
-                        </Typography>
-                        <Typography sx={{ fontSize: 14, fontWeight: 600, color: value ? "#1a1a2e" : "#aaa", lineHeight: 1 }}>
-                            {displayText}
-                        </Typography>
+                        <Typography sx={{ fontSize: 10, color: "#888", lineHeight: 1, mb: 0.2 }}>Month</Typography>
+                        <Typography sx={{ fontSize: 14, fontWeight: 600, color: value ? "#1a1a2e" : "#aaa", lineHeight: 1 }}>{displayText}</Typography>
                     </Box>
                     <CalendarMonthIcon sx={{ fontSize: 20, color: open ? "#1e3c72" : "#aaa" }} />
                 </Box>
 
                 {open && (
-                    <Paper
-                        elevation={8}
-                        sx={{
-                            position: "absolute",
-                            top: "calc(100% + 6px)",
-                            right: 0,
-                            zIndex: 1400,
-                            borderRadius: "12px",
-                            overflow: "hidden",
-                            minWidth: 310,
-                            boxShadow: "0 8px 32px rgba(0,0,0,0.18)",
-                        }}
-                    >
+                    <Paper elevation={8} sx={{ position: "absolute", top: "calc(100% + 6px)", right: 0, zIndex: 1400, borderRadius: "12px", overflow: "hidden", minWidth: 310, boxShadow: "0 8px 32px rgba(0,0,0,0.18)" }}>
                         <Box display="flex" sx={{ height: 240 }}>
                             {/* Year list */}
-                            <Box
-                                ref={yearListRef}
-                                sx={{
-                                    width: 80,
-                                    overflowY: "auto",
-                                    bgcolor: "#f5f7fa",
-                                    borderRight: "1px solid #e8ecf0",
-                                    py: 0.5,
-                                    "&::-webkit-scrollbar": { width: 4 },
-                                    "&::-webkit-scrollbar-thumb": { bgcolor: "#ccc", borderRadius: 2 },
-                                }}
-                            >
+                            <Box ref={yearListRef}
+                                sx={{ width: 80, overflowY: "auto", bgcolor: "#f5f7fa", borderRight: "1px solid #e8ecf0", py: 0.5, "&::-webkit-scrollbar": { width: 4 }, "&::-webkit-scrollbar-thumb": { bgcolor: "#ccc", borderRadius: 2 } }}>
                                 {years.map((yr) => {
                                     const isSelected = value?.year === yr;
                                     const isHovered = hoveredYear === yr;
                                     return (
-                                        <Box
-                                            key={yr}
-                                            data-year={yr}
-                                            onClick={() => setHoveredYear(yr)}
-                                            sx={{
-                                                px: 2,
-                                                py: 0.9,
-                                                cursor: "pointer",
-                                                fontSize: 13.5,
-                                                fontWeight: isSelected || isHovered ? 700 : 400,
-                                                color: isSelected ? "#fff" : isHovered ? "#1e3c72" : "#374151",
-                                                bgcolor: isSelected ? "#1e3c72" : isHovered ? "#e8edf8" : "transparent",
-                                                borderRadius: "6px",
-                                                mx: 0.5,
-                                                transition: "all .12s",
-                                                "&:hover": {
-                                                    bgcolor: isSelected ? "#1e3c72" : "#dde4f5",
-                                                    color: isSelected ? "#fff" : "#1e3c72",
-                                                },
-                                            }}
-                                        >
+                                        <Box key={yr} data-year={yr} onClick={() => setHoveredYear(yr)}
+                                            sx={{ px: 2, py: 0.9, cursor: "pointer", fontSize: 13.5, fontWeight: isSelected || isHovered ? 700 : 400, color: isSelected ? "#fff" : isHovered ? "#1e3c72" : "#374151", bgcolor: isSelected ? "#1e3c72" : isHovered ? "#e8edf8" : "transparent", borderRadius: "6px", mx: 0.5, transition: "all .12s", "&:hover": { bgcolor: isSelected ? "#1e3c72" : "#dde4f5", color: isSelected ? "#fff" : "#1e3c72" } }}>
                                             {yr}
                                         </Box>
                                     );
@@ -536,41 +359,14 @@ const YearMonthPicker = ({ value, onChange, apiMonths }) => {
                             </Box>
 
                             {/* Month grid */}
-                            <Box
-                                sx={{
-                                    flex: 1,
-                                    p: 1.5,
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    justifyContent: "center",
-                                }}
-                            >
+                            <Box sx={{ flex: 1, p: 1.5, display: "flex", flexDirection: "column", justifyContent: "center" }}>
                                 <Box sx={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 0.8 }}>
                                     {MONTH_SHORT.map((mn, mIdx) => {
                                         const disabled = isDisabled(hoveredYear, mIdx);
                                         const isActive = value?.year === hoveredYear && value?.month === mIdx;
                                         return (
-                                            <Box
-                                                key={mn}
-                                                onClick={() => handleMonthClick(hoveredYear, mIdx)}
-                                                sx={{
-                                                    textAlign: "center",
-                                                    py: 0.8,
-                                                    borderRadius: "8px",
-                                                    fontSize: 13,
-                                                    fontWeight: isActive ? 700 : 400,
-                                                    cursor: disabled ? "not-allowed" : "pointer",
-                                                    color: disabled ? "#ccc" : isActive ? "#fff" : "#374151",
-                                                    bgcolor: isActive ? "#1e3c72" : "transparent",
-                                                    border: isActive ? "none" : "1px solid transparent",
-                                                    transition: "all .12s",
-                                                    "&:hover": disabled ? {} : {
-                                                        bgcolor: isActive ? "#1e3c72" : "#e8edf8",
-                                                        color: isActive ? "#fff" : "#1e3c72",
-                                                        borderColor: "#bcd0f0",
-                                                    },
-                                                }}
-                                            >
+                                            <Box key={mn} onClick={() => handleMonthClick(hoveredYear, mIdx)}
+                                                sx={{ textAlign: "center", py: 0.8, borderRadius: "8px", fontSize: 13, fontWeight: isActive ? 700 : 400, cursor: disabled ? "not-allowed" : "pointer", color: disabled ? "#ccc" : isActive ? "#fff" : "#374151", bgcolor: isActive ? "#1e3c72" : "transparent", border: isActive ? "none" : "1px solid transparent", transition: "all .12s", "&:hover": disabled ? {} : { bgcolor: isActive ? "#1e3c72" : "#e8edf8", color: isActive ? "#fff" : "#1e3c72", borderColor: "#bcd0f0" } }}>
                                                 {mn}
                                             </Box>
                                         );
@@ -580,24 +376,14 @@ const YearMonthPicker = ({ value, onChange, apiMonths }) => {
                         </Box>
 
                         {/* Footer */}
-                        <Box
-                            display="flex"
-                            justifyContent="space-between"
-                            alignItems="center"
-                            sx={{ px: 2, py: 1, borderTop: "1px solid #e8ecf0", bgcolor: "#fafbfc" }}
-                        >
-                            <Button
-                                size="small"
-                                onClick={() => { onChange(null); setOpen(false); }}
-                                sx={{ textTransform: "none", fontSize: 13, color: "#374151", fontWeight: 600, "&:hover": { color: "#c62828" } }}
-                            >
+                        <Box display="flex" justifyContent="space-between" alignItems="center"
+                            sx={{ px: 2, py: 1, borderTop: "1px solid #e8ecf0", bgcolor: "#fafbfc" }}>
+                            <Button size="small" onClick={() => { onChange(null); setOpen(false); }}
+                                sx={{ textTransform: "none", fontSize: 13, color: "#374151", fontWeight: 600, "&:hover": { color: "#c62828" } }}>
                                 Clear
                             </Button>
-                            <Button
-                                size="small"
-                                onClick={() => { onChange({ year: CURRENT_YEAR, month: CURRENT_MONTH }); setOpen(false); }}
-                                sx={{ textTransform: "none", fontSize: 13, color: "#1e3c72", fontWeight: 700, "&:hover": { bgcolor: "#e8edf8" } }}
-                            >
+                            <Button size="small" onClick={() => { onChange({ year: CURRENT_YEAR, month: CURRENT_MONTH }); setOpen(false); }}
+                                sx={{ textTransform: "none", fontSize: 13, color: "#1e3c72", fontWeight: 700, "&:hover": { bgcolor: "#e8edf8" } }}>
                                 This month
                             </Button>
                         </Box>
@@ -623,10 +409,8 @@ const TechTable = ({ tech, apiResponse, titleLabel }) => {
             <table style={{ width: "100%", borderCollapse: "collapse", tableLayout: "auto", minWidth: 500 }}>
                 <thead>
                     <tr>
-                        <th
-                            colSpan={COLUMNS.length + 1}
-                            style={{ ...cellSt, background: colors.active, color: "#fff", fontSize: 14, fontWeight: 700, textAlign: "center", padding: "8px 12px", border: "1px solid #2e4a70" }}
-                        >
+                        <th colSpan={COLUMNS.length + 1}
+                            style={{ ...cellSt, background: colors.active, color: "#fff", fontSize: 14, fontWeight: 700, textAlign: "center", padding: "8px 12px", border: "1px solid #2e4a70" }}>
                             {titleLabel || "Select a date range or month to load data"}
                         </th>
                     </tr>
@@ -689,24 +473,24 @@ const Scft_Pending_Aging = () => {
     const [startDate, setStartDate] = useState(firstOfMonth());
     const [endDate, setEndDate] = useState(today());
 
-    // ── Derived values ────────────────────────────────────────────────────
-    const apiMonthValue = toApiFormat(selected); // "Jun 2026"
-
+    // ── Derived title label ───────────────────────────────────────────────
     const titleLabel = (() => {
-        if (filterMode === "month") {
-            return apiMonthValue ? `SCFT Pending Aging | ${apiMonthValue}` : "";
-        } else {
+        if (filterMode === "month" && selected) {
+            // FIX: Use separate year + month fields matching the API contract
+            return `SCFT Pending Aging | ${MONTH_SHORT[selected.month]} ${selected.year}`;
+        } else if (filterMode === "daterange") {
             const s = startDate ? toDisplayDate(startDate) : "?";
             const e = endDate ? toDisplayDate(endDate) : "?";
             return startDate && endDate ? `SCFT Pending Aging | ${s} – ${e}` : "";
         }
+        return "";
     })();
 
     // ── Fetch table data ──────────────────────────────────────────────────
     const fetchData = useCallback(async () => {
         const canFetch =
             filterMode === "month"
-                ? !!apiMonthValue
+                ? !!selected
                 : !!startDate && !!endDate && startDate <= endDate;
 
         if (!canFetch) return;
@@ -716,7 +500,10 @@ const Scft_Pending_Aging = () => {
             const formData = new FormData();
 
             if (filterMode === "month") {
-                formData.append("month", apiMonthValue);
+                // FIX: API expects month as a number (1–12), not a short name.
+                // selected.month is 0-indexed so we add 1 → Jan=1, Feb=2 … Dec=12
+                formData.append("year", String(selected.year));
+                formData.append("month", String(selected.month + 1));
             } else {
                 formData.append("start_date", toDateString(startDate));
                 formData.append("end_date", toDateString(endDate));
@@ -730,7 +517,7 @@ const Scft_Pending_Aging = () => {
         } finally {
             action(false);
         }
-    }, [filterMode, apiMonthValue, startDate, endDate]);
+    }, [filterMode, selected, startDate, endDate]);
 
     useEffect(() => {
         const timer = setTimeout(() => fetchData(), 400);
@@ -787,18 +574,9 @@ const Scft_Pending_Aging = () => {
                                 borderRadius: "8px",
                                 overflow: "hidden",
                                 "& .MuiToggleButton-root": {
-                                    border: "none",
-                                    px: 1.5,
-                                    py: 0.6,
-                                    fontSize: 12,
-                                    fontWeight: 600,
-                                    textTransform: "none",
-                                    color: "#555",
-                                    "&.Mui-selected": {
-                                        bgcolor: "#1e3c72",
-                                        color: "#fff",
-                                        "&:hover": { bgcolor: "#1e3c72" },
-                                    },
+                                    border: "none", px: 1.5, py: 0.6, fontSize: 12, fontWeight: 600,
+                                    textTransform: "none", color: "#555",
+                                    "&.Mui-selected": { bgcolor: "#1e3c72", color: "#fff", "&:hover": { bgcolor: "#1e3c72" } },
                                 },
                             }}
                         >
@@ -828,20 +606,14 @@ const Scft_Pending_Aging = () => {
                                     label="Start Date"
                                     value={startDate}
                                     maxDate={endDate || today()}
-                                    onChange={(d) => {
-                                        setStartDate(d);
-                                        setApiResponse(null);
-                                    }}
+                                    onChange={(d) => { setStartDate(d); setApiResponse(null); }}
                                 />
                                 <Typography sx={{ fontSize: 12, color: "#888", fontWeight: 600 }}>to</Typography>
                                 <SingleDatePicker
                                     label="End Date"
                                     value={endDate}
                                     minDate={startDate}
-                                    onChange={(d) => {
-                                        setEndDate(d);
-                                        setApiResponse(null);
-                                    }}
+                                    onChange={(d) => { setEndDate(d); setApiResponse(null); }}
                                 />
                             </Box>
                         )}
@@ -869,11 +641,8 @@ const Scft_Pending_Aging = () => {
                                 key={tab.key}
                                 onClick={() => setActiveTech(tab.key)}
                                 sx={{
-                                    px: 3, py: 1,
-                                    cursor: "pointer",
-                                    userSelect: "none",
-                                    fontWeight: isActive ? 700 : 500,
-                                    fontSize: 14,
+                                    px: 3, py: 1, cursor: "pointer", userSelect: "none",
+                                    fontWeight: isActive ? 700 : 500, fontSize: 14,
                                     color: isActive ? "#fff" : tColor.tabColor,
                                     background: isActive ? tColor.active : "transparent",
                                     borderRadius: "6px 6px 0 0",
