@@ -122,9 +122,9 @@ const DailyTaskReview = () => {
                                                  My Task
                                             </Nav.Item>
 
-                                            <Nav.Item eventKey="4" placement="rightStart" className="single-item-custom" icon={< ImportIcon style={{}} />} onClick={() => { navigate('/tools/daily_task_review/'); show(); setMenuButton(true) }}>
+                                            {/* <Nav.Item eventKey="4" placement="rightStart" className="single-item-custom" icon={< ImportIcon style={{}} />} onClick={() => { navigate('/tools/daily_task_review/'); show(); setMenuButton(true) }}>
                                                 Task Templates
-                                            </Nav.Item>
+                                            </Nav.Item> */}
 
                                             {/* <Nav.Item eventKey="1" placement="rightStart" className="single-item-custom" icon={<FolderIcon style={{}} />} onClick={() => { navigate('/tools/full_site_dismantle/file_manager'); show(); setMenuButton(true) }}>
                                                 File Manager
