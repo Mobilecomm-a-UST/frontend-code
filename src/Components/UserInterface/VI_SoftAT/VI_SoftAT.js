@@ -11,11 +11,16 @@ import FileUploadIcon from '@rsuite/icons/FileUpload';
 import ConversionIcon from '@rsuite/icons/Conversion';
 import { getDecreyptedData } from '../../utils/localstorage';
 import Loader from '../../Skeleton/Loader';
+import NavMenu from 'rsuite/esm/Nav/NavMenu';
 
 const VI_SoftAT_Tool = lazy(() => import('./VI_SoftAT_Tool'))
 const Vi_Checklist = lazy(() => import('./VI_Checklist/Vi_checklist'))
 const UploadFile = lazy(() => import('./VI_Checklist/UploadFile'))
 const VI_FTR_Dashboard = lazy(() => import('./VI_Checklist/VI_FTR_Dashboard/VI_FTR_Dashboard'))
+const FourG = lazy(()=> import('./VI_Summary/FourG'))
+const TwoG = lazy(()=> import('./VI_Summary/TwoG'))
+const FiveG = lazy(()=> import('./VI_Summary/FiveG'))
+
 
 const VI_SoftAT = () => {
     const [expanded, setExpanded] = useState(true);
@@ -46,12 +51,26 @@ const VI_SoftAT = () => {
                                         <Nav.Item eventKey="1" placement="rightStart" icon={<AppSelectIcon />} onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/Vi_checklist')}>
                                             VI Checklist
                                         </Nav.Item>
-                                        <Nav.Item eventKey="2" placement="rightStart" icon={<DashboardIcon />} onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/vi_ftr_dashboard')}>
+                                        <Nav.Menu eventKey="2" placement="rightStart" title="VI Summary" icon={<DashboardIcon size="3em" />}>
+                                           
+                                        <Nav.Item eventKey="2-1" placement="rightStart"  onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/TwoG')}>
+                                            2G
+                                        </Nav.Item>
+                                        <Nav.Item eventKey="2-2" placement="rightStart"  onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/FourG')}>
+                                            4G
+                                        </Nav.Item>
+                                        <Nav.Item eventKey="2-3" placement="rightStart"  onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/FiveG')}>
+                                            5G
+                                        </Nav.Item>
+                                         </Nav.Menu>
+
+                                    
+                                        {/* <Nav.Item eventKey="2" placement="rightStart" icon={<DashboardIcon />} onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/vi_ftr_dashboard')}>
                                             VI FTR Dashboard
                                         </Nav.Item>
                                          <Nav.Item eventKey="3" placement="rightStart" icon={<FileUploadIcon />} onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/upload_file')} >
                                             Upload FTR
-                                        </Nav.Item>
+                                        </Nav.Item> */}
                                      
                                     </Nav>
                                 </Sidenav.Body>
@@ -66,6 +85,10 @@ const VI_SoftAT = () => {
                                 <Route element={<Vi_Checklist />} path="/vi_checklist" />
                                 <Route element={<UploadFile />} path="/upload_file" />
                                 <Route element={<VI_FTR_Dashboard />} path="/vi_ftr_dashboard" />
+                                <Route element={<FourG />} path="/FourG" />
+                                <Route element={<TwoG />} path="/TwoG" />
+                                <Route element={<FiveG />} path="/FiveG" />
+                                
                             </Routes>
                         </Suspense>
                     </Grid>

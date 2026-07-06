@@ -37,7 +37,7 @@ const SA = () => {
                                         <Nav style={{ fontWeight: 550, color: 'white', textAlign: 'center', fontSize: 19 }}>5G GPL Tool</Nav>
                                    
                                         <Nav.Item eventKey="1" placement="rightStart" icon={<FileUploadIcon />} onClick={() => navigate('/tools/ix_tools/sa_slicing/sa_upload_xml')}>
-                                            Upload  GPL
+                                            UPE GPL
                                         </Nav.Item>
                                    
                                     </Nav>

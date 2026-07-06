@@ -19,6 +19,7 @@ const MicrowaveTool = lazy(() => import('./MicrowaveTool'))
 const MicrowaveAVIATUpload = lazy(() => import('./MicrowaveAVIAT/MicrowaveAVIATUpload'))
 const MicrowaveAviatTable = lazy(()=>import('./MicrowaveTable/MicrowaveAviatTable'))
 const MicrowaveCeragonUpload = lazy(() => import('./MicrowaveCeragon/MicrowaveCeragonUpload'))
+const Parameter = lazy(() => import('./MicrowaveCeragon/Parameter'))
 
 const Microwave = () => {
       const [expanded, setExpanded] = useState(true);
@@ -109,6 +110,10 @@ const Microwave = () => {
                                             <Nav.Item eventKey="2-1" placement="rightStart" icon={<FileUploadIcon />} onClick={() => { navigate('/tools/microwave_soft_at/microwave_ceragon_upload'); show(); setMenuButton(true) }}>
                                                 Upload Files
                                             </Nav.Item>
+                                            <Nav.Item eventKey="2-2" placement="rightStart" icon={<FileUploadIcon />} onClick={() => { navigate('/tools/microwave_soft_at/parameter'); show(); setMenuButton(true) }}>
+                                                Parameter
+                                            </Nav.Item>
+                                            
                                                {/* <Nav.Item eventKey="2-2" placement="rightStart" icon={<DashboardIcon />} onClick={() => { navigate('/tools/microwave_soft_at/microwave_aviat_table'); show(); setMenuButton(true) }}>
                                                 Microwave(AVIAT) Dashboard
                                             </Nav.Item> */}
@@ -140,6 +145,7 @@ const Microwave = () => {
                                 <Route element={<MicrowaveAVIATUpload />} path="/microwave_aviat_upload" />
                                 <Route element={<MicrowaveAviatTable />} path="/microwave_aviat_table" />
                                 <Route element={<MicrowaveCeragonUpload />} path="/microwave_ceragon_upload" />
+                                <Route element={<Parameter />} path="/parameter" />
                             
 
 
