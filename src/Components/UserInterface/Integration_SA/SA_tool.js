@@ -24,7 +24,7 @@ const SA_tool = () => {
              <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
                 <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
                <Link underline='hover'  onClick={() => { navigate('/tools/ix_tools') }}>IX Tools</Link>
-               <Typography color='text.primary'>5G GPL</Typography>
+               <Typography color='text.primary'>UPE GPL</Typography>
                
              </Breadcrumbs>
            </div>

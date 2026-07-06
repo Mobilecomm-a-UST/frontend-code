@@ -11,18 +11,22 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Loader from '../../Skeleton/Loader'
 import { Garage } from '@mui/icons-material';
 import { getDecreyptedData } from '../../utils/localstorage'
+import NetworkPingRoundedIcon from '@mui/icons-material/NetworkPingRounded';
 
 const PerformanceTool = lazy(() => import("./PerformanceTool"));
 const FileManager = lazy(() => import("./File Manager/File_Manager"));
 const FTR_Aging = lazy(() => import("./File Manager/FTR_Aging"));
 const SCFT_FTR = lazy(() => import("./File Manager/SCFT_FTR"));
 const MasterDashboard = lazy(() => import("./File Manager/MasterDashboard"));
+const Performance_Aging_Main_Graph = lazy(() => import("./File Manager/Performance_Aging_Main_Graph"));
+const SCFT_Aging_Main_Graph = lazy(() => import("./perATPendingAging/SCFT_Aging_Main_Graph"));
+const PerformanceKpi5G = lazy(() => import("./File Manager/Performancekpi5g"));
 
 const SCFT_Aging = lazy(() => import("./File Manager/SCFT_Aging"));
 const SCFT_Pending_Aging = lazy(()=> import("./perATPendingAging/Scft_Pending_Aging"));
 const Performance_SR_Wise = lazy(() => import("./File Manager/Performance_SR_Wise"));
 const PerformanceAtPendingAging = lazy(() => import("./perATPendingAging/MasterDashboard"));
-const Performance_Aging_Graph = lazy(() => import("./File Manager/Performance_Aging_Graph"));
+// const Performance_Aging_Graph = lazy(() => import("./File Manager/Performance_Aging_Graph"));
 const SCFT_Aging_Graph = lazy(() => import("./perATPendingAging/SCFT_Aging_Graph"));
 const Aging5G = lazy(() => import("./Soft AT/Aging5G"));
 const SR_Wise_Hyper =lazy(()=> import ("./File Manager/SR_Wise_Hyperlink"));
@@ -83,6 +87,8 @@ const PerformanceAt = () => {
                                             File Manager
                                         </Nav.Item>}
 
+                                        
+
                                         <Nav.Menu eventKey="2" style={{ fontWeight: 400, color: 'white' }} placement="leftStart" className="menu-title-custom" title="Performance AT" icon={<DashboardIcon />}  >
                                             <Nav.Item
                                                 eventKey="2-1"
@@ -113,7 +119,7 @@ const PerformanceAt = () => {
                                                 eventKey="2-4"
                                                 placement="rightStart"
                                                 // icon={<DashboardIcon />}
-                                                onClick={() => navigate('/tools/performance_at_tat/Performance_Aging_Graph')}
+                                                onClick={() => navigate('/tools/performance_at_tat/Performance_Aging_Main_Graph')}
                                             >
                                                 Performance Graph
                                             </Nav.Item>
@@ -161,7 +167,7 @@ const PerformanceAt = () => {
                                                 eventKey="3-5"
                                                 placement="rightStart"
                                                 // icon={<DashboardIcon />}
-                                                onClick={() => navigate('/tools/performance_at_tat/SCFT_Aging_Graph')}
+                                                onClick={() => navigate('/tools/performance_at_tat/SCFT_Aging_Main_Graph')}
                                             >
                                                 SCFT Aging Graph
                                             </Nav.Item>
@@ -180,7 +186,17 @@ const PerformanceAt = () => {
 
                                         </Nav.Menu>
 
+                                        <Nav.Item
+                                            eventKey="5"
+                                            placement="rightStart"
+                                            icon={<DashboardIcon />}
+                                            onClick={() => navigate('/tools/performance_at_tat/Performancekpi5g')}
+                                        >
+                                            5G Performance KPI
+                                        </Nav.Item>
+                                        
                                     </Nav>
+                                    
                                 </Sidenav.Body>
                             </Sidenav>
                         </div>
@@ -199,15 +215,15 @@ const PerformanceAt = () => {
                                 <Route element={<Performance_SR_Wise />} path="/Performance_SR_Wise" />
                                 <Route element={<MasterDashboard />} path="/MasterDashboard" />
                                 <Route element={<PerformanceAtPendingAging />} path="/performance_at_pending_aging" />
-                                <Route element={<Performance_Aging_Graph />} path="/Performance_Aging_Graph" />
-                                <Route element={<SCFT_Aging_Graph />} path="/SCFT_Aging_Graph" />
+                                <Route element={<Performance_Aging_Main_Graph />} path="/Performance_Aging_Main_Graph" />
+                                <Route element={<SCFT_Aging_Main_Graph />} path="/SCFT_Aging_Main_Graph" />
                                 <Route element={<Aging5G />} path="/Aging5G" />
+                                <Route element={<PerformanceKpi5G />} path="/Performancekpi5g" />
                                 <Route element ={<SR_Wise_Hyper/>} path= "/SR_Wise_Hyperlink"/>
                             </Routes>
                         </Suspense>
                     </Grid>
-
-                </Grid>
+                </Grid> 
             </Box>
         </>
     );

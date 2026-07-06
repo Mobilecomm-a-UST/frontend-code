@@ -117,7 +117,7 @@ const Vi_checklist = () => {
                         
                                 <Box className={classes.Front_Box} >
                                     <div className={classes.Front_Box_Hading}>
-                                        Select XML File:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{ }</span>
+                                        Select File:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{ }</span>
                                     </div>
                                     <div className={classes.Front_Box_Select_Button} >
                                         <div style={{ float: "left" }}>
