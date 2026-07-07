@@ -120,7 +120,7 @@ const ScriptGen = () => {
                 <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
                     <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
                     <Link underline="hover" onClick={() => { navigate('/tools/mobile_network_integration') }}>MNI TOOL</Link>
-                    <Typography color='text.primary'>Script Generater</Typography>
+                    <Typography color='text.primary'>Script Generator</Typography>
                 </Breadcrumbs>
             </div>
             <Slide
@@ -133,7 +133,7 @@ const ScriptGen = () => {
                     <Box className={classes.main_Box}>
                         <Box className={classes.Back_Box} sx={{ width: { md: '75%', xs: '100%' } }}>
                             <Box className={classes.Box_Hading} >
-                                Script Generater
+                                Script Generator
                             </Box>
                             <Stack spacing={2} sx={{ marginTop: "-40px" }} direction={'column'}>
 

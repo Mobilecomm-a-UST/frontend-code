@@ -356,7 +356,7 @@ const Fmr = () => {
          const formData = new FormData();
 
         formData.append("hw", hardWareFile.bytes);
-        const response = await postData("mobinate_vs_cats/forward_material_reconciliation/");
+        const response = await postData("mobinate_vs_cats/forward_material_reconciliation/",formData);
         action(false);
 
         if (response.status) {

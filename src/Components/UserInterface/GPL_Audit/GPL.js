@@ -105,10 +105,10 @@ const GPL = () => {
                                                 GPL Audit (Parse)
                                             </Nav.Item>
                                             <Nav.Item eventKey="3" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobile_network_integration/gpl_pre_post_audit'); show(); setMenuButton(true) }}>
-                                                GPL Pre Post Audit
+                                                GPL Audit
                                             </Nav.Item>
                                             <Nav.Item eventKey="4" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobile_network_integration/script_generator'); show(); setMenuButton(true) }}>
-                                                Scripte Generater
+                                                Script Generator
                                             </Nav.Item>
                                             {/* <Nav.Menu eventKey="3" placement="rightStart" title="NOM Audit" icon={<DocPassIcon />}>
                                                     <Nav.Item eventKey="3-1" placement="rightStart" onClick={() => { navigate('/tools/nomenclature_scriptor/nom_audit_dashboard'); show(); setMenuButton(true) }}>
