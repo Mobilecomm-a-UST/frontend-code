@@ -24,10 +24,11 @@ const SCFT_Aging_Main_Graph = () => {
                 </div>
     
         <Box>
-            <MemoSCFT_Aging_Graph />
+           <MemoSCFT_Aging_Graph2 />
         </Box>
             <Box>
-            <MemoSCFT_Aging_Graph2 />
+                 <MemoSCFT_Aging_Graph />
+            
         </Box>
 
     </>

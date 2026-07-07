@@ -4972,7 +4972,7 @@ const MicrowaveCeragonUpload = () => {
                                 {/* ── LINK BUDGET FILE 2 ── */}
                                 <Box className={classes.Front_Box}>
                                     <LinkBudgetRow
-                                        label="Select Link Budget File 2:"
+                                        label="Select Traffic Shifting File:"
                                         files={linkFiles2}
                                         onUpload={handleLinkFileUpload2}
                                         onDelete={handleDeleteLinkFiles2}

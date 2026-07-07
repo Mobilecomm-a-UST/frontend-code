@@ -754,7 +754,7 @@ const SCFT_Aging_Graph2 = () => {
                 {/* ── Top Bar ── */}
                 <Paper elevation={0} sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 2, mb: 2.5, px: 2.5, py: 2, borderRadius: "16px", border: "1px solid #e8ecf0", bgcolor: "#fff", boxShadow: "0 2px 12px rgba(0,0,0,0.06)" }}>
                     <Box>
-                        <Typography fontWeight={800} fontSize={20} letterSpacing="-.3px" color="#1a1a2e">SCFT Aging Graph - [Circle as a Trend]</Typography>
+                        <Typography fontWeight={800} fontSize={20} letterSpacing="-.3px" color="#1a1a2e">SCFT Aging Graph </Typography>
                         <Typography fontSize={13} color="text.secondary" mt={0.2}>
                             Categories on X-axis · months as bars · select circles for overlay lines
                         </Typography>
@@ -810,9 +810,9 @@ const SCFT_Aging_Graph2 = () => {
                     <CategoryFilterBar
                         selectedCategories={selectedCategories}
                         onChange={setSelectedCategories}
-                        circles={circleOptions}
-                        selectedCircles={selectedCircles}
-                        onCirclesChange={setSelectedCircles}
+                        // circles={circleOptions}
+                        // selectedCircles={selectedCircles}
+                        // onCirclesChange={setSelectedCircles}
                     />
 
                     <Box p={2.5}>

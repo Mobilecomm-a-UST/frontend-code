@@ -21,6 +21,7 @@ const MasterDashboard = lazy(() => import("./File Manager/MasterDashboard"));
 const Performance_Aging_Main_Graph = lazy(() => import("./File Manager/Performance_Aging_Main_Graph"));
 const SCFT_Aging_Main_Graph = lazy(() => import("./perATPendingAging/SCFT_Aging_Main_Graph"));
 const PerformanceKpi5G = lazy(() => import("./File Manager/Performancekpi5g"));
+const Performance_SR_Wise_Main = lazy(() => import("./File Manager/Performance_SR_Wise_Main"));
 
 const SCFT_Aging = lazy(() => import("./File Manager/SCFT_Aging"));
 const SCFT_Pending_Aging = lazy(()=> import("./perATPendingAging/Scft_Pending_Aging"));
@@ -158,7 +159,7 @@ const PerformanceAt = () => {
                                                 eventKey="3-4"
                                                 placement="rightStart"
                                                 // icon={<DashboardIcon />}
-                                                onClick={() => navigate('/tools/performance_at_tat/Performance_SR_Wise')}
+                                                onClick={() => navigate('/tools/performance_at_tat/Performance_SR_Wise_Main')}
                                             >
                                                 SR Wise Tracking
                                             </Nav.Item>
@@ -212,7 +213,7 @@ const PerformanceAt = () => {
                                 <Route element={<SCFT_FTR />} path="/SCFT_FTR" />
                                 <Route element={<SCFT_Aging />} path="/SCFT_Aging" />
                                 <Route element={<SCFT_Pending_Aging/>} path="/SCFT_Pending_Aging"/>
-                                <Route element={<Performance_SR_Wise />} path="/Performance_SR_Wise" />
+                                <Route element={<Performance_SR_Wise_Main />} path="/Performance_SR_Wise_Main" />
                                 <Route element={<MasterDashboard />} path="/MasterDashboard" />
                                 <Route element={<PerformanceAtPendingAging />} path="/performance_at_pending_aging" />
                                 <Route element={<Performance_Aging_Main_Graph />} path="/Performance_Aging_Main_Graph" />

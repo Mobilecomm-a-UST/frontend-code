@@ -4,10 +4,11 @@ import { Breadcrumbs, Link, Typography } from "@mui/material";
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { useNavigate } from "react-router-dom";
 
-import { MemoPerformance_Aging_Graph } from './Performance_Aging_Graph'
-import { MemoPerformance_Aging_Graph2 } from './Performance_Aging_Graph2';
+import { MemoPerformance_SR_Wise } from './Performance_SR_Wise'
+import { MemoPerformance_SR_Wise2 } from './Performance_SR_Wise2';
+import Performance_SR_Wise from './Performance_SR_Wise';
 
-const Performance_Aging_Main_Graph = () => {
+const Performance_SR_Wise_Main = () => {
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -19,16 +20,15 @@ const Performance_Aging_Main_Graph = () => {
                     <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
                         <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
                         <Link underline="hover" onClick={() => { navigate('/tools/performance_at_tat') }}>Performace AT</Link>
-                        <Typography color='text.primary'>Performance Aging Main Graph</Typography>
+                        <Typography color='text.primary'>Performance SR wise</Typography>
                     </Breadcrumbs>
                 </div>
     
         <Box>
-            <MemoPerformance_Aging_Graph2 />
+            <MemoPerformance_SR_Wise />
         </Box>
             <Box>
-                 <MemoPerformance_Aging_Graph />
-           
+            <MemoPerformance_SR_Wise2 />
         </Box>
 
     </>
@@ -36,4 +36,4 @@ const Performance_Aging_Main_Graph = () => {
     )
 }
 
-export default Performance_Aging_Main_Graph
+export default Performance_SR_Wise_Main
