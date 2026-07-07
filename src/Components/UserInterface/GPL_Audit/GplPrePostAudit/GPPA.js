@@ -39,15 +39,15 @@ const GPPA = () => {
             var formData = new FormData();
              for (let i = 0; i < make4GFiles.length; i++) {
                 // console.log('pre files' , preFiles[i])
-                formData.append(`pre_log_files`, make4GFiles[i]);
+                formData.append(`pre_files`, make4GFiles[i]);
             }
             for (let i = 0; i < postFiles.length; i++) {
                 // console.log('post files' , postFiles[i])
-                formData.append(`post_log_files`, postFiles[i]);
+                formData.append(`post_files`, postFiles[i]);
             }
 
 
-            const response = await postData('gpl_audit/get_audit_data/', formData)
+            const response = await postData('gpl_audit_tool_V2/run/', formData)
 
             // console.log('response data', response)
 
