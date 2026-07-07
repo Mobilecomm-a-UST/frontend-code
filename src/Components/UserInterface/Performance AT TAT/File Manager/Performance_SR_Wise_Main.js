@@ -25,10 +25,10 @@ const Performance_SR_Wise_Main = () => {
                 </div>
     
         <Box>
-            <MemoPerformance_SR_Wise />
+            <MemoPerformance_SR_Wise2 />
         </Box>
             <Box>
-            <MemoPerformance_SR_Wise2 />
+                <MemoPerformance_SR_Wise />
         </Box>
 
     </>

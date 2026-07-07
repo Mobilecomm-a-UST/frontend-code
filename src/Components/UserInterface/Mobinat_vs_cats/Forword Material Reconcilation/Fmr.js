@@ -464,7 +464,7 @@ const Fmr = () => {
                                     startIcon={<FileDownloadIcon sx={{ fontSize: 30, color: "green" }} />}
                                     sx={{ mt: 2, textTransform: "none", fontWeight: 800, fontSize: "22px", fontFamily: "Poppins" }}
                                 >
-                                    SN Mapping Report
+                                   Forword Material Reconcilation Report
                                 </Button>
                             </a>
                         </Box>
