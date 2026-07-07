@@ -571,6 +571,7 @@ const getMonthEndDate = (yyyyMM) => {
 // ── Table Columns ─────────────────────────────────────────────────────────────
 const COLUMNS = [
     { label: "Circle", key: "Circle" },
+    { label: "MS Date", key: "MS Date" },
     { label: "PAT", key: "PAT" },
     { label: "SAT", key: "SAT" },
     { label: "KAT", key: "KAT" },
@@ -701,7 +702,7 @@ const Performance_SR_Wise2 = () => {
 
     // ── Effective dates sent to the API (derived from mode) ────────────────
     const effectiveStartDate = dateMode === "month" ? getMonthStartDate(selectedMonth) : startDate;
-    const effectiveEndDate   = dateMode === "month" ? getMonthEndDate(selectedMonth) : endDate;
+    const effectiveEndDate = dateMode === "month" ? getMonthEndDate(selectedMonth) : endDate;
 
     const handleModeChange = (_e, newMode) => {
         if (newMode) setDateMode(newMode);
