@@ -63,7 +63,7 @@ const FiveG = () => {
             if (response?.status === true) {
                 action(false)
                 setDownloadLinks({
-                    download_url1: response.download_url1
+                    download_url1: response.download_url
                     
                 })
                 Swal.fire({

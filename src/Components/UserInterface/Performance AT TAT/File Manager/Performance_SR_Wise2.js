@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Box,
     Typography,
@@ -7,13 +7,10 @@ import {
     Breadcrumbs,
     Link,
     Chip,
-    InputAdornment,
 } from "@mui/material";
 
 import DownloadIcon from "@mui/icons-material/Download";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import SearchIcon from "@mui/icons-material/Search";
-import ClearIcon from "@mui/icons-material/Clear";
 
 import { useNavigate } from "react-router-dom";
 
@@ -30,34 +27,38 @@ const getDefaultStartDate = () => {
 
 // ── Table Columns ─────────────────────────────────────────────────────────────
 const COLUMNS = [
-    { label: "SR_Site ID", key: "SR_Site ID" },
-    { label: "Site ID",    key: "Site ID" },
-    { label: "Circle",     key: "Circle" },
-    { label: "PAT",        key: "PAT" },
-    { label: "SAT",        key: "SAT" },
-    { label: "KAT",        key: "KAT" },
-    { label: "SCFT",       key: "SCFT" },
-    { label: "PAT Date",   key: "PAT Date" },
-    { label: "SAT Date",   key: "SAT Date" },
-    { label: "KAT Date",   key: "KAT Date" },
-    { label: "SCFT Date",  key: "SCFT Date" },
+    { label: "Circle", key: "Circle" },
+    { label: "PAT", key: "PAT" },
+    { label: "SAT", key: "SAT" },
+    { label: "KAT", key: "KAT" },
+    { label: "SCFT", key: "SCFT" },
 ];
+
+const STATUS_COLS = ["PAT", "SAT", "KAT", "SCFT"];
 
 // ── 5G Colour Theme ───────────────────────────────────────────────────────────
 const COLORS = {
-    titleBg:  "linear-gradient(135deg, #134e5e 0%, #71b280 100%)",
+    titleBg: "linear-gradient(135deg, #134e5e 0%, #71b280 100%)",
     headerBg: "linear-gradient(135deg, #0b3d2e 0%, #1f4037 100%)",
-    badge:    "#2e7d32",
-    border:   "#1f4037",
+    badge: "#2e7d32",
+    border: "#1f4037",
 };
 
 // ── Status Cell Colour Helper ─────────────────────────────────────────────────
+// When value is a word (old behaviour) — keep colours.
+// When value is a number  — the whole cell becomes a clickable link chip.
+const STATUS_COLORS = {
+    accepted: { color: "#1b5e20", bg: "#e8f5e9", border: "#a5d6a7" },
+    pending: { color: "#e65100", bg: "#fff3e0", border: "#ffcc80" },
+    offered: { color: "#0d47a1", bg: "#e3f2fd", border: "#90caf9" },
+};
+
 const getStatusStyle = (value) => {
     if (!value || value === "-" || value === "") return {};
     const v = String(value).toLowerCase();
     if (v === "accepted") return { color: "#1b5e20", fontWeight: 600 };
-    if (v === "pending")  return { color: "#e65100", fontWeight: 600 };
-    if (v === "offered")  return { color: "#0d47a1", fontWeight: 600 };
+    if (v === "pending") return { color: "#e65100", fontWeight: 600 };
+    if (v === "offered") return { color: "#0d47a1", fontWeight: 600 };
     return {};
 };
 
@@ -80,17 +81,53 @@ const stickySt = {
     fontSize: 12,
 };
 
+// ── Clickable Count Chip ──────────────────────────────────────────────────────
+// Rendered when the cell value is a number (future API).
+// statusKey: "pending" | "offered" | "accepted"
+const CountChip = ({ count, statusKey, onClick }) => {
+    const theme = STATUS_COLORS[statusKey] ?? { color: "#333", bg: "#eee", border: "#ccc" };
+    return (
+        <Box
+            component="span"
+            onClick={onClick}
+            sx={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                minWidth: 32,
+                px: 1.2,
+                py: 0.3,
+                borderRadius: "12px",
+                fontSize: 12,
+                fontWeight: 700,
+                cursor: "pointer",
+                userSelect: "none",
+                color: theme.color,
+                background: theme.bg,
+                border: `1.5px solid ${theme.border}`,
+                transition: "all .15s",
+                "&:hover": {
+                    filter: "brightness(0.92)",
+                    boxShadow: `0 2px 8px ${theme.border}88`,
+                },
+            }}
+        >
+            {count}
+        </Box>
+    );
+};
+
+// ── Helper: is the value a pure number? ──────────────────────────────────────
+const isNumeric = (val) => val !== null && val !== undefined && val !== "" && val !== "-" && !isNaN(Number(val));
+
 // ── Main Component ────────────────────────────────────────────────────────────
-const Performance_SR_Wise = () => {
+const Performance_SR_Wise2 = () => {
     const { loading, action } = useLoadingDialog();
     const navigate = useNavigate();
 
     const [apiResponse, setApiResponse] = useState(null);
     const [startDate, setStartDate] = useState(getDefaultStartDate());
-    const [endDate, setEndDate]     = useState(todayStr);
-
-    // ── Site ID / SR Site ID Search ───────────────────────────────────────
-    const [searchTerm, setSearchTerm] = useState("");
+    const [endDate, setEndDate] = useState(todayStr);
 
     // ── Fetch ─────────────────────────────────────────────────────────────
     const fetchData = async () => {
@@ -102,10 +139,10 @@ const Performance_SR_Wise = () => {
 
             const formData = new FormData();
             formData.append("start_date", startDate);
-            formData.append("end_date",   endDate);
+            formData.append("end_date", endDate);
 
             const res = await postData(
-                "performance_idploy/generate-performance-at-srwise-report/",
+                "performance_idploy/generate-atsrwise-summary/",
                 formData
             );
 
@@ -140,22 +177,132 @@ const Performance_SR_Wise = () => {
         document.body.removeChild(link);
     };
 
-    const rawRows = apiResponse?.data || [];
-
-    // ── Filtered Rows (by SR_Site ID or Site ID) ───────────────────────────
-    const tableRows = useMemo(() => {
-        const term = searchTerm.trim().toLowerCase();
-        if (!term) return rawRows;
-        return rawRows.filter((row) => {
-            const srSiteId = String(row?.["SR_Site ID"] ?? "").toLowerCase();
-            const siteId   = String(row?.["Site ID"] ?? "").toLowerCase();
-            return srSiteId.includes(term) || siteId.includes(term);
+    // ── Navigate to detail page on chip click ─────────────────────────────
+    // Passes: circle, column (PAT/SAT/KAT/SCFT), statusKey, date range
+    const handleCountClick = ({ circle, column, statusKey, count }) => {
+        navigate("/tools/performance_at_tat/sr_wise_hyperlink", {
+            state: {
+                circle,
+                column,        // "PAT" | "SAT" | "KAT" | "SCFT"
+                statusKey,     // "pending" | "offered" | "accepted"
+                count,
+                startDate,
+                endDate,
+            },
         });
-    }, [rawRows, searchTerm]);
+    };
 
+    const tableRows = apiResponse?.summary || [];
     const dateRangeLabel = startDate && endDate ? `${startDate}  to  ${endDate}` : "";
-    const titleLabel   = dateRangeLabel ? `AT Report  |  ${dateRangeLabel}` : "AT Report";
-    const STRIPE       = "#f4f7fb";
+    const titleLabel = dateRangeLabel ? `AT Report  |  ${dateRangeLabel}` : "AT Report";
+    const STRIPE = "#f4f7fb";
+
+    // ── Cell renderer ─────────────────────────────────────────────────────
+    // For STATUS columns:
+    //   • If value is a NUMBER  → render clickable CountChip(s) per status
+    //   • If value is a STRING  → render coloured text (current behaviour)
+    //
+    // Future API shape expected for numeric mode (one example):
+    //   row.PAT = { pending: 3, offered: 1, accepted: 12 }
+    //   — OR —
+    //   row.PAT_pending = 3, row.PAT_offered = 1, row.PAT_accepted = 12
+    //
+    // For now the API still returns a string ("Pending" / "Offered" / "Accepted"),
+    // so the string branch runs. When the API changes, only the numeric branch
+    // will activate — no other code needs changing.
+
+    const renderStatusCell = (row, col) => {
+        const val = row?.[col.key];
+
+        // ── Numeric mode (future API) ──────────────────────────────────────
+        // Expected shape: row[col.key] = { pending: N, offered: N, accepted: N }
+        if (val && typeof val === "object" && !Array.isArray(val)) {
+            const chips = Object.entries(val)
+                .filter(([, n]) => Number(n) > 0)
+                .map(([statusKey, n]) => (
+                    <CountChip
+                        key={statusKey}
+                        count={n}
+                        statusKey={statusKey}
+                        onClick={() =>
+                            handleCountClick({
+                                circle: row["Circle"],
+                                column: col.key,
+                                statusKey,
+                                count: n,
+                            })
+                        }
+                    />
+                ));
+            return (
+                <Box display="flex" gap={0.5} justifyContent="center" flexWrap="wrap">
+                    {chips.length ? chips : "-"}
+                </Box>
+            );
+        }
+
+        // ── Flat numeric mode (alternate future API) ──────────────────────
+        // Expected shape: row["PAT_pending"] = 3, row["PAT_offered"] = 1 …
+        const flatKeys = ["pending", "offered", "accepted"].map((s) => ({
+            statusKey: s,
+            flatKey: `${col.key}_${s}`,
+        }));
+        const hasFlatNums = flatKeys.some(({ flatKey }) => isNumeric(row[flatKey]));
+        if (hasFlatNums) {
+            const chips = flatKeys
+                .filter(({ flatKey }) => isNumeric(row[flatKey]) && Number(row[flatKey]) > 0)
+                .map(({ statusKey, flatKey }) => (
+                    <CountChip
+                        key={statusKey}
+                        count={row[flatKey]}
+                        statusKey={statusKey}
+                        onClick={() =>
+                            handleCountClick({
+                                circle: row["Circle"],
+                                column: col.key,
+                                statusKey,
+                                count: row[flatKey],
+                            })
+                        }
+                    />
+                ));
+            return (
+                <Box display="flex" gap={0.5} justifyContent="center" flexWrap="wrap">
+                    {chips.length ? chips : "-"}
+                </Box>
+            );
+        }
+
+        // ── String mode (current API) ─────────────────────────────────────
+        // ── Plain number mode (current API returns a single count) ────────
+        // e.g. row.PAT = 3  →  show as a clickable "Pending" chip (all counts
+        //      from summary are pending counts, adjust statusKey as needed)
+        if (isNumeric(val) && Number(val) > 0) {
+            return (
+                <CountChip
+                    count={Number(val)}
+                    statusKey="pending"
+                    onClick={() =>
+                        handleCountClick({
+                            circle: row["Circle"],
+                            column: col.key,
+                            statusKey: "pending",
+                            count: Number(val),
+                        })
+                    }
+                />
+            );
+        }
+        if (isNumeric(val) && Number(val) === 0) {
+            return <span style={{ color: "#9e9e9e", fontSize: 12 }}>0</span>;
+        }
+
+        // ── String mode ───────────────────────────────────────────────────
+        const strVal = val !== null && val !== undefined && val !== "" ? String(val) : "-";
+        return (
+            <span style={getStatusStyle(strVal)}>{strVal}</span>
+        );
+    };
 
     return (
         <>
@@ -190,33 +337,6 @@ const Performance_SR_Wise = () => {
                     </Typography>
 
                     <Box display="flex" gap={1} alignItems="center" flexWrap="wrap">
-                        {/* ── Site ID / SR Site ID Search Box ── */}
-                        <TextField
-                            size="small"
-                            label="Search Site ID / SR Site ID"
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            sx={{ minWidth: 220 }}
-                            InputProps={{
-                                startAdornment: (
-                                    <InputAdornment position="start">
-                                        <SearchIcon fontSize="small" />
-                                    </InputAdornment>
-                                ),
-                                endAdornment: searchTerm ? (
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                            size="small"
-                                            onClick={() => setSearchTerm("")}
-                                            title="Clear search"
-                                        >
-                                            <ClearIcon fontSize="small" />
-                                        </IconButton>
-                                    </InputAdornment>
-                                ) : null,
-                            }}
-                        />
-
                         <TextField
                             size="small"
                             label="Start Date"
@@ -274,7 +394,7 @@ const Performance_SR_Wise = () => {
                             width: "100%",
                             borderCollapse: "collapse",
                             tableLayout: "auto",
-                            minWidth: 900,
+                            minWidth: 700,
                         }}
                     >
                         <thead>
@@ -310,9 +430,6 @@ const Performance_SR_Wise = () => {
                                             fontSize: 12,
                                             border: `1px solid ${COLORS.border}`,
                                             padding: "6px 10px",
-                                            ...(col.key === "SR_Site ID"
-                                                ? { position: "sticky", left: 0, zIndex: 3 }
-                                                : {}),
                                         }}
                                     >
                                         {col.label}
@@ -325,28 +442,28 @@ const Performance_SR_Wise = () => {
                             {tableRows.length > 0 ? (
                                 tableRows.map((row, idx) => (
                                     <tr
-                                        key={`${row["SR_Site ID"]}-${idx}`}
+                                        key={`${row["Circle"]}-${idx}`}
                                         style={{ background: idx % 2 === 0 ? "#fff" : STRIPE }}
                                     >
                                         {COLUMNS.map((col) => {
-                                            const val      = row?.[col.key] ?? "-";
-                                            const isStatus = ["PAT", "SAT", "KAT", "SCFT"].includes(col.key);
-                                            const isFirst  = col.key === "SR_Site ID";
+                                            const isStatus = STATUS_COLS.includes(col.key);
+                                            const isCircle = col.key === "Circle";
+                                            const val = row?.[col.key] ?? "-";
 
                                             return (
                                                 <td
                                                     key={col.key}
                                                     style={{
-                                                        ...(isFirst ? stickySt : cellSt),
-                                                        background: isFirst
+                                                        ...(isCircle ? stickySt : cellSt),
+                                                        background: isCircle
                                                             ? idx % 2 === 0 ? "#fff" : STRIPE
                                                             : undefined,
-                                                        ...(isStatus ? getStatusStyle(val) : {}),
                                                     }}
                                                 >
-                                                    {val !== null && val !== undefined && val !== ""
-                                                        ? val
-                                                        : "-"}
+                                                    {isStatus
+                                                        ? renderStatusCell(row, col)
+                                                        : (val !== null && val !== undefined && val !== ""
+                                                            ? val : "-")}
                                                 </td>
                                             );
                                         })}
@@ -364,9 +481,7 @@ const Performance_SR_Wise = () => {
                                             textAlign: "center",
                                         }}
                                     >
-                                        {searchTerm
-                                            ? "No Matching Site ID / SR Site ID Found"
-                                            : "No Data Available"}
+                                        No Data Available
                                     </td>
                                 </tr>
                             )}
@@ -390,7 +505,7 @@ const Performance_SR_Wise = () => {
                                 Showing
                             </Typography>
                             <Chip
-                                label={`${tableRows.length} / ${apiResponse?.total_sites ?? rawRows.length} rows`}
+                                label={`${tableRows.length} / ${apiResponse?.total_sites ?? tableRows.length} rows`}
                                 size="small"
                                 sx={{
                                     background: COLORS.badge,
@@ -409,4 +524,4 @@ const Performance_SR_Wise = () => {
     );
 };
 
-export const MemoPerformance_SR_Wise = React.memo(Performance_SR_Wise);
+export const MemoPerformance_SR_Wise2 = React.memo(Performance_SR_Wise2);
