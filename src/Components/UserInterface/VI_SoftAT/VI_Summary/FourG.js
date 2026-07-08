@@ -305,7 +305,7 @@ const FourG = () => {
                 <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
                     <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
                     <Link underline="hover" onClick={() => { navigate('/tools/soft_at_tools') }}>VI Soft-AT Tool</Link>
-                    <Typography color='text.primary'>4G Summary</Typography>
+                    <Typography color='text.primary'>4G/5G Summary</Typography>
                 </Breadcrumbs>
             </div>
             <Slide
@@ -317,7 +317,7 @@ const FourG = () => {
                     <Box className={classes.main_Box}>
                         <Box className={classes.Back_Box} sx={{ width: { md: '75%', xs: '100%' } }}>
                             <Box className={classes.Box_Hading} >
-                                Generate 4G Summary
+                                Generate 4G/5G Summary
                             </Box>
                             <Stack spacing={2} sx={{ marginTop: "-40px" }} direction={'column'}>
                                 <Box className={classes.Front_Box}>
