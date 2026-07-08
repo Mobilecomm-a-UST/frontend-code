@@ -12,6 +12,8 @@ import FolderIcon from '@rsuite/icons/Folder';
 import ChangeListIcon from '@rsuite/icons/ChangeList';
 import BytedanceMicroappIcon from '@rsuite/icons/BytedanceMicroapp';
 import FileUploadIcon from '@rsuite/icons/FileUpload';
+import AlipayMiniIcon from '@rsuite/icons/AlipayMini';
+import MenuIcon from '@rsuite/icons/Menu';
 import Loader from '../../Skeleton/Loader'
 import { Upload } from '@hugeicons/core-free-icons';
 
@@ -20,7 +22,7 @@ const MicrowaveAVIATUpload = lazy(() => import('./MicrowaveAVIAT/MicrowaveAVIATU
 const MicrowaveAviatTable = lazy(()=>import('./MicrowaveTable/MicrowaveAviatTable'))
 const MicrowaveCeragonUpload = lazy(() => import('./MicrowaveCeragon/MicrowaveCeragonUpload'))
 const Parameter = lazy(() => import('./MicrowaveCeragon/Parameter'))
-
+const ServerIP = lazy(() => import('./MicrowaveCeragon/ServerIP'))
 const Microwave = () => {
       const [expanded, setExpanded] = useState(true);
         const [activeKey, setActiveKey] = useState();
@@ -110,8 +112,11 @@ const Microwave = () => {
                                             <Nav.Item eventKey="2-1" placement="rightStart" icon={<FileUploadIcon />} onClick={() => { navigate('/tools/microwave_soft_at/microwave_ceragon_upload'); show(); setMenuButton(true) }}>
                                                 Upload Files
                                             </Nav.Item>
-                                            <Nav.Item eventKey="2-2" placement="rightStart" icon={<FileUploadIcon />} onClick={() => { navigate('/tools/microwave_soft_at/parameter'); show(); setMenuButton(true) }}>
+                                            <Nav.Item eventKey="2-2" placement="rightStart" icon={<MenuIcon />} onClick={() => { navigate('/tools/microwave_soft_at/parameter'); show(); setMenuButton(true) }}>
                                                 Parameter
+                                            </Nav.Item>
+                                            <Nav.Item eventKey="2-3" placement="rightStart" icon={<AlipayMiniIcon />} onClick={() => { navigate('/tools/microwave_soft_at/ServerIP'); show(); setMenuButton(true) }}>
+                                                Server IP
                                             </Nav.Item>
                                             
                                                {/* <Nav.Item eventKey="2-2" placement="rightStart" icon={<DashboardIcon />} onClick={() => { navigate('/tools/microwave_soft_at/microwave_aviat_table'); show(); setMenuButton(true) }}>
@@ -146,8 +151,7 @@ const Microwave = () => {
                                 <Route element={<MicrowaveAviatTable />} path="/microwave_aviat_table" />
                                 <Route element={<MicrowaveCeragonUpload />} path="/microwave_ceragon_upload" />
                                 <Route element={<Parameter />} path="/parameter" />
-                            
-
+                                <Route element={<ServerIP />} path="/ServerIP" />
 
                             </Routes>
                         </Suspense>

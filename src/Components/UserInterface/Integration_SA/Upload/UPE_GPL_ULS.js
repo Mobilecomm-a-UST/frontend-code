@@ -43,7 +43,7 @@ const UPE_GPL_ULS = () => {
             action(true)
             var formData = new FormData();
             formData.append(`xml_file`, make4GFiles.bytes);
-            const response = await postData('nokia/slicing/', formData)
+            const response = await postData('nokia_uls/uls_slicing/', formData)
             console.log('response data', response)
             if (response.status === true) {
                 action(false)
@@ -170,7 +170,7 @@ const UPE_GPL_ULS = () => {
                                     textDecoration: "none"
                                 }}
                             >
-                                Download UPE GPL Micro Report
+                                Download UPE GPL ULS Report
                             </span>
                         </Button>
                     </Box>
