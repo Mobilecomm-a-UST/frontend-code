@@ -13,7 +13,7 @@ import OverAllCss from "../../../csss/OverAllCss";
 import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
 
 
-const Upload = () => {
+const UPE_GPL_ULS = () => {
     const [make4GFiles, setMake4GFiles] = useState({ filename: "", bytes: "" })
     const [selectCircle, setSelectCircle] = useState('')
     const [show4G, setShow4G] = useState(false)
@@ -35,9 +35,6 @@ const Upload = () => {
             state: true
         })
     }
-
-
-
 
 
 
@@ -75,6 +72,8 @@ const Upload = () => {
                 setShow4G(false)
             }
 
+
+
         }
     }
 
@@ -96,7 +95,7 @@ const Upload = () => {
                     <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
                     <Link underline='hover' onClick={() => { navigate('/tools/ix_tools') }}>IX Tools</Link>
                     <Link underline='hover' onClick={() => { navigate('/tools/ix_tools/sa_slicing') }}>5G GPL</Link>
-                    <Typography color='text.primary'>UPE GPL Upload</Typography>
+                    <Typography color='text.primary'>UPE GPL ULS</Typography>
                 </Breadcrumbs>
             </div>
             <Slide
@@ -109,7 +108,7 @@ const Upload = () => {
                     <Box className={classes.main_Box}>
                         <Box className={classes.Back_Box} sx={{ width: { md: '75%', xs: '100%' } }}>
                             <Box className={classes.Box_Hading} >
-                                Upload GPL for UPE
+                                Upload GPL for ULS
                             </Box>
                             <Stack spacing={2} sx={{ marginTop: "-40px" }} direction={'column'}>
 
@@ -182,4 +181,4 @@ const Upload = () => {
     )
 }
 
-export default Upload
+export default UPE_GPL_ULS;

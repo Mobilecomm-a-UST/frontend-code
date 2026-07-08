@@ -57,11 +57,11 @@ const VI_SoftAT = () => {
                                             2G
                                         </Nav.Item>
                                         <Nav.Item eventKey="2-2" placement="rightStart"  onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/FourG')}>
-                                            4G
+                                            4G/5G
                                         </Nav.Item>
-                                        <Nav.Item eventKey="2-3" placement="rightStart"  onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/FiveG')}>
+                                        {/* <Nav.Item eventKey="2-3" placement="rightStart"  onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/FiveG')}>
                                             5G
-                                        </Nav.Item>
+                                        </Nav.Item> */}
                                          </Nav.Menu>
 
                                     

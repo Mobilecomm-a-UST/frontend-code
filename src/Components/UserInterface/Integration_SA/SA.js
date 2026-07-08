@@ -13,6 +13,7 @@ import Loader from '../../Skeleton/Loader';
 
 const SA_upload = lazy(()=>import('./Upload/Upload'))
 const SA_tool = lazy(()=>import('./SA_tool'))
+const UPE_GPL_ULS = lazy(()=>import('./Upload/UPE_GPL_ULS'))
 
 const SA = () => {
         const [expanded, setExpanded] = useState(true);
@@ -37,7 +38,10 @@ const SA = () => {
                                         <Nav style={{ fontWeight: 550, color: 'white', textAlign: 'center', fontSize: 19 }}>5G GPL Tool</Nav>
                                    
                                         <Nav.Item eventKey="1" placement="rightStart" icon={<FileUploadIcon />} onClick={() => navigate('/tools/ix_tools/sa_slicing/sa_upload_xml')}>
-                                            UPE GPL
+                                            UPE GPL Micro
+                                        </Nav.Item>
+                                        <Nav.Item eventKey="2" placement="rightStart" icon={<FileUploadIcon />} onClick={() => navigate('/tools/ix_tools/sa_slicing/UPE_GPL_ULS')}>
+                                            UPE GPL ULS
                                         </Nav.Item>
                                    
                                     </Nav>
@@ -51,6 +55,7 @@ const SA = () => {
                             <Routes>
                                 <Route element={<SA_tool />} path="/" />
                                 <Route element={<SA_upload/>} path='/sa_upload_xml' />
+                                <Route element={<UPE_GPL_ULS/>} path='/UPE_GPL_ULS' />
                     
                             </Routes>
                         </Suspense>
