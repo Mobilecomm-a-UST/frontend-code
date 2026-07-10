@@ -12,6 +12,7 @@ import Loader from '../../Skeleton/Loader'
 import { Garage } from '@mui/icons-material';
 import { getDecreyptedData } from '../../utils/localstorage'
 import NetworkPingRoundedIcon from '@mui/icons-material/NetworkPingRounded';
+import AutoGraphIcon from '@mui/icons-material/AutoGraph';
 
 const PerformanceTool = lazy(() => import("./PerformanceTool"));
 const FileManager = lazy(() => import("./File Manager/File_Manager"));
@@ -31,6 +32,9 @@ const PerformanceAtPendingAging = lazy(() => import("./perATPendingAging/MasterD
 const SCFT_Aging_Graph = lazy(() => import("./perATPendingAging/SCFT_Aging_Graph"));
 const Aging5G = lazy(() => import("./Soft AT/Aging5G"));
 const SR_Wise_Hyper =lazy(()=> import ("./File Manager/SR_Wise_Hyperlink"));
+
+const PerformanceFTRGraph = lazy(() => import("./File Manager/PerformanceFTRGraph"));
+const SCFTFTRGraph = lazy(() => import("./perATPendingAging/SCFTFTRGraph"));
 
 
 // const UploadPerformanceAt = lazy(() => import("./Upload_Performance_At/UploadPerformanceAt"));
@@ -116,8 +120,17 @@ const PerformanceAt = () => {
                                             >
                                                 Performance FTR
                                             </Nav.Item>
+
                                             <Nav.Item
                                                 eventKey="2-4"
+                                                placement="rightStart"
+                                                // icon={<AutoGraphIcon />}
+                                                onClick={() => navigate('/tools/performance_at_tat/PerformanceFTRGraph')}
+                                            >
+                                                Performance FTR Graph
+                                            </Nav.Item>
+                                            <Nav.Item
+                                                eventKey="2-5"
                                                 placement="rightStart"
                                                 // icon={<DashboardIcon />}
                                                 onClick={() => navigate('/tools/performance_at_tat/Performance_Aging_Main_Graph')}
@@ -154,9 +167,18 @@ const PerformanceAt = () => {
                                             >
                                                 SCFT FTR
                                             </Nav.Item>
+                                            
+                                             <Nav.Item
+                                                eventKey="3-4"
+                                                placement="rightStart"
+                                                // icon={<AutoGraphIcon />}
+                                                onClick={() => navigate('/tools/performance_at_tat/SCFTFTRGraph')}
+                                            >
+                                                SCFT FTR Graph
+                                            </Nav.Item>
 
                                             <Nav.Item
-                                                eventKey="3-4"
+                                                eventKey="3-5"
                                                 placement="rightStart"
                                                 // icon={<DashboardIcon />}
                                                 onClick={() => navigate('/tools/performance_at_tat/Performance_SR_Wise_Main')}
@@ -165,7 +187,7 @@ const PerformanceAt = () => {
                                             </Nav.Item>
 
                                              <Nav.Item
-                                                eventKey="3-5"
+                                                eventKey="3-6"
                                                 placement="rightStart"
                                                 // icon={<DashboardIcon />}
                                                 onClick={() => navigate('/tools/performance_at_tat/SCFT_Aging_Main_Graph')}
@@ -221,6 +243,8 @@ const PerformanceAt = () => {
                                 <Route element={<Aging5G />} path="/Aging5G" />
                                 <Route element={<PerformanceKpi5G />} path="/Performancekpi5g" />
                                 <Route element ={<SR_Wise_Hyper/>} path= "/SR_Wise_Hyperlink"/>
+                                <Route element ={<PerformanceFTRGraph/>} path= "/PerformanceFTRGraph"/>
+                                <Route element ={<SCFTFTRGraph/>} path= "/SCFTFTRGraph"/>
                             </Routes>
                         </Suspense>
                     </Grid>
