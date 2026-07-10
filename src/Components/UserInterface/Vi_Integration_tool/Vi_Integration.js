@@ -18,6 +18,8 @@ const FinalDashboard = lazy(() => import('./Dashboard/FinalDashboard'))
 const ComanDashboard = lazy(() => import('./Dashboard/ComanDashboard'))
 const MDashboard = lazy(() => import('./MasterDashboard/MDashboard'))
 const TotalDataDashboard = lazy(() => import('./Dashboard/TotalDataDashboard'));
+const Vi_Hoto = lazy(() => import('./VI_Hoto Dashboard/Vi_Hoto'));
+const UPLOADHOTO = lazy(() => import('./VI_Hoto Dashboard/UPLOADHOTO'));
 
 const Vi_Integration = () => {
     const [expanded, setExpanded] = useState(true);
@@ -53,7 +55,16 @@ const Vi_Integration = () => {
                                         </Nav.Item>
                                         {!userTypes?.includes('VI_IX_reader') &&    <Nav.Item eventKey="3" placement="rightStart" icon={<FileUploadIcon />} onClick={() => navigate('/tools/ix_tools/vi_integration/upload_file')} >
                                             Upload File
-                                        </Nav.Item>}      
+                                        </Nav.Item>}
+
+                                        {!userTypes?.includes('VI_IX_reader') &&    <Nav.Item eventKey="4" placement="rightStart" icon={<FileUploadIcon />} onClick={() => navigate('/tools/ix_tools/vi_integration/UPLOADHOTO')} >
+                                            Upload HOTO File
+                                        </Nav.Item>}  
+                                        
+                                        <Nav.Item eventKey="5" placement="rightStart" icon={<DashboardIcon />} onClick={() => navigate('/tools/ix_tools/vi_integration/vi_hoto_dashboard')}>
+                                            VI Hoto Dashboard
+                                        </Nav.Item>  
+
                                      
                                     </Nav>
                                 </Sidenav.Body>
@@ -70,6 +81,8 @@ const Vi_Integration = () => {
                                 <Route element={<TotalDataDashboard />} path="/dashboard/total_count/:name" />
                                 <Route element={<ComanDashboard />} path="/dashboard/:name" />
                                 <Route element={<MDashboard />} path="/master_dashboard" />
+                                <Route element={<Vi_Hoto />} path="/vi_hoto_dashboard" />
+                                <Route element={<UPLOADHOTO />} path="/UPLOADHOTO" />
                             </Routes>
                         </Suspense>
                     </Grid>

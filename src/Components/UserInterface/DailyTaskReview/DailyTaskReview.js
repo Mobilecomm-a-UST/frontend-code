@@ -25,6 +25,7 @@ const AssignTask = lazy(() => import("./AssignTask/AssignTask"));
 const MyTask = lazy(() => import("./MyTask/MyTask"));
 const AddEmail = lazy(()=> import("./AdminPanel/AddTask/AddEmail"));
 const Dashboard = lazy(() => import("./Dashboard/Dashboard"));
+const TaskTemplate = lazy(() => import("./TaskTemplate/TaskTemplate"));
 
 
 const DailyTaskReview = () => {
@@ -122,7 +123,7 @@ const DailyTaskReview = () => {
                                                  My Task
                                             </Nav.Item>
 
-                                            {/* <Nav.Item eventKey="4" placement="rightStart" className="single-item-custom" icon={< ImportIcon style={{}} />} onClick={() => { navigate('/tools/daily_task_review/'); show(); setMenuButton(true) }}>
+                                            {/* <Nav.Item eventKey="4" placement="rightStart" className="single-item-custom" icon={< ImportIcon style={{}} />} onClick={() => { navigate('/tools/daily_task_review/TaskTemplate'); show(); setMenuButton(true) }}>
                                                 Task Templates
                                             </Nav.Item> */}
 
@@ -147,14 +148,15 @@ const DailyTaskReview = () => {
                                 <Route path="/AssignTask" element={<AssignTask />} />
                                 <Route path="/MyTask" element={<MyTask />} />
                                 <Route path="/Dashboard" element={<Dashboard />} />
+                                <Route path="/TaskTemplate" element={<TaskTemplate/>} />
 
-                                {/* {userTypes?.includes('ran_admin') && 
+                              {/* {userTypes?.includes('ran_admin') && 
                                 <Route element={<FinalMailPage />} path="/email_dashboard" />
                                 }
                                 
                                 {userTypes?.includes('ran_admin') &&
                                 <Route element={<Module />} path="/module" />
-                                } */}
+                                }  */}
 
                             </Routes>
                         </Suspense>

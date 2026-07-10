@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useMemo } from "react";
+import React, { useEffect, useState, useCallback, useMemo, useRef } from "react";
 import {
     Box, Typography, Breadcrumbs, Link, IconButton, TextField,
     InputAdornment, Tooltip, Chip, Dialog, DialogTitle, DialogContent,
@@ -13,19 +13,20 @@ import {
     Close as CloseIcon,
     Save as SaveIcon,
     Search as SearchIcon,
+    UploadFile as UploadFileIcon,
 } from "@mui/icons-material";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { postData, getData, ServerURL } from "../../../services/FetchNodeServices";
 import OverAllCss from "../../../csss/OverAllCss";
 import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
-
+ 
 // ─── theme constants ────────────────────────────────────────────────────────
 const TEAL = "#2a77bf";
 const TEAL_DARK = "#28538c";
 const NAVY = "#0f1c3f";
 const NAVY_DARK = "#0a1430";
-
+ 
 const fieldSx = {
     "& .MuiOutlinedInput-root": {
         borderRadius: "8px",
@@ -35,7 +36,7 @@ const fieldSx = {
     },
     "& .MuiInputLabel-root.Mui-focused": { color: TEAL },
 };
-
+ 
 const cellSt = {
     padding: "8px 14px",
     border: "1px solid #dfe3e8",
@@ -43,21 +44,22 @@ const cellSt = {
     fontSize: 13,
     whiteSpace: "nowrap",
 };
-
+ 
 // ── Backend endpoints — adjust the paths to whatever your API actually
 // exposes for this table; these follow the same postData/getData +
 // FormData pattern used everywhere else in the app. ──
-const LIST_ENDPOINT   = "softAt/server_ip/";                // GET  -> list of {id, circle, ip}
-const ADD_ENDPOINT    = "softAt/server_ip/";                // POST -> create
-const UPDATE_ENDPOINT = (id) => `softAt/server_ip/${id}/`;  // PUT  -> update
-const DELETE_ENDPOINT = (id) => `softAt/server_ip/${id}/`;  // DELETE
-
+const LIST_ENDPOINT   = "mwCeragon/upload_serverip/";
+const ADD_ENDPOINT    = "mwCeragon/upload_serverip/";
+const UPLOAD_ENDPOINT = "mwCeragon/upload_serverip/"; // excel upload (key: "file")
+const UPDATE_ENDPOINT = (id) => `mwCeragon/upload_serverip/${id}/`;
+const DELETE_ENDPOINT = (id) => `mwCeragon/upload_serverip/${id}/`;
+ 
 const safeParseJson = async (res) => {
     const text = await res.text();
     if (!text) return {};
     try { return JSON.parse(text); } catch { return {}; }
 };
-
+ 
 const isSuccessResponse = (res, data) => {
     if (!res.ok) return false;
     if (data == null) return true;
@@ -65,28 +67,28 @@ const isSuccessResponse = (res, data) => {
     if (typeof data.success === "boolean") return data.success;
     return true;
 };
-
+ 
 // ─── Add / Edit Server IP Dialog ─────────────────────────────────────────────
 const ServerIpDialog = ({ open, mode, row, onClose, onSaved }) => {
     const [circle, setCircle] = useState("");
     const [ip, setIp] = useState("");
     const [saving, setSaving] = useState(false);
-
+ 
     const isEdit = mode === "edit";
-
+ 
     useEffect(() => {
         if (open) {
             setCircle(isEdit ? (row?.circle ?? "") : "");
             setIp(isEdit ? (row?.ip ?? "") : "");
         }
     }, [open, isEdit, row]);
-
+ 
     const handleClear = () => { setCircle(""); setIp(""); };
-
+ 
     const handleSave = async () => {
         if (!circle.trim()) { Swal.fire("Validation", "Circle is required.", "warning"); return; }
         if (!ip.trim())     { Swal.fire("Validation", "IP is required.", "warning"); return; }
-
+ 
         setSaving(true);
         try {
             const url = isEdit ? `${ServerURL}/${UPDATE_ENDPOINT(row.id)}` : `${ServerURL}/${ADD_ENDPOINT}`;
@@ -102,14 +104,16 @@ const ServerIpDialog = ({ open, mode, row, onClose, onSaved }) => {
                 onClose();
             } else {
                 Swal.fire("Error", data?.message || (isEdit ? "Update failed." : "Add failed."), "error");
+                onClose();
             }
         } catch {
             Swal.fire("Error", "Something went wrong.", "error");
+            onClose();
         } finally {
             setSaving(false);
         }
     };
-
+ 
     return (
         <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth disableScrollLock
             PaperProps={{ sx: { borderRadius: "14px", overflow: "hidden" } }}>
@@ -128,7 +132,7 @@ const ServerIpDialog = ({ open, mode, row, onClose, onSaved }) => {
                     <CloseIcon sx={{ fontSize: 16 }} />
                 </IconButton>
             </Box>
-
+ 
             <DialogContent sx={{ pt: 3, pb: 1 }}>
                 <Box
                     sx={{
@@ -153,7 +157,7 @@ const ServerIpDialog = ({ open, mode, row, onClose, onSaved }) => {
                             size="small" fullWidth sx={fieldSx}
                         />
                     </Box>
-
+ 
                     <Box display="flex" justifyContent="center" gap={2} mt={2.5}>
                         <Button
                             variant="contained"
@@ -176,7 +180,7 @@ const ServerIpDialog = ({ open, mode, row, onClose, onSaved }) => {
                     </Box>
                 </Box>
             </DialogContent>
-
+ 
             <DialogActions sx={{ px: 3, pb: 2.5, pt: 1 }}>
                 <Button onClick={onClose} sx={{ textTransform: "none", color: "text.secondary", border: "1px solid #e0e0e0", borderRadius: "8px", px: 2, fontWeight: 600, "&:hover": { bgcolor: "#f5f5f5" } }}>
                     Close
@@ -185,7 +189,147 @@ const ServerIpDialog = ({ open, mode, row, onClose, onSaved }) => {
         </Dialog>
     );
 };
-
+ 
+// ─── Excel Upload Dialog ──────────────────────────────────────────────────
+const ExcelUploadDialog = ({ open, onClose, onUploaded }) => {
+    const fileInputRef = useRef(null);
+    const [file, setFile] = useState(null);
+    const [uploading, setUploading] = useState(false);
+ 
+    useEffect(() => {
+        if (open) setFile(null);
+    }, [open]);
+ 
+    const handleSelectClick = () => fileInputRef.current?.click();
+ 
+    const handleFileChange = (e) => {
+        const f = e.target.files?.[0];
+        e.target.value = "";
+        if (f) setFile(f);
+    };
+ 
+    const handleClear = () => setFile(null);
+ 
+    const handleUpload = async () => {
+        if (!file) { Swal.fire("Validation", "Please select an excel file.", "warning"); return; }
+ 
+        setUploading(true);
+        try {
+            const formData = new FormData();
+            formData.append("file", file); // key = "file"
+ 
+            const res = await fetch(`${ServerURL}/${UPLOAD_ENDPOINT}`, {
+                method: "POST",
+                body: formData, // do NOT set Content-Type manually for FormData
+            });
+            const data = await safeParseJson(res);
+            if (isSuccessResponse(res, data)) {
+                Swal.fire({ icon: "success", title: "Uploaded!", timer: 1600, showConfirmButton: false });
+                setFile(null);
+                onUploaded();
+                onClose();
+            } else {
+                Swal.fire("Error", data?.message || "Upload failed.", "error");
+            }
+        } catch {
+            Swal.fire("Error", "Something went wrong while uploading.", "error");
+        } finally {
+            setUploading(false);
+        }
+    };
+ 
+    return (
+        <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth disableScrollLock
+            PaperProps={{ sx: { borderRadius: "14px", overflow: "hidden" } }}>
+            <Box sx={{
+                px: 3, py: 2, display: "flex", alignItems: "center", justifyContent: "space-between",
+                borderBottom: "1px solid #eee",
+            }}>
+                <Box display="flex" alignItems="center" gap={1}>
+                    <UploadFileIcon sx={{ color: TEAL, fontSize: 20 }} />
+                    <Typography fontWeight={700} fontSize={16}>
+                        Upload Excel
+                    </Typography>
+                </Box>
+                <IconButton size="small" onClick={onClose}
+                    sx={{ bgcolor: "#f3f4f6", borderRadius: "8px", "&:hover": { bgcolor: "#fdecea", color: "#c62828" } }}>
+                    <CloseIcon sx={{ fontSize: 16 }} />
+                </IconButton>
+            </Box>
+ 
+            <DialogContent sx={{ pt: 3, pb: 1 }}>
+                <Box
+                    sx={{
+                        background: `linear-gradient(135deg, ${TEAL} 0%, #6dd5c8 100%)`,
+                        borderRadius: "16px",
+                        p: 3,
+                    }}
+                >
+                    <input
+                        type="file"
+                        accept=".xlsx,.xls,.csv"
+                        ref={fileInputRef}
+                        onChange={handleFileChange}
+                        style={{ display: "none" }}
+                    />
+ 
+                    <Box sx={{ bgcolor: "#fff", borderRadius: "12px", p: 2.2 }}>
+                        <Typography fontWeight={700} fontSize={15} mb={1.2}>
+                            Select Excel Files:-
+                        </Typography>
+                        <Button
+                            variant="contained"
+                            onClick={handleSelectClick}
+                            disabled={uploading}
+                            sx={{
+                                bgcolor: TEAL,
+                                "&:hover": { bgcolor: TEAL_DARK },
+                                textTransform: "uppercase",
+                                fontWeight: 700,
+                                px: 2.5,
+                            }}
+                        >
+                            Select File
+                        </Button>
+                        {file && (
+                            <Typography sx={{ mt: 1.4, fontSize: 12.5, color: "#455a64", wordBreak: "break-all" }}>
+                                {file.name}
+                            </Typography>
+                        )}
+                    </Box>
+ 
+                    <Box display="flex" justifyContent="center" gap={2} mt={2.5}>
+                        <Button
+                            variant="contained"
+                            onClick={handleUpload}
+                            disabled={uploading}
+                            startIcon={uploading ? <CircularProgress size={14} color="inherit" /> : <UploadFileIcon sx={{ fontSize: 16 }} />}
+                            sx={{ bgcolor: "#2e7d32", "&:hover": { bgcolor: "#1b5e20" }, textTransform: "uppercase", fontWeight: 700, px: 3 }}
+                        >
+                            {uploading ? "Uploading…" : "Upload"}
+                        </Button>
+                        <Button
+                            variant="contained"
+                            onClick={handleClear}
+                            disabled={uploading}
+                            startIcon={<CloseIcon sx={{ fontSize: 16 }} />}
+                            sx={{ bgcolor: "#d32f2f", "&:hover": { bgcolor: "#b71c1c" }, textTransform: "uppercase", fontWeight: 700, px: 3 }}
+                        >
+                            Clear
+                        </Button>
+                    </Box>
+                </Box>
+            </DialogContent>
+ 
+            <DialogActions sx={{ px: 3, pb: 2.5, pt: 1 }}>
+                <Button onClick={onClose} sx={{ textTransform: "none", color: "text.secondary", border: "1px solid #e0e0e0", borderRadius: "8px", px: 2, fontWeight: 600, "&:hover": { bgcolor: "#f5f5f5" } }}>
+                    Close
+                </Button>
+            </DialogActions>
+        </Dialog>
+    );
+};
+ 
 // ═══════════════════════════════════════════════════════════════════════════════
 // MAIN COMPONENT
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -193,15 +337,18 @@ const ServerIp = () => {
     const classes = OverAllCss();
     const navigate = useNavigate();
     const { loading, action } = useLoadingDialog();
-
+ 
     const [rows, setRows] = useState([]);
     const [rowsLoading, setRowsLoading] = useState(false);
     const [search, setSearch] = useState("");
-
+ 
     const [dialogOpen, setDialogOpen] = useState(false);
     const [dialogMode, setDialogMode] = useState("add"); // "add" | "edit"
     const [editRow, setEditRow] = useState(null);
-
+ 
+    // ── excel upload dialog state ──
+    const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
+ 
     const fetchRows = useCallback(async () => {
         setRowsLoading(true);
         try {
@@ -216,9 +363,9 @@ const ServerIp = () => {
             setRowsLoading(false);
         }
     }, []);
-
+ 
     useEffect(() => { fetchRows(); }, [fetchRows]);
-
+ 
     const filteredRows = useMemo(() => {
         const q = search.trim().toLowerCase();
         if (!q) return rows;
@@ -228,10 +375,10 @@ const ServerIp = () => {
                 String(r.ip ?? "").toLowerCase().includes(q)
         );
     }, [rows, search]);
-
+ 
     const openAddDialog = () => { setDialogMode("add"); setEditRow(null); setDialogOpen(true); };
     const openEditDialog = (row) => { setDialogMode("edit"); setEditRow(row); setDialogOpen(true); };
-
+ 
     const handleDelete = async (row) => {
         const result = await Swal.fire({
             title: "Delete Server IP?",
@@ -243,7 +390,7 @@ const ServerIp = () => {
             cancelButtonText: "Cancel",
         });
         if (!result.isConfirmed) return;
-
+ 
         action(true);
         try {
             const res = await fetch(`${ServerURL}/${DELETE_ENDPOINT(row.id)}`, {
@@ -263,7 +410,9 @@ const ServerIp = () => {
             action(false);
         }
     };
-
+ 
+    const openUploadDialog = () => setUploadDialogOpen(true);
+ 
     return (
         <>
             <Box m={1} ml={2}>
@@ -273,9 +422,9 @@ const ServerIp = () => {
                     <Typography color="text.primary">Server IP</Typography>
                 </Breadcrumbs>
             </Box>
-
+ 
             <Box p={1}>
-                {/* ── Header bar: title centered, + on the right, no download ── */}
+                {/* ── Header bar: title centered, upload + add on the right ── */}
                 <Box
                     sx={{
                         display: "flex",
@@ -291,19 +440,35 @@ const ServerIp = () => {
                     <Typography sx={{ color: "#fff", fontWeight: 800, fontSize: 24, textAlign: "center", flex: 1 }}>
                         Server IP
                     </Typography>
-                    <Tooltip title="Add Server IP" arrow>
-                        <IconButton onClick={openAddDialog}
-                            sx={{
-                                bgcolor: "rgba(255,255,255,0.12)",
-                                color: "#fff",
-                                borderRadius: "8px",
-                                "&:hover": { bgcolor: "rgba(255,255,255,0.24)" },
-                            }}>
-                            <AddIcon />
-                        </IconButton>
-                    </Tooltip>
+ 
+                    <Box display="flex" alignItems="center" gap={1}>
+                        <Tooltip title="Upload Excel" arrow>
+                            <IconButton
+                                onClick={openUploadDialog}
+                                sx={{
+                                    bgcolor: "rgba(255,255,255,0.12)",
+                                    color: "#fff",
+                                    borderRadius: "8px",
+                                    "&:hover": { bgcolor: "rgba(255,255,255,0.24)" },
+                                }}>
+                                <UploadFileIcon />
+                            </IconButton>
+                        </Tooltip>
+ 
+                        <Tooltip title="Add Server IP" arrow>
+                            <IconButton onClick={openAddDialog}
+                                sx={{
+                                    bgcolor: "rgba(255,255,255,0.12)",
+                                    color: "#fff",
+                                    borderRadius: "8px",
+                                    "&:hover": { bgcolor: "rgba(255,255,255,0.24)" },
+                                }}>
+                                <AddIcon />
+                            </IconButton>
+                        </Tooltip>
+                    </Box>
                 </Box>
-
+ 
                 {/* ── Search ── */}
                 <Box
                     sx={{
@@ -336,7 +501,7 @@ const ServerIp = () => {
                         />
                     )}
                 </Box>
-
+ 
                 {/* ── Table ── */}
                 <TableContainer component={Paper} elevation={0}
                     sx={{
@@ -413,10 +578,10 @@ const ServerIp = () => {
                         </TableBody>
                     </Table>
                 </TableContainer>
-
+ 
                 {loading}
             </Box>
-
+ 
             <ServerIpDialog
                 open={dialogOpen}
                 mode={dialogMode}
@@ -424,8 +589,15 @@ const ServerIp = () => {
                 onClose={() => setDialogOpen(false)}
                 onSaved={fetchRows}
             />
+ 
+            <ExcelUploadDialog
+                open={uploadDialogOpen}
+                onClose={() => setUploadDialogOpen(false)}
+                onUploaded={fetchRows}
+            />
         </>
     );
 };
-
+ 
 export default ServerIp;
+ 
