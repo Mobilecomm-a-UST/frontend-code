@@ -1,3 +1,5 @@
+
+
 // import React, { useState, useEffect, useMemo, useCallback } from "react";
 // import {
 //     Box,
@@ -12,8 +14,6 @@
 //     Tabs,
 //     Tab,
 //     Typography,
-//     Card,
-//     CardContent,
 //     Avatar,
 //     Button,
 //     Stack,
@@ -22,8 +22,6 @@
 //     Link,
 // } from "@mui/material";
 // import LayersIcon from "@mui/icons-material/Layers";
-// import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-// import SendIcon from "@mui/icons-material/Send";
 // import AccessTimeIcon from "@mui/icons-material/AccessTime";
 // import CellTowerIcon from "@mui/icons-material/CellTower";
 // import ApartmentIcon from "@mui/icons-material/Apartment";
@@ -201,39 +199,6 @@
 // }
 
 // /* ------------------------------------------------------------------ */
-// /*  Stat card                                                           */
-// /* ------------------------------------------------------------------ */
-// // function StatCard({ label, value, icon, accent, pct }) {
-// //     return (
-// //         <Card elevation={1} sx={{ borderRadius: 2, flex: 1, minWidth: 150 }}>
-// //             <CardContent sx={{ pb: "16px !important" }}>
-// //                 <Stack direction="row" alignItems="center" justifyContent="space-between">
-// //                     <Typography
-// //                         variant="caption"
-// //                         sx={{ fontWeight: 600, letterSpacing: 0.5, textTransform: "uppercase", color: "#64748b" }}
-// //                     >
-// //                         {label}
-// //                     </Typography>
-// //                     <Avatar sx={{ bgcolor: `${accent}1a`, width: 30, height: 30 }}>
-// //                         {React.cloneElement(icon, { sx: { color: accent, fontSize: 17 } })}
-// //                     </Avatar>
-// //                 </Stack>
-// //                 <Stack direction="row" alignItems="baseline" spacing={1} sx={{ mt: 0.5 }}>
-// //                     <Typography variant="h5" sx={{ fontWeight: 800, color: "#101828" }}>
-// //                         {value}
-// //                     </Typography>
-// //                     {pct != null && (
-// //                         <Typography variant="caption" sx={{ color: "#94a3b8", fontWeight: 500 }}>
-// //                             {pct}% of total
-// //                         </Typography>
-// //                     )}
-// //                 </Stack>
-// //             </CardContent>
-// //         </Card>
-// //     );
-// // }
-
-// /* ------------------------------------------------------------------ */
 // /*  Main Dashboard                                                      */
 // /* ------------------------------------------------------------------ */
 // function Vi_Hoto() {
@@ -277,9 +242,6 @@
 //     const circlePendingBucket = dashboard?.["circle pending bucket"];
 //     const oemStatus = dashboard?.["oem wise status"];
 //     const oemPendingBucket = dashboard?.["oem wise pending bucket"];
-
-//     const stats = useMemo(() => summarize(circleStatus), [circleStatus]);
-//     const pct = (n) => (stats.total ? Math.round((n / stats.total) * 1000) / 10 : 0);
 
 //     const hasAnyData = !!dashboard;
 
@@ -390,32 +352,6 @@
 //                         {/* Content */}
 //                         {!loading && !error && hasAnyData && (
 //                             <>
-//                                 {/* Stat cards */}
-//                                 {/* <Stack direction="row" spacing={2} sx={{ mb: 3, flexWrap: "wrap", rowGap: 2 }}>
-//                                     <StatCard label="Total Sites" value={stats.total} icon={<LayersIcon />} accent="#0f2a52" />
-//                                     <StatCard
-//                                         label="Accepted"
-//                                         value={stats.accepted}
-//                                         icon={<CheckCircleIcon />}
-//                                         accent="#16a34a"
-//                                         pct={pct(stats.accepted)}
-//                                     />
-//                                     <StatCard
-//                                         label="Offered"
-//                                         value={stats.offered}
-//                                         icon={<SendIcon />}
-//                                         accent="#2563eb"
-//                                         pct={pct(stats.offered)}
-//                                     />
-//                                     <StatCard
-//                                         label="Pending"
-//                                         value={stats.pending}
-//                                         icon={<AccessTimeIcon />}
-//                                         accent="#d97706"
-//                                         pct={pct(stats.pending)}
-//                                     />
-//                                 </Stack> */}
-
 //                                 {/* Tabs — toggles which section is shown */}
 //                                 <Paper elevation={1} sx={{ display: "inline-flex", borderRadius: 2, mb: 3, p: 0.5 }}>
 //                                     <Tabs
@@ -513,10 +449,9 @@
 
 // export default Vi_Hoto;
 
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
     Box,
-    Grid,
     Paper,
     Table,
     TableBody,
@@ -528,20 +463,19 @@ import {
     Tab,
     Typography,
     Avatar,
-    Button,
+    IconButton,
     Stack,
     CircularProgress,
     Breadcrumbs,
     Link,
+    Tooltip,
 } from "@mui/material";
 import LayersIcon from "@mui/icons-material/Layers";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import CellTowerIcon from "@mui/icons-material/CellTower";
 import ApartmentIcon from "@mui/icons-material/Apartment";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import InboxIcon from "@mui/icons-material/Inbox";
-import RefreshIcon from "@mui/icons-material/Refresh";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import Slide from "@mui/material/Slide";
 import { useNavigate } from "react-router-dom";
@@ -554,22 +488,39 @@ const BASE_URL = "https://commtoolapi.mcpspmis.com/";
 const API_PATH = "ix_tracker_vi/HOTO_dashboard/";
 
 /* ------------------------------------------------------------------ */
+/*  Colors — matched to the Excel-style reference screenshots          */
+/* ------------------------------------------------------------------ */
+const C = {
+    corner: "#2e4463",       // top-left / date-row dark navy
+    headerBg: "#4d8fd1",     // column header medium blue
+    labelOdd: "#dbe9f8",     // circle label column - light blue
+    labelEven: "#eef4fb",    // circle label column - lighter blue
+    grandTotalBg: "#c9f7d6", // total row green
+    grandTotalText: "#0b6b3a",
+    zeroText: "#b7bfc9",
+    valueText: "#1a2f52",
+    border: "#c3cbd6",
+};
+
+const PAGE_BG = "#fdece0"; // warm peach/orange page background (replaces bluish tone)
+
+const ROW_H = 37; // approx header row height, used for sticky offset of 2nd header row
+
+/* ------------------------------------------------------------------ */
 /*  Helpers                                                             */
 /* ------------------------------------------------------------------ */
 const getCols = (rows, labelKey) =>
-    rows && rows.length ? Object.keys(rows[0]).filter((k) => k !== labelKey && k !== "Grand Total") : [];
+    rows && rows.length
+        ? Object.keys(rows[0]).filter((k) => k !== labelKey && k !== "Grand Total")
+        : [];
 
-function summarize(statusRows) {
-    if (!statusRows || !statusRows.length) return { total: 0, accepted: 0, offered: 0, pending: 0 };
-    const gt = statusRows.find((r) => r.Status === "Grand Total");
-    const find = (s) => statusRows.find((r) => r.Status === s)?.["Grand Total"] ?? 0;
-    return {
-        total: gt?.["Grand Total"] ?? 0,
-        accepted: find("Accepted"),
-        offered: find("Offered"),
-        pending: find("Pending"),
-    };
-}
+const todayLabel = () => {
+    const d = new Date();
+    const dd = String(d.getDate()).padStart(2, "0");
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    const yyyy = d.getFullYear();
+    return `${dd}-${mm}-${yyyy}`;
+};
 
 /* ------------------------------------------------------------------ */
 /*  No data placeholder                                                 */
@@ -596,14 +547,14 @@ function NoData({ label = "No data found", compact = false }) {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Matrix table — built entirely with MUI Table components             */
+/*  Excel-style matrix table (matches the reference screenshots)        */
 /* ------------------------------------------------------------------ */
 function MatrixTable({ title, rows, labelKey, icon }) {
     const cols = getCols(rows, labelKey);
     const hasData = Array.isArray(rows) && rows.length > 0;
 
     return (
-        <Paper elevation={2} sx={{ borderRadius: 2, overflow: "hidden" }}>
+        <Paper elevation={2} sx={{ borderRadius: 2, overflow: "hidden", border: `1px solid ${C.border}` }}>
             <Box
                 sx={{
                     display: "flex",
@@ -611,7 +562,7 @@ function MatrixTable({ title, rows, labelKey, icon }) {
                     gap: 1,
                     px: 2,
                     py: 1.25,
-                    background: "linear-gradient(90deg, #0f2a52 0%, #173d73 100%)",
+                    background: "linear-gradient(90deg, #446698 0%, #173d73 100%)",
                 }}
             >
                 {icon}
@@ -626,49 +577,100 @@ function MatrixTable({ title, rows, labelKey, icon }) {
             {!hasData ? (
                 <NoData compact />
             ) : (
-                <TableContainer sx={{ maxHeight: 420 }}>
-                    <Table size="small" stickyHeader>
+                <TableContainer sx={{ maxHeight: 460 }}>
+                    <Table
+                        size="small"
+                        stickyHeader
+                        sx={{
+                            borderCollapse: "collapse",
+                            "& .MuiTableCell-root": { border: `1px solid ${C.border}`, py: 0.75 },
+                        }}
+                    >
                         <TableHead>
+                            {/* date row */}
                             <TableRow>
                                 <TableCell
+                                    rowSpan={2}
                                     sx={{
-                                        bgcolor: "#e8edf6",
+                                        position: "sticky",
+                                        left: 0,
+                                        top: 0,
+                                        zIndex: 6,
+                                        bgcolor: C.corner,
+                                        color: "#fff",
                                         fontWeight: 700,
-                                        color: "#1a2f52",
-                                        minWidth: 130,
+                                        minWidth: 110,
                                     }}
                                 >
                                     {labelKey}
                                 </TableCell>
+                                <TableCell
+                                    colSpan={cols.length + 1}
+                                    align="right"
+                                    sx={{
+                                        position: "sticky",
+                                        top: 0,
+                                        zIndex: 4,
+                                        bgcolor: C.corner,
+                                        color: "#fff",
+                                        fontWeight: 700,
+                                    }}
+                                >
+                                    {todayLabel()}
+                                </TableCell>
+                            </TableRow>
+                            {/* column header row */}
+                            <TableRow>
                                 {cols.map((c) => (
                                     <TableCell
                                         key={c}
                                         align="center"
-                                        sx={{ bgcolor: "#0f2a52", color: "#fff", fontWeight: 700, whiteSpace: "nowrap" }}
+                                        sx={{
+                                            position: "sticky",
+                                            top: ROW_H,
+                                            zIndex: 3,
+                                            bgcolor: C.headerBg,
+                                            color: "#fff",
+                                            fontWeight: 700,
+                                            whiteSpace: "nowrap",
+                                        }}
                                     >
                                         {c}
                                     </TableCell>
                                 ))}
                                 <TableCell
                                     align="center"
-                                    sx={{ bgcolor: "#0a1f3d", color: "#fff", fontWeight: 700, whiteSpace: "nowrap" }}
+                                    sx={{
+                                        position: "sticky",
+                                        top: ROW_H,
+                                        right: 0,
+                                        zIndex: 4,
+                                        bgcolor: C.corner,
+                                        color: "#fff",
+                                        fontWeight: 700,
+                                        whiteSpace: "nowrap",
+                                    }}
                                 >
-                                    Total
+                                    Grand Total
                                 </TableCell>
                             </TableRow>
                         </TableHead>
 
                         <TableBody>
                             {rows.map((row, i) => {
-                                const isGrandTotal = row[labelKey] === "Grand Total";
-                                const rowBg = isGrandTotal ? "#ecfdf5" : i % 2 === 0 ? "#ffffff" : "#f8fafc";
+                                const isGrandTotal = row[labelKey] === "Grand Total" || row[labelKey] === "Total";
+                                const labelBg = isGrandTotal ? C.grandTotalBg : i % 2 === 0 ? C.labelOdd : C.labelEven;
 
                                 return (
-                                    <TableRow key={row[labelKey] ?? i} sx={{ bgcolor: rowBg }}>
+                                    <TableRow key={row[labelKey] ?? i}>
                                         <TableCell
                                             sx={{
-                                                fontWeight: isGrandTotal ? 700 : 500,
-                                                color: isGrandTotal ? "#065f46" : "#1a2f52",
+                                                position: "sticky",
+                                                left: 0,
+                                                zIndex: 2,
+                                                bgcolor: labelBg,
+                                                fontWeight: 700,
+                                                color: isGrandTotal ? C.grandTotalText : C.corner,
                                                 whiteSpace: "nowrap",
                                             }}
                                         >
@@ -681,8 +683,9 @@ function MatrixTable({ title, rows, labelKey, icon }) {
                                                     key={c}
                                                     align="center"
                                                     sx={{
+                                                        bgcolor: isGrandTotal ? C.grandTotalBg : "#ffffff",
                                                         fontVariantNumeric: "tabular-nums",
-                                                        color: val === 0 ? "#cbd5e1" : isGrandTotal ? "#065f46" : "#0369a1",
+                                                        color: val === 0 ? C.zeroText : isGrandTotal ? C.grandTotalText : C.valueText,
                                                         fontWeight: val === 0 ? 400 : 700,
                                                     }}
                                                 >
@@ -693,9 +696,12 @@ function MatrixTable({ title, rows, labelKey, icon }) {
                                         <TableCell
                                             align="center"
                                             sx={{
-                                                fontWeight: 800,
+                                                position: "sticky",
+                                                right: 0,
+                                                bgcolor: isGrandTotal ? C.grandTotalBg : C.labelOdd,
                                                 fontVariantNumeric: "tabular-nums",
-                                                color: isGrandTotal ? "#065f46" : "#0f2a52",
+                                                color: isGrandTotal ? C.grandTotalText : C.corner,
+                                                fontWeight: 800,
                                             }}
                                         >
                                             {row["Grand Total"] ?? 0}
@@ -718,7 +724,7 @@ function Vi_Hoto() {
     const navigate = useNavigate();
 
     const [tab, setTab] = useState(0); // 0 = Circle, 1 = OEM
-    const [dashboard, setDashboard] = useState(null); // dashboard object from API
+    const [dashboard, setDashboard] = useState(null);
     const [downloadLink, setDownloadLink] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
@@ -781,8 +787,8 @@ function Vi_Hoto() {
                     </Breadcrumbs>
                 </div>
 
-                <Box sx={{ minHeight: "100%", width: "100%", bgcolor: "#f1f5f9", fontFamily: "Roboto, sans-serif" }}>
-                    <Box sx={{ maxWidth: 1200, mx: "auto", px: { xs: 2, sm: 3 }, py: 3 }}>
+                <Box sx={{ minHeight: "100%", width: "100%", bgcolor: PAGE_BG, fontFamily: "Roboto, sans-serif" }}>
+                    <Box sx={{ width: "100%", px: { xs: 2, sm: 3, md: 4 }, py: 3 }}>
                         {/* Header */}
                         <Paper
                             elevation={3}
@@ -791,10 +797,9 @@ function Vi_Hoto() {
                                 px: 2.5,
                                 py: 2,
                                 mb: 3,
-                                background: "linear-gradient(90deg, #0a1f3d 0%, #0f2a52 55%, #173d73 100%)",
+                                background: "linear-gradient(90deg, #0a1f3d 0%, #446698 0%, #173d73 100%)",
                                 display: "flex",
-                                flexDirection: { xs: "column", sm: "row" },
-                                alignItems: { xs: "flex-start", sm: "center" },
+                                alignItems: "center",
                                 justifyContent: "space-between",
                                 gap: 2,
                             }}
@@ -807,45 +812,29 @@ function Vi_Hoto() {
                                     <Typography variant="subtitle1" sx={{ color: "#fff", fontWeight: 700, letterSpacing: 0.3 }}>
                                         VI HOTO Dashboard
                                     </Typography>
-                                    <Typography variant="caption" sx={{ color: "rgba(186,230,253,0.8)" }}>
+                                    {/* <Typography variant="caption" sx={{ color: "rgba(186,230,253,0.8)" }}>
                                         Integration Tracker VI — Handover / Takeover Status
-                                    </Typography>
+                                    </Typography> */}
                                 </Box>
                             </Stack>
 
-                            <Stack direction="row" spacing={1}>
-                                <Button
-                                    onClick={fetchDashboard}
-                                    variant="outlined"
-                                    size="small"
-                                    startIcon={<RefreshIcon />}
-                                    sx={{
-                                        color: "#fff",
-                                        borderColor: "rgba(255,255,255,0.35)",
-                                        textTransform: "none",
-                                        "&:hover": { borderColor: "#fff", bgcolor: "rgba(255,255,255,0.08)" },
-                                    }}
-                                >
-                                    Refresh
-                                </Button>
-                                <Button
-                                    href={downloadLink || undefined}
-                                    disabled={!downloadLink}
-                                    variant="outlined"
-                                    size="small"
-                                    startIcon={<FileDownloadIcon />}
-                                    endIcon={<ChevronRightIcon />}
-                                    sx={{
-                                        color: "#fff",
-                                        borderColor: "rgba(255,255,255,0.35)",
-                                        textTransform: "none",
-                                        "&:hover": { borderColor: "#fff", bgcolor: "rgba(255,255,255,0.08)" },
-                                        "&.Mui-disabled": { color: "rgba(255,255,255,0.35)", borderColor: "rgba(255,255,255,0.15)" },
-                                    }}
-                                >
-                                    Download Excel
-                                </Button>
-                            </Stack>
+                            <Tooltip title={downloadLink ? "Download Excel" : "No file available"}>
+                                <span>
+                                    <IconButton
+                                        component={downloadLink ? "a" : "button"}
+                                        href={downloadLink || undefined}
+                                        disabled={!downloadLink}
+                                        sx={{
+                                            color: "#7dd3fc",
+                                            bgcolor: "rgba(255,255,255,0.08)",
+                                            "&:hover": { bgcolor: "rgba(255,255,255,0.16)" },
+                                            "&.Mui-disabled": { color: "rgba(255,255,255,0.3)" },
+                                        }}
+                                    >
+                                        <FileDownloadIcon />
+                                    </IconButton>
+                                </span>
+                            </Tooltip>
                         </Paper>
 
                         {/* Loading state */}
@@ -865,7 +854,7 @@ function Vi_Hoto() {
                         {/* Content */}
                         {!loading && !error && hasAnyData && (
                             <>
-                                {/* Tabs — toggles which section is shown */}
+                                {/* Tabs */}
                                 <Paper elevation={1} sx={{ display: "inline-flex", borderRadius: 2, mb: 3, p: 0.5 }}>
                                     <Tabs
                                         value={tab}
@@ -905,52 +894,44 @@ function Vi_Hoto() {
                                     </Tabs>
                                 </Paper>
 
-                                {/* Only the selected section's tables are rendered */}
-                                <Grid container spacing={3}>
+                                {/* Tables stacked one below the other, full width */}
+                                <Stack spacing={3}>
                                     {tab === 0 ? (
                                         <>
-                                            <Grid item xs={12} xl={6}>
-                                                <MatrixTable
-                                                    title="Circle-wise Status"
-                                                    rows={circleStatus}
-                                                    labelKey="Status"
-                                                    icon={<CellTowerIcon sx={{ color: "#7dd3fc", fontSize: 18 }} />}
-                                                />
-                                            </Grid>
-                                            <Grid item xs={12} xl={6}>
-                                                <MatrixTable
-                                                    title="Circle-wise Pending Bucket"
-                                                    rows={circlePendingBucket}
-                                                    labelKey="Pending Bucket"
-                                                    icon={<AccessTimeIcon sx={{ color: "#7dd3fc", fontSize: 18 }} />}
-                                                />
-                                            </Grid>
+                                            <MatrixTable
+                                                title="Circle-wise Status"
+                                                rows={circleStatus}
+                                                labelKey="Status"
+                                                icon={<CellTowerIcon sx={{ color: "#7dd3fc", fontSize: 18 }} />}
+                                            />
+                                            <MatrixTable
+                                                title="Circle-wise Pending Bucket"
+                                                rows={circlePendingBucket}
+                                                labelKey="Pending Bucket"
+                                                icon={<AccessTimeIcon sx={{ color: "#7dd3fc", fontSize: 18 }} />}
+                                            />
                                         </>
                                     ) : (
                                         <>
-                                            <Grid item xs={12} xl={6}>
-                                                <MatrixTable
-                                                    title="OEM-wise Status"
-                                                    rows={oemStatus}
-                                                    labelKey="Status"
-                                                    icon={<ApartmentIcon sx={{ color: "#7dd3fc", fontSize: 18 }} />}
-                                                />
-                                            </Grid>
-                                            <Grid item xs={12} xl={6}>
-                                                <MatrixTable
-                                                    title="OEM-wise Pending Bucket"
-                                                    rows={oemPendingBucket}
-                                                    labelKey="Pending Bucket"
-                                                    icon={<AccessTimeIcon sx={{ color: "#7dd3fc", fontSize: 18 }} />}
-                                                />
-                                            </Grid>
+                                            <MatrixTable
+                                                title="OEM-wise Status"
+                                                rows={oemStatus}
+                                                labelKey="Status"
+                                                icon={<ApartmentIcon sx={{ color: "#7dd3fc", fontSize: 18 }} />}
+                                            />
+                                            <MatrixTable
+                                                title="OEM-wise Pending Bucket"
+                                                rows={oemPendingBucket}
+                                                labelKey="Pending Bucket"
+                                                icon={<AccessTimeIcon sx={{ color: "#7dd3fc", fontSize: 18 }} />}
+                                            />
                                         </>
                                     )}
-                                </Grid>
+                                </Stack>
 
-                                <Typography variant="caption" sx={{ display: "block", textAlign: "center", color: "#94a3b8", mt: 4 }}>
+                                {/* <Typography variant="caption" sx={{ display: "block", textAlign: "center", color: "#94a3b8", mt: 4 }}>
                                     Data source: backend API · Live snapshot
-                                </Typography>
+                                </Typography> */}
                             </>
                         )}
                     </Box>
