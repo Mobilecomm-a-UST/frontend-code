@@ -121,14 +121,14 @@ const PerformanceAt = () => {
                                                 Performance FTR
                                             </Nav.Item>
 
-                                            <Nav.Item
+                                            {/* <Nav.Item
                                                 eventKey="2-4"
                                                 placement="rightStart"
                                                 // icon={<AutoGraphIcon />}
                                                 onClick={() => navigate('/tools/performance_at_tat/PerformanceFTRGraph')}
                                             >
                                                 Performance FTR Graph
-                                            </Nav.Item>
+                                            </Nav.Item> */}
                                             <Nav.Item
                                                 eventKey="2-5"
                                                 placement="rightStart"
@@ -168,14 +168,14 @@ const PerformanceAt = () => {
                                                 SCFT FTR
                                             </Nav.Item>
                                             
-                                             <Nav.Item
+                                             {/* <Nav.Item
                                                 eventKey="3-4"
                                                 placement="rightStart"
                                                 // icon={<AutoGraphIcon />}
                                                 onClick={() => navigate('/tools/performance_at_tat/SCFTFTRGraph')}
                                             >
                                                 SCFT FTR Graph
-                                            </Nav.Item>
+                                            </Nav.Item> */}
 
                                             <Nav.Item
                                                 eventKey="3-5"

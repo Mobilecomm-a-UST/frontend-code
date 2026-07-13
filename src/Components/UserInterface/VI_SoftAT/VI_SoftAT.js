@@ -23,6 +23,7 @@ const TwoG = lazy(()=> import('./VI_Summary/TwoG'))
 const FiveG = lazy(()=> import('./VI_Summary/FiveG'))
 const Vi_Hoto = lazy(() => import('./VI_Hoto_Dashboard/Vi_Hoto'));
 const UPLOADHOTO = lazy(() => import('./VI_Hoto_Dashboard/UPLOADHOTO'));
+const VIHotoFtr = lazy(() => import('./VI_Hoto_Dashboard/VIHotoFtr'));
 
 
 const VI_SoftAT = () => {
@@ -76,8 +77,12 @@ const VI_SoftAT = () => {
                                         <Nav.Item eventKey="3-2" placement="rightStart" icon={<DashboardIcon />} onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/Vi_Hoto')}>
                                             VI Hoto Dashboard
                                         </Nav.Item>  
-                                         </Nav.Menu>
+                                         <Nav.Item eventKey="3-3" placement="rightStart" icon={<DashboardIcon />} onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/VIHotoFtr')}>
+                                            VI Hoto FTR
+                                        </Nav.Item> 
 
+                                         </Nav.Menu>
+                                         
                                     
                                         {/* <Nav.Item eventKey="2" placement="rightStart" icon={<DashboardIcon />} onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/vi_ftr_dashboard')}>
                                             VI FTR Dashboard
@@ -104,6 +109,7 @@ const VI_SoftAT = () => {
                                 <Route element={<FiveG />} path="/FiveG" />
                                 <Route element={<Vi_Hoto />} path="/vi_hoto" />
                                 <Route element={<UPLOADHOTO />} path="/UPLOADHOTO" />
+                                <Route element={<VIHotoFtr />} path="/VIHotoFtr" />
                             </Routes>
                         </Suspense>
                     </Grid>

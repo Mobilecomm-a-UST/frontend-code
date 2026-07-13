@@ -5862,7 +5862,7 @@ const AssignTaskDialog = ({ open, onClose, editId, taskId, initialForm, onSaved,
                         InputProps={{ startAdornment: (<InputAdornment position="start"><EventOutlinedIcon sx={{ fontSize: 18, color: TEAL }} /></InputAdornment>) }} />
 
                     {/* ── Reminder Frequency ──────────────────────────────────────────── */}
-                    <Box>
+                    {/* <Box>
                         <Typography fontSize={12.5} fontWeight={600} color="text.secondary" mb={1}
                             sx={{ display: "flex", alignItems: "center", gap: 0.6 }}>
                             <NotificationsOutlinedIcon sx={{ fontSize: 15, color: TEAL }} />
@@ -5889,7 +5889,7 @@ const AssignTaskDialog = ({ open, onClose, editId, taskId, initialForm, onSaved,
                                 );
                             })}
                         </Box>
-                    </Box>
+                    </Box> */}
 
                     {/* ── Assigned at info ────────────────────────────────────────────── */}
                     <Paper variant="outlined" sx={{ display: "flex", alignItems: "center", gap: 1.2, px: 2, py: 1.3, bgcolor: TEAL_LIGHT, border: `1px solid ${TEAL_MID}`, borderRadius: "10px" }}>
@@ -6230,8 +6230,8 @@ const AssignTask = () => {
 
                             <ToggleButtonGroup value={viewMode} exclusive onChange={(_, v) => v && setViewMode(v)} size="small"
                                 sx={{ bgcolor: "#f3f4f6", borderRadius: "10px", p: 0.3, height: 36, "& .MuiToggleButton-root": { border: "none", borderRadius: "8px !important", px: 1.5 } }}>
-                                <ToggleButton value="table"><Tooltip title="Table view" arrow><TableRowsOutlinedIcon sx={{ fontSize: 17 }} /></Tooltip></ToggleButton>
-                                <ToggleButton value="kanban"><Tooltip title="Kanban board" arrow><ViewKanbanOutlinedIcon sx={{ fontSize: 17 }} /></Tooltip></ToggleButton>
+                                {/* <ToggleButton value="table"><Tooltip title="Table view" arrow><TableRowsOutlinedIcon sx={{ fontSize: 17 }} /></Tooltip></ToggleButton> */}
+                                {/* <ToggleButton value="kanban"><Tooltip title="Kanban board" arrow><ViewKanbanOutlinedIcon sx={{ fontSize: 17 }} /></Tooltip></ToggleButton> */}
                             </ToggleButtonGroup>
 
                             <Button variant="outlined"
@@ -6308,7 +6308,7 @@ const AssignTask = () => {
                 </Box>
 
                 {/* ════ KANBAN ════ */}
-                {viewMode === "kanban" && (
+                {/* {viewMode === "kanban" && (
                     <Box sx={{ px: 2.5, py: 2.5, overflowX: "auto" }}>
                         {loading ? (
                             <Box display="flex" gap={2}>
@@ -6333,7 +6333,7 @@ const AssignTask = () => {
                             Drag cards between columns to update status instantly
                         </Typography>
                     </Box>
-                )}
+                )} */}
 
                 {/* ════ TABLE ════ */}
                 {viewMode === "table" && (
@@ -6538,7 +6538,7 @@ const AssignTask = () => {
                                                                 <DeleteOutlineIcon sx={{ fontSize: 17 }} />
                                                             </IconButton>
                                                         </Tooltip>
-                                                        <Tooltip title={freq && freq !== "None" ? `Send ${freq} reminder` : "No reminder set"} arrow>
+                                                        {/* <Tooltip title={freq && freq !== "None" ? `Send ${freq} reminder` : "No reminder set"} arrow>
                                                             <span>
                                                                 <IconButton size="small"
                                                                     onClick={() => handleSendReminder(row)}
@@ -6550,7 +6550,7 @@ const AssignTask = () => {
                                                                     }
                                                                 </IconButton>
                                                             </span>
-                                                        </Tooltip>
+                                                        </Tooltip> */}
                                                     </Box>
                                                 </TableCell>
                                             </TableRow>
@@ -6570,8 +6570,11 @@ const AssignTask = () => {
                                     )}
                                 </Typography>
                                 <Typography variant="caption" color="text.disabled">
-                                    ✎ edit · 🗑 remove · 🔔 send reminder
+                                    ✎ edit · 🗑 remove 
                                 </Typography>
+                                {/* <Typography variant="caption" color="text.disabled">
+                                    ✎ edit · 🗑 remove · 🔔 send reminder
+                                </Typography> */}
                             </Box>
                         )}
                     </>

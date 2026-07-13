@@ -371,6 +371,7 @@ const MonthWiseIntegration = ({ onData }) => {
         },
 
         { title: 'NO OF BBU', field: 'NO_OF_BBU' },
+        { title: 'MIDS ID', field: 'MIDS_ID' },
         { title: 'Uploaded By', field: 'uploaded_by' },
         { title: 'Upload Date', field: 'upload_date' },
 
