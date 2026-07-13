@@ -583,27 +583,27 @@ const ComanDashboard = () => {
         { title: '2G HOTO Accepted Date.', field: 'HOTO_Accepted_Date_2g' },
          { title: 'Uploaded By', field: 'uploaded_by',editable: 'never' },
         { title: 'Upload Date', field: 'upload_date',editable: 'never' },
-        // {
-        //     title: 'Actions',
-        //     field: 'actions',
-        //     render: rowData => (
-        //         <>
-        //             {!userTypes?.includes('VI_IX_reader') && <IconButton aria-label="delete" title={'Edit'} size="large" onClick={() => { handleEdit(rowData) }}>
-        //                 <DriveFileRenameOutlineIcon
-        //                     style={{ cursor: 'pointer' }}
-        //                     color='success'
-        //                 />
-        //             </IconButton>}
-        //             {!userTypes?.includes('VI_IX_reader') && <IconButton aria-label="delete" title={'Delete'} size="large" onClick={() => { handleDelete(rowData) }}>
-        //                 <DeleteOutlineIcon
-        //                     style={{ cursor: 'pointer' }}
-        //                     color='error'
-        //                 />
-        //             </IconButton>}
-        //         </>
+        {
+            // title: 'Actions',
+            // field: 'actions',
+            // render: rowData => (
+            //     <>
+            //         {!userTypes?.includes('VI_IX_reader') && <IconButton aria-label="delete" title={'Edit'} size="large" onClick={() => { handleEdit(rowData) }}>
+            //             <DriveFileRenameOutlineIcon
+            //                 style={{ cursor: 'pointer' }}
+            //                 color='success'
+            //             />
+            //         </IconButton>}
+            //         {!userTypes?.includes('VI_IX_reader') && <IconButton aria-label="delete" title={'Delete'} size="large" onClick={() => { handleDelete(rowData) }}>
+            //             <DeleteOutlineIcon
+            //                 style={{ cursor: 'pointer' }}
+            //                 color='error'
+            //             />
+            //         </IconButton>}
+            //     </>
 
-        //     )
-        // }
+            // )
+        }
 
     ]
 
@@ -676,114 +676,114 @@ const ComanDashboard = () => {
                     onSelectionChange={(rows) => setSelectedRows(rows)}
                     // onRowClick={((evt, selectedRow) => console.log())}
                      icons={tableIcons}
-                    // editable={{
-                    //     onRowAdd: newData =>
-                    //         new Promise(async (resolve, reject) => {
-                    //             try {
+                    editable={{
+                        onRowAdd: newData =>
+                            new Promise(async (resolve, reject) => {
+                                try {
 
-                    //                 const payload = {
-                    //                     ...DEFAULT_ROW,
-                    //                     ...newData,
-                    //                 };
-                    //                 const response = await axios.post(
-                    //                     `${ServerURL}/IntegrationTracker/add_integration_record/`,
-                    //                     payload,
-                    //                     {
-                    //                         headers: {
-                    //                             Authorization: `token ${getDecreyptedData('tokenKey')}`,
-                    //                         },
-                    //                     }
-                    //                 );
-                    //                 // If backend returns created object with ID
-                    //                 const savedData = response.data.data || newData;
-                    //                 setListData(prevData => [...prevData, savedData]);
-                    //                 navigate('/tools/Integration/dashboard')
-                    //                 Swal.fire({
-                    //                     icon: 'success',
-                    //                     title: 'Added',
-                    //                     text: 'New row added successfully',
-                    //                     timer: 1500,
-                    //                     showConfirmButton: false,
-                    //                 });
-                    //                 resolve();
-                    //             } catch (error) {
-                    //                 Swal.fire({
-                    //                     icon: 'error',
-                    //                     title: 'Error',
-                    //                     text: error.response?.data?.message || error.message,
-                    //                 });
-                    //                 reject();
-                    //             }
-                    //         }),
+                                    const payload = {
+                                        ...DEFAULT_ROW,
+                                        ...newData,
+                                    };
+                                    const response = await axios.post(
+                                        `${ServerURL}/IntegrationTracker/add_integration_record/`,
+                                        payload,
+                                        {
+                                            headers: {
+                                                Authorization: `token ${getDecreyptedData('tokenKey')}`,
+                                            },
+                                        }
+                                    );
+                                    // If backend returns created object with ID
+                                    const savedData = response.data.data || newData;
+                                    setListData(prevData => [...prevData, savedData]);
+                                    navigate('/tools/Integration/dashboard')
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Added',
+                                        text: 'New row added successfully',
+                                        timer: 1500,
+                                        showConfirmButton: false,
+                                    });
+                                    resolve();
+                                } catch (error) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: error.response?.data?.message || error.message,
+                                    });
+                                    reject();
+                                }
+                            }),
 
-                    //     onRowUpdate: (newData, oldData) =>
-                    //         new Promise(async (resolve, reject) => {
-                    //             try {
-                    //                 await axios.put(
-                    //                     `${ServerURL}/IntegrationTracker/edit-integration-record/${oldData.id}/`,
-                    //                     newData,
-                    //                     {
-                    //                         headers: {
-                    //                             Authorization: `token ${getDecreyptedData('tokenKey')}`,
-                    //                         },
-                    //                     }
-                    //                 );
-                    //                 const updatedData = [...listData];
-                    //                 updatedData[oldData.tableData.id] = newData;
-                    //                 setListData(updatedData);
-                    //                 navigate('/tools/Integration/dashboard')
-                    //                 Swal.fire({
-                    //                     icon: 'success',
-                    //                     title: 'Updated',
-                    //                     text: 'Row updated successfully',
-                    //                     timer: 1500,
-                    //                     showConfirmButton: false,
-                    //                 });
-                    //                 resolve();
-                    //             } catch (error) {
-                    //                 Swal.fire({
-                    //                     icon: 'error',
-                    //                     title: 'Error',
-                    //                     text: error.response?.data?.message || error.message,
-                    //                 });
-                    //                 reject();
-                    //             }
-                    //         }),
+                        onRowUpdate: (newData, oldData) =>
+                            new Promise(async (resolve, reject) => {
+                                try {
+                                    await axios.put(
+                                        `${ServerURL}/IntegrationTracker/edit-integration-record/${oldData.id}/`,
+                                        newData,
+                                        {
+                                            headers: {
+                                                Authorization: `token ${getDecreyptedData('tokenKey')}`,
+                                            },
+                                        }
+                                    );
+                                    const updatedData = [...listData];
+                                    updatedData[oldData.tableData.id] = newData;
+                                    setListData(updatedData);
+                                    navigate('/tools/Integration/dashboard')
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Updated',
+                                        text: 'Row updated successfully',
+                                        timer: 1500,
+                                        showConfirmButton: false,
+                                    });
+                                    resolve();
+                                } catch (error) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: error.response?.data?.message || error.message,
+                                    });
+                                    reject();
+                                }
+                            }),
 
-                    //     onRowDelete: oldData =>
-                    //         new Promise(async (resolve, reject) => {
-                    //             try {
-                    //                 await axios.delete(
-                    //                     `${ServerURL}/ix_tracker_vi/delete-integration-record/${oldData.id}/`,
-                    //                     {
-                    //                         headers: {
-                    //                             Authorization: `token ${getDecreyptedData('tokenKey')}`,
-                    //                         },
-                    //                     }
-                    //                 );
-                    //                 const newData = listData.filter(item => item.id !== oldData.id);
-                    //                 setListData(newData);
+                        onRowDelete: oldData =>
+                            new Promise(async (resolve, reject) => {
+                                try {
+                                    await axios.delete(
+                                        `${ServerURL}/ix_tracker_vi/delete-integration-record/${oldData.id}/`,
+                                        {
+                                            headers: {
+                                                Authorization: `token ${getDecreyptedData('tokenKey')}`,
+                                            },
+                                        }
+                                    );
+                                    const newData = listData.filter(item => item.id !== oldData.id);
+                                    setListData(newData);
 
-                    //                 // navigate('/tools/Integration/dashboard')
-                    //                 Swal.fire({
-                    //                     icon: 'success',
-                    //                     title: 'Deleted',
-                    //                     text: 'Row deleted successfully',
-                    //                     timer: 1500,
-                    //                     showConfirmButton: false,
-                    //                 });
+                                    // navigate('/tools/Integration/dashboard')
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Deleted',
+                                        text: 'Row deleted successfully',
+                                        timer: 1500,
+                                        showConfirmButton: false,
+                                    });
 
-                    //                 resolve();
-                    //             } catch (error) {
-                    //                 Swal.fire({
-                    //                     icon: 'error',
-                    //                     title: 'Error',
-                    //                     text: error.response?.data?.message || error.message,
-                    //                 });
-                    //                 reject();
-                    //             }
-                    //         }),
-                    // }}
+                                    resolve();
+                                } catch (error) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: error.response?.data?.message || error.message,
+                                    });
+                                    reject();
+                                }
+                            }),
+                    }}
                     actions={[
                         {
                             icon: () => <DownloadIcon color='primary' fontSize='large' />,
