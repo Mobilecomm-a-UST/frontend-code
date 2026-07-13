@@ -686,7 +686,7 @@ const ComanDashboard = () => {
                                         ...newData,
                                     };
                                     const response = await axios.post(
-                                        `${ServerURL}/IntegrationTracker/add_integration_record/`,
+                                        `${ServerURL}/ix_tracker_vi/add_integration_record/`,
                                         payload,
                                         {
                                             headers: {
@@ -720,7 +720,7 @@ const ComanDashboard = () => {
                             new Promise(async (resolve, reject) => {
                                 try {
                                     await axios.put(
-                                        `${ServerURL}/IntegrationTracker/edit-integration-record/${oldData.id}/`,
+                                        `${ServerURL}/ix_tracker_vi/edit-integration-record/${oldData.id}/`,
                                         newData,
                                         {
                                             headers: {

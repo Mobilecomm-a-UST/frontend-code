@@ -6230,7 +6230,7 @@ const AssignTask = () => {
 
                             <ToggleButtonGroup value={viewMode} exclusive onChange={(_, v) => v && setViewMode(v)} size="small"
                                 sx={{ bgcolor: "#f3f4f6", borderRadius: "10px", p: 0.3, height: 36, "& .MuiToggleButton-root": { border: "none", borderRadius: "8px !important", px: 1.5 } }}>
-                                <ToggleButton value="table"><Tooltip title="Table view" arrow><TableRowsOutlinedIcon sx={{ fontSize: 17 }} /></Tooltip></ToggleButton>
+                                {/* <ToggleButton value="table"><Tooltip title="Table view" arrow><TableRowsOutlinedIcon sx={{ fontSize: 17 }} /></Tooltip></ToggleButton> */}
                                 {/* <ToggleButton value="kanban"><Tooltip title="Kanban board" arrow><ViewKanbanOutlinedIcon sx={{ fontSize: 17 }} /></Tooltip></ToggleButton> */}
                             </ToggleButtonGroup>
 
