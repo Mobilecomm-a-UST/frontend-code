@@ -127,8 +127,9 @@ const PerformanceAt = () => {
                                                 // icon={<AutoGraphIcon />}
                                                 onClick={() => navigate('/tools/performance_at_tat/PerformanceFTRGraph')}
                                             >
-                                                Performance FTR Graph
+                                                Performance FTR Trend
                                             </Nav.Item> */}
+
                                             <Nav.Item
                                                 eventKey="2-5"
                                                 placement="rightStart"
@@ -174,7 +175,7 @@ const PerformanceAt = () => {
                                                 // icon={<AutoGraphIcon />}
                                                 onClick={() => navigate('/tools/performance_at_tat/SCFTFTRGraph')}
                                             >
-                                                SCFT FTR Graph
+                                                SCFT FTR Trend
                                             </Nav.Item> */}
 
                                             <Nav.Item
