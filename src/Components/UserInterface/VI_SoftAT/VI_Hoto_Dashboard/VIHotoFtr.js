@@ -769,7 +769,7 @@ function VIHotoFtr() {
     return (
         <Slide direction="left" in="true" timeout={1000}>
             <div>
-                <div style={{ margin: 10, marginLeft: 10 }}>
+                {/* <div style={{ margin: 10, marginLeft: 10 }}>
                     <Breadcrumbs
                         aria-label="breadcrumb"
                         itemsBeforeCollapse={2}
@@ -787,7 +787,7 @@ function VIHotoFtr() {
                         </Link>
                         <Typography color="text.primary">VI HOTO FTR</Typography>
                     </Breadcrumbs>
-                </div>
+                </div> */}
 
                 <Box sx={{ minHeight: "100%", width: "100%", bgcolor: PAGE_BG, fontFamily: "Roboto, sans-serif" }}>
                     <Box sx={{ width: "100%", px: { xs: 2, sm: 3, md: 4 }, py: 3 }}>
@@ -949,4 +949,4 @@ function VIHotoFtr() {
     );
 }
 
-export default VIHotoFtr;
+export const MemoVIHotoFtr = React.memo(VIHotoFtr);
