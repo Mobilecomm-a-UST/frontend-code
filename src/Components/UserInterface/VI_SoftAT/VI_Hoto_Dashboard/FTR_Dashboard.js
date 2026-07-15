@@ -551,7 +551,7 @@ function FTR_Dashboard() {
     return (
         <Slide direction="left" in="true" timeout={1000}>
             <div>
-                <div style={{ margin: 10, marginLeft: 10 }}>
+                {/* <div style={{ margin: 10, marginLeft: 10 }}>
                     <Breadcrumbs
                         aria-label="breadcrumb"
                         itemsBeforeCollapse={2}
@@ -569,7 +569,7 @@ function FTR_Dashboard() {
                         </Link>
                         <Typography color="text.primary">VI HOTO FTR</Typography>
                     </Breadcrumbs>
-                </div>
+                </div> */}
 
                 <Box sx={{ minHeight: "100%", width: "100%", bgcolor: PAGE_BG, fontFamily: "Roboto, sans-serif" }}>
                     <Box sx={{ width: "100%", px: { xs: 2, sm: 3, md: 4 }, py: 3 }}>
@@ -594,7 +594,7 @@ function FTR_Dashboard() {
                                 </Avatar>
                                 <Box>
                                     <Typography variant="subtitle1" sx={{ color: "#fff", fontWeight: 700, letterSpacing: 0.3 }}>
-                                        FTR Analysis Dashboard
+                                        FTR Dashboard
                                     </Typography>
                                     {/* <Typography variant="caption" sx={{ color: "rgba(186,230,253,0.8)" }}>
                                         Integration Tracker VI — Handover / Takeover Status
@@ -730,4 +730,4 @@ function FTR_Dashboard() {
     );
 }
 
-export default FTR_Dashboard;
+export const MemoFTR_Dashboard = React.memo(FTR_Dashboard);

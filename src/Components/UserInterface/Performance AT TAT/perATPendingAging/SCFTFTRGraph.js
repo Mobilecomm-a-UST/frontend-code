@@ -1489,7 +1489,6 @@ const getCircleBarColor = (idx) => CIRCLE_BAR_COLORS[idx % CIRCLE_BAR_COLORS.len
 const OVERALL_LINE_COLOR = "#9c27b0";
 const PERCENT_AXIS_TICKS = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 
-// ── View mode: bars+trend (default, current behaviour) vs trend-only ──
 const VIEW_MODES = [
   { key: "bars-trend", label: "Bars + Trend" },
   { key: "trend-only", label: "Trend Only" },
@@ -1528,6 +1527,23 @@ const inputValueToMonthLabel = (val) => {
   const idx = parseInt(month, 10) - 1;
   if (Number.isNaN(idx) || idx < 0 || idx > 11 || !year) return "";
   return `${MONTH_ABBRS[idx]} ${year}`;
+};
+
+// Builds the "Mon YYYY,Mon YYYY" string the backend expects for the "month"
+// form field (confirmed via Postman: month = "Apr 2026,Jul 2026").
+const buildMonthParam = (fromLabel, toLabel) => {
+  const from = parseMonthLabel(fromLabel);
+  const to = parseMonthLabel(toLabel || fromLabel) || from;
+  if (!from || !to) return null;
+
+  let f = fromLabel;
+  let t = toLabel || fromLabel;
+  const fKey = from.year * 12 + from.monthIdx;
+  const tKey = to.year * 12 + to.monthIdx;
+  if (fKey > tKey) {
+    [f, t] = [t, f];
+  }
+  return `${f},${t}`;
 };
 
 const CircleGradientDefs = ({ circleNames }) => (
@@ -1605,7 +1621,6 @@ const CustomXTick = ({ x, y, payload }) => (
   </text>
 );
 
-// ── Replaces the old CategoryFilterBar: toggles chart display mode ──
 const ViewModeFilter = ({ active, onChange }) => (
   <Box sx={{
     display: "flex", alignItems: "center", flexWrap: "wrap", gap: 1,
@@ -1774,17 +1789,29 @@ function SCFTFTRGraph() {
   const requestIdRef = React.useRef(0);
   const isTrendOnly = viewMode === "trend-only";
 
-  const fetchAll = React.useCallback(() => {
+  // FIX: fetchAll now sends a "month" form-data field built from the current
+  // monthRange, in the exact "Mon YYYY,Mon YYYY" format the backend expects
+  // (confirmed via Postman: month = "Apr 2026,Jul 2026"). Previously no
+  // month/date info was sent at all, so the backend fell back to its own
+  // default range which never included the current month (e.g. Jul 2026).
+  const fetchAll = React.useCallback((range) => {
     const myRequestId = ++requestIdRef.current;
     setLoading(true);
     setError(null);
 
-    const postEmpty = (endpoint) =>
-      postData(endpoint, new FormData())
+    const monthParam = buildMonthParam(range?.from, range?.to);
+
+    const postWithRange = (endpoint) => {
+      const formData = new FormData();
+      if (monthParam) {
+        formData.append("month", monthParam);
+      }
+      return postData(endpoint, formData)
         .then((res) => (res?.status ? res : null))
         .catch(() => null);
+    };
 
-    Promise.all([postEmpty(CIRCLE_API), postEmpty(GRAND_TOTAL_API)])
+    Promise.all([postWithRange(CIRCLE_API), postWithRange(GRAND_TOTAL_API)])
       .then(([circleRes, grandRes]) => {
         if (requestIdRef.current !== myRequestId) return;
         if (!circleRes && !grandRes) {
@@ -1798,9 +1825,13 @@ function SCFTFTRGraph() {
       });
   }, []);
 
+  // FIX: refetch whenever the month range changes (debounced), not just once
+  // on mount — so picking "Jul 2026" actually asks the backend for July
+  // instead of only fetching whatever the default range was at load time.
   useEffect(() => {
-    fetchAll();
-  }, [fetchAll]);
+    const timer = setTimeout(() => fetchAll(monthRange), 300);
+    return () => clearTimeout(timer);
+  }, [fetchAll, monthRange]);
 
   const allCircleNames = useMemo(() => {
     if (!circleGraphData || !circleGraphData[tech]) return [];
@@ -1823,8 +1854,6 @@ function SCFTFTRGraph() {
     return allCircleNames.filter((c) => selectedCircles.includes(c));
   }, [allCircleNames, selectedCircles]);
 
-  // In trend-only mode skip building per-circle bar columns entirely —
-  // just month + Overall, so the line renders cleanly on its own.
   const chartData = useMemo(() => {
     if (!circleGraphData || !circleGraphData[tech]) return [];
     const circleSeries = circleGraphData[tech].series || [];
@@ -1848,6 +1877,8 @@ function SCFTFTRGraph() {
     setMonthRange({ from: m, to: m });
   };
 
+  // Server now already scopes data to the requested month range, but this
+  // client-side filter is kept as a harmless safety net.
   const filteredChartData = useMemo(() => {
     if (!chartData.length) return chartData;
     const fromKey = monthSortKey(monthRange.from);
@@ -1873,8 +1904,6 @@ function SCFTFTRGraph() {
   const chartHeight = isTrendOnly ? 420 : Math.max(420, 380 + Math.max(0, numCircles - 4) * 14);
   const hasOverall = filteredChartData.some((row) => row.Overall != null);
 
-  // ✅ In Trend Only mode the Overall line uses the LEFT axis (no right axis rendered).
-  // In Bars + Trend mode bars use "left" and Overall line uses "right", as before.
   const overallAxisId = isTrendOnly ? "left" : "right";
 
   const monthLabel = filteredChartData.length
@@ -1912,7 +1941,7 @@ function SCFTFTRGraph() {
           <MuiTooltip title="Refresh data" arrow>
             <span>
               <IconButton
-                onClick={fetchAll}
+                onClick={() => fetchAll(monthRange)}
                 size="small"
                 disabled={loading}
                 sx={{ bgcolor: alpha("#1e3c72", 0.08), borderRadius: "10px", "&:hover": { bgcolor: alpha("#1e3c72", 0.15) } }}
@@ -1931,7 +1960,6 @@ function SCFTFTRGraph() {
         </Paper>
 
         <Paper elevation={0} sx={{ borderRadius: "16px", border: "1px solid #e8ecf0", overflow: "hidden", boxShadow: "0 2px 12px rgba(0,0,0,0.06)", mb: 2 }}>
-          {/* Tech tabs */}
           <Box sx={{ display: "flex", borderBottom: "1.5px solid #e8ecf0", bgcolor: "#f8fafc", px: 1.5, pt: 0.5 }}>
             {TECH_TABS.map((tab) => {
               const isActive = tech === tab.key;
@@ -1954,10 +1982,8 @@ function SCFTFTRGraph() {
             })}
           </Box>
 
-          {/* View mode: Bars + Trend  vs  Trend Only (replaces old category filter) */}
           <ViewModeFilter active={viewMode} onChange={setViewMode} />
 
-          {/* Filter row — month range (left) + circle filter (right, hidden in trend-only) */}
           <Box sx={{
             display: "flex", justifyContent: "space-between", alignItems: "center",
             flexWrap: "wrap", gap: 1.5, px: 2, py: 1.4, bgcolor: "#f8fafc", borderBottom: "1px solid #e8ecf0",
@@ -1973,7 +1999,6 @@ function SCFTFTRGraph() {
             )}
           </Box>
 
-          {/* Chart panel */}
           <Box sx={{ borderRadius: 0, overflow: "hidden", background: "#fff" }}>
             <Box sx={{
               background: `linear-gradient(135deg, ${HEADER_GRADIENT_FROM} 0%, ${HEADER_GRADIENT_TO} 100%)`,
@@ -2021,7 +2046,6 @@ function SCFTFTRGraph() {
                       <CartesianGrid strokeDasharray="4 4" stroke="#eaeef2" vertical={false} />
                       <XAxis dataKey="month" tick={<CustomXTick />} axisLine={{ stroke: "#dde3ea" }} tickLine={false} height={34} />
 
-                      {/* Left axis: bars in normal mode, Overall trend in trend-only mode */}
                       <YAxis
                         yAxisId="left"
                         domain={[0, 100]}
@@ -2033,7 +2057,6 @@ function SCFTFTRGraph() {
                         tickFormatter={isTrendOnly ? (v) => `${v}%` : undefined}
                       />
 
-                      {/* Right axis only needed when bars (left) + trend (right) coexist */}
                       {!isTrendOnly && (
                         <YAxis yAxisId="right" orientation="right" domain={[0, 100]} ticks={PERCENT_AXIS_TICKS} tick={{ fontSize: 11, fill: OVERALL_LINE_COLOR }} axisLine={false} tickLine={false} tickFormatter={(v) => `${v}%`} width={46} />
                       )}

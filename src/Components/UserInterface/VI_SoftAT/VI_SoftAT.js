@@ -25,6 +25,7 @@ const Vi_Hoto = lazy(() => import('./VI_Hoto_Dashboard/Vi_Hoto'));
 const UPLOADHOTO = lazy(() => import('./VI_Hoto_Dashboard/UPLOADHOTO'));
 const VIHotoFtr = lazy(() => import('./VI_Hoto_Dashboard/VIHotoFtr'));
 const FTR_Dashboard = lazy(() => import('./VI_Hoto_Dashboard/FTR_Dashboard'));
+const VI_Hoto_FTR = lazy(() => import('./VI_Hoto_Dashboard/VI_Hoto_FTR'));
 
 
 const VI_SoftAT = () => {
@@ -78,11 +79,15 @@ const VI_SoftAT = () => {
                                         <Nav.Item eventKey="3-2" placement="rightStart" icon={<DashboardIcon />} onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/Vi_Hoto')}>
                                             VI Hoto Dashboard
                                         </Nav.Item>  
-                                         <Nav.Item eventKey="3-3" placement="rightStart" icon={<DashboardIcon />} onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/VIHotoFtr')}>
+                                        
+                                         {/* <Nav.Item eventKey="3-3" placement="rightStart" icon={<DashboardIcon />} onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/VIHotoFtr')}>
                                             FTR Analysis
                                         </Nav.Item> 
                                          <Nav.Item eventKey="3-4" placement="rightStart" icon={<DashboardIcon />} onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/FTR_Dashboard')}>
                                             FTR Dasboard
+                                        </Nav.Item>  */}
+                                         <Nav.Item eventKey="3-5" placement="rightStart" icon={<DashboardIcon />} onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/VI_Hoto_FTR')}>
+                                            VI Hoto FTR
                                         </Nav.Item> 
 
                                          </Nav.Menu>
@@ -115,6 +120,7 @@ const VI_SoftAT = () => {
                                 <Route element={<UPLOADHOTO />} path="/UPLOADHOTO" />
                                 <Route element={<VIHotoFtr />} path="/VIHotoFtr" />
                                 <Route element={<FTR_Dashboard />} path="/FTR_Dashboard" />
+                                <Route element={<VI_Hoto_FTR />} path="/VI_Hoto_FTR" />
                             </Routes>
                         </Suspense>
                     </Grid>
