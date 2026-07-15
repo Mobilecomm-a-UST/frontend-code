@@ -24,6 +24,7 @@ const FiveG = lazy(()=> import('./VI_Summary/FiveG'))
 const Vi_Hoto = lazy(() => import('./VI_Hoto_Dashboard/Vi_Hoto'));
 const UPLOADHOTO = lazy(() => import('./VI_Hoto_Dashboard/UPLOADHOTO'));
 const VIHotoFtr = lazy(() => import('./VI_Hoto_Dashboard/VIHotoFtr'));
+const FTR_Dashboard = lazy(() => import('./VI_Hoto_Dashboard/FTR_Dashboard'));
 
 
 const VI_SoftAT = () => {
@@ -80,6 +81,9 @@ const VI_SoftAT = () => {
                                          <Nav.Item eventKey="3-3" placement="rightStart" icon={<DashboardIcon />} onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/VIHotoFtr')}>
                                             FTR Analysis
                                         </Nav.Item> 
+                                         <Nav.Item eventKey="3-4" placement="rightStart" icon={<DashboardIcon />} onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/FTR_Dashboard')}>
+                                            FTR Dasboard
+                                        </Nav.Item> 
 
                                          </Nav.Menu>
                                          
@@ -110,6 +114,7 @@ const VI_SoftAT = () => {
                                 <Route element={<Vi_Hoto />} path="/vi_hoto" />
                                 <Route element={<UPLOADHOTO />} path="/UPLOADHOTO" />
                                 <Route element={<VIHotoFtr />} path="/VIHotoFtr" />
+                                <Route element={<FTR_Dashboard />} path="/FTR_Dashboard" />
                             </Routes>
                         </Suspense>
                     </Grid>
