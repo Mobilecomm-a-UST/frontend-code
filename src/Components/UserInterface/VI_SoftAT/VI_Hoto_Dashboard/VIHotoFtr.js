@@ -756,13 +756,13 @@ function VIHotoFtr() {
         fetchDashboard();
     }, [fetchDashboard]);
 
-    const circleStatus = dashboard?.["circle status"];
-    const circlePendingBucket = dashboard?.["circle pending bucket"];
+    // const circleStatus = dashboard?.["circle status"];
+    // const circlePendingBucket = dashboard?.["circle pending bucket"];
     // New: circle-wise FTR Status matrix (same shape as the others — one row
     // per circle-code column set, e.g. BIH / DEL / KAR / KK / MAH / MUM / UPE / UPW).
     const circleFtrStatus = dashboard?.["FTR Status"];
-    const oemStatus = dashboard?.["oem wise status"];
-    const oemPendingBucket = dashboard?.["oem wise pending bucket"];
+    // const oemStatus = dashboard?.["oem wise status"];
+    // const oemPendingBucket = dashboard?.["oem wise pending bucket"];
 
     const hasAnyData = !!dashboard;
 

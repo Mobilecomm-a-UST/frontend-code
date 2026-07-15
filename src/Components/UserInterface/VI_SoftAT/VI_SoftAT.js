@@ -78,7 +78,7 @@ const VI_SoftAT = () => {
                                             VI Hoto Dashboard
                                         </Nav.Item>  
                                          <Nav.Item eventKey="3-3" placement="rightStart" icon={<DashboardIcon />} onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/VIHotoFtr')}>
-                                            VI Hoto FTR
+                                            FTR Analysis
                                         </Nav.Item> 
 
                                          </Nav.Menu>
