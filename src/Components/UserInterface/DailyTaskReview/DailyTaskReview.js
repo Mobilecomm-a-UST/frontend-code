@@ -17,6 +17,7 @@ import FolderIcon from '@rsuite/icons/Folder';
 import { Admin } from '@rsuite/icons';
 import { use } from 'react';
 import Loader from '../../Skeleton/Loader';
+import TextImageIcon from '@rsuite/icons/TextImage';
 
 
 
@@ -91,7 +92,7 @@ const DailyTaskReview = () => {
                         {/* THIS VIEW FOR PC  */}
                         <Box sx={{ display: { xs: 'none', md: 'inherit' } }} >
                             <Box sx={{ position: 'fixed', width: '16.5%' }} >
-                                <Sidenav expanded={expanded} defaultOpenKeys={['1']} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#006e74", marginTop: 8, borderRadius: 10 }}>
+                                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#006e74", marginTop: 8, borderRadius: 10 }}>
                                     <Sidenav.Body>
                                         <Nav activeKey={activeKey} onSelect={setActiveKey} >
                                             <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>Daily Task Review</Nav>
@@ -111,6 +112,10 @@ const DailyTaskReview = () => {
                                                 </Nav.Menu>
                                             {/* } */}
 
+                                              <Nav.Item eventKey="4" placement="rightStart" className="single-item-custom" icon={< TextImageIcon style={{}} />} onClick={() => { navigate('/tools/daily_task_review/TaskTemplate'); show(); setMenuButton(true) }}>
+                                                Task Templates
+                                            </Nav.Item> 
+
                                             <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={<DashboardIcon style={{}} />} onClick={() => { navigate('/tools/daily_task_review/Dashboard'); show(); setMenuButton(true) }}>
                                                 Dashboard
                                             </Nav.Item>
@@ -124,9 +129,7 @@ const DailyTaskReview = () => {
                                                  My Task
                                             </Nav.Item>
 
-                                             <Nav.Item eventKey="4" placement="rightStart" className="single-item-custom" icon={< ListIcon style={{}} />} onClick={() => { navigate('/tools/daily_task_review/TaskTemplate'); show(); setMenuButton(true) }}>
-                                                Task Templates
-                                            </Nav.Item> 
+                                           
 
                                             {/* <Nav.Item eventKey="1" placement="rightStart" className="single-item-custom" icon={<FolderIcon style={{}} />} onClick={() => { navigate('/tools/full_site_dismantle/file_manager'); show(); setMenuButton(true) }}>
                                                 File Manager
