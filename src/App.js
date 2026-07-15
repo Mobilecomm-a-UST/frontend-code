@@ -417,7 +417,7 @@ function App() {
 
             <Route path="/tools/resource_management/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={ResourceManagement} allowedUserTypes={['admin', 'RM']} userType={userType} />
+                <ProtectedRoute element={ResourceManagement} allowedUserTypes={['RM_Admin',"RM_CDH"]} userType={userType} />
               </Suspense>
             } />
 
