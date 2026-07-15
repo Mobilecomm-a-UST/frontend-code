@@ -432,15 +432,15 @@ const ToolData = [
         link: '/tools/daily_task_review',
         groupBy: ['admin', 'DTR']
     },
-    // {
-    //     id: 40,
-    //     name: 'Resource Mgt',
-    //     title: 'Resource Management System',
-    //     icons: DateTaskIcon,
-    //     fullname: 'Resource Management',
-    //     link: '/tools/resource_management',
-    //     groupBy: ['admin',"RM"]
-    // },
+    {
+        id: 40,
+        name: 'Resource Mgt',
+        title: 'Resource Management System',
+        icons: DateTaskIcon,
+        fullname: 'Resource Management',
+        link: '/tools/resource_management',
+        groupBy: ['RM_Admin',"RM_CDH"]
+    },
 
   
 

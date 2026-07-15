@@ -12,7 +12,6 @@ import DialogTitle from '@mui/material/DialogTitle';
 import axios from "axios";
 import OverAllCss from "../../../csss/OverAllCss";
 import { useNavigate } from 'react-router-dom'
-// import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
 import Fab from '@mui/material/Fab';
 import CloseIcon from '@mui/icons-material/Close';
@@ -21,7 +20,7 @@ import DownloadIcon from '@mui/icons-material/Download';
 import { usePost } from "../../../Hooks/PostApis";
 import { getDecreyptedData } from "../../../utils/localstorage";
 
-const UploadFile = () => {
+const UploadResource = () => {
     const { makePostRequest, cancelRequest } = usePost()
     const [rawKpiFile, setRawKpiFile] = useState({ filename: "", bytes: "" })
     const [open, setOpen] = useState(false);
@@ -33,7 +32,6 @@ const UploadFile = () => {
     const [version, setVersion] = useState('')
     const classes = OverAllCss()
     const navigate = useNavigate()
-
     var link = `${ServerURL}${fileData}`;
 
 
@@ -62,7 +60,7 @@ const UploadFile = () => {
             var formData = new FormData();
             formData.append("file", rawKpiFile.bytes);
             try {
-                const response = await postDataa(`api/monthly-report/bulk-upsert/`, formData);
+                const response = await postDataa(`resource/bulk-upload/`, formData);
                 var result = await response
                 setOpen(false);
                 setError(result.error_rows)
@@ -77,7 +75,7 @@ const UploadFile = () => {
                         icon: "success",
                         title: "Done",
                         // text: `${result.message}`,
-                        text:"",
+                        text: "",
                     });
                 }
 
@@ -178,13 +176,15 @@ const UploadFile = () => {
 
     useEffect(() => {
         const fetchDownloadTemp = async () => {
-            const res = await getData(`template/?fileName=${encodeURIComponent("Revenue_Template.xlsx")}`, { headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` } })
+            const res = await getData(`template/?fileName=${encodeURIComponent("Resource_Template.xlsx")}`, { headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` } })
             if (res) {
                 setFileData(res.file_url)
                 setVersion(res.template_version)
             }
         }
+
         fetchDownloadTemp();
+
     }, [])
 
     return (
@@ -199,7 +199,7 @@ const UploadFile = () => {
                     <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
                         <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
                         <Link underline="hover" onClick={() => { navigate('/tools/resource_management') }}>Resource Management</Link>
-                        <Typography color='text.primary'>Upload Revenue</Typography>
+                        <Typography color='text.primary'>Upload Resource</Typography>
                     </Breadcrumbs>
                 </div>
 
@@ -217,7 +217,7 @@ const UploadFile = () => {
                 <Box className={classes.main_Box}>
                     <Box className={classes.Back_Box}>
                         <Box className={classes.Box_Hading}>
-                            Upload Revenue
+                            Upload Resource
                         </Box>
                         <Stack spacing={2} sx={{ marginTop: "-40px" }}>
 
@@ -260,4 +260,4 @@ const UploadFile = () => {
     )
 }
 
-export default UploadFile
+export default UploadResource
