@@ -812,7 +812,7 @@ function VIHotoFtr() {
                                 </Avatar>
                                 <Box>
                                     <Typography variant="subtitle1" sx={{ color: "#fff", fontWeight: 700, letterSpacing: 0.3 }}>
-                                        VI HOTO FTR Dashboard
+                                        FTR Analysis Dashboard
                                     </Typography>
                                     {/* <Typography variant="caption" sx={{ color: "rgba(186,230,253,0.8)" }}>
                                         Integration Tracker VI — Handover / Takeover Status
@@ -913,7 +913,7 @@ function VIHotoFtr() {
                                                 icon={<AccessTimeIcon sx={{ color: "#7dd3fc", fontSize: 18 }} />}
                                             /> */}
                                             <MatrixTable
-                                                title="Circle-wise FTR Status"
+                                                title="FTR Analysis"
                                                 rows={circleFtrStatus}
                                                 labelKey="FTR Status"
                                                 icon={<TrendingUpIcon sx={{ color: "#7dd3fc", fontSize: 18 }} />}
