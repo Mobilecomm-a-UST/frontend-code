@@ -14,6 +14,7 @@ import Loader from '../../Skeleton/Loader';
 const SA_upload = lazy(()=>import('./Upload/Upload'))
 const SA_tool = lazy(()=>import('./SA_tool'))
 const UPE_GPL_ULS = lazy(()=>import('./Upload/UPE_GPL_ULS'))
+const ORI_gpl_macro = lazy(()=>import('./Upload/ORI_gpl_macro'))
 
 const SA = () => {
         const [expanded, setExpanded] = useState(true);
@@ -43,7 +44,10 @@ const SA = () => {
                                         <Nav.Item eventKey="2" placement="rightStart" icon={<FileUploadIcon />} onClick={() => navigate('/tools/ix_tools/sa_slicing/UPE_GPL_ULS')}>
                                             UPE GPL ULS
                                         </Nav.Item>
-                                    
+                                        <Nav.Item eventKey="3" placement="rightStart" icon={<FileUploadIcon />} onClick={() => navigate('/tools/ix_tools/sa_slicing/ORI_gpl_macro')}>
+                                            ORI GPL Macro
+                                        </Nav.Item>
+
                                     </Nav>
                                 </Sidenav.Body>
 
@@ -56,7 +60,8 @@ const SA = () => {
                                 <Route element={<SA_tool />} path="/" />
                                 <Route element={<SA_upload/>} path='/sa_upload_xml' />
                                 <Route element={<UPE_GPL_ULS/>} path='/UPE_GPL_ULS' />
-                    
+                                <Route element={<ORI_gpl_macro/>} path='/ORI_gpl_macro' />
+
                             </Routes>
                         </Suspense>
                     </Grid>
