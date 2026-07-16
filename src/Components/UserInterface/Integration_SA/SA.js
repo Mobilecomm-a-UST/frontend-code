@@ -15,6 +15,7 @@ const SA_upload = lazy(()=>import('./Upload/Upload'))
 const SA_tool = lazy(()=>import('./SA_tool'))
 const UPE_GPL_ULS = lazy(()=>import('./Upload/UPE_GPL_ULS'))
 const ORI_gpl_macro = lazy(()=>import('./Upload/ORI_gpl_macro'))
+const BIH_gpl_uls = lazy(()=>import('./Upload/BIH_gpl_uls'))
 
 const SA = () => {
         const [expanded, setExpanded] = useState(true);
@@ -47,6 +48,10 @@ const SA = () => {
                                         <Nav.Item eventKey="3" placement="rightStart" icon={<FileUploadIcon />} onClick={() => navigate('/tools/ix_tools/sa_slicing/ORI_gpl_macro')}>
                                             ORI GPL Macro
                                         </Nav.Item>
+                                        <Nav.Item eventKey="4" placement="rightStart" icon={<FileUploadIcon />} onClick={() => navigate('/tools/ix_tools/sa_slicing/BIH_gpl_uls')}>
+                                            BIH GPL ULS
+                                        </Nav.Item>
+                                        
 
                                     </Nav>
                                 </Sidenav.Body>
@@ -61,6 +66,7 @@ const SA = () => {
                                 <Route element={<SA_upload/>} path='/sa_upload_xml' />
                                 <Route element={<UPE_GPL_ULS/>} path='/UPE_GPL_ULS' />
                                 <Route element={<ORI_gpl_macro/>} path='/ORI_gpl_macro' />
+                                <Route element={<BIH_gpl_uls/>} path='/BIH_gpl_uls' />
 
                             </Routes>
                         </Suspense>
