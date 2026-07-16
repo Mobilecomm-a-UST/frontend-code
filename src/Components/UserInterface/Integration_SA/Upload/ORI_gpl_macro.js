@@ -13,7 +13,7 @@ import OverAllCss from "../../../csss/OverAllCss";
 import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
 
 
-const Upload = () => {
+const ORI_gpl_macro = () => {
     const [make4GFiles, setMake4GFiles] = useState({ filename: "", bytes: "" })
     const [selectCircle, setSelectCircle] = useState('')
     const [show4G, setShow4G] = useState(false)
@@ -46,7 +46,7 @@ const Upload = () => {
             action(true)
             var formData = new FormData();
             formData.append(`xml_file`, make4GFiles.bytes);
-            const response = await postData('nokia/slicing/', formData)
+            const response = await postData('ori_macro/ori_slicing/', formData)
             console.log('response data', response)
             if (response.status === true) {
                 action(false)
@@ -96,7 +96,7 @@ const Upload = () => {
                     <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
                     <Link underline='hover' onClick={() => { navigate('/tools/ix_tools') }}>IX Tools</Link>
                     <Link underline='hover' onClick={() => { navigate('/tools/ix_tools/sa_slicing') }}>5G GPL</Link>
-                    <Typography color='text.primary'>UPE GPL MACRO</Typography>
+                    <Typography color='text.primary'>UPE GPL Macro</Typography>
                 </Breadcrumbs>
             </div>
             <Slide
@@ -109,7 +109,7 @@ const Upload = () => {
                     <Box className={classes.main_Box}>
                         <Box className={classes.Back_Box} sx={{ width: { md: '75%', xs: '100%' } }}>
                             <Box className={classes.Box_Hading} >
-                                Upload GPL for UPE
+                                Upload GPL for ORI
                             </Box>
                             <Stack spacing={2} sx={{ marginTop: "-40px" }} direction={'column'}>
 
@@ -171,7 +171,7 @@ const Upload = () => {
                                     textDecoration: "none"
                                 }}
                             >
-                                Download UPE GPL Macro Report
+                                Download ORI GPL Macro Report
                             </span>
                         </Button>
                     </Box>
@@ -182,4 +182,4 @@ const Upload = () => {
     )
 }
 
-export default Upload
+export default ORI_gpl_macro
