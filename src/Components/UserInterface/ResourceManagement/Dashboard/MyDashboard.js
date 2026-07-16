@@ -386,6 +386,9 @@ const MonthWise = () => {
         if(costId === 'c7') return ((costs["c1"] || 0) -((costs["c2"] || 0) +(costs["c3"] || 0) +(costs["c4"] || 0) +(costs["c5"] || 0))).toFixed(0);
       }
       const final_value = monthWiseData[month].costs?.[costId] ?? ""
+      if (typeof final_value !== "number") {
+          return "";
+      }
       return final_value.toFixed(0);
     };
 
