@@ -33,6 +33,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { DashboardCircleEditIcon } from "@hugeicons/core-free-icons";
 import { FileScriptIcon } from "@hugeicons/core-free-icons";
 import DateTaskIcon from '@rsuite/icons/DateTask';
+import GpsFixedIcon from '@mui/icons-material/GpsFixed';
 
 import { groupBy } from 'lodash';
 
@@ -441,6 +442,16 @@ const ToolData = [
         link: '/tools/resource_management',
         groupBy: ['RM_Admin',"RM_CDH"]
     },
+
+    // {
+    //     id: 41,
+    //     name: 'Field Resrc Tracking',
+    //     title: 'Field Resource Tracking System',
+    //     icons: GpsFixedIcon,
+    //     fullname: 'Field Resource Tracking',
+    //     link: '/tools/field_resource_tracking',
+    //     groupBy: ['admin',"frt"]
+    // },
 
   
 

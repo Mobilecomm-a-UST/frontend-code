@@ -71,6 +71,7 @@ const Soft_AT_Tool = lazy(() => import('./Components/UserInterface/Soft_AT_Tool/
 const VI_SoftAT = lazy(() => import('./Components/UserInterface/VI_SoftAT/VI_SoftAT'))
 const IX_Ericsson = lazy(()=> import('./Components/UserInterface/IX Audit Ericsson/Audit_Ericsson'))
 const ResourceManagement = lazy(() => import('./Components/UserInterface/ResourceManagement/Resource_management'));
+const FieldResourceTracking = lazy(() => import('./Components/UserInterface/Field Resource Tracking/FieldResourceTracking'))
 
 const queryClient = new QueryClient()
 
@@ -418,6 +419,12 @@ function App() {
             <Route path="/tools/resource_management/*" element={
               <Suspense fallback={<div>Loading...</div>}>
                 <ProtectedRoute element={ResourceManagement} allowedUserTypes={['RM_Admin',"RM_CDH"]} userType={userType} />
+              </Suspense>
+            } />
+
+            <Route path="/tools/field_resource_tracking/*" element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProtectedRoute element={FieldResourceTracking} allowedUserTypes={['admin',"frt"]} userType={userType} />
               </Suspense>
             } />
 

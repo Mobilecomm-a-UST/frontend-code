@@ -13,7 +13,7 @@ import OverAllCss from "../../../csss/OverAllCss";
 import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
 
 
-const UPE_GPL_ULS = () => {
+const MUM_gpl_macro = () => {
     // selectedFiles: [{ id, name, file }]
     const [selectedFiles, setSelectedFiles] = useState([])
     const [selectCircle, setSelectCircle] = useState('')
@@ -63,7 +63,7 @@ const UPE_GPL_ULS = () => {
             selectedFiles.forEach((f) => {
                 formData.append(`xml_file`, f.file);
             });
-            const response = await postData('nokia_uls/uls_slicing/', formData)
+            const response = await postData('mum_macro/mum_slicing/', formData)
             console.log('response data', response)
             if (response.status === true) {
                 action(false)
@@ -108,7 +108,7 @@ const UPE_GPL_ULS = () => {
                     <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
                     <Link underline='hover' onClick={() => { navigate('/tools/ix_tools') }}>IX Tools</Link>
                     <Link underline='hover' onClick={() => { navigate('/tools/ix_tools/sa_slicing') }}>5G GPL</Link>
-                    <Typography color='text.primary'>UPE GPL ULS</Typography>
+                    <Typography color='text.primary'>MUM GPL Macro</Typography>
                 </Breadcrumbs>
             </div>
             <Slide
@@ -121,7 +121,7 @@ const UPE_GPL_ULS = () => {
                     <Box className={classes.main_Box}>
                         <Box className={classes.Back_Box} sx={{ width: { md: '75%', xs: '100%' } }}>
                             <Box className={classes.Box_Hading} >
-                                Upload GPL for ULS
+                                Upload GPL for MUM
                             </Box>
                             <Stack spacing={2} sx={{ marginTop: "-40px" }} direction={'column'}>
 
@@ -197,7 +197,7 @@ const UPE_GPL_ULS = () => {
                                     textDecoration: "none"
                                 }}
                             >
-                                Download UPE GPL ULS Report
+                                Download MUM GPL Macro Report
                             </span>
                         </Button>
                     </Box>
@@ -208,4 +208,4 @@ const UPE_GPL_ULS = () => {
     )
 }
 
-export default UPE_GPL_ULS;
+export default MUM_gpl_macro

@@ -1,3 +1,5 @@
+
+
 // import React, { useEffect, useState } from 'react'
 // import {
 //     Box, Button, Stack, Breadcrumbs, Link, Typography, Slide, TextField
@@ -438,13 +440,37 @@
 //                                                 val === "<NA>" ||
 //                                                 val === "nan" ||
 //                                                 val === "NA" ||
-                   
+ 
 //                                                 Number.isNaN(val)
 //                                             ) {
 //                                                 return "";
 //                                             }
 //                                             return val;
 //                                         };
+//                                         const hasRed =
+//                                             !condPolarization ||
+//                                             !condTxFreq ||
+//                                             !condRxFreq ||
+//                                             !condTxPower ||
+//                                             !condAtpcLink ||
+//                                             !condSnr ||
+//                                             !condRsl ||
+//                                             !condSiteAMod ||
+//                                             !condSiteZMod ||
+//                                             !checkQM(it.site_a_min_mod_last_24h) ||
+//                                             !checkQM(it.site_z_min_mod_last_24h) ||
+//                                             !checkQM(it.site_a_max_mod_last_24h) ||
+//                                             !checkQM(it.site_z_max_mod_last_24h) ||
+//                                             !checkQAMMin(it.site_a_min_configured_mod) ||
+//                                             !checkQAMMin(it.site_z_min_configured_mod) ||
+//                                             !checkQM(it.site_a_max_configured_mod) ||
+//                                             !checkQM(it.site_z_max_configured_mod) ||
+//                                             xpdMinColor === "#FF0000" ||
+//                                             xpdMinColor === "#C00000" ||
+//                                             xpdMaxColor === "#FF0000" ||
+//                                             xpdMaxColor === "#C00000";
+ 
+//                                         const remarks = hasRed ? "Action is Required" : "Ready to offer";
  
  
  
@@ -500,7 +526,9 @@
 //                                                 <th style={{ backgroundColor: '#FFF', color: checkQM(it.site_z_max_configured_mod) ? "#00B050" : "#FF0000" }}>{displayValue(it.site_z_max_configured_mod)}</th>
  
 //                                                 <th style={{ backgroundColor: '#fff', color: condAtpcLink ? "#00B050" : "#FF0000" }}>{displayValue(atpcDisplay)}</th>
-//                                                 <th style={{ backgroundColor: '#FFF', color: 'black' }}>{it.remark || "Ready to Offer"}</th>
+//                                                 <th style={{ backgroundColor: '#FFF', color: 'black' }}>
+//                                                     {remarks}
+//                                                 </th>
 //                                             </tr>
 //                                         );
 //                                     })}
@@ -518,6 +546,7 @@
 // }
  
 // export default MicrowaveAviatTable
+
 
 import React, { useEffect, useState } from 'react'
 import {
@@ -767,28 +796,9 @@ const MicrowaveAviatTable = () => {
                                 <Button type='submit' sx={{ backgroundColor: '#223354' }} variant='contained'>Filter</Button>
                             </form>
  
-                            {/* <FormControl sx={{ minWidth: 100, maxWidth: 100 }} size="small">
-                                        <InputLabel id="demo-select-small-label">View</InputLabel>
-                                        <Select
-                                            labelId="demo-select-small-label"
-                                            id="demo-select-small"
-                                            value={view}
-                                            label="View"
-                                            onChange={handleViewChange}
-                                        >
-                                            <MenuItem value="Cumulative">Cumulative</MenuItem>
-                                            <MenuItem value="Non-cumulative">Non-cumulative</MenuItem>
- 
-                                        </Select>
-                                    </FormControl> */}
- 
- 
- 
- 
                             <Tooltip title="Download Microwave(AVIAT) Dashboard">
                                 <IconButton
                                     component="a"
-                                    // href={downloadExcelData}
                                     onClick={(handleDownloadFile)}
                                     download
                                 >
@@ -798,9 +808,7 @@ const MicrowaveAviatTable = () => {
                             <Tooltip title="Delete Microwave(AVIAT) Table">
                                 <IconButton
                                     component="a"
-                                    // href={downloadExcelData}
                                     onClick={(handleDeleteTable)}
-                                // download
                                 >
                                     <DeleteIcon fontSize="large" color="error" />
                                 </IconButton>
@@ -869,7 +877,19 @@ const MicrowaveAviatTable = () => {
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site Z Max Configured Modulation</th>
  
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>ATPC Status (Link)</th>
-                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff', width: '450px', minWidth: '450px', maxWidth: '450px', textAlign: 'center' }}>SoftAt-Output</th>
+ 
+                                        {/* ============ NEW CONFIG COLUMNS (before SoftAt-Output) ============ */}
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff', width: '300px', minWidth: '300px', maxWidth: '300px', textAlign: 'center' }}>Software Version (A)</th>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>MTU Size (A)</th>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>TenGigE1/1 Disabled (A)</th>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>TenGigE1/2 Disabled (A)</th>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff', width: '300px', minWidth: '300px', maxWidth: '300px', textAlign: 'center' }}>Software Version (Z)</th>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>MTU Size (Z)</th>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>TenGigE1/1 Disabled (Z)</th>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>TenGigE1/2 Disabled (Z)</th>
+                                        {/* ============ END NEW CONFIG COLUMNS ============ */}
+ 
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff', width: '300px', minWidth: '300px', maxWidth: '300px', textAlign: 'center' }}>SoftAt-Output</th>
  
                                     </tr>
                                 </thead >
@@ -966,6 +986,19 @@ const MicrowaveAviatTable = () => {
                                             }
                                             return val;
                                         };
+ 
+                                        // ============ NEW CONFIG COLUMN CONDITIONS ============
+                                        const condSwA = it.software_version_a?.toString().startsWith("2.11.12.18");
+                                        const condMtuA = it.mtu_size_a?.toString() === "10214";
+                                        const condTg11A = it.tengige11_disabled_a === false || it.tengige11_disabled_a?.toString().toLowerCase() === "false";
+                                        const condTg12A = it.tengige12_disabled_a === false || it.tengige12_disabled_a?.toString().toLowerCase() === "false";
+ 
+                                        const condSwZ = it.software_version_z?.toString().startsWith("2.11.12.18");
+                                        const condMtuZ = it.mtu_size_z?.toString() === "10214";
+                                        const condTg11Z = it.tengige11_disabled_z === false || it.tengige11_disabled_z?.toString().toLowerCase() === "false";
+                                        const condTg12Z = it.tengige12_disabled_z === false || it.tengige12_disabled_z?.toString().toLowerCase() === "false";
+                                        // ============ END NEW CONFIG COLUMN CONDITIONS ============
+ 
                                         const hasRed =
                                             !condPolarization ||
                                             !condTxFreq ||
@@ -987,7 +1020,9 @@ const MicrowaveAviatTable = () => {
                                             xpdMinColor === "#FF0000" ||
                                             xpdMinColor === "#C00000" ||
                                             xpdMaxColor === "#FF0000" ||
-                                            xpdMaxColor === "#C00000";
+                                            xpdMaxColor === "#C00000" ||
+                                            !condSwA || !condMtuA || !condTg11A || !condTg12A ||
+                                            !condSwZ || !condMtuZ || !condTg11Z || !condTg12Z;
  
                                         const remarks = hasRed ? "Action is Required" : "Ready to offer";
  
@@ -1045,6 +1080,18 @@ const MicrowaveAviatTable = () => {
                                                 <th style={{ backgroundColor: '#FFF', color: checkQM(it.site_z_max_configured_mod) ? "#00B050" : "#FF0000" }}>{displayValue(it.site_z_max_configured_mod)}</th>
  
                                                 <th style={{ backgroundColor: '#fff', color: condAtpcLink ? "#00B050" : "#FF0000" }}>{displayValue(atpcDisplay)}</th>
+ 
+                                                {/* ============ NEW CONFIG COLUMN DATA CELLS ============ */}
+                                                <th style={{ backgroundColor: '#FFF', color: condSwA ? "#00B050" : "#FF0000" }}>{displayValue(it.software_version_a)}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: condMtuA ? "#00B050" : "#FF0000" }}>{displayValue(it.mtu_size_a)}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: condTg11A ? "#00B050" : "#FF0000" }}>{displayValue(it.tengige11_disabled_a)}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: condTg12A ? "#00B050" : "#FF0000" }}>{displayValue(it.tengige12_disabled_a)}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: condSwZ ? "#00B050" : "#FF0000" }}>{displayValue(it.software_version_z)}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: condMtuZ ? "#00B050" : "#FF0000" }}>{displayValue(it.mtu_size_z)}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: condTg11Z ? "#00B050" : "#FF0000" }}>{displayValue(it.tengige11_disabled_z)}</th>
+                                                <th style={{ backgroundColor: '#FFF', color: condTg12Z ? "#00B050" : "#FF0000" }}>{displayValue(it.tengige12_disabled_z)}</th>
+                                                {/* ============ END NEW CONFIG COLUMN DATA CELLS ============ */}
+ 
                                                 <th style={{ backgroundColor: '#FFF', color: 'black' }}>
                                                     {remarks}
                                                 </th>
@@ -1065,3 +1112,4 @@ const MicrowaveAviatTable = () => {
 }
  
 export default MicrowaveAviatTable
+ 
