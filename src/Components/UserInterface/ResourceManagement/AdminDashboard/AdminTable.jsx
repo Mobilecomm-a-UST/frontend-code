@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { getDecreyptedData } from '../../../utils/localstorage';
 import axios from 'axios';
+import ExcelJS from "exceljs";
+import { saveAs } from "file-saver";
 
 const CATEGORY_CONFIG = {
     A: {
@@ -181,6 +183,188 @@ const AdminTable = () => {
 
 
 
+  const exportToExcel = async () => {
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Admin Report");
+
+    worksheet.views = [{ state: "frozen", ySplit: 1 }];
+
+    // Header
+    const header = ["Circle", "Category", "Allowed", ...MONTHS];
+    const headerRow = worksheet.addRow(header);
+
+    headerRow.eachCell(cell => {
+        cell.font = {
+            bold: true,
+            color: { argb: "FFFFFFFF" }
+        };
+
+        cell.fill = {
+            type: "pattern",
+            pattern: "solid",
+            fgColor: { argb: "1A5C2A" }
+        };
+
+        cell.alignment = {
+            horizontal: "center",
+            vertical: "middle"
+        };
+
+        cell.border = {
+            top: { style: "thin" },
+            left: { style: "thin" },
+            bottom: { style: "thin" },
+            right: { style: "thin" }
+        };
+    });
+
+    filteredData.forEach(circleData => {
+
+        const config = CATEGORY_CONFIG[circleData.category];
+        if (!config) return;
+
+        const monthData = circleData.months;
+
+        const costs = selectedCost
+            ? config.costs.filter(c => c.id === selectedCost)
+            : config.costs;
+
+        const startRow = worksheet.rowCount + 1;
+
+        costs.forEach(cost => {
+
+            const row = [
+                circleData.circle,
+                cost.label,
+                cost.value
+            ];
+
+            MONTHS.forEach(month => {
+
+                row.push(
+                    cost.id === "c1"
+                        ? getCostVal(monthData, month, cost.id)
+                        : getCostPercent(monthData, month, cost.id)
+                );
+
+            });
+
+            const excelRow = worksheet.addRow(row);
+
+            excelRow.eachCell(cell => {
+
+                cell.border = {
+                    top: { style: "thin" },
+                    left: { style: "thin" },
+                    bottom: { style: "thin" },
+                    right: { style: "thin" }
+                };
+
+                cell.alignment = {
+                    horizontal: "center",
+                    vertical: "middle"
+                };
+
+            });
+
+            // Allowed column color
+            excelRow.getCell(3).fill = {
+                type: "pattern",
+                pattern: "solid",
+                fgColor: { argb: cost.isTotal ? "F0F0E8" : "CCE8F7" }
+            };
+
+            // Revenue row
+            if (cost.id === "c1") {
+
+                for (let i = 4; i <= excelRow.cellCount; i++) {
+
+                    excelRow.getCell(i).fill = {
+                        type: "pattern",
+                        pattern: "solid",
+                        fgColor: { argb: "D8AC46" }
+                    };
+
+                }
+
+            }
+
+            // Percentage rows
+            else {
+
+                MONTHS.forEach((month, index) => {
+
+                    const percent = getCostPercent(monthData, month, cost.id);
+
+                    if (!percent) return;
+
+                    const actual = parseFloat(percent);
+                    const allowed = parseFloat(cost.value);
+
+                    const isGreen =
+                        cost.id === "c7"
+                            ? actual >= allowed
+                            : actual <= allowed;
+
+                    excelRow.getCell(index + 4).fill = {
+                        type: "pattern",
+                        pattern: "solid",
+                        fgColor: {
+                            argb: isGreen ? "94CA98" : "F52C2C"
+                        }
+                    };
+
+                });
+
+            }
+
+            if (cost.isTotal) {
+                excelRow.font = { bold: true };
+            }
+
+        });
+
+        // Merge Circle column
+        const endRow = worksheet.rowCount;
+
+        if (endRow > startRow) {
+            worksheet.mergeCells(`A${startRow}:A${endRow}`);
+        }
+
+        const circleCell = worksheet.getCell(`A${startRow}`);
+
+        circleCell.alignment = {
+            horizontal: "center",
+            vertical: "middle"
+        };
+
+        circleCell.font = {
+            bold: true
+        };
+
+        circleCell.fill = {
+            type: "pattern",
+            pattern: "solid",
+            fgColor: { argb: "F5CFC0" }
+        };
+
+    });
+
+    worksheet.columns.forEach(col => {
+        col.width = 18;
+    });
+
+    const buffer = await workbook.xlsx.writeBuffer();
+
+    saveAs(
+        new Blob([buffer]),
+        "Admin_Report.xlsx"
+    );
+};
+
+
+
+
 
 
     // ── Styles ───────────────────────────────────────────────────
@@ -298,27 +482,20 @@ const AdminTable = () => {
                 ))}
             </select>
 
-            {/* <button
-              onClick={handleFilterClick}
+            <button
+              onClick={exportToExcel}
               style={{
-                padding: "6px 16px", fontSize: 13, fontWeight: 500,
-                borderRadius: 6, border: "none", cursor: "pointer",
-                background: CAT_COLOR, color: "#fff",
+                  padding: "6px 8px",
+                  fontSize: 13,
+                  borderRadius: 6,
+                  border: "1px solid #ccc",
+                  background:"#223354",
+                  color: "#fff",
               }}
             >
-              Filter
-            </button> */}
+              Export
+            </button>
 
-            {/* <button
-              onClick={handleRefresh}
-              style={{
-                padding: "6px 16px", fontSize: 13, fontWeight: 500,
-                borderRadius: 6, border: "none", cursor: "pointer",
-                background: CAT_COLOR, color: "#fff",
-              }}
-            >
-              Reset
-            </button> */}
 
           </div>
         </div>
