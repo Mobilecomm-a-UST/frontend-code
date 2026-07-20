@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Box, Button, Stack } from "@mui/material";
+import { Box, Button, Stack, Chip } from "@mui/material";
 import { Breadcrumbs, Link, Typography } from "@mui/material";
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { useNavigate } from "react-router-dom";
@@ -14,7 +14,8 @@ import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
 
 
 const BIH_gpl_uls = () => {
-    const [make4GFiles, setMake4GFiles] = useState({ filename: "", bytes: "" })
+    // selectedFiles: [{ id, name, file }]
+    const [selectedFiles, setSelectedFiles] = useState([])
     const [selectCircle, setSelectCircle] = useState('')
     const [show4G, setShow4G] = useState(false)
     const [show, setShow] = useState(false)
@@ -27,22 +28,41 @@ const BIH_gpl_uls = () => {
 
 
     const handle4GFileSelection = (event) => {
-        // console.log('event target files', event)
+        const newFiles = Array.from(event.target.files || []);
+        if (newFiles.length === 0) return;
+
         setShow4G(false);
-        setMake4GFiles({
-            filename: event.target.files[0].name,
-            bytes: event.target.files[0],
-            state: true
-        })
+        setSelectedFiles((prev) => {
+            // avoid adding the same file (by name + size) twice
+            const existingKeys = new Set(prev.map((f) => `${f.name}_${f.file.size}`));
+            const merged = [...prev];
+            newFiles.forEach((file) => {
+                const key = `${file.name}_${file.size}`;
+                if (!existingKeys.has(key)) {
+                    merged.push({ id: `${key}_${Date.now()}_${Math.random()}`, name: file.name, file });
+                    existingKeys.add(key);
+                }
+            });
+            return merged;
+        });
+
+        // allow re-selecting the same file again later
+        event.target.value = "";
+    }
+
+    const handleRemoveFile = (id) => {
+        setSelectedFiles((prev) => prev.filter((f) => f.id !== id));
     }
 
 
 
     const handleSubmit = async () => {
-        if (make4GFiles.filename.length > 0) {
+        if (selectedFiles.length > 0) {
             action(true)
             var formData = new FormData();
-            formData.append(`xml_file`, make4GFiles.bytes);
+            selectedFiles.forEach((f) => {
+                formData.append(`xml_file`, f.file);
+            });
             const response = await postData('bih_uls/uls_bih/', formData)
             console.log('response data', response)
             if (response.status === true) {
@@ -66,19 +86,12 @@ const BIH_gpl_uls = () => {
             }
         }
         else {
-            if (make4GFiles.filename.length === 0) {
-                setShow4G(true)
-            } else {
-                setShow4G(false)
-            }
-
-
-
+            setShow4G(true)
         }
     }
 
     const handleCancel = () => {
-        setMake4GFiles({ filename: "", bytes: "" })
+        setSelectedFiles([])
         setShow4G(false)
 
     }
@@ -115,15 +128,16 @@ const BIH_gpl_uls = () => {
 
                                 <Box className={classes.Front_Box} >
                                     <div className={classes.Front_Box_Hading}>
-                                        Select XML Files:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{make4GFiles.filename}</span>
+                                        Select XML Files:-
                                     </div>
                                     <div className={classes.Front_Box_Select_Button} >
                                         <div style={{ float: "left" }}>
-                                            <Button variant="contained" component="label" color={make4GFiles.state > 0 ? "warning" : "primary"}>
-                                                select file
+                                            <Button variant="contained" component="label" color={selectedFiles.length > 0 ? "warning" : "primary"}>
+                                                select files
                                                 <input
                                                     required
                                                     hidden
+                                                    multiple
                                                     type="file"
                                                     accept=".xml"
                                                     onChange={(e) => handle4GFileSelection(e)}
@@ -131,10 +145,23 @@ const BIH_gpl_uls = () => {
                                             </Button>
                                         </div>
 
-                                        {/* {make4GFiles.state > 0 && <span style={{ color: 'green', fontSize: '18px', fontWeight: 600 }}>{make4GFiles.filename}</span>} */}
-
                                         <div>  <span style={{ display: show4G ? 'inherit' : 'none', color: 'red', fontSize: '18px', fontWeight: 600 }}>This Field Is Required !</span> </div>
                                     </div>
+
+                                    {selectedFiles.length > 0 && (
+                                        <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap" sx={{ marginTop: 2 }}>
+                                            {selectedFiles.map((f) => (
+                                                <Chip
+                                                    key={f.id}
+                                                    label={f.name}
+                                                    onDelete={() => handleRemoveFile(f.id)}
+                                                    color="primary"
+                                                    variant="outlined"
+                                                    sx={{ fontFamily: 'Poppins' }}
+                                                />
+                                            ))}
+                                        </Stack>
+                                    )}
                                 </Box>
                             </Stack>
                             <Stack direction={{ xs: "column", sm: "column", md: "row" }} spacing={2} style={{ display: 'flex', justifyContent: "space-around", marginTop: "20px" }}>
