@@ -64,7 +64,7 @@ const GPL = () => {
                             <Collapse in={checked} orientation="horizontal" timeout={'auto'}>
                                 <Box sx={{ width: 240, minHeight: "670px", height: "100hv", backgroundColor: "#223354", borderRadius: 5, position: 'fixed', zIndex: 10 }}>
                                     <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle">
-                                        <Sidenav.Body>
+                                        {/* <Sidenav.Body>
                                             <Nav activeKey={activeKey} onSelect={setActiveKey} style={{ width: 'auto', minHeight: "670px", height: "100hv", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
                                                 <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>MNIT</Nav>
                                                 <Nav.Item eventKey="2" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobile_network_integration/gpl_audit_parse'); show(); setMenuButton(true) }}>
@@ -76,18 +76,18 @@ const GPL = () => {
                                                 <Nav.Item eventKey="4" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobile_network_integration/script_generator'); show(); setMenuButton(true) }}>
                                                     Scripte Generater
                                                 </Nav.Item>
-                                                {/* <Nav.Menu eventKey="3" placement="rightStart" title="NOM Audit" icon={<DocPassIcon />}>
+                                                <Nav.Menu eventKey="3" placement="rightStart" title="NOM Audit" icon={<DocPassIcon />}>
                                                     <Nav.Item eventKey="3-1" placement="rightStart" onClick={() => { navigate('/tools/nomenclature_scriptor/nom_audit_dashboard'); show(); setMenuButton(true) }}>
                                                         Dashboard
                                                     </Nav.Item>
                                                     <Nav.Item eventKey="3-2" placement="rightStart" onClick={() => { navigate('/tools/nomenclature_scriptor/nom_audit'); show(); setMenuButton(true) }}>
                                                         Pre-Post Audit
                                                     </Nav.Item>
-                                                </Nav.Menu> */}
+                                                </Nav.Menu>
 
 
                                             </Nav>
-                                        </Sidenav.Body>
+                                        </Sidenav.Body> */}
 
                                     </Sidenav>
                                 </Box>
