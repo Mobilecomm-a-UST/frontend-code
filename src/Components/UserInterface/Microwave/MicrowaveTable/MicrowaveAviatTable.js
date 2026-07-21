@@ -881,12 +881,12 @@ const MicrowaveAviatTable = () => {
                                         {/* ============ NEW CONFIG COLUMNS (before SoftAt-Output) ============ */}
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff', width: '300px', minWidth: '300px', maxWidth: '300px', textAlign: 'center' }}>Software Version (A)</th>
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>MTU Size (A)</th>
-                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>TenGigE1/1 Disabled (A)</th>
-                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>TenGigE1/2 Disabled (A)</th>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>TenGigE1/1 Enabled (A)</th>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>TenGigE1/2 Enabled (A)</th>
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff', width: '300px', minWidth: '300px', maxWidth: '300px', textAlign: 'center' }}>Software Version (Z)</th>
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>MTU Size (Z)</th>
-                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>TenGigE1/1 Disabled (Z)</th>
-                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>TenGigE1/2 Disabled (Z)</th>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>TenGigE1/1 Enabled (Z)</th>
+                                        <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>TenGigE1/2 Enabled (Z)</th>
                                         {/* ============ END NEW CONFIG COLUMNS ============ */}
  
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff', width: '300px', minWidth: '300px', maxWidth: '300px', textAlign: 'center' }}>SoftAt-Output</th>
