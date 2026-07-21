@@ -7,7 +7,7 @@ import Slide from '@mui/material/Slide';
 import UploadIcon from '@mui/icons-material/Upload';
 import DoDisturbIcon from '@mui/icons-material/DoDisturb';
 import Swal from "sweetalert2";
-import { postData, ServerURL } from "../../../services/FetchNodeServices";
+import { postData, postDataa, ServerURL } from "../../../services/FetchNodeServices";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import OverAllCss from "../../../csss/OverAllCss";
 import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
@@ -33,10 +33,13 @@ const GAP = () => {
         if (make4GFiles.length > 0) {
             action(true)
             var formData = new FormData();
-            formData.append(`files`, make4GFiles);
-            
+            for (let i = 0; i < make4GFiles.length; i++) {
+                formData.append(`files`, make4GFiles[i]);
+            }
+            // formData.append(`files`, make4GFiles);
 
-            const response = await postData('gpl_audit_tool_V2/parse/', formData)
+
+            const response = await postDataa('gpl_audit_tool_V2/parse/', formData)
 
             // console.log('response data', response)
 
@@ -60,8 +63,8 @@ const GAP = () => {
 
                 Swal.fire({
                     icon: "error",
-                    title: "Oops...",
-                    text: `${response.message}`,
+                    title: "Error...",
+                    text: `${response.error}`,
                 });
             }
         }
@@ -140,7 +143,7 @@ const GAP = () => {
                         </Box>
                     </Box>
                     <Box sx={{ display: download ? 'block' : 'none', textAlign: 'center' }}>
-                        <a download href={link}><Button variant="outlined" onClick='' title="Export Excel" startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />} sx={{ marginTop: "10px", width: "auto" }}><span style={{ fontFamily: "Poppins", fontSize: "22px", fontWeight: 800, textTransform: "none", textDecorationLine: "none" }}>Download GPL Audit Report </span></Button></a>
+                        <a download href={fileData}><Button variant="outlined" onClick='' title="Export Excel" startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />} sx={{ marginTop: "10px", width: "auto" }}><span style={{ fontFamily: "Poppins", fontSize: "22px", fontWeight: 800, textTransform: "none", textDecorationLine: "none" }}>Download GPL Audit Report </span></Button></a>
                     </Box>
                 </Box>
             </Slide>

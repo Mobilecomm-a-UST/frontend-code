@@ -7,7 +7,7 @@ import Slide from '@mui/material/Slide';
 import UploadIcon from '@mui/icons-material/Upload';
 import DoDisturbIcon from '@mui/icons-material/DoDisturb';
 import Swal from "sweetalert2";
-import { postData, ServerURL } from "../../../services/FetchNodeServices";
+import { postData, postDataa, ServerURL } from "../../../services/FetchNodeServices";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import OverAllCss from "../../../csss/OverAllCss";
 import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
@@ -55,7 +55,7 @@ const ScriptGen = () => {
             formData.append(`Circle`, selectCircle);
             formData.append(`user_id`, userName);
         
-            const response = await postData('LTE/Integration/generating_scripts/', formData)
+            const response = await postDataa('LTE/Integration/generating_scripts/', formData)
 
             // console.log('response data', response)
 
@@ -79,8 +79,8 @@ const ScriptGen = () => {
 
                 Swal.fire({
                     icon: "error",
-                    title: "Oops...",
-                    text: `${response.message}`,
+                    title: "Error...",
+                    text: `${response.error}`,
                 });
             }
         }

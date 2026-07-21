@@ -110,7 +110,7 @@ const GPPA = () => {
                 <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
                     <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
                     <Link underline="hover" onClick={() => { navigate('/tools/mobile_network_integration') }}>MNI TOOL</Link>
-                    <Typography color='text.primary'>GPL Audit</Typography>
+                    <Typography color='text.primary'>GPL Audit Pre-Post</Typography>
                 </Breadcrumbs>
             </div>
             <Slide
@@ -123,7 +123,7 @@ const GPPA = () => {
                     <Box className={classes.main_Box}>
                         <Box className={classes.Back_Box} sx={{ width: { md: '75%', xs: '100%' } }}>
                             <Box className={classes.Box_Hading} >
-                                Make GPL Audit
+                                Make GPL Audit Pre-Post
                             </Box>
                             <Stack spacing={2} sx={{ marginTop: "-40px" }} direction={'column'}>
 
