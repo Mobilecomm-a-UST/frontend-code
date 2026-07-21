@@ -33,10 +33,10 @@ const GAP = () => {
         if (make4GFiles.length > 0) {
             action(true)
             var formData = new FormData();
-            formData.append(`pre_log_files`, make4GFiles);
+            formData.append(`files`, make4GFiles);
             
 
-            const response = await postData('gpl_audit/get_parsed_data/', formData)
+            const response = await postData('gpl_audit_tool_V2/parse/', formData)
 
             // console.log('response data', response)
 
@@ -92,7 +92,7 @@ const GAP = () => {
                 <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
                     <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
                     <Link underline="hover" onClick={() => { navigate('/tools/mobile_network_integration') }}>MNI TOOL</Link>
-                    <Typography color='text.primary'>GPL Audit (Parse)</Typography>
+                    <Typography color='text.primary'>GPL Audit</Typography>
                 </Breadcrumbs>
             </div>
             <Slide
@@ -105,7 +105,7 @@ const GAP = () => {
                     <Box className={classes.main_Box}>
                         <Box className={classes.Back_Box} sx={{ width: { md: '75%', xs: '100%' } }}>
                             <Box className={classes.Box_Hading} >
-                                Make GPL Audit ( Parse )
+                                Make GPL Audit
                             </Box>
                             <Stack spacing={2} sx={{ marginTop: "-40px" }} direction={'column'}>
 

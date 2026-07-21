@@ -102,10 +102,10 @@ const GPL = () => {
                                         <Nav activeKey={activeKey} onSelect={setActiveKey} style={{ width: 'auto', minHeight: "670px", height: "100hv", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
                                             <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>MNIT</Nav>
                                             <Nav.Item eventKey="2" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobile_network_integration/gpl_audit_parse'); show(); setMenuButton(true) }}>
-                                                GPL Audit (Parse)
+                                                GPL Audit
                                             </Nav.Item>
                                             <Nav.Item eventKey="3" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobile_network_integration/gpl_pre_post_audit'); show(); setMenuButton(true) }}>
-                                                GPL Audit
+                                                GPL Audit Pre-Post
                                             </Nav.Item>
                                             <Nav.Item eventKey="4" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobile_network_integration/script_generator'); show(); setMenuButton(true) }}>
                                                 Script Generator
