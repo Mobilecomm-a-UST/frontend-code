@@ -19,6 +19,7 @@ import { use } from 'react';
 import Loader from '../../Skeleton/Loader';
 import FileUploadIcon from '@rsuite/icons/FileUpload';
 
+
 const FieldResourceTrackingTool = lazy(() => import('./FieldResourceTrackingTool'))
 const UploadFile = lazy(()=> import('./Upload File/Upload_file'))
 const Dashboard = lazy(()=> import('./Dasboard/Dashboard'))
@@ -69,7 +70,7 @@ const FieldResourceTracking = () => {
                                             <Nav.Item eventKey="1" placement="rightStart" className="single-item-custom" icon={<FileUploadIcon style={{}} />} onClick={() => { navigate('/tools/field_resource_tracking/UploadFile'); show(); setMenuButton(true) }}>
                                                  Upload File
                                             </Nav.Item>
-                                            <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={<FileUploadIcon style={{}} />} onClick={() => { navigate('/tools/field_resource_tracking/Dashboard'); show(); setMenuButton(true) }}>
+                                            <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={<DashboardIcon style={{}} />} onClick={() => { navigate('/tools/field_resource_tracking/Dashboard'); show(); setMenuButton(true) }}>
                                                  Dashboard
                                             </Nav.Item>
 

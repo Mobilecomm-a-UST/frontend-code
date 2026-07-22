@@ -598,15 +598,15 @@ import {
   Autocomplete,
   Button,
   Chip,
-  Tabs,
-  Tab,
+  // Tabs,   // <-- was only used for idle/working table tabs, commented out below
+  // Tab,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  TablePagination,
+  // TablePagination, // <-- only used by idle/working table
   CircularProgress,
   Divider,
   IconButton,
@@ -637,32 +637,44 @@ import {
 /* ------------------------------------------------------------------
  * CONFIG
  * ------------------------------------------------------------------
- * Adjust BASE_URL to wherever this router is actually mounted
- * (the urls.py you shared only has the relative paths, e.g.
- * 'analytics/', 'circle-summary/' — prefix with whatever your
- * project's include() uses, e.g. '/field_resource_tracking/api/').
- *
- * ASSUMED RESPONSE SHAPES (edit the accessor helpers below,
- * marked with "// <-- adjust", to match your actual serializers):
- *
- *   GET  dashboard/            -> { total, working, idle, circles }
- *   GET  circle-summary/       -> [{ circle, working, idle, total }]
- *   GET  dept-summary/         -> [{ department, working, idle, total }]
- *   GET  skill-summary/        -> [{ skill, count }]
- *   GET  project-summary/      -> [{ project, count }]
- *   GET  date-summary/         -> [{ date, working, idle }]
- *   GET  manager-summary/      -> [{ manager, team_size, working, idle }]
- *   GET  idle/                 -> [{ employee_id, name, circle, department, skill, manager, last_active }]
- *   GET  working/              -> [{ employee_id, name, circle, department, project, manager }]
- *   GET  dates/                -> ["2026-07-01", "2026-07-02", ...]
- *   GET  search/?q=            -> [{ employee_id, name, circle, department }]
- *   GET  date-range/?from=&to= -> same shape as dashboard/ (filtered)
+ * NOTE (from Network tab): idle/ and working/ endpoints require a
+ * single ?date=YYYY-MM-DD param, e.g.
+ *   { "error": "Please provide a date. Example: /api/idle/?date=2026-06-15" }
+ * They do NOT accept from/to/circle/department like the summary
+ * endpoints do. Both calls are commented out below for now so the
+ * rest of the dashboard renders. See "RE-ENABLE IDLE/WORKING" notes
+ * further down for how to turn them back on once you confirm the
+ * exact query param the backend expects (date vs from/to on this
+ * endpoint specifically).
  * ---------------------------------------------------------------- */
 const BASE_URL = "https://commtoolapi.mcpspmis.com/field_resource_tracking"; // <-- adjust if the router is mounted elsewhere
 
 const api = axios.create({ baseURL: BASE_URL });
 
 const COLORS = ["#00695c", "#26a69a", "#80cbc4", "#f4511e", "#ffb74d", "#5c6bc0", "#8d6e63"];
+
+// Small helper so a non-array API response (error object, {results:[...]}, undefined, etc.)
+// never crashes a .map() call downstream.
+const toArray = (val) => {
+  if (Array.isArray(val)) return val;
+  if (val && Array.isArray(val.results)) return val.results; // handles DRF pagination shape
+  return [];
+};
+
+// Every summary endpoint here wraps its array in a named key instead of
+// returning a bare array, e.g. circle-summary/ -> { total_circles, circles: [...] }
+// dept-summary/ -> { total_departments, departments: [...] }
+// skill-summary/ -> { total_skills, skills: [...] }
+// project-summary/ -> { total_projects, projects: [...] }
+// manager-summary/ -> { total_managers, managers: [...] }
+// date-summary/ -> { total_dates, dates: [ {date, working, idle, ...} ] }
+// dates/ -> { total_dates, dates: [ "2026-06-15", ... ] }  (array of strings, not objects)
+// unwrap() tries the given key first, then falls back to toArray().
+const unwrap = (data, key) => {
+  if (Array.isArray(data)) return data;
+  if (data && Array.isArray(data[key])) return data[key];
+  return toArray(data);
+};
 
 const StatCard = ({ icon, label, value, color }) => (
   <Card elevation={0} sx={{ borderRadius: 3, border: "1px solid #e0dcd0", height: "100%" }}>
@@ -716,8 +728,9 @@ export default function FieldResourceDashboard() {
   const [dateTo, setDateTo] = useState("");
   const [circleFilter, setCircleFilter] = useState("All");
   const [deptFilter, setDeptFilter] = useState("All");
-  // idle/ and working/ take a single ?date= param (not a range) — see network tab error:
-  // {"error":"Please provide a date. Example: /api/working/?date=YYYY-MM-DD"}
+  // idle/ and working/ take a single ?date= param (not a range) — kept here
+  // for when those calls are re-enabled.
+  // eslint-disable-next-line no-unused-vars
   const [selectedDate, setSelectedDate] = useState(() => new Date().toISOString().slice(0, 10));
 
   // ---- data ----
@@ -728,8 +741,8 @@ export default function FieldResourceDashboard() {
   const [projectSummary, setProjectSummary] = useState([]);
   const [dateSummary, setDateSummary] = useState([]);
   const [managerSummary, setManagerSummary] = useState([]);
-  const [idleEmployees, setIdleEmployees] = useState([]);
-  const [workingEmployees, setWorkingEmployees] = useState([]);
+  // const [idleEmployees, setIdleEmployees] = useState([]);       // <-- idle/ disabled, see fetchTables
+  // const [workingEmployees, setWorkingEmployees] = useState([]); // <-- working/ disabled, see fetchTables
   const [availableDates, setAvailableDates] = useState([]);
 
   const [loading, setLoading] = useState({ top: true, charts: true, tables: true });
@@ -739,10 +752,10 @@ export default function FieldResourceDashboard() {
   const [searchOptions, setSearchOptions] = useState([]);
   const [searchLoading, setSearchLoading] = useState(false);
 
-  // ---- table tab + pagination ----
-  const [tableTab, setTableTab] = useState("idle"); // idle | working
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  // ---- table tab + pagination ---- (kept but unused while idle/working table is disabled)
+  // const [tableTab, setTableTab] = useState("idle"); // idle | working
+  // const [page, setPage] = useState(0);
+  // const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const dateParams = useMemo(() => {
     const p = {};
@@ -753,27 +766,14 @@ export default function FieldResourceDashboard() {
     return p;
   }, [dateFrom, dateTo, circleFilter, deptFilter]);
 
-  const fetchTop = useCallback(async () => {
-    setLoading((s) => ({ ...s, top: true }));
-    try {
-      const endpoint = dateFrom || dateTo ? "date-range/" : "dashboard/";
-      const res = await api.get(endpoint, { params: dateParams });
-      const d = res.data || {};
-      setSummary({
-        total: d.total ?? d.total_employees ?? 0, // <-- adjust
-        working: d.working ?? d.working_count ?? 0, // <-- adjust
-        idle: d.idle ?? d.idle_count ?? 0, // <-- adjust
-        circles: d.circles ?? d.circle_count ?? 0, // <-- adjust
-      });
-    } catch (e) {
-      console.error("dashboard fetch failed", e);
-    } finally {
-      setLoading((s) => ({ ...s, top: false }));
-    }
-  }, [dateParams, dateFrom, dateTo]);
+  // Stat cards are now derived from circle-summary/ (see fetchCharts below)
+  // rather than a separate dashboard/ or date-range/ call, since that
+  // endpoint's response shape wasn't confirmed. If you want the cards fed
+  // by a dedicated endpoint instead, add a fetchTop() call and wire it back
+  // into refreshAll() once you've confirmed its exact field names.
 
   const fetchCharts = useCallback(async () => {
-    setLoading((s) => ({ ...s, charts: true }));
+    setLoading((s) => ({ ...s, top: true, charts: true }));
     try {
       const [circleRes, deptRes, skillRes, projectRes, dateRes] = await Promise.all([
         api.get("circle-summary/", { params: dateParams }),
@@ -782,31 +782,55 @@ export default function FieldResourceDashboard() {
         api.get("project-summary/", { params: dateParams }),
         api.get("date-summary/", { params: dateParams }),
       ]);
-      setCircleSummary(circleRes.data || []);
-      setDeptSummary(deptRes.data || []);
-      setSkillSummary(skillRes.data || []);
-      setProjectSummary(projectRes.data || []);
-      setDateSummary(dateRes.data || []);
+
+      const circles = unwrap(circleRes.data, "circles");
+      const departments = unwrap(deptRes.data, "departments");
+      const skills = unwrap(skillRes.data, "skills");
+      const projects = unwrap(projectRes.data, "projects");
+      const dates = unwrap(dateRes.data, "dates");
+
+      setCircleSummary(circles);
+      setDeptSummary(departments);
+      setSkillSummary(skills);
+      setProjectSummary(projects);
+      setDateSummary(dates);
+
+      // Stat cards: derive from circle-summary totals since it carries
+      // total_employees/working/idle per circle plus a circle count.
+      const totalEmployees = circles.reduce((sum, c) => sum + (c.total_employees || 0), 0);
+      const totalWorking = circles.reduce((sum, c) => sum + (c.working || 0), 0);
+      const totalIdle = circles.reduce((sum, c) => sum + (c.idle || 0), 0);
+      const circleCount = circleRes.data?.total_circles ?? circles.length;
+      setSummary({ total: totalEmployees, working: totalWorking, idle: totalIdle, circles: circleCount });
     } catch (e) {
       console.error("charts fetch failed", e);
     } finally {
-      setLoading((s) => ({ ...s, charts: false }));
+      setLoading((s) => ({ ...s, top: false, charts: false }));
     }
   }, [dateParams]);
 
   const fetchTables = useCallback(async () => {
     setLoading((s) => ({ ...s, tables: true }));
     try {
-      const [mgrRes, idleRes, workRes, datesRes] = await Promise.all([
+      // --- RE-ENABLE IDLE/WORKING ---
+      // idle/ and working/ returned 400 because they require ?date=YYYY-MM-DD
+      // (not from/to/circle/department). To turn them back on, uncomment the
+      // two api.get calls below, uncomment idleEmployees/workingEmployees
+      // state above, uncomment the Idle/Working table section in the JSX,
+      // and pass a date param, e.g.:
+      //   api.get("idle/", { params: { date: selectedDate } }),
+      //   api.get("working/", { params: { date: selectedDate } }),
+      const [mgrRes, /* idleRes, workRes, */ datesRes] = await Promise.all([
         api.get("manager-summary/", { params: dateParams }),
-        api.get("idle/", { params: dateParams }),
-        api.get("working/", { params: dateParams }),
+        // api.get("idle/", { params: { date: selectedDate } }),
+        // api.get("working/", { params: { date: selectedDate } }),
         api.get("dates/"),
       ]);
-      setManagerSummary(mgrRes.data || []);
-      setIdleEmployees(idleRes.data || []);
-      setWorkingEmployees(workRes.data || []);
-      setAvailableDates(datesRes.data || []);
+      setManagerSummary(unwrap(mgrRes.data, "managers"));
+      // setIdleEmployees(toArray(idleRes.data));
+      // setWorkingEmployees(toArray(workRes.data));
+      // dates/ returns { total_dates, dates: ["2026-06-15", ...] } — array of strings
+      setAvailableDates(unwrap(datesRes.data, "dates"));
     } catch (e) {
       console.error("tables fetch failed", e);
     } finally {
@@ -815,10 +839,9 @@ export default function FieldResourceDashboard() {
   }, [dateParams]);
 
   const refreshAll = useCallback(() => {
-    fetchTop();
-    fetchCharts();
+    fetchCharts(); // also populates the 4 stat cards, derived from circle-summary/
     fetchTables();
-  }, [fetchTop, fetchCharts, fetchTables]);
+  }, [fetchCharts, fetchTables]);
 
   useEffect(() => {
     refreshAll();
@@ -826,7 +849,7 @@ export default function FieldResourceDashboard() {
   }, []);
 
   const handleApplyFilters = () => {
-    setPage(0);
+    // setPage(0); // <-- was for idle/working table pagination, disabled
     refreshAll();
   };
 
@@ -839,7 +862,7 @@ export default function FieldResourceDashboard() {
     setSearchLoading(true);
     try {
       const res = await api.get("search/", { params: { q: query } });
-      setSearchOptions(res.data || []);
+      setSearchOptions(toArray(res.data));
     } catch (e) {
       console.error("search failed", e);
     } finally {
@@ -848,16 +871,16 @@ export default function FieldResourceDashboard() {
   };
 
   const circleOptions = useMemo(
-    () => ["All", ...new Set(circleSummary.map((c) => c.circle))], // <-- adjust field name
+    () => ["All", ...new Set(toArray(circleSummary).map((c) => c.circle))],
     [circleSummary]
   );
   const deptOptions = useMemo(
-    () => ["All", ...new Set(deptSummary.map((d) => d.department))], // <-- adjust field name
+    () => ["All", ...new Set(toArray(deptSummary).map((d) => d.department))],
     [deptSummary]
   );
 
-  const activeTableData = tableTab === "idle" ? idleEmployees : workingEmployees;
-  const pagedRows = activeTableData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+  // const activeTableData = tableTab === "idle" ? idleEmployees : workingEmployees;
+  // const pagedRows = activeTableData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   return (
     <Box sx={{ bgcolor: "#F4F1EA", minHeight: "100vh", p: { xs: 2, md: 3 } }}>
@@ -995,12 +1018,12 @@ export default function FieldResourceDashboard() {
         <Grid item xs={12} md={6}>
           <ChartCard title="Skill-wise Headcount" loading={loading.charts}>
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={skillSummary} layout="vertical" margin={{ left: 40 }}>
+              <BarChart data={skillSummary} layout="vertical" margin={{ left: 90 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
                 <XAxis type="number" />
-                <YAxis dataKey="skill" type="category" tick={{ fontSize: 11 }} width={100} /> {/* <-- adjust */}
+                <YAxis dataKey="skill_set" type="category" tick={{ fontSize: 11 }} width={100} />
                 <RTooltip />
-                <Bar dataKey="count" fill="#00897b" radius={[0, 4, 4, 0]} /> {/* <-- adjust */}
+                <Bar dataKey="total_employees" fill="#00897b" radius={[0, 4, 4, 0]} name="Employees" />
               </BarChart>
             </ResponsiveContainer>
           </ChartCard>
@@ -1011,14 +1034,14 @@ export default function FieldResourceDashboard() {
               <PieChart>
                 <Pie
                   data={projectSummary}
-                  dataKey="count" // <-- adjust
-                  nameKey="project" // <-- adjust
+                  dataKey="total"
+                  nameKey="project"
                   cx="50%"
                   cy="50%"
                   outerRadius={100}
                   label={(entry) => entry.project}
                 >
-                  {projectSummary.map((entry, i) => (
+                  {toArray(projectSummary).map((entry, i) => (
                     <Cell key={`cell-${i}`} fill={COLORS[i % COLORS.length]} />
                   ))}
                 </Pie>
@@ -1072,11 +1095,19 @@ export default function FieldResourceDashboard() {
                     <CircularProgress size={24} />
                   </TableCell>
                 </TableRow>
+              ) : managerSummary.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={4} align="center">
+                    <Typography variant="body2" color="text.secondary" py={2}>
+                      No records found
+                    </Typography>
+                  </TableCell>
+                </TableRow>
               ) : (
                 managerSummary.map((row, i) => (
                   <TableRow key={i} hover>
-                    <TableCell>{row.manager}</TableCell> {/* <-- adjust */}
-                    <TableCell align="right">{row.team_size}</TableCell> {/* <-- adjust */}
+                    <TableCell>{row.reporting_manager}</TableCell>
+                    <TableCell align="right">{row.total_employees}</TableCell>
                     <TableCell align="right">
                       <Chip size="small" label={row.working} sx={{ bgcolor: "#e0f2f1", color: "#00695c" }} />
                     </TableCell>
@@ -1091,7 +1122,12 @@ export default function FieldResourceDashboard() {
         </TableContainer>
       </Paper>
 
-      {/* Idle / Working employee list */}
+      {/* Idle / Working employee list — DISABLED
+          idle/ and working/ endpoints need ?date=YYYY-MM-DD and were
+          returning 400 with from/to/circle/department params. Uncomment
+          this whole block once fetchTables idle/working calls above are
+          re-enabled (see RE-ENABLE IDLE/WORKING note).
+
       <Paper elevation={0} sx={{ p: 2.5, borderRadius: 3, border: "1px solid #e0dcd0" }}>
         <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1}>
           <Tabs
@@ -1143,12 +1179,12 @@ export default function FieldResourceDashboard() {
               ) : (
                 pagedRows.map((row, i) => (
                   <TableRow key={i} hover>
-                    <TableCell>{row.employee_id}</TableCell> {/* <-- adjust */}
-                    <TableCell>{row.name}</TableCell> {/* <-- adjust */}
-                    <TableCell>{row.circle}</TableCell> {/* <-- adjust */}
-                    <TableCell>{row.department}</TableCell> {/* <-- adjust */}
-                    <TableCell>{tableTab === "idle" ? row.skill : row.project}</TableCell> {/* <-- adjust */}
-                    <TableCell>{row.manager}</TableCell> {/* <-- adjust */}
+                    <TableCell>{row.employee_id}</TableCell>
+                    <TableCell>{row.name}</TableCell>
+                    <TableCell>{row.circle}</TableCell>
+                    <TableCell>{row.department}</TableCell>
+                    <TableCell>{tableTab === "idle" ? row.skill : row.project}</TableCell>
+                    <TableCell>{row.manager}</TableCell>
                   </TableRow>
                 ))
               )}
@@ -1168,6 +1204,7 @@ export default function FieldResourceDashboard() {
           rowsPerPageOptions={[10, 25, 50]}
         />
       </Paper>
+      */}
     </Box>
   );
 }

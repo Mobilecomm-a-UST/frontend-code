@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 import { MemoPerformance_SR_Wise } from './Performance_SR_Wise'
 import { MemoPerformance_SR_Wise2 } from './Performance_SR_Wise2';
+import { MemoPerformance_SR_Wise_summary3 } from './Performance_SR_Wise_summary3';
 import Performance_SR_Wise from './Performance_SR_Wise';
 
 const Performance_SR_Wise_Main = () => {
@@ -30,6 +31,10 @@ const Performance_SR_Wise_Main = () => {
             <Box>
                 <MemoPerformance_SR_Wise />
         </Box>
+         {/* <Box>
+                <MemoPerformance_SR_Wise_summary3 />
+        </Box> */}
+        
 
     </>
 
