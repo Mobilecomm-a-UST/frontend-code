@@ -422,11 +422,11 @@ function App() {
               </Suspense>
             } />
 
-            {/* <Route path="/tools/field_resource_tracking/*" element={
+             {/* <Route path="/tools/field_resource_tracking/*" element={
               <Suspense fallback={<div>Loading...</div>}>
                 <ProtectedRoute element={FieldResourceTracking} allowedUserTypes={['admin',"frt"]} userType={userType} />
               </Suspense>
-            } /> */}
+            } />  */}
 
 
           </Routes>

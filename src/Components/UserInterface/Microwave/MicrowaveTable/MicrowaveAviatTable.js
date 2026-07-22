@@ -28,15 +28,15 @@
 // import 'rsuite/dist/rsuite.min.css';
 // import axios from 'axios';
 // import { constant } from 'lodash';
- 
- 
- 
- 
+
+
+
+
 // const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues }) => {
 //     const handleChange = (event) => {
 //         const { value } = event.target;
 //         const selected = typeof value === 'string' ? value.split(',') : value;
- 
+
 //         if (selected.includes('ALL')) {
 //             if (selectedValues.length === options.length) {
 //                 setSelectedValues([]);
@@ -47,9 +47,9 @@
 //             setSelectedValues(selected);
 //         }
 //     };
- 
+
 //     const isAllSelected = options.length > 0 && selectedValues.length === options.length;
- 
+
 //     return (
 //         <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
 //             <InputLabel id={`${label}-label`}>{label}</InputLabel>
@@ -70,7 +70,7 @@
 //                     />
 //                     <ListItemText primary="Select All" />
 //                 </MenuItem>
- 
+
 //                 {options.map((name) => (
 //                     <MenuItem key={name} value={name}>
 //                         <Checkbox checked={selectedValues.includes(name)} />
@@ -82,7 +82,7 @@
 //     );
 // };
 // const CircleList = ['AP', 'AS', 'BIH', 'CHN', 'DL', 'HRY', 'JK', 'JRK', 'KK', 'KOL', 'MH', 'MP', 'MB', 'NE', 'ORI', 'PUN', 'RAJ', 'ROTN', 'UE', 'UPW', 'WB']
- 
+
 // const MicrowaveAviatTable = () => {
 //     const navigate = useNavigate();
 //     const classes = useStyles()
@@ -94,7 +94,7 @@
 //         circle: '',
 //         equipment_make: ''
 //     })
- 
+
 //     const handleChange = (e) => {
 //         const { name, value } = e.target;
 //         setFormTabel((prev) => ({
@@ -102,28 +102,28 @@
 //             [name]: value,
 //         }));
 //     }
- 
- 
+
+
 //     const fetchMicrowaveDashboard = async () => {
- 
+
 //         action(true);
 //         const formData = new FormData();
 //         formData.append("site_id", formTable.site_id);
 //         formData.append("circle", formTable.circle);
 //         formData.append("equipment_make", formTable.equipment_make);
- 
+
 //         const response = await makePostRequest("mw_app/get_table/", formData);
- 
+
 //         action(false);
 //         if (response.status) {
 //             setTableData(response.data)
- 
+
 //             Swal.fire({ icon: "success", title: "Done", text: response.message });
 //         } else {
 //             Swal.fire({ icon: "error", title: "Oops...", text: response.message });
 //         }
 //     }
- 
+
 //     const handleDeleteTable = async () => {
 //         const result = await Swal.fire({
 //             title: "Are you sure?",
@@ -133,7 +133,7 @@
 //             confirmButtonText: "Yes, delete it!",
 //             cancelButtonText: "Cancel"
 //         });
- 
+
 //         if (result.isConfirmed) {
 //             try {
 //                 const res = await axios.delete(
@@ -144,7 +144,7 @@
 //                         }
 //                     }
 //                 );
- 
+
 //                 if (res?.data?.status === true) {
 //                     Swal.fire({
 //                         icon: "success",
@@ -159,7 +159,7 @@
 //                         text: res?.data?.error || res?.data?.message || "Delete operation failed."
 //                     });
 //                 }
- 
+
 //             } catch (error) {
 //                 Swal.fire({
 //                     icon: "error",
@@ -169,14 +169,14 @@
 //             }
 //         }
 //     };
- 
- 
+
+
 //     const handleDownloadFile = async () => {
 //         const res = await getData('mw_app/get_delete/');
- 
+
 //         if (res?.file_url) {
 //             const downloadExcelFilelink = res.file_url;
- 
+
 //             // 🔽 Auto download
 //             const link = document.createElement('a');
 //             link.href = downloadExcelFilelink;
@@ -186,14 +186,14 @@
 //             document.body.removeChild(link);
 //         }
 //     };
- 
- 
+
+
 //     const handleSubmitSite = (e) => {
 //         e.preventDefault()
 //         fetchMicrowaveDashboard()
 //     }
- 
- 
+
+
 //     useEffect(() => {
 //         fetchMicrowaveDashboard()
 //         const title = window.location.pathname
@@ -203,7 +203,7 @@
 //             .toUpperCase();
 //         document.title = title;
 //     }, []);
- 
+
 //     return (
 //         <>
 //             <style>{"th{border:1px solid black;}"}</style>
@@ -214,21 +214,21 @@
 //                     <Typography color="text.primary">Microwave(AVIAT) Dashboard</Typography>
 //                 </Breadcrumbs>
 //             </Box>
- 
- 
- 
+
+
+
 //             <Slide direction="left" in='true' timeout={700} style={{ transformOrigin: '1 1 1' }}>
 //                 <div style={{ margin: 20 }}>
- 
+
 //                     {/* ************* 2G  TABLE DATA ************** */}
 //                     <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', alignContent: 'center' }}>
 //                         <Box style={{ fontSize: 22, fontWeight: 'bold' }}>
 //                             Microwave (AVIAT) Dashboard
 //                         </Box>
 //                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', gap: 1 }}>
- 
+
 //                             <form onSubmit={handleSubmitSite} style={{ display: 'flex', justifyContent: 'center', gap: 5 }}>
- 
+
 //                                 <FormControl size="small" sx={{ minWidth: 120 }}>
 //                                     <InputLabel id="issue-label">Circle</InputLabel>
 //                                     <Select
@@ -247,7 +247,7 @@
 //                                 <TextField size='small' placeholder='Equipment Make' label="Equipment Make" name='equipment_make' value={formTable.equipment_make} onChange={handleChange} />
 //                                 <Button type='submit' sx={{ backgroundColor: '#223354' }} variant='contained'>Filter</Button>
 //                             </form>
- 
+
 //                             {/* <FormControl sx={{ minWidth: 100, maxWidth: 100 }} size="small">
 //                                         <InputLabel id="demo-select-small-label">View</InputLabel>
 //                                         <Select
@@ -259,13 +259,13 @@
 //                                         >
 //                                             <MenuItem value="Cumulative">Cumulative</MenuItem>
 //                                             <MenuItem value="Non-cumulative">Non-cumulative</MenuItem>
- 
+
 //                                         </Select>
 //                                     </FormControl> */}
- 
- 
- 
- 
+
+
+
+
 //                             <Tooltip title="Download Microwave(AVIAT) Dashboard">
 //                                 <IconButton
 //                                     component="a"
@@ -288,15 +288,15 @@
 //                             </Tooltip>
 //                         </Box>
 //                     </Box>
- 
+
 //                     <Box sx={{ marginTop: 0 }}>
 //                         <TableContainer sx={{ maxHeight: 600, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} component={Paper}>
 //                             <table style={{ width: "100%", border: "1px solid black", borderCollapse: 'collapse', overflow: 'auto' }} >
 //                                 <thead style={{ position: 'sticky', top: 0, zIndex: 1, height: '60px' }}>
 //                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
- 
+
 //                                         <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', position: 'sticky', left: 0, top: 0, backgroundColor: '#223354' }}> Circle </th>
- 
+
 //                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff', width: '300px', minWidth: '300px', maxWidth: '300px', textAlign: 'center' }}>Reference-Key
 //                                         </th>
 //                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff', width: '250px', minWidth: '250px', maxWidth: '250px', textAlign: 'center' }}>SiteID
@@ -310,69 +310,69 @@
 //                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site ID - B</th>
 //                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Rx Frequency (MHz)</th>
 //                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Bandwidth (MHz)</th>
- 
+
 //                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>ACM Status</th>
 //                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>ACM Min QAM</th>
 //                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>ACM Max QAM</th>
- 
+
 //                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>ATPC Status</th>
 //                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>ATPC Min</th>
 //                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>ATPC Max</th>
- 
+
 //                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>RSL Min (dBm)</th>
 //                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>RSL Max (dBm)</th>
 //                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Tx Power Max (dBm)</th>
 //                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>SNR Min (dB)</th>
- 
+
 //                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>XPD Min (dBm)</th>
 //                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>XPD Max (dBm)</th>
 //                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Polarization (Radio)</th>
- 
+
 //                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site A Current RSL</th>
 //                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site Z Current RSL</th>
- 
+
 //                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>FREQ TX</th>
 //                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>FREQ RX</th>
- 
+
 //                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site A Modulation Mode</th>
 //                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site Z Modulation Mode</th>
- 
+
 //                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site A Min Modulation (24h)</th>
 //                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site Z Min Modulation (24h)</th>
- 
+
 //                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site A Max Modulation (24h)</th>
 //                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site Z Max Modulation (24h)</th>
- 
+
 //                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site A Min Configured Modulation</th>
 //                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site Z Min Configured Modulation</th>
- 
+
 //                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site A Max Configured Modulation</th>
 //                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site Z Max Configured Modulation</th>
- 
+
 //                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>ATPC Status (Link)</th>
 //                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff', width: '450px', minWidth: '450px', maxWidth: '450px', textAlign: 'center' }}>SoftAt-Output</th>
- 
+
 //                                     </tr>
 //                                 </thead >
- 
+
 //                                 <tbody>
 //                                     {tableData?.map((it, index) => {
- 
- 
+
+
 //                                         const toFloat = (val) => (val !== null && val !== undefined && !isNaN(val) ? parseFloat(val) : null);
- 
- 
+
+
 //                                         const condPolarization = it.polarization === it.polarization_radio;
 //                                         const condTxFreq = it.tx_frequency_mhz === it.freq_tx || it.tx_frequency_mhz === it.freq_rx;
 //                                         const condRxFreq = it.rx_frequency_mhz === it.freq_rx || it.tx_frequency_mhz === it.freq_rx;
 //                                         const condTxPower = parseInt(it.atpc_max) === parseInt(it.tx_power_max_dbm);
- 
+
 //                                         const condAtpcLink = it.atpc_status_link === true || it.atpc_status_link === "true" || it.atpc_status_link === "True" || it.atpc_status_link === 1;
 //                                         const atpcDisplay = it.atpc_status_link === null || it.atpc_status_link === undefined || Number.isNaN(it.atpc_status_link) ? "NaN" : condAtpcLink ? "True" : "NaN";
- 
- 
+
+
 //                                         const condSnr = toFloat(it.snr_min_db) > 40;
- 
+
 //                                         const ber = toFloat(it.ber10e6_rx_level_dbm);
 //                                         const rslMin = toFloat(it.rsl_min_dbm);
 //                                         const rslMax = toFloat(it.rsl_max_dbm);
@@ -390,8 +390,8 @@
 //                                             ber <= rslA + 3 &&
 //                                             ber >= rslZ - 3 &&
 //                                             ber <= rslZ + 3;
- 
- 
+
+
 //                                         const condXpdMin = toFloat(it.xpd_min_dbm);
 //                                         const condXpdMax = toFloat(it.xpd_max_dbm);
 //                                         const xpdMinColor =
@@ -406,30 +406,30 @@
 //                                                 : (20 <= condXpdMax && condXpdMax <= 22) || (35 <= condXpdMax && condXpdMax <= 38)
 //                                                     ? "#FF0000"
 //                                                     : "#C00000";
- 
- 
+
+
 //                                         const acmStatus = it.acm_status?.toLowerCase();
 //                                         const condSiteAMod = (acmStatus === "enable" && it.site_a_modulation_mode?.toLowerCase() === "adaptive") ||
 //                                             (acmStatus === "disable" && it.site_a_modulation_mode?.toLowerCase() === "fixed");
 //                                         const condSiteZMod = (acmStatus === "enable" && it.site_z_modulation_mode?.toLowerCase() === "adaptive") ||
 //                                             (acmStatus === "disable" && it.site_z_modulation_mode?.toLowerCase() === "fixed");
- 
- 
+
+
 //                                         const acmMin = it.acm_min_qam?.toString().toLowerCase();
 //                                         const acmMax = it.acm_max_qam?.toString().toLowerCase();
- 
+
 //                                         const checkQAM = (val) => val?.toString().toLowerCase() === acmMax;
 //                                         const checkQAMMin = (val) => val?.toString().toLowerCase() === acmMin;
- 
- 
+
+
 //                                         const normalizeQAM = (val) => {
 //                                             if (!val) return "";
 //                                             return val.toString().toLowerCase().replace(/[^0-9]/g, ''); // keep only numbers
 //                                         };
- 
+
 //                                         const acmMaxNormalized = normalizeQAM(it.acm_max_qam);
- 
- 
+
+
 //                                         const checkQM = (val) => normalizeQAM(val) === acmMaxNormalized;
 //                                         const displayValue = (val) => {
 //                                             if (
@@ -440,7 +440,7 @@
 //                                                 val === "<NA>" ||
 //                                                 val === "nan" ||
 //                                                 val === "NA" ||
- 
+
 //                                                 Number.isNaN(val)
 //                                             ) {
 //                                                 return "";
@@ -469,11 +469,11 @@
 //                                             xpdMinColor === "#C00000" ||
 //                                             xpdMaxColor === "#FF0000" ||
 //                                             xpdMaxColor === "#C00000";
- 
+
 //                                         const remarks = hasRed ? "Action is Required" : "Ready to offer";
- 
- 
- 
+
+
+
 //                                         return (
 //                                             <tr key={index}>
 //                                                 <th style={{ backgroundColor: '#CBCBCB', color: 'black', position: 'sticky', left: 0 }}>{it.circle}</th>
@@ -488,43 +488,43 @@
 //                                                 <th style={{ backgroundColor: '#FFF', color: 'black' }}>{displayValue(it.site_id_b)}</th>
 //                                                 <th style={{ backgroundColor: '#FFF', color: 'black' }}>{displayValue(it.rx_frequency_mhz)}</th>
 //                                                 <th style={{ backgroundColor: '#FFF', color: 'black' }}>{displayValue(it.bandwidth_mhz)}</th>
- 
+
 //                                                 <th style={{ backgroundColor: '#FFF', color: 'black' }}>{displayValue(it.acm_status)}</th>
 //                                                 <th style={{ backgroundColor: '#FFF', color: 'black' }}>{displayValue(it.acm_min_qam)}</th>
 //                                                 <th style={{ backgroundColor: '#FFF', color: 'black' }}>{displayValue(it.acm_max_qam)}</th>
- 
+
 //                                                 <th style={{ backgroundColor: '#FFF', color: 'black' }}>{displayValue(it.atpc_status)}</th>
 //                                                 <th style={{ backgroundColor: '#FFF', color: 'black' }}>{displayValue(it.atpc_min)}</th>
 //                                                 <th style={{ backgroundColor: '#FFF', color: 'black' }}>{displayValue(it.atpc_max)}</th>
- 
+
 //                                                 <th style={{ backgroundColor: '#FFF', color: condRsl ? "#00B050" : "#FF0000" }}>{displayValue(it.rsl_min_dbm)}</th>
 //                                                 <th style={{ backgroundColor: '#FFF', color: condRsl ? "#00B050" : "#FF0000" }}>{displayValue(it.rsl_max_dbm)}</th>
 //                                                 <th style={{ backgroundColor: '#FFF', color: condTxPower ? "#00B050" : "#FF0000" }}>{displayValue(it.tx_power_max_dbm)}</th>
 //                                                 <th style={{ backgroundColor: '#FFF', color: condSnr ? "#00B050" : "#FF0000" }}>{displayValue(it.snr_min_db)}</th>
- 
+
 //                                                 <th style={{ backgroundColor: '#FFF', color: xpdMinColor }}>{displayValue(it.xpd_min_dbm)}</th>
 //                                                 <th style={{ backgroundColor: '#FFF', color: xpdMaxColor }}>{displayValue(it.xpd_max_dbm)}</th>
 //                                                 <th style={{ backgroundColor: '#FFF', color: condPolarization ? "#00B050" : "#FF0000" }}>{displayValue(it.polarization_radio)}</th>
- 
+
 //                                                 <th style={{ backgroundColor: '#FFF', color: condRsl ? "#00B050" : "#FF0000" }}>{displayValue(it.site_a_current_rsl)}</th>
 //                                                 <th style={{ backgroundColor: '#FFF', color: condRsl ? "#00B050" : "#FF0000" }}>{displayValue(it.site_z_current_rsl)}</th>
- 
+
 //                                                 <th style={{ backgroundColor: '#FFF', color: condTxFreq ? "#00B050" : "#FF0000" }}>{displayValue(it.freq_tx)}</th>
 //                                                 <th style={{ backgroundColor: '#FFF', color: condRxFreq ? "#00B050" : "#FF0000" }}>{displayValue(it.freq_rx)}</th>
- 
+
 //                                                 <th style={{ backgroundColor: '#FFF', color: condSiteAMod ? "#00B050" : "#FF0000" }}>{displayValue(it.site_a_modulation_mode)}</th>
 //                                                 <th style={{ backgroundColor: '#FFF', color: condSiteZMod ? "#00B050" : "#FF0000" }}>{displayValue(it.site_z_modulation_mode)}</th>
- 
+
 //                                                 <th style={{ backgroundColor: '#FFF', color: checkQM(it.site_a_min_mod_last_24h) ? "#00B050" : "#FF0000" }}>{displayValue(it.site_a_min_mod_last_24h)}</th>
 //                                                 <th style={{ backgroundColor: '#FFF', color: checkQM(it.site_z_min_mod_last_24h) ? "#00B050" : "#FF0000" }}>{displayValue(it.site_z_min_mod_last_24h)}</th>
 //                                                 <th style={{ backgroundColor: '#FFF', color: checkQM(it.site_a_max_mod_last_24h) ? "#00B050" : "#FF0000" }}>{displayValue(it.site_a_max_mod_last_24h)}</th>
 //                                                 <th style={{ backgroundColor: '#FFF', color: checkQM(it.site_z_max_mod_last_24h) ? "#00B050" : "#FF0000" }}>{displayValue(it.site_z_max_mod_last_24h)}</th>
- 
+
 //                                                 <th style={{ backgroundColor: '#FFF', color: checkQAMMin(it.site_a_min_configured_mod) ? "#00B050" : "#FF0000" }}>{displayValue(it.site_a_min_configured_mod)}</th>
 //                                                 <th style={{ backgroundColor: '#FFF', color: checkQAMMin(it.site_z_min_configured_mod) ? "#00B050" : "#FF0000" }}>{displayValue(it.site_z_min_configured_mod)}</th>
 //                                                 <th style={{ backgroundColor: '#FFF', color: checkQM(it.site_a_max_configured_mod) ? "#00B050" : "#FF0000" }}>{displayValue(it.site_a_max_configured_mod)}</th>
 //                                                 <th style={{ backgroundColor: '#FFF', color: checkQM(it.site_z_max_configured_mod) ? "#00B050" : "#FF0000" }}>{displayValue(it.site_z_max_configured_mod)}</th>
- 
+
 //                                                 <th style={{ backgroundColor: '#fff', color: condAtpcLink ? "#00B050" : "#FF0000" }}>{displayValue(atpcDisplay)}</th>
 //                                                 <th style={{ backgroundColor: '#FFF', color: 'black' }}>
 //                                                     {remarks}
@@ -539,12 +539,12 @@
 //                 </div>
 //             </Slide>
 //             {loading}
- 
- 
+
+
 //         </>
 //     )
 // }
- 
+
 // export default MicrowaveAviatTable
 
 
@@ -576,15 +576,15 @@ import Swal from "sweetalert2";
 import 'rsuite/dist/rsuite.min.css';
 import axios from 'axios';
 import { constant } from 'lodash';
- 
- 
- 
- 
+
+
+
+
 const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues }) => {
     const handleChange = (event) => {
         const { value } = event.target;
         const selected = typeof value === 'string' ? value.split(',') : value;
- 
+
         if (selected.includes('ALL')) {
             if (selectedValues.length === options.length) {
                 setSelectedValues([]);
@@ -595,9 +595,9 @@ const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues 
             setSelectedValues(selected);
         }
     };
- 
+
     const isAllSelected = options.length > 0 && selectedValues.length === options.length;
- 
+
     return (
         <FormControl sx={{ minWidth: 120, maxWidth: 120 }} size="small">
             <InputLabel id={`${label}-label`}>{label}</InputLabel>
@@ -618,7 +618,7 @@ const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues 
                     />
                     <ListItemText primary="Select All" />
                 </MenuItem>
- 
+
                 {options.map((name) => (
                     <MenuItem key={name} value={name}>
                         <Checkbox checked={selectedValues.includes(name)} />
@@ -630,7 +630,7 @@ const MultiSelectWithAll = ({ label, options, selectedValues, setSelectedValues 
     );
 };
 const CircleList = ['AP', 'AS', 'BIH', 'CHN', 'DL', 'HRY', 'JK', 'JRK', 'KK', 'KOL', 'MH', 'MP', 'MB', 'NE', 'ORI', 'PUN', 'RAJ', 'ROTN', 'UE', 'UPW', 'WB']
- 
+
 const MicrowaveAviatTable = () => {
     const navigate = useNavigate();
     const classes = useStyles()
@@ -642,7 +642,7 @@ const MicrowaveAviatTable = () => {
         circle: '',
         equipment_make: ''
     })
- 
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormTabel((prev) => ({
@@ -650,28 +650,28 @@ const MicrowaveAviatTable = () => {
             [name]: value,
         }));
     }
- 
- 
+
+
     const fetchMicrowaveDashboard = async () => {
- 
+
         action(true);
         const formData = new FormData();
         formData.append("site_id", formTable.site_id);
         formData.append("circle", formTable.circle);
         formData.append("equipment_make", formTable.equipment_make);
- 
+
         const response = await makePostRequest("mw_app/get_table/", formData);
- 
+
         action(false);
         if (response.status) {
             setTableData(response.data)
- 
+
             Swal.fire({ icon: "success", title: "Done", text: response.message });
         } else {
             Swal.fire({ icon: "error", title: "Oops...", text: response.message });
         }
     }
- 
+
     const handleDeleteTable = async () => {
         const result = await Swal.fire({
             title: "Are you sure?",
@@ -681,7 +681,7 @@ const MicrowaveAviatTable = () => {
             confirmButtonText: "Yes, delete it!",
             cancelButtonText: "Cancel"
         });
- 
+
         if (result.isConfirmed) {
             try {
                 const res = await axios.delete(
@@ -692,7 +692,7 @@ const MicrowaveAviatTable = () => {
                         }
                     }
                 );
- 
+
                 if (res?.data?.status === true) {
                     Swal.fire({
                         icon: "success",
@@ -707,7 +707,7 @@ const MicrowaveAviatTable = () => {
                         text: res?.data?.error || res?.data?.message || "Delete operation failed."
                     });
                 }
- 
+
             } catch (error) {
                 Swal.fire({
                     icon: "error",
@@ -717,14 +717,14 @@ const MicrowaveAviatTable = () => {
             }
         }
     };
- 
- 
+
+
     const handleDownloadFile = async () => {
         const res = await getData('mw_app/get_delete/');
- 
+
         if (res?.file_url) {
             const downloadExcelFilelink = res.file_url;
- 
+
             // 🔽 Auto download
             const link = document.createElement('a');
             link.href = downloadExcelFilelink;
@@ -734,14 +734,14 @@ const MicrowaveAviatTable = () => {
             document.body.removeChild(link);
         }
     };
- 
- 
+
+
     const handleSubmitSite = (e) => {
         e.preventDefault()
         fetchMicrowaveDashboard()
     }
- 
- 
+
+
     useEffect(() => {
         fetchMicrowaveDashboard()
         const title = window.location.pathname
@@ -751,7 +751,7 @@ const MicrowaveAviatTable = () => {
             .toUpperCase();
         document.title = title;
     }, []);
- 
+
     return (
         <>
             <style>{"th{border:1px solid black;}"}</style>
@@ -762,21 +762,21 @@ const MicrowaveAviatTable = () => {
                     <Typography color="text.primary">Microwave(AVIAT) Dashboard</Typography>
                 </Breadcrumbs>
             </Box>
- 
- 
- 
+
+
+
             <Slide direction="left" in='true' timeout={700} style={{ transformOrigin: '1 1 1' }}>
                 <div style={{ margin: 20 }}>
- 
+
                     {/* ************* 2G  TABLE DATA ************** */}
                     <Box style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', alignContent: 'center' }}>
                         <Box style={{ fontSize: 22, fontWeight: 'bold' }}>
                             Microwave (AVIAT) Dashboard
                         </Box>
                         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', gap: 1 }}>
- 
+
                             <form onSubmit={handleSubmitSite} style={{ display: 'flex', justifyContent: 'center', gap: 5 }}>
- 
+
                                 <FormControl size="small" sx={{ minWidth: 120 }}>
                                     <InputLabel id="issue-label">Circle</InputLabel>
                                     <Select
@@ -795,7 +795,7 @@ const MicrowaveAviatTable = () => {
                                 <TextField size='small' placeholder='Equipment Make' label="Equipment Make" name='equipment_make' value={formTable.equipment_make} onChange={handleChange} />
                                 <Button type='submit' sx={{ backgroundColor: '#223354' }} variant='contained'>Filter</Button>
                             </form>
- 
+
                             <Tooltip title="Download Microwave(AVIAT) Dashboard">
                                 <IconButton
                                     component="a"
@@ -815,15 +815,15 @@ const MicrowaveAviatTable = () => {
                             </Tooltip>
                         </Box>
                     </Box>
- 
+
                     <Box sx={{ marginTop: 0 }}>
                         <TableContainer sx={{ maxHeight: 600, boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px' }} component={Paper}>
                             <table style={{ width: "100%", border: "1px solid black", borderCollapse: 'collapse', overflow: 'auto' }} >
                                 <thead style={{ position: 'sticky', top: 0, zIndex: 1, height: '60px' }}>
                                     <tr style={{ fontSize: 15, backgroundColor: "#223354", color: "white", border: '1px solid white' }}>
- 
+
                                         <th style={{ padding: '5px 10px', whiteSpace: 'nowrap', position: 'sticky', left: 0, top: 0, backgroundColor: '#223354' }}> Circle </th>
- 
+
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff', width: '300px', minWidth: '300px', maxWidth: '300px', textAlign: 'center' }}>Reference-Key
                                         </th>
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff', width: '250px', minWidth: '250px', maxWidth: '250px', textAlign: 'center' }}>SiteID
@@ -837,47 +837,47 @@ const MicrowaveAviatTable = () => {
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site ID - B</th>
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Rx Frequency (MHz)</th>
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Bandwidth (MHz)</th>
- 
+
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>ACM Status</th>
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>ACM Min QAM</th>
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>ACM Max QAM</th>
- 
+
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>ATPC Status</th>
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>ATPC Min</th>
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>ATPC Max</th>
- 
+
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>RSL Min (dBm)</th>
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>RSL Max (dBm)</th>
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Tx Power Max (dBm)</th>
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>SNR Min (dB)</th>
- 
+
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>XPD Min (dBm)</th>
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>XPD Max (dBm)</th>
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Polarization (Radio)</th>
- 
+
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site A Current RSL</th>
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site Z Current RSL</th>
- 
+
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>FREQ TX</th>
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>FREQ RX</th>
- 
+
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site A Modulation Mode</th>
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site Z Modulation Mode</th>
- 
+
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site A Min Modulation (24h)</th>
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site Z Min Modulation (24h)</th>
- 
+
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site A Max Modulation (24h)</th>
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site Z Max Modulation (24h)</th>
- 
+
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site A Min Configured Modulation</th>
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site Z Min Configured Modulation</th>
- 
+
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site A Max Configured Modulation</th>
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>Site Z Max Configured Modulation</th>
- 
+
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>ATPC Status (Link)</th>
- 
+
                                         {/* ============ NEW CONFIG COLUMNS (before SoftAt-Output) ============ */}
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff', width: '300px', minWidth: '300px', maxWidth: '300px', textAlign: 'center' }}>Software Version (A)</th>
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>MTU Size (A)</th>
@@ -888,30 +888,30 @@ const MicrowaveAviatTable = () => {
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>TenGigE1/1 Enabled (Z)</th>
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff' }}>TenGigE1/2 Enabled (Z)</th>
                                         {/* ============ END NEW CONFIG COLUMNS ============ */}
- 
+
                                         <th style={{ padding: '5px 5px', whiteSpace: 'nowrap', backgroundColor: '#223354', color: '#fff', width: '300px', minWidth: '300px', maxWidth: '300px', textAlign: 'center' }}>SoftAt-Output</th>
- 
+
                                     </tr>
                                 </thead >
- 
+
                                 <tbody>
                                     {tableData?.map((it, index) => {
- 
- 
+
+
                                         const toFloat = (val) => (val !== null && val !== undefined && !isNaN(val) ? parseFloat(val) : null);
- 
- 
+
+
                                         const condPolarization = it.polarization === it.polarization_radio;
                                         const condTxFreq = it.tx_frequency_mhz === it.freq_tx || it.tx_frequency_mhz === it.freq_rx;
                                         const condRxFreq = it.rx_frequency_mhz === it.freq_rx || it.tx_frequency_mhz === it.freq_rx;
                                         const condTxPower = parseInt(it.atpc_max) === parseInt(it.tx_power_max_dbm);
- 
+
                                         const condAtpcLink = it.atpc_status_link === true || it.atpc_status_link === "true" || it.atpc_status_link === "True" || it.atpc_status_link === 1;
                                         const atpcDisplay = it.atpc_status_link === null || it.atpc_status_link === undefined || Number.isNaN(it.atpc_status_link) ? "NaN" : condAtpcLink ? "True" : "NaN";
- 
- 
+
+
                                         const condSnr = toFloat(it.snr_min_db) > 40;
- 
+
                                         const ber = toFloat(it.ber10e6_rx_level_dbm);
                                         const rslMin = toFloat(it.rsl_min_dbm);
                                         const rslMax = toFloat(it.rsl_max_dbm);
@@ -929,8 +929,8 @@ const MicrowaveAviatTable = () => {
                                             ber <= rslA + 3 &&
                                             ber >= rslZ - 3 &&
                                             ber <= rslZ + 3;
- 
- 
+
+
                                         const condXpdMin = toFloat(it.xpd_min_dbm);
                                         const condXpdMax = toFloat(it.xpd_max_dbm);
                                         const xpdMinColor =
@@ -945,30 +945,30 @@ const MicrowaveAviatTable = () => {
                                                 : (20 <= condXpdMax && condXpdMax <= 22) || (35 <= condXpdMax && condXpdMax <= 38)
                                                     ? "#FF0000"
                                                     : "#C00000";
- 
- 
+
+
                                         const acmStatus = it.acm_status?.toLowerCase();
                                         const condSiteAMod = (acmStatus === "enable" && it.site_a_modulation_mode?.toLowerCase() === "adaptive") ||
                                             (acmStatus === "disable" && it.site_a_modulation_mode?.toLowerCase() === "fixed");
                                         const condSiteZMod = (acmStatus === "enable" && it.site_z_modulation_mode?.toLowerCase() === "adaptive") ||
                                             (acmStatus === "disable" && it.site_z_modulation_mode?.toLowerCase() === "fixed");
- 
- 
+
+
                                         const acmMin = it.acm_min_qam?.toString().toLowerCase();
                                         const acmMax = it.acm_max_qam?.toString().toLowerCase();
- 
+
                                         const checkQAM = (val) => val?.toString().toLowerCase() === acmMax;
                                         const checkQAMMin = (val) => val?.toString().toLowerCase() === acmMin;
- 
- 
+
+
                                         const normalizeQAM = (val) => {
                                             if (!val) return "";
                                             return val.toString().toLowerCase().replace(/[^0-9]/g, ''); // keep only numbers
                                         };
- 
+
                                         const acmMaxNormalized = normalizeQAM(it.acm_max_qam);
- 
- 
+
+
                                         const checkQM = (val) => normalizeQAM(val) === acmMaxNormalized;
                                         const displayValue = (val) => {
                                             if (
@@ -979,26 +979,52 @@ const MicrowaveAviatTable = () => {
                                                 val === "<NA>" ||
                                                 val === "nan" ||
                                                 val === "NA" ||
- 
+
                                                 Number.isNaN(val)
                                             ) {
                                                 return "";
                                             }
                                             return val;
                                         };
- 
+
                                         // ============ NEW CONFIG COLUMN CONDITIONS ============
-                                        const condSwA = it.software_version_a?.toString().startsWith("2.11.12.18");
+
+                                        // const condSwA = it.software_version_a?.toString().startsWith("2.11.12.18");
+
+                                        // const condSwA =
+                                        //     it.software_version_a?.toString().startsWith("2.11.12.18.6191") ||
+                                        //     it.software_version_a?.toString().startsWith("2.11.15.18.6298") ||
+                                        //     it.software_version_a?.toString().startsWith("2.11.17.18.6740");
+                                        // const condMtuA = it.mtu_size_a?.toString() === "10214";
+                                        // const condTg11A = it.tengige11_disabled_a === false || it.tengige11_disabled_a?.toString().toLowerCase() === "false";
+                                        // const condTg12A = it.tengige12_disabled_a === false || it.tengige12_disabled_a?.toString().toLowerCase() === "false";
+
+                                        // const condSwZ =
+                                        // it.software_version_z?.toString().startsWith("2.11.12.18.6191") ||
+                                        //     it.software_version_z?.toString().startsWith("2.11.15.18.6298") ||
+                                        //     it.software_version_z?.toString().startsWith("2.11.17.18.6740");
+
+
+                                        const condSwA = (() => {
+                                            const v = it.software_version_a?.toString().split("-")[0];
+                                            const p = v?.split(".");
+                                            return p?.[0] === "2" && p?.[1] === "11" && Number(p?.[2]) >= 12;
+                                        })();
+
                                         const condMtuA = it.mtu_size_a?.toString() === "10214";
                                         const condTg11A = it.tengige11_disabled_a === false || it.tengige11_disabled_a?.toString().toLowerCase() === "false";
                                         const condTg12A = it.tengige12_disabled_a === false || it.tengige12_disabled_a?.toString().toLowerCase() === "false";
- 
-                                        const condSwZ = it.software_version_z?.toString().startsWith("2.11.12.18");
+
+                                        const condSwZ = (() => {
+                                            const v = it.software_version_z?.toString().split("-")[0];
+                                            const p = v?.split(".");
+                                            return p?.[0] === "2" && p?.[1] === "11" && Number(p?.[2]) >= 12;
+                                        })();
                                         const condMtuZ = it.mtu_size_z?.toString() === "10214";
                                         const condTg11Z = it.tengige11_disabled_z === false || it.tengige11_disabled_z?.toString().toLowerCase() === "false";
                                         const condTg12Z = it.tengige12_disabled_z === false || it.tengige12_disabled_z?.toString().toLowerCase() === "false";
                                         // ============ END NEW CONFIG COLUMN CONDITIONS ============
- 
+
                                         const hasRed =
                                             !condPolarization ||
                                             !condTxFreq ||
@@ -1023,11 +1049,11 @@ const MicrowaveAviatTable = () => {
                                             xpdMaxColor === "#C00000" ||
                                             !condSwA || !condMtuA || !condTg11A || !condTg12A ||
                                             !condSwZ || !condMtuZ || !condTg11Z || !condTg12Z;
- 
+
                                         const remarks = hasRed ? "Action is Required" : "Ready to offer";
- 
- 
- 
+
+
+
                                         return (
                                             <tr key={index}>
                                                 <th style={{ backgroundColor: '#CBCBCB', color: 'black', position: 'sticky', left: 0 }}>{it.circle}</th>
@@ -1042,45 +1068,45 @@ const MicrowaveAviatTable = () => {
                                                 <th style={{ backgroundColor: '#FFF', color: 'black' }}>{displayValue(it.site_id_b)}</th>
                                                 <th style={{ backgroundColor: '#FFF', color: 'black' }}>{displayValue(it.rx_frequency_mhz)}</th>
                                                 <th style={{ backgroundColor: '#FFF', color: 'black' }}>{displayValue(it.bandwidth_mhz)}</th>
- 
+
                                                 <th style={{ backgroundColor: '#FFF', color: 'black' }}>{displayValue(it.acm_status)}</th>
                                                 <th style={{ backgroundColor: '#FFF', color: 'black' }}>{displayValue(it.acm_min_qam)}</th>
                                                 <th style={{ backgroundColor: '#FFF', color: 'black' }}>{displayValue(it.acm_max_qam)}</th>
- 
+
                                                 <th style={{ backgroundColor: '#FFF', color: 'black' }}>{displayValue(it.atpc_status)}</th>
                                                 <th style={{ backgroundColor: '#FFF', color: 'black' }}>{displayValue(it.atpc_min)}</th>
                                                 <th style={{ backgroundColor: '#FFF', color: 'black' }}>{displayValue(it.atpc_max)}</th>
- 
+
                                                 <th style={{ backgroundColor: '#FFF', color: condRsl ? "#00B050" : "#FF0000" }}>{displayValue(it.rsl_min_dbm)}</th>
                                                 <th style={{ backgroundColor: '#FFF', color: condRsl ? "#00B050" : "#FF0000" }}>{displayValue(it.rsl_max_dbm)}</th>
                                                 <th style={{ backgroundColor: '#FFF', color: condTxPower ? "#00B050" : "#FF0000" }}>{displayValue(it.tx_power_max_dbm)}</th>
                                                 <th style={{ backgroundColor: '#FFF', color: condSnr ? "#00B050" : "#FF0000" }}>{displayValue(it.snr_min_db)}</th>
- 
+
                                                 <th style={{ backgroundColor: '#FFF', color: xpdMinColor }}>{displayValue(it.xpd_min_dbm)}</th>
                                                 <th style={{ backgroundColor: '#FFF', color: xpdMaxColor }}>{displayValue(it.xpd_max_dbm)}</th>
                                                 <th style={{ backgroundColor: '#FFF', color: condPolarization ? "#00B050" : "#FF0000" }}>{displayValue(it.polarization_radio)}</th>
- 
+
                                                 <th style={{ backgroundColor: '#FFF', color: condRsl ? "#00B050" : "#FF0000" }}>{displayValue(it.site_a_current_rsl)}</th>
                                                 <th style={{ backgroundColor: '#FFF', color: condRsl ? "#00B050" : "#FF0000" }}>{displayValue(it.site_z_current_rsl)}</th>
- 
+
                                                 <th style={{ backgroundColor: '#FFF', color: condTxFreq ? "#00B050" : "#FF0000" }}>{displayValue(it.freq_tx)}</th>
                                                 <th style={{ backgroundColor: '#FFF', color: condRxFreq ? "#00B050" : "#FF0000" }}>{displayValue(it.freq_rx)}</th>
- 
+
                                                 <th style={{ backgroundColor: '#FFF', color: condSiteAMod ? "#00B050" : "#FF0000" }}>{displayValue(it.site_a_modulation_mode)}</th>
                                                 <th style={{ backgroundColor: '#FFF', color: condSiteZMod ? "#00B050" : "#FF0000" }}>{displayValue(it.site_z_modulation_mode)}</th>
- 
+
                                                 <th style={{ backgroundColor: '#FFF', color: checkQM(it.site_a_min_mod_last_24h) ? "#00B050" : "#FF0000" }}>{displayValue(it.site_a_min_mod_last_24h)}</th>
                                                 <th style={{ backgroundColor: '#FFF', color: checkQM(it.site_z_min_mod_last_24h) ? "#00B050" : "#FF0000" }}>{displayValue(it.site_z_min_mod_last_24h)}</th>
                                                 <th style={{ backgroundColor: '#FFF', color: checkQM(it.site_a_max_mod_last_24h) ? "#00B050" : "#FF0000" }}>{displayValue(it.site_a_max_mod_last_24h)}</th>
                                                 <th style={{ backgroundColor: '#FFF', color: checkQM(it.site_z_max_mod_last_24h) ? "#00B050" : "#FF0000" }}>{displayValue(it.site_z_max_mod_last_24h)}</th>
- 
+
                                                 <th style={{ backgroundColor: '#FFF', color: checkQAMMin(it.site_a_min_configured_mod) ? "#00B050" : "#FF0000" }}>{displayValue(it.site_a_min_configured_mod)}</th>
                                                 <th style={{ backgroundColor: '#FFF', color: checkQAMMin(it.site_z_min_configured_mod) ? "#00B050" : "#FF0000" }}>{displayValue(it.site_z_min_configured_mod)}</th>
                                                 <th style={{ backgroundColor: '#FFF', color: checkQM(it.site_a_max_configured_mod) ? "#00B050" : "#FF0000" }}>{displayValue(it.site_a_max_configured_mod)}</th>
                                                 <th style={{ backgroundColor: '#FFF', color: checkQM(it.site_z_max_configured_mod) ? "#00B050" : "#FF0000" }}>{displayValue(it.site_z_max_configured_mod)}</th>
- 
+
                                                 <th style={{ backgroundColor: '#fff', color: condAtpcLink ? "#00B050" : "#FF0000" }}>{displayValue(atpcDisplay)}</th>
- 
+
                                                 {/* ============ NEW CONFIG COLUMN DATA CELLS ============ */}
                                                 <th style={{ backgroundColor: '#FFF', color: condSwA ? "#00B050" : "#FF0000" }}>{displayValue(it.software_version_a)}</th>
                                                 <th style={{ backgroundColor: '#FFF', color: condMtuA ? "#00B050" : "#FF0000" }}>{displayValue(it.mtu_size_a)}</th>
@@ -1091,7 +1117,7 @@ const MicrowaveAviatTable = () => {
                                                 <th style={{ backgroundColor: '#FFF', color: condTg11Z ? "#00B050" : "#FF0000" }}>{displayValue(it.tengige11_disabled_z)}</th>
                                                 <th style={{ backgroundColor: '#FFF', color: condTg12Z ? "#00B050" : "#FF0000" }}>{displayValue(it.tengige12_disabled_z)}</th>
                                                 {/* ============ END NEW CONFIG COLUMN DATA CELLS ============ */}
- 
+
                                                 <th style={{ backgroundColor: '#FFF', color: 'black' }}>
                                                     {remarks}
                                                 </th>
@@ -1105,11 +1131,10 @@ const MicrowaveAviatTable = () => {
                 </div>
             </Slide>
             {loading}
- 
- 
+
+
         </>
     )
 }
- 
+
 export default MicrowaveAviatTable
- 
