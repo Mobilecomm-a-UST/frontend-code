@@ -219,7 +219,7 @@ const CATEGORY_CONFIG = {
         { id:"c4", label:"Expense",          value:"3.50%" },
         { id:"c5", label:"Fixed cost",       value:"5.20%" },
         { id:"c6", label:"Total Cost", value:"69.70%"},
-        { id:"c6", label:"Gross Profit", value:"30.30", isTotal:true },
+        { id:"c7", label:"Gross Profit", value:"30.30", isTotal:true },
         ],
         resources: [
         {id:"r1",role:"CDH",qty:1,exp:"10 to 15"},
@@ -252,7 +252,7 @@ const CATEGORY_CONFIG = {
           { id:"c4", label:"Expense",          value:"4.00%" },
           { id:"c5", label:"Fixed cost",       value:"6.20%" },
           { id:"c6", label:"Gross Profit", value:"81.20%"},
-          { id:"c6", label:"Gross Profit", value:"18.8%",isTotal:true},
+          { id:"c7", label:"Gross Profit", value:"18.8%",isTotal:true},
         ],
         resources: [
         {id:"r1",role:"CDH",qty:1,exp:"10 to 15"},
@@ -481,7 +481,6 @@ const MonthWise = () => {
           color: onClick ? "#e6a817":"#222",
           cursor: onClick ? "pointer" : "default",
           fontWeight: onClick ? "600" : "400",
-          // textDecoration: onClick ? "underline" : "none",
         }}
       >
         {value !== "" && value != null ? value : <span style={{ color: "#ccc" }}></span>}
@@ -597,9 +596,11 @@ const MonthWise = () => {
                     other_resources:payload.otherResources
                   })
                 });
-                console.log("Payload to send:", payload);
-                // const data = await res.json();
-                // console.log(data.message); 
+                if (res.ok) {
+                  fetchDataForMonth(month);
+                } else {
+                  alert("Failed to save data");
+                }
               }}
             />
           </div>

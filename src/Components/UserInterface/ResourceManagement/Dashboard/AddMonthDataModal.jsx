@@ -463,23 +463,23 @@ const AddMonthDataModal = ({ catColor,costCenter,onSubmit}) => {
   }
 
   async function handleSubmit() {
-    const { newErrors: resErrors, isValid: resValid } = validateResourceSection(resources, RESOURCE_ROLES);
-    const { newErrors: otherErrors, isValid: otherValid } = validateResourceSection(otherResources, OTHER_RESOURCE_ROLES);
+    // const { newErrors: resErrors, isValid: resValid } = validateResourceSection(resources, RESOURCE_ROLES);
+    // const { newErrors: otherErrors, isValid: otherValid } = validateResourceSection(otherResources, OTHER_RESOURCE_ROLES);
 
-    setErrors(resErrors);
-    setOtherErrors(otherErrors); 
+    // setErrors(resErrors);
+    // setOtherErrors(otherErrors); 
 
-    if(!year){
-      setFieldErrors(p => ({...p, year:"Year is Required"}))
-    }
+    // if(!year){
+    //   setFieldErrors(p => ({...p, year:"Year is Required"}))
+    // }
 
-    if(!month){
-      setFieldErrors(p => ({...p, month:"Month is Required"}))
-    }
+    // if(!month){
+    //   setFieldErrors(p => ({...p, month:"Month is Required"}))
+    // }
 
-    if (!resValid || !otherValid || !year || !month) {
-      return;
-    }
+    // if (!resValid || !otherValid || !year || !month) {
+    //   return;
+    // }
 
     const monthKey = `${month}-${year.slice(2)}`;
 

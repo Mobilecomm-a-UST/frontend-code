@@ -27,6 +27,7 @@ const ResourceUploadFile = lazy(() => import('./Upload/Resource_upload'))
 const MyDashboard = lazy(() => import('./Dashboard/MyDashboard'))
 const AdminDashboard = lazy(() => import('./AdminDashboard/AdminDashboard'))
 const AdminTable = lazy(() => import('./AdminDashboard/AdminTable'))
+const ResourceTable = lazy(() => import('./AdminDashboard/ResourceTable'))
 
 
 
@@ -89,6 +90,9 @@ const ResourceManagement = () => {
                                                     <Nav.Item eventKey="1-6" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} icon={<TableIcon />} onClick={() => { navigate('/tools/resource_management/admin_table'); show(); setMenuButton(true) }}>
                                                             Admin Table
                                                     </Nav.Item>
+                                                    <Nav.Item eventKey="1-6" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} icon={<TableIcon />} onClick={() => { navigate('/tools/resource_management/resource_table'); show(); setMenuButton(true) }}>
+                                                            Resource Table
+                                                    </Nav.Item>
                                                     <Nav.Item eventKey="1-6" placement="rightStart" style={{ fontWeight: 400, color: 'white' }} icon={<FileUploadIcon />} onClick={() => { navigate('/tools/resource_management/upload_file'); show(); setMenuButton(true) }}>
                                                             Upload Revenue
                                                     </Nav.Item>
@@ -123,6 +127,7 @@ const ResourceManagement = () => {
                                         <Route element={<ResourceUploadFile />} path="/resource_upload" />
                                         <Route element={<AdminDashboard />} path="/admin_dashboard" />
                                         <Route element={<AdminTable />} path="/admin_table" />
+                                        <Route element={<ResourceTable />} path="/resource_table" />
 
                                     </>
                                 }
