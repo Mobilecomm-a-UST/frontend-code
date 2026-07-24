@@ -14,7 +14,8 @@ const Soft_AT_Tool = () => {
     const navigate = useNavigate()
     const chackToken = getDecreyptedData("tokenKey")
     const userTypes = (getDecreyptedData('user_type')?.split(","))
-    const allowedAirtelRoles = ['soft_at_team', 'admin', 'soft_at'];
+    const allowedAirtelRoles = ['soft_at_team', 'admin', 'soft_at','soft_at_airtel'];
+     const allowedViRoles = ['soft_at_team', 'admin', 'soft_at_vi'];
     // const allowedAirtelReader = ['quality', 'IX_reader', 'quality-s']
 
 
@@ -106,7 +107,7 @@ const Soft_AT_Tool = () => {
                                 </Grid>}
 
 
-                                {userTypes?.some(role => allowedAirtelRoles.map(r => r.toLowerCase()).includes(role?.toLowerCase())) && <Grid item xs={4}>
+                                {userTypes?.some(role => allowedViRoles.map(r => r.toLowerCase()).includes(role?.toLowerCase())) && <Grid item xs={4}>
                                     <Box sx={backgroundStyle} className={classes.des} onClick={handleVI}>
                                         <div className={classes.centerIcon}>   <img src="/assets/VI.webp" alt="VI   " style={{ width: "60px", height: "60px" }} /></div>
                                         <div >

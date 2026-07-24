@@ -400,19 +400,19 @@ function App() {
 
             <Route path="/tools/soft_at_tools/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={Soft_AT_Tool} allowedUserTypes={['soft_at_team', 'admin', 'soft_at']} userType={userType} />
+                <ProtectedRoute element={Soft_AT_Tool} allowedUserTypes={['soft_at_team', 'admin', 'soft_at','soft_at_vi','soft_at_airtel']} userType={userType} />
               </Suspense>
             } />
 
             <Route path="/tools/soft_at_tools/vi_soft_at/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={VI_SoftAT} allowedUserTypes={['soft_at_team', 'admin', 'vi_soft_at']} userType={userType} />
+                <ProtectedRoute element={VI_SoftAT} allowedUserTypes={['soft_at_team', 'admin','soft_at_vi']} userType={userType} />
               </Suspense>
             } />
 
             <Route path="/tools/soft_at_tools/airtel_soft_at/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={SoftAT} allowedUserTypes={['soft_at_team', 'admin', 'soft_at']} userType={userType} />
+                <ProtectedRoute element={SoftAT} allowedUserTypes={['soft_at_team', 'admin', 'soft_at','soft_at_airtel']} userType={userType} />
               </Suspense>
             } />
 
@@ -422,11 +422,17 @@ function App() {
               </Suspense>
             } />
 
-             {/* <Route path="/tools/field_resource_tracking/*" element={
+             <Route path="/tools/field_resource_tracking/*" element={
               <Suspense fallback={<div>Loading...</div>}>
                 <ProtectedRoute element={FieldResourceTracking} allowedUserTypes={['admin',"frt"]} userType={userType} />
               </Suspense>
-            } />  */}
+            } /> 
+
+             <Route path="/tools/field_resource_tracking/*" element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProtectedRoute element={FieldResourceTracking} allowedUserTypes={['admin',"frt"]} userType={userType} />
+              </Suspense>
+            } /> 
 
 
           </Routes>
