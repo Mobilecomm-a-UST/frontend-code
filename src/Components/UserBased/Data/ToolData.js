@@ -34,6 +34,9 @@ import { DashboardCircleEditIcon } from "@hugeicons/core-free-icons";
 import { FileScriptIcon } from "@hugeicons/core-free-icons";
 import DateTaskIcon from '@rsuite/icons/DateTask';
 import GpsFixedIcon from '@mui/icons-material/GpsFixed';
+import BlurOnOutlinedIcon from '@mui/icons-material/BlurOnOutlined';
+import DeblurOutlinedIcon from '@mui/icons-material/DeblurOutlined';
+
 
 import { groupBy } from 'lodash';
 
@@ -452,6 +455,17 @@ const ToolData = [
     //     link: '/tools/field_resource_tracking',
     //     groupBy: ['admin',"frt"]
     // },
+
+    //  {
+    //     id: 42,
+    //     name: 'WCC Generate',
+    //     title: 'WCC Generate System',
+    //     icons: DeblurOutlinedIcon,
+    //     fullname: 'WCC Generate',
+    //     link: '/tools/wcc_generate',
+    //     groupBy: ['admin',"wcg"]
+    // },
+
 
   
 

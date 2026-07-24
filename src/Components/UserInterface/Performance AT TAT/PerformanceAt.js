@@ -13,6 +13,9 @@ import { Garage } from '@mui/icons-material';
 import { getDecreyptedData } from '../../utils/localstorage'
 import NetworkPingRoundedIcon from '@mui/icons-material/NetworkPingRounded';
 import AutoGraphIcon from '@mui/icons-material/AutoGraph';
+import SpinnerIcon from '@rsuite/icons/Spinner';
+import DoingRoundIcon from '@rsuite/icons/DoingRound';
+
 
 const PerformanceTool = lazy(() => import("./PerformanceTool"));
 const FileManager = lazy(() => import("./File Manager/File_Manager"));
@@ -213,7 +216,7 @@ const PerformanceAt = () => {
                                         <Nav.Item
                                             eventKey="5"
                                             placement="rightStart"
-                                            icon={<DashboardIcon />}
+                                            icon={<DoingRoundIcon />}
                                             onClick={() => navigate('/tools/performance_at_tat/Performancekpi5g')}
                                         >
                                             5G Performance KPI
