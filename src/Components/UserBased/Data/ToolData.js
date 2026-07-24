@@ -34,6 +34,9 @@ import { DashboardCircleEditIcon } from "@hugeicons/core-free-icons";
 import { FileScriptIcon } from "@hugeicons/core-free-icons";
 import DateTaskIcon from '@rsuite/icons/DateTask';
 import GpsFixedIcon from '@mui/icons-material/GpsFixed';
+import BlurOnOutlinedIcon from '@mui/icons-material/BlurOnOutlined';
+import DeblurOutlinedIcon from '@mui/icons-material/DeblurOutlined';
+
 
 import { groupBy } from 'lodash';
 
@@ -93,7 +96,7 @@ const ToolData = [
         icons: PcIcon,
         link: '/tools/soft_at_tools',
         fullname: 'Soft AT Tool',
-        groupBy: ['soft_at_team', 'admin', 'soft_at']
+        groupBy: ['soft_at_team', 'admin', 'soft_at','soft_at_airtel','soft_at_vi']
     },
 
     {
@@ -443,15 +446,26 @@ const ToolData = [
         groupBy: ['RM_Admin',"RM_CDH"]
     },
 
-    // {
-    //     id: 41,
-    //     name: 'Field Resrc Tracking',
-    //     title: 'Field Resource Tracking System',
-    //     icons: GpsFixedIcon,
-    //     fullname: 'Field Resource Tracking',
-    //     link: '/tools/field_resource_tracking',
-    //     groupBy: ['admin',"frt"]
-    // },
+    {
+        id: 41,
+        name: 'Field Resrc Tracking',
+        title: 'Field Resource Tracking System',
+        icons: GpsFixedIcon,
+        fullname: 'Field Resource Tracking',
+        link: '/tools/field_resource_tracking',
+        groupBy: ['admin',"frt"]
+    },
+
+     {
+        id: 42,
+        name: 'WCC Generate',
+        title: 'WCC Generate System',
+        icons: DeblurOutlinedIcon,
+        fullname: 'WCC Generate',
+        link: '/tools/wcc_generate',
+        groupBy: ['admin',"wcg"]
+    },
+
 
   
 
