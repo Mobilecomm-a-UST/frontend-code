@@ -72,6 +72,7 @@ const VI_SoftAT = lazy(() => import('./Components/UserInterface/VI_SoftAT/VI_Sof
 const IX_Ericsson = lazy(()=> import('./Components/UserInterface/IX Audit Ericsson/Audit_Ericsson'))
 const ResourceManagement = lazy(() => import('./Components/UserInterface/ResourceManagement/Resource_management'));
 const FieldResourceTracking = lazy(() => import('./Components/UserInterface/Field Resource Tracking/FieldResourceTracking'))
+const WccGenerate = lazy(()=> import('./Components/UserInterface/WCC Generate/Wcc_generate'))
 
 const queryClient = new QueryClient()
 
@@ -428,9 +429,9 @@ function App() {
               </Suspense>
             } /> 
 
-             <Route path="/tools/field_resource_tracking/*" element={
+             <Route path="/tools/wcc_generate/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={FieldResourceTracking} allowedUserTypes={['admin',"frt"]} userType={userType} />
+                <ProtectedRoute element={WccGenerate} allowedUserTypes={['admin',"frt"]} userType={userType} />
               </Suspense>
             } /> 
 
