@@ -1,0 +1,803 @@
+
+
+
+// import React, { useState, useEffect, useCallback } from 'react';
+// import {
+//     Grid,
+//     Box,
+//     Dialog,
+//     DialogContent,
+//     DialogTitle,
+//     IconButton,
+//     Slide,
+//     Breadcrumbs, Link, Typography, Button
+// } from '@mui/material';
+// import {
+//     Upload as UploadIcon,
+//     DoDisturb as DoDisturbIcon,
+//     FileDownload as FileDownloadIcon,
+//     KeyboardArrowRight as KeyboardArrowRightIcon,
+// } from "@mui/icons-material";
+// import FolderIcon from '@mui/icons-material/Folder';
+// import CloseIcon from '@mui/icons-material/Close';
+// import DeleteIcon from '@mui/icons-material/Delete';
+// import { useNavigate } from 'react-router-dom';
+// import Swal from "sweetalert2";
+// import TopicIcon from '@mui/icons-material/Topic';
+// import OverAllCss from "../../../csss/OverAllCss";
+// import { postData, getData, deleteData, ServerURL } from "../../../services/FetchNodeServices";
+// import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
+ 
+// const jsonData = [
+    
+//     { folder_name: "Upload Pdf", api: " ", back_folder: " " },
+//     { folder_name: "Address Master", api: " ", back_folder: " " },
+//     { folder_name: "Project Data", api: " ", back_folder: " " },
+//     { folder_name: "PMS Dump", api: " ", back_folder: " " },
+// ];
+// const Transition = React.forwardRef(function Transition(props, ref) {
+//     return (
+//         <Slide
+//             direction="down"
+//             timeout={2500}
+//             style={{ transformOrigin: '0 0 0' }}
+//             mountOnEnter
+//             unmountOnExit
+//             ref={ref}
+//             {...props}
+//         />
+//     );
+// });
+ 
+// const FileManager = () => {
+//     const [open2, setOpen2] = useState(false);
+//     const [dialogData, setDialogData] = useState()
+//     const navigate = useNavigate()
+//     const { loading, action } = useLoadingDialog();
+//     const [showFiles, setShoweFiles] = useState([])
+//     const [selectFiles, setSeletctFiles] = useState([])
+//     const [showError, setShowError] = useState({
+//         selectfile: false,
+//     });
+ 
+//     const fetchApiData = async (api) => {
+//         action(true)
+ 
+//         const response = await getData(`${api}/`);
+ 
+//         if (response?.status) {
+//             action(false);
+//             setShoweFiles(response.files);
+ 
+//         }
+ 
+ 
+//     }
+ 
+//     const handleOpen = (foldername, apikey, back_folder) => {
+//         fetchApiData(apikey)
+//         setOpen2(true);
+//         setDialogData({ foldername: foldername, apikey: apikey, back_folder: back_folder })
+//         // console.log('data', foldername, apikey)
+//     }
+//     const handleClose = () => {
+//         setOpen2(false);
+//         setShoweFiles([])
+//         setDialogData()
+//         setShowError({ selectfile: false })
+//         setSeletctFiles([])
+ 
+//     }
+ 
+//     const handleSubmit = async (api) => {
+//         const isValid = selectFiles.length > 0;
+ 
+//         if (!isValid) {
+//             setShowError({
+//                 selectfile: selectFiles.length === 0,
+ 
+//             });
+//             return;
+//         }
+ 
+//         action(true);
+//         const formData = new FormData();
+//         Array.from(selectFiles).forEach((file) => {
+//             formData.append("files", file);
+//         });
+//         const response = await postData(`${api}/`, formData);
+//         action(false);
+ 
+//         if (response.status) {
+//             fetchApiData(api);
+//             setShowError({ selectfile: false })
+//             setSeletctFiles([])
+//             Swal.fire({ icon: "success", title: "Done", text: response.message });
+//         } else {
+//             Swal.fire({ icon: "error", title: "Oops...", text: response.message });
+//         }
+ 
+//     }
+//     const handleDelete = async (api) => {
+//         const confirmResult = await Swal.fire({
+//             title: "Are you sure?",
+//             text: "This action cannot be undone!",
+//             icon: "warning",
+//             showCancelButton: true,
+//             confirmButtonColor: "#d33",
+//             cancelButtonColor: "#3085d6",
+//             confirmButtonText: "Yes, delete it!",
+//         });
+ 
+//         if (confirmResult.isConfirmed) {
+//             action(true);
+ 
+//             const response = await deleteData(`${api}/`);
+//             console.log("response", response);
+ 
+//             action(false);
+ 
+//             if (response?.status) {
+//                 setShoweFiles([]);
+//                 Swal.fire({ icon: "success", title: "Deleted!", text: response.message });
+//             } else {
+//                 Swal.fire({ icon: "error", title: "Oops...", text: response.message });
+//             }
+//         } else {
+//             // Optional: do something when deletion is cancelled
+//             console.log("Deletion cancelled.");
+//         }
+//     };
+ 
+//     // const OneFileDelete = async(fileName,api,back_folder) => {
+//     //    const confirmResult = await Swal.fire({
+//     //         title: "Are you sure?",
+//     //         text: `Want to delete ${fileName} file!`,
+//     //         icon: "warning",
+//     //         showCancelButton: true,
+//     //         confirmButtonColor: "#d33",
+//     //         cancelButtonColor: "#3085d6",
+//     //         confirmButtonText: "Yes, delete it!",
+//     //     });
+ 
+//     //     if (confirmResult.isConfirmed) {
+//     //         action(true);
+ 
+//     //         const response = await deleteData(`mobinate_vs_cats/delete_mobinet_file/`, {
+//     //             data: { filename: `${fileName}`, foldername: `${back_folder}`}
+//     //         });
+ 
+//     //         action(false);
+//     //         if (response?.status) {
+//     //             fetchApiData(api)
+//     //             Swal.fire({ icon: "success", title: "Deleted!", text: response.message });
+//     //         } else {
+//     //             Swal.fire({ icon: "error", title: "Oops...", text: response.message });
+//     //         }
+//     //     } else {
+//     //         // Optional: do something when deletion is cancelled
+//     //         console.log("Deletion cancelled.");
+//     //     }
+//     // }
+ 
+//     const OneFileDelete = async (fileName, api, back_folder) => {
+ 
+//         const result = await Swal.fire({
+//             title: "Choose Action",
+//             text: `What do you want to do with ${fileName}?`,
+//             icon: "question",
+ 
+//             showCancelButton: true,
+//             showConfirmButton: true,
+//             showDenyButton: true,
+ 
+//             confirmButtonText: "Delete",
+//             denyButtonText: "Download",
+//             cancelButtonText: "Cancel",
+ 
+//             confirmButtonColor: "#d33",
+//             denyButtonColor: "#28a745",
+//             cancelButtonColor: "#3085d6",
+//         });
+ 
+//         // DELETE
+//         if (result.isConfirmed) {
+ 
+//             action(true);
+ 
+//             const response = await deleteData(
+//                 `mobinate_vs_cats/delete_mobinet_file/`,
+//                 {
+//                     data: {
+//                         filename: fileName,
+//                         foldername: back_folder
+//                     }
+//                 }
+//             );
+ 
+//             action(false);
+ 
+//             if (response?.status) {
+//                 fetchApiData(api);
+ 
+//                 Swal.fire({
+//                     icon: "success",
+//                     title: "Deleted!",
+//                     text: response.message
+//                 });
+ 
+//             } else {
+ 
+//                 Swal.fire({
+//                     icon: "error",
+//                     title: "Oops...",
+//                     text: response.message
+//                 });
+//             }
+//         }
+ 
+//         // DOWNLOAD
+//         else if (result.isDenied) {
+ 
+//             try {
+ 
+//                 const fileUrl = `${ServerURL}/media/Mobinet_CATs_TOOL/${back_folder}/${fileName}`;
+ 
+//                 // Create download link
+//                 const link = document.createElement("a");
+ 
+//                 link.href = fileUrl;
+//                 link.download = fileName;
+//                 link.target = "_blank";
+ 
+//                 document.body.appendChild(link);
+ 
+//                 link.click();
+ 
+//                 link.remove();
+ 
+//                 Swal.fire({
+//                     icon: "success",
+//                     title: "Downloaded!",
+//                     text: `${fileName} downloaded successfully`
+//                 });
+ 
+//             } catch (error) {
+ 
+//                 Swal.fire({
+//                     icon: "error",
+//                     title: "Download Failed",
+//                     text: error.message
+//                 });
+//             }
+//         }
+ 
+//         // CANCEL
+//         else {
+//             console.log("Action cancelled");
+//         }
+//     };
+ 
+//     useEffect(() => {
+//         const title = window.location.pathname
+//             .slice(1)
+//             .replaceAll("_", " ")
+//             .replaceAll("/", " | ")
+//             .toUpperCase();
+//         document.title = title;
+//     }, []);
+ 
+//     return (
+//         <>
+//             <Box m={1} ml={2}>
+//                 <Breadcrumbs separator={<KeyboardArrowRightIcon fontSize="small" />}>
+//                     <Link underline="hover" onClick={() => navigate("/tools")}>Tools</Link>
+//                     <Link underline="hover" onClick={() => navigate("/tools/wcc_generate")}>Wcc Generate</Link>
+//                     <Typography color="text.primary">File Manager</Typography>
+//                 </Breadcrumbs>
+//             </Box>
+//             <Box sx={{ margin: '20px' }}>
+//                 <Grid container rowSpacing={2} columnSpacing={3} direction={{ xs: "column", sm: "column", md: "row" }}>
+//                     {jsonData.map((item, index) => (
+//                         <Grid item xs={4} key={index}>
+//                             <Box
+//                                 onClick={() => handleOpen(item.folder_name, item.api, item.back_folder)}
+//                                 sx={{
+//                                     border: '1px solid black',
+//                                     cursor: 'pointer',
+//                                     display: 'flex',
+//                                     gap: '10px',
+//                                     padding: 1,
+//                                     alignItems: 'center',
+//                                     borderRadius: '5px',
+//                                     boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px',
+//                                     '&:hover': { backgroundColor: '#223354', color: 'white' },
+ 
+//                                 }}
+//                             >
+//                                 <FolderIcon sx={{ color: '#FEA405', fontSize: 35 }} />
+//                                 <Box sx={{ fontSize: 20, fontWeight: 'bold' }}>{item.folder_name}</Box>
+//                             </Box>
+//                         </Grid>
+//                     ))}
+//                 </Grid>
+//             </Box>
+ 
+//             {/* Dialog Rendered Normally */}
+//             {open2 && <Dialog
+//                 fullWidth
+//                 maxWidth="lg"
+//                 TransitionComponent={Transition}
+//                 open={open2}
+//                 onClose={handleClose}
+//                 sx={{ zIndex: 2 }}
+//             >
+//                 <DialogTitle>
+//                     <span style={{ float: 'left' }}>
+//                         <h2>{dialogData.foldername}</h2>
+//                     </span>
+//                     <span style={{ float: 'right' }}>
+//                         <IconButton size="large" onClick={handleClose}>
+//                             <CloseIcon />
+//                         </IconButton>
+//                     </span>
+//                 </DialogTitle>
+//                 <DialogContent>
+//                     <Box sx={{ border: "2px solid black", borderRadius: '5px', padding: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center', alignContent: 'center' }}>
+//                         <Box>
+//                             <UploadSection
+//                                 // label="Select Mobinet Dump Files"
+//                                 color={selectFiles.length > 0 ? "warning" : "primary"}
+//                                 multiple
+//                                 onChange={(e) => {
+//                                     setSeletctFiles(Array.from(e.target.files))
+//                                     setShowError((prev) => ({ ...prev, selectfile: false }));
+//                                 }}
+//                                 error={showError.selectfile}
+//                                 selectedText={selectFiles.length > 0 ? `Selected File(s): ${selectFiles.length}` : ""}
+//                             />
+ 
+//                         </Box>
+//                         <Box><Button variant="contained" color="success" onClick={() => handleSubmit(dialogData?.apikey)} endIcon={<UploadIcon />}>Upload</Button></Box>
+//                     </Box>
+//                     {showFiles.length > 0 && <Box sx={{ border: "2px solid black", borderRadius: '5px', padding: 2, marginTop: 1 }}>
+//                         <Grid container rowSpacing={2} columnSpacing={3} direction={{ xs: "column", sm: "column", md: "row" }}>
+//                             {showFiles.map((item, index) => (
+//                                 <Grid item xs={4} key={index}>
+//                                     <Box key={item} sx={{
+//                                         display: "flex",
+//                                         justifyContent: 'flex-start', alignItems: 'center',
+//                                         cursor: 'pointer', border: '0px solid black', borderRadius: '5px',
+//                                         padding: 0.5, background: '#e9e9e9',
+//                                         '&:hover': { backgroundColor: '#223354', color: 'white' }
+//                                     }}
+//                                         onClick={() => OneFileDelete(item, dialogData?.apikey, dialogData?.back_folder)}
+//                                     >
+//                                         <TopicIcon sx={{ color: '#FEA405' }} />{item}
+//                                     </Box>
+//                                 </Grid>
+//                             ))}
+//                         </Grid>
+//                         <Box sx={{ textAlign: 'center', marginTop: 2 }}>
+//                             <Button onClick={() => handleDelete(dialogData?.apikey)} variant="contained" fullWidth color="error" endIcon={<DeleteIcon />}>Delete All</Button>
+//                         </Box>
+//                     </Box>}
+ 
+ 
+//                 </DialogContent>
+//             </Dialog>}
+ 
+//             {loading}
+ 
+//         </>
+//     );
+// };
+ 
+// const UploadSection = ({ label, color, onChange, error, multiple = false, selectedText }) => {
+//     return (
+//         <Box >
+//             <div className={OverAllCss().Front_Box_Hading}>{label}</div>
+//             <div className={OverAllCss().Front_Box_Select_Button}>
+//                 <Button variant="contained" component="label" color={color}>
+//                     Select File
+//                     <input
+//                         hidden
+//                         required
+//                         type="file"
+//                         accept=".csv, .xls, .xlsx, .xlsb, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, application/octet-stream"
+//                         multiple={multiple}
+//                         onChange={onChange}
+//                     />
+//                 </Button>
+//                 {selectedText && (
+//                     <span style={{ color: "green", fontSize: 18, fontWeight: 600, marginLeft: 10 }}>
+//                         {selectedText}
+//                     </span>
+//                 )}
+//                 {error && (
+//                     <div>
+//                         <span style={{ color: "red", fontSize: 18, fontWeight: 600 }}>This Field Is Required!</span>
+//                     </div>
+//                 )}
+//             </div>
+//         </Box>
+//     );
+// };
+ 
+// export default FileManager;
+
+
+import React, { useState, useEffect } from 'react';
+import {
+    Grid,
+    Box,
+    Dialog,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+    Slide,
+    Breadcrumbs, Link, Typography, Button
+} from '@mui/material';
+import {
+    Upload as UploadIcon,
+    KeyboardArrowRight as KeyboardArrowRightIcon,
+} from "@mui/icons-material";
+import FolderIcon from '@mui/icons-material/Folder';
+import CloseIcon from '@mui/icons-material/Close';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { useNavigate } from 'react-router-dom';
+import Swal from "sweetalert2";
+import TopicIcon from '@mui/icons-material/Topic';
+import OverAllCss from "../../../csss/OverAllCss";
+import { postData, getData, deleteData, ServerURL } from "../../../services/FetchNodeServices";
+import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
+
+// `type` drives which file types each folder's upload button accepts:
+// "pdf"   -> only .pdf files
+// "excel" -> only .csv/.xls/.xlsx/.xlsb
+const jsonData = [
+    { folder_name: "Upload Pdf", api: " ", back_folder: " ", type: "pdf" },
+    { folder_name: "Address Master", api: " ", back_folder: " ", type: "excel" },
+    { folder_name: "Project Data", api: " ", back_folder: " ", type: "excel" },
+    { folder_name: "PMS Dump", api: " ", back_folder: " ", type: "excel" },
+];
+
+// File-picker `accept` strings per folder type.
+const ACCEPT_BY_TYPE = {
+    pdf: ".pdf, application/pdf",
+    excel: ".csv, .xls, .xlsx, .xlsb, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, application/octet-stream",
+};
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return (
+        <Slide
+            direction="down"
+            timeout={2500}
+            style={{ transformOrigin: '0 0 0' }}
+            mountOnEnter
+            unmountOnExit
+            ref={ref}
+            {...props}
+        />
+    );
+});
+
+const FileManager = () => {
+    const [open2, setOpen2] = useState(false);
+    const [dialogData, setDialogData] = useState()
+    const navigate = useNavigate()
+    const { loading, action } = useLoadingDialog();
+    const [showFiles, setShoweFiles] = useState([])
+    const [selectFiles, setSeletctFiles] = useState([])
+    const [showError, setShowError] = useState({
+        selectfile: false,
+    });
+
+    const fetchApiData = async (api) => {
+        action(true)
+
+        const response = await getData(`${api}/`);
+
+        if (response?.status) {
+            action(false);
+            setShoweFiles(response.files);
+        }
+    }
+
+    const handleOpen = (foldername, apikey, back_folder, type) => {
+        fetchApiData(apikey)
+        setOpen2(true);
+        setDialogData({ foldername, apikey, back_folder, type })
+    }
+
+    const handleClose = () => {
+        setOpen2(false);
+        setShoweFiles([])
+        setDialogData()
+        setShowError({ selectfile: false })
+        setSeletctFiles([])
+    }
+
+    const handleSubmit = async (api) => {
+        const isValid = selectFiles.length > 0;
+
+        if (!isValid) {
+            setShowError({
+                selectfile: selectFiles.length === 0,
+            });
+            return;
+        }
+
+        action(true);
+        const formData = new FormData();
+        Array.from(selectFiles).forEach((file) => {
+            formData.append("files", file);
+        });
+        const response = await postData(`${api}/`, formData);
+        action(false);
+
+        if (response.status) {
+            fetchApiData(api);
+            setShowError({ selectfile: false })
+            setSeletctFiles([])
+            Swal.fire({ icon: "success", title: "Done", text: response.message });
+        } else {
+            Swal.fire({ icon: "error", title: "Oops...", text: response.message });
+        }
+    }
+
+    const handleDelete = async (api) => {
+        const confirmResult = await Swal.fire({
+            title: "Are you sure?",
+            text: "This action cannot be undone!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Yes, delete it!",
+        });
+
+        if (confirmResult.isConfirmed) {
+            action(true);
+
+            const response = await deleteData(`${api}/`);
+
+            action(false);
+
+            if (response?.status) {
+                setShoweFiles([]);
+                Swal.fire({ icon: "success", title: "Deleted!", text: response.message });
+            } else {
+                Swal.fire({ icon: "error", title: "Oops...", text: response.message });
+            }
+        }
+    };
+
+    const OneFileDelete = async (fileName, api, back_folder) => {
+        const result = await Swal.fire({
+            title: "Choose Action",
+            text: `What do you want to do with ${fileName}?`,
+            icon: "question",
+            showCancelButton: true,
+            showConfirmButton: true,
+            showDenyButton: true,
+            confirmButtonText: "Delete",
+            denyButtonText: "Download",
+            cancelButtonText: "Cancel",
+            confirmButtonColor: "#d33",
+            denyButtonColor: "#28a745",
+            cancelButtonColor: "#3085d6",
+        });
+
+        // DELETE
+        if (result.isConfirmed) {
+            action(true);
+
+            const response = await deleteData(
+                `mobinate_vs_cats/delete_mobinet_file/`,
+                {
+                    data: {
+                        filename: fileName,
+                        foldername: back_folder
+                    }
+                }
+            );
+
+            action(false);
+
+            if (response?.status) {
+                fetchApiData(api);
+                Swal.fire({ icon: "success", title: "Deleted!", text: response.message });
+            } else {
+                Swal.fire({ icon: "error", title: "Oops...", text: response.message });
+            }
+        }
+
+        // DOWNLOAD
+        else if (result.isDenied) {
+            try {
+                const fileUrl = `${ServerURL}/media/Mobinet_CATs_TOOL/${back_folder}/${fileName}`;
+
+                const link = document.createElement("a");
+                link.href = fileUrl;
+                link.download = fileName;
+                link.target = "_blank";
+
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+
+                Swal.fire({
+                    icon: "success",
+                    title: "Downloaded!",
+                    text: `${fileName} downloaded successfully`
+                });
+            } catch (error) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Download Failed",
+                    text: error.message
+                });
+            }
+        }
+    };
+
+    useEffect(() => {
+        const title = window.location.pathname
+            .slice(1)
+            .replaceAll("_", " ")
+            .replaceAll("/", " | ")
+            .toUpperCase();
+        document.title = title;
+    }, []);
+
+    return (
+        <>
+            <Box m={1} ml={2}>
+                <Breadcrumbs separator={<KeyboardArrowRightIcon fontSize="small" />}>
+                    <Link underline="hover" onClick={() => navigate("/tools")}>Tools</Link>
+                    <Link underline="hover" onClick={() => navigate("/tools/wcc_generate")}>Wcc Generate</Link>
+                    <Typography color="text.primary">File Manager</Typography>
+                </Breadcrumbs>
+            </Box>
+            <Box sx={{ margin: '20px' }}>
+                <Grid container rowSpacing={2.5} columnSpacing={3} direction={{ xs: "column", sm: "column", md: "row" }}>
+                    {jsonData.map((item, index) => (
+                        <Grid item xs={4} key={index}>
+                            <Box
+                                onClick={() => handleOpen(item.folder_name, item.api, item.back_folder, item.type)}
+                                sx={{
+                                    border: '1px solid #bfe0dc',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    gap: '14px',
+                                    padding: '16px 18px',
+                                    alignItems: 'center',
+                                    borderRadius: '14px',
+                                    background: 'linear-gradient(135deg, #e3f4f1 0%, #cdeae5 100%)',
+                                    boxShadow: '0 2px 10px rgba(0, 77, 71, 0.10)',
+                                    transition: 'transform 0.18s ease, box-shadow 0.18s ease',
+                                    '&:hover': {
+                                        transform: 'translateY(-3px)',
+                                        boxShadow: '0 10px 22px rgba(0, 77, 71, 0.22)',
+                                    },
+                                }}
+                            >
+                                <Box
+                                    sx={{
+                                        width: 44,
+                                        height: 44,
+                                        borderRadius: '10px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        background: 'linear-gradient(180deg, #0e8c7f 0%, #006e74 100%)',
+                                        flexShrink: 0,
+                                    }}
+                                >
+                                    <FolderIcon sx={{ color: '#ffffff', fontSize: 26 }} />
+                                </Box>
+                                <Box sx={{ fontSize: 18, fontWeight: 700, color: '#2f3e52' }}>{item.folder_name}</Box>
+                            </Box>
+                        </Grid>
+                    ))}
+                </Grid>
+            </Box>
+
+            {/* Dialog Rendered Normally */}
+            {open2 && <Dialog
+                fullWidth
+                maxWidth="lg"
+                TransitionComponent={Transition}
+                open={open2}
+                onClose={handleClose}
+                sx={{ zIndex: 2 }}
+            >
+                <DialogTitle>
+                    <span style={{ float: 'left' }}>
+                        <h2>{dialogData.foldername}</h2>
+                    </span>
+                    <span style={{ float: 'right' }}>
+                        <IconButton size="large" onClick={handleClose}>
+                            <CloseIcon />
+                        </IconButton>
+                    </span>
+                </DialogTitle>
+                <DialogContent>
+                    <Box sx={{ border: "2px solid black", borderRadius: '5px', padding: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center', alignContent: 'center' }}>
+                        <Box>
+                            <UploadSection
+                                accept={ACCEPT_BY_TYPE[dialogData?.type] || ACCEPT_BY_TYPE.excel}
+                                color={selectFiles.length > 0 ? "warning" : "primary"}
+                                multiple
+                                onChange={(e) => {
+                                    setSeletctFiles(Array.from(e.target.files))
+                                    setShowError((prev) => ({ ...prev, selectfile: false }));
+                                }}
+                                error={showError.selectfile}
+                                selectedText={selectFiles.length > 0 ? `Selected File(s): ${selectFiles.length}` : ""}
+                            />
+                        </Box>
+                        <Box><Button variant="contained" color="success" onClick={() => handleSubmit(dialogData?.apikey)} endIcon={<UploadIcon />}>Upload</Button></Box>
+                    </Box>
+                    {showFiles.length > 0 && <Box sx={{ border: "2px solid black", borderRadius: '5px', padding: 2, marginTop: 1 }}>
+                        <Grid container rowSpacing={2} columnSpacing={3} direction={{ xs: "column", sm: "column", md: "row" }}>
+                            {showFiles.map((item, index) => (
+                                <Grid item xs={4} key={index}>
+                                    <Box key={item} sx={{
+                                        display: "flex",
+                                        justifyContent: 'flex-start', alignItems: 'center',
+                                        cursor: 'pointer', border: '0px solid black', borderRadius: '5px',
+                                        padding: 0.5, background: '#e9e9e9',
+                                        '&:hover': { backgroundColor: '#223354', color: 'white' }
+                                    }}
+                                        onClick={() => OneFileDelete(item, dialogData?.apikey, dialogData?.back_folder)}
+                                    >
+                                        <TopicIcon sx={{ color: '#006e74' }} />{item}
+                                    </Box>
+                                </Grid>
+                            ))}
+                        </Grid>
+                        <Box sx={{ textAlign: 'center', marginTop: 2 }}>
+                            <Button onClick={() => handleDelete(dialogData?.apikey)} variant="contained" fullWidth color="error" endIcon={<DeleteIcon />}>Delete All</Button>
+                        </Box>
+                    </Box>}
+                </DialogContent>
+            </Dialog>}
+
+            {loading}
+        </>
+    );
+};
+
+const UploadSection = ({ accept, color, onChange, error, multiple = false, selectedText }) => {
+    return (
+        <Box>
+            <div className={OverAllCss().Front_Box_Select_Button}>
+                <Button variant="contained" component="label" color={color}>
+                    Select File
+                    <input
+                        hidden
+                        required
+                        type="file"
+                        accept={accept}
+                        multiple={multiple}
+                        onChange={onChange}
+                    />
+                </Button>
+                {selectedText && (
+                    <span style={{ color: "green", fontSize: 18, fontWeight: 600, marginLeft: 10 }}>
+                        {selectedText}
+                    </span>
+                )}
+                {error && (
+                    <div>
+                        <span style={{ color: "red", fontSize: 18, fontWeight: 600 }}>This Field Is Required!</span>
+                    </div>
+                )}
+            </div>
+        </Box>
+    );
+};
+
+export default FileManager;
