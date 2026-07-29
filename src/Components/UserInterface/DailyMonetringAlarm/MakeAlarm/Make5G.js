@@ -17,7 +17,7 @@ import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 
 
-const circleArray = ['AP', 'CH', 'KK', 'DL', 'HR', 'RJ', 'JK', 'WB', 'OD', 'MU', 'TNCH', 'UE', 'BH', 'UW', 'MP', 'PB', 'KO', 'WB', 'JH']
+const circleArray = ['AP', 'CH', 'KK', 'DL', 'HR', 'RJ', 'JK', 'WB', 'OD', 'MU', 'TNCH', 'UE', 'BH', 'UW', 'MP', 'NESA','PB', 'KO', 'WB', 'JH']
 const Make5G = () => {
   const [make4GFiles, setMake4GFiles] = useState([])
   const [selectCircle, setSelectCircle] = useState('')

@@ -268,6 +268,7 @@ const ComanDashboard = () => {
             validate: rowData =>
                 rowData.Site_ID ? true : 'Site ID is required',
         },
+       
         { title: 'MO NAME', field: 'MO_NAME' },
         { title: 'LNBTS ID', field: 'LNBTS_ID' },
         { title: 'New NRBTS ID', field: 'New_NRBTS_ID' },

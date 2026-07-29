@@ -633,6 +633,7 @@ const RangeWiseDashboard = ({ onData }) => {
         { title: 'CIRCLE', field: 'CIRCLE' },
         { title: 'Activity Name', field: 'Activity_Name' },
         { title: 'Site ID', field: 'Site_ID' },
+        {title: 'NSS ID', field:'NSS_ID'},
         { title: 'MO NAME', field: 'MO_NAME' },
         { title: 'LNBTS ID', field: 'LNBTS_ID' },
         { title: 'Technology (SIWA)', field: 'Technology_SIWA' },

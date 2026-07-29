@@ -17,41 +17,43 @@ import MenuIcon from '@rsuite/icons/Menu';
 import Loader from '../../Skeleton/Loader'
 import { Upload } from '@hugeicons/core-free-icons';
 import SendToDashboardIcon from '@rsuite/icons/SendToDashboard';
+import { getDecreyptedData } from '../../utils/localstorage';
 
 const MicrowaveTool = lazy(() => import('./MicrowaveTool'))
 const MicrowaveAVIATUpload = lazy(() => import('./MicrowaveAVIAT/MicrowaveAVIATUpload'))
-const MicrowaveAviatTable = lazy(()=>import('./MicrowaveTable/MicrowaveAviatTable'))
+const MicrowaveAviatTable = lazy(() => import('./MicrowaveTable/MicrowaveAviatTable'))
 const MicrowaveCeragonUpload = lazy(() => import('./MicrowaveCeragon/MicrowaveCeragonUpload'))
 const Parameter = lazy(() => import('./MicrowaveCeragon/Parameter'))
 const ServerIP = lazy(() => import('./MicrowaveCeragon/ServerIP'))
 const CeragonDashboard = lazy(() => import('./MicrowaveCeragon/CeragonDashboard'))
 
 const Microwave = () => {
-      const [expanded, setExpanded] = useState(true);
-        const [activeKey, setActiveKey] = useState();
-        const [states, setStates] = useState(60)
-        const [checked, setChecked] = useState(true)
-        const [menuButton, setMenuButton] = useState(false)
-        const [scrollTop, setScrollTop] = useState(0);
-    
-        const navigate = useNavigate()
-    
-    
-    
-        const show = () => {
-            setChecked(!checked)
-            if (checked === true) {
-                setMenuButton(false)
-            }
+    const [expanded, setExpanded] = useState(true);
+    const [activeKey, setActiveKey] = useState();
+    const [states, setStates] = useState(60)
+    const [checked, setChecked] = useState(true)
+    const [menuButton, setMenuButton] = useState(false)
+    const [scrollTop, setScrollTop] = useState(0);
+    const userType = (getDecreyptedData('user_type')?.split(","))
+
+    const navigate = useNavigate()
+
+
+
+    const show = () => {
+        setChecked(!checked)
+        if (checked === true) {
+            setMenuButton(false)
         }
-    
-    
-        useEffect(() => {
-            document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
-    
-        }, [])
-  return (
-  <>
+    }
+
+
+    useEffect(() => {
+        document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
+
+    }, [])
+    return (
+        <>
 
             <Box style={{ marginTop: states, transition: 'all 1s ease' }} >
 
@@ -104,31 +106,35 @@ const Microwave = () => {
                                                 File Manager
                                             </Nav.Item> */}
                                             <Nav.Menu eventKey="1" placement="rightStart" title="Microwave AVIAT" icon={<BytedanceMicroappIcon size="3em" />}>
-                                            <Nav.Item eventKey="1-1" placement="rightStart" icon={<FileUploadIcon />} onClick={() => { navigate('/tools/microwave_soft_at/microwave_aviat_upload'); show(); setMenuButton(true) }}>
-                                                Upload Files
-                                            </Nav.Item>
-                                               <Nav.Item eventKey="1-2" placement="rightStart" icon={<DashboardIcon />} onClick={() => { navigate('/tools/microwave_soft_at/microwave_aviat_table'); show(); setMenuButton(true) }}>
-                                                Microwave(AVIAT) Dashboard
-                                            </Nav.Item>
-                                             </Nav.Menu>
-                                             <Nav.Menu eventKey="2" placement="rightStart" title="Microwave Ceragon" icon={<BytedanceMicroappIcon size="3em" />}>
-                                            <Nav.Item eventKey="2-1" placement="rightStart" icon={<FileUploadIcon />} onClick={() => { navigate('/tools/microwave_soft_at/microwave_ceragon_upload'); show(); setMenuButton(true) }}>
-                                                Upload Files
-                                            </Nav.Item>
-                                             <Nav.Item eventKey="2-2" placement="rightStart" icon={<SendToDashboardIcon />} onClick={() => { navigate('/tools/microwave_soft_at/CeragonDashboard'); show(); setMenuButton(true) }}>
-                                                Ceragon Dashboard
-                                            </Nav.Item>
-                                            <Nav.Item eventKey="2-3" placement="rightStart" icon={<MenuIcon />} onClick={() => { navigate('/tools/microwave_soft_at/parameter'); show(); setMenuButton(true) }}>
-                                                Parameter
-                                            </Nav.Item>
-                                            <Nav.Item eventKey="2-4" placement="rightStart" icon={<AlipayMiniIcon />} onClick={() => { navigate('/tools/microwave_soft_at/ServerIP'); show(); setMenuButton(true) }}>
-                                                Server IP
-                                            </Nav.Item>
-                                            
-                                               {/* <Nav.Item eventKey="2-2" placement="rightStart" icon={<DashboardIcon />} onClick={() => { navigate('/tools/microwave_soft_at/microwave_aviat_table'); show(); setMenuButton(true) }}>
+                                                <Nav.Item eventKey="1-1" placement="rightStart" icon={<FileUploadIcon />} onClick={() => { navigate('/tools/microwave_soft_at/microwave_aviat_upload'); show(); setMenuButton(true) }}>
+                                                    Upload Files
+                                                </Nav.Item>
+                                                <Nav.Item eventKey="1-2" placement="rightStart" icon={<DashboardIcon />} onClick={() => { navigate('/tools/microwave_soft_at/microwave_aviat_table'); show(); setMenuButton(true) }}>
+                                                    Microwave(AVIAT) Dashboard
+                                                </Nav.Item>
+                                            </Nav.Menu>
+                                            <Nav.Menu eventKey="2" placement="rightStart" title="Microwave Ceragon" icon={<BytedanceMicroappIcon size="3em" />}>
+                                                <Nav.Item eventKey="2-1" placement="rightStart" icon={<FileUploadIcon />} onClick={() => { navigate('/tools/microwave_soft_at/microwave_ceragon_upload'); show(); setMenuButton(true) }}>
+                                                    Upload Files
+                                                </Nav.Item>
+                                                <Nav.Item eventKey="2-2" placement="rightStart" icon={<SendToDashboardIcon />} onClick={() => { navigate('/tools/microwave_soft_at/CeragonDashboard'); show(); setMenuButton(true) }}>
+                                                    Ceragon Dashboard
+                                                </Nav.Item>
+                                                {!userType.includes('microwave') && <>
+                                                    <Nav.Item eventKey="2-3" placement="rightStart" icon={<MenuIcon />} onClick={() => { navigate('/tools/microwave_soft_at/parameter'); show(); setMenuButton(true) }}>
+                                                        Parameter
+                                                    </Nav.Item>
+                                                    <Nav.Item eventKey="2-4" placement="rightStart" icon={<AlipayMiniIcon />} onClick={() => { navigate('/tools/microwave_soft_at/ServerIP'); show(); setMenuButton(true) }}>
+                                                        Server IP
+                                                    </Nav.Item>
+
+                                                </>}
+
+
+                                                {/* <Nav.Item eventKey="2-2" placement="rightStart" icon={<DashboardIcon />} onClick={() => { navigate('/tools/microwave_soft_at/microwave_aviat_table'); show(); setMenuButton(true) }}>
                                                 Microwave(AVIAT) Dashboard
                                             </Nav.Item> */}
-                                             </Nav.Menu>
+                                            </Nav.Menu>
                                             {/* <Nav.Item eventKey="3" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/CATS'); show(); setMenuButton(true) }}>
                                                 Step 2: CATS
                                             </Nav.Item>
@@ -138,7 +144,7 @@ const Microwave = () => {
                                               <Nav.Item eventKey="5" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/sn_mapping'); show(); setMenuButton(true) }}>
                                                 SN Mapping
                                             </Nav.Item> */}
-                               
+
 
                                         </Nav>
                                     </Sidenav.Body>
@@ -150,14 +156,18 @@ const Microwave = () => {
                     <Grid item xs={12} md={10}>
 
 
-                        <Suspense fallback={<Loader/>}>
+                        <Suspense fallback={<Loader />}>
                             <Routes>
                                 <Route element={<MicrowaveTool />} path="/" />
                                 <Route element={<MicrowaveAVIATUpload />} path="/microwave_aviat_upload" />
                                 <Route element={<MicrowaveAviatTable />} path="/microwave_aviat_table" />
                                 <Route element={<MicrowaveCeragonUpload />} path="/microwave_ceragon_upload" />
-                                <Route element={<Parameter />} path="/parameter" />
-                                <Route element={<ServerIP />} path="/ServerIP" />
+                                {!userType.includes('microwave') &&
+                                    <>                <Route element={<Parameter />} path="/parameter" />
+                                        <Route element={<ServerIP />} path="/ServerIP" />
+                                    </>
+                                }
+
                                 <Route element={<CeragonDashboard />} path="/CeragonDashboard" />
 
                             </Routes>
@@ -166,7 +176,7 @@ const Microwave = () => {
                 </Grid>
             </Box>
         </>
-  )
+    )
 }
 
 export default Microwave

@@ -456,10 +456,10 @@ import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
 // "pdf"   -> only .pdf files
 // "excel" -> only .csv/.xls/.xlsx/.xlsb
 const jsonData = [
-    { folder_name: "Upload Pdf", api: " ", back_folder: " ", type: "pdf" },
-    { folder_name: "Address Master", api: " ", back_folder: " ", type: "excel" },
-    { folder_name: "Project Data", api: " ", back_folder: " ", type: "excel" },
-    { folder_name: "PMS Dump", api: " ", back_folder: " ", type: "excel" },
+    { folder_name: "Upload Pdf", api: "wcc/upload_PDF_PO", back_folder: "PDF_PO", type: "pdf" },
+    { folder_name: "Address Master", api: "wcc/upload_Add_master", back_folder: "address_master", type: "excel" },
+    { folder_name: "Project Data", api: "wcc/upload_Project_Data", back_folder: "project_data", type: "excel" },
+    { folder_name: "PMS Dump", api: "wcc/upload_PMIS_Data", back_folder: "pmis_dump", type: "excel" },
 ];
 
 // File-picker `accept` strings per folder type.
@@ -594,7 +594,7 @@ const FileManager = () => {
             action(true);
 
             const response = await deleteData(
-                `mobinate_vs_cats/delete_mobinet_file/`,
+                `wcc/delete_mobinet_file/`,
                 {
                     data: {
                         filename: fileName,
@@ -616,7 +616,7 @@ const FileManager = () => {
         // DOWNLOAD
         else if (result.isDenied) {
             try {
-                const fileUrl = `${ServerURL}/media/Mobinet_CATs_TOOL/${back_folder}/${fileName}`;
+                const fileUrl = `${ServerURL}/media/WCC_Files/${back_folder}/${fileName}`;
 
                 const link = document.createElement("a");
                 link.href = fileUrl;

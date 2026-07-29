@@ -248,12 +248,13 @@ import { use } from 'react';
 import Loader from '../../Skeleton/Loader';
 import FileUploadIcon from '@rsuite/icons/FileUpload';
 import FolderVerifyIcon from '@rsuite/icons/FolderVerify';
+import SpinnerIcon from '@rsuite/icons/Spinner';
 
 
 
 const Wcc_generatetool = lazy(()=>import('./Wcc_generatetool'))
 const Filemanager = lazy(()=>import('./File Manager/Filemanager'))
-
+const GenerateWcc = lazy(()=> import('./Generate Wcc/GenerateWcc'))
 // Sidebar gradient — a soft top-to-bottom teal fade instead of the old
 // flat #006e74 fill, so it reads a little richer/more modern while
 // staying in the same color family as before.
@@ -319,6 +320,16 @@ const Wcc_generate = () => {
                                                 >
                                                 File Manager
                                             </Nav.Item>
+                                            <Nav.Item
+                                                    eventKey="1"
+                                                    placement="rightStart"
+                                                    icon={<SpinnerIcon style={{ color: '#ffffff' }} />}
+                                                    onClick={() => { navigate('/tools/wcc_generate/GenerateWcc'); show(); setMenuButton(true) }}
+                                                    style={{ color: '#ffffff', fontWeight: 500 }}
+                                                    className="wcc-sidenav-item"
+                                                >
+                                                Generate Wcc
+                                            </Nav.Item>
 
                                         </Nav>
                                     </Sidenav.Body>
@@ -333,6 +344,8 @@ const Wcc_generate = () => {
                             <Routes>
                                   <Route element={<Wcc_generatetool />} path="/" />
                                   <Route element={<Filemanager/>} path='Filemanager'/>
+                                   <Route element={<GenerateWcc/>} path='GenerateWcc'/>
+
 
                                   {/* <Route element ={<UploadFile/>} path='/UploadFile'/>
                                   <Route element ={<Dashboard/>} path='/Dashboard'/> */}

@@ -896,8 +896,8 @@ const Performance_SR_Wise_summary3 = () => {
             ? `${effectiveStartDate}  to  ${effectiveEndDate}`
             : "");
     const titleLabel = dateRangeLabel
-        ? `${currentMetric} Ageing Summary  |  ${dateRangeLabel}`
-        : `${currentMetric} Ageing Summary`;
+        ? `${currentMetric} Aging Summary  |  ${dateRangeLabel}`
+        : `${currentMetric} Aging Summary`;
     const STRIPE = "#f4f7fb";
 
     return (

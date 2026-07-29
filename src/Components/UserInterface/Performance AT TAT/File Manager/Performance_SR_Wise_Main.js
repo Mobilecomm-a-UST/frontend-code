@@ -122,7 +122,7 @@ const Performance_SR_Wise_Main = () => {
             >
                 <ToggleButton value="sr_wise_2" sx={toggleBtnSt}>SR Wise Overview</ToggleButton>
                 <ToggleButton value="sr_wise" sx={toggleBtnSt}>Detailed AT Report</ToggleButton>
-                <ToggleButton value="ageing_summary" sx={toggleBtnSt}>AT Ageing Summary</ToggleButton>
+                <ToggleButton value="aging_summary" sx={toggleBtnSt}>AT Aging Summary</ToggleButton>
             </ToggleButtonGroup>
         </Box>
 
@@ -141,7 +141,7 @@ const Performance_SR_Wise_Main = () => {
             </Box>
         )}
 
-        {activeDashboard === "ageing_summary" && (
+        {activeDashboard === "aging_summary" && (
             <Box>
                 {/* Mirrors whatever range was last selected in the Detailed AT Report tab.
                     If that tab was never visited yet, sharedStartDate/EndDate are null and

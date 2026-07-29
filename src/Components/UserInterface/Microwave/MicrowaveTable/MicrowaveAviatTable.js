@@ -792,7 +792,7 @@ const MicrowaveAviatTable = () => {
                                     </Select>
                                 </FormControl>
                                 <TextField size='small' placeholder='Site ID' label="Site ID" name='site_id' value={formTable.site_id} onChange={handleChange} />
-                                <TextField size='small' placeholder='Equipment Make' label="Equipment Make" name='equipment_make' value={formTable.equipment_make} onChange={handleChange} />
+                                {/* <TextField size='small' placeholder='Equipment Make' label="Equipment Make" name='equipment_make' value={formTable.equipment_make} onChange={handleChange} /> */}
                                 <Button type='submit' sx={{ backgroundColor: '#223354' }} variant='contained'>Filter</Button>
                             </form>
 
