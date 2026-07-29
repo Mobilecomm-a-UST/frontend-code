@@ -355,7 +355,7 @@ const ToolData = [
         icons: StopOutlineIcon,
         fullname: 'Microwave Soft-At Tool',
         link: '/tools/microwave_soft_at',
-        groupBy: ['admin', 'microwave']
+        groupBy: ['admin','admin_microwave', 'microwave']
     },
     {
         id: 34,

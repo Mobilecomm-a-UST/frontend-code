@@ -42,6 +42,7 @@ const TotalDataDashboard = () => {
         {
             title: 'Site ID', field: 'Site_ID',
         },
+       
         { title: 'MO NAME', field: 'MO_NAME' },
         { title: 'LNBTS ID', field: 'LNBTS_ID' },
         { title: 'New NRBTS ID', field: 'New_NRBTS_ID' },

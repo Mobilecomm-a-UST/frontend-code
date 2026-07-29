@@ -166,6 +166,7 @@ const DEFAULT_ROW = {
     CIRCLE: "",
     Activity_Name: "",
     Site_ID: "",
+    NSS_ID:" ",
     MO_NAME: "",
     LNBTS_ID: "",
     Technology_SIWA: "",
@@ -316,6 +317,7 @@ const ComanDashboard = () => {
             CIRCLE: rowData.CIRCLE,
             Activity_Name: rowData.Activity_Name,
             Site_ID: rowData.Site_ID,
+            NSS_ID:rowData.NSS_ID,
             MO_NAME: rowData.MO_NAME,
             LNBTS_ID: rowData.LNBTS_ID,
             Technology_SIWA: rowData.Technology_SIWA,
@@ -460,6 +462,7 @@ const ComanDashboard = () => {
             validate: rowData =>
                 rowData.Site_ID ? true : 'Site ID is required',
         },
+        {title:'NSS ID', field:'NSS_ID'},
         { title: 'MO NAME', field: 'MO_NAME' },
         { title: 'LNBTS ID', field: 'LNBTS_ID' },
         // { title: 'Technology (SIWA)', field: 'Technology_SIWA' },

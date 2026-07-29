@@ -460,6 +460,32 @@ const UserCounter = () => {
  
  
  
+    // Shared by both the table and the Excel export, so they always show/export
+    // the exact same rows in the exact same order.
+    const getProcessedData = useCallback(() => {
+        let filteredData = _.filter(data?.data, item => {
+            const userMatch = selectUser.length === 0 || _.includes(selectUser, item.user_name);
+            return userMatch;
+        });
+
+        // Sort month-wise: Jan(1) -> Feb(2) -> ... -> Dec(12), then day-wise
+        // within each month: 1 -> 31. row.Date comes in as "YYYY-MM-DD".
+        filteredData = _.sortBy(filteredData, [
+            (item) => {
+                const monthStr = item?.Date ? String(item.Date).split('-')[1] : null;
+                const monthNum = parseInt(monthStr, 10);
+                return Number.isNaN(monthNum) ? 13 : monthNum; // undated rows sink to the end
+            },
+            (item) => {
+                const dayStr = item?.Date ? String(item.Date).split('-')[2] : null;
+                const dayNum = parseInt(dayStr, 10);
+                return Number.isNaN(dayNum) ? 32 : dayNum;
+            },
+        ]);
+
+        return filteredData;
+    }, [data, selectUser])
+
     const handleDownload = () => {
         const workbook = new ExcelJS.Workbook();
         const sheet1 = workbook.addWorksheet("Nokia Summary", { properties: { tabColor: { argb: 'B0EBB4' } } })
@@ -478,12 +504,9 @@ const UserCounter = () => {
             { key: 'count' },
         ]
  
-        // Fix: `data` is the whole API response object ({ status, data: [...] }),
-        // the array of rows lives at `data?.data` (same as filterRCAData uses below).
-        // Previously this called `.map` directly on the response object, which
-        // isn't a function on a plain object, so nothing ever got written and the
-        // download silently failed.
-        data?.data?.map(item => {
+        // Only export the currently filtered (by selected User ID) and sorted rows —
+        // same data the table is showing, not the full unfiltered dataset.
+        getProcessedData()?.map(item => {
             sheet1.addRow({
                 user_name: item?.user_name,
                 site_id: item?.site_id,
@@ -549,22 +572,8 @@ const UserCounter = () => {
  
  
     const filterRCAData = useCallback(() => {
- 
-        let filteredData = _.filter(data?.data, item => {
-            const userMatch = selectUser.length === 0 || _.includes(selectUser, item.user_name);
- 
- 
-            return userMatch;
- 
-        });
 
-        // Sort month-wise: Jan(1) -> Feb(2) -> ... -> Dec(12), regardless of year.
-        // row.Date comes in as "YYYY-MM-DD", so the month is the 2nd segment.
-        filteredData = _.sortBy(filteredData, (item) => {
-            const monthStr = item?.Date ? String(item.Date).split('-')[1] : null;
-            const monthNum = parseInt(monthStr, 10);
-            return Number.isNaN(monthNum) ? 13 : monthNum; // undated rows sink to the end
-        });
+        const filteredData = getProcessedData();
  
         return filteredData?.map((row, index) => (
             <StyledTableRow
@@ -594,7 +603,7 @@ const UserCounter = () => {
             </StyledTableRow>
         ))
  
-    }, [data, selectUser])
+    }, [getProcessedData])
  
     useEffect(() => {
         refetch();

@@ -223,14 +223,14 @@ const PerformanceAt = () => {
                                                 5G Performance KPI
                                             </Nav.Item>
                                            
-                                            {/* <Nav.Item
+                                            <Nav.Item
                                                 eventKey="5-2"
                                                 placement="rightStart"
                                                 // icon={<DashboardIcon />}
                                                 onClick={() => navigate('/tools/performance_at_tat/Performance_5g_Kpi_dashboard')}
                                             >
                                                 Dashboard
-                                            </Nav.Item> */}
+                                            </Nav.Item>
                                         </Nav.Menu>
 
                                     </Nav>
