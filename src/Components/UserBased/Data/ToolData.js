@@ -36,6 +36,8 @@ import DateTaskIcon from '@rsuite/icons/DateTask';
 import GpsFixedIcon from '@mui/icons-material/GpsFixed';
 import BlurOnOutlinedIcon from '@mui/icons-material/BlurOnOutlined';
 import DeblurOutlinedIcon from '@mui/icons-material/DeblurOutlined';
+import LogIcon from '@rsuite/icons/Log';
+
 
 
 import { groupBy } from 'lodash';
@@ -466,6 +468,16 @@ const ToolData = [
         groupBy: ['admin',"wcg"]
     },
 
+    {
+        id: 43,
+        name: 'Logs',
+        title: 'Logs System',
+        icons: LogIcon,
+        fullname: 'Logs',
+        link: '/tools/log_s',
+        groupBy: ['admin',"log"]
+    },
+    
 
   
 

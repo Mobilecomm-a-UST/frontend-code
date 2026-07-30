@@ -73,6 +73,9 @@ const IX_Ericsson = lazy(()=> import('./Components/UserInterface/IX Audit Ericss
 const ResourceManagement = lazy(() => import('./Components/UserInterface/ResourceManagement/Resource_management'));
 const FieldResourceTracking = lazy(() => import('./Components/UserInterface/Field Resource Tracking/FieldResourceTracking'))
 const WccGenerate = lazy(()=> import('./Components/UserInterface/WCC Generate/Wcc_generate'))
+const Logs = lazy(()=>import('./Components/UserInterface/Logs/Logs'))
+
+
 
 const queryClient = new QueryClient()
 
