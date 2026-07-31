@@ -872,6 +872,10 @@ Loading...
                     }}
                 >
 
+                    <th style={th}>Customer</th>
+
+                    <th style={th}>Project Code</th>
+                    
                     <th style={th}>Circle</th>
 
                     <th style={th}>Revenue</th>
@@ -900,6 +904,14 @@ Loading...
                                 background:index%2===0?"#fff":"#fafafa"
                             }}
                         >
+
+                            <td style={td}>
+                                {row.customer}
+                            </td>
+                            
+                            <td style={td}>
+                                {row.costCenter}
+                            </td>
 
                             <td style={td}>
                                 {row.circle}
@@ -973,6 +985,8 @@ Loading...
                     }}
                 >
 
+                    <td style={tfoot}></td>
+                    <td style={tfoot}></td>
                     <td style={tfoot}>
 
                         Total
