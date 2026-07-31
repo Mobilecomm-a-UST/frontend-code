@@ -230,7 +230,10 @@ const Performancekpi5g = () => {
             <Box m={1} ml={2}>
                 <Breadcrumbs separator={<KeyboardArrowRightIcon fontSize="small" />}>
                     <Link underline="hover" onClick={() => navigate("/tools")}>Tools</Link>
-                    <Typography color="text.primary">KPI Monitoring Report</Typography>
+                    <Link underline="hover" onClick={() => navigate("/tools/performance_at_tat")}>
+                      Performance At
+                    </Link>
+                    <Typography color="text.primary">Performance 5G KPI</Typography>
                 </Breadcrumbs>
             </Box>
 
