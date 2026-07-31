@@ -52,6 +52,7 @@ import { useNavigate } from "react-router-dom";
 import { MemoPerformance_SR_Wise } from './Performance_SR_Wise'
 import { MemoPerformance_SR_Wise2 } from './Performance_SR_Wise2';
 import { MemoPerformance_SR_Wise_summary3 } from './Performance_SR_Wise_summary3';
+import { MemoPerformance_SR_Wise_Pending_summary } from './Performance_SR_Wise_Pending_summary';
 
 // ── Toggle styling, matching the teal/navy theme used across the SR Wise dashboards ──
 const toggleWrapSt = {
@@ -123,6 +124,7 @@ const Performance_SR_Wise_Main = () => {
                 <ToggleButton value="sr_wise_2" sx={toggleBtnSt}>SR Wise Overview</ToggleButton>
                 <ToggleButton value="sr_wise" sx={toggleBtnSt}>Detailed AT Report</ToggleButton>
                 <ToggleButton value="aging_summary" sx={toggleBtnSt}>AT Aging Summary</ToggleButton>
+                 <ToggleButton value="pending_aging_summary" sx={toggleBtnSt}>AT Pending Aging Summary</ToggleButton>
             </ToggleButtonGroup>
         </Box>
 
@@ -147,6 +149,11 @@ const Performance_SR_Wise_Main = () => {
                     If that tab was never visited yet, sharedStartDate/EndDate are null and
                     the component falls back to the current month on its own. */}
                 <MemoPerformance_SR_Wise_summary3 startDate={sharedStartDate} endDate={sharedEndDate} />
+            </Box>
+        )}
+         {activeDashboard === "pending_aging_summary" && (
+            <Box>
+                <MemoPerformance_SR_Wise_Pending_summary />
             </Box>
         )}
 

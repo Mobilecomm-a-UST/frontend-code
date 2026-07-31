@@ -37,6 +37,7 @@ import GpsFixedIcon from '@mui/icons-material/GpsFixed';
 import BlurOnOutlinedIcon from '@mui/icons-material/BlurOnOutlined';
 import DeblurOutlinedIcon from '@mui/icons-material/DeblurOutlined';
 import LogIcon from '@rsuite/icons/Log';
+import OperatePeopleIcon from '@rsuite/icons/OperatePeople';
 
 
 
@@ -477,11 +478,16 @@ const ToolData = [
         link: '/tools/log_s',
         groupBy: ['admin',"log"]
     },
+     {
+        id: 44,
+        name: 'Performance',
+        title: 'This is Performance System',
+        icons: OperatePeopleIcon,
+        fullname: 'Performance',
+        link: '/tools/performance_new',
+        groupBy: ['admin',"performance_n"]
+    },
     
-
-  
-
-
 ]
 
 export default ToolData

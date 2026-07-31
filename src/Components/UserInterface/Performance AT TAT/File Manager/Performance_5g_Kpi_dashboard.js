@@ -7,9 +7,10 @@ import {
     Chip,
     Button,
     InputAdornment,
-    Pagination,
+    Pagination,Breadcrumbs, Link, 
 } from "@mui/material";
-
+import {KeyboardArrowRight as KeyboardArrowRightIcon } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 import DownloadIcon from "@mui/icons-material/Download";
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -159,7 +160,7 @@ const ChipInput = ({ label, placeholder, values, onChange }) => {
 // ── Main Component ────────────────────────────────────────────────────────────
 const Performance_5g_Kpi_dashboard = () => {
     const { loading, action } = useLoadingDialog();
-
+    const navigate = useNavigate();
     const [apiResponse, setApiResponse] = useState(null);
     const [fetchError, setFetchError] = useState(null);
     const [hasFetchedOnce, setHasFetchedOnce] = useState(false);
@@ -318,6 +319,22 @@ const Performance_5g_Kpi_dashboard = () => {
     const STRIPE = "#f4f7fb";
 
     return (
+<>
+         <div style={{ margin: 5, marginLeft: 10, marginTop: 10 }}>
+                        <Breadcrumbs
+                            aria-label="breadcrumb"
+                            maxItems={3}
+                            separator={<KeyboardArrowRightIcon fontSize="small" />}
+                        >
+                            <Link underline="hover" onClick={() => navigate("/tools")}>
+                                Tools
+                            </Link>
+                            <Link underline="hover" onClick={() => navigate("/tools/performance_at_tat")}>
+                                Performance At
+                            </Link>
+                            <Typography color="text.primary">Dashboard</Typography>
+                        </Breadcrumbs>
+                    </div>
         <Box p={1}>
             {/* ── Title Banner ── */}
             <Box
@@ -625,6 +642,7 @@ const Performance_5g_Kpi_dashboard = () => {
 
             {loading}
         </Box>
+        </>
     );
 };
 

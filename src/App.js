@@ -358,7 +358,7 @@ function App() {
 
             <Route path="/tools/microwave_soft_at/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={MicrowaveSoftAt} allowedUserTypes={['admin', 'microwave']} userType={userType} />
+                <ProtectedRoute element={MicrowaveSoftAt} allowedUserTypes={['admin', 'microwave','admin_microwave']} userType={userType} />
               </Suspense>
             } />
 
@@ -435,6 +435,11 @@ function App() {
              <Route path="/tools/wcc_generate/*" element={
               <Suspense fallback={<div>Loading...</div>}>
                 <ProtectedRoute element={WccGenerate} allowedUserTypes={['admin',"frt"]} userType={userType} />
+              </Suspense>
+            } /> 
+            <Route path="/tools/log_s/*" element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProtectedRoute element={Logs} allowedUserTypes={['admin',"log"]} userType={userType} />
               </Suspense>
             } /> 
 
