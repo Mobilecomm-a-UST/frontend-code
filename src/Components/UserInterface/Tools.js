@@ -77,7 +77,7 @@ export default function Tools() {
   return (
     <>
 
-      <div style={{ backgroundColor: '#FBEEE6' }}>
+      <div >
 
         <Box style={{ padding: "15px", marginTop: '60px' }}>
           <Box sx={{ display: "flex", justifyContent: 'center' }}>
@@ -88,7 +88,8 @@ export default function Tools() {
                 fontFamily: "sans-serif",
                 fontSize: "25px",
                 fontWeight: 600,
-                backgroundColor: "#223354",
+                // backgroundColor: "#223354",
+                backgroundColor: "rgb(0, 110, 116)",
                 color: "#ffffff",
                 borderRadius: "20px",
                 width: "90%",
@@ -113,6 +114,7 @@ export default function Tools() {
                             <div className={classes.centerIcon}><item.icons /></div>
                             <div >
                               <div className={classes.center}>{item.name}</div>
+                              {/* <div>{item.title}</div> */}
                             </div>
                           </Box>
                         </Grid>

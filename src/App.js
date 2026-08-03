@@ -73,7 +73,9 @@ const IX_Ericsson = lazy(()=> import('./Components/UserInterface/IX Audit Ericss
 const ResourceManagement = lazy(() => import('./Components/UserInterface/ResourceManagement/Resource_management'));
 const FieldResourceTracking = lazy(() => import('./Components/UserInterface/Field Resource Tracking/FieldResourceTracking'))
 const WccGenerate = lazy(()=> import('./Components/UserInterface/WCC Generate/Wcc_generate'))
+const PerformanceNew = lazy(()=> import('./Components/UserInterface/Performance New/PerformanceAt'))
 const Logs = lazy(()=>import('./Components/UserInterface/Logs/Logs'))
+const LogsTool = lazy(()=>import('./Components/UserInterface/Logs Tools/LogsTool'))
 
 
 
@@ -442,6 +444,18 @@ function App() {
                 <ProtectedRoute element={Logs} allowedUserTypes={['admin',"log"]} userType={userType} />
               </Suspense>
             } /> 
+
+              <Route path="/tools/logs_tools/*" element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProtectedRoute element={LogsTool} allowedUserTypes={['admin','card1','card2','card3','card4','card5','card6','card7','card8']} userType={userType} />
+              </Suspense>
+            } />
+
+             {/* <Route path="/tools/performance_new/*" element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProtectedRoute element={PerformanceNew} allowedUserTypes={['admin', 'PN','PN_Admin']} userType={userType} />
+              </Suspense>
+            } /> */}
 
 
           </Routes>

@@ -2440,6 +2440,7 @@ import { postData, getData, ServerURL } from "../../../services/FetchNodeService
 import OverAllCss from "../../../csss/OverAllCss";
 import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
 import "rsuite/dist/rsuite.min.css";
+import { getDecreyptedData } from '../../../utils/localstorage';
 
 // ─── theme constants ────────────────────────────────────────────────────────
 const TEAL = "#2a77bf";
@@ -3323,6 +3324,7 @@ const MicrowaveCeragonUpload = () => {
     const classes = OverAllCss();
     const navigate = useNavigate();
     const { loading, action } = useLoadingDialog();
+    const userType = (getDecreyptedData('user_type')?.split(","))
 
     // ── plan id (multi-select) ─────────────────────────────────────────────
     const [selectedPlans, setSelectedPlans] = useState([]);
@@ -3573,6 +3575,7 @@ const MicrowaveCeragonUpload = () => {
                                 />
 
                                 {/* ── LINK BUDGET FILE 1 ── */}
+                                 {!userType.includes('microwave') && <>
                                 <Box className={classes.Front_Box}>
                                     <LinkBudgetRow
                                         label="Select Link Budget File 1:"
@@ -3583,7 +3586,7 @@ const MicrowaveCeragonUpload = () => {
                                     />
                                 </Box>
 
-                                {/* ── LINK BUDGET FILE 2 ── */}
+                               
                                 <Box className={classes.Front_Box}>
                                     <LinkBudgetRow
                                         label="Select Traffic Shifting File:"
@@ -3592,7 +3595,7 @@ const MicrowaveCeragonUpload = () => {
                                         onDelete={handleDeleteLinkFiles2}
                                         showError={false}
                                     />
-                                </Box>
+                                </Box></>}
 
                                 {/* ── DUMP A + DUMP B — narrow card, not stretched to full width ── */}
                                 <Box className={classes.Front_Box} sx={{ maxWidth: 1200, mx: "auto" }}>
