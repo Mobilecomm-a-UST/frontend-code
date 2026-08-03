@@ -110,11 +110,12 @@ var prevScrollpos = window.pageYOffset;
   const handleTools = () => {
     navigate("/tools");
   };
-
+// rgb(0, 110, 116)
 
   return (
     <div>
-      <AppBar sx={{ backgroundColor: "#223354",height:{xs:50,md:60} }}>
+      {/* <AppBar sx={{ backgroundColor: "#223354",height:{xs:50,md:60} }}>  */}
+      <AppBar sx={{ backgroundColor: "rgb(0, 110, 116)" ,height:{xs:50,md:60} }}> 
         <Container maxWidth="xl">
           <Toolbar disableGutters>
             {/* <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} /> */}

@@ -14,7 +14,7 @@ import { useLoadingDialog } from '../../../Hooks/LoadingDialog';
 import Swal from "sweetalert2";
 import 'rsuite/dist/rsuite.min.css';
 import axios from 'axios';
-
+import { getDecreyptedData } from '../../../utils/localstorage';
 /* ------------------------------------------------------------------ */
 /*  API config                                                          */
 /*  - DASHBOARD_API: GET -> table data                                  */
@@ -105,6 +105,7 @@ const CeragonDashboard = () => {
     const { loading, action } = useLoadingDialog();
     const [tableData, setTableData] = useState([]);
     const [downloadUrl, setDownloadUrl] = useState(null);
+    const userType = (getDecreyptedData('user_type')?.split(","))
 
     /* -------------------- Table data: GET dashboard API -------------------- */
     const fetchCeragonDashboard = async () => {
@@ -132,6 +133,7 @@ const CeragonDashboard = () => {
     };
 
     /* -------------------- Delete: DELETE on action API -------------------- */
+    
     const handleDeleteTable = async () => {
         const result = await Swal.fire({
             title: "Are you sure?",
@@ -240,6 +242,7 @@ const CeragonDashboard = () => {
                                     <DownloadIcon fontSize="large" color="primary" />
                                 </IconButton>
                             </Tooltip>
+                             {!userType.includes('microwave') && <>
                             <Tooltip title="Delete Microwave(CERAGON) Table">
                                 <IconButton
                                     component="a"
@@ -248,6 +251,7 @@ const CeragonDashboard = () => {
                                     <DeleteIcon fontSize="large" color="error" />
                                 </IconButton>
                             </Tooltip>
+                            </>}
                         </Box>
                     </Box>
 

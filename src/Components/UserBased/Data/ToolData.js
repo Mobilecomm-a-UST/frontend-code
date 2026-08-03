@@ -478,15 +478,15 @@ const ToolData = [
         link: '/tools/log_s',
         groupBy: ['admin',"log"]
     },
-     {
-        id: 44,
-        name: 'Performance',
-        title: 'This is Performance System',
-        icons: OperatePeopleIcon,
-        fullname: 'Performance',
-        link: '/tools/performance_new',
-        groupBy: ['admin',"performance_n"]
-    },
+    //  {
+    //     id: 44,
+    //     name: 'Performance',
+    //     title: 'This is Performance New System',
+    //     icons: OperatePeopleIcon,
+    //     fullname: 'Performance',
+    //     link: '/tools/performance_new',
+    //     groupBy: ['admin',"performance_n"]
+    // },
     
 ]
 
