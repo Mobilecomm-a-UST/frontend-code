@@ -6,6 +6,9 @@ import { Sidenav, Nav } from 'rsuite';
 import FileUploadIcon from '@rsuite/icons/FileUpload';
 import { useNavigate } from 'react-router-dom'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import './../../../../App.css'
+
+
 const TrendBox = lazy(() => import('../TrendBox'))
 const MakeKPITrendOld = lazy(() => import('./Make_Trend(Old)/MakeKPITrendOld'))
 const TwoG = lazy(() => import('./Make_Trend(Old)/2G/TwoG'))
@@ -36,14 +39,15 @@ function APTrend() {
           <Grid item xs={0} md={2} sx={{}}>
             <Box sx={{ display: { xs: 'none', md: 'inherit' } }} >
               <Box sx={{ position: 'fixed', width: '16.5%' }} >
-                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
+                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "rgb(0, 110, 116)", marginTop: 8, borderRadius: 10 }}>
                   <Sidenav.Body>
                     <Nav activeKey={activeKey} onSelect={setActiveKey} >
                       <Nav style={{ fontWeight: 500, color: 'white', textAlign: 'center', fontSize: 20 }}>AP Trend</Nav>
 
-                      <Nav.Item eventKey="4" placement="rightStart" icon={<FileUploadIcon />} onClick={() => navigate('/trends/ap/make_kpi_trend_old')}>
+                      <Nav.Item eventKey="1" placement="rightStart" className="single-item-custom" icon={<FileUploadIcon />} onClick={() => navigate('/trends/ap/make_kpi_trend_old')}>
                         Make Trend(Old)
                       </Nav.Item>
+
                     </Nav>
                   </Sidenav.Body>
 
@@ -69,3 +73,4 @@ function APTrend() {
 
 }
 export default APTrend
+

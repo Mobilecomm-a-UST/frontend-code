@@ -15,6 +15,7 @@ import NetworkPingRoundedIcon from '@mui/icons-material/NetworkPingRounded';
 import AutoGraphIcon from '@mui/icons-material/AutoGraph';
 import SpinnerIcon from '@rsuite/icons/Spinner';
 import DoingRoundIcon from '@rsuite/icons/DoingRound';
+import './../../../App.css'
 
 
 const PerformanceTool = lazy(() => import("./PerformanceTool"));
@@ -79,7 +80,7 @@ const PerformanceAt = () => {
                                         style={{
                                             width: 'auto',
                                             minHeight: "800px",
-                                            backgroundColor: "#223354",
+                                            backgroundColor: "#006e74",
                                             marginTop: 8,
                                             borderRadius: 10,
                                         }}
@@ -91,7 +92,7 @@ const PerformanceAt = () => {
                                             eventKey="1"
                                             placement="rightStart"
                                             icon={<FileUploadIcon />}
-                                            onClick={() => navigate('/tools/performance_at_tat/file_manager')}
+                                           className="single-item-custom" onClick={() => navigate('/tools/performance_at_tat/file_manager')}
                                         >
                                             File Manager
                                         </Nav.Item>}

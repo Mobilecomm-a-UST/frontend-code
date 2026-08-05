@@ -6,6 +6,9 @@ import { Sidenav, Nav } from 'rsuite';
 import FileUploadIcon from '@rsuite/icons/FileUpload';
 import { useNavigate } from 'react-router-dom'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import './../../../../App.css'
+
+
 const TrendBox = lazy(() => import('../TrendBox'))
 const KpiTrend4G = lazy(() => import('./Make_Trend(Old)/KpiTrend4G'))
 const KpiTrendRAN = lazy(() => import('./Make_Trend(Old)/KpiTrendRAN'))
@@ -39,7 +42,7 @@ function ORTrend() {
           <Grid item xs={0} md={2} sx={{}}>
             <Box sx={{ display: { xs: 'none', md: 'inherit' } }} >
               <Box sx={{ position: 'fixed', width: '16.5%' }} >
-                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
+                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "rgb(0, 110, 116)", marginTop: 8, borderRadius: 10 }}>
                   <Sidenav.Body>
                     <Nav activeKey={activeKey} onSelect={setActiveKey} >
                       <Nav style={{ fontWeight: 500, color: 'white', textAlign: 'center', fontSize: 20 }}>OR Trend</Nav>
@@ -51,19 +54,19 @@ function ORTrend() {
            >Pre-Post Report</Nav.Item>
 
         </Nav.Menu> */}
-                      <Nav.Menu activeKey="2" icon={<FileUploadIcon />} title="Make Trend (Old)">
+                      <Nav.Menu activeKey="2" icon={<FileUploadIcon />} className="menu-title-custom" title="Make Trend (Old)">
                         <Nav.Item eventKey="2-1"
-                          onClick={() => navigate('/trends/or/kpi_trend_old_2G')}
+                          className="single-item-custom" onClick={() => navigate('/trends/or/kpi_trend_old_2G')}
                         >
                           Trend 2G
                         </Nav.Item>
                         <Nav.Item eventKey="2-2"
-                          onClick={() => navigate('/trends/or/kpi_trend_old_4G')}
+                          className="single-item-custom" onClick={() => navigate('/trends/or/kpi_trend_old_4G')}
                         >
                           Trend 4G
                         </Nav.Item>
                         <Nav.Item eventKey="2-3"
-                          onClick={() => navigate('/trends/or/kpi_trend_old_RAN')}
+                          className="single-item-custom" onClick={() => navigate('/trends/or/kpi_trend_old_RAN')}
                         >
                           Trend RNA
                         </Nav.Item>

@@ -6,6 +6,7 @@ import { Sidenav, Nav } from 'rsuite';
 import FileUploadIcon from '@rsuite/icons/FileUpload';
 import { useNavigate } from 'react-router-dom'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import './../../../../App.css'
 
 const TrendBox = lazy(() => import('../TrendBox'))
 const MakeKPITrendOld = lazy(() => import('./Make_Trend(Old)/MakeKPITrendOld'))
@@ -34,7 +35,7 @@ function HRTrend() {
           <Grid item xs={0} md={2} sx={{}}>
             <Box sx={{ display: { xs: 'none', md: 'inherit' } }} >
               <Box sx={{ position: 'fixed', width: '16.5%' }} >
-                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
+                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "rgb(0, 110, 116)", marginTop: 8, borderRadius: 10 }}>
                   <Sidenav.Body>
                     <Nav activeKey={activeKey} onSelect={setActiveKey} >
                       <Nav style={{ fontWeight: 500, color: 'white', textAlign: 'center', fontSize: 20 }}>HR Trend</Nav>
@@ -43,17 +44,17 @@ function HRTrend() {
 
             </Nav.Menu> */}
                       <Nav.Item eventKey="1" placement="rightStart" icon={<FileUploadIcon />}
-                        onClick={() => navigate('/trends/hr/make_kpi_trend_old')}
+                        className="single-item-custom" onClick={() => navigate('/trends/hr/make_kpi_trend_old')}
                       >
                         Make Trend(Old)
                       </Nav.Item>
                       <Nav.Item eventKey="2" placement="rightStart" icon={<FileUploadIcon />}
-                        onClick={() => navigate('/trends/hr/degrow')}
+                        className="single-item-custom" onClick={() => navigate('/trends/hr/degrow')}
                       >
                         Make Degrow
                       </Nav.Item>
                       <Nav.Item eventKey="3" placement="rightStart" icon={<FileUploadIcon />}
-                        onClick={() => navigate('/trends/hr/degrow_v2')}
+                        className="single-item-custom" onClick={() => navigate('/trends/hr/degrow_v2')}
                       >
                         Make Degrow V2
                       </Nav.Item>

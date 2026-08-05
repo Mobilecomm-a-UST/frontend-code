@@ -10,6 +10,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import FileUploadIcon from '@rsuite/icons/FileUpload';
 import ConversionIcon from '@rsuite/icons/Conversion';
 import Loader from '../../Skeleton/Loader';
+import './../../../App.css'
 
 
 const SA_upload = lazy(()=>import('./Upload/Upload'))
@@ -40,42 +41,42 @@ const SA = () => {
                 <Grid container spacing={2}>
                     <Grid item xs={0} md={2} sx={{}}>
                         <Box style={{ position: 'fixed', width: '16.5%' }}>
-                            <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
+                            <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#006e74", marginTop: 8, borderRadius: 10 }}>
                                 <Sidenav.Body>
                                     <Nav activeKey={activeKey} onSelect={setActiveKey} >
                                         <Nav style={{ fontWeight: 550, color: 'white', textAlign: 'center', fontSize: 19 }}>5G GPL Tool</Nav>
-                                         <Nav.Menu eventKey="1" placement="rightStart" icon={<ConversionIcon />} title="GPL MACRO" >
+                                         <Nav.Menu eventKey="1" placement="rightStart"  icon={<ConversionIcon />}  className="menu-title-custom" title="GPL MACRO" >
                                    
-                                        <Nav.Item eventKey="1-1" placement="rightStart" icon={<FileUploadIcon />} onClick={() => navigate('/tools/ix_tools/sa_slicing/sa_upload_xml')}>
+                                        <Nav.Item eventKey="1-1" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/sa_upload_xml')}>
                                             UPE GPL Macro
                                         </Nav.Item>
-                                          <Nav.Item eventKey="1-2" placement="rightStart" icon={<FileUploadIcon />} onClick={() => navigate('/tools/ix_tools/sa_slicing/ORI_gpl_macro')}>
+                                          <Nav.Item eventKey="1-2" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/ORI_gpl_macro')}>
                                             ORI GPL Macro
                                         </Nav.Item>
-                                          <Nav.Item eventKey="1-3" placement="rightStart" icon={<FileUploadIcon />} onClick={() => navigate('/tools/ix_tools/sa_slicing/BIH_gpl_macro')}>
+                                          <Nav.Item eventKey="1-3" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/BIH_gpl_macro')}>
                                             BIH GPL Macro
                                         </Nav.Item>
-                                          <Nav.Item eventKey="1-4" placement="rightStart" icon={<FileUploadIcon />} onClick={() => navigate('/tools/ix_tools/sa_slicing/MP_gpl_macro')}>
+                                          <Nav.Item eventKey="1-4" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/MP_gpl_macro')}>
                                             MP GPL Macro
                                         </Nav.Item>
-                                          <Nav.Item eventKey="1-5" placement="rightStart" icon={<FileUploadIcon />} onClick={() => navigate('/tools/ix_tools/sa_slicing/MUM_gpl_macro')}>
+                                          <Nav.Item eventKey="1-5" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/MUM_gpl_macro')}>
                                             MUM GPL Macro
                                         </Nav.Item>
-                                        <Nav.Item eventKey="1-6" placement="rightStart" icon={<FileUploadIcon />} onClick={() => navigate('/tools/ix_tools/sa_slicing/WB_gpl_macro')}>
+                                        <Nav.Item eventKey="1-6" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/WB_gpl_macro')}>
                                             WB GPL Macro
                                         </Nav.Item>
-                                        <Nav.Item eventKey="1-7" placement="rightStart" icon={<FileUploadIcon />} onClick={() => navigate('/tools/ix_tools/sa_slicing/MAH_gpl_macro')}>
+                                        <Nav.Item eventKey="1-7" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/MAH_gpl_macro')}>
                                             MAH GPL Macro
                                         </Nav.Item>
                                         
                                         </Nav.Menu>
 
-                                        <Nav.Menu eventKey="2" placement="rightStart" icon={<ConversionIcon />} title="GPL ULS" >
-                                        <Nav.Item eventKey="2-1" placement="rightStart" icon={<FileUploadIcon />} onClick={() => navigate('/tools/ix_tools/sa_slicing/UPE_GPL_ULS')}>
+                                        <Nav.Menu eventKey="2" placement="rightStart" icon={<ConversionIcon />} className="menu-title-custom" title="GPL ULS" >
+                                        <Nav.Item eventKey="2-1" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/UPE_GPL_ULS')}>
                                             UPE GPL ULS
                                         </Nav.Item>
                                       
-                                        <Nav.Item eventKey="2-2" placement="rightStart" icon={<FileUploadIcon />} onClick={() => navigate('/tools/ix_tools/sa_slicing/BIH_gpl_uls')}>
+                                        <Nav.Item eventKey="2-2" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/BIH_gpl_uls')}>
                                             BIH GPL ULS
                                         </Nav.Item>
                                         </Nav.Menu>

@@ -13,6 +13,7 @@ import ViewsAuthorizeIcon from '@rsuite/icons/ViewsAuthorize';
 import { getDecreyptedData } from '../../utils/localstorage';
 import WaitIcon from '@rsuite/icons/Wait';
 import Loader from '../../Skeleton/Loader';
+import './../../../App.css'
 
 const Kpi_Data = lazy(() => import('./Kpi_table/Kpi_Data'));
 const Rca_tool = lazy(() => import('./Rca_tool'));
@@ -57,7 +58,7 @@ const Rca = () => {
                 <Grid container spacing={1}>
                     <Grid item xs={2} >
                         <div style={{ position: 'fixed', width: '16%', overflow: "scroll", scrollbarWidth: "1px" }}>
-                            <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#223354", marginTop: 5, borderRadius: 10 }}>
+                            <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#006e74", marginTop: 5, borderRadius: 10 }}>
                                 <Sidenav.Body>
                                     <Nav activeKey={activeKey} onSelect={setActiveKey} >
                                         <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 18 }}>RCA Genie</Nav>
@@ -96,10 +97,10 @@ const Rca = () => {
                                             </Nav.Item>
                                         </Nav.Menu>
 
-                                        <Nav.Item eventKey="3" placement="rightStart" icon={<GearIcon size="3em" />} onClick={() => navigate('/tools/rca/generate_rca')}>
+                                        <Nav.Item eventKey="3" className="single-item-custom" placement="rightStart" icon={<GearIcon size="3em" />} onClick={() => navigate('/tools/rca/generate_rca')}>
                                             Generate RCA
                                         </Nav.Item>
-                                            <Nav.Item eventKey="7" placement="rightStart" icon={<WaitIcon size="3em" />} onClick={() => navigate('/tools/rca/sa_performance')}>
+                                            <Nav.Item eventKey="7" className="single-item-custom" placement="rightStart" icon={<WaitIcon size="3em" />} onClick={() => navigate('/tools/rca/sa_performance')}>
                                             SA Performance
                                         </Nav.Item>
 {/* 

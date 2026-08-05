@@ -29,7 +29,7 @@ useEffect(()=>{
     </div>
     <Box className={classes.main_Box}>
         <Box className={classes.Back_Box}>
-            <Box className={classes.Box_Hading}>
+            <Box className={classes.Box_Hading}  >
                 Make KPI TREND(OLD)
             </Box>
             <Box style={{display:'flex',justifyContent:'center'}}>

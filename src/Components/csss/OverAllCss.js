@@ -15,6 +15,25 @@ const theme = createTheme({
 });
 
 const OverAllCss = makeStyles(theme=>({
+
+
+  menuTitleCustom: {
+    "& .rs-dropdown-toggle:hover": {
+      background: "#006e74 !important",
+      color: "#fff !important",
+      fontWeight: "bold",
+    },
+
+    "& .rs-dropdown-toggle-active": {
+      background: "#006e74 !important",
+      color: "#fff !important",
+    },
+
+    "& .rs-dropdown-menu": {
+      background: "#006e74 !important",
+    },
+  }, 
+  
   main_Box:{
     display: "flex",
     justifyContent: "center",
@@ -32,7 +51,7 @@ const OverAllCss = makeStyles(theme=>({
     padding: 30,
     borderRadius: "15px",
     // backgroundColor: '#a7d5f2',
-    backgroundImage: "linear-gradient(160deg, #0093E9 0%, #80D0C7 100%)",
+    backgroundImage: "linear-gradient(160deg, #006e74 0%, #80D0C7 100%)", borderRadius: "10px", boxShadow: "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset",
     boxShadow: 'rgba(50, 50, 93, 0.25) 0px 50px 10px -40px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset'
 
   },
@@ -42,7 +61,7 @@ const OverAllCss = makeStyles(theme=>({
     fontFamily: "Poppins",
     fontSize: "120%",
     fontWeight: 700,
-    backgroundColor: "#223354",
+    backgroundColor: "#006e74",
     borderRadius: 50,
     color: "#ffffff",
     marginRight: "auto",

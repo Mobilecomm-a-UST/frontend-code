@@ -6,6 +6,8 @@ import { Sidenav, Nav } from 'rsuite';
 import FileUploadIcon from '@rsuite/icons/FileUpload';
 import { useNavigate } from 'react-router-dom'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import './../../../../App.css'
+
 const TrendBox = lazy(() => import('../TrendBox'))
 const Kpi4G = lazy(() => import('./MakeKPI(old).js/Kpi4G'))
 // import TrendBox from '../TrendBox';
@@ -28,17 +30,17 @@ const JKTrend = () => {
                     <Grid item xs={0} md={2} sx={{}}>
                         <Box sx={{ display: { xs: 'none', md: 'inherit' } }} >
                             <Box sx={{ position: 'fixed', width: '16.5%' }} >
-                                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
+                                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "rgb(0, 110, 116)", marginTop: 8, borderRadius: 10 }}>
                                     <Sidenav.Body>
                                         <Nav activeKey={activeKey} onSelect={setActiveKey} >
                                             <Nav style={{ fontWeight: 500, color: 'white', textAlign: 'center', fontSize: 20 }}>JK Trend</Nav>
-                                            <Nav.Menu placement="rightStart" eventKey="1" title="Make Trend(Old)" icon={<FileUploadIcon />}>
+                                            <Nav.Menu placement="rightStart" eventKey="1" className="menu-title-custom" title="Make Trend(Old)" icon={<FileUploadIcon />} >
                                                 {/* <Nav.Item eventKey="1-1"
                                  onClick={()=>navigate('/trends/mp/2G')}
                                 >2G
                                 </Nav.Item> */}
                                                 <Nav.Item eventKey="1-2"
-                                                    onClick={() => navigate('/trends/jk/kpi_4G')}
+                                                    className="single-item-custom" onClick={() => navigate('/trends/jk/kpi_4G')}
                                                 >4G
                                                 </Nav.Item>
 

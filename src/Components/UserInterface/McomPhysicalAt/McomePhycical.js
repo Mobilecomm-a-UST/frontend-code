@@ -17,6 +17,7 @@ import ViewsUnauthorizeIcon from '@rsuite/icons/ViewsUnauthorize';
 import AddOutlineIcon from '@rsuite/icons/AddOutline';
 import CheckOutlineIcon from '@rsuite/icons/CheckOutline';
 import Loader from '../../Skeleton/Loader'
+import './../../../App.css'
 
 const McomTool = lazy(() => import('./McomTool'));
 const UploadData = lazy(() => import('./Upload/UploadData'));
@@ -61,10 +62,10 @@ const McomePhycical = () => {
                                 <Button onClick={() => { show() }} style={{ position: 'absolute', top: '60px', backgroundColor: '#223354' }}><SettingsIcon style={{ color: "white" }} /></Button>
                             </Collapse>
                             <Collapse in={checked} orientation="horizontal" timeout={'auto'}>
-                                <Box sx={{ width: 240, minHeight: "670px", height: "100hv", backgroundColor: "#223354", borderRadius: 5, position: 'fixed', zIndex: 10 }}>
+                                <Box sx={{ width: 240, minHeight: "670px", height: "100hv", backgroundColor: "#006e74", borderRadius: 5, position: 'fixed', zIndex: 10 }}>
                                     <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle">
                                         <Sidenav.Body>
-                                            <Nav activeKey={activeKey} onSelect={setActiveKey} style={{ width: 'auto', minHeight: "670px", height: "100hv", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
+                                            <Nav activeKey={activeKey} onSelect={setActiveKey} style={{ width: 'auto', minHeight: "670px", height: "100hv", backgroundColor: "#006e74", marginTop: 8, borderRadius: 10 }}>
                                                 <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>Soft AT TOOL</Nav>
                                                 <Nav.Menu eventKey="1" placement="rightStart" title="Dashboard" icon={<DashboardIcon size="3em" />}>
                                                     <Nav.Item eventKey="1-1" onClick={() => { navigate('/tools/soft_at/master_dashboard'); show(); setMenuButton(true) }} >
@@ -100,7 +101,7 @@ const McomePhycical = () => {
                         {/* THIS VIEW FOR PC  */}
                         <Box sx={{ display: { xs: 'none', md: 'inherit' } }} >
                             <Box sx={{ position: 'fixed', width: '16.5%' }} >
-                                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
+                                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#006e74", marginTop: 8, borderRadius: 10 }}>
                                     <Sidenav.Body>
                                         <Nav activeKey={activeKey} onSelect={setActiveKey} >
                                             <Nav style={{ fontWeight: 500, color: 'white', textAlign: 'center', fontSize: 20 }}>Mcom Physical AT</Nav>
@@ -109,7 +110,7 @@ const McomePhycical = () => {
                                                     Acceptance Summary
                                                 </Nav.Item>
                                             </Nav.Menu>
-                                            <Nav.Item eventKey="2" placement="rightStart" icon={<AddOutlineIcon />} onClick={() => { navigate('/tools/mcom_physical_at/add_new_site'); show(); setMenuButton(true) }}>
+                                            <Nav.Item eventKey="2" className="single-item-custom" placement="rightStart" icon={<AddOutlineIcon />} onClick={() => { navigate('/tools/mcom_physical_at/add_new_site'); show(); setMenuButton(true) }}>
                                                 Add New Site
                                             </Nav.Item>
                                             {/* <Nav.Item eventKey="3" placement="rightStart" icon={<PageIcon />} onClick={() => { navigate('/tools/soft_at/view_report'); show(); setMenuButton(true) }}>

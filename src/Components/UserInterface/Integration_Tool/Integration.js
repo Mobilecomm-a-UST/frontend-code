@@ -10,6 +10,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import FileUploadIcon from '@rsuite/icons/FileUpload';
 import ConversionIcon from '@rsuite/icons/Conversion';
 import Loader from '../../Skeleton/Loader';
+import './../../../App.css'
 
 const Integration_Tool = lazy(() => import('./Integration_Tool'))
 const UploadFile = lazy(() => import('./Upload/UploadFile'))
@@ -42,34 +43,34 @@ const Integration = () => {
                 <Grid container spacing={2}>
                     <Grid item xs={0} md={2} sx={{}}>
                         <Box style={{ position: 'fixed', width: '16.5%' }}>
-                            <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
+                            <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#006e74", marginTop: 8, borderRadius: 10 }}>
                                 <Sidenav.Body>
                                     <Nav activeKey={activeKey} onSelect={setActiveKey} >
                                         <Nav style={{ fontWeight: 550, color: 'white', textAlign: 'center', fontSize: 19 }}>Airtel Tracker Tool</Nav>
                                         {/* <Nav.Men eventKey="1" placement="rightStart" icon={<DashboardIcon />} title="Dashboard">
                                          <Nav.Item>dfdf</Nav.Item>
                                         </Nav.Men > */}
-                                        <Nav.Item eventKey="1" placement="rightStart" icon={<AppSelectIcon />} onClick={() => navigate('/tools/Integration/master_dashboard')}>
+                                        <Nav.Item eventKey="1" placement="rightStart" icon={<AppSelectIcon />} className="single-item-custom" onClick={() => navigate('/tools/Integration/master_dashboard')}>
                                             Master Dashboard
                                         </Nav.Item>
-                                        <Nav.Item eventKey="2" placement="rightStart" icon={<DashboardIcon />} onClick={() => navigate('/tools/Integration/dashboard')}>
+                                        <Nav.Item eventKey="2" placement="rightStart" icon={<DashboardIcon />} className="single-item-custom" onClick={() => navigate('/tools/Integration/dashboard')}>
                                             Dashboard
                                         </Nav.Item>
 
-                                        <Nav.Item eventKey="3" placement="rightStart" icon={<FileUploadIcon />} onClick={() => navigate('/tools/Integration/upload_file')} >
+                                        <Nav.Item eventKey="3" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/Integration/upload_file')} >
                                             Upload File
                                         </Nav.Item>
-                                        <Nav.Menu eventKey="4" placement="rightStart" icon={<ConversionIcon />} title="Relocation" >
+                                        <Nav.Menu eventKey="4" placement="rightStart" icon={<ConversionIcon />} className="menu-title-custom" title="Relocation" >
                                             {/* <Nav.Item eventKey="4-1" placement="rightStart" onClick={() => navigate('/tools/Integration/relocation_charts')}>
                                                 Master Dashboard
                                             </Nav.Item> */}
-                                            <Nav.Item eventKey="4-2" placement="rightStart" onClick={() => navigate('/tools/Integration/relocation_master_table')}>
+                                            <Nav.Item eventKey="4-2" placement="rightStart" className="single-item-custom" onClick={() => navigate('/tools/Integration/relocation_master_table')}>
                                                 Master Table
                                             </Nav.Item>
-                                            <Nav.Item eventKey="4-3" placement="rightStart" onClick={() => navigate('/tools/Integration/relocation_dashboard')}>
+                                            <Nav.Item eventKey="4-3" placement="rightStart" className="single-item-custom" onClick={() => navigate('/tools/Integration/relocation_dashboard')}>
                                                 Dashboard
                                             </Nav.Item>
-                                            <Nav.Item eventKey="4-4" placement="rightStart" onClick={() => navigate('/tools/Integration/relocation_uploadfile')}>
+                                            <Nav.Item eventKey="4-4" placement="rightStart" className="single-item-custom" onClick={() => navigate('/tools/Integration/relocation_uploadfile')}>
                                                 Upload File
                                             </Nav.Item>
                                         </Nav.Menu>

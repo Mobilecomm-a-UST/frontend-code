@@ -10,6 +10,10 @@ import ListIcon from '@rsuite/icons/List';
 import DetailIcon from '@rsuite/icons/Detail';
 import { useNavigate } from 'react-router-dom'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import './../../../../App.css'
+
+
+
 const TrendBox = lazy(() => import('../TrendBox'))
 const MakeKPITrendOld = lazy(() => import('./Make_Trend(Old)/MakeKPITrendOld'))
 const Degrow = lazy(() => import('./Degrow/Degrow'))
@@ -53,19 +57,19 @@ const WBKOL_Trend = () => {
           <Grid item xs={0} md={2} sx={{}}>
             <Box sx={{ display: { xs: 'none', md: 'inherit' } }} >
               <Box sx={{ position: 'fixed', width: '16.5%' }} >
-                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
+                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "rgb(0, 110, 116)", marginTop: 8, borderRadius: 10 }}>
                   <Sidenav.Body>
                     <Nav activeKey={activeKey} onSelect={setActiveKey} >
                       <Nav style={{ fontWeight: 500, color: 'white', textAlign: 'center', fontSize: 20 }}>BW/KOL Trend</Nav>
-                      <Nav.Menu placement="rightStart" eventKey="3" title="Pre-Post Upload" icon={<FileUploadIcon />}>
+                      <Nav.Menu placement="rightStart" eventKey="3" className="menu-title-custom" title="Pre-Post Upload" icon={<FileUploadIcon />}>
                         <Nav.Item eventKey="3-2"
-                          onClick={() => navigate()}
+                          className="single-item-custom" onClick={() => navigate()}
                         >Pre-Post Report</Nav.Item>
                       </Nav.Menu>
-                      <Nav.Item eventKey="4" placement="rightStart" icon={<FileUploadIcon />} onClick={() => { navigate('/trends/wb_kol/degrow'); show(); setMenuButton(true) }}>
+                      <Nav.Item eventKey="4" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => { navigate('/trends/wb_kol/degrow'); show(); setMenuButton(true) }}>
                         Make Degrow
                       </Nav.Item>
-                      <Nav.Item eventKey="5" placement="rightStart" icon={<FileUploadIcon />} onClick={() => { navigate('/trends/wb_kol/make_kpi_trend_old'); show(); setMenuButton(true) }}>
+                      <Nav.Item eventKey="5" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => { navigate('/trends/wb_kol/make_kpi_trend_old'); show(); setMenuButton(true) }}>
                         Make Trend(old)
                       </Nav.Item>
                     </Nav>
