@@ -258,3 +258,52 @@ html {
 .custom-step-item:hover .rs-steps-item-title {
     color: #4f46e5;
 }
+
+
+/* ===========================
+   RSuite Nested Menu Fix
+   =========================== */
+
+/* Parent Menu (e.g. Nokia Status) */
+.rs-sidenav .rs-dropdown-toggle {
+    color: #ffffff !important;
+    font-weight: 600;
+}
+
+/* Parent hover */
+.rs-sidenav .rs-dropdown-toggle:hover {
+    background: #ffffff !important;
+    color: #006e74 !important;
+}
+
+/* Nested Menu (e.g. 4G) */
+.rs-dropdown-menu .rs-dropdown-toggle {
+    background: #006e74 !important;
+    color: #ffffff !important;
+    font-weight: 600;
+}
+
+/* Nested Menu Hover */
+.rs-dropdown-menu .rs-dropdown-toggle:hover {
+    background: #ffffff !important;
+    color: #006e74 !important;
+}
+
+/* Nested Menu Items */
+.rs-dropdown-menu .rs-dropdown-item {
+    background: #006e74 !important;
+    color: #ffffff !important;
+    font-weight: 500;
+}
+
+/* Nested Menu Items Hover */
+.rs-dropdown-menu .rs-dropdown-item:hover {
+    background: #ffffff !important;
+    color: #006e74 !important;
+    font-weight: bold;
+}
+
+/* Keep submenu visible */
+.rs-dropdown-menu {
+    background: #006e74 !important;
+}

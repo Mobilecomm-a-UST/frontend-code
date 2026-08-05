@@ -11,6 +11,7 @@ import FileUploadIcon from '@rsuite/icons/FileUpload';
 import ConversionIcon from '@rsuite/icons/Conversion';
 import { getDecreyptedData } from '../../utils/localstorage'
 import Loader from '../../Skeleton/Loader';
+import './../../../App.css'
 
 const Integration_Tool = lazy(() => import('./Vi_Integration_Tool'))
 const UploadFile = lazy(() => import('./Upload/UploadFile'))
@@ -39,20 +40,20 @@ const Vi_Integration = () => {
                 <Grid container spacing={2}>
                     <Grid item xs={0} md={2} sx={{}}>
                         <Box style={{ position: 'fixed', width: '16.5%' }}>
-                            <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
+                            <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#006e74", marginTop: 8, borderRadius: 10 }}>
                                 <Sidenav.Body>
                                     <Nav activeKey={activeKey} onSelect={setActiveKey} >
                                         <Nav style={{ fontWeight: 550, color: 'white', textAlign: 'center', fontSize: 19 }}>VI Tracker Tool</Nav>
                                         {/* <Nav.Men eventKey="1" placement="rightStart" icon={<DashboardIcon />} title="Dashboard">
                                          <Nav.Item>dfdf</Nav.Item>
                                         </Nav.Men > */}
-                                        <Nav.Item eventKey="1" placement="rightStart" icon={<AppSelectIcon />} onClick={() => navigate('/tools/ix_tools/vi_integration/master_dashboard')}>
+                                        <Nav.Item eventKey="1" placement="rightStart" icon={<AppSelectIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/vi_integration/master_dashboard')}>
                                             Master Dashboard
                                         </Nav.Item>
-                                        <Nav.Item eventKey="2" placement="rightStart" icon={<DashboardIcon />} onClick={() => navigate('/tools/ix_tools/vi_integration/dashboard')}>
+                                        <Nav.Item eventKey="2" placement="rightStart" icon={<DashboardIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/vi_integration/dashboard')}>
                                             Dashboard
                                         </Nav.Item>
-                                        {!userTypes?.includes('VI_IX_reader') &&    <Nav.Item eventKey="3" placement="rightStart" icon={<FileUploadIcon />} onClick={() => navigate('/tools/ix_tools/vi_integration/upload_file')} >
+                                        {!userTypes?.includes('VI_IX_reader') &&    <Nav.Item eventKey="3" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/vi_integration/upload_file')} >
                                             Upload File
                                         </Nav.Item>}
 

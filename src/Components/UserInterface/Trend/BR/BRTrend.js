@@ -6,10 +6,17 @@ import { Sidenav, Nav } from 'rsuite';
 import FileUploadIcon from '@rsuite/icons/FileUpload';
 import { useNavigate } from 'react-router-dom'
 import { Routes, Route } from "react-router-dom";
+import './../../../../App.css'
+
+
+
 const TrendBox = lazy(() => import('../TrendBox'))
 const Degrow = lazy(() => import('./Degrow/Degrow'))
 const Macro = lazy(() => import('./MakeTrend/Macro'))
 const SmallCell = lazy(() => import('./MakeTrend/SmallCell'))
+
+
+
 // import TrendBox from '../TrendBox';
 // import Degrow from './Degrow/Degrow';
 // import Macro from './MakeTrend/Macro';
@@ -38,19 +45,19 @@ function BRTrend() {
           <Grid item xs={0} md={2} sx={{}}>
             <Box sx={{ display: { xs: 'none', md: 'inherit' } }} >
               <Box sx={{ position: 'fixed', width: '16.5%' }} >
-                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
+                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "rgb(0, 110, 116)", marginTop: 8, borderRadius: 10 }}>
                   <Sidenav.Body>
                     <Nav activeKey={activeKey} onSelect={setActiveKey} >
                       <Nav style={{ fontWeight: 500, color: 'white', textAlign: 'center', fontSize: 20 }}>BR Trend</Nav>
+{/* style={{ fontWeight: 400, color: 'white' }} placement="leftStart"  */}
+                      <Nav.Menu placement="rightStart" eventKey="1" className="menu-title-custom" title="Make Trend" icon={<FileUploadIcon />}>
 
-                      <Nav.Menu placement="rightStart" eventKey="1" title="Make Trend" icon={<FileUploadIcon />}>
-
-                        <Nav.Item eventKey="1-1" onClick={() => navigate('/trends/br/macro')}>Macro</Nav.Item>
-                        <Nav.Item eventKey="1-2" onClick={() => navigate('/trends/br/small_cell')}>Small Cell</Nav.Item>
+                        <Nav.Item eventKey="1-1" className="single-item-custom" onClick={() => navigate('/trends/br/macro')}>Macro</Nav.Item>
+                        <Nav.Item eventKey="1-2" className="single-item-custom" onClick={() => navigate('/trends/br/small_cell')}>Small Cell</Nav.Item>
 
 
                       </Nav.Menu>
-                      <Nav.Item eventKey="4" icon={<FileUploadIcon />} onClick={() => navigate('/trends/br/degrow')}>
+                      <Nav.Item eventKey="2" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/trends/br/degrow')}>
                         Degrow
                       </Nav.Item>
 

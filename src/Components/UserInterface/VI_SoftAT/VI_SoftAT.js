@@ -12,7 +12,7 @@ import ConversionIcon from '@rsuite/icons/Conversion';
 import { getDecreyptedData } from '../../utils/localstorage';
 import Loader from '../../Skeleton/Loader';
 import NavMenu from 'rsuite/esm/Nav/NavMenu';
-
+import '../../../App.css'
 
 const VI_SoftAT_Tool = lazy(() => import('./VI_SoftAT_Tool'))
 const Vi_Checklist = lazy(() => import('./VI_Checklist/Vi_checklist'))
@@ -47,56 +47,56 @@ const VI_SoftAT = () => {
                 <Grid container spacing={2}>
                     <Grid item xs={0} md={2} sx={{}}>
                         <Box style={{ position: 'fixed', width: '16.5%' }}>
-                            <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
+                            <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#006e74", marginTop: 8, borderRadius: 10 }}>
                                 <Sidenav.Body>
                                     <Nav activeKey={activeKey} onSelect={setActiveKey} >
                                         <Nav style={{ fontWeight: 550, color: 'white', textAlign: 'center', fontSize: 19 }}>VI Soft AT Tool</Nav>
                                         {/* <Nav.Men eventKey="1" placement="rightStart" icon={<DashboardIcon />} title="Dashboard">
                                          <Nav.Item>dfdf</Nav.Item>
                                         </Nav.Men > */}
-                                        <Nav.Item eventKey="1" placement="rightStart" icon={<AppSelectIcon />} onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/Vi_checklist')}>
+                                        <Nav.Item eventKey="1" placement="rightStart" icon={<AppSelectIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/Vi_checklist')}>
                                             VI Checklist
                                         </Nav.Item>
-                                        <Nav.Menu eventKey="2" placement="rightStart" title="VI Summary" icon={<DashboardIcon size="3em" />}>
+                                        <Nav.Menu eventKey="2" placement="rightStart" className="menu-title-custom" title="VI Summary" icon={<DashboardIcon size="3em" />}>
                                            
-                                        <Nav.Item eventKey="2-1" placement="rightStart"  onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/TwoG')}>
+                                        <Nav.Item eventKey="2-1" placement="rightStart"  className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/TwoG')}>
                                             2G
                                         </Nav.Item>
-                                        <Nav.Item eventKey="2-2" placement="rightStart"  onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/FourG')}>
+                                        <Nav.Item eventKey="2-2" placement="rightStart"  className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/FourG')}>
                                             4G/5G
                                         </Nav.Item>
                                         
-                                        {/* <Nav.Item eventKey="2-3" placement="rightStart"  onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/FiveG')}>
+                                        {/* <Nav.Item eventKey="2-3" placement="rightStart"  className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/FiveG')}>
                                             5G
                                         </Nav.Item> */}
                                          </Nav.Menu>
 
-                                         <Nav.Menu eventKey="3" placement="rightStart" title="VI HOTO" icon={<DashboardIcon size="3em" />}>
-                                        <Nav.Item eventKey="3-1" placement="rightStart" icon={<FileUploadIcon />} onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/UPLOADHOTO')} >
+                                         <Nav.Menu eventKey="3" placement="rightStart" className="menu-title-custom" title="VI HOTO" icon={<DashboardIcon size="3em" />}>
+                                        <Nav.Item eventKey="3-1" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/UPLOADHOTO')} >
                                             Upload HOTO File
                                         </Nav.Item>
                                         
-                                        <Nav.Item eventKey="3-2" placement="rightStart" icon={<DashboardIcon />} onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/Vi_Hoto')}>
+                                        <Nav.Item eventKey="3-2" placement="rightStart" icon={<DashboardIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/Vi_Hoto')}>
                                             VI Hoto Dashboard
                                         </Nav.Item>  
                                         
-                                         {/* <Nav.Item eventKey="3-3" placement="rightStart" icon={<DashboardIcon />} onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/VIHotoFtr')}>
+                                         {/* <Nav.Item eventKey="3-3" placement="rightStart" icon={<DashboardIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/VIHotoFtr')}>
                                             FTR Analysis
                                         </Nav.Item> 
-                                         <Nav.Item eventKey="3-4" placement="rightStart" icon={<DashboardIcon />} onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/FTR_Dashboard')}>
+                                         <Nav.Item eventKey="3-4" placement="rightStart" icon={<DashboardIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/FTR_Dashboard')}>
                                             FTR Dasboard
                                         </Nav.Item>  */}
-                                         <Nav.Item eventKey="3-5" placement="rightStart" icon={<DashboardIcon />} onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/VI_Hoto_FTR')}>
+                                         <Nav.Item eventKey="3-5" placement="rightStart" icon={<DashboardIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/VI_Hoto_FTR')}>
                                             VI Hoto FTR
                                         </Nav.Item> 
 
                                          </Nav.Menu>
                                          
                                     
-                                        {/* <Nav.Item eventKey="2" placement="rightStart" icon={<DashboardIcon />} onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/vi_ftr_dashboard')}>
+                                        {/* <Nav.Item eventKey="2" placement="rightStart" icon={<DashboardIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/vi_ftr_dashboard')}>
                                             VI FTR Dashboard
                                         </Nav.Item>
-                                         <Nav.Item eventKey="3" placement="rightStart" icon={<FileUploadIcon />} onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/upload_file')} >
+                                         <Nav.Item eventKey="3" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/upload_file')} >
                                             Upload FTR
                                         </Nav.Item> */}
                                      

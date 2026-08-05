@@ -73,7 +73,7 @@ const IX_Ericsson = lazy(()=> import('./Components/UserInterface/IX Audit Ericss
 const ResourceManagement = lazy(() => import('./Components/UserInterface/ResourceManagement/Resource_management'));
 const FieldResourceTracking = lazy(() => import('./Components/UserInterface/Field Resource Tracking/FieldResourceTracking'))
 const WccGenerate = lazy(()=> import('./Components/UserInterface/WCC Generate/Wcc_generate'))
-const PerformanceNew = lazy(()=> import('./Components/UserInterface/Performance New/PerformanceAt'))
+// const PerformanceNew = lazy(()=> import('./Components/UserInterface/Performance New/PerformanceAt'))
 const Logs = lazy(()=>import('./Components/UserInterface/Logs/Logs'))
 const LogsTool = lazy(()=>import('./Components/UserInterface/Logs Tools/LogsTool'))
 

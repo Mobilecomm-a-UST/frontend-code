@@ -52,7 +52,7 @@ const Soft_AT_Tool = () => {
         borderRadius: 3,
         boxShadow: "-10px -10px 15px rgba(255,255,255,0.4),10px 10px 15px rgba(70,70,70,0.15)",
         textShadow: '2px 2px 4px #ffffff',
-        color: '#223354',
+        color: "#006e74",
         // border:"1px solid black"
     }
 
@@ -61,7 +61,7 @@ const Soft_AT_Tool = () => {
 
     }, [])
     return (
-        <div style={{ backgroundColor: '#FBEEE6' }}>
+        <div style={{ backgroundColor: '' }}>
 
             <Box style={{ padding: "15px", marginTop: '60px' }}>
                 <Box sx={{ display: "flex", justifyContent: 'center' }}>
@@ -72,7 +72,7 @@ const Soft_AT_Tool = () => {
                             fontFamily: "sans-serif",
                             fontSize: "24px",
                             fontWeight: 600,
-                            backgroundColor: "#223354",
+                            backgroundColor: "#006e74",
                             color: "#ffffff",
                             borderRadius: "20px",
                             width: "90%",

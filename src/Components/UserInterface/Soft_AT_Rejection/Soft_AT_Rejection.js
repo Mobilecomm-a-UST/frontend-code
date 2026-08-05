@@ -13,6 +13,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import SoftAtTool from './SoftAtTool'
 import ViewsUnauthorizeIcon from '@rsuite/icons/ViewsUnauthorize';
 import Loader from '../../Skeleton/Loader'
+import './../../../App.css'
 
 
 const Rejected_Report = lazy(() => import('../Soft_AT_Rejection/Rejected/RejectedReport'))
@@ -64,7 +65,7 @@ function Soft_at_Rejection() {
                     <Grid item xs={0} md={2} sx={{}}>
                         <Box sx={{ display: { xs: 'none', md: 'inherit' } }} >
                             <Box sx={{ position: 'fixed', width: '16.5%' }} >
-                                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#223354", marginTop: 70, borderRadius: 10 }}>
+                                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#006e74", marginTop: 70, borderRadius: 10 }}>
                                     <Sidenav.Body>
                                         <Nav activeKey={activeKey} onSelect={setActiveKey} >
                                             <Nav style={{ fontWeight: 500, color: 'white', textAlign: 'center', fontSize: 20 }}>Soft AT Tracking</Nav>
@@ -88,21 +89,21 @@ function Soft_at_Rejection() {
                                     <Sidenav.Body>
                                         <Nav activeKey={activeKey} onSelect={setActiveKey} style={{ width: 'auto', minHeight: "670px", height: "100hv", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
                                             <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>Soft AT Tracking</Nav> */}
-                                            <Nav.Menu eventKey="1" placement="rightStart" title="Dashboard" icon={<DashboardIcon size="3em" />}>
+                                            <Nav.Menu eventKey="1" className="menu-title-custom" placement="rightStart" title="Dashboard" icon={<DashboardIcon size="3em" />}>
 
-                                                <Nav.Item eventKey="1-1" onClick={() => { navigate('/tools/soft_at_rejection/dashboard'); show(); setMenuButton(true) }} >
+                                                <Nav.Item eventKey="1-1" className="single-item-custom" onClick={() => { navigate('/tools/soft_at_rejection/dashboard'); show(); setMenuButton(true) }} >
                                                     Dashboard
                                                 </Nav.Item>
-                                                <Nav.Item eventKey="1-2" onClick={() => { navigate('/tools/soft_at_rejection/master_dashboard'); show(); setMenuButton(true) }} >
+                                                <Nav.Item eventKey="1-2" className="single-item-custom" onClick={() => { navigate('/tools/soft_at_rejection/master_dashboard'); show(); setMenuButton(true) }} >
                                                     Master Dashboard
                                                 </Nav.Item>
                                                 {/* <Nav.Item eventKey="1-2" onClick={() => { navigate('/tools/soft_at_rejection/site_wise_rej_acc'); show(); setMenuButton(true) }}>
                                                         Site Wise Rej. Acc.
                                                     </Nav.Item> */}
-                                                <Nav.Item eventKey="1-4" onClick={() => { navigate('/tools/soft_at_rejection/date_wise'); show(); setMenuButton(true) }}>
+                                                <Nav.Item eventKey="1-4" className="single-item-custom" onClick={() => { navigate('/tools/soft_at_rejection/date_wise'); show(); setMenuButton(true) }}>
                                                     Date Wise
                                                 </Nav.Item>
-                                                <Nav.Item eventKey="1-5" onClick={() => { navigate('/tools/soft_at_rejection/range_wise'); show(); setMenuButton(true) }}>
+                                                <Nav.Item eventKey="1-5" className="single-item-custom" onClick={() => { navigate('/tools/soft_at_rejection/range_wise'); show(); setMenuButton(true) }}>
                                                     Range Wise
                                                 </Nav.Item>
                                             </Nav.Menu>
@@ -132,25 +133,25 @@ function Soft_at_Rejection() {
                     <Grid item xs={0} md={2} sx={{}}>
                         <Box sx={{ display: { xs: 'none', md: 'inherit' } }} >
                             <Box sx={{ position: 'fixed', width: '16.5%' }} >
-                                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#223354", marginTop: 70, borderRadius: 10 }}>
+                                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#006e74", marginTop: 70, borderRadius: 10 }}>
                                     <Sidenav.Body>
                                         <Nav activeKey={activeKey} onSelect={setActiveKey} >
                                             <Nav style={{ fontWeight: 500, color: 'white', textAlign: 'center', fontSize: 20 }}>Soft AT Tracking</Nav>
-                                            <Nav.Menu eventKey="1" placement="rightStart" title="Dashboard" icon={<DashboardIcon size="3em" />}>
+                                            <Nav.Menu eventKey="1" className="menu-title-custom" placement="rightStart" title="Dashboard" icon={<DashboardIcon size="3em" />}>
 
-                                                <Nav.Item eventKey="1-1" onClick={() => { navigate('/tools/soft_at_rejection/dashboard'); show(); setMenuButton(true) }} >
+                                                <Nav.Item eventKey="1-1" className="single-item-custom" onClick={() => { navigate('/tools/soft_at_rejection/dashboard'); show(); setMenuButton(true) }} >
                                                     Dashboard
                                                 </Nav.Item>
-                                                <Nav.Item eventKey="1-2" onClick={() => { navigate('/tools/soft_at_rejection/master_dashboard'); show(); setMenuButton(true) }} >
+                                                <Nav.Item eventKey="1-2" className="single-item-custom" onClick={() => { navigate('/tools/soft_at_rejection/master_dashboard'); show(); setMenuButton(true) }} >
                                                     Master Dashboard
                                                 </Nav.Item>
-                                                {/* <Nav.Item eventKey="1-3" onClick={() => { navigate('/tools/soft_at_rejection/site_wise_rej_acc'); show(); setMenuButton(true) }}>
+                                                {/* <Nav.Item eventKey="1-3" className="single-item-custom" onClick={() => { navigate('/tools/soft_at_rejection/site_wise_rej_acc'); show(); setMenuButton(true) }}>
                                                     Site Wise Rej. Acc.
                                                 </Nav.Item> */}
-                                                <Nav.Item eventKey="1-4" onClick={() => { navigate('/tools/soft_at_rejection/date_wise'); show(); setMenuButton(true) }}>
+                                                <Nav.Item eventKey="1-4" className="single-item-custom" onClick={() => { navigate('/tools/soft_at_rejection/date_wise'); show(); setMenuButton(true) }}>
                                                     Date Wise
                                                 </Nav.Item>
-                                                <Nav.Item eventKey="1-5" onClick={() => { navigate('/tools/soft_at_rejection/range_wise'); show(); setMenuButton(true) }}>
+                                                <Nav.Item eventKey="1-5" className="single-item-custom" onClick={() => { navigate('/tools/soft_at_rejection/range_wise'); show(); setMenuButton(true) }}>
                                                     Range Wise
                                                 </Nav.Item>
 

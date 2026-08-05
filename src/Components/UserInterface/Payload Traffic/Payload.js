@@ -17,6 +17,9 @@ import { IconButton, ButtonToolbar } from 'rsuite';
 import { Query } from '@tanstack/react-query';
 import { getDecreyptedData } from '../../utils/localstorage';
 import Loader from '../../Skeleton/Loader'
+import './../../../App.css'
+
+
 // import { Search } from '@mui/icons-material';
 // import { Query } from '@tanstack/react-query';
 
@@ -54,17 +57,17 @@ const Payload = () => {
                     <Grid item xs={0} md={2} sx={{}}>
                         <Box sx={{ display: { xs: 'none', md: 'inherit' } }} >
                             <Box sx={{ position: 'fixed', width: '16.5%' }} >
-                                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#223354", marginTop: 70, borderRadius: 10 }}>
+                                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#006e74", marginTop: 70, borderRadius: 10 }}>
                                     <Sidenav.Body>
                                         <Nav activeKey={activeKey} onSelect={setActiveKey} >
                                             <Nav style={{ fontWeight: 500, color: 'white', textAlign: 'center', fontSize: 20 }}>Telecom Traffic System</Nav>
-                                            <Nav.Item eventKey="1" placement="rightStart" onClick={() => navigate('/tools/Payload Traffic/Upload_Payload/Upload_4G_Payload')} >
+                                            <Nav.Item eventKey="1" placement="rightStart" className="single-item-custom" onClick={() => navigate('/tools/Payload Traffic/Upload_Payload/Upload_4G_Payload')} >
                                                 Upload_4G_Payload
                                             </Nav.Item>
-                                            <Nav.Item eventKey="2" placement="rightStart" onClick={() => navigate('/tools/Payload Traffic/Upload_Payload/Upload_5G_Payload')} >
+                                            <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" onClick={() => navigate('/tools/Payload Traffic/Upload_Payload/Upload_5G_Payload')} >
                                                 Upload_5G_Payload
                                             </Nav.Item>
-                                            <Nav.Item eventKey="3" placement="rightStart" onClick={() => navigate('/tools/Payload Traffic/Upload_Payload/Query_Traffic')} >
+                                            <Nav.Item eventKey="3" placement="rightStart" className="single-item-custom" onClick={() => navigate('/tools/Payload Traffic/Upload_Payload/Query_Traffic')} >
                                                 Query Traffic
                                             </Nav.Item>
                                         </Nav>
@@ -75,7 +78,7 @@ const Payload = () => {
                         {/* THIS VIEW FOR PC  */}
                         <Box sx={{ display: { xs: 'none', md: 'inherit' } }} >
                             <Box sx={{ position: 'fixed', width: '16.5%' }} >
-                                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#223354", marginTop: 20, borderRadius: 10 }}>
+                                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#006e74", marginTop: 20, borderRadius: 10 }}>
                                     <Sidenav.Body>
                                         {(['Admin', 'PTS_Admin'].some(role => userType?.includes(role))) && 
 
@@ -83,17 +86,17 @@ const Payload = () => {
                                                 <Nav style={{ fontWeight: 100, color: 'white', textAlign: 'center', fontSize: 20 }}>Telecom Traffic System</Nav>
 
                                                 <Nav.Menu eventKey="1" placement="rightStart" icon={<FileUploadIcon />} title="Upload Payload">
-                                                    <Nav.Item eventKey="1-1" placement="rightStart" onClick={() => { navigate('/tools/Payload_Traffic/Upload_4G_Payload'); show(); setMenuButton(true) }}>
+                                                    <Nav.Item eventKey="1-1" placement="rightStart" className="single-item-custom" onClick={() => { navigate('/tools/Payload_Traffic/Upload_4G_Payload'); show(); setMenuButton(true) }}>
                                                         Upload 4G Payload
                                                     </Nav.Item>
-                                                    <Nav.Item eventKey="1-2" placement="rightStart" onClick={() => { navigate('/tools/Payload_Traffic/Upload_5G_Payload'); show(); setMenuButton(true) }}>
+                                                    <Nav.Item eventKey="1-2" placement="rightStart" className="single-item-custom" onClick={() => { navigate('/tools/Payload_Traffic/Upload_5G_Payload'); show(); setMenuButton(true) }}>
                                                         Upload 5G Payload
                                                     </Nav.Item>
                                                 </Nav.Menu>
-                                                <Nav.Item eventKey="2" placement="rightStart" icon={<SearchIcon />} onClick={() => { navigate('/tools/Payload_Traffic/Query_Traffic'); show(); setMenuButton(true) }}>
+                                                <Nav.Item eventKey="2" placement="rightStart" icon={<SearchIcon />} className="single-item-custom" onClick={() => { navigate('/tools/Payload_Traffic/Query_Traffic'); show(); setMenuButton(true) }}>
                                                     Query Traffic
                                                 </Nav.Item>
-                                                <Nav.Item eventKey="3" placement="rightStart" icon={<HistoryIcon />} onClick={() => { navigate('/tools/Payload_Traffic/Upload_History'); show(); setMenuButton(true) }}>
+                                                <Nav.Item eventKey="3" placement="rightStart" icon={<HistoryIcon />} className="single-item-custom" onClick={() => { navigate('/tools/Payload_Traffic/Upload_History'); show(); setMenuButton(true) }}>
                                                     Upload History
                                                 </Nav.Item>
                                             </Nav>}
@@ -101,7 +104,7 @@ const Payload = () => {
                                         {userType?.includes('PTS') &&
                                             <Nav activeKey={activeKey} onSelect={setActiveKey} >
                                                 <Nav style={{ fontWeight: 100, color: 'white', textAlign: 'center', fontSize: 20 }}>Telecom Traffic System</Nav>
-                                                <Nav.Item eventKey="2" placement="rightStart" icon={<SearchIcon />} onClick={() => { navigate('/tools/Payload_Traffic/Query_Traffic'); show(); setMenuButton(true) }}>
+                                                <Nav.Item eventKey="2" placement="rightStart" icon={<SearchIcon />} className="single-item-custom" onClick={() => { navigate('/tools/Payload_Traffic/Query_Traffic'); show(); setMenuButton(true) }}>
                                                     Query Traffic
                                                 </Nav.Item>
 

@@ -17,6 +17,7 @@ import DocPassIcon from '@rsuite/icons/DocPass';
 import CheckOutlineIcon from '@rsuite/icons/CheckOutline';
 import ChangeListIcon from '@rsuite/icons/ChangeList';
 import Loader from '../../Skeleton/Loader'
+import './../../../App.css'
 
 
 const GplTool = lazy(() => import('./GplTool'));
@@ -25,6 +26,8 @@ const Gplauditparse = lazy(() => import('./GplAuditParse/GAP'))
 const GplPrePostAudit = lazy(() => import('./GplPrePostAudit/GPPA'));
 const ScriptGenerator = lazy(() => import('./ScriptGenerator/ScriptGen'));
 const TestingGpl = lazy(() => import('./Generate/GenrateGplState'))
+const Step1Comparsion = lazy(() => import('./Kget To GPL/Step1Comparsion'))
+const Step2Scripting = lazy(() => import('./Kget To GPL/Step2Scripting'))
 
 const GPL = () => {
     const [expanded, setExpanded] = useState(true);
@@ -59,7 +62,7 @@ const GPL = () => {
                     <Grid item xs={0} md={2} sx={{}}>
                         <Box sx={{ display: { xs: 'inherit', md: 'none' } }}>
                             <Collapse in={!checked}>
-                                <Button onClick={() => { show() }} style={{ position: 'absolute', top: '60px', backgroundColor: '#223354' }}><SettingsIcon style={{ color: "white" }} /></Button>
+                                <Button onClick={() => { show() }} style={{ position: 'absolute', top: '60px', backgroundColor: '#006e74' }}><SettingsIcon style={{ color: "white" }} /></Button>
                             </Collapse>
                             <Collapse in={checked} orientation="horizontal" timeout={'auto'}>
                                 <Box sx={{ width: 240, minHeight: "670px", height: "100hv", backgroundColor: "#223354", borderRadius: 5, position: 'fixed', zIndex: 10 }}>
@@ -97,29 +100,27 @@ const GPL = () => {
                         {/* THIS VIEW FOR PC  */}
                         <Box sx={{ display: { xs: 'none', md: 'inherit' } }} >
                             <Box sx={{ position: 'fixed', width: '16.5%' }} >
-                                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
+                                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#006e74", marginTop: 8, borderRadius: 10 }}>
                                     <Sidenav.Body>
-                                        <Nav activeKey={activeKey} onSelect={setActiveKey} style={{ width: 'auto', minHeight: "670px", height: "100hv", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
+                                        <Nav activeKey={activeKey} onSelect={setActiveKey} style={{ width: 'auto', minHeight: "670px", height: "100hv", backgroundColor: "#006e74", marginTop: 8, borderRadius: 10 }}>
                                             <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>MNIT</Nav>
-                                            <Nav.Item eventKey="2" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobile_network_integration/gpl_audit_parse'); show(); setMenuButton(true) }}>
+                                            <Nav.Item eventKey="1" placement="rightStart" icon={<ChangeListIcon />} className="single-item-custom" onClick={() => { navigate('/tools/mobile_network_integration/gpl_audit_parse'); show(); setMenuButton(true) }}>
                                                 GPL Audit
                                             </Nav.Item>
-                                            <Nav.Item eventKey="3" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobile_network_integration/gpl_pre_post_audit'); show(); setMenuButton(true) }}>
+                                            <Nav.Item eventKey="2" placement="rightStart" icon={<ChangeListIcon />} className="single-item-custom" onClick={() => { navigate('/tools/mobile_network_integration/gpl_pre_post_audit'); show(); setMenuButton(true) }}>
                                                 GPL Audit Pre-Post
                                             </Nav.Item>
-                                            <Nav.Item eventKey="4" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobile_network_integration/script_generator'); show(); setMenuButton(true) }}>
+                                            <Nav.Item eventKey="3" placement="rightStart" icon={<ChangeListIcon />} className="single-item-custom" onClick={() => { navigate('/tools/mobile_network_integration/script_generator'); show(); setMenuButton(true) }}>
                                                 Script Generator
                                             </Nav.Item>
-                                            {/* <Nav.Menu eventKey="3" placement="rightStart" title="NOM Audit" icon={<DocPassIcon />}>
-                                                    <Nav.Item eventKey="3-1" placement="rightStart" onClick={() => { navigate('/tools/nomenclature_scriptor/nom_audit_dashboard'); show(); setMenuButton(true) }}>
-                                                        Dashboard
+                                            <Nav.Menu eventKey="2" placement="rightStart" className="menu-title-custom" title="Kget To GPL" icon={<DocPassIcon />}>
+                                                    <Nav.Item eventKey="2-1" placement="rightStart" className="single-item-custom" onClick={() => { navigate('/tools/mobile_network_integration/step1_comparsion'); show(); setMenuButton(true) }}>
+                                                        Step 1 - Comparsion
                                                     </Nav.Item>
-                                                    <Nav.Item eventKey="3-2" placement="rightStart" onClick={() => { navigate('/tools/nomenclature_scriptor/nom_audit'); show(); setMenuButton(true) }}>
-                                                        Pre-Post Audit
+                                                    <Nav.Item eventKey="2-2" placement="rightStart" className="single-item-custom" onClick={() => { navigate('/tools/mobile_network_integration/step2_scripting'); show(); setMenuButton(true) }}>
+                                                        Step 2 - Scripting
                                                     </Nav.Item>
-                                                </Nav.Menu> */}
-
-
+                                                </Nav.Menu>
                                         </Nav>
                                     </Sidenav.Body>
 
@@ -136,6 +137,8 @@ const GPL = () => {
                                 <Route element={<Gplauditparse />} path="/gpl_audit_parse" />
                                 <Route element={<GplPrePostAudit />} path="/gpl_pre_post_audit" />
                                 <Route element={<ScriptGenerator />} path="/script_generator" />
+                                <Route element={<Step1Comparsion />} path="/step1_comparsion" />
+                                <Route element={<Step2Scripting />} path="/step2_scripting" />
                                 {/* <Route element={<TestingGpl />} path="/testing_gpl" /> */}
 
 

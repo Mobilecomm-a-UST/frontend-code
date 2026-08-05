@@ -11,6 +11,7 @@ import FileUploadIcon from '@rsuite/icons/FileUpload';
 import ConversionIcon from '@rsuite/icons/Conversion';
 import Loader from '../../Skeleton/Loader';
 
+import './../../../App.css'
 
 const Upload = lazy(()=> import ('./Upload/Upload'))
 const AuditTool = lazy(()=> import('./Audit_EricssonTool'))
@@ -32,12 +33,12 @@ const Audit_Ericsson = () => {
                 <Grid container spacing={2}>
                     <Grid item xs={0} md={2} sx={{}}>
                         <Box style={{ position: 'fixed', width: '16.5%' }}>
-                            <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
+                            <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#006e74", marginTop: 8, borderRadius: 10 }}>
                                 <Sidenav.Body>
                                     <Nav activeKey={activeKey} onSelect={setActiveKey} >
                                         <Nav style={{ fontWeight: 550, color: 'white', textAlign: 'center', fontSize: 19 }}>Audit Ericsson</Nav>
                                    
-                                        <Nav.Item eventKey="1" placement="rightStart" icon={<FileUploadIcon />} onClick={() => navigate('/tools/ix_tools/ix_ericsson/ix_upload_er')}>
+                                        <Nav.Item eventKey="1" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/ix_ericsson/ix_upload_er')}>
                                             Upload Audit Ercisson
                                         </Nav.Item>
                                    

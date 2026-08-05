@@ -1,6 +1,6 @@
 import React, { useEffect, Suspense, lazy } from 'react'
 import { useState } from 'react'
-
+import './../../../App.css'
 import { Box } from '@mui/material'
 import { Grid } from '@mui/material'
 import { Sidenav, Nav } from 'rsuite';
@@ -93,7 +93,7 @@ const Microwave = () => {
                         {/* THIS VIEW FOR PC  */}
                         <Box sx={{ display: { xs: 'none', md: 'inherit' } }} >
                             <Box sx={{ position: 'fixed', width: '16.5%' }} >
-                                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
+                                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#006e74", marginTop: 8, borderRadius: 10 }}>
                                     <Sidenav.Body>
                                         <Nav activeKey={activeKey} onSelect={setActiveKey} >
                                             <Nav style={{ fontWeight: 500, color: 'white', textAlign: 'center', fontSize: 20 }}>Microwave Soft_At</Nav>
@@ -105,26 +105,26 @@ const Microwave = () => {
                                             {/* <Nav.Item eventKey="1" placement="rightStart" icon={<FolderIcon style={{}} />} onClick={() => { navigate('/tools/mobinet_vs_cats/file_manager'); show(); setMenuButton(true) }}>
                                                 File Manager
                                             </Nav.Item> */}
-                                            <Nav.Menu eventKey="1" placement="rightStart" title="Microwave AVIAT" icon={<BytedanceMicroappIcon size="3em" />}>
-                                                <Nav.Item eventKey="1-1" placement="rightStart" icon={<FileUploadIcon />} onClick={() => { navigate('/tools/microwave_soft_at/microwave_aviat_upload'); show(); setMenuButton(true) }}>
+                                            <Nav.Menu eventKey="1" placement="rightStart" title="Microwave AVIAT" className="menu-title-custom" icon={<BytedanceMicroappIcon size="3em" />}>
+                                                <Nav.Item eventKey="1-1" className="single-item-custom" placement="rightStart" icon={<FileUploadIcon />} onClick={() => { navigate('/tools/microwave_soft_at/microwave_aviat_upload'); show(); setMenuButton(true) }}>
                                                     Upload Files
                                                 </Nav.Item>
-                                                <Nav.Item eventKey="1-2" placement="rightStart" icon={<DashboardIcon />} onClick={() => { navigate('/tools/microwave_soft_at/microwave_aviat_table'); show(); setMenuButton(true) }}>
+                                                <Nav.Item eventKey="1-2" className="single-item-custom" placement="rightStart" icon={<DashboardIcon />} onClick={() => { navigate('/tools/microwave_soft_at/microwave_aviat_table'); show(); setMenuButton(true) }}>
                                                     Microwave(AVIAT) Dashboard
                                                 </Nav.Item>
                                             </Nav.Menu>
-                                            <Nav.Menu eventKey="2" placement="rightStart" title="Microwave Ceragon" icon={<BytedanceMicroappIcon size="3em" />}>
-                                                <Nav.Item eventKey="2-1" placement="rightStart" icon={<FileUploadIcon />} onClick={() => { navigate('/tools/microwave_soft_at/microwave_ceragon_upload'); show(); setMenuButton(true) }}>
+                                            <Nav.Menu eventKey="2" placement="rightStart" title="Microwave Ceragon" className="menu-title-custom" icon={<BytedanceMicroappIcon size="3em" />}>
+                                                <Nav.Item eventKey="2-1" className="single-item-custom" placement="rightStart" icon={<FileUploadIcon />} onClick={() => { navigate('/tools/microwave_soft_at/microwave_ceragon_upload'); show(); setMenuButton(true) }}>
                                                     Upload Files
                                                 </Nav.Item>
-                                                <Nav.Item eventKey="2-2" placement="rightStart" icon={<SendToDashboardIcon />} onClick={() => { navigate('/tools/microwave_soft_at/CeragonDashboard'); show(); setMenuButton(true) }}>
+                                                <Nav.Item eventKey="2-2" className="single-item-custom" placement="rightStart" icon={<SendToDashboardIcon />} onClick={() => { navigate('/tools/microwave_soft_at/CeragonDashboard'); show(); setMenuButton(true) }}>
                                                     Ceragon Dashboard
                                                 </Nav.Item>
                                                 {!userType.includes('microwave') && <>
-                                                    <Nav.Item eventKey="2-3" placement="rightStart" icon={<MenuIcon />} onClick={() => { navigate('/tools/microwave_soft_at/parameter'); show(); setMenuButton(true) }}>
+                                                    <Nav.Item eventKey="2-3" className="single-item-custom" placement="rightStart" icon={<MenuIcon />} onClick={() => { navigate('/tools/microwave_soft_at/parameter'); show(); setMenuButton(true) }}>
                                                         Parameter
                                                     </Nav.Item>
-                                                    <Nav.Item eventKey="2-4" placement="rightStart" icon={<AlipayMiniIcon />} onClick={() => { navigate('/tools/microwave_soft_at/ServerIP'); show(); setMenuButton(true) }}>
+                                                    <Nav.Item eventKey="2-4" className="single-item-custom" placement="rightStart" icon={<AlipayMiniIcon />} onClick={() => { navigate('/tools/microwave_soft_at/ServerIP'); show(); setMenuButton(true) }}>
                                                         Server IP
                                                     </Nav.Item>
 
