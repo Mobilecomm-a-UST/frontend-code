@@ -28,6 +28,7 @@ const ScriptGenerator = lazy(() => import('./ScriptGenerator/ScriptGen'));
 const TestingGpl = lazy(() => import('./Generate/GenrateGplState'))
 const Step1Comparsion = lazy(() => import('./Kget To GPL/Step1Comparsion'))
 const Step2Scripting = lazy(() => import('./Kget To GPL/Step2Scripting'))
+const BhartiGPLAudit = lazy(() => import('./Bharti GPL Audit/BhartiGPLAudit'))
 
 const GPL = () => {
     const [expanded, setExpanded] = useState(true);
@@ -113,6 +114,10 @@ const GPL = () => {
                                             <Nav.Item eventKey="3" placement="rightStart" icon={<ChangeListIcon />} className="single-item-custom" onClick={() => { navigate('/tools/mobile_network_integration/script_generator'); show(); setMenuButton(true) }}>
                                                 Script Generator
                                             </Nav.Item>
+                                             <Nav.Item eventKey="4" placement="rightStart" icon={<ChangeListIcon />} className="single-item-custom" onClick={() => { navigate('/tools/mobile_network_integration/bharti_gpl_audit'); show(); setMenuButton(true) }}>
+                                                Bharti GPL Audit
+                                            </Nav.Item>
+
                                             <Nav.Menu eventKey="2" placement="rightStart" className="menu-title-custom" title="Kget To GPL" icon={<DocPassIcon />}>
                                                     <Nav.Item eventKey="2-1" placement="rightStart" className="single-item-custom" onClick={() => { navigate('/tools/mobile_network_integration/step1_comparsion'); show(); setMenuButton(true) }}>
                                                         Step 1 - Comparsion
@@ -139,6 +144,7 @@ const GPL = () => {
                                 <Route element={<ScriptGenerator />} path="/script_generator" />
                                 <Route element={<Step1Comparsion />} path="/step1_comparsion" />
                                 <Route element={<Step2Scripting />} path="/step2_scripting" />
+                                <Route element={<BhartiGPLAudit />} path="/bharti_gpl_audit" />
                                 {/* <Route element={<TestingGpl />} path="/testing_gpl" /> */}
 
 
