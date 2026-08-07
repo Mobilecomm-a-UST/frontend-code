@@ -38,6 +38,7 @@ import BlurOnOutlinedIcon from '@mui/icons-material/BlurOnOutlined';
 import DeblurOutlinedIcon from '@mui/icons-material/DeblurOutlined';
 import LogIcon from '@rsuite/icons/Log';
 import OperatePeopleIcon from '@rsuite/icons/OperatePeople';
+import DraftRoundIcon from '@rsuite/icons/DraftRound';
 
 
 
@@ -478,8 +479,19 @@ const ToolData = [
         link: '/tools/log_s',
         groupBy: ['admin',"log"]
     },
+
+     {
+        id: 44,
+        name: 'Baseband Reqrmt',
+        title: 'Baseband Requirement System',
+        icons: DraftRoundIcon,
+        fullname: 'Baseband Requirement',
+        link: '/tools/baseband_requirement',
+        groupBy: ['admin','BR_Admin',"BR"]
+    },
+
     //  {
-    //     id: 44,
+    //     id: 45,
     //     name: 'Performance',
     //     title: 'This is Performance New System',
     //     icons: OperatePeopleIcon,
@@ -487,6 +499,7 @@ const ToolData = [
     //     link: '/tools/performance_new',
     //     groupBy: ['admin',"performance_n"]
     // },
+
     
 ]
 

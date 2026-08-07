@@ -56,7 +56,7 @@ const MDPTool = () => {
 
     }, [])
     return (
-        <div style={{ backgroundColor: '#FBEEE6'}}>
+        <div style={{ backgroundColor: ''}}>
 
             <Box style={{ padding: "15px", marginTop: '60px' }}>
                 <Box sx={{ display: "flex", justifyContent: 'center' }}>
@@ -67,7 +67,7 @@ const MDPTool = () => {
                             fontFamily: "sans-serif",
                             fontSize: "25px",
                             fontWeight: 600,
-                            backgroundColor: "#223354",
+                            backgroundColor: "#006e74",
                             color: "#ffffff",
                             borderRadius: "20px",
                             width: "90%",

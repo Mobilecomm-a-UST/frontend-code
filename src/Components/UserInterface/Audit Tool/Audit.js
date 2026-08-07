@@ -60,7 +60,7 @@ const Audit = () => {
         borderRadius: 3,
         boxShadow: "-10px -10px 15px rgba(255,255,255,0.4),10px 10px 15px rgba(70,70,70,0.15)",
         textShadow: '2px 2px 4px #ffffff',
-        color: '#223354',
+        color: '#006e74',
         // border:"1px solid black"
     }
 
@@ -69,7 +69,7 @@ const Audit = () => {
 
     },[])
   return (
-    <div style={{ backgroundColor: '#FBEEE6' }}>
+    <div style={{ backgroundColor: '' }}>
 
             <Box style={{ padding: "15px", marginTop: '60px' }}>
                 <Box sx={{ display: "flex", justifyContent: 'center' }}>
@@ -80,7 +80,7 @@ const Audit = () => {
                             fontFamily: "sans-serif",
                             fontSize: "25px",
                             fontWeight: 600,
-                            backgroundColor: "#223354",
+                            backgroundColor: "#006e74",
                             color: "#ffffff",
                             borderRadius: "20px",
                             width: "90%",
