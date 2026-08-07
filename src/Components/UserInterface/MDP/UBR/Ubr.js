@@ -11,6 +11,8 @@ import FileUploadIcon from '@rsuite/icons/FileUpload';
 import Slide from '@mui/material/Slide';
 import Loader from '../../../Skeleton/Loader'
 
+import './../../../../App.css'
+
 // import MDPTool from './MDPTool';
 // import OverAll from './Dashboard/OverAll'
 const OverAll = lazy(() => import('./Dashboard/OverAll'))
@@ -36,7 +38,7 @@ const Ubr = () => {
                     <Grid item xs={0} md={2} sx={{}}>
                         <Box sx={{ display: { xs: 'none', md: 'inherit' } }} >
                             <Box sx={{ position: 'fixed', width: '16.5%' }} >
-                                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#223354", marginTop: 70, borderRadius: 10 }}>
+                                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#006e74", marginTop: 70, borderRadius: 10 }}>
                                     <Sidenav.Body>
                                         <Nav activeKey={activeKey} onSelect={setActiveKey} >
                                             <Nav style={{ fontWeight: 500, color: 'white', textAlign: 'center', fontSize: 20 }}>MDP UBR</Nav>
@@ -48,13 +50,13 @@ const Ubr = () => {
 
                   </Nav.Menu> */}
 
-                                            <Nav.Item eventKey="1" placement="rightStart" icon={<DashboardIcon />} onClick={() => navigate('/tools/mdp/ubr/over_all')} >
+                                            <Nav.Item eventKey="1" placement="rightStart" className="single-item-custom" icon={<DashboardIcon />} onClick={() => navigate('/tools/mdp/ubr/over_all')} >
                                                 Over All
                                             </Nav.Item>
-                                            <Nav.Item eventKey="2" placement="rightStart" icon={<DashboardIcon />} onClick={() => navigate('/tools/mdp/ubr/dashboard')} >
+                                            <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={<DashboardIcon />} onClick={() => navigate('/tools/mdp/ubr/dashboard')} >
                                                 Dashboard
                                             </Nav.Item>
-                                            <Nav.Item eventKey="3" placement="rightStart" icon={<FileUploadIcon />} onClick={() => navigate('/tools/mdp/ubr/upload_data')} >
+                                            <Nav.Item eventKey="3" placement="rightStart" className="single-item-custom" icon={<FileUploadIcon />} onClick={() => navigate('/tools/mdp/ubr/upload_data')} >
                                                 Upload Excel
                                             </Nav.Item>
 

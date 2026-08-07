@@ -30,20 +30,20 @@ const G2Audit = () => {
                     <Slide direction="down" in={true} timeout={800} mountOnEnter unmountOnExit>
                         <Grid item xs={0} md={2} sx={{}}>
                             <div style={{ position: 'fixed' ,width:'16%'}}>
-                                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100hv", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
+                                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100hv", backgroundColor: "#006e74", marginTop: 8, borderRadius: 10 }}>
                                     <Sidenav.Body>
                                         <Nav activeKey={activeKey} onSelect={setActiveKey} >
                                             <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>2G Audit</Nav>
 
-                                            <Nav.Item eventKey="1" placement="rightStart" icon={<AbTestIcon />} onClick={() => navigate('/tools/audit/2G_audit/haryana')} >
+                                            <Nav.Item eventKey="1" placement="rightStart" icon={<AbTestIcon />} className="single-item-custom" onClick={() => navigate('/tools/audit/2G_audit/haryana')} >
                                             Haryana (HRY)
                                             </Nav.Item>
                                             
-                                            <Nav.Item eventKey="2" title='Kolkata' placement="rightStart" icon={<AbTestIcon />} onClick={() => navigate('/tools/audit/2G_audit/kolkata')} >
+                                            <Nav.Item eventKey="2" title='Kolkata' placement="rightStart" icon={<AbTestIcon />} className="single-item-custom" onClick={() => navigate('/tools/audit/2G_audit/kolkata')} >
                                             Kolkata (KOL)
                                             </Nav.Item>
 
-                                            <Nav.Item eventKey="3" title='Kolkata' placement="rightStart" icon={<AbTestIcon />} onClick={() => navigate('/tools/audit/2G_audit/punjab')} >
+                                            <Nav.Item eventKey="3" title='Kolkata' placement="rightStart" icon={<AbTestIcon />} className="single-item-custom" onClick={() => navigate('/tools/audit/2G_audit/punjab')} >
                                             Punjab (PB)
                                             </Nav.Item>
                                         </Nav>

@@ -9,6 +9,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AbTestIcon from '@rsuite/icons/AbTest';
 import Slide from '@mui/material/Slide';
 import Loader from '../../../Skeleton/Loader'
+import './../../../../App.css'
 
 const FDDTool = lazy(() => import('./FDDTool'))
 const Comparison = lazy(() => import('./Comperison/Comperison'))
@@ -29,19 +30,12 @@ const FDD = () => {
                     <Slide direction="down" in={true} timeout={800} mountOnEnter unmountOnExit>
                         <Grid item xs={0} md={2} sx={{}}>
                             <div style={{ position: 'fixed' ,width:'16%'}}>
-                                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100hv", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
+                                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100hv", backgroundColor: "#006e74", marginTop: 8, borderRadius: 10 }}>
                                     <Sidenav.Body>
                                         <Nav activeKey={activeKey} onSelect={setActiveKey} >
                                             <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>Audit FDD</Nav>
 
-                                            {/* <Nav.Menu eventKey="1" placement="rightStart" title="Dashboard" icon={<DashboardIcon size="3em"/>} >
-              <Nav.Item eventKey='1-1' placement="rightStart"  onClick={() => navigate('/tools/physical_at/dashboard')}>
-                Ageing(Circle Wise)
-              </Nav.Item>
-
-          </Nav.Menu> */}
-
-                                            <Nav.Item eventKey="1" placement="rightStart" icon={<AbTestIcon />} onClick={() => navigate('/tools/audit/FDD/comperison')} >
+                                            <Nav.Item eventKey="1" placement="rightStart" className="single-item-custom" icon={<AbTestIcon />} onClick={() => navigate('/tools/audit/FDD/comperison')} >
                                                 Comparison
                                             </Nav.Item>
 

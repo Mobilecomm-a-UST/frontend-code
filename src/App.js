@@ -76,6 +76,7 @@ const WccGenerate = lazy(()=> import('./Components/UserInterface/WCC Generate/Wc
 // const PerformanceNew = lazy(()=> import('./Components/UserInterface/Performance New/PerformanceAt'))
 const Logs = lazy(()=>import('./Components/UserInterface/Logs/Logs'))
 const LogsTool = lazy(()=>import('./Components/UserInterface/Logs Tools/LogsTool'))
+const BasebandRequirement = lazy(()=>import('./Components/UserInterface/Baseband Requirement/BasebandRequirement'))
 
 
 
@@ -456,6 +457,12 @@ function App() {
                 <ProtectedRoute element={PerformanceNew} allowedUserTypes={['admin', 'PN','PN_Admin']} userType={userType} />
               </Suspense>
             } /> */}
+
+             <Route path="/tools/baseband_requirement/*" element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProtectedRoute element={BasebandRequirement} allowedUserTypes={['admin', 'BR_Admin','BR']} userType={userType} />
+              </Suspense>
+            } />
 
 
           </Routes>
