@@ -13,16 +13,15 @@ const ResourceTable = () => {
     const YEARS = Array.from({ length: CURRENT_YEAR - START_YEAR + 1 },(_, i) => String(START_YEAR + i));
     const MONTHSLIST = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
     const CURRENT_MONTH =`${MONTHSLIST[new Date().getMonth()]}-${String(CURRENT_YEAR).slice(-2)}`;
+    const MONTHS = [ "Jan-26", "Feb-26", "Mar-26", "Apr-26", "May-26", "Jun-26", "Jul-26", "Aug-26", "Sep-26", "Oct-26", "Nov-26", "Dec-26", ];
 
-    const [MONTHS,setMONTHS] = useState(["Jan-26","Feb-26","Mar-26","Apr-26","May-26","Jun-26","Jul-26"]);
 
     const [analyticsData, setAnalyticsData] = useState([]);
-    const [selectedCost, setSelectedCost] = useState("");
-    const [filterCircle, setFilterCircle] = useState("");
     const [openMemberModal, setOpenMemberModal] = useState(false);
     const [selectedMembers, setSelectedMembers] = useState([]);
     const [selectedRole, setSelectedRole] = useState("");
     const [viewType, setViewType] = useState("circle");
+    const [month, setMonth] = useState(CURRENT_MONTH);
 
 
     const Table_Header = [
@@ -101,11 +100,11 @@ const ResourceTable = () => {
 
 
     useEffect(() => {
-        axios.get(`https://commtoolapi.mcpspmis.com/resource-table/?month=Jul-26`)
+        axios.get(`https://commtoolapi.mcpspmis.com/resource-table/?month=${month}`)
             .then(res => {
                 setAnalyticsData(res.data);
             });
-    }, []);
+    }, [month]);
 
 
 
@@ -454,6 +453,22 @@ const ResourceTable = () => {
             <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:12, padding:"8px 12px", background:"#f5f5f0", border:"0.5px solid #ddd", borderRadius:8 }}>
                 <div style={{ borderRadius:6, background:CAT_COLOR, display:"inline-flex", alignItems:"center", padding: "6px 10px", justifyContent:"center", color:"#fff", fontWeight:700, fontSize:16 }}>Total Members - {totalResources}</div>
                 <div style={{marginLeft:"auto",display: "flex", gap: 8 }}>
+
+                    <select
+                        value={month}
+                        onChange={(e) => setMonth(e.target.value)}
+                        style={{
+                            padding: "8px 14px",
+                            borderRadius: 8,
+                            border: "1px solid #ddd",
+                            fontSize: 13
+                        }}
+                    >
+                        {
+                            MONTHS.map(m => <option key={m} value={m} >{m}</option> )
+                        }
+                    </select>
+
                     <select
                         value={viewType}
                         onChange={e => setViewType(e.target.value)}
