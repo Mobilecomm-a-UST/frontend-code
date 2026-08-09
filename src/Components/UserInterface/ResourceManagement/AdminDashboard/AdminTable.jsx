@@ -3,11 +3,8 @@ import { getDecreyptedData } from '../../../utils/localstorage';
 import axios from 'axios';
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
-import AdminTableChart from "./AdminTableChart";
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend, Filler, } from "chart.js";
-import { Line } from "react-chartjs-2";
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend, Filler);
 
 const CATEGORY_CONFIG = {
     A: {
@@ -368,75 +365,6 @@ const AdminTable = () => {
         );
     };
 
-    const chartOptions = {
-        responsive: true,
-        maintainAspectRatio: false,
-        interaction: {
-            mode: "index",
-            intersect: false,
-        },
-        plugins: {
-            legend: {
-                position: "top",
-                labels: {
-                    usePointStyle: true,
-                    padding: 18,
-                    font: {
-                        size: 11,
-                        weight: "600",
-                    },
-                },
-            },
-
-            tooltip: {
-                callbacks: {
-                    label: (context) => {
-                        const value = context.raw;
-                        return `${context.dataset.label}: ${formatAmount(value)}`;
-                    },
-                },
-            },
-        },
-
-        scales: {
-            x: {
-                grid: {
-                    display: false,
-                },
-                ticks: {
-                    font: {
-                        size: 10,
-                    },
-                },
-            },
-
-            y: {
-                beginAtZero: false,
-                grid: {
-                    color: "rgba(0,0,0,0.08)",
-                },
-                ticks: {
-                    font: {
-                        size: 10,
-                    },
-                    callback: (value) => {
-                        const absValue = Math.abs(value);
-                        if (absValue >= 10000000) {
-                            return `₹ ${(value / 10000000).toFixed(1)} Cr`;
-                        }
-
-                        if (absValue >= 100000) {
-                            return `₹ ${(value / 100000).toFixed(1)} L`;
-                        }
-                        if (absValue >= 1000) {
-                            return `₹ ${(value / 1000).toFixed(0)}K`;
-                        }
-                        return `₹ ${value}`;
-                    },
-                },
-            },
-        },
-    };
 
 
 
