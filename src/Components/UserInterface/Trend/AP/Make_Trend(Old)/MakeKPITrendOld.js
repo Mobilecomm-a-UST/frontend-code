@@ -22,8 +22,9 @@ useEffect(()=>{
     <div style={{margin:10}}>
     <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small"/>}>
         <Link underline="hover" href='/tools'>Tools</Link>
-        <Link underline="hover" href='/trends'>Trend</Link>
-        <Link underline="hover" href='/trends/ap'>AP</Link>
+        <Link underline="hover" href='/tools/quality_team'>Quality Team</Link>
+        <Link underline="hover" href='/tools/quality_team/trends'>Trends</Link>
+         <Link underline="hover" href='/tools/quality_team/trends/ap'>AP</Link>
         <Typography color='text.primary'>Make Trend(old)</Typography>
        </Breadcrumbs>
     </div>
@@ -34,8 +35,8 @@ useEffect(()=>{
             </Box>
             <Box style={{display:'flex',justifyContent:'center'}}>
             <Stack spacing={4} sx={{ marginTop: "-40px",textAlign:'center' }} direction={{xs:'column',md:'row',sm:'column'}}>
-                <Box><Button variant="contained" style={{width:200}} onClick={()=>{navigate('/trends/ap/make_kpi_trend_old/2G')}}><span style={{fontSize:20,fontWeight:'bold'}}>For 2G</span></Button></Box>
-                <Box><Button variant="contained" style={{width:200}} onClick={()=>{navigate('/trends/ap/make_kpi_trend_old/4G')}}><span style={{fontSize:20,fontWeight:'bold'}}>For 4G</span></Button></Box>
+                <Box><Button variant="contained" style={{width:200}} onClick={()=>{navigate('/tools/quality_team/trends/ap/make_kpi_trend_old/2G')}}><span style={{fontSize:20,fontWeight:'bold'}}>For 2G</span></Button></Box>
+                <Box><Button variant="contained" style={{width:200}} onClick={()=>{navigate('/tools/quality_team/trends/ap/make_kpi_trend_old/4G')}}><span style={{fontSize:20,fontWeight:'bold'}}>For 4G</span></Button></Box>
             </Stack>
             </Box>
         </Box>

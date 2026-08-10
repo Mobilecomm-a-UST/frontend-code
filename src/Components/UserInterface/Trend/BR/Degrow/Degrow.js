@@ -179,8 +179,10 @@ const Degrow = () => {
                         separator={<KeyboardArrowRightIcon fontSize="small" />}
                     >
                         <Link underline="hover" href='/tools'>Tools</Link>
-                        <Link underline="hover" href='/trends'>Trend</Link>
-                        <Link underline="hover" href='/trends/br'>BR</Link>
+                               <Link underline="hover" href='/tools/quality_team'>Quality Team</Link>
+                               <Link underline="hover" href='/tools/quality_team/trends'>Trends</Link>
+                                <Link underline="hover" href='/tools/quality_team/trends/br'>Br</Link>
+                        
                         <Typography color='text.primary'>Degrow</Typography>
                     </Breadcrumbs>
                 </div>

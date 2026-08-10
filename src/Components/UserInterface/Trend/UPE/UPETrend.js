@@ -44,7 +44,7 @@ const UPETrend = () => {
                                 >2G
                                 </Nav.Item> */}
                                                 <Nav.Item eventKey="1-2"
-                                                    className="single-item-custom" onClick={() => navigate('/trends/upe/degrow')}
+                                                    className="single-item-custom" onClick={() => navigate('degrow')}
                                                 >Degrow
                                                 </Nav.Item>
                                             </Nav.Menu>

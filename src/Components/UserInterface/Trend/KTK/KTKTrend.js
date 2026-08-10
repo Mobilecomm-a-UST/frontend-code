@@ -42,9 +42,9 @@ const KTKTrend = () => {
                                 >4G
                                 </Nav.Item>
                             </Nav.Menu> */}
-                                            <Nav.Item eventKey='1' placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/trends/ktk/make_kpi_trend_old')}>Make Trend(Old)</Nav.Item>
-                                            <Nav.Item eventKey='2' placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/trends/ktk/make_kpi_trend_new')}>Make Trend(New)</Nav.Item>
-                                            <Nav.Item eventKey='3' placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/trends/ktk/make_degrow')}>Make Degrow</Nav.Item>
+                                            <Nav.Item eventKey='1' placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('make_kpi_trend_old')}>Make Trend(Old)</Nav.Item>
+                                            <Nav.Item eventKey='2' placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('make_kpi_trend_new')}>Make Trend(New)</Nav.Item>
+                                            <Nav.Item eventKey='3' placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('make_degrow')}>Make Degrow</Nav.Item>
                                         </Nav>
                                     </Sidenav.Body>
                                 </Sidenav>

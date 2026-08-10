@@ -44,17 +44,17 @@ function HRTrend() {
 
             </Nav.Menu> */}
                       <Nav.Item eventKey="1" placement="rightStart" icon={<FileUploadIcon />}
-                        className="single-item-custom" onClick={() => navigate('/trends/hr/make_kpi_trend_old')}
+                        className="single-item-custom" onClick={() => navigate('make_kpi_trend_old')}
                       >
                         Make Trend(Old)
                       </Nav.Item>
                       <Nav.Item eventKey="2" placement="rightStart" icon={<FileUploadIcon />}
-                        className="single-item-custom" onClick={() => navigate('/trends/hr/degrow')}
+                        className="single-item-custom" onClick={() => navigate('degrow')}
                       >
                         Make Degrow
                       </Nav.Item>
                       <Nav.Item eventKey="3" placement="rightStart" icon={<FileUploadIcon />}
-                        className="single-item-custom" onClick={() => navigate('/trends/hr/degrow_v2')}
+                        className="single-item-custom" onClick={() => navigate('degrow_v2')}
                       >
                         Make Degrow V2
                       </Nav.Item>

@@ -218,9 +218,11 @@ else{
         <div>
         <div style={{ margin: 10, marginLeft: 10 }}>
           <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
-            <Link underline="hover" href='/tools'>Tools</Link>
-            <Link underline="hover" href='/trends'>Trend</Link>
-            <Link underline="hover" href='/trends/wb_kol'>WB/KOL</Link>
+             <Link underline="hover" href='/tools'>Tools</Link>
+                        <Link underline="hover" href='/tools/quality_team'>Quality Team</Link>
+                        <Link underline="hover" href='/tools/quality_team/trends'>Trends</Link>
+                        <Link underline="hover" href='/tools/quality_team/trends/wb_kol'>WB/KOL</Link>
+          
             <Typography color='text.primary'>Make Degrow</Typography>
           </Breadcrumbs>
       </div>

@@ -49,10 +49,10 @@ function RJTrend() {
                Make Trend
             </Nav.Item> */}
                       <Nav.Menu activeKey="2" icon={<FileUploadIcon />} className="menu-title-custom" title="Make Trend">
-                        <Nav.Item eventKey="2-1" className="single-item-custom" onClick={() => navigate('/trends/rj/kpi_trend_2G')}>
+                        <Nav.Item eventKey="2-1" className="single-item-custom" onClick={() => navigate('kpi_trend_2G')}>
                           Trend 2G
                         </Nav.Item>
-                        <Nav.Item eventKey="2-2" className="single-item-custom" onClick={() => navigate('/trends/rj/kpi_trend_4G')} >
+                        <Nav.Item eventKey="2-2" className="single-item-custom" onClick={() => navigate('kpi_trend_4G')} >
                           Trend 4G
                         </Nav.Item>
                       </Nav.Menu>

@@ -52,12 +52,12 @@ function BRTrend() {
 {/* style={{ fontWeight: 400, color: 'white' }} placement="leftStart"  */}
                       <Nav.Menu placement="rightStart" eventKey="1" className="menu-title-custom" title="Make Trend" icon={<FileUploadIcon />}>
 
-                        <Nav.Item eventKey="1-1" className="single-item-custom" onClick={() => navigate('/trends/br/macro')}>Macro</Nav.Item>
-                        <Nav.Item eventKey="1-2" className="single-item-custom" onClick={() => navigate('/trends/br/small_cell')}>Small Cell</Nav.Item>
+                        <Nav.Item eventKey="1-1" className="single-item-custom" onClick={() => navigate('macro')}>Macro</Nav.Item>
+                        <Nav.Item eventKey="1-2" className="single-item-custom" onClick={() => navigate('small_cell')}>Small Cell</Nav.Item>
 
 
                       </Nav.Menu>
-                      <Nav.Item eventKey="2" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/trends/br/degrow')}>
+                      <Nav.Item eventKey="2" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('degrow')}>
                         Degrow
                       </Nav.Item>
 

@@ -19,16 +19,15 @@ import { use } from 'react';
 import Loader from '../../Skeleton/Loader';
 import FileUploadIcon from '@rsuite/icons/FileUpload';
 import SendToDashboardIcon from '@rsuite/icons/SendToDashboard';
+import { Alarm } from '@mui/icons-material';
 
 
 
-const BasebandTool = lazy(() => import("./BasebandTool"));
-const UploadFile = lazy(() => import("./BasebandUpload"));
-const Dashboard = lazy(() => import("./Dashboard"));
+const AlarmLogsTool = lazy(() => import("./AlarmLogsTool"));
+const AlarmLogUpload = lazy(() => import("./AlarmLog/AlarmLogUpload"));
 
 
-
-const BasebandRequirement = () => {
+const AlarmLogs = () => {
     const [expanded, setExpanded] = useState(true);
         const [activeKey, setActiveKey] = useState();
         const [states, setStates] = useState(60)
@@ -62,11 +61,11 @@ const BasebandRequirement = () => {
                                 <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#006e74", marginTop: 8, borderRadius: 10 }}>
                                     <Sidenav.Body>
                                         <Nav activeKey={activeKey} onSelect={setActiveKey} >
-                                            <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>Baseband Requirement</Nav>
+                                            <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>Alarm Logs</Nav>
                                             <Divider component="li" sx={{ backgroundColor: 'white' }} />
         
 
-                                              <Nav.Item eventKey="1" placement="rightStart" className="single-item-custom" icon={< FileUploadIcon style={{}} />} onClick={() => { navigate('/tools/baseband_requirement/uploadfile'); show(); setMenuButton(true) }}>
+                                              <Nav.Item eventKey="1" placement="rightStart" className="single-item-custom" icon={< FileUploadIcon style={{}} />} onClick={() => { navigate('/tools/quality_team/alarm_logs/AlarmLogUpload'); show(); setMenuButton(true) }}>
                                                         Upload File
                                             </Nav.Item> 
 
@@ -85,9 +84,14 @@ const BasebandRequirement = () => {
 
                         <Suspense fallback={<Loader/>}>
                             <Routes>
-                               <Route path="/" element={<BasebandTool />} />
-                                <Route path="/uploadfile" element={<UploadFile />} />
-                                <Route path="/dashboard" element={<Dashboard />} />
+                               <Route path="/" element={<AlarmLogsTool />} />
+                               <Route path="/AlarmLogUpload" element={<AlarmLogUpload />} />
+
+
+
+
+                                {/* <Route path="/uploadfile" element={<UploadFile />} />
+                                <Route path="/dashboard" element={<Dashboard />} /> */}
                                 
 
                               {/* {userTypes?.includes('ran_admin') && 
@@ -107,4 +111,4 @@ const BasebandRequirement = () => {
     )
 }
 
-export default BasebandRequirement
+export default AlarmLogs

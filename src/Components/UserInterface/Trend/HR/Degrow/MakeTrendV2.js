@@ -177,9 +177,11 @@ const MakeTrendV2 = () => {
       <div>
         <div style={{ margin: 10, marginLeft: 10 }}>
           <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
-            <Link underline="hover" href='/tools'>Tools</Link>
-            <Link underline="hover" href='/tools/others'>Others</Link>
-            <Link underline="hover" href='/tools/others/de-grow'>Degrow</Link>
+           <Link underline="hover" href='/tools'>Tools</Link>
+                  <Link underline="hover" href='/tools/quality_team'>Quality Team</Link>
+                  <Link underline="hover" href='/tools/quality_team/trends'>Trends</Link>
+                   <Link underline="hover" href='/tools/quality_team/trends/hr'>HR</Link>
+           
             <Typography color='text.primary'>Make Trend V2</Typography>
           </Breadcrumbs>
         </div>

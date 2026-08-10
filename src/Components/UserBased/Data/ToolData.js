@@ -39,7 +39,8 @@ import DeblurOutlinedIcon from '@mui/icons-material/DeblurOutlined';
 import LogIcon from '@rsuite/icons/Log';
 import OperatePeopleIcon from '@rsuite/icons/OperatePeople';
 import DraftRoundIcon from '@rsuite/icons/DraftRound';
-
+import BytedanceIcon from '@rsuite/icons/Bytedance';
+import WidgetsIcon from '@mui/icons-material/Widgets';
 
 
 import { groupBy } from 'lodash';
@@ -489,6 +490,16 @@ const ToolData = [
         link: '/tools/baseband_requirement',
         groupBy: ['admin','BR_Admin',"BR"]
     },
+
+    //  {
+    //     id: 45,
+    //     name: 'Quality Team',
+    //     title: 'Quality Team System',
+    //     icons: WidgetsIcon,
+    //     fullname: 'Quality Team',
+    //     link: '/tools/quality_team',
+    //     groupBy: ['admin','QT_Admin',"QT",'QT_AL','quality', 'quality-s', 'trend_tool']
+    // },
 
     //  {
     //     id: 45,

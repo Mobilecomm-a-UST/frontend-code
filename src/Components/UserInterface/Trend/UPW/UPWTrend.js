@@ -38,7 +38,7 @@ const UPWTrend = () => {
                                 >2G
                                 </Nav.Item> */}
                                                 <Nav.Item eventKey="1-2"
-                                                    className="single-item-custom" onClick={() => navigate('/trends/upw/kpi_4G')}
+                                                    className="single-item-custom" onClick={() => navigate('kpi_4G')}
                                                 >4G
                                                 </Nav.Item>
 

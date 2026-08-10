@@ -28,9 +28,9 @@ function MakeKPITrend() {
   const [show, setShow] = useState(false);
   const [showSite, setShowSite] = useState(false);
   const [site, setSite] = useState([])
-  const [integratSite , setIntegratSite] = useState()
-  const [unintegratSite , setUnintegratSite] = useState([])
-  const [mycommData , setMycommData] = useState([])
+  const [integratSite, setIntegratSite] = useState()
+  const [unintegratSite, setUnintegratSite] = useState([])
+  const [mycommData, setMycommData] = useState([])
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const classes = OverAllCss();
@@ -77,7 +77,7 @@ function MakeKPITrend() {
     setPdate([year, month, day].join('-'))
   }
 
-// ########## FETCH DORPDOWN SITE LIST ##########
+  // ########## FETCH DORPDOWN SITE LIST ##########
   const fetchSiteList = async () => {
     const response = await getData('Original_trend/tnch/integrated_sites')
 
@@ -94,7 +94,7 @@ function MakeKPITrend() {
   useEffect(() => {
     todayDate();
     pastDate();
-    document.title=`${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/',' | ').toUpperCase()}`
+    document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
     fetchSiteList();
   }, [])
 
@@ -114,34 +114,31 @@ function MakeKPITrend() {
     setSiteOpen(false);
   };
 
-  const integrateList=()=>
-  {
-    return(
-         integratSite?.map((item)=>
-    (
-        <div style={{fontWeight:600,fontSize:17}}>{item}</div>
-    )
-    )
-    )
-  }
-  const nonintegrateList=()=>
-  {
-    return(
-         unintegratSite?.map((item)=>
-    (
-        <div style={{fontWeight:600,fontSize:17}}>{item}</div>
-    )
-    )
+  const integrateList = () => {
+    return (
+      integratSite?.map((item) =>
+      (
+        <div style={{ fontWeight: 600, fontSize: 17 }}>{item}</div>
+      )
+      )
     )
   }
-  const refMyCommData=()=>
-  {
-    return(
-         mycommData?.map((item)=>
-    (
-        <div style={{fontWeight:600,fontSize:17}}>{item}</div>
+  const nonintegrateList = () => {
+    return (
+      unintegratSite?.map((item) =>
+      (
+        <div style={{ fontWeight: 600, fontSize: 17 }}>{item}</div>
+      )
+      )
     )
-    )
+  }
+  const refMyCommData = () => {
+    return (
+      mycommData?.map((item) =>
+      (
+        <div style={{ fontWeight: 600, fontSize: 17 }}>{item}</div>
+      )
+      )
     )
   }
 
@@ -168,20 +165,20 @@ function MakeKPITrend() {
             <Box style={{ fontSize: '25px', fontFamily: 700 }}>Not Reflecting In Integrated Sites</Box>
             <Box style={{ minWidth: '400px', minHeight: '100px', maxWidth: 'auto', maxHeight: 'auto', border: '2px solid black' }}>
               <Box >
-               {unintegratSite.length != 0?<Box style={{ display: 'grid', gridTemplateColumns: 'auto auto auto auto' }}>{nonintegrateList()}</Box>:<Box style={{color:'green',fontSize:20,marginTop:'20px'}}>.............</Box>}
+                {unintegratSite.length != 0 ? <Box style={{ display: 'grid', gridTemplateColumns: 'auto auto auto auto' }}>{nonintegrateList()}</Box> : <Box style={{ color: 'green', fontSize: 20, marginTop: '20px' }}>.............</Box>}
               </Box>
             </Box>
             <Box style={{ fontSize: '25px', fontFamily: 700 }}>not reflectig in MyCom data</Box>
             <Box style={{ minWidth: '400px', minHeight: '100px', maxWidth: 'auto', maxHeight: 'auto', border: '2px solid black' }}>
               <Box >
-               {mycommData.length != 0?<Box style={{ display: 'grid', gridTemplateColumns: 'auto auto auto auto' }}>{refMyCommData()}</Box>:<Box style={{color:'green',fontSize:20,marginTop:'20px'}}>.............</Box>}
+                {mycommData.length != 0 ? <Box style={{ display: 'grid', gridTemplateColumns: 'auto auto auto auto' }}>{refMyCommData()}</Box> : <Box style={{ color: 'green', fontSize: 20, marginTop: '20px' }}>.............</Box>}
               </Box>
             </Box>
 
           </Box>
           <Box textAlign={'center'} style={{ marginTop: "10px", display: 'flex', justifyContent: 'space-between' }}>
-            <Button variant="contained" color="primary" endIcon={<CachedIcon />} onClick={()=>{handleProcessing();setSiteOpen(false)}}>PROCEED</Button>
-            <Button variant="contained" color="error" endIcon={<DoDisturbIcon />} onClick={()=>{setSiteOpen(false)}}>cancel</Button>
+            <Button variant="contained" color="primary" endIcon={<CachedIcon />} onClick={() => { handleProcessing(); setSiteOpen(false) }}>PROCEED</Button>
+            <Button variant="contained" color="error" endIcon={<DoDisturbIcon />} onClick={() => { setSiteOpen(false) }}>cancel</Button>
           </Box>
         </DialogContent>
       </Dialog>
@@ -234,47 +231,46 @@ function MakeKPITrend() {
       }
     }
   };
-  const cancellAPI=()=>{
+  const cancellAPI = () => {
     setOpen(false)
     abortController.abort()
   }
 
 
   // ###### AFTER PROCESSING ########
-  const handleProcessing=async()=>
-  {
+  const handleProcessing = async () => {
 
     setOpen(true)
-      var formData = new FormData();
-      formData.append("site_list", siteList.bytes);
-      formData.append("site", site);
-      formData.append("from_date", pdate);
-      formData.append("to_date", tdate);
+    var formData = new FormData();
+    formData.append("site_list", siteList.bytes);
+    formData.append("site", site);
+    formData.append("from_date", pdate);
+    formData.append("to_date", tdate);
 
 
-      const response = await postData('Original_trend/tnch/KpiTrend/?check=False', formData)
-      sessionStorage.setItem('makekpitrend', JSON.stringify(response));
-      console.log('response processing data:', response)
+    const response = await postData('Original_trend/tnch/KpiTrend/?check=False', formData)
+    sessionStorage.setItem('makekpitrend', JSON.stringify(response));
+    console.log('response processing data:', response)
 
-      if (response.status) {
-        setOpen(false);
-        Swal.fire({
-          icon: "success",
-          title: "Done",
-          text: `${response.message}`,
-        });
-        navigate('/trends/tn_ch/make_kpi_trend_report');
-      } else {
-        setOpen(false);
+    if (response.status) {
+      setOpen(false);
+      Swal.fire({
+        icon: "success",
+        title: "Done",
+        text: `${response.message}`,
+      });
+      navigate('/trends/tn_ch/make_kpi_trend_report');
+    } else {
+      setOpen(false);
 
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: `${response.message}`,
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: `${response.message}`,
 
-        })
-      }
+      })
     }
+  }
 
 
   const handleCancel = () => {
@@ -298,8 +294,8 @@ function MakeKPITrend() {
         <DialogContent>
           <Box style={{ padding: 20, display: 'flex', justifyContent: "center" }}></Box>
           <Box style={{ textAlign: 'center' }}><GearIcon pulse style={{ fontSize: '100px', color: '#232455' }} /></Box>
-          <Box style={{margin:'10px 0px 10px 0px', fontWeight:'bolder'}}>DATA UNDER PROCESSING...</Box>
-          <Button   variant="contained" fullWidth  style={{backgroundColor:"red",color:'white'}} onClick={cancellAPI} endIcon={<DoDisturbIcon />}>cancel</Button>
+          <Box style={{ margin: '10px 0px 10px 0px', fontWeight: 'bolder' }}>DATA UNDER PROCESSING...</Box>
+          <Button variant="contained" fullWidth style={{ backgroundColor: "red", color: 'white' }} onClick={cancellAPI} endIcon={<DoDisturbIcon />}>cancel</Button>
 
         </DialogContent>
 
@@ -309,99 +305,101 @@ function MakeKPITrend() {
 
   return (
     <Zoom in='true' timeout={500}>
-    <div>
-    <div style={{ margin: 10, marginLeft: 10 }}>
+      <div>
+        <div style={{ margin: 10, marginLeft: 10 }}>
           <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
             <Link underline="hover" href='/tools'>Tools</Link>
-            <Link underline="hover" href='/trends'>Trend</Link>
-            <Link underline="hover" href='/trends/tn_ch'>TNCH</Link>
+            <Link underline="hover" href='/tools/quality_team'>Quality Team</Link>
+            <Link underline="hover" href='/tools/quality_team/trends'>Trends</Link>
+            <Link underline="hover" href='/tools/quality_team/trends/tn_ch'>TNCH</Link>
+
             <Typography color='text.primary'>Make Trend</Typography>
           </Breadcrumbs>
-      </div>
-      <Box className={classes.main_Box}>
-        <Box className={classes.Back_Box}>
-          <Box className={classes.Box_Hading}>
-            MAKE KPI TREND
+        </div>
+        <Box className={classes.main_Box}>
+          <Box className={classes.Back_Box}>
+            <Box className={classes.Box_Hading}>
+              MAKE KPI TREND
+            </Box>
+            <Stack spacing={2} sx={{ marginTop: "-40px" }}>
+
+              <Box className={classes.Front_Box}>
+                <div className={classes.Front_Box_Hading}>
+                  Select SITE LIST:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{siteList.filename}</span>
+                </div>
+                <div className={classes.Front_Box_Select_Button}>
+                  <div style={{ float: "left" }}>
+                    <Button variant="contained" component="label" color={siteList.state ? "warning" : "primary"}>
+                      select file
+                      <input required hidden onChange={handleSiteList} accept="/*" multiple type="file" />
+                    </Button>
+                  </div>
+                  <div><span style={{ display: show ? 'inherit' : 'none', color: 'red', fontSize: '18px', fontWeight: 600 }}>This Field Is required !</span></div>
+                </div>
+              </Box>
+              {/* ########## SELECT SITE ############*/}
+              <Box className={classes.Front_Box}>
+                <div className={classes.Front_Box_Hading}>
+                  Select SITE :-
+                </div>
+                <div className={classes.Front_Box_Select_Button}>
+                  <div style={{ float: "left" }}>
+                    <Multiselect
+                      isObject={false}
+                      options={names}
+                      showCheckbox
+                      onRemove={(event) => { setSite(event); console.log('select:', event) }}
+                      onSelect={(event) => { setSite(event); console.log('select:', event); setShowSite(false) }}
+                      placeholder="Select Site"
+                    />
+
+                  </div>
+                  <div><span style={{ display: showSite ? 'inherit' : 'none', color: 'red', fontSize: '18px', fontWeight: 600 }}>This Field Is required !</span></div>
+                </div>
+
+              </Box>
+
+
+
+              <Box className={classes.Front_Box}>
+                <div className={classes.Front_Box_Hading}>
+                  Select DATE:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}></span>
+                </div>
+                <div className={classes.Front_Box_Select_Button}>
+                  <div >
+                    <span style={{ fontSize: '20px', fontWeight: 'bold' }}>From </span>
+                    <input required value={pdate} onChange={(event) => setPdate(event.target.value)} type="date" style={{ width: '165px', height: '35px', fontSize: '20px', fontWeight: 500, borderRadius: "10px" }} />
+
+                  </div>
+                  <div><SyncAltIcon /></div>
+                  <div >
+                    <span style={{ fontSize: '20px', fontWeight: 'bold' }}>To </span>
+                    <input required value={tdate} onChange={(event) => setTdate(event.target.value)} type="date" style={{ width: '165px', height: '35px', fontSize: '20px', fontWeight: 500, borderRadius: "10px" }} />
+                  </div>
+                </div>
+              </Box>
+
+
+            </Stack>
+            <Box style={{ display: 'flex', justifyContent: "space-around", marginTop: "20px" }}>
+              <Box>
+                <Button variant="contained" color="success" onClick={handleSubmit} endIcon={<UploadIcon />}>upload</Button>
+              </Box>
+              <Box>
+                <Button variant="contained" onClick={handleCancel} style={{ backgroundColor: "red", color: 'white' }} endIcon={<DoDisturbIcon />} >cancel</Button>
+              </Box>
+            </Box>
           </Box>
-          <Stack spacing={2} sx={{ marginTop: "-40px" }}>
-
-            <Box className={classes.Front_Box}>
-              <div className={classes.Front_Box_Hading}>
-                Select SITE LIST:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{siteList.filename}</span>
-              </div>
-              <div className={classes.Front_Box_Select_Button}>
-                <div style={{ float: "left" }}>
-                  <Button variant="contained" component="label" color={siteList.state ? "warning" : "primary"}>
-                    select file
-                    <input required hidden onChange={handleSiteList} accept="/*" multiple type="file" />
-                  </Button>
-                </div>
-                <div><span style={{ display: show ? 'inherit' : 'none', color: 'red', fontSize: '18px', fontWeight: 600 }}>This Field Is required !</span></div>
-              </div>
-            </Box>
-            {/* ########## SELECT SITE ############*/}
-            <Box className={classes.Front_Box}>
-              <div className={classes.Front_Box_Hading}>
-                Select SITE :-
-              </div>
-              <div className={classes.Front_Box_Select_Button}>
-                <div style={{ float: "left" }}>
-                  <Multiselect
-                    isObject={false}
-                    options={names}
-                    showCheckbox
-                    onRemove={(event) => { setSite(event); console.log('select:', event) }}
-                    onSelect={(event) => { setSite(event); console.log('select:', event); setShowSite(false) }}
-                    placeholder="Select Site"
-                  />
-
-                </div>
-                <div><span style={{ display: showSite ? 'inherit' : 'none', color: 'red', fontSize: '18px', fontWeight: 600 }}>This Field Is required !</span></div>
-              </div>
-
-            </Box>
+          {/* <a download href={link}><Button variant="outlined" onClick='' startIcon={<FileDownloadIcon style={{fontSize:30,color:"green"}}/>}  sx={{marginTop:"10px",width:"auto"}}><span style={{fontFamily:"Poppins",fontSize:"22px",fontWeight:800,textTransform:"none",textDecorationLine:"none"}}>Download Temp</span></Button></a> */}
 
 
-
-            <Box className={classes.Front_Box}>
-              <div className={classes.Front_Box_Hading}>
-                Select DATE:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}></span>
-              </div>
-              <div className={classes.Front_Box_Select_Button}>
-                <div >
-                  <span style={{ fontSize: '20px', fontWeight: 'bold' }}>From </span>
-                  <input required value={pdate} onChange={(event) => setPdate(event.target.value)} type="date" style={{ width: '165px', height: '35px', fontSize: '20px', fontWeight: 500, borderRadius: "10px" }} />
-
-                </div>
-                <div><SyncAltIcon /></div>
-                <div >
-                  <span style={{ fontSize: '20px', fontWeight: 'bold' }}>To </span>
-                  <input required value={tdate} onChange={(event) => setTdate(event.target.value)} type="date" style={{ width: '165px', height: '35px', fontSize: '20px', fontWeight: 500, borderRadius: "10px" }} />
-                </div>
-              </div>
-            </Box>
-
-
-          </Stack>
-          <Box style={{ display: 'flex', justifyContent: "space-around", marginTop: "20px" }}>
-            <Box>
-              <Button variant="contained" color="success" onClick={handleSubmit} endIcon={<UploadIcon />}>upload</Button>
-            </Box>
-            <Box>
-              <Button variant="contained" onClick={handleCancel} style={{ backgroundColor: "red", color: 'white' }} endIcon={<DoDisturbIcon />} >cancel</Button>
-            </Box>
-          </Box>
         </Box>
-        {/* <a download href={link}><Button variant="outlined" onClick='' startIcon={<FileDownloadIcon style={{fontSize:30,color:"green"}}/>}  sx={{marginTop:"10px",width:"auto"}}><span style={{fontFamily:"Poppins",fontSize:"22px",fontWeight:800,textTransform:"none",textDecorationLine:"none"}}>Download Temp</span></Button></a> */}
+        {loadingDialog()}
+        {siteDialogBox()}
+        {/* {handleError()} */}
 
 
-      </Box>
-      {loadingDialog()}
-      {siteDialogBox()}
-      {/* {handleError()} */}
-
-
-    </div>
+      </div>
     </Zoom>
   )
 }

@@ -44,7 +44,7 @@ function APTrend() {
                     <Nav activeKey={activeKey} onSelect={setActiveKey} >
                       <Nav style={{ fontWeight: 500, color: 'white', textAlign: 'center', fontSize: 20 }}>AP Trend</Nav>
 
-                      <Nav.Item eventKey="1" placement="rightStart" className="single-item-custom" icon={<FileUploadIcon />} onClick={() => navigate('/trends/ap/make_kpi_trend_old')}>
+                      <Nav.Item eventKey="1" placement="rightStart" className="single-item-custom" icon={<FileUploadIcon />} onClick={() => navigate('/tools/quality_team/trends/ap/make_kpi_trend_old')}>
                         Make Trend(Old)
                       </Nav.Item>
 

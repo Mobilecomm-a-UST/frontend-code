@@ -39,15 +39,15 @@ const PBTrend = () => {
                       <Nav style={{ fontWeight: 500, color: 'white', textAlign: 'center', fontSize: 20 }}>PB Trend</Nav>
                       <Nav.Menu placement="rightStart" icon={<FileUploadIcon />} eventKey="1" className="menu-title-custom" title="Make Trend(Old)" >
                         <Nav.Menu eventKey="1-1" className="menu-title-custom" title="NOK" >
-                          <Nav.Item eventKey="1-1-1" className="single-item-custom" onClick={() => { navigate('/trends/pb/small_cell') }}>Small Cells</Nav.Item>
-                          <Nav.Item eventKey="1-1-2" className="single-item-custom" onClick={() => { navigate('/trends/pb/hpsc_cell') }}>Hpsc Cells</Nav.Item>
+                          <Nav.Item eventKey="1-1-1" className="single-item-custom" onClick={() => { navigate('small_cell') }}>Small Cells</Nav.Item>
+                          <Nav.Item eventKey="1-1-2" className="single-item-custom" onClick={() => { navigate('hpsc_cell') }}>Hpsc Cells</Nav.Item>
                         </Nav.Menu>
-                        <Nav.Item placement='rightStart' eventKey='1-2' icon={<FileUploadIcon />} className="single-item-custom" onClick={() => { navigate('/trends/pb/zte') }}>ZTE</Nav.Item>
+                        <Nav.Item placement='rightStart' eventKey='1-2' icon={<FileUploadIcon />} className="single-item-custom" onClick={() => { navigate('zte') }}>ZTE</Nav.Item>
                       </Nav.Menu>
-                      <Nav.Item eventKey='2' icon={<FileUploadIcon />} className="single-item-custom" onClick={() => { navigate('/trends/pb/degrow_V1') }}>
+                      <Nav.Item eventKey='2' icon={<FileUploadIcon />} className="single-item-custom" onClick={() => { navigate('degrow_V1') }}>
                         Degrow V1
                       </Nav.Item>
-                      <Nav.Item eventKey='3' icon={<FileUploadIcon />} className="single-item-custom" onClick={() => { navigate('/trends/pb/degrow_V2') }}>
+                      <Nav.Item eventKey='3' icon={<FileUploadIcon />} className="single-item-custom" onClick={() => { navigate('degrow_V2') }}>
                         Degrow V2
                       </Nav.Item>
                       {/* <Nav.Item eventKey="4" icon={<FileUploadIcon/>} onClick={()=>navigate(-1)}>
