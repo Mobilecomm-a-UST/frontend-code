@@ -66,10 +66,10 @@ const WBKOL_Trend = () => {
                           className="single-item-custom" onClick={() => navigate()}
                         >Pre-Post Report</Nav.Item>
                       </Nav.Menu>
-                      <Nav.Item eventKey="4" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => { navigate('/trends/wb_kol/degrow'); show(); setMenuButton(true) }}>
+                      <Nav.Item eventKey="4" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => { navigate('degrow'); show(); setMenuButton(true) }}>
                         Make Degrow
                       </Nav.Item>
-                      <Nav.Item eventKey="5" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => { navigate('/trends/wb_kol/make_kpi_trend_old'); show(); setMenuButton(true) }}>
+                      <Nav.Item eventKey="5" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => { navigate('make_kpi_trend_old'); show(); setMenuButton(true) }}>
                         Make Trend(old)
                       </Nav.Item>
                     </Nav>

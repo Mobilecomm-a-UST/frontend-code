@@ -38,11 +38,11 @@ const MPTrend = () => {
                                             <Nav style={{ fontWeight: 500, color: 'white', textAlign: 'center', fontSize: 20 }}>MP Trend</Nav>
                                             <Nav.Menu placement="rightStart" eventKey="1" className="menu-title-custom" title="Make Trend(Old)" icon={<FileUploadIcon />}>
                                                 <Nav.Item eventKey="1-1"
-                                                   className="single-item-custom" onClick={() => navigate('/trends/mp/2G')}
+                                                   className="single-item-custom" onClick={() => navigate('2G')}
                                                 >2G
                                                 </Nav.Item>
                                                 <Nav.Item eventKey="1-2"
-                                                    className="single-item-custom" onClick={() => navigate('/trends/mp/4G')}
+                                                    className="single-item-custom" onClick={() => navigate('4G')}
                                                 >4G
                                                 </Nav.Item>
                                             </Nav.Menu>

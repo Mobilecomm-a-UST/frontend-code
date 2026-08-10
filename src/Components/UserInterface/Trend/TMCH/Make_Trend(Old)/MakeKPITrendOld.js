@@ -26,7 +26,7 @@ const MakeKPITrendOld = () => {
     const [siteListFile, setSiteListFile] = useState({ filename: "", bytes: "" })
     const [siteData, setSiteData] = useState([])
     const [missingSite, setMissingSite] = useState([])
-    const [missingBox,setMissingBox] = useState('')
+    const [missingBox, setMissingBox] = useState('')
     const [missingSiteOpen, setMissingSiteOpen] = useState(false)
     const [open, setOpen] = useState(false);
     const [offerDate, setOfferDate] = useState()
@@ -39,7 +39,7 @@ const MakeKPITrendOld = () => {
     const rawKpiLength = rawKpiFile.filename.length
     const siteListLength = siteListFile.filename.length
 
-  const { isLoading,error,response,makePostRequest,cancelRequest,}  = usePost()
+    const { isLoading, error, response, makePostRequest, cancelRequest, } = usePost()
 
 
     console.warn('qqqqqqqqq', missingSite)
@@ -103,30 +103,30 @@ const MakeKPITrendOld = () => {
     const startTour = () => {
         const driverObj = driver({
 
-          showProgress: true,
-          steps: [
-            { element: '#step-1', popover: { title: 'Select RAW KPI File', description: 'Select Raw KPI file generated from MyCom Tool', side: "bottom", align: 'start' } },
-            { element: '#step-2', popover: { title: 'Select Site List File', description: 'Either select site list in excel formate having column name 2G ID', side: "left", align: 'start' } },
-            { element: '#step-3', popover: { title: 'Enter Site List', description: 'OR paste site id in this field', side: "left", align: 'start' } },
-            { element: '#step-4', popover: { title: 'OFFERED DATE', description: 'Select Offered date which is greatest date +1 amoung the 5 dates', side: "left", align: 'start' } },
-            { element: '#step-5', popover: { title: 'SUBMIT BUTTON', description: 'Click on submit button', side: "center", align: 'start' } },
-            { element: '#step-6', popover: { title: '', description: "<div>Please wait few minutes</div><img src='/assets/prograse.png' style='height: 202.5px; width: 270px;' />", }},
-            { element: '#step-7', popover: { title: 'Enable Download KPI Button', description: "<img src='/assets/downloadButton.png' style='height: 202.5px; width: 270px;' />", }},
-          ]
+            showProgress: true,
+            steps: [
+                { element: '#step-1', popover: { title: 'Select RAW KPI File', description: 'Select Raw KPI file generated from MyCom Tool', side: "bottom", align: 'start' } },
+                { element: '#step-2', popover: { title: 'Select Site List File', description: 'Either select site list in excel formate having column name 2G ID', side: "left", align: 'start' } },
+                { element: '#step-3', popover: { title: 'Enter Site List', description: 'OR paste site id in this field', side: "left", align: 'start' } },
+                { element: '#step-4', popover: { title: 'OFFERED DATE', description: 'Select Offered date which is greatest date +1 amoung the 5 dates', side: "left", align: 'start' } },
+                { element: '#step-5', popover: { title: 'SUBMIT BUTTON', description: 'Click on submit button', side: "center", align: 'start' } },
+                { element: '#step-6', popover: { title: '', description: "<div>Please wait few minutes</div><img src='/assets/prograse.png' style='height: 202.5px; width: 270px;' />", } },
+                { element: '#step-7', popover: { title: 'Enable Download KPI Button', description: "<img src='/assets/downloadButton.png' style='height: 202.5px; width: 270px;' />", } },
+            ]
         });
 
         driverObj.drive();
-      };
+    };
 
 
     useEffect(() => {
         todayDate();
-        document.title=`${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/',' | ').toUpperCase()}`
+        document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
     }, [])
 
     const handleSubmit = async () => {
 
-        if (rawKpiLength > 0 && siteListLength > 0 || siteData.length > 0 ) {
+        if (rawKpiLength > 0 && siteListLength > 0 || siteData.length > 0) {
             setOpen(true)
             var formData = new FormData();
             formData.append("raw_kpi", rawKpiFile.bytes);
@@ -134,24 +134,24 @@ const MakeKPITrendOld = () => {
             formData.append("str_site_list", siteData);
             formData.append("offered_date", offerDate);
             // const response = await postData('trend/OriginalTrend/makeKpiTrend/old', formData, { headers: { Authorization: `token ${JSON.parse(localStorage.getItem("tokenKey"))}` }
-            const response = await makePostRequest('trend/OriginalTrend/makeKpiTrend/old', formData )
+            const response = await makePostRequest('trend/OriginalTrend/makeKpiTrend/old', formData)
 
             // ,signal:abortSignal })
             setFileData(response.Download_url)
             console.log('response data', response)
             setMissingSite(response.missing_sites)
-           if(response == false){
-            Swal.fire({
-                icon: "error",
-                title: "Oops...",
-                text: `${response.message}`,
-            });
-           }
+            if (response == false) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: `${response.message}`,
+                });
+            }
 
             if (response.status == true) {
                 setOpen(false);
                 setDlink(true);
-                if(response.missing_sites.length > 0){
+                if (response.missing_sites.length > 0) {
                     setMissingBox('These are missing sites')
                     setMissingSiteOpen(true)
                 }
@@ -162,7 +162,7 @@ const MakeKPITrendOld = () => {
                     text: `${response.message}`,
                 });
             }
-            else if(response.status == 'undefind'){
+            else if (response.status == 'undefind') {
                 setOpen(false)
                 Swal.fire({
                     icon: "error",
@@ -173,7 +173,7 @@ const MakeKPITrendOld = () => {
             else {
                 setOpen(false)
 
-                if(response.missing_sites.length > 0){
+                if (response.missing_sites.length > 0) {
                     setMissingBox('These are missing Columns')
                     setMissingSiteOpen(true)
                 }
@@ -189,16 +189,16 @@ const MakeKPITrendOld = () => {
             if (rawKpiLength == 0) {
                 setRawShow(true)
             }
-            if (siteListLength == 0 || siteData.length ==0) {
+            if (siteListLength == 0 || siteData.length == 0) {
                 // setSiteShow(true)
                 alert('Please Select Anyone Option (Select Sites List File) Or (Enter Sites List)')
             }
 
         }
     };
-    const cancellAPI=()=>{
+    const cancellAPI = () => {
 
-      }
+    }
 
 
     // DATA PROCESSING DIALOG BOX...............
@@ -214,8 +214,8 @@ const MakeKPITrendOld = () => {
                 <DialogContent>
                     <Box style={{ padding: 20, display: 'flex', justifyContent: "center" }}></Box>
                     <Box style={{ textAlign: 'center' }}><GearIcon pulse style={{ fontSize: '100px', color: '#232455' }} /></Box>
-                    <Box style={{margin:'10px 0px 10px 0px', fontWeight:'bolder'}}>DATA UNDER PROCESSING...</Box>
-                    <Button variant="contained" fullWidth  style={{backgroundColor:"red",color:'white'}} onClick={cancelRequest} endIcon={<DoDisturbIcon />}>cancel</Button>
+                    <Box style={{ margin: '10px 0px 10px 0px', fontWeight: 'bolder' }}>DATA UNDER PROCESSING...</Box>
+                    <Button variant="contained" fullWidth style={{ backgroundColor: "red", color: 'white' }} onClick={cancelRequest} endIcon={<DoDisturbIcon />}>cancel</Button>
                 </DialogContent>
 
             </Dialog>
@@ -223,16 +223,16 @@ const MakeKPITrendOld = () => {
     }
 
     // DIALOG FOR MISSING SITS .........................
-    const handleMissingSite=()=>{
-        return(
+    const handleMissingSite = () => {
+        return (
             <Dialog
-            open={missingSiteOpen}
-            sx={{zIndex:5}}
+                open={missingSiteOpen}
+                sx={{ zIndex: 5 }}
             >
-                <DialogContent sx={{minHeight:200,maxHeight:'auto',width:600}}>
-                    <div style={{float:'right',cursor:'pointer'}} ><ClearIcon onClick={()=>{setMissingSiteOpen(false)}}/></div>
-                    <div style={{textAlign:'center',color:'red'}}><h3>{missingBox}</h3></div>
-                    <div><ul style={{display:"flex",flexWrap:'wrap',gap:'20px'}}>{missingSite?.map((item)=>(
+                <DialogContent sx={{ minHeight: 200, maxHeight: 'auto', width: 600 }}>
+                    <div style={{ float: 'right', cursor: 'pointer' }} ><ClearIcon onClick={() => { setMissingSiteOpen(false) }} /></div>
+                    <div style={{ textAlign: 'center', color: 'red' }}><h3>{missingBox}</h3></div>
+                    <div><ul style={{ display: "flex", flexWrap: 'wrap', gap: '20px' }}>{missingSite?.map((item) => (
                         <li key={item}>{item}</li>
                     ))}</ul></div>
                 </DialogContent>
@@ -254,17 +254,18 @@ const MakeKPITrendOld = () => {
                 <div style={{ margin: 10, marginLeft: 10 }}>
                     <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
                         <Link underline="hover" href='/tools'>Tools</Link>
-                        <Link underline="hover" href='/trends'>Trend</Link>
-                        <Link underline="hover" href='/trends/tn_ch'>TNCH</Link>
+                        <Link underline="hover" href='/tools/quality_team'>Quality Team</Link>
+                        <Link underline="hover" href='/tools/quality_team/trends'>Trends</Link>
+                        <Link underline="hover" href='/tools/quality_team/trends/tn_ch'>TNCH</Link>
                         <Typography color='text.primary'>Make Trend(old)</Typography>
                     </Breadcrumbs>
                 </div>
-                <Box style={{position:'fixed',right:20}}>
-                <Tooltip title="Help">
-                <Fab color="primary" aria-label="add" onClick={startTour}>
-                    <LiveHelpIcon />
-                </Fab>
-                </Tooltip>
+                <Box style={{ position: 'fixed', right: 20 }}>
+                    <Tooltip title="Help">
+                        <Fab color="primary" aria-label="add" onClick={startTour}>
+                            <LiveHelpIcon />
+                        </Fab>
+                    </Tooltip>
                 </Box>
                 <Box className={classes.main_Box}>
                     <Box className={classes.Back_Box}>
@@ -272,7 +273,7 @@ const MakeKPITrendOld = () => {
                             Make KPI TREND(OLD)
                         </Box>
                         <Stack spacing={2} sx={{ marginTop: "-40px" }}>
-                            <Box className={classes.Front_Box}id="step-1">
+                            <Box className={classes.Front_Box} id="step-1">
                                 <div className={classes.Front_Box_Hading}>
                                     Select RAW KPI File:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{rawKpiFile.filename}</span>
                                 </div>
@@ -288,7 +289,7 @@ const MakeKPITrendOld = () => {
                                     </div>
                                 </div>
                             </Box>
-                            <Box className={classes.Front_Box}id="step-2">
+                            <Box className={classes.Front_Box} id="step-2">
                                 <div className={classes.Front_Box_Hading}>
                                     Select Site List File:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{siteListFile.filename}</span>
                                 </div>
@@ -303,7 +304,7 @@ const MakeKPITrendOld = () => {
                                     <div></div>
                                 </div>
                             </Box>
-                            <Box className={classes.Front_Box}id="step-3">
+                            <Box className={classes.Front_Box} id="step-3">
                                 <div className={classes.Front_Box_Hading}>
                                     Enter Site List:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}></span>
                                 </div>
@@ -316,7 +317,7 @@ const MakeKPITrendOld = () => {
                                 </div>
                             </Box>
 
-                            <Box className={classes.Front_Box}id="step-4">
+                            <Box className={classes.Front_Box} id="step-4">
                                 <div className={classes.Front_Box_Hading}>
                                     OFFERED DATE:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}></span>
                                 </div>

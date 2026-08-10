@@ -305,8 +305,9 @@ const MakeKPITrendOld = () => {
                 <div style={{ margin: 10, marginLeft: 10 }}>
                     <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
                         <Link underline="hover" href='/tools'>Tools</Link>
-                        <Link underline="hover" href='/trends'>Trend</Link>
-                        <Link underline="hover" href='/trends/dl'>DL</Link>
+                               <Link underline="hover" href='/tools/quality_team'>Quality Team</Link>
+                               <Link underline="hover" href='/tools/quality_team/trends'>Trends</Link>
+                                <Link underline="hover" href='/tools/quality_team/trends/dl'>DL</Link>
                         <Typography color='text.primary'>Make Trend(old)</Typography>
                     </Breadcrumbs>
                 </div>

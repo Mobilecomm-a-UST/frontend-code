@@ -77,6 +77,8 @@ const WccGenerate = lazy(()=> import('./Components/UserInterface/WCC Generate/Wc
 const Logs = lazy(()=>import('./Components/UserInterface/Logs/Logs'))
 const LogsTool = lazy(()=>import('./Components/UserInterface/Logs Tools/LogsTool'))
 const BasebandRequirement = lazy(()=>import('./Components/UserInterface/Baseband Requirement/BasebandRequirement'))
+const QualityTeamTool = lazy(()=>import('./Components/UserInterface/Quality Team Tools/QualityTeamTool'))
+const AlarmLogs = lazy(()=>import('./Components/UserInterface/Alarm Logs Tool/AlarmLogs'))
 
 
 
@@ -132,7 +134,7 @@ function App() {
                 <ProtectedRoute element={Dpr} allowedUserTypes={['central', 'admin']} userType={userType} />
               </Suspense>
             } />
-            <Route path="/trends/*" element={
+            <Route path="/tools/quality_team/trends/*" element={
               <Suspense fallback={<div>Loading...</div>}>
                 <ProtectedRoute element={Trends} allowedUserTypes={['quality', 'admin', 'quality-s', 'trend_tool']} userType={userType} />
               </Suspense>
@@ -463,6 +465,19 @@ function App() {
                 <ProtectedRoute element={BasebandRequirement} allowedUserTypes={['admin', 'BR_Admin','BR']} userType={userType} />
               </Suspense>
             } />
+
+            <Route path="/tools/quality_team/*" element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProtectedRoute element={QualityTeamTool} allowedUserTypes={['admin', 'QT_Admin','QT','QT_AL']} userType={userType} />
+              </Suspense>
+            } />
+
+             <Route path="/tools/quality_team/alarm_logs/*" element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProtectedRoute element={AlarmLogs} allowedUserTypes={['admin', 'QT_AL']} userType={userType} />
+              </Suspense>
+            } />
+            
 
 
           </Routes>

@@ -56,17 +56,17 @@ function ORTrend() {
         </Nav.Menu> */}
                       <Nav.Menu activeKey="2" icon={<FileUploadIcon />} className="menu-title-custom" title="Make Trend (Old)">
                         <Nav.Item eventKey="2-1"
-                          className="single-item-custom" onClick={() => navigate('/trends/or/kpi_trend_old_2G')}
+                          className="single-item-custom" onClick={() => navigate('kpi_trend_old_2G')}
                         >
                           Trend 2G
                         </Nav.Item>
                         <Nav.Item eventKey="2-2"
-                          className="single-item-custom" onClick={() => navigate('/trends/or/kpi_trend_old_4G')}
+                          className="single-item-custom" onClick={() => navigate('kpi_trend_old_4G')}
                         >
                           Trend 4G
                         </Nav.Item>
                         <Nav.Item eventKey="2-3"
-                          className="single-item-custom" onClick={() => navigate('/trends/or/kpi_trend_old_RAN')}
+                          className="single-item-custom" onClick={() => navigate('kpi_trend_old_RAN')}
                         >
                           Trend RNA
                         </Nav.Item>

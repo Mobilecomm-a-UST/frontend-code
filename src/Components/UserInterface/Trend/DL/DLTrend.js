@@ -39,7 +39,7 @@ const DLTrend = () => {
                                                 <NavLink  to='/trends/hr'>Giraj singh</NavLink>
                                             </Nav.Menu> */}
                                             <Nav.Item eventKey="4" icon={<FileUploadIcon />}
-                                                className="single-item-custom" onClick={() => navigate('/trends/dl/make_kpi_trend_old')}
+                                                className="single-item-custom" onClick={() => navigate('make_kpi_trend_old')}
                                             >
                                                 Make Trend(Old)
                                             </Nav.Item>

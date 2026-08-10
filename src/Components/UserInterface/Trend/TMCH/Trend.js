@@ -55,17 +55,17 @@ export default function Trend() {
                                  <Nav.Menu placement="rightStart" eventKey="3" className="menu-title-custom" title="Pre-Post Upload" icon={<FileUploadIcon />}>
 
                                     <Nav.Item eventKey="3-2"
-                                       className="single-item-custom" onClick={() => navigate('/trends/tn_ch/Pre_Post_report')}
+                                       className="single-item-custom" onClick={() => navigate('Pre_Post_report')}
                                     >Pre-Post Report</Nav.Item>
 
                                  </Nav.Menu>
-                                 <Nav.Item eventKey="4" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/trends/tn_ch/make_kpi_trend')}>
+                                 <Nav.Item eventKey="4" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('make_kpi_trend')}>
                                     Make Trend
                                  </Nav.Item>
-                                 <Nav.Item eventKey="7" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/trends/tn_ch/make_kpi_trend_old')}>
+                                 <Nav.Item eventKey="7" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('make_kpi_trend_old')}>
                                     Make Trend(Old)
                                  </Nav.Item>
-                                 <Nav.Item eventKey="5" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/trends/tn_ch/upload_post_kpi')}>
+                                 <Nav.Item eventKey="5" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('upload_post_kpi')}>
                                     Upload Post KPI
                                  </Nav.Item>
                                  {/* <Nav.Item eventKey="6" icon={<FileUploadIcon/>} >

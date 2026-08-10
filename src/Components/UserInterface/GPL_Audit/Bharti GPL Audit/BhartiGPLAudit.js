@@ -11,16 +11,24 @@ import { postData, postDataa, ServerURL } from "../../../services/FetchNodeServi
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import OverAllCss from "../../../csss/OverAllCss";
 import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
+
+const circleArray = ['AP', 'CHN', 'KK', 'DEL', 'HR', 'RJ', 'JK', 'WB', 'OD', 'MU', 'TN', 'UE', 'BH', 'UPW', 'MP', 'PB', 'KO', 'WB', 'JH', 'AS', 'NE']
 
 const BhartiGPLAudit = () => {
     const [make4GFiles, setMake4GFiles] = useState([])
     const [show4G, setShow4G] = useState(false)
+    const [selectCircle, setSelectCircle] = useState('')
     const [fileData, setFileData] = useState()
     const [download, setDownload] = useState(false);
     const { loading, action } = useLoadingDialog()
     const navigate = useNavigate()
     const classes = OverAllCss()
     const link = `${ServerURL}${fileData}`;
+        const [show, setShow] = useState(false)
 
 
     const handle4GFileSelection = (event) => {
@@ -30,14 +38,14 @@ const BhartiGPLAudit = () => {
 
 
     const handleSubmit = async () => {
-        if (make4GFiles.length > 0) {
+        if (make4GFiles.length > 0 && selectCircle !== '') {
             action(true)
             var formData = new FormData();
             for (let i = 0; i < make4GFiles.length; i++) {
                 formData.append(`files`, make4GFiles[i]);
             }
             // formData.append(`files`, make4GFiles);
-
+            formData.append(`circle`, selectCircle);
 
             const response = await postDataa('gpl_reference_audit_tool/run/', formData)
 
@@ -74,14 +82,20 @@ const BhartiGPLAudit = () => {
             } else {
                 setShow4G(false)
             }
+            if (selectCircle === '') {
+                setShow(true)
+            } else {
+                setShow(false)
+            }
 
         }
     }
 
     const handleCancel = () => {
         setMake4GFiles([])
-
         setShow4G(false)
+        setSelectCircle('')
+        setShow(false)
 
     }
 
@@ -111,6 +125,28 @@ const BhartiGPLAudit = () => {
                                 Make Bharti GPL Audit
                             </Box>
                             <Stack spacing={2} sx={{ marginTop: "-40px" }} direction={'column'}>
+                                <Box className={classes.Front_Box}>
+                                    <Box className={classes.Front_Box_Hading}>
+                                        Select Circle
+                                    </Box>
+                                    <Box className={classes.Front_Box_Select_Button} >
+                                        <FormControl sx={{ minWidth: 150 }}>
+                                            <InputLabel id="demo-simple-select-label">Select Circle</InputLabel>
+                                            <Select
+                                                labelId="demo-simple-select-label"
+                                                id="demo-simple-select"
+                                                value={selectCircle}
+                                                label="Select Circle"
+                                                onChange={(event) => { setSelectCircle(event.target.value); setShow(false) }}
+                                            >
+                                                {circleArray.map((item, index) => (
+                                                    <MenuItem value={item} key={index}>{item}</MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                        <div>  <span style={{ display: show ? 'inherit' : 'none', color: 'red', fontSize: '18px', fontWeight: 600 }}>This Field Is Required !</span> </div>
+                                    </Box>
+                                </Box>
 
                                 <Box className={classes.Front_Box} >
                                     <div className={classes.Front_Box_Hading}>
@@ -120,7 +156,7 @@ const BhartiGPLAudit = () => {
                                         <div style={{ float: "left" }}>
                                             <Button variant="contained" component="label" color={make4GFiles.length > 0 ? "warning" : "primary"}>
                                                 select file
-                                                <input required hidden accept=".log,.txt"  type="file"
+                                                <input required hidden accept=".log,.txt" type="file"
                                                     // webkitdirectory="true"
                                                     // directory="true"
                                                     onChange={(e) => { handle4GFileSelection(e); setShow4G(false); }} />
