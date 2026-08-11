@@ -134,11 +134,7 @@ function App() {
                 <ProtectedRoute element={Dpr} allowedUserTypes={['central', 'admin']} userType={userType} />
               </Suspense>
             } />
-            <Route path="/tools/quality_team/trends/*" element={
-              <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={Trends} allowedUserTypes={['quality', 'admin', 'quality-s', 'trend_tool']} userType={userType} />
-              </Suspense>
-            } />
+           
             <Route path="/tools/vendor/*" element={
               <Suspense fallback={<div>Loading...</div>}>
                 <ProtectedRoute element={Vendor} allowedUserTypes={['central', 'admin']} userType={userType} />
@@ -378,22 +374,14 @@ function App() {
                 <ProtectedRoute element={UpgradeDeployment} allowedUserTypes={['admin', 'UDT', 'UDT_reader']} userType={userType} />
               </Suspense>
             } />
-            <Route path="/tools/payload_traffic/*" element={
-              <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={payloadTraffic} allowedUserTypes={['admin', 'PTS', 'PTS_Admin']} userType={userType} />
-              </Suspense>
-            } />
+         
             <Route path="/tools/2g_scripting/*" element={
               <Suspense fallback={<div>Loading...</div>}>
                 <ProtectedRoute element={G2Scripting} allowedUserTypes={['admin', '2G_Script']} userType={userType} />
               </Suspense>
             } />
 
-            <Route path="/tools/performance_at_tat/*" element={
-              <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={PerformanceTAT} allowedUserTypes={['admin', 'PAT','PAT_Admin']} userType={userType} />
-              </Suspense>
-            } />
+            
 
             <Route path="/tools/daily_task_review/*" element={
               <Suspense fallback={<div>Loading...</div>}>
@@ -468,7 +456,25 @@ function App() {
 
             <Route path="/tools/quality_team/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={QualityTeamTool} allowedUserTypes={['admin', 'QT_Admin','QT','QT_AL']} userType={userType} />
+                <ProtectedRoute element={QualityTeamTool} allowedUserTypes={['admin','QT_AL','PAT','PAT_Admin','PTS', 'PTS_Admin','quality','quality-s', 'trend_tool']} userType={userType} />
+              </Suspense>
+            } />
+
+             <Route path="/tools/quality_team/trends/*" element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProtectedRoute element={Trends} allowedUserTypes={['quality','admin', 'quality-s', 'trend_tool']} userType={userType} />
+              </Suspense>
+            } />
+
+            <Route path="/tools/quality_team/performance_at_tat/*" element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProtectedRoute element={PerformanceTAT} allowedUserTypes={['admin', 'PAT','PAT_Admin']} userType={userType} />
+              </Suspense>
+            } />
+
+               <Route path="/tools/quality_team/payload_traffic/*" element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProtectedRoute element={payloadTraffic} allowedUserTypes={['admin', 'PTS', 'PTS_Admin']} userType={userType} />
               </Suspense>
             } />
 

@@ -16,7 +16,7 @@ const PerformanceTool = () => {
           <div style={{ margin: 10, marginLeft: 20 }}>
             <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
               <Link underline="hover" href='/tools'>Tools</Link>
-              {/* <Link underline="hover" href='/trends'>Trend</Link> */}
+              <Link underline="hover" href='/tools/quality_team'>Quality Team</Link>
               <Typography color='text.primary'>Performance AT</Typography>
             </Breadcrumbs>
           </div>

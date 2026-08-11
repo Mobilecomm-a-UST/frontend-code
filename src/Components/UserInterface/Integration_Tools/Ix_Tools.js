@@ -274,7 +274,7 @@ const Ix_Tools = () => {
         borderRadius: 3,
         boxShadow: "-10px -10px 15px rgba(255,255,255,0.4),10px 10px 15px rgba(70,70,70,0.15)",
         textShadow: '2px 2px 4px #ffffff',
-        color: "#006e74",
+        color: "#292525",
     }
 
     useEffect(() => {
