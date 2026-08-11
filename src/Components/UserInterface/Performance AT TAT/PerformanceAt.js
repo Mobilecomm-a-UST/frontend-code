@@ -92,7 +92,7 @@ const PerformanceAt = () => {
                                             eventKey="1"
                                             placement="rightStart"
                                             icon={<FileUploadIcon />}
-                                           className="single-item-custom" onClick={() => navigate('/tools/performance_at_tat/file_manager')}
+                                           className="single-item-custom" onClick={() => navigate('file_manager')}
                                         >
                                             File Manager
                                         </Nav.Item>}
@@ -104,7 +104,7 @@ const PerformanceAt = () => {
                                                 eventKey="2-1"
                                                 placement="rightStart"
                                                 // icon={<DashboardIcon />}
-                                                onClick={() => navigate('/tools/performance_at_tat/MasterDashboard')}
+                                                onClick={() => navigate('MasterDashboard')}
                                             >
                                                 Performance Aging
                                             </Nav.Item>
@@ -112,7 +112,7 @@ const PerformanceAt = () => {
                                                 eventKey="2-2"
                                                 placement="rightStart"
                                                 // icon={<DashboardIcon />}
-                                                onClick={() => navigate('/tools/performance_at_tat/performance_at_pending_aging')}
+                                                onClick={() => navigate('performance_at_pending_aging')}
                                             >
                                                 Pending Aging
                                             </Nav.Item>
@@ -121,7 +121,7 @@ const PerformanceAt = () => {
                                                 eventKey="2-3"
                                                 placement="rightStart"
                                                 // icon={<DashboardIcon />}
-                                                onClick={() => navigate('/tools/performance_at_tat/FTR_Aging')}
+                                                onClick={() => navigate('FTR_Aging')}
                                             >
                                                 Performance FTR
                                             </Nav.Item>
@@ -130,7 +130,7 @@ const PerformanceAt = () => {
                                                 eventKey="2-4"
                                                 placement="rightStart"
                                                 // icon={<AutoGraphIcon />}
-                                                onClick={() => navigate('/tools/performance_at_tat/PerformanceFTRGraph')}
+                                                onClick={() => navigate('PerformanceFTRGraph')}
                                             >
                                                 Performance FTR Trend
                                             </Nav.Item>
@@ -139,7 +139,7 @@ const PerformanceAt = () => {
                                                 eventKey="2-5"
                                                 placement="rightStart"
                                                 // icon={<DashboardIcon />}
-                                                onClick={() => navigate('/tools/performance_at_tat/Performance_Aging_Main_Graph')}
+                                                onClick={() => navigate('Performance_Aging_Main_Graph')}
                                             >
                                                 Performance Graph
                                             </Nav.Item>
@@ -151,7 +151,7 @@ const PerformanceAt = () => {
                                                 eventKey="3-1"
                                                 placement="rightStart"
                                                 // icon={<DashboardIcon />}
-                                                onClick={() => navigate('/tools/performance_at_tat/SCFT_Aging')}
+                                                onClick={() => navigate('SCFT_Aging')}
                                             >
                                                 SCFT Aging
                                             </Nav.Item>
@@ -160,7 +160,7 @@ const PerformanceAt = () => {
                                                 eventKey="3-2"
                                                 placement="rightStart"
                                                 // icon={<DashboardIcon />}
-                                                onClick={() => navigate('/tools/performance_at_tat/SCFT_Pending_Aging')}
+                                                onClick={() => navigate('SCFT_Pending_Aging')}
                                             >
                                                 SCFT Pending Aging
                                             </Nav.Item>
@@ -169,7 +169,7 @@ const PerformanceAt = () => {
                                                 eventKey="3-3"
                                                 placement="rightStart"
                                                 // icon={<DashboardIcon />}
-                                                onClick={() => navigate('/tools/performance_at_tat/SCFT_FTR')}
+                                                onClick={() => navigate('SCFT_FTR')}
                                             >
                                                 SCFT FTR
                                             </Nav.Item>
@@ -178,7 +178,7 @@ const PerformanceAt = () => {
                                                 eventKey="3-4"
                                                 placement="rightStart"
                                                 // icon={<AutoGraphIcon />}
-                                                onClick={() => navigate('/tools/performance_at_tat/SCFTFTRGraph')}
+                                                onClick={() => navigate('SCFTFTRGraph')}
                                             >
                                                 SCFT FTR Trend
                                             </Nav.Item>
@@ -187,7 +187,7 @@ const PerformanceAt = () => {
                                                 eventKey="3-5"
                                                 placement="rightStart"
                                                 // icon={<DashboardIcon />}
-                                                onClick={() => navigate('/tools/performance_at_tat/Performance_SR_Wise_Main')}
+                                                onClick={() => navigate('Performance_SR_Wise_Main')}
                                             >
                                                 SR Wise Tracking
                                             </Nav.Item>
@@ -196,7 +196,7 @@ const PerformanceAt = () => {
                                                 eventKey="3-6"
                                                 placement="rightStart"
                                                 // icon={<DashboardIcon />}
-                                                onClick={() => navigate('/tools/performance_at_tat/SCFT_Aging_Main_Graph')}
+                                                onClick={() => navigate('SCFT_Aging_Main_Graph')}
                                             >
                                                 SCFT Aging Graph
                                             </Nav.Item>
@@ -208,7 +208,7 @@ const PerformanceAt = () => {
                                                 eventKey="4-1"
                                                 placement="rightStart"
                                                 // icon={<DashboardIcon />}
-                                                onClick={() => navigate('/tools/performance_at_tat/Aging5G')}
+                                                onClick={() => navigate('Aging5G')}
                                             >
                                                 5G Aging
                                             </Nav.Item>
@@ -219,7 +219,7 @@ const PerformanceAt = () => {
                                                 eventKey="5-1"
                                                 placement="rightStart"
                                                 // icon={<DoingRoundIcon />}
-                                                onClick={() => navigate('/tools/performance_at_tat/Performancekpi5g')}
+                                                onClick={() => navigate('Performancekpi5g')}
                                             >
                                                 5G Performance KPI
                                             </Nav.Item>
@@ -228,7 +228,7 @@ const PerformanceAt = () => {
                                                 eventKey="5-2"
                                                 placement="rightStart"
                                                 // icon={<DashboardIcon />}
-                                                onClick={() => navigate('/tools/performance_at_tat/Performance_5g_Kpi_dashboard')}
+                                                onClick={() => navigate('Performance_5g_Kpi_dashboard')}
                                             >
                                                 Dashboard
                                             </Nav.Item>

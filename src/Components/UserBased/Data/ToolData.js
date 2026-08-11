@@ -50,15 +50,28 @@ import { groupBy } from 'lodash';
 
 
 const ToolData = [
-    {
-        id: 0,
-        name: 'TREND',
-        title: 'This is a trend tool',
-        icons: TrendIcon,
-        link: '/trends',
-        fullname: 'Trend Analysis Tool',
-        groupBy: ['quality', 'admin', 'quality-s', 'trend_tool']
+
+
+
+
+     {
+        id: 1,
+        name: 'Quality Team',
+        title: 'Quality Team System',
+        icons: WidgetsIcon,
+        fullname: 'Quality Team',
+        link: '/tools/quality_team',
+        groupBy: ['admin','QT_AL','quality', 'quality-s', 'trend_tool','PAT','PAT_Admin','PTS', 'PTS_Admin']
     },
+    // {
+    //     id: 0,
+    //     name: 'TREND',
+    //     title: 'This is a trend tool',
+    //     icons: TrendIcon,
+    //     link: '/trends',
+    //     fullname: 'Trend Analysis Tool',
+    //     groupBy: ['quality', 'admin', 'quality-s', 'trend_tool']
+    // },
     // {
     //     id: 1,
     //     name: 'DPR',
@@ -381,15 +394,15 @@ const ToolData = [
         link: '/tools/upgrade_deployment',
         groupBy: ['admin', 'UDT', 'UDT_reader']
     },
-    {
-        id: 36,
-        name: 'Payload Traffic',
-        title: 'This is Payload Traffic System',
-        icons: TrafficOutlinedIcon,
-        fullname: 'Payload traffic system',
-        link: '/tools/payload_traffic',
-        groupBy: ['admin', 'PTS', 'PTS_Admin']
-    },
+    // {
+    //     id: 36,
+    //     name: 'Payload Traffic',
+    //     title: 'This is Payload Traffic System',
+    //     icons: TrafficOutlinedIcon,
+    //     fullname: 'Payload traffic system',
+    //     link: '/tools/payload_traffic',
+    //     groupBy: ['admin', 'PTS', 'PTS_Admin']
+    // },
 
     {
         id: 37,
@@ -412,26 +425,26 @@ const ToolData = [
     //     link: '/tools/performance_at_tat',
     //     groupBy:['admin']
     // }
-    {
-        id: 38,
+    // {
+    //     id: 38,
 
-        name:
-            'Performance AT',
-        title: 'This is Performance And SCFT TAT/FTR Tool',
+    //     name:
+    //         'Performance AT',
+    //     title: 'This is Performance And SCFT TAT/FTR Tool',
 
-        icons: () => (
-            <HugeiconsIcon
-                icon={DashboardCircleEditIcon}
-                size={30}
-            />
-        ),
+    //     icons: () => (
+    //         <HugeiconsIcon
+    //             icon={DashboardCircleEditIcon}
+    //             size={30}
+    //         />
+    //     ),
 
-        fullname: 'Performance And SCFT TAT/FTR',
+    //     fullname: 'Performance And SCFT TAT/FTR',
 
-        link: '/tools/performance_at_tat',
+    //     link: '/tools/performance_at_tat',
 
-        groupBy: ['admin', 'PAT','PAT_Admin']
-    },
+    //     groupBy: ['admin', 'PAT','PAT_Admin']
+    // },
     {
         id: 39,
         name: 'Daily Task Review',
@@ -491,15 +504,7 @@ const ToolData = [
         groupBy: ['admin','BR_Admin',"BR"]
     },
 
-    //  {
-    //     id: 45,
-    //     name: 'Quality Team',
-    //     title: 'Quality Team System',
-    //     icons: WidgetsIcon,
-    //     fullname: 'Quality Team',
-    //     link: '/tools/quality_team',
-    //     groupBy: ['admin','QT_Admin',"QT",'QT_AL','quality', 'quality-s', 'trend_tool']
-    // },
+    
 
     //  {
     //     id: 45,

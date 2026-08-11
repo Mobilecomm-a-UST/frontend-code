@@ -61,11 +61,11 @@ const WBKOL_Trend = () => {
                   <Sidenav.Body>
                     <Nav activeKey={activeKey} onSelect={setActiveKey} >
                       <Nav style={{ fontWeight: 500, color: 'white', textAlign: 'center', fontSize: 20 }}>BW/KOL Trend</Nav>
-                      <Nav.Menu placement="rightStart" eventKey="3" className="menu-title-custom" title="Pre-Post Upload" icon={<FileUploadIcon />}>
+                      {/* <Nav.Menu placement="rightStart" eventKey="3" className="menu-title-custom" title="Pre-Post Upload" icon={<FileUploadIcon />}>
                         <Nav.Item eventKey="3-2"
                           className="single-item-custom" onClick={() => navigate()}
                         >Pre-Post Report</Nav.Item>
-                      </Nav.Menu>
+                      </Nav.Menu> */}
                       <Nav.Item eventKey="4" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => { navigate('degrow'); show(); setMenuButton(true) }}>
                         Make Degrow
                       </Nav.Item>
