@@ -10,6 +10,7 @@ import { Routes, Route } from "react-router-dom";
 import ChangeListIcon from '@rsuite/icons/ChangeList';
 import TextImageIcon from '@rsuite/icons/TextImage';
 import Loader from '../../Skeleton/Loader'
+import './../../../App.css'
 
 const LKFTool = lazy(() => import('./LKFTool'))
 const UploadLKFile = lazy(() => import('./Upload'))
@@ -44,13 +45,13 @@ const LKF = () => {
                     <Grid item xs={0} md={2} sx={{}}>
                         <Box sx={{ display: { xs: 'inherit', md: 'none' } }}>
                             <Collapse in={!checked}>
-                                <Button onClick={() => { show() }} style={{ position: 'absolute', top: '60px', backgroundColor: '#223354' }}><SettingsIcon style={{ color: "white" }} /></Button>
+                                <Button onClick={() => { show() }} style={{ position: 'absolute', top: '60px', backgroundColor: '#006e74' }}><SettingsIcon style={{ color: "white" }} /></Button>
                             </Collapse>
                             <Collapse in={checked} orientation="horizontal" timeout={'auto'}>
-                                <Box sx={{ width: 240, minHeight: "670px", height: "100hv", backgroundColor: "#223354", borderRadius: 5, position: 'fixed', zIndex: 10 }}>
+                                <Box sx={{ width: 240, minHeight: "670px", height: "100hv", backgroundColor: "#006e74", borderRadius: 5, position: 'fixed', zIndex: 10 }}>
                                     <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle">
                                         <Sidenav.Body>
-                                            <Nav activeKey={activeKey} onSelect={setActiveKey} style={{ width: 'auto', minHeight: "670px", height: "100hv", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
+                                            <Nav activeKey={activeKey} onSelect={setActiveKey} style={{ width: 'auto', minHeight: "670px", height: "100hv", backgroundColor: "#006e74", marginTop: 8, borderRadius: 10 }}>
                                                 <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>LKF/RCC TOOL</Nav>
 
 
@@ -68,7 +69,7 @@ const LKF = () => {
                         {/* THIS VIEW FOR PC  */}
                         <Box sx={{ display: { xs: 'none', md: 'inherit' } }} >
                             <Box sx={{ position: 'fixed', width: '16.5%' }} >
-                                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
+                                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#006e74", marginTop: 8, borderRadius: 10 }}>
                                     <Sidenav.Body>
                                         <Nav activeKey={activeKey} onSelect={setActiveKey} >
                                             <Nav style={{ fontWeight: 500, color: 'white', textAlign: 'center', fontSize: 20 }}>LKF/RCC TOOL</Nav>
@@ -77,10 +78,10 @@ const LKF = () => {
                                                Acceptance Summary
                                            </Nav.Item>
                                        </Nav.Menu> */}
-                                            <Nav.Item eventKey="1" placement="rightStart" icon={<TextImageIcon />} onClick={() => { navigate('/tools/lkf_status/make_status'); show(); setMenuButton(true) }}>
+                                            <Nav.Item eventKey="1" placement="rightStart" icon={<TextImageIcon />} className="single-item-custom" onClick={() => { navigate('/tools/lkf_status/make_status'); show(); setMenuButton(true) }}>
                                                 Make LKF Status
                                             </Nav.Item>
-                                            <Nav.Item eventKey="2" placement="rightStart" icon={<TextImageIcon />} onClick={() => { navigate('/tools/lkf_status/rcc_status'); show(); setMenuButton(true) }}>
+                                            <Nav.Item eventKey="2" placement="rightStart" icon={<TextImageIcon />} className="single-item-custom" onClick={() => { navigate('/tools/lkf_status/rcc_status'); show(); setMenuButton(true) }}>
                                                 Make RCC Status
                                             </Nav.Item>
                                          

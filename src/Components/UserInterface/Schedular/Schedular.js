@@ -8,6 +8,7 @@ import FileUploadIcon from '@rsuite/icons/FileUpload';
 import { useNavigate } from 'react-router-dom';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Loader from '../../Skeleton/Loader'
+import './../../../App.css'
 
 const SchedularTools = lazy(() => import('./SchedularTools'))
 const MakeAlaramTrend = lazy(() => import('./MakeAlaramTrend/MakeAlaramTrend'))
@@ -31,7 +32,7 @@ const Schedular = () => {
           <Grid item xs={0} md={2} sx={{}}>
             <Box sx={{ display: { xs: 'none', md: 'inherit' } }} >
               <Box sx={{ position: 'fixed', width: '16.5%' }} >
-                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#223354", marginTop: 70, borderRadius: 10 }}>
+                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#006e74", marginTop: 70, borderRadius: 10 }}>
                   <Sidenav.Body>
                     <Nav activeKey={activeKey} onSelect={setActiveKey} >
                       <Nav style={{ fontWeight: 500, color: 'white', textAlign: 'center', fontSize: 20 }}>SCHEDULER TOOL</Nav>
@@ -43,7 +44,7 @@ const Schedular = () => {
 
                   </Nav.Menu> */}
 
-                      <Nav.Item eventKey="1" placement="rightStart" icon={<FileUploadIcon />} onClick={() => navigate('/tools/schedular/alarm_trend')} >
+                      <Nav.Item eventKey="1" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/schedular/alarm_trend')} >
                         Make Alarm Trend
                       </Nav.Item>
                       {/* <Nav.Item eventKey="1" placement="rightStart" icon={<FileUploadIcon />} onClick={() => navigate('/tools/others/schedular/form')} >

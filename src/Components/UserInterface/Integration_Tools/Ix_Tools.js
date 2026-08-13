@@ -206,6 +206,7 @@ import { useDispatch } from "react-redux";
 import Zoom from '@mui/material/Zoom';
 import CodeIcon from '@rsuite/icons/Code';
 import { getDecreyptedData } from '../../utils/localstorage'
+import LocationSearchingRoundedIcon from '@mui/icons-material/LocationSearchingRounded';
 
 const Ix_Tools = () => {
     const dispatch = useDispatch()
@@ -218,6 +219,7 @@ const Ix_Tools = () => {
     const allowedViRoles = ['Admin', 'VI_IX', 'VI_IX_reader'];
     const allowedSaRoles = ['Admin', 'IX_SA']
     const allowedErRoles = ['Admin', 'IX_ER']
+    const allowedTsRoles = ['Admin', 'IX_TS']
 
     const linker = window.location.pathname;
 
@@ -263,6 +265,15 @@ const Ix_Tools = () => {
             dispatch({ type: 'LINK_PAGES', payload: { linker } })
         } else {
             navigate('/tools/ix_tools/ix_ericsson')
+        }
+    }
+
+    const handleTS = () => {
+        if (chackToken === null) {
+            navigate('/login')
+            dispatch({ type: 'LINK_PAGES', payload: { linker } })
+        } else {
+            navigate('/tools/ix_tools/ix_tstracker')
         }
     }
 
@@ -384,6 +395,20 @@ const Ix_Tools = () => {
                                         </Box>
                                     </Grid>
                                           )}
+
+                                {/* TS Tracker */}
+                                {userTypes?.some(role => allowedTsRoles.map(r => r.toLowerCase()).includes(role?.toLowerCase())) && (
+                                    <Grid item xs={12} sm={6} md={3}>
+                                        <Box sx={backgroundStyle} className={classes.des} onClick={handleTS}>
+                                            <div className={classes.centerIcon}>
+                                                <LocationSearchingRoundedIcon alt="TS" style={{ width: "40px", height: "40px" }} />
+                                            </div>
+                                            <div>
+                                                <div className={classes.center}>TS Tracker</div>
+                                            </div>
+                                        </Box>
+                                    </Grid>
+                                )}
 
                             </Grid>
                         </Box>

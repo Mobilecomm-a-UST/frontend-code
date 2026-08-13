@@ -11,6 +11,7 @@ import FolderOpenIcon from '@mui/icons-material/FolderOpen';
 import FolderIcon from '@rsuite/icons/Folder';
 import ChangeListIcon from '@rsuite/icons/ChangeList';
 import Loader from '../../Skeleton/Loader';
+import './../../../App.css'
 
 const MobinateTool = lazy(() => import('./MobinateTool'))
 const MobinateFileHandle = lazy(() => import('./Mobinate/Mobinate'))
@@ -88,7 +89,7 @@ const MobinateVsCate = () => {
                         {/* THIS VIEW FOR PC  */}
                         <Box sx={{ display: { xs: 'none', md: 'inherit' } }} >
                             <Box sx={{ position: 'fixed', width: '16.5%' }} >
-                                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
+                                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#006e74", marginTop: 8, borderRadius: 10 }}>
                                     <Sidenav.Body>
                                         <Nav activeKey={activeKey} onSelect={setActiveKey} >
                                             <Nav style={{ fontWeight: 500, color: 'white', textAlign: 'center', fontSize: 20 }}>Mobinet Vs CATS</Nav>
@@ -97,22 +98,22 @@ const MobinateVsCate = () => {
                                                     Acceptance Summary
                                                 </Nav.Item>
                                             </Nav.Menu> */}
-                                            <Nav.Item eventKey="1" placement="rightStart" icon={<FolderIcon style={{}} />} onClick={() => { navigate('/tools/mobinet_vs_cats/file_manager'); show(); setMenuButton(true) }}>
+                                            <Nav.Item eventKey="1" placement="rightStart" className="single-item-custom" icon={<FolderIcon style={{}} />} onClick={() => { navigate('/tools/mobinet_vs_cats/file_manager'); show(); setMenuButton(true) }}>
                                                 File Manager
                                             </Nav.Item>
-                                            <Nav.Item eventKey="2" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/mobinet'); show(); setMenuButton(true) }}>
+                                            <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/mobinet'); show(); setMenuButton(true) }}>
                                                 Step 1: Mobinet
                                             </Nav.Item>
-                                            <Nav.Item eventKey="3" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/CATS'); show(); setMenuButton(true) }}>
+                                            <Nav.Item eventKey="3" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/CATS'); show(); setMenuButton(true) }}>
                                                 Step 2: CATS
                                             </Nav.Item>
-                                             <Nav.Item eventKey="4" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/site_mapping'); show(); setMenuButton(true) }}>
+                                             <Nav.Item eventKey="4" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/site_mapping'); show(); setMenuButton(true) }}>
                                                 Site Mapping
                                             </Nav.Item>
-                                              <Nav.Item eventKey="5" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/sn_mapping'); show(); setMenuButton(true) }}>
+                                              <Nav.Item eventKey="5" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/sn_mapping'); show(); setMenuButton(true) }}>
                                                 SN Mapping
                                             </Nav.Item>
-                                            <Nav.Item eventKey="6" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/fmr'); show(); setMenuButton(true) }}>
+                                            <Nav.Item eventKey="6" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/fmr'); show(); setMenuButton(true) }}>
                                                 Forword Material Reconcilation
                                             </Nav.Item>
                                             {/* <Nav.Menu eventKey="3" placement="rightStart" title="NOM Audit" icon={<DocPassIcon />}>
