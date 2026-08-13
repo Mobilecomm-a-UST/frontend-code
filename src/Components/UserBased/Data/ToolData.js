@@ -41,7 +41,7 @@ import OperatePeopleIcon from '@rsuite/icons/OperatePeople';
 import DraftRoundIcon from '@rsuite/icons/DraftRound';
 import BytedanceIcon from '@rsuite/icons/Bytedance';
 import WidgetsIcon from '@mui/icons-material/Widgets';
-
+import LocationSearchingRoundedIcon from '@mui/icons-material/LocationSearchingRounded';
 
 import { groupBy } from 'lodash';
 
@@ -504,10 +504,20 @@ const ToolData = [
         groupBy: ['admin','BR_Admin',"BR"]
     },
 
+    //  {
+    //     id: 45,
+    //     name: 'TS Tracker',
+    //     title: 'TS Tracker System',
+    //     icons: LocationSearchingRoundedIcon,
+    //     fullname: 'TS Tracker',
+    //     link: '/tools/ts_tracker',
+    //     groupBy: ['admin','TS_Admin']
+    // },
+
     
 
     //  {
-    //     id: 45,
+    //     id: 46,
     //     name: 'Performance',
     //     title: 'This is Performance New System',
     //     icons: OperatePeopleIcon,

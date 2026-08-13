@@ -156,7 +156,7 @@ const BhartiGPLAudit = () => {
                                         <div style={{ float: "left" }}>
                                             <Button variant="contained" component="label" color={make4GFiles.length > 0 ? "warning" : "primary"}>
                                                 select file
-                                                <input required hidden accept=".log,.txt" type="file"
+                                                <input required hidden accept=".log,.txt" multiple type="file"
                                                     // webkitdirectory="true"
                                                     // directory="true"
                                                     onChange={(e) => { handle4GFileSelection(e); setShow4G(false); }} />

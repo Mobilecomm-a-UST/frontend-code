@@ -79,7 +79,7 @@ const LogsTool = lazy(()=>import('./Components/UserInterface/Logs Tools/LogsTool
 const BasebandRequirement = lazy(()=>import('./Components/UserInterface/Baseband Requirement/BasebandRequirement'))
 const QualityTeamTool = lazy(()=>import('./Components/UserInterface/Quality Team Tools/QualityTeamTool'))
 const AlarmLogs = lazy(()=>import('./Components/UserInterface/Alarm Logs Tool/AlarmLogs'))
-
+const Tstracker = lazy(()=>import('./Components/UserInterface/TS Tracker/TS_Tracker'))
 
 
 const queryClient = new QueryClient()
@@ -356,6 +356,13 @@ function App() {
                 <ProtectedRoute element={IX_Ericsson} allowedUserTypes={['admin', 'IX_ER']} userType={userType} />
               </Suspense>
             } />
+
+            <Route path="/tools/ix_tools/ix_tstracker/*" element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProtectedRoute element={Tstracker} allowedUserTypes={['admin', 'IX_TS']} userType={userType} />
+              </Suspense>
+            } />
+
 
             <Route path="/tools/microwave_soft_at/*" element={
               <Suspense fallback={<div>Loading...</div>}>

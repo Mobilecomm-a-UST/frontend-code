@@ -9,6 +9,8 @@ import { useNavigate } from 'react-router-dom'
 import { Routes, Route } from "react-router-dom";
 import CombinationIcon from '@rsuite/icons/Combination';
 import Loader from '../../Skeleton/Loader';
+import './../../../App.css'
+
 
 import ChangeListIcon from '@rsuite/icons/ChangeList';
 const Make4G = lazy(() => import('./MakeAlarm/Make4G'))
@@ -49,13 +51,13 @@ const Dma = () => {
                     <Grid item xs={0} md={2} sx={{}}>
                         <Box sx={{ display: { xs: 'inherit', md: 'none' } }}>
                             <Collapse in={!checked}>
-                                <Button onClick={() => { show() }} style={{ position: 'absolute', top: '60px', backgroundColor: '#223354' }}><SettingsIcon style={{ color: "white" }} /></Button>
+                                <Button onClick={() => { show() }} style={{ position: 'absolute', top: '60px', backgroundColor: '#006e74' }}><SettingsIcon style={{ color: "white" }} /></Button>
                             </Collapse>
                             <Collapse in={checked} orientation="horizontal" timeout={'auto'}>
-                                <Box sx={{ width: 240, minHeight: "670px", height: "100hv", backgroundColor: "#223354", borderRadius: 5, position: 'fixed', zIndex: 10 }}>
+                                <Box sx={{ width: 240, minHeight: "670px", height: "100hv", backgroundColor: "#006e74", borderRadius: 5, position: 'fixed', zIndex: 10 }}>
                                     <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle">
                                         <Sidenav.Body>
-                                            <Nav activeKey={activeKey} onSelect={setActiveKey} style={{ width: 'auto', minHeight: "670px", height: "100hv", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
+                                            <Nav activeKey={activeKey} onSelect={setActiveKey} style={{ width: 'auto', minHeight: "670px", height: "100hv", backgroundColor: "#006e74", marginTop: 8, borderRadius: 10 }}>
                                                 <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>DSA TOOL</Nav>
 
 
@@ -73,7 +75,7 @@ const Dma = () => {
                         {/* THIS VIEW FOR PC  */}
                         <Box sx={{ display: { xs: 'none', md: 'inherit' } }} >
                             <Box sx={{ position: 'fixed', width: '16.5%' }} >
-                                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
+                                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#006e74", marginTop: 8, borderRadius: 10 }}>
                                     <Sidenav.Body>
                                         <Nav activeKey={activeKey} onSelect={setActiveKey} >
                                             <Nav style={{ fontWeight: 500, color: 'white', textAlign: 'center', fontSize: 20 }}>DSA TOOL</Nav>
@@ -85,19 +87,19 @@ const Dma = () => {
                                             5G Alarm
                                         </Nav.Item>
                                     </Nav.Menu>
-                                            <Nav.Item eventKey="2" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/dma/make_4g'); show(); setMenuButton(true) }}>
+                                            <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/dma/make_4g'); show(); setMenuButton(true) }}>
                                                 Make 4G Alarm
                                             </Nav.Item>
-                                            <Nav.Item eventKey="3" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/dma/make_5g'); show(); setMenuButton(true) }}>
+                                            <Nav.Item eventKey="3" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/dma/make_5g'); show(); setMenuButton(true) }}>
                                                 Make 5G Alarm
                                             </Nav.Item>
-                                            <Nav.Item eventKey="4" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/dma/RRU_status'); show(); setMenuButton(true) }}>
+                                            <Nav.Item eventKey="4" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/dma/RRU_status'); show(); setMenuButton(true) }}>
                                                 RRU Status
                                             </Nav.Item>
-                                            <Nav.Item eventKey="5" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/dma/twamp_ericsson'); show(); setMenuButton(true) }}>
+                                            <Nav.Item eventKey="5" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/dma/twamp_ericsson'); show(); setMenuButton(true) }}>
                                                 Twamp Ericsson
                                             </Nav.Item>
-                                                  <Nav.Item eventKey="6" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/dma/twamp_2.0'); show(); setMenuButton(true) }}>
+                                                  <Nav.Item eventKey="6" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/dma/twamp_2.0'); show(); setMenuButton(true) }}>
                                                 Twamp 2.0
                                             </Nav.Item>
                                             {/* <Nav.Menu eventKey="3" placement="rightStart" title="NOM Audit" icon={<DocPassIcon />}>

@@ -18,6 +18,7 @@ import DocPassIcon from '@rsuite/icons/DocPass';
 import CheckOutlineIcon from '@rsuite/icons/CheckOutline';
 import ChangeListIcon from '@rsuite/icons/ChangeList';
 import ChangeList from '@rsuite/icons/ChangeList'; 
+import './../../../App.css'
 
 
 const G2ScriptingTool = lazy(() => import('./2GScriptingTool'))
@@ -52,13 +53,13 @@ const G2Scripting = () => {
                     <Grid item xs={0} md={2} sx={{}}>
                         <Box sx={{ display: { xs: 'inherit', md: 'none' } }}>
                             <Collapse in={!checked}>
-                                <Button onClick={() => { show() }} style={{ position: 'absolute', top: '60px', backgroundColor: '#223354' }}><SettingsIcon style={{ color: "white" }} /></Button>
+                                <Button onClick={() => { show() }} style={{ position: 'absolute', top: '60px', backgroundColor: '#006e74' }}><SettingsIcon style={{ color: "white" }} /></Button>
                             </Collapse>
                             <Collapse in={checked} orientation="horizontal" timeout={'auto'}>
-                                <Box sx={{ width: 240, minHeight: "670px", height: "100hv", backgroundColor: "#223354", borderRadius: 5, position: 'fixed', zIndex: 10 }}>
+                                <Box sx={{ width: 240, minHeight: "670px", height: "100hv", backgroundColor: "#006e74", borderRadius: 5, position: 'fixed', zIndex: 10 }}>
                                     <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle">
                                         <Sidenav.Body>
-                                            <Nav activeKey={activeKey} onSelect={setActiveKey} style={{ width: 'auto', minHeight: "670px", height: "100hv", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
+                                            <Nav activeKey={activeKey} onSelect={setActiveKey} style={{ width: 'auto', minHeight: "670px", height: "100hv", backgroundColor: "#006e74", marginTop: 8, borderRadius: 10 }}>
                                                 <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>2G Scripting</Nav>
 
                                                 <Nav.Item eventKey="3-2" placement="rightStart" onClick={() => { navigate('/tools/2g_scripting/2g_script'); show(); setMenuButton(true) }}>
@@ -78,7 +79,7 @@ const G2Scripting = () => {
                         {/* THIS VIEW FOR PC  */}
                         <Box sx={{ display: { xs: 'none', md: 'inherit' } }} >
                             <Box sx={{ position: 'fixed', width: '16.5%' }} >
-                                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
+                                <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#006e74", marginTop: 8, borderRadius: 10 }}>
                                     <Sidenav.Body>
                                         <Nav activeKey={activeKey} onSelect={setActiveKey} >
                                             <Nav style={{ fontWeight: 500, color: 'white', textAlign: 'center', fontSize: 20 }}>2G Scripting</Nav>
@@ -87,7 +88,7 @@ const G2Scripting = () => {
                                                 eventKey="3-2"
                                                 placement="rightStart"
                                                 icon={<ChangeListIcon />}
-                                                onClick={() => {
+                                                className="single-item-custom" onClick={() => {
                                                     navigate('/tools/2g_scripting/2g_script');
                                                     show();
                                                     setMenuButton(true);
