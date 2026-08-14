@@ -1908,7 +1908,7 @@ function FTR_OfferedSiteWise() {
     return (
         <Slide direction="left" in="true" timeout={1000}>
             <div>
-                <Box sx={{ minHeight: "100%", width: "100%", bgcolor: PAGE_BG, fontFamily: "Roboto, sans-serif" }}>
+                <Box sx={{ minHeight: "100%", width: "100%", fontFamily: "Roboto, sans-serif" }}>
                     <Box sx={{ width: "100%", px: { xs: 2, sm: 3, md: 4 }, py: 3 }}>
                         {/* Header */}
                         <Paper

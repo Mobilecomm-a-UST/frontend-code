@@ -1005,7 +1005,7 @@ const C = {
     border: "#c3cbd6",
 };
 
-const PAGE_BG = "#fdece0"; // warm peach/orange page background (replaces bluish tone)
+// const PAGE_BG = "#fdece0"; // warm peach/orange page background (replaces bluish tone)
 
 const ROW_H = 37; // approx header row height, used for sticky offset of 2nd header row
 
@@ -1295,7 +1295,7 @@ function VIHotoFtr() {
     return (
         <Slide direction="left" in="true" timeout={1000}>
             <div>
-                <Box sx={{ minHeight: "100%", width: "100%", bgcolor: PAGE_BG, fontFamily: "Roboto, sans-serif" }}>
+                <Box sx={{ minHeight: "100%", width: "100%",  fontFamily: "Roboto, sans-serif" }}>
                     <Box sx={{ width: "100%", px: { xs: 2, sm: 3, md: 4 }, py: 3 }}>
                         {/* Header */}
                         <Paper
