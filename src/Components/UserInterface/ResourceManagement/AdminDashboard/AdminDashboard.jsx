@@ -3,30 +3,12 @@
 import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import ReactECharts from "echarts-for-react";
-
-import {
-    Chart as ChartJS,
-    CategoryScale,
-    LinearScale,
-    BarElement,
-    ArcElement,
-    Tooltip,
-    Legend,
-} from "chart.js";
-
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend, } from "chart.js";
 import { Bar, Doughnut } from "react-chartjs-2";
 import AnalyticsDrawer from "./AnalyticsDrawer";
 import annotationPlugin from "chartjs-plugin-annotation";
 
-ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    BarElement,
-    ArcElement,
-    Tooltip,
-    Legend,
-    annotationPlugin
-);
+ChartJS.register( CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend, annotationPlugin );
 
 const MONTHS = [
     "Jan-26",

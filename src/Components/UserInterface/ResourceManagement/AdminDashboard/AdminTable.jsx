@@ -1,9 +1,11 @@
-// import React, { useState, useEffect, useMemo } from 'react';
-// import { getDecreyptedData } from '../../../utils/localstorage';
-// import axios from 'axios';
-// import ExcelJS from "exceljs";
-// import { saveAs } from "file-saver";
-// import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend, Filler, } from "chart.js";
+import React, { memo, useCallback, useEffect, useMemo, useState, } from "react";
+import axios from "axios";
+import ExcelJS from "exceljs";
+import { saveAs } from "file-saver";
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend, } from "chart.js";
+import { Line } from "react-chartjs-2";
+import ChartDataLabels from "chartjs-plugin-datalabels";
+ChartJS.register( CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend,ChartDataLabels);
 
 
 const CATEGORY_CONFIG = {
@@ -140,21 +142,6 @@ const CATEGORY_CONFIG = {
         ],
     },
 };
-
-
-
-import React, { memo, useCallback, useEffect, useMemo, useState, } from "react";
-import axios from "axios";
-import ExcelJS from "exceljs";
-import { saveAs } from "file-saver";
-//   new code
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend, } from "chart.js";
-import { Line } from "react-chartjs-2";
-import ChartDataLabels from "chartjs-plugin-datalabels";
-ChartJS.register( CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend,ChartDataLabels);
-
-
-
 
 
 const MONTHS = [ "Jan-26", "Feb-26", "Mar-26", "Apr-26", "May-26", "Jun-26", "Jul-26"];
