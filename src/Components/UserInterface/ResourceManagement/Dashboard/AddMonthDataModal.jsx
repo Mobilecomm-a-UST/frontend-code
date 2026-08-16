@@ -5,16 +5,6 @@ const CURRENT_YEAR = new Date().getFullYear();
 const YEARS = Array.from({ length: CURRENT_YEAR - START_YEAR + 1 },(_, i) => String(START_YEAR + i));
 const COUNT_OPTIONS = Array.from({ length: 11 }, (_, i) => i); 
 
-// const NAME_OPTIONS = [
-//   { id: "e1", name: "Mohit Batra", ustId: "UST1001" },
-//   { id: "e2", name: "Vishal Yadav",   ustId: "UST1002" },
-//   { id: "e3", name: "Girraj Singh",  ustId: "UST1003" },
-//   { id: "e4", name: "Prerna", ustId: "UST1004" },
-//   { id: "e5", name: "Abhinav",   ustId: "UST1005" },
-//   { id: "e6", name: "Abhishek",  ustId: "UST1006" },
-  
-// ];
-
 const PROJECT_OPTIONS = [
   { id: "p1", name: "Relcoation" },
   { id: "p2", name: "NT/Upgrade" },
@@ -181,6 +171,7 @@ const AddMonthDataModal = ({ catColor,costCenter,onSubmit}) => {
   const [otherResources, setOtherResources] = useState(buildEmptyOtherResources());
   const [nameOptions, setNameOptions] = useState([]);
 
+
   useEffect(() => {
     if (!open) return;
 
@@ -251,38 +242,69 @@ const AddMonthDataModal = ({ catColor,costCenter,onSubmit}) => {
     }));
   }
 
+  // function updateResourceMember(roleId, index, field, value) {
+  //   setResources(prev => {
+  //     const members = [...prev[roleId].members];
+
+  //     if (field === "name") {
+  //       const emp = nameOptions.find(n => n.id === value);
+
+  //       members[index] = {...members[index],name: emp ? emp.name : "",ustId: emp ? emp.ustId : "",id: emp?.id || "",};
+
+  //     } else if (field === "projects") {
+  //       const projectNames = PROJECT_OPTIONS.filter(p => value.includes(p.id)).map(p => p.name);
+  //       members[index] = {...members[index],projects: value};
+
+  //     } else {
+  //       members[index] = {...members[index],[field]: value};
+  //     }
+
+  //     return {...prev,[roleId]: {...prev[roleId],members}};
+  //   });
+
+  //   setErrors(prev => {
+  //     const roleErr = prev[roleId] || {};
+  //     const memberErrs = [...(roleErr.members || [])];
+  //     memberErrs[index] = { ...memberErrs[index], [field]: "" };
+
+  //     return {...prev,[roleId]: {...roleErr,members: memberErrs}};
+  //   });
+  // }
+
+
   function updateResourceMember(roleId, index, field, value) {
     setResources(prev => {
       const members = [...prev[roleId].members];
-
       if (field === "name") {
-        const emp = nameOptions.find(n => n.id === value);
-
-        members[index] = {...members[index],name: emp ? emp.name : "",ustId: emp ? emp.ustId : "",id: emp?.id || "",};
+          const emp = nameOptions.find( n => n.id === value );
+          if (emp) {
+              const isDuplicate = members.some( (member, memberIndex) => memberIndex !== index && String(member.ustId).trim() === String(emp.ustId).trim() );
+              if (isDuplicate) {
+                alert(
+                    `${emp.name} (${emp.ustId}) is already added in ${RESOURCE_ROLES.find(r => r.id === roleId)?.role || roleId}.`
+                );
+                return prev;
+              }
+              members[index] = { ...members[index], name: emp.name, ustId: emp.ustId, id: emp.id || "", };
+          } else {
+              members[index] = { ...members[index], name: "", ustId: "", id: "", };
+          }
 
       } else if (field === "projects") {
-        const projectNames = PROJECT_OPTIONS.filter(p => value.includes(p.id)).map(p => p.name);
-        members[index] = {...members[index],projects: value};
-
+          const projectNames = PROJECT_OPTIONS .filter(p => value.includes(p.id)) .map(p => p.name);
+          members[index] = { ...members[index], projects: value, };
       } else {
-        members[index] = {...members[index],[field]: value};
+          members[index] = { ...members[index], [field]: value, };
       }
-
-      return {...prev,[roleId]: {...prev[roleId],members}};
+      return { ...prev, [roleId]: { ...prev[roleId], members, }, };
     });
-
     setErrors(prev => {
-      const roleErr = prev[roleId] || {};
-      const memberErrs = [...(roleErr.members || [])];
-      memberErrs[index] = { ...memberErrs[index], [field]: "" };
-
-      return {...prev,[roleId]: {...roleErr,members: memberErrs}};
+        const roleErr = prev[roleId] || {};
+        const memberErrs = [...(roleErr.members || [])];
+        memberErrs[index] = { ...memberErrs[index], [field]: "", };
+        return { ...prev, [roleId]: { ...roleErr, members: memberErrs, }, };
     });
   }
-
-
-
-
 
   function updateOtherResourceMember(roleId, index, field, value) {
     setOtherResources(prev => {
@@ -291,7 +313,21 @@ const AddMonthDataModal = ({ catColor,costCenter,onSubmit}) => {
       if (field === "name") {
         const emp = nameOptions.find(n => n.id === value);
 
-        members[index] = {...members[index],name: emp ? emp.name : "",ustId: emp ? emp.ustId : "",id:emp?.id || ""};
+        if (emp) {
+              const isDuplicate = members.some( (member, memberIndex) => memberIndex !== index && String(member.ustId).trim() === String(emp.ustId).trim() );
+              if (isDuplicate) {
+                alert(
+                    `${emp.name} (${emp.ustId}) is already added in ${OTHER_RESOURCE_ROLES.find(r => r.id === roleId)?.role || roleId}.`
+                );
+                return prev;
+              }
+              members[index] = { ...members[index], name: emp.name, ustId: emp.ustId, id: emp.id || "", };
+          } else {
+              members[index] = { ...members[index], name: "", ustId: "", id: "", };
+          }
+
+
+        // members[index] = {...members[index],name: emp ? emp.name : "",ustId: emp ? emp.ustId : "",id:emp?.id || ""};
 
       } else if (field === "projects") {
         const projectNames = PROJECT_OPTIONS.filter(p => value.includes(p.id)).map(p => p.name);
@@ -442,6 +478,46 @@ const AddMonthDataModal = ({ catColor,costCenter,onSubmit}) => {
 
     return { newErrors, isValid };
   }
+
+  // const isDuplicateMember = (resourceData, roleId, ustId) => {
+  //   const members = resourceData?.[roleId]?.members || [];
+
+  //   return members.some(
+  //       (member) =>
+  //           String(member.ustId).trim() ===
+  //           String(ustId).trim()
+  //   );
+  // }
+
+  // const duplicateInResource = isDuplicateMember(
+  //   resources,
+  //   selectedRole,
+  //   selectedUser.ustId
+  // );
+
+  // if (duplicateInResource) {
+  //     alert(
+  //         `${selectedUser.ustId} is already added in this role.`
+  //     );
+  //     return;
+  // }
+
+  // const duplicateInOtherResource = isDuplicateMember(
+  //   otherResources,
+  //   selectedOtherRole,
+  //   selectedUser.ustId
+  // );
+
+  // if (duplicateInOtherResource) {
+  //     alert(
+  //         `${selectedUser.ustId} is already added in this role.`
+  //     );
+  //     return;
+  // }
+
+
+
+  console.log(resources,"resourcesresources")
 
 
 
@@ -601,7 +677,6 @@ const AddMonthDataModal = ({ catColor,costCenter,onSubmit}) => {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            // paddingTop: "5vh",
             padding: "2rem",
             overflowY: "auto",
            
@@ -663,7 +738,7 @@ const AddMonthDataModal = ({ catColor,costCenter,onSubmit}) => {
               </div>
 
               {/* ── Resource Table ── */}
-              <div style={{ fontSize: 12, fontWeight: 600, color: "#444", marginBottom: 8 }}>
+              <div style={{ fontSize: 12, fontWeight: 600, color: "#333", marginBottom: 8 }}>
                 Resource Management
               </div>
               <div style={{ border: "0.5px solid #ddd", borderRadius: 8, overflow: "visible" }}>
@@ -922,5 +997,4 @@ const AddMonthDataModal = ({ catColor,costCenter,onSubmit}) => {
     </>
   );
 };
-
 export default AddMonthDataModal;
