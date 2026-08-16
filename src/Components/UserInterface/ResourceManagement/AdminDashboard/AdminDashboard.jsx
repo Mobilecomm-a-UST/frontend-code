@@ -16,6 +16,7 @@ import {
 
 import { Bar, Doughnut } from "react-chartjs-2";
 import AnalyticsDrawer from "./AnalyticsDrawer";
+import annotationPlugin from "chartjs-plugin-annotation";
 
 ChartJS.register(
     CategoryScale,
@@ -23,7 +24,8 @@ ChartJS.register(
     BarElement,
     ArcElement,
     Tooltip,
-    Legend
+    Legend,
+    annotationPlugin
 );
 
 const MONTHS = [
@@ -43,7 +45,7 @@ const MONTHS = [
 
 export default function Analytics() {
 
-    const [month, setMonth] = useState("Jun-26");
+    const [month, setMonth] = useState("Jul-26");
     const [loading, setLoading] = useState(false);
     const [records, setRecords] = useState([]);
     const [revenueFilter, setRevenueFilter] = useState("");
@@ -179,7 +181,8 @@ export default function Analytics() {
                 item.gpPercent
             ],
 
-            name: item.circle,
+            // name: `${item.circle}-${item.customer}`,
+            name: item.customer === "Airtel" ? `${item.circle}-Air` : `${item.circle}-${item.customer}`,
             customer: item.customer,
             totalCost: item.totalCost,
             revenue: item.revenue,
@@ -211,9 +214,7 @@ export default function Analytics() {
         tooltip: {
 
             trigger: "item",
-
             formatter: function (params) {
-
                 const d = params.data;
 
                 return `
@@ -531,23 +532,33 @@ export default function Analytics() {
 
 
     const gpChart = {
+        // labels,
+        labels: tableData.map((item) => {
+            const customer =
+                item.customer?.toLowerCase() === "airtel"
+                    ? "Air"
+                    : item.customer;
 
-        labels,
-
+            return `${item.circle}-${customer}`;
+        }),
         datasets: [
-
             {
-
                 label: "GP %",
-
-                data: tableData.map(x => x.gpPercent),
-
-                backgroundColor: "#43a047"
-
+                data: tableData.map(x => Math.round(x.gpPercent)),
+                backgroundColor: tableData.map(x =>
+                    Math.round(x.gpPercent) > 25
+                        ? "#43a047"
+                        : "#e53935"
+                ),
+                borderColor: tableData.map(x =>
+                    Math.round(x.gpPercent) > 25
+                        ? "#2e7d32"
+                        : "#c62828"
+                ),
+                borderWidth: 1,
+                borderRadius: 3,
             }
-
         ]
-
     };
 
 
@@ -666,32 +677,103 @@ export default function Analytics() {
 
 
 
+    // const gpOptions = {
+
+    //     responsive: true,
+
+    //     plugins: {
+    //         legend: { display: false },
+    //         datalabels: { display: true, },
+    //     },
+
+    //     scales: {
+    //         y: {
+    //             beginAtZero: true,
+    //             max: 100
+    //         }
+
+    //     }
+
+    // };
+
     const gpOptions = {
 
-        responsive: true,
+    responsive: true,
+    plugins: {
+        legend: {
+            display: false,
+        },
+        datalabels: {
+            display: true,
+            color: "#000",
+            font: {
+                size: 10,
+                weight: "600",
+            },
 
-        plugins: {
-
-            legend: { display: false },
-            datalabels: { display: false, },
-
+            formatter: (value) => {
+                return `${value}`;
+            },
         },
 
-        scales: {
+        annotation: {
+            annotations: {
+                targetLine: {
+                    type: "line",
+                    yMin: 25,
+                    yMax: 25,
+                    borderColor: "#1565C0",
+                    borderWidth: 2,
+                    borderDash: [6, 6],
+                    label: {
+                        display: true,
+                        content: "",
+                        position: "end",
+                        backgroundColor: "#1565C0",
+                        color: "#fff",
+                        font: {
+                            size: 11,
+                            weight: "600",
+                        },
+                        padding: 5,
+                    },
+                },
+            },
+        },
+    },
+    scales: {
+        y: {
+            beginAtZero: true,
+            max: 100,
+            ticks: {
+                callback: (value) => `${value}%`,
+            },
+            title: {
+                display: true,
+                text: "GP %",
+            },
+        },
 
-            y: {
+        x: {
 
-                beginAtZero: true,
+            ticks: {
+                minRotation: 90,
+                maxRotation: 90,
+                autoSkip: false,
 
-                max: 100
+                font: {
+                    size: 11,
+                    weight: "600",
+                    color:"#000"
+                },
+            },
 
-            }
-
-        }
-
-    };
-
-
+            grid: {
+                display: false,
+            },
+        },
+    },
+};
 
     const doughnutOptions = {
 
@@ -1470,7 +1552,7 @@ export default function Analytics() {
                                     background: "#fff",
                                     borderRadius: 12,
                                     padding: 20,
-                                    boxShadow: "0 2px 8px rgba(0,0,0,.08)"
+                                    boxShadow: "0 2px 8px rgba(0,0,0,.08)",
                                 }}
                             >
 
