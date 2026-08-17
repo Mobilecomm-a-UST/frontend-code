@@ -187,7 +187,7 @@ const ToolData = [
         icons: DocPassIcon,
         fullname: 'Integration Tools',
         link: '/tools/ix_tools',
-        groupBy: ['admin', 'IX', 'VI_IX', 'VI_IX_reader', 'soft_at_team', 'IX_SA', 'IX_ER', 'quality', 'IX_reader', 'quality-s']
+        groupBy: ['admin', 'IX', 'VI_IX', 'VI_IX_reader', 'soft_at_team', 'IX_SA', 'IX_ER', 'quality', 'IX_reader', 'quality-s','IX_TS']
     },
     // {
     //     id: 12,

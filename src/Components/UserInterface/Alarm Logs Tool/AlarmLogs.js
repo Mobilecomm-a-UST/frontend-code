@@ -25,6 +25,7 @@ import { Alarm } from '@mui/icons-material';
 
 const AlarmLogsTool = lazy(() => import("./AlarmLogsTool"));
 const AlarmLogUpload = lazy(() => import("./AlarmLog/AlarmLogUpload"));
+const Dashboard = lazy(() => import("./AlarmLog/Dashboard"));
 
 
 const AlarmLogs = () => {
@@ -69,7 +70,7 @@ const AlarmLogs = () => {
                                                         Upload File
                                             </Nav.Item> 
 
-                                            {/* <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={<SendToDashboardIcon style={{}} />} onClick={() => { navigate('/tools/baseband_requirement/Dashboard'); show(); setMenuButton(true) }}>
+                                            {/* <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={<SendToDashboardIcon style={{}} />} onClick={() => { navigate('/tools/quality_team/alarm_logs/Dashboard'); show(); setMenuButton(true) }}>
                                                 Dashboard
                                             </Nav.Item> */}
 
@@ -86,7 +87,7 @@ const AlarmLogs = () => {
                             <Routes>
                                <Route path="/" element={<AlarmLogsTool />} />
                                <Route path="/AlarmLogUpload" element={<AlarmLogUpload />} />
-
+                               <Route path="/Dashboard" element={<Dashboard />} />
 
 
 
