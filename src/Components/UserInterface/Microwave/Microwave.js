@@ -18,6 +18,7 @@ import Loader from '../../Skeleton/Loader'
 import { Upload } from '@hugeicons/core-free-icons';
 import SendToDashboardIcon from '@rsuite/icons/SendToDashboard';
 import { getDecreyptedData } from '../../utils/localstorage';
+import CollaspedFillIcon from '@rsuite/icons/CollaspedFill';
 
 const MicrowaveTool = lazy(() => import('./MicrowaveTool'))
 const MicrowaveAVIATUpload = lazy(() => import('./MicrowaveAVIAT/MicrowaveAVIATUpload'))
@@ -26,6 +27,7 @@ const MicrowaveCeragonUpload = lazy(() => import('./MicrowaveCeragon/MicrowaveCe
 const Parameter = lazy(() => import('./MicrowaveCeragon/Parameter'))
 const ServerIP = lazy(() => import('./MicrowaveCeragon/ServerIP'))
 const CeragonDashboard = lazy(() => import('./MicrowaveCeragon/CeragonDashboard'))
+const UbrCambium = lazy(() => import('./MicrowaveCeragon/UbrCambium'))
 
 const Microwave = () => {
     const [expanded, setExpanded] = useState(true);
@@ -125,16 +127,25 @@ const Microwave = () => {
                                                         Parameter
                                                     </Nav.Item>
                                                     <Nav.Item eventKey="2-4" className="single-item-custom" placement="rightStart" icon={<AlipayMiniIcon />} onClick={() => { navigate('/tools/microwave_soft_at/ServerIP'); show(); setMenuButton(true) }}>
-                                                        Server IP
+                                                        Server IP 
                                                     </Nav.Item>
 
+
                                                 </>}
+                                                
+                                                    
+                                                    </Nav.Menu>
+                                                     <Nav.Menu eventKey="3" placement="rightStart" title="UBR" className="menu-title-custom" icon={<BytedanceMicroappIcon size="3em" />}>
+                                                         <Nav.Item eventKey="3-1" className="single-item-custom" placement="rightStart" icon={<CollaspedFillIcon />} onClick={() => { navigate('/tools/microwave_soft_at/UbrCambium'); show(); setMenuButton(true) }}>
+                                                             UBR Cambium
+                                                         </Nav.Item>
+                                                     </Nav.Menu>
 
 
                                                 {/* <Nav.Item eventKey="2-2" placement="rightStart" icon={<DashboardIcon />} onClick={() => { navigate('/tools/microwave_soft_at/microwave_aviat_table'); show(); setMenuButton(true) }}>
                                                 Microwave(AVIAT) Dashboard
                                             </Nav.Item> */}
-                                            </Nav.Menu>
+                                            
                                             {/* <Nav.Item eventKey="3" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/CATS'); show(); setMenuButton(true) }}>
                                                 Step 2: CATS
                                             </Nav.Item>
@@ -169,6 +180,7 @@ const Microwave = () => {
                                 }
 
                                 <Route element={<CeragonDashboard />} path="/CeragonDashboard" />
+                                <Route element={<UbrCambium />} path="/UbrCambium" />
 
                             </Routes>
                         </Suspense>
