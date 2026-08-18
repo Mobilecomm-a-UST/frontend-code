@@ -26,6 +26,7 @@ const UPLOADHOTO = lazy(() => import('./VI_Hoto_Dashboard/UPLOADHOTO'));
 const VIHotoFtr = lazy(() => import('./VI_Hoto_Dashboard/VIHotoFtr'));
 const FTR_Dashboard = lazy(() => import('./VI_Hoto_Dashboard/FTR_Dashboard'));
 const VI_Hoto_FTR = lazy(() => import('./VI_Hoto_Dashboard/VI_Hoto_FTR'));
+const UploadVil = lazy(()=>import('./VIL ERICSSON/UploadVil'))
 
 
 const VI_SoftAT = () => {
@@ -91,6 +92,11 @@ const VI_SoftAT = () => {
                                         </Nav.Item> 
 
                                          </Nav.Menu>
+                                         <Nav.Menu eventKey="4" placement="rightStart" className="menu-title-custom" title="VIL ERICSSON" icon={<DashboardIcon size="3em" />}>
+                                         <Nav.Item eventKey="4-1" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/UploadVil')}>
+                                            Upload VIL 
+                                        </Nav.Item>
+                                         </Nav.Menu>
                                          
                                     
                                         {/* <Nav.Item eventKey="2" placement="rightStart" icon={<DashboardIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/vi_ftr_dashboard')}>
@@ -121,6 +127,7 @@ const VI_SoftAT = () => {
                                 <Route element={<VIHotoFtr />} path="/VIHotoFtr" />
                                 <Route element={<FTR_Dashboard />} path="/FTR_Dashboard" />
                                 <Route element={<VI_Hoto_FTR />} path="/VI_Hoto_FTR" />
+                                <Route element={<UploadVil/>} path='/UploadVil'/>
                             </Routes>
                         </Suspense>
                     </Grid>

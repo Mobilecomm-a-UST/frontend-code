@@ -20,6 +20,7 @@ const FileManager = lazy(() => import('./File_manager/FileManager'))
 const SiteMaping = lazy(()=>import('./Site_maping/SiteMaping'))
 const SNmaping = lazy(()=>import('./SNmapping/SNmaping'))
 const Fmr = lazy(()=>import('./Forword Material Reconcilation/Fmr'))
+const RecoMaterial = lazy(()=> import('./Reco Material/RecoMaterial'))
 
 
 
@@ -107,14 +108,17 @@ const MobinateVsCate = () => {
                                             <Nav.Item eventKey="3" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/CATS'); show(); setMenuButton(true) }}>
                                                 Step 2: CATS
                                             </Nav.Item>
-                                             <Nav.Item eventKey="4" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/site_mapping'); show(); setMenuButton(true) }}>
+                                             {/* <Nav.Item eventKey="4" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/site_mapping'); show(); setMenuButton(true) }}>
                                                 Site Mapping
                                             </Nav.Item>
                                               <Nav.Item eventKey="5" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/sn_mapping'); show(); setMenuButton(true) }}>
                                                 SN Mapping
-                                            </Nav.Item>
+                                            </Nav.Item> */}
                                             <Nav.Item eventKey="6" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/fmr'); show(); setMenuButton(true) }}>
                                                 Forword Material Reconcilation
+                                            </Nav.Item>
+                                             <Nav.Item eventKey="7" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/RecoMaterial'); show(); setMenuButton(true) }}>
+                                                Reco Material 
                                             </Nav.Item>
                                             {/* <Nav.Menu eventKey="3" placement="rightStart" title="NOM Audit" icon={<DocPassIcon />}>
                                                 <Nav.Item eventKey="3-1" placement="rightStart" onClick={() => { navigate('/tools/nomenclature_scriptor/nom_audit_dashboard'); show(); setMenuButton(true) }}>
@@ -144,6 +148,7 @@ const MobinateVsCate = () => {
                                 <Route element={<SiteMaping />} path="/site_mapping" />
                                 <Route element={<SNmaping/>} path='/sn_mapping' />
                                 <Route element={<Fmr/>} path='/fmr' />
+                                <Route element={<RecoMaterial/>} path='/RecoMaterial'/>
 
 
                             </Routes>
