@@ -164,7 +164,7 @@ export default function Analytics() {
             ],
 
             // name: `${item.circle}-${item.customer}`,
-            name: item.customer === "Airtel" ? `${item.circle}-Air` : `${item.circle}-${item.customer}`,
+            name: item.customer === "Airtel" ? `${item.circle}` : `${item.circle}-${item.customer}`,
             customer: item.customer,
             totalCost: item.totalCost,
             revenue: item.revenue,
@@ -198,13 +198,13 @@ export default function Analytics() {
             trigger: "item",
             formatter: function (params) {
                 const d = params.data;
-
-                return `
-            <b>${d.customer} - ${d.name}</b><br/>
-            Revenue : ₹ ${d.revenue.toLocaleString("en-IN")}<br/>
-            Total Cost : ₹ ${d.totalCost.toLocaleString("en-IN")}<br/>
-            GP % : ${d.value[1].toFixed(2)}%
-            `;
+                const title = d.customer === "Airtel"? `${d.customer} - ${d.name}` : `${d.name}`
+                return  `
+                    <b>${title}</b><br/>
+                    Revenue : ₹ ${d.revenue.toLocaleString("en-IN")}<br/>
+                    Total Cost : ₹ ${d.totalCost.toLocaleString("en-IN")}<br/>
+                    GP % : ${d.value[1].toFixed(2)}%
+                `;
             }
         },
 
