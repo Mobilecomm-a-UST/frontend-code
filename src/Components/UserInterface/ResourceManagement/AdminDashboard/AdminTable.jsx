@@ -307,6 +307,31 @@ const calculateMonthData = (monthData, month) => {
     };
 };
 
+const getAverageValue = (monthData, costId) => {
+    let values;
+
+    // Revenue Raverage
+    if (costId === "c1") {
+        values = MONTHS
+            .map((month) => monthData?.[month]?.c1)
+            .filter((value) => value !== null && value !== undefined);
+    } 
+    // c2-c7 Percentage Average
+    else {
+        values = MONTHS
+            .map((month) => monthData?.[month]?.percentages?.[costId])
+            .filter((value) => value !== null && value !== undefined);
+    }
+
+    if (!values.length) return null;
+
+    const average = values.reduce((sum, value) => sum + toNumber(value), 0) / values.length;
+    return costId === "c1"
+        ? average.toFixed(2)
+        : `${average.toFixed(2)}%`;
+    // return Number(average.toFixed(2));
+};
+
 
 const getDisplayValue = (monthData, month, costId) => {
     const data = monthData?.[month];
@@ -419,7 +444,7 @@ const AdminTableRow = memo(({
         <tr>
             {isFirst && (
                 <SectionCell
-                     text={`${circleData.circle} - ${circleData.customer}`}
+                    text={`${circleData.circle} - ${circleData.customer}`}
                     rowSpan={totalRows}
                 />
             )}
@@ -468,6 +493,16 @@ const AdminTableRow = memo(({
                     />
                 </td>
             ))}
+            <td
+                style={{
+                    ...styles.cell,
+                    textAlign: "center",
+                    fontWeight: cost.isTotal ? 600 : 400,
+                    background: cost.isTotal ? "#f0f0e8" : "#cce8f7",
+                }}
+            >
+                {getAverageValue(monthData, cost.id)}
+            </td>
         </tr>
     );
 });
@@ -515,6 +550,17 @@ const AdminTable = () => {
         };
     }, []);
 
+
+    useEffect(() => {
+        if (viewType === "table"){
+            setSelectedCost("")
+        }
+        else {
+          setSelectedCost("c7")  
+        }
+
+    },[viewType])
+
     const circleList = useMemo(() => {
         return [
             ...new Set(
@@ -544,10 +590,7 @@ const AdminTable = () => {
         return filteredData.map((circleData) => {
             const monthData = {};
             MONTHS.forEach((month) => {
-                monthData[month] = calculateMonthData(
-                    circleData.months,
-                    month
-                );
+                monthData[month] = calculateMonthData( circleData.months, month );
             });
 
             return {
@@ -557,52 +600,49 @@ const AdminTable = () => {
         });
     }, [filteredData]);
 
+    const LINE_CHART_COLORS = [
+        "#2563EB", // Blue
+        "#16A34A", // Green
+        "#DC2626", // Red
+        "#9333EA", // Purple
+        "#EA580C", // Orange
+        "#0891B2", // Cyan
+        "#DB2777", // Pink
+        "#65A30D", // Lime
+        "#7C3AED", // Violet
+        "#0F766E", // Teal
+        "#CA8A04", // Yellow
+        "#C026D3", // Magenta
+        "#0284C7", // Sky Blue
+        "#15803D", // Emerald
+        "#B91C1C", // Dark Red
+        "#6D28D9", // Indigo
+        "#C2410C", // Dark Orange
+        "#0369A1", // Deep Sky
+        "#4D7C0F", // Olive
+        "#A21CAF", // Fuchsia
+        "#047857", // Green Teal
+        "#BE123C", // Rose
+        "#4338CA", // Deep Indigo
+        "#92400E", // Brown
+        "#1D4ED8", // Strong Blue
+    ];
 
 
-    // new code
-
-const CHART_COLORS = [
-    "#2563EB", // Blue
-    "#16A34A", // Green
-    "#DC2626", // Red
-    "#9333EA", // Purple
-    "#EA580C", // Orange
-    "#0891B2", // Cyan
-    "#DB2777", // Pink
-    "#65A30D", // Lime
-    "#7C3AED", // Violet
-    "#0F766E", // Teal
-    "#CA8A04", // Yellow
-    "#C026D3", // Magenta
-    "#0284C7", // Sky Blue
-    "#15803D", // Emerald
-    "#B91C1C", // Dark Red
-    "#6D28D9", // Indigo
-    "#C2410C", // Dark Orange
-    "#0369A1", // Deep Sky
-    "#4D7C0F", // Olive
-    "#A21CAF", // Fuchsia
-    "#047857", // Green Teal
-    "#BE123C", // Rose
-    "#4338CA", // Deep Indigo
-    "#92400E", // Brown
-    "#1D4ED8", // Strong Blue
-];
-
-
-    const gpTrendData = useMemo(() => {
+    const lineGraphData = useMemo(() => {
 
         const data = preparedData.filter((item) => selectedCircles.includes(item.circle) );
 
         return {
             labels: MONTHS,
             datasets: data.map((circleData, index) => {
-                const color = CHART_COLORS[index % CHART_COLORS.length];
+                const color = LINE_CHART_COLORS[index % LINE_CHART_COLORS.length];
                 return {
                     label: `${circleData.circle}-${circleData.customer}`,
                     customer: circleData.customer,
                     data: MONTHS.map((month) => {
-                        const value = circleData.preparedMonths?.[month]?.percentages?.c7;
+                        const value = selectedCost === "" ? circleData.preparedMonths?.[month]?.percentages?.c7
+                                : circleData.preparedMonths?.[month]?.percentages?.[selectedCost];
                         return value != null ? Math.round(value) : null;
                     }),
                     borderColor: color,
@@ -619,12 +659,12 @@ const CHART_COLORS = [
             }),
         };
 
-    }, [preparedData, selectedCircles]);
+    }, [preparedData,selectedCircles,selectedCost]);
     
     
 
 
-    const gpTrendOptions = {
+    const lineGraphOptions = {
 
         responsive: true,
         maintainAspectRatio: false,
@@ -636,6 +676,11 @@ const CHART_COLORS = [
             duration: 1000,
             easing: "easeOutQuart",
         },
+        // layout: {
+        //     padding: {
+        //         top: 20,
+        //     },
+        // },
         plugins: {
             legend: {
                 position: "bottom",
@@ -659,7 +704,7 @@ const CHART_COLORS = [
                 anchor: "end",
                 align: "top",
                 offset: 2,
-                clamp: true,
+                clamp: false,
                 clip: false,
             },
             tooltip: {
@@ -683,6 +728,7 @@ const CHART_COLORS = [
         scales: {
             y: {
                 beginAtZero: false,
+                grace: "10%",
                 grid: {
                     display:false,
                 },
@@ -696,7 +742,7 @@ const CHART_COLORS = [
                 title: {
                     display: true,
                     color:"#333",
-                    text: "Gross Profit %",
+                    text: `${CATEGORY_LIST.find(item => item.id === selectedCost)?.label || "Gross Profit"} %`,
                     font: {
                         weight: "600",
                         size:"14px"
@@ -737,7 +783,7 @@ const CHART_COLORS = [
                 ySplit: 1,
             },
         ];
-        const header = [ "Circle", "Category", "Allowed", ...MONTHS, ];
+        const header = [ "Circle", "Category", "Allowed", ...MONTHS,"Average"];
         const headerRow = worksheet.addRow(header);
 
         headerRow.eachCell((cell) => {
@@ -785,42 +831,43 @@ const CHART_COLORS = [
 
 
             costs.forEach((cost) => {
-
-                const row = [
-                    circleData.circle,
-                    cost.label,
-                    cost.value,
-                ];
-
+                
+                const row = [ circleData.circle, cost.label, cost.value];
 
                 MONTHS.forEach((month) => {
-
-                    const value =
-                        circleData.preparedMonths[
-                            month
-                        ];
-
+                    const value = circleData.preparedMonths[ month ];
                     if (cost.id === "c1") {
-                        row.push(
-                            value?.c1?.toFixed(0) || ""
-                        );
+                        row.push( value?.c1?.toFixed(0) || "" );
                     } else {
-                        const percentage =
-                            value?.percentages?.[
-                                cost.id
-                            ];
-
-                        row.push(
-                            percentage != null
-                                ? `${percentage.toFixed(2)}%`
-                                : ""
-                        );
+                        const percentage = value?.percentages?.[ cost.id ];
+                        row.push( percentage != null ? `${percentage.toFixed(2)}%` : "" );
                     }
                 });
 
+                const averageValues = MONTHS.map((month) => {
+                    const value = circleData.preparedMonths[month];
+                    return cost.id === "c1" ? value?.c1 : value?.percentages?.[cost.id];
+                }) .filter((value) => value != null);
 
-                const excelRow =
-                    worksheet.addRow(row);
+                const average = averageValues.length
+                    ? averageValues.reduce(
+                        (sum, value) => sum + Number(value),
+                        0
+                    ) / averageValues.length
+                    : null;
+
+                row.push(
+                    average != null
+                        ? cost.id === "c1"
+                            ? average.toFixed(2)
+                            : `${average.toFixed(2)}%`
+                        : ""
+                );
+
+                
+
+
+                const excelRow = worksheet.addRow(row);
 
 
                 excelRow.eachCell((cell) => {
@@ -970,7 +1017,7 @@ const CHART_COLORS = [
 
         saveAs( new Blob([buffer]), "Admin_Report.xlsx" );
 
-    }, [ preparedData, selectedCost, ]);
+    }, [ preparedData,selectedCost]);
 
 
 
@@ -1007,11 +1054,14 @@ const CHART_COLORS = [
         <div style={styles.container}>
             <div style={styles.toolbar}>
                 <div style={styles.toolbarRight}>
-
-                    {/* VIEW */}
                     <select
                         value={viewType}
-                        onChange={(e) => setViewType( e.target.value ) }
+                        onChange={(e) => {
+                            setViewType(e.target.value);
+                            setFilterCircle("");
+                            setSelectedCost("");
+                            setSelectedCircles([]);
+                        }}
                         style={styles.select}
                     >
                         <option value="table">
@@ -1023,18 +1073,29 @@ const CHART_COLORS = [
                         </option>
                     </select>
 
+                    <select
+                        value={selectedCost}
+                        onChange={(e) => {
+                            setSelectedCost(e.target.value);
+                            // setSelectedCircles([]);
+                        }}
+                        style={styles.select}
+                    >
+                        {/* {CATEGORY_LIST.map( (item) => ( <option key={item.id} value={item.id} > {item.label} </option> ) )} */}
+                        {CATEGORY_LIST .filter( (item) => viewType !== "dashboard" || (item.label !== "All" && item.label !== "Revenue") )
+                            .map((item) => (
+                                <option key={item.id} value={item.id}>{item.label}</option>
+                        ))}
+                    </select>
+
 
                     
                     {viewType === "table" && (
                         <>
-                        {/* CIRCLE */}
+                            {/* CIRCLE */}
                             <select
                                 value={filterCircle}
-                                onChange={(e) =>
-                                    setFilterCircle(
-                                        e.target.value
-                                    )
-                                }
+                                onChange={(e) => setFilterCircle(e.target.value) }
                                 style={styles.select}
                             >
                                 <option value=""> -- All Circles -- </option>
@@ -1046,34 +1107,9 @@ const CHART_COLORS = [
                                 )}
                             </select>
 
-
-                            <select
-                                value={selectedCost}
-                                onChange={(e) =>
-                                    setSelectedCost(
-                                        e.target.value
-                                    )
-                                }
-                                style={styles.select}
-                            >
-                                {CATEGORY_LIST.map(
-                                    (item) => (
-                                        <option
-                                            key={item.id}
-                                            value={item.id}
-                                        >
-                                            {item.label}
-                                        </option>
-                                    )
-                                )}
-                            </select>
-
-
                             <button
                                 onClick={exportToExcel}
-                                style={
-                                    styles.exportButton
-                                }
+                                style={ styles.exportButton }
                             >
                                 Export
                             </button>
@@ -1164,41 +1200,21 @@ const CHART_COLORS = [
                                     )
                                 )}
 
+                                <th
+                                    style={{ ...styles.cell, background: CATEGORY_COLORS.A, color: "#fff", fontWeight: 600, textAlign: "center", }}
+                                >
+                                    Average
+                                </th>
+
                             </tr>
 
 
                             <tr>
-
-                                <th
-                                    style={
-                                        styles.emptyHeader
-                                    }
-                                />
-
-                                <th
-                                    style={
-                                        styles.emptyHeader
-                                    }
-                                />
-
-                                <th
-                                    style={
-                                        styles.emptyHeader
-                                    }
-                                />
-
-                                {MONTHS.map(
-                                    (month) => (
-                                        <th
-                                            key={month}
-                                            style={
-                                                styles.subHeader
-                                            }
-                                        >
-                                            Actual
-                                        </th>
-                                    )
-                                )}
+                                <th style={ styles.emptyHeader } />
+                                <th style={ styles.emptyHeader } />
+                                <th style={ styles.emptyHeader } />
+                                {MONTHS.map( (month) => ( <th key={month} style={ styles.subHeader } > Actual </th> ) )}
+                                <th style={ styles.subHeader } > Actual </th>
 
                             </tr>
 
@@ -1209,51 +1225,23 @@ const CHART_COLORS = [
                             {preparedData.map(
                                 (circleData) => {
 
-                                    const config =
-                                        CATEGORY_CONFIG[
-                                            circleData
-                                                .category
-                                        ];
+                                    const config = CATEGORY_CONFIG[ circleData .category ];
 
                                     if (!config) {
                                         return null;
                                     }
 
-                                    const costs =
-                                        selectedCost
-                                            ? config.costs.filter(
-                                                (cost) =>
-                                                    cost.id ===
-                                                    selectedCost
-                                            )
-                                            : config.costs;
+                                    const costs = selectedCost ? config.costs.filter( (cost) => cost.id === selectedCost ) : config.costs;
 
-                                    return costs.map(
-                                        (
-                                            cost,
-                                            index
-                                        ) => (
-
+                                    return costs.map( ( cost, index ) => (
                                             <AdminTableRow
                                                 key={`${circleData.circle}-${circleData.customer}-${circleData.costCenter}-${cost.id}`}
-                                                circleData={
-                                                    circleData
-                                                }
-                                                cost={
-                                                    cost
-                                                }
-                                                monthData={
-                                                    circleData.preparedMonths
-                                                }
-                                                isFirst={
-                                                    index ===
-                                                    0
-                                                }
-                                                totalRows={
-                                                    costs.length
-                                                }
+                                                circleData={ circleData }
+                                                cost={ cost }
+                                                monthData={ circleData.preparedMonths }
+                                                isFirst={ index === 0 }
+                                                totalRows={ costs.length }
                                             />
-
                                         )
                                     );
                                 }
@@ -1372,8 +1360,8 @@ const CHART_COLORS = [
                     >
                         {selectedCircles.length > 0 ? (
                             <Line
-                                data={gpTrendData}
-                                options={gpTrendOptions}
+                                data={lineGraphData}
+                                options={lineGraphOptions}
                             />
                         ) : (
                             <div
