@@ -761,7 +761,7 @@ const UbrCambium = () => {
                 <Box>
                     <Box className={classes.main_Box}>
                         <Box className={classes.Back_Box} sx={{ width: { md: "82%", xs: "100%" } }}>
-                            <Box className={classes.Box_Hading}>Make Microwave(Ceragon) Summary</Box>
+                            <Box className={classes.Box_Hading}>Make Cambium Report</Box>
 
                             <Stack spacing={2} sx={{ mt: "-40px" }}>
 
