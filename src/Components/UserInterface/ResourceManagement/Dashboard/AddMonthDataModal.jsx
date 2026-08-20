@@ -155,11 +155,41 @@ function SearchableMultiSelect({ options, selected = [], onChange,catcolor,place
   );
 }
 
+const inp = {
+  border: "0.5px solid #ccc",
+  borderRadius: 6,
+  padding: "6px 10px",
+  fontSize: 13,
+  width: "100%",
+  boxSizing: "border-box",
+  outline: "none",
+  background: "#fff",
+  color: "#222",
+};
+
+const label = {
+  display: "block",
+  fontSize: 11,
+  color: "#666",
+  marginBottom: 4,
+  fontWeight: 500,
+};
+
+const errTxt = { fontSize: 10, color: "#c04040", marginTop: 3 };
+
+const tdStyle = {
+  padding: "5px 6px",
+  border: "0.5px solid #e0e0e0",
+  fontSize: 12,
+  background: "#fff",
+};
+
 
 
 const AddMonthDataModal = ({ catColor,costCenter,onSubmit}) => {
 
   const [open, setOpen] = useState(false);
+  const [editData, setEditData] = useState(null);
   const [year,      setYear]      = useState("");
   const [month,     setMonth]     = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -530,30 +560,6 @@ const AddMonthDataModal = ({ catColor,costCenter,onSubmit}) => {
 
 
 
-
-  // ── Styles ─────────────────────────────────────────────────────────────────
-  const inp = {
-    border: "0.5px solid #ccc",
-    borderRadius: 6,
-    padding: "6px 10px",
-    fontSize: 13,
-    width: "100%",
-    boxSizing: "border-box",
-    outline: "none",
-    background: "#fff",
-    color: "#222",
-  };
-
-  const label = {
-    display: "block",
-    fontSize: 11,
-    color: "#666",
-    marginBottom: 4,
-    fontWeight: 500,
-  };
-
-  const errStyle = { fontSize: 10, color: "#c04040", marginTop: 3 };
-
   const thStyle = {
     padding: "6px 8px",
     background: catColor,
@@ -564,22 +570,7 @@ const AddMonthDataModal = ({ catColor,costCenter,onSubmit}) => {
     border: "0.5px solid rgba(255,255,255,0.2)",
   };
 
-  const tdStyle = {
-    padding: "5px 6px",
-    border: "0.5px solid #e0e0e0",
-    fontSize: 12,
-    background: "#fff",
-  };
 
-    const lbl = {
-    display: "block",
-    fontSize: 11,
-    color: "#666",
-    marginBottom: 4,
-    fontWeight: 500,
-  };
- 
-  const errTxt = { fontSize: 10, color: "#c04040", marginTop: 3 };
 
   return (
     <>
@@ -601,10 +592,29 @@ const AddMonthDataModal = ({ catColor,costCenter,onSubmit}) => {
       >
         <span style={{ fontSize: 18, lineHeight: 1 }}>+</span> Add
       </button>
+      
+      {/* <button
+        onClick={() => setOpen(true)}
+        style={{
+          background: catColor,
+          color: "#fff",
+          border: "none",
+          borderRadius: 6,
+          padding: "6px 16px",
+          fontSize: 13,
+          fontWeight: 500,
+          cursor: "pointer",
+          display: "flex",
+          alignItems: "center",
+          gap: 6,
+        }}
+      >
+        Update
+      </button> */}
 
       {open && (
         <div
-          onClick={closeModal}
+          // onClick={closeModal}
           style={{
             position: "fixed", inset: 0,
             background: "rgba(0,0,0,0.45)",
@@ -617,7 +627,6 @@ const AddMonthDataModal = ({ catColor,costCenter,onSubmit}) => {
            
           }}
         >
-          {/* Modal box — click propagation rok */}
           <div
             onClick={e => e.stopPropagation()}
             style={{
@@ -655,7 +664,7 @@ const AddMonthDataModal = ({ catColor,costCenter,onSubmit}) => {
                     <option value="">-- Select Year --</option>
                     {YEARS.map(y => <option key={y} value={y}>{y}</option>)}
                   </select>
-                  {fieldErrors.year && <div style={errStyle}>{fieldErrors.year}</div>}
+                  {fieldErrors.year && <div style={errTxt}>{fieldErrors.year}</div>}
                 </div>
 
                 <div style={{ flex: 1 }}>
@@ -668,7 +677,7 @@ const AddMonthDataModal = ({ catColor,costCenter,onSubmit}) => {
                     <option value="">-- Select Month --</option>
                     {MONTHS.map(m => <option key={m} value={m}>{m}</option>)}
                   </select>
-                  {fieldErrors.month && <div style={errStyle}>{fieldErrors.month}</div>}
+                  {fieldErrors.month && <div style={errTxt}>{fieldErrors.month}</div>}
                 </div>
               </div>
 

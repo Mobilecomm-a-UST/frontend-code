@@ -6,10 +6,10 @@ import AddMonthDataModal from "./AddMonthDataModal";
 
 const USER_CONFIG = {
   'Vishal.Yadav@ust.com':{
-    "circle":"UPE",
-    "category":"A",
+    "circle":"BHJH",
+    "category":"B",
     "customer":"Airtel",
-    "costCenter":"MCT0385"
+    "costCenter":"MCT0353"
   },
   'Anurag.Singh@ust.com':{
     "circle":"UPE",
