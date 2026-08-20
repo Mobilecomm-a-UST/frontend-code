@@ -28,6 +28,7 @@ import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
 const jsonData = [
     { folder_name: "Mobinet Dump Files", api: "mobinate_vs_cats/mobinet_dump", back_folder: "mobinet_dump_data" },
     { folder_name: "Locator File", api: "mobinate_vs_cats/locator", back_folder: "locator_data" },
+    { folder_name: "Hardware File", api: "mobinate_vs_cats/hw", back_folder: "hw_data" },
     { folder_name: "MS-MF File", api: "mobinate_vs_cats/msmf", back_folder: "msmf_data" },
     { folder_name: "RFS File", api: "mobinate_vs_cats/rfs", back_folder: "rfs_data" },
     { folder_name: "Stock File", api: "mobinate_vs_cats/stock", back_folder: "stock_report_data" },

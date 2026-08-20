@@ -290,14 +290,14 @@ var prevScrollpos = window.pageYOffset;
                       navigate("/profile");
                     }}
                   >
-                    <Avatar
+                    {/* <Avatar
                       style={{
                         width: "25px",
                         height: "25px",
                         marginRight: "15px",
                       }}
                       src={`${ServerURL}${image}`}
-                    />
+                    /> */}
                     My account
                   </MenuItem>
                   <Divider />

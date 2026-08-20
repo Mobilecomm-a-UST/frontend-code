@@ -12,6 +12,7 @@ import FolderIcon from '@rsuite/icons/Folder';
 import ChangeListIcon from '@rsuite/icons/ChangeList';
 import Loader from '../../Skeleton/Loader';
 import './../../../App.css'
+import ArrowRightIcon from '@rsuite/icons/ArrowRight';
 
 const MobinateTool = lazy(() => import('./MobinateTool'))
 const MobinateFileHandle = lazy(() => import('./Mobinate/Mobinate'))
@@ -21,6 +22,9 @@ const SiteMaping = lazy(()=>import('./Site_maping/SiteMaping'))
 const SNmaping = lazy(()=>import('./SNmapping/SNmaping'))
 const Fmr = lazy(()=>import('./Forword Material Reconcilation/Fmr'))
 const RecoMaterial = lazy(()=> import('./Reco Material/RecoMaterial'))
+const Step2srn_cam_rmo = lazy(()=> import('./Forword Material Reconcilation/Step2srn_cam_rmo'))
+const LiveMobReco = lazy(()=> import('./Reco Material/LiveMobReco'))
+
 
 
 
@@ -114,12 +118,22 @@ const MobinateVsCate = () => {
                                               <Nav.Item eventKey="5" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/sn_mapping'); show(); setMenuButton(true) }}>
                                                 SN Mapping
                                             </Nav.Item> */}
-                                            <Nav.Item eventKey="6" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/fmr'); show(); setMenuButton(true) }}>
-                                                Forword Material Reconcilation
+                                            <Nav.Menu eventKey="4" placement='rightstart' title="Forword Material Reconcilation" className="menu-title-custom" icon={<ChangeListIcon /> }>
+                                            <Nav.Item eventKey="4-1" placement="rightStart" className="single-item-custom" icon={<ArrowRightIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/fmr'); show(); setMenuButton(true) }}>
+                                              Step 1-Mobinate Working
                                             </Nav.Item>
-                                             <Nav.Item eventKey="7" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/RecoMaterial'); show(); setMenuButton(true) }}>
-                                                Reco Material 
+                                            <Nav.Item eventKey="4-2" placement="rightStart" className="single-item-custom" icon={<ArrowRightIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/Step2srn_cam_rmo'); show(); setMenuButton(true) }}>
+                                               Step 2-SRN/CAM/RMO
                                             </Nav.Item>
+                                            </Nav.Menu>
+                                            <Nav.Menu eventKey="5" placement='rightstart' title=" Reverse Material Reconcilation" className="menu-title-custom" icon={<ChangeListIcon /> }>
+                                             <Nav.Item eventKey="5-1" placement="rightStart" className="single-item-custom" icon={<ArrowRightIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/RecoMaterial'); show(); setMenuButton(true) }}>
+                                                Step 1-Reco Data
+                                            </Nav.Item>
+                                             <Nav.Item eventKey="5-2" placement="rightStart" className="single-item-custom" icon={<ArrowRightIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/LiveMobReco'); show(); setMenuButton(true) }}>
+                                                Step 2-Live Mob + Reco
+                                            </Nav.Item>
+                                            </Nav.Menu>
                                             {/* <Nav.Menu eventKey="3" placement="rightStart" title="NOM Audit" icon={<DocPassIcon />}>
                                                 <Nav.Item eventKey="3-1" placement="rightStart" onClick={() => { navigate('/tools/nomenclature_scriptor/nom_audit_dashboard'); show(); setMenuButton(true) }}>
                                                     Dashboard
@@ -149,6 +163,8 @@ const MobinateVsCate = () => {
                                 <Route element={<SNmaping/>} path='/sn_mapping' />
                                 <Route element={<Fmr/>} path='/fmr' />
                                 <Route element={<RecoMaterial/>} path='/RecoMaterial'/>
+                                <Route element={<Step2srn_cam_rmo/>} path='/Step2srn_cam_rmo'/>
+                                <Route element={<LiveMobReco/>} path='/LiveMobReco'/>
 
 
                             </Routes>
