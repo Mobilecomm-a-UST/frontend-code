@@ -326,10 +326,7 @@ const getAverageValue = (monthData, costId) => {
     if (!values.length) return null;
 
     const average = values.reduce((sum, value) => sum + toNumber(value), 0) / values.length;
-    return costId === "c1"
-        ? average.toFixed(2)
-        : `${average.toFixed(2)}%`;
-    // return Number(average.toFixed(2));
+    return costId === "c1" ? average.toFixed(2) : `${average.toFixed(2)}%`;
 };
 
 
@@ -527,7 +524,6 @@ const AdminTable = () => {
             try {
                 setLoading(true);
                 setError("");
-
                 const response = await axios.get( "https://commtoolapi.mcpspmis.com/admin-table/" );
                 if (mounted) {
                     setAnalyticsData(Array.isArray(response.data) ? response.data : [] );
