@@ -288,6 +288,8 @@ const Fmr = () => {
     const [hardWareFile, setHardWareFile] = useState({ filename: "", bytes: "" });
     const [showFiles, setShowFiles] = useState({
 
+
+        hardware:[],
         mobinate: [],
         locator: [],
         mbf: [],
@@ -295,6 +297,7 @@ const Fmr = () => {
     });
 
     const [showError, setShowError] = useState({
+        hardware: false,
         mobinate: false,
         locator: false,
         mbf: false,
@@ -318,6 +321,7 @@ const Fmr = () => {
     // -------- Fetch Files ---------
     const fetchMobinetFileData = async () => {
         action(true);
+        const hardware = await getData('mobinate_vs_cats/hw/')
         const mobinate = await getData('mobinate_vs_cats/mobinet_dump/');
         const locator = await getData('mobinate_vs_cats/locator/');
         const mbf = await getData('mobinate_vs_cats/mobinet_baseline_upload/');
@@ -327,7 +331,7 @@ const Fmr = () => {
         action(false);
 
         setShowFiles({
-
+            hardware: hardware?.files || [],
             mobinate: mobinate?.files || [],
             locator: locator?.files || [],
             mbf: mbf?.files || [],
@@ -339,6 +343,7 @@ const Fmr = () => {
     // -------- Submit ----------
     const handleSubmit = async () => {
         const errors = {
+            hardware: showFiles.hardware.length === 0,
             mobinate: showFiles.mobinate.length === 0,
             locator: showFiles.locator.length === 0,
             mbf: showFiles.mbf.length === 0,
@@ -355,7 +360,7 @@ const Fmr = () => {
         action(true);
          const formData = new FormData();
 
-        formData.append("hw", hardWareFile.bytes);
+        // formData.append("hw", hardWareFile.bytes);
         const response = await postData("mobinate_vs_cats/forward_material_reconciliation/",formData);
         action(false);
 
@@ -370,11 +375,16 @@ const Fmr = () => {
 
     const handleCancel = () => {
         setDownload(false);
-        setShowError({ mobinate: false, mbf: false, tod: false, locator: false });
+        setShowError({ hardware:false, mobinate: false, mbf: false, tod: false, locator: false });
     };
 
     useEffect(() => {
-        document.title = "SN MAPPING";
+        const title = window.location.pathname
+            .slice(1)
+            .replaceAll("_", " ")
+            .replaceAll("/", " | ")
+            .toUpperCase();
+        document.title = title;
         fetchMobinetFileData();
     }, []);
 
@@ -386,7 +396,7 @@ const Fmr = () => {
                     <Link underline="hover" onClick={() => navigate("/tools/mobinet_vs_cats")}>
                         Mobinet Vs CATS
                     </Link>
-                    <Typography color="text.primary">Forword Material Reconcilation</Typography>
+                    <Typography color="text.primary">Step 1-Mobinate Working</Typography>
                 </Breadcrumbs>
             </Box>
 
@@ -394,16 +404,22 @@ const Fmr = () => {
                 <Box>
                     <Box className={classes.main_Box}>
                         <Box className={classes.Back_Box} sx={{ width: { md: "75%", xs: "100%" } }}>
-                            <Box className={classes.Box_Hading}>Forword Material Reconcilation</Box>
+                            <Box className={classes.Box_Hading}>Step 1-Mobinate Working</Box>
 
                             <Stack spacing={2} sx={{ mt: "-40px" }}>
 
-                                <UploadSection
+                                {/* <UploadSection
                                     label="Select Hardware File"
                                     color={hardWareFile.filename ? "warning" : "primary"}
                                     onChange={(e) => updateFile(e, setHardWareFile, "hardware")}
                                     error={showError.hardware}
                                     selectedText={hardWareFile.filename}
+                                /> */}
+
+                                <FileBox
+                                    title="Hardware File"
+                                    data={showFiles.hardware}
+                                    error={showError.hardware}
                                 />
 
                                 {/* Mobinate Dump */}
@@ -464,7 +480,7 @@ const Fmr = () => {
                                     startIcon={<FileDownloadIcon sx={{ fontSize: 30, color: "green" }} />}
                                     sx={{ mt: 2, textTransform: "none", fontWeight: 800, fontSize: "22px", fontFamily: "Poppins" }}
                                 >
-                                   Forword Material Reconcilation Report
+                                   Forword Material Reconcilation Mobinet Report
                                 </Button>
                             </a>
                         </Box>
