@@ -28,6 +28,7 @@ const MyTask = lazy(() => import("./MyTask/MyTask"));
 const AddEmail = lazy(()=> import("./AdminPanel/AddTask/AddEmail"));
 const Dashboard = lazy(() => import("./Dashboard/Dashboard"));
 const TaskTemplate = lazy(() => import("./TaskTemplate/TaskTemplate"));
+const Tasktracker = lazy(()=> import('./Task Tracker/Tasktracker'))
 
 
 const DailyTaskReview = () => {
@@ -129,6 +130,10 @@ const DailyTaskReview = () => {
                                                  My Task
                                             </Nav.Item>
 
+                                            {/* <Nav.Item eventKey="4" placement="rightStart" className="single-item-custom" icon={<ListIcon style={{}} />} onClick={() => { navigate('/tools/daily_task_review/Tasktracker'); show(); setMenuButton(true) }}>
+                                                 Task Tracker
+                                            </Nav.Item> */}
+
                                            
 
                                             {/* <Nav.Item eventKey="1" placement="rightStart" className="single-item-custom" icon={<FolderIcon style={{}} />} onClick={() => { navigate('/tools/full_site_dismantle/file_manager'); show(); setMenuButton(true) }}>
@@ -153,6 +158,7 @@ const DailyTaskReview = () => {
                                 <Route path="/MyTask" element={<MyTask />} />
                                 <Route path="/Dashboard" element={<Dashboard />} />
                                 <Route path="/TaskTemplate" element={<TaskTemplate/>} />
+                                <Route path='/Tasktracker' element={<Tasktracker/>}/>
 
                               {/* {userTypes?.includes('ran_admin') && 
                                 <Route element={<FinalMailPage />} path="/email_dashboard" />
