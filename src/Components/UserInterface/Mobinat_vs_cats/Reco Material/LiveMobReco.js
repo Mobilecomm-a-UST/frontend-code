@@ -24,18 +24,13 @@ const LiveMobReco = () => {
   const [download, setDownload]       = useState(false);
 
   const [showFiles, setShoweFiles] = useState({
-    locator: [],
-    stock: [],
-    msmf: [],
-    rfs: [],
+    
     mobinetDump: [],
-    moVsCap: [],
+   
   });
 
   const [showError, setShowError] = useState({
-    siteList:  false,
-    hardware:  false,
-    olmId:     false,
+   
     recoFile:  false, // ✅ NEW
   });
 
@@ -55,34 +50,26 @@ const LiveMobReco = () => {
 
   const fetchMobinetFileData = async () => {
     action(true);
-    const response1 = await getData('mobinate_vs_cats/rfs/');
-    const response2 = await getData('mobinate_vs_cats/msmf/');
-    const response3 = await getData('mobinate_vs_cats/stock/');
-    const response4 = await getData('mobinate_vs_cats/locator/');
+   
     const response5 = await getData('mobinate_vs_cats/mobinet_dump/');
-    const response6 = await getData('mobinate_vs_cats/mo_vs_cap/');
+  
     action(false);
 
     setShoweFiles({
-      locator:     response4?.files || [],
-      stock:       response3?.files || [],
-      msmf:        response2?.files || [],
-      rfs:         response1?.files || [],
+     
       mobinetDump: response5?.files || [],
-      moVsCap:     response6?.files || [],
+    
     });
   };
 
   const handleSubmit = async () => {
     const isValid =
-      siteList.filename &&
-      hardWareFile.filename &&
+     
       recoFile.filename; // ✅ NEW validation
 
     if (!isValid) {
       setShowError({
-        siteList:  !siteList.filename,
-        hardware:  !hardWareFile.filename,
+       
         recoFile:  !recoFile.filename, // ✅ NEW
       });
       return;
@@ -90,11 +77,10 @@ const LiveMobReco = () => {
 
     action(true);
     const formData = new FormData();
-    formData.append("site_list_file", siteList.bytes);
-    formData.append("hw_file",        hardWareFile.bytes);
+   
     formData.append("reco_file",      recoFile.bytes); // ✅ NEW
 
-    const response = await postData("mobinate_vs_cats/mobinate_vs_cats/live_in_mob/", formData);
+    const response = await postData("mobinate_vs_cats/live_in_mob/", formData);
     action(false);
 
     if (response.status) {
@@ -107,9 +93,7 @@ const LiveMobReco = () => {
   };
 
   const handleCancel = () => {
-    setSiteList({ filename: "", bytes: "" });
-    setHardWareFile({ filename: "", bytes: "" });
-    setOlmidFile({ filename: "", bytes: "" });
+  
     setRecoFile({ filename: "", bytes: "" }); // ✅ NEW
     setDownload(false);
     setShowError({ siteList: false, hardware: false, recoFile: false }); // ✅ NEW

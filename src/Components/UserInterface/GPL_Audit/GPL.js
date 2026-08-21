@@ -29,6 +29,7 @@ const TestingGpl = lazy(() => import('./Generate/GenrateGplState'))
 const Step1Comparsion = lazy(() => import('./Kget To GPL/Step1Comparsion'))
 const Step2Scripting = lazy(() => import('./Kget To GPL/Step2Scripting'))
 const BhartiGPLAudit = lazy(() => import('./Bharti GPL Audit/BhartiGPLAudit'))
+const Convertor = lazy(()=> import('./Converter/Converter'))
 
 const GPL = () => {
     const [expanded, setExpanded] = useState(true);
@@ -118,14 +119,18 @@ const GPL = () => {
                                                 Bharti GPL Audit
                                             </Nav.Item>
 
-                                            <Nav.Menu eventKey="2" placement="rightStart" className="menu-title-custom" title="Kget To GPL" icon={<DocPassIcon />}>
-                                                    <Nav.Item eventKey="2-1" placement="rightStart" className="single-item-custom" onClick={() => { navigate('/tools/mobile_network_integration/step1_comparsion'); show(); setMenuButton(true) }}>
+                                            <Nav.Menu eventKey="5" placement="rightStart" className="menu-title-custom" title="Kget To GPL" icon={<DocPassIcon />}>
+                                                    <Nav.Item eventKey="5-1" placement="rightStart" className="single-item-custom" onClick={() => { navigate('/tools/mobile_network_integration/step1_comparsion'); show(); setMenuButton(true) }}>
                                                         Step 1 - Comparsion
                                                     </Nav.Item>
-                                                    <Nav.Item eventKey="2-2" placement="rightStart" className="single-item-custom" onClick={() => { navigate('/tools/mobile_network_integration/step2_scripting'); show(); setMenuButton(true) }}>
+                                                    <Nav.Item eventKey="5-2" placement="rightStart" className="single-item-custom" onClick={() => { navigate('/tools/mobile_network_integration/step2_scripting'); show(); setMenuButton(true) }}>
                                                         Step 2 - Scripting
                                                     </Nav.Item>
                                                 </Nav.Menu>
+
+                                                 <Nav.Item eventKey="6" placement="rightStart" className="single-item-custom" icon={<DocPassIcon />} onClick={() => { navigate('/tools/mobile_network_integration/Convertor'); show(); setMenuButton(true) }}>
+                                                        Convertor
+                                                    </Nav.Item>
                                         </Nav>
                                     </Sidenav.Body>
 
@@ -145,9 +150,8 @@ const GPL = () => {
                                 <Route element={<Step1Comparsion />} path="/step1_comparsion" />
                                 <Route element={<Step2Scripting />} path="/step2_scripting" />
                                 <Route element={<BhartiGPLAudit />} path="/bharti_gpl_audit" />
+                                <Route element={<Convertor/>} path='/Convertor'/>
                                 {/* <Route element={<TestingGpl />} path="/testing_gpl" /> */}
-
-
 
                             </Routes>
                         </Suspense>
