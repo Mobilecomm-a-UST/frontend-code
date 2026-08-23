@@ -186,7 +186,7 @@ const tdStyle = {
 
 
 
-const AddMonthDataModal = ({ catColor,costCenter,onSubmit}) => {
+const AddMonthDataModal = ({ catColor,costCenter,modelData,onSubmit}) => {
 
   const [open, setOpen] = useState(false);
   const [editData, setEditData] = useState(null);
@@ -214,6 +214,26 @@ const AddMonthDataModal = ({ catColor,costCenter,onSubmit}) => {
       });
 
   }, [open]);
+
+
+  useEffect(() => {
+    if (!open) return;
+
+    if (editData) {
+      setYear(editData.year || "");
+      setMonth(editData.month || "");
+      setResources(editData.resources || buildEmptyResources());
+      setOtherResources(editData.otherResources || buildEmptyOtherResources());
+    } else {
+      setYear("");
+      setMonth("");
+      setResources(buildEmptyResources());
+      setOtherResources(buildEmptyOtherResources());
+    }
+    setErrors({});
+    setOtherErrors({});
+    setFieldErrors({});
+  }, [open, editData]);
 
   function updateResourceCount(roleId, value) {
     const count = parseInt(value) || 0;
@@ -482,12 +502,6 @@ const AddMonthDataModal = ({ catColor,costCenter,onSubmit}) => {
     return { newErrors, isValid };
   }
 
-
-
-
-
-
-
   function resetForm() {
     setYear("");
     setMonth("");
@@ -557,9 +571,6 @@ const AddMonthDataModal = ({ catColor,costCenter,onSubmit}) => {
     closeModal();
   }
 
-
-
-
   const thStyle = {
     padding: "6px 8px",
     background: catColor,
@@ -575,7 +586,10 @@ const AddMonthDataModal = ({ catColor,costCenter,onSubmit}) => {
   return (
     <>
       <button
-        onClick={() => setOpen(true)}
+        onClick={() =>{
+          setEditData(null);
+          setOpen(true)
+        }}
         style={{
           background: catColor,
           color: "#fff",
@@ -594,7 +608,63 @@ const AddMonthDataModal = ({ catColor,costCenter,onSubmit}) => {
       </button>
       
       {/* <button
-        onClick={() => setOpen(true)}
+        onClick={() => {
+          const Resources = Object.fromEntries(
+              RESOURCE_ROLES.map((role) => {
+                  const resource = modelData.resources?.[role.id];
+
+                  return [
+                      role.id,
+                      {
+                          count: resource?.count || "",
+                          action: resource?.action || "",
+                          comment: resource?.comment || "",
+                          members: (resource?.members || []).map((member) => ({
+                              ...member,
+                              projects: PROJECT_OPTIONS
+                                  .filter((p) =>
+                                      member.projects?.includes(p.name)
+                                  )
+                                  .map((p) => p.id),
+                          })),
+                      },
+                  ];
+              })
+          );
+
+          const OtherResources = Object.fromEntries(
+              OTHER_RESOURCE_ROLES.map((role) => {
+                  const resource = modelData.otherResources?.[role.id];
+
+                  return [
+                      role.id,
+                      {
+                          count: resource?.count || "",
+                          action: resource?.action || "",
+                          comment: resource?.comment || "",
+                          members: (resource?.members || []).map((member) => ({
+                              ...member,
+                              projects: PROJECT_OPTIONS
+                                  .filter((p) =>
+                                      member.projects?.includes(p.name)
+                                  )
+                                  .map((p) => p.id),
+                          })),
+                      },
+                  ];
+              })
+          );
+
+          const editData = {
+              ...modelData,
+              resources: Resources,
+              otherResources: OtherResources,
+          };
+
+          setEditData(editData);
+          setOpen(true);
+        }}
+        
         style={{
           background: catColor,
           color: "#fff",
@@ -645,7 +715,7 @@ const AddMonthDataModal = ({ catColor,costCenter,onSubmit}) => {
           >
             {/* Header */}
             <div style={{background: catColor,color: "#fff",padding: "14px 20px",display: "flex",alignItems: "center",justifyContent: "space-between",flexShrink: 0}}>
-                <div style={{ fontSize: 11, opacity: 0.8, marginTop: 2 }}>Add Data</div>
+                <div style={{ fontSize: 11, opacity: 0.8, marginTop: 2 }}>{editData ? "Edit Data" : "Add Data"}</div>
                 <button onClick={closeModal} style={{ background: "none", border: "none", color: "#fff", fontSize: 22, cursor: "pointer", lineHeight: 1 }}>×</button>
             </div>
 
@@ -932,7 +1002,7 @@ const AddMonthDataModal = ({ catColor,costCenter,onSubmit}) => {
                   cursor: submitting ? "not-allowed" : "pointer",
                 }}
               >
-                {submitting ? "Saving..." : "Save"}
+                {submitting ? editData ? "Updating..." : "Saving..." : editData ? "Update" : "Save"}
               </button>
             </div>
           </div>

@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { getDecreyptedData } from '../../../utils/localstorage';
 import AddMonthDataModal from "./AddMonthDataModal";
+import ExcelJS from "exceljs";
+import { saveAs } from "file-saver";
 
 
 
@@ -290,38 +292,43 @@ const MonthWise = () => {
 
   const [filterYear, setFilterYear] = useState(String(CURRENT_YEAR));
   const [filterMonth, setFilterMonth] = useState(MONTHSLIST[new Date().getMonth()]);
-  const user = Object.keys(USER_CONFIG).find(k => k.toLowerCase() === userID) ? USER_CONFIG[Object.keys(USER_CONFIG).find(k => k.toLowerCase() === userID)] : null;
-  const cat = user.category;
-  const config = CATEGORY_CONFIG[cat];
+  const userKey = Object.keys(USER_CONFIG).find( key => key.toLowerCase() === userID );
+  const user = userKey ? USER_CONFIG[userKey] : null;
+  const cat = user?.category;
+  const config = cat ? CATEGORY_CONFIG[cat] : null;
 
-  const [monthWiseData,     setMonthWiseData]     = useState(null); 
-  const [costMonthData, setCostMonthData] = useState(null); 
-  const [apiLoading,    setApiLoading]    = useState(true);
-  const [apiError,      setApiError]      = useState(null);
-  const [MONTHS,setMONTHS] = useState([CURRENT_MONTH]);
-  const[month,setMonth] = useState(CURRENT_MONTH);
+  if (!user || !config) {
+    return (
+      <div style={{ padding: "2rem", textAlign: "center", color: "#c04040" }}>
+        User configuration not found.
+      </div>
+    );
+  }
+
+  const EMPTY_MODEL_DATA = {
+    year: "",
+    month: "",
+    resources: {},
+    otherResources: {},
+  };
+
+  const [monthWiseData, setMonthWiseData] = useState({});
+  const [apiLoading, setApiLoading] = useState(true);
+  const [apiError, setApiError] = useState(null);
+  const [MONTHS, setMONTHS] = useState([CURRENT_MONTH]);
+  const [month, setMonth] = useState(CURRENT_MONTH);
+  const [modelData, setModelData] = useState(EMPTY_MODEL_DATA);
 
   const [openMemberModal, setOpenMemberModal] = useState(false);
   const [selectedMembers, setSelectedMembers] = useState([]);
   const [selectedRole, setSelectedRole] = useState("");
 
-  const handleMemberClick = (month, role,type) => {
-    let members = [];
-    if (type === "resource"){
-      members = monthWiseData?.[month]?.resources?.[role.id]?.members || [];
+
+  const fetchDataForMonth = useCallback(async (selectedMonth) => {
+    if (!selectedMonth || !user?.costCenter) {
+      return;
     }
-    else {
-      members = monthWiseData?.[month]?.other_resources?.[role.id]?.members || [];
-    }
-    
-    setSelectedRole(role.role);
-    setSelectedMembers(members);
-    setOpenMemberModal(true);
-  };
 
-
-
-  const fetchDataForMonth = (selectedMonth) => {
     setApiLoading(true);
     setApiError(null);
 
@@ -330,76 +337,94 @@ const MonthWise = () => {
       costCenter: user.costCenter,
     });
 
-    fetch(`https://commtoolapi.mcpspmis.com/api/monthly-report/upsert/?${params}`)
-      .then(res => {
-        if (res.status === 404) {
-          setMonthWiseData(null);
-          return null;
-        }
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        return res.json();
-      })
-      .then(data => {
-        if (data) {
-          setMonthWiseData({
-            [data.month]: {
-              costs: data.costs || {},
-              resources: data.resources || {},
-              other_resources: data.other_resources || {},
-            },
-          });
-        }
-      })
-      .catch(err => setApiError(err.message))
-      .finally(() => setApiLoading(false));
-  };
+    try {
+      const response = await fetch( `https://commtoolapi.mcpspmis.com/api/monthly-report/upsert/?${params.toString()}`);
+      if (response.status === 404) {
+        setMonthWiseData({});
+        setModelData(EMPTY_MODEL_DATA);
+        return;
+      }
 
-  function handleFilterClick() {
-    if (!filterYear || !filterMonth) {
-      alert("Please select both Year and Month");
-      return;
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      const resources = data.resources || {};
+      const otherResources = data.other_resources || {};
+      const costs = data.costs || {};
+
+      setMonthWiseData({
+        [data.month]: {
+          costs,
+          resources,
+          other_resources: otherResources,
+        },
+      });
+
+      setModelData({
+        year: data.year || "",
+        month: data.month?.split("-")[0] || "",
+        resources,
+        otherResources,
+      });
+
+    } 
+    catch (error) {
+      setApiError(error.message || "Something went wrong");
+      setMonthWiseData({});
+      setModelData(EMPTY_MODEL_DATA);
+    } finally {
+      setApiLoading(false);
     }
-    const selectedMonth = `${filterMonth}-${String(filterYear).slice(-2)}`;
-    setMONTHS([selectedMonth]);
-    setMonth(selectedMonth);
-  }
+  }, [user?.costCenter]);
 
-  const handleRefresh = () => {
-    setFilterYear(String(CURRENT_YEAR));
-    setFilterMonth(MONTHSLIST[new Date().getMonth()])
-    const selectedMonth = `${MONTHSLIST[new Date().getMonth()]}-${String(CURRENT_YEAR).slice(-2)}`;
-    setMONTHS([selectedMonth]);
-    setMonth(selectedMonth);
-  };
 
-    useEffect(() => {
-      fetchDataForMonth(month);
-    }, [month]);
+  useEffect(() => {
+    fetchDataForMonth(month);
+  }, [month, fetchDataForMonth])
 
-    const hasData = (month) => monthWiseData?.[month] != null;
-  
-    const getCostVal = (month, costId) => {
-      if (!hasData(month)) return null;
-      if (['c6','c7'].includes(costId)) {
-        const costs = monthWiseData[month]?.costs || {};
-        if(costId === 'c6') return ((costs["c2"] || 0) +(costs["c3"] || 0) +(costs["c4"] || 0) +(costs["c5"] || 0)).toFixed(0);
-        if(costId === 'c7') return ((costs["c1"] || 0) -((costs["c2"] || 0) +(costs["c3"] || 0) +(costs["c4"] || 0) +(costs["c5"] || 0))).toFixed(0);
+    
+
+  const hasData = useCallback(
+    month => Boolean(monthWiseData?.[month]),
+    [monthWiseData]
+  );
+
+  const getCostVal = useCallback( (month, costId) => {
+      const monthData = monthWiseData?.[month];
+      if (!monthData) return "";
+
+      const costs = monthData.costs || {};
+
+      if (costId === "c6") {
+        return ( Number(costs.c2 || 0) + Number(costs.c3 || 0) + Number(costs.c4 || 0) + Number(costs.c5 || 0) ).toFixed(0);
       }
-      const final_value = monthWiseData[month].costs?.[costId] ?? ""
-      if (typeof final_value !== "number") {
-          return "";
-      }
-      return final_value.toFixed(0);
-    };
 
-    const getCostPercent = (month, id) => {
-      if (id === "c1") return "";
-      const revenue = Number(getCostVal(month, "c1") || 0);
-      const value = Number(getCostVal(month, id) || 0);
-      if (!revenue) return "";
-      return ((value / revenue) * 100).toFixed(2) + "%";
-      
-    };
+      if (costId === "c7") { 
+        return ( Number(costs.c1 || 0) - ( Number(costs.c2 || 0) + Number(costs.c3 || 0) + Number(costs.c4 || 0) + Number(costs.c5 || 0) ) ).toFixed(0); 
+      }
+
+      const value = costs[costId];
+      return typeof value === "number" ? value.toFixed(0) : value ? Number(value).toFixed(0) : "";
+    }, [monthWiseData]
+  );
+
+
+
+  const getCostPercent = useCallback(
+    (month, costId) => {
+    if (costId === "c1") return "";
+
+    const revenue = Number(getCostVal(month, "c1") || 0);
+    const value = Number(getCostVal(month, costId) || 0);
+
+    if (!revenue) return "";
+
+    return `${((value / revenue) * 100).toFixed(2)}%`;
+    }, [getCostVal]
+  );
 
   const getCostAlert = (month, cost) => {
     if (cost.id === "c1") return null;
@@ -449,51 +474,309 @@ const MonthWise = () => {
       </span>
     );
   };
-  
-    const getResCell = (month, resId) => {
-      if (!hasData(month)) return null;
-      return monthWiseData[month].resources?.[resId] ?? { count:"", comment:"", action:"" };
-    };
 
-    const getothResCell = (month, resId) => {
-      if (!hasData(month)) return null;
-      return monthWiseData[month].other_resources?.[resId] ?? { count:"", comment:"", action:"" };
-    };
+  const EMPTY_CELL = {
+    count: "",
+    comment: "",
+    action: "",
+    members: [],
+  };
 
+  const getResCell = useCallback( (month, resId) => {
+    return ( monthWiseData?.[month]?.resources?.[resId] || EMPTY_CELL );
+    }, [monthWiseData]
+  );
 
-    // ── Styles ───────────────────────────────────────────────────
-    const CAT_COLOR = { A:"#1a5c2a", B:"#006E74", C:"#a85c00", D:"#8b1a1a" }[cat];
-    const bdr   = "0.5px solid #c8c6be";
-    const cs    = { border:bdr, padding:"4px 8px", fontSize:12, background:"#fff", color:"#222", whiteSpace:"nowrap" };
-    const hc    = { border:bdr, padding:"6px 8px", fontSize:11, fontWeight:600, textAlign:"center", background:CAT_COLOR, color:"#fff", whiteSpace:"nowrap" };
-    const sh    = { border:bdr, padding:"4px 4px", fontSize:10, fontWeight:500, textAlign:"center", background:"#e6a817", color:"#4a2800", whiteSpace:"nowrap" };
-    const shSub = { border:bdr, padding:"3px 4px", fontSize:10, textAlign:"center", background:"#f0ede0", color:"#555", whiteSpace:"nowrap" };
-    const emptyHeader = { border: "none",background: "#f0ede0",padding: 0};
-
-    const DisplayCell = ({value,align = "center",onClick = null}) => (
-      <span
-        onClick={onClick}
-        style={{
-          display: "block",
-          fontSize: onClick ? 14 : 12,
-          textAlign: align,
-          padding: "3px 5px",
-          color: onClick ? "#e6a817":"#222",
-          cursor: onClick ? "pointer" : "default",
-          fontWeight: onClick ? "600" : "400",
-        }}
-      >
-        {value !== "" && value != null ? value : <span style={{ color: "#ccc" }}></span>}
-      </span>
-    );
+  const getothResCell = useCallback( (month, resId) => {
+    return ( monthWiseData?.[month]?.other_resources?.[resId] || EMPTY_CELL );
+    }, [monthWiseData]
+  );
 
 
+  const handleMemberClick = useCallback( (selectedMonth, role, type) => {
+      const members =
+        type === "resource"
+          ? monthWiseData?.[selectedMonth]?.resources?.[role.id]?.members || []
+          : monthWiseData?.[selectedMonth]?.other_resources?.[role.id]?.members || [];
 
-    const sectionTd = (text, rowSpan, bg, color) => (
-      <td rowSpan={rowSpan} style={{ border:bdr, background:bg, fontWeight:500, fontSize:11, textAlign:"center", verticalAlign:"middle", writingMode:"vertical-rl", transform:"rotate(180deg)", padding:"8px 3px", width:28, color }}>
-        {text}
-      </td>
-    );
+      setSelectedRole(role.role);
+      setSelectedMembers(members);
+      setOpenMemberModal(true);
+    },
+    [monthWiseData]
+  );
+
+  function handleFilterClick() {
+    if (!filterYear || !filterMonth) {
+      alert("Please select both Year and Month");
+      return;
+    }
+    const selectedMonth = `${filterMonth}-${String(filterYear).slice(-2)}`;
+    setMONTHS([selectedMonth]);
+    setMonth(selectedMonth);
+  }
+
+  const handleRefresh = () => {
+    const currentMonth = MONTHSLIST[new Date().getMonth()];
+    const currentMonthValue = `${currentMonth}-${String(CURRENT_YEAR).slice(-2)}`;
+
+    setFilterYear(String(CURRENT_YEAR));
+    setFilterMonth(currentMonth);
+
+    setMONTHS([currentMonthValue]);
+    setMonth(currentMonthValue);
+  };
+
+
+  const handleExport = async () => {
+    try {
+      const workbook = new ExcelJS.Workbook();
+      const data = monthWiseData?.[month];
+
+      if (!data) {
+        alert(`No data available for ${month}`);
+        return;
+      }
+
+      const costSheet = workbook.addWorksheet("Cost");
+      costSheet.columns = [
+        { header: "Category", key: "category", width: 25 },
+        { header: "Target / Exp", key: "target", width: 18 },
+        { header: "Value", key: "value", width: 18 },
+        { header: "%", key: "percent", width: 15 },
+        { header: "Notes", key: "notes", width: 25 },
+      ];
+
+      costs.forEach((cost) => {
+        costSheet.addRow({
+          category: cost.label,
+          target: cost.value,
+          value: getCostVal(month, cost.id),
+          percent: getCostPercent(month, cost.id),
+          notes: "",
+        });
+      });
+
+      costSheet.getRow(1).eachCell((cell) => {
+        cell.font = {
+          bold: true,
+          color: { argb: "FFFFFF" },
+        };
+
+        cell.fill = {
+          type: "pattern",
+          pattern: "solid",
+          fgColor: {
+            argb: CAT_COLOR.replace("#", ""),
+          },
+        };
+
+        cell.alignment = {
+          horizontal: "center",
+          vertical: "middle",
+        };
+      });
+
+      const resourceSheet = workbook.addWorksheet("Resources");
+
+      resourceSheet.columns = [
+        { header: "Role", key: "role", width: 30 },
+        { header: "UST ID", key: "ustId", width: 15 },
+        { header: "Name", key: "name", width: 30 },
+        { header: "Projects", key: "projects", width: 45 },
+        { header: "Comment", key: "comment", width: 30 },
+        { header: "Action", key: "action", width: 30 },
+      ];
+
+      resources.filter((role) => role.role !== "Total back end Resources").forEach((role) => {
+        const resourceData = data.resources?.[role.id] || {};
+        const members = resourceData.members || [];
+
+        if (members.length === 0) {
+          resourceSheet.addRow({
+            role: role.role,
+            ustId: "",
+            name: "",
+            projects: "",
+            comment: resourceData.comment || "",
+            action: resourceData.action || "",
+          });
+        } else {
+          members.forEach((member) => {
+            resourceSheet.addRow({
+              role: role.role,
+              ustId: member.ustId || "",
+              name: member.name || "",
+              projects: (member.projects || []).join(", "),
+              comment: resourceData.comment || "",
+              action: resourceData.action || "",
+            });
+          });
+        }
+      });
+
+      const otherResourceSheet = workbook.addWorksheet("Other Resources");
+      otherResourceSheet.columns = [
+        { header: "Role", key: "role", width: 30 },
+        { header: "UST ID", key: "ustId", width: 15 },
+        { header: "Name", key: "name", width: 30 },
+        { header: "Projects", key: "projects", width: 45 },
+        { header: "Comment", key: "comment", width: 30 },
+        { header: "Action", key: "action", width: 30 },
+      ];
+
+      otherResources.forEach((role) => {
+        const resourceData =
+          data.other_resources?.[role.id] || {};
+
+        const members = resourceData.members || [];
+
+        if (members.length === 0) {
+          otherResourceSheet.addRow({
+            role: role.role,
+            ustId: "",
+            name: "",
+            projects: "",
+            comment: resourceData.comment || "",
+            action: resourceData.action || "",
+          });
+        } else {
+          members.forEach((member) => {
+            otherResourceSheet.addRow({
+              role: role.role,
+              ustId: member.ustId || "",
+              name: member.name || "",
+              projects: (member.projects || []).join(", "),
+              comment: resourceData.comment || "",
+              action: resourceData.action || "",
+            });
+          });
+        }
+      });
+
+      [resourceSheet, otherResourceSheet].forEach((sheet) => {
+        sheet.getRow(1).eachCell((cell) => {
+          cell.font = {
+            bold: true,
+            color: { argb: "FFFFFF" },
+          };
+
+          cell.fill = {
+            type: "pattern",
+            pattern: "solid",
+            fgColor: {
+              argb: CAT_COLOR.replace("#", ""),
+            },
+          };
+
+          cell.alignment = {
+            horizontal: "center",
+            vertical: "middle",
+          };
+        });
+
+        sheet.eachRow((row, rowNumber) => {
+          if (rowNumber > 1) {
+            row.eachCell((cell) => {
+              cell.alignment = {
+                vertical: "middle",
+                wrapText: true,
+              };
+
+              cell.border = {
+                top: { style: "thin", color: { argb: "DDDDDD" } },
+                left: { style: "thin", color: { argb: "DDDDDD" } },
+                bottom: { style: "thin", color: { argb: "DDDDDD" } },
+                right: { style: "thin", color: { argb: "DDDDDD" } },
+              };
+            });
+          }
+        });
+
+        sheet.views = [
+          {
+            state: "frozen",
+            ySplit: 1,
+          },
+        ];
+
+        sheet.autoFilter = {
+          from: "A1",
+          to: "F1",
+        };
+      });
+
+      costSheet.eachRow((row, rowNumber) => {
+        if (rowNumber > 1) {
+          row.eachCell((cell) => {
+            cell.alignment = {
+              vertical: "middle",
+              wrapText: true,
+            };
+
+            cell.border = {
+              top: { style: "thin", color: { argb: "DDDDDD" } },
+              left: { style: "thin", color: { argb: "DDDDDD" } },
+              bottom: { style: "thin", color: { argb: "DDDDDD" } },
+              right: { style: "thin", color: { argb: "DDDDDD" } },
+            };
+          });
+        }
+      });
+
+      costSheet.views = [
+        {
+          state: "frozen",
+          ySplit: 1,
+        },
+      ];
+
+
+      const buffer = await workbook.xlsx.writeBuffer();
+
+      saveAs(
+        new Blob([buffer], {
+          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        }),
+        `${user.circle}_${user.costCenter}_${month}.xlsx`
+      );
+
+    } catch (error) {
+      console.error("Export Error:", error);
+      alert("Failed to export Excel");
+    }
+  };
+
+  const CAT_COLOR = { A:"#1a5c2a", B:"#006E74", C:"#a85c00", D:"#8b1a1a" }[cat];
+  const bdr   = "0.5px solid #c8c6be";
+  const cs    = { border:bdr, padding:"4px 8px", fontSize:12, background:"#fff", color:"#222", whiteSpace:"nowrap" };
+  const hc    = { border:bdr, padding:"6px 8px", fontSize:11, fontWeight:600, textAlign:"center", background:CAT_COLOR, color:"#fff", whiteSpace:"nowrap" };
+  const sh    = { border:bdr, padding:"4px 4px", fontSize:10, fontWeight:500, textAlign:"center", background:"#e6a817", color:"#4a2800", whiteSpace:"nowrap" };
+  const shSub = { border:bdr, padding:"3px 4px", fontSize:10, textAlign:"center", background:"#f0ede0", color:"#555", whiteSpace:"nowrap" };
+  const emptyHeader = { border: "none",background: "#f0ede0",padding: 0};
+
+  const DisplayCell = ({value,align = "center",onClick = null}) => (
+    <span
+      onClick={onClick}
+      style={{
+        display: "block",
+        fontSize: onClick ? 14 : 12,
+        textAlign: align,
+        padding: "3px 5px",
+        color: onClick ? "#e6a817":"#222",
+        cursor: onClick ? "pointer" : "default",
+        fontWeight: onClick ? "600" : "400",
+      }}
+    >
+      {value !== "" && value != null ? value : <span style={{ color: "#ccc" }}></span>}
+    </span>
+  );
+
+  const sectionTd = (text, rowSpan, bg, color) => (
+    <td rowSpan={rowSpan} style={{ border:bdr, background:bg, fontWeight:500, fontSize:11, textAlign:"center", verticalAlign:"middle", writingMode:"vertical-rl", transform:"rotate(180deg)", padding:"8px 3px", width:28, color }}>
+      {text}
+    </td>
+  );
 
   const thStyle = {
     padding: "10px 12px",
@@ -513,100 +796,172 @@ const MonthWise = () => {
   };
 
     
-    const resources = config.resources;
-    const costs     = config.costs;
-    const otherResources = config.otherResources;
+  const resources = config.resources;
+  const costs     = config.costs;
+  const otherResources = config.otherResources;
     
-    if (apiError) return (
-        <div style={{ padding:"2rem", textAlign:"center", color:"#c04040", fontSize:14 }}>
-        Failed to load: {apiError}
-        </div>
-    );
-
+  if (apiError) {
     return (
-    <>
-      <div style={{ fontFamily:"sans-serif", padding:"1.5rem 0 2rem" }}>
-  
-        {/* Header bar */}
-        <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:12, padding:"8px 12px", background:"#f5f5f0", border:"0.5px solid #ddd", borderRadius:8 }}>
-          <div style={{ borderRadius:6, background:CAT_COLOR, display:"inline-flex", alignItems:"center", padding: "6px 10px", justifyContent:"center", color:"#fff", fontWeight:700, fontSize:16 }}>Category - {cat} &nbsp; Circle - {user.circle}</div>
-          <div style={{marginLeft:"auto",display: "flex", gap: 8 }}>
-            <select
-              value={filterYear}
-              onChange={e => setFilterYear(e.target.value)}
-              style={{
-                padding: "6px 8px", fontSize: 13, borderRadius: 6,
-                border: "1px solid #ccc", outline: "none",
-              }}
-            >
-              <option value="">-- Year --</option>
-              {YEARS.map(y => <option key={y} value={y}>{y}</option>)}
-            </select>
+      <div
+        style={{
+          padding: "2rem",
+          textAlign: "center",
+          color: "#c04040",
+          fontSize: 14,
+        }}
+      >
+        Failed to load: {apiError}
+      </div>
+    );
+  }
 
-            <select
-              value={filterMonth}
-              onChange={e => setFilterMonth(e.target.value)}
-              style={{
-                padding: "6px 8px", fontSize: 13, borderRadius: 6,
-                border: "1px solid #ccc", outline: "none",
-              }}
-            >
-              <option value="">-- Month --</option>
-              {MONTHSLIST.map(m => <option key={m} value={m}>{m}</option>)}
-            </select>
+  return (
+  <>
+    <div style={{ fontFamily:"sans-serif", padding:"1.5rem 0 2rem" }}>
 
-            <button
-              onClick={handleFilterClick}
-              style={{
-                padding: "6px 16px", fontSize: 13, fontWeight: 500,
-                borderRadius: 6, border: "none", cursor: "pointer",
-                background: CAT_COLOR, color: "#fff",
-              }}
-            >
-              Filter
-            </button>
-            <button
-              onClick={handleRefresh}
-              style={{
-                padding: "6px 16px", fontSize: 13, fontWeight: 500,
-                borderRadius: 6, border: "none", cursor: "pointer",
-                background: CAT_COLOR, color: "#fff",
-              }}
-            >
-              Reset
-            </button>
-          </div>
-  
-          <div style={{ marginLeft:"auto", display:"flex", gap:6 }}>
-            <AddMonthDataModal
-              catColor={CAT_COLOR}
-              costCenter = {user.costCenter}
-              onSubmit={async (payload) => {
-                const res = await fetch('https://commtoolapi.mcpspmis.com/api/monthly-report/upsert/', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({
-                    circle:  user.circle,
-                    category: user.category,
-                    customer: user.customer,
-                    month:payload.month,
-                    year:payload.year,
-                    costCenter:user.costCenter,
-                    resources: payload.resources,
-                    other_resources:payload.otherResources
-                  })
-                });
-                if (res.ok) {
-                  fetchDataForMonth(month);
-                } else {
-                  alert("Failed to save data");
-                }
-              }}
-            />
-          </div>
+      {/* Header bar */}
+      <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:12, padding:"8px 12px", background:"#f5f5f0", border:"0.5px solid #ddd", borderRadius:8 }}>
+        <div style={{ borderRadius:6, background:CAT_COLOR, display:"inline-flex", alignItems:"center", padding: "6px 10px", justifyContent:"center", color:"#fff", fontWeight:700, fontSize:16 }}>Category - {cat} &nbsp; Circle - {user.circle}</div>
+        <div style={{marginLeft:"auto",display: "flex", gap: 8 }}>
+          <select
+            value={filterYear}
+            onChange={e => setFilterYear(e.target.value)}
+            style={{
+              padding: "6px 8px", fontSize: 13, borderRadius: 6,
+              border: "1px solid #ccc", outline: "none",
+            }}
+          >
+            <option value="">-- Year --</option>
+            {YEARS.map(y => <option key={y} value={y}>{y}</option>)}
+          </select>
+
+          <select
+            value={filterMonth}
+            onChange={e => setFilterMonth(e.target.value)}
+            style={{
+              padding: "6px 8px", fontSize: 13, borderRadius: 6,
+              border: "1px solid #ccc", outline: "none",
+            }}
+          >
+            <option value="">-- Month --</option>
+            {MONTHSLIST.map(m => <option key={m} value={m}>{m}</option>)}
+          </select>
+
+          <button
+            onClick={handleFilterClick}
+            style={{
+              padding: "6px 16px", fontSize: 13, fontWeight: 500,
+              borderRadius: 6, border: "none", cursor: "pointer",
+              background: CAT_COLOR, color: "#fff",
+            }}
+          >
+            Filter
+          </button>
+          <button
+            onClick={handleRefresh}
+            style={{
+              padding: "6px 16px", fontSize: 13, fontWeight: 500,
+              borderRadius: 6, border: "none", cursor: "pointer",
+              background: CAT_COLOR, color: "#fff",
+            }}
+          >
+            Reset
+          </button>
         </div>
-  
-        {/* Table */}
+
+        <div style={{ marginLeft:"auto", display:"flex", gap:6 }}>
+          <AddMonthDataModal
+            catColor={CAT_COLOR}
+            costCenter = {user.costCenter}
+            modelData = {modelData}
+            onSubmit={async (payload) => {
+              const res = await fetch('https://commtoolapi.mcpspmis.com/api/monthly-report/upsert/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  circle:  user.circle,
+                  category: user.category,
+                  customer: user.customer,
+                  month:payload.month,
+                  year:payload.year,
+                  costCenter:user.costCenter,
+                  resources: payload.resources,
+                  other_resources:payload.otherResources
+                })
+              });
+              if (res.ok) {
+                await fetchDataForMonth(month);
+              } else {
+                alert("Failed to save data");
+              }
+            }}
+          />
+          {/* {Export} */}
+
+          {/* <button
+            onClick={handleExport}
+            disabled={apiLoading || !monthWiseData?.[month]}
+            style={{
+              padding: "6px 16px",
+              fontSize: 13,
+              fontWeight: 500,
+              borderRadius: 6,
+              border: "none",
+              cursor:
+                apiLoading || !monthWiseData?.[month]
+                  ? "not-allowed"
+                  : "pointer",
+              background:
+                apiLoading || !monthWiseData?.[month]
+                  ? "#aaa"
+                  : CAT_COLOR,
+              color: "#fff",
+              display: "flex",
+              alignItems: "center",
+              gap: 6,
+            }}
+          >
+            Export
+          </button> */}
+
+        </div>
+      </div>
+
+      {apiLoading ? (
+        <div
+          style={{
+            minHeight: 300,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            flexDirection: "column",
+            gap: 12,
+            border: bdr,
+            borderRadius: 8,
+            background: "#fafafa",
+          }}
+        >
+          <div
+            style={{
+              width: 35,
+              height: 35,
+              border: `4px solid #ddd`,
+              borderTop: `4px solid ${CAT_COLOR}`,
+              borderRadius: "50%",
+              animation: "spin 0.8s linear infinite",
+            }}
+          />
+
+          <span
+            style={{
+              fontSize: 13,
+              color: "#666",
+            }}
+          >
+            Loading {month} data...
+          </span>
+        </div>
+      ) : (
         <div style={{ border:bdr, borderRadius:8, overflow:"hidden", width:"100%" }}>
           <table style={{ borderCollapse:"collapse", width:"100%", tableLayout:"fixed" }}>
             <colgroup>
@@ -615,14 +970,14 @@ const MonthWise = () => {
               <col style={{ width:"7%" }} />
               <col style={{ width:"9%" }} />
               {MONTHS.map(m => (
-                <>
-                  <col key={m+"cnt"} />
-                  <col key={m+"cmt"} />
-                  <col key={m+"act"} />
-                </>
+                <React.Fragment key={m}>
+                  <col />
+                  <col />
+                  <col />
+                </React.Fragment>
               ))}
             </colgroup>
-  
+
             <thead>
               <tr>
                 <th style={hc} colSpan={2}>Category</th>
@@ -650,7 +1005,7 @@ const MonthWise = () => {
 
 
             </thead>
-  
+
             <tbody>
               {/* ── Overall Cost ── */}
               <tr>
@@ -691,7 +1046,7 @@ const MonthWise = () => {
                   ))}
                 </tr>
               ))}
-  
+
               {/* ── Resource Management header ── */}
               <tr>
                 {sectionTd("Resource Management", resources.length+2, "#d8d8d0", "#2c2c2a")}
@@ -716,7 +1071,7 @@ const MonthWise = () => {
                   </>
                 ))}
               </tr>
-  
+
               {/* ── Resource rows ── */}
               {resources.map(r => {
                 const highlight = r.role === "Total back end Resources" 
@@ -736,7 +1091,7 @@ const MonthWise = () => {
                       const cell = getResCell(m, r.id);
                       return (
                         <>
-                          <td key={m+"cnt"} style={cs}><DisplayCell value={cell?.count} onClick={() => handleMemberClick(m, r,"resource")}/></td>
+                          <td key={m+"cnt"} style={cs}><DisplayCell value={cell?.count} onClick={Number(cell.count) > 0 ?() => handleMemberClick(m, r,"resource"): null}/></td>
                           <td key={m+"cmt"} style={cs}><DisplayCell value={cell?.comment} align="left" /></td>
                           <td key={m+"act"} style={cs}><DisplayCell value={cell?.action} align="left" /></td>
                         </>
@@ -783,7 +1138,7 @@ const MonthWise = () => {
                       const cell = getothResCell(m, r.id);
                       return (
                         <>
-                          <td key={m+"cnt"} style={cs}><DisplayCell value={cell?.count} onClick={() => handleMemberClick(m, r,"other_resource")}/></td>
+                          <td key={m+"cnt"} style={cs}><DisplayCell value={cell?.count} onClick={Number(cell.count) > 0 ? () => handleMemberClick(m, r,"other_resource"): null}/></td>
                           <td key={m+"cmt"} style={cs}><DisplayCell value={cell?.comment} align="left" /></td>
                           <td key={m+"act"} style={cs}><DisplayCell value={cell?.action} align="left" /></td>
                         </>
@@ -796,173 +1151,168 @@ const MonthWise = () => {
             </tbody>
           </table>
         </div>
-      </div>
+      )}
+      
+    </div>
 
 
-      {openMemberModal && (
+    {openMemberModal && (
+      <div
+        // onClick={() => setOpenMemberModal(false)}
+        style={{
+          position: "fixed",
+          inset: 0,
+          background: "rgba(0,0,0,.45)",
+          zIndex: 99999,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "2rem",
+        }}
+      >
         <div
-          onClick={() => setOpenMemberModal(false)}
+          onClick={(e) => e.stopPropagation()}
           style={{
-            position: "fixed",
-            inset: 0,
-            background: "rgba(0,0,0,.45)",
-            zIndex: 99999,
+            width: "900px",
+            maxWidth: "95%",
+            maxHeight: "80vh",
+            background: "#fff",
+            borderRadius: 12,
             display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "2rem",
+            flexDirection: "column",
+            overflow: "hidden",
+            boxShadow: "0 8px 30px rgba(0,0,0,.25)",
           }}
         >
+          {/* Header */}
           <div
-            onClick={(e) => e.stopPropagation()}
             style={{
-              width: "900px",
-              maxWidth: "95%",
-              maxHeight: "80vh",
-              background: "#fff",
-              borderRadius: 12,
+              background: CAT_COLOR,
+              color: "#fff",
+              padding: "14px 20px",
               display: "flex",
-              flexDirection: "column",
-              overflow: "hidden",
-              boxShadow: "0 8px 30px rgba(0,0,0,.25)",
+              justifyContent: "space-between",
+              alignItems: "center",
+              flexShrink: 0,
             }}
           >
-            {/* Header */}
-            <div
-              style={{
-                background: CAT_COLOR,
-                color: "#fff",
-                padding: "14px 20px",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                flexShrink: 0,
-              }}
-            >
-              <div>
-                <div style={{ fontSize: 18, fontWeight: 600 }}>
-                  {selectedRole}
-                </div>
-
-                <div style={{ fontSize: 12, opacity: 0.8 }}>
-                  Total Members : {selectedMembers.length}
-                </div>
+            <div>
+              <div style={{ fontSize: 18, fontWeight: 600 }}>
+                {selectedRole}
               </div>
 
-              <button
-                onClick={() => setOpenMemberModal(false)}
-                style={{
-                  border: "none",
-                  background: "transparent",
-                  color: "#fff",
-                  fontSize: 26,
-                  cursor: "pointer",
-                }}
-              >
-                ×
-              </button>
+              <div style={{ fontSize: 12, opacity: 0.8 }}>
+                Total Members : {selectedMembers.length}
+              </div>
             </div>
 
-            {/* Body */}
-            <div
+            <button
+              onClick={() => setOpenMemberModal(false)}
               style={{
-                flex: 1,
-                overflowY: "auto",
-                padding: 20,
+                border: "none",
+                background: "transparent",
+                color: "#fff",
+                fontSize: 26,
+                cursor: "pointer",
               }}
             >
-              <table
-                style={{
-                  width: "100%",
-                  borderCollapse: "collapse",
-                }}
-              >
-                <thead
-                  style={{
-                    position: "sticky",
-                    top: 0,
-                    zIndex: 2,
-                    background: CAT_COLOR,
-                  }}
-                >
-                  <tr>
-                    <th style={thStyle}>#</th>
-                    <th style={thStyle}>Name</th>
-                    <th style={thStyle}>UST ID</th>
-                    <th style={thStyle}>Projects</th>
-                  </tr>
-                </thead>
+              ×
+            </button>
+          </div>
 
-                <tbody>
-                  {selectedMembers.length === 0 ? (
-                    <tr>
-                      <td
-                        colSpan={4}
-                        style={{
-                          padding: 30,
-                          textAlign: "center",
-                          color: "#888",
-                        }}
-                      >
-                        No Members Found
-                      </td>
-                    </tr>
-                  ) : (
-                    selectedMembers.map((m, i) => (
-                      <tr
-                        key={i}
-                        style={{
-                          background: i % 2 === 0 ? "#fafafa" : "#fff",
-                        }}
-                      >
-                        <td style={tdStyle}>{i + 1}</td>
-                        <td style={tdStyle}>{m.name}</td>
-                        <td style={tdStyle}>{m.ustId}</td>
-                        <td style={tdStyle}>{m.projects.join(", ")}</td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
-
-            {/* Footer */}
-            <div
+          {/* Body */}
+          <div
+            style={{
+              flex: 1,
+              overflowY: "auto",
+              padding: 20,
+            }}
+          >
+            <table
               style={{
-                padding: "14px 20px",
-                borderTop: "1px solid #eee",
-                display: "flex",
-                justifyContent: "flex-end",
-                background: "#fafafa",
-                flexShrink: 0,
+                width: "100%",
+                borderCollapse: "collapse",
               }}
             >
-              <button
-                onClick={() => setOpenMemberModal(false)}
+              <thead
                 style={{
-                  padding: "8px 22px",
-                  border: "none",
-                  borderRadius: 6,
+                  position: "sticky",
+                  top: 0,
+                  zIndex: 2,
                   background: CAT_COLOR,
-                  color: "#fff",
-                  cursor: "pointer",
-                  fontWeight: 500,
                 }}
               >
-                Close
-              </button>
-            </div>
+                <tr>
+                  <th style={thStyle}>#</th>
+                  <th style={thStyle}>Name</th>
+                  <th style={thStyle}>UST ID</th>
+                  <th style={thStyle}>Projects</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {selectedMembers.length === 0 ? (
+                  <tr>
+                    <td
+                      colSpan={4}
+                      style={{
+                        padding: 30,
+                        textAlign: "center",
+                        color: "#888",
+                      }}
+                    >
+                      No Members Found
+                    </td>
+                  </tr>
+                ) : (
+                  selectedMembers.map((m, i) => (
+                    <tr
+                      key={i}
+                      style={{
+                        background: i % 2 === 0 ? "#fafafa" : "#fff",
+                      }}
+                    >
+                      <td style={tdStyle}>{i + 1}</td>
+                      <td style={tdStyle}>{m.name}</td>
+                      <td style={tdStyle}>{m.ustId}</td>
+                      <td style={tdStyle}>{m.projects.join(", ")}</td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Footer */}
+          <div
+            style={{
+              padding: "14px 20px",
+              borderTop: "1px solid #eee",
+              display: "flex",
+              justifyContent: "flex-end",
+              background: "#fafafa",
+              flexShrink: 0,
+            }}
+          >
+            <button
+              onClick={() => setOpenMemberModal(false)}
+              style={{
+                padding: "8px 22px",
+                border: "none",
+                borderRadius: 6,
+                background: CAT_COLOR,
+                color: "#fff",
+                cursor: "pointer",
+                fontWeight: 500,
+              }}
+            >
+              Close
+            </button>
           </div>
         </div>
-      )}
-    </>
+      </div>
+    )}
+  </>
   ); 
 }
-
 export default MonthWise
-
-
-
-
-
-
