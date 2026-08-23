@@ -297,14 +297,6 @@ const MonthWise = () => {
   const cat = user?.category;
   const config = cat ? CATEGORY_CONFIG[cat] : null;
 
-  if (!user || !config) {
-    return (
-      <div style={{ padding: "2rem", textAlign: "center", color: "#c04040" }}>
-        User configuration not found.
-      </div>
-    );
-  }
-
   const EMPTY_MODEL_DATA = {
     year: "",
     month: "",
@@ -322,7 +314,6 @@ const MonthWise = () => {
   const [openMemberModal, setOpenMemberModal] = useState(false);
   const [selectedMembers, setSelectedMembers] = useState([]);
   const [selectedRole, setSelectedRole] = useState("");
-
 
   const fetchDataForMonth = useCallback(async (selectedMonth) => {
     if (!selectedMonth || !user?.costCenter) {
@@ -387,10 +378,7 @@ const MonthWise = () => {
 
     
 
-  const hasData = useCallback(
-    month => Boolean(monthWiseData?.[month]),
-    [monthWiseData]
-  );
+  const hasData = useCallback( month => Boolean(monthWiseData?.[month]), [monthWiseData] );
 
   const getCostVal = useCallback( (month, costId) => {
       const monthData = monthWiseData?.[month];
@@ -799,6 +787,15 @@ const MonthWise = () => {
   const resources = config.resources;
   const costs     = config.costs;
   const otherResources = config.otherResources;
+
+
+  if (!user || !config) {
+    return (
+      <div style={{ padding: "2rem", textAlign: "center", color: "#c04040" }}>
+        User configuration not found.
+      </div>
+    );
+  }
     
   if (apiError) {
     return (
