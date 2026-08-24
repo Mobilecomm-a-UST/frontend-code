@@ -322,10 +322,10 @@ const ToolData = [
     ,
     {
         id: 28,
-        name: 'Mobinet VS CATS',
-        title: 'This is a Mobinet VS CATS Tool',
+        name: 'Mobinet VS AWS',
+        title: 'This is a Mobinet VS AWS Tool',
         icons: FunnelStepsIcon,
-        fullname: 'Mobinet VS CATS Tool',
+        fullname: 'Mobinet VS AWS Tool',
         link: '/tools/mobinet_vs_cats',
         groupBy: ['admin', 'ran']
     },
