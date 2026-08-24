@@ -21,6 +21,7 @@ const RecoMaterial = () => {
   // so its old file-picker state has been removed.
   const [siteList, setSiteList] = useState({ filename: "", bytes: "" });
   const [hardWareFile, setHardWareFile] = useState({ filename: "", bytes: "" });
+  const [manualFile, setManualFile] = useState({filename: "", bytes: "" })
   const [olmidFile, setOlmidFile] = useState({ filename: "", bytes: "" });
   const [fileData, setFileData] = useState();
   const [download, setDownload] = useState(false);
@@ -85,7 +86,8 @@ const RecoMaterial = () => {
   const handleSubmit = async () => {
     const isValid =
       siteList.filename &&
-      hardWareFile.filename;
+      hardWareFile.filename &&
+      manualFile.filename;
     // mobinate dump is no longer a manual upload, so it's dropped from validation
     // olmidFile.filename ;
     // rfsFile.filename &&
@@ -96,6 +98,7 @@ const RecoMaterial = () => {
       setShowError({
         siteList: !siteList.filename,
         hardware: !hardWareFile.filename,
+        manualFile: !manualFile.filename,
         // olmId: !olmidFile.filename,
         // rfs: !rfsFile.filename,
         // msmf: !msmfFile.filename,
@@ -112,6 +115,7 @@ const RecoMaterial = () => {
     // });
     formData.append("site_list_file", siteList.bytes);
     formData.append("hw_file", hardWareFile.bytes);
+    formData.append("manual_file", manualFile.bytes);
     // formData.append("olm_id_file", olmidFile.bytes);
     // formData.append("rfs_file", rfsFile.bytes);
     // formData.append("msmf_file", msmfFile.bytes);
@@ -204,6 +208,14 @@ const RecoMaterial = () => {
                   onChange={(e) => updateFile(e, setHardWareFile, "hardware")}
                   error={showError.hardware}
                   selectedText={hardWareFile.filename}
+                />
+
+                 <UploadSection
+                  label="Select Manual File"
+                  color={manualFile.filename ? "warning" : "primary"}
+                  onChange={(e) => updateFile(e, setHardWareFile, "hardware")}
+                  error={showError.hardware}
+                  selectedText={manualFile.filename}
                 />
 
                 {/* OLM ID File */}
