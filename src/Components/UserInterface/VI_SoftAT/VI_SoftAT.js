@@ -27,6 +27,8 @@ const VIHotoFtr = lazy(() => import('./VI_Hoto_Dashboard/VIHotoFtr'));
 const FTR_Dashboard = lazy(() => import('./VI_Hoto_Dashboard/FTR_Dashboard'));
 const VI_Hoto_FTR = lazy(() => import('./VI_Hoto_Dashboard/VI_Hoto_FTR'));
 const UploadVil = lazy(()=>import('./VIL ERICSSON/UploadVil'))
+const VI4G = lazy(()=>import('./VI GPL/VI4G'))
+const VI5G = lazy(()=> import('./VI GPL/VI5G'))
 
 
 const VI_SoftAT = () => {
@@ -97,6 +99,15 @@ const VI_SoftAT = () => {
                                             Upload VIL 
                                         </Nav.Item>
                                          </Nav.Menu>
+
+                                          <Nav.Menu eventKey="5" placement="rightStart" className="menu-title-custom" title="VI GPL" icon={<DashboardIcon size="3em" />}>
+                                         <Nav.Item eventKey="5-1" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/VI4G')}>
+                                            4G
+                                        </Nav.Item>
+                                         <Nav.Item eventKey="5-2" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/VI5G')}>
+                                            5G 
+                                        </Nav.Item>
+                                         </Nav.Menu>
                                          
                                     
                                         {/* <Nav.Item eventKey="2" placement="rightStart" icon={<DashboardIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/vi_ftr_dashboard')}>
@@ -128,6 +139,9 @@ const VI_SoftAT = () => {
                                 <Route element={<FTR_Dashboard />} path="/FTR_Dashboard" />
                                 <Route element={<VI_Hoto_FTR />} path="/VI_Hoto_FTR" />
                                 <Route element={<UploadVil/>} path='/UploadVil'/>
+                                <Route element={<VI4G/>} path='/VI4G'/>
+                                <Route element={<VI5G/>} path='/VI5G'/>
+
                             </Routes>
                         </Suspense>
                     </Grid>
