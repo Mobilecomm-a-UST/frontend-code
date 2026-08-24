@@ -39,6 +39,7 @@ const RecoMaterial = () => {
   const [showError, setShowError] = useState({
     siteList: false,
     hardware: false,
+    manual:false,
     olmId: false,
     // rfs: false,
     // msmf: false,
@@ -98,7 +99,7 @@ const RecoMaterial = () => {
       setShowError({
         siteList: !siteList.filename,
         hardware: !hardWareFile.filename,
-        manualFile: !manualFile.filename,
+        manual: !manualFile.filename,
         // olmId: !olmidFile.filename,
         // rfs: !rfsFile.filename,
         // msmf: !msmfFile.filename,
@@ -136,12 +137,13 @@ const RecoMaterial = () => {
   const handleCancel = () => {
     setSiteList({ filename: "", bytes: "" });
     setHardWareFile({ filename: "", bytes: "" });
+    setManualFile({filename:'', bytes:""});
     setOlmidFile({ filename: "", bytes: "" });
     // setRfsFile({ filename: "", bytes: "" });
     // setMsmfFile({ filename: "", bytes: "" });
     // setStockFile({ filename: "", bytes: "" });
     setDownload(false);
-    setShowError({ siteList: false, hardware: false });
+    setShowError({ siteList: false, hardware: false, manual: false });
   };
 
   useEffect(() => {
@@ -213,8 +215,8 @@ const RecoMaterial = () => {
                  <UploadSection
                   label="Select Manual File"
                   color={manualFile.filename ? "warning" : "primary"}
-                  onChange={(e) => updateFile(e, setHardWareFile, "hardware")}
-                  error={showError.hardware}
+                  onChange={(e) => updateFile(e, setManualFile, "manual")}
+                  error={showError.manual}
                   selectedText={manualFile.filename}
                 />
 
