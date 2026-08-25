@@ -463,7 +463,7 @@ function App() {
 
             <Route path="/tools/quality_team/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={QualityTeamTool} allowedUserTypes={['admin','QT_AL','PAT','PAT_Admin','PAT_5GKPI','PTS', 'PTS_Admin','quality','quality-s', 'trend_tool']} userType={userType} />
+                <ProtectedRoute element={QualityTeamTool} allowedUserTypes={['admin','QT_AL','PAT','PAT_Admin','PTS', 'PTS_Admin','quality','quality-s', 'trend_tool']} userType={userType} />
               </Suspense>
             } />
 
@@ -475,7 +475,7 @@ function App() {
 
             <Route path="/tools/quality_team/performance_at_tat/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={PerformanceTAT} allowedUserTypes={['admin', 'PAT','PAT_Admin','PAT_5GKPI']} userType={userType} />
+                <ProtectedRoute element={PerformanceTAT} allowedUserTypes={['admin', 'PAT','PAT_Admin']} userType={userType} />
               </Suspense>
             } />
 

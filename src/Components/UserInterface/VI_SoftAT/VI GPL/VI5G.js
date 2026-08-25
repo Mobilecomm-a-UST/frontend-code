@@ -65,7 +65,7 @@ const VI5G = () => {
             selectedFiles.forEach((f) => {
                 formData.append(`xml_file`, f.file);
             });
-            const response = await postData('bih_gpl_macro/bih_slicing/', formData)
+            const response = await postData('vi_gpl_5g/vi_slicing/', formData)
             console.log('response data', response)
             if (response.status === true) {
                 action(false)
