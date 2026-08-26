@@ -24,6 +24,8 @@ const Fmr = lazy(()=>import('./Forword Material Reconcilation/Fmr'))
 const RecoMaterial = lazy(()=> import('./Reco Material/RecoMaterial'))
 const Step2srn_cam_rmo = lazy(()=> import('./Forword Material Reconcilation/Step2srn_cam_rmo'))
 const LiveMobReco = lazy(()=> import('./Reco Material/LiveMobReco'))
+const MicrowaveReconcilation = lazy(()=> import('./Microwave Reconcilation/MicrowaveReconcilation'))
+const DegrowReconcilation = lazy(()=>import('./Degrow Reconcilation/DegrowReconcilation'))
 
 
 
@@ -134,6 +136,14 @@ const MobinateVsCate = () => {
                                                 Step 2-Live Mob + Reco
                                             </Nav.Item>
                                             </Nav.Menu>
+                                             <Nav.Item eventKey="6" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/MicrowaveReconcilation'); show(); setMenuButton(true) }}>
+                                                Microwave Reconcilation
+                                            </Nav.Item>
+                                            <Nav.Item eventKey="7" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/DegrowReconcilation'); show(); setMenuButton(true) }}>
+                                                Degrow Reconcilation
+                                            </Nav.Item>
+
+
                                             {/* <Nav.Menu eventKey="3" placement="rightStart" title="NOM Audit" icon={<DocPassIcon />}>
                                                 <Nav.Item eventKey="3-1" placement="rightStart" onClick={() => { navigate('/tools/nomenclature_scriptor/nom_audit_dashboard'); show(); setMenuButton(true) }}>
                                                     Dashboard
@@ -165,7 +175,8 @@ const MobinateVsCate = () => {
                                 <Route element={<RecoMaterial/>} path='/RecoMaterial'/>
                                 <Route element={<Step2srn_cam_rmo/>} path='/Step2srn_cam_rmo'/>
                                 <Route element={<LiveMobReco/>} path='/LiveMobReco'/>
-
+                                <Route element={<MicrowaveReconcilation/>} path='/MicrowaveReconcilation'/> 
+                                <Route element={<DegrowReconcilation/>} path='/DegrowReconcilation'/>
 
                             </Routes>
                         </Suspense>
