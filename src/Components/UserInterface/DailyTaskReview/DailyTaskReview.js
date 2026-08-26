@@ -130,9 +130,9 @@ const DailyTaskReview = () => {
                                                  My Task
                                             </Nav.Item>
 
-                                             <Nav.Item eventKey="4" placement="rightStart" className="single-item-custom" icon={<ListIcon style={{}} />} onClick={() => { navigate('/tools/daily_task_review/Tasktracker'); show(); setMenuButton(true) }}>
+                                             {/* <Nav.Item eventKey="4" placement="rightStart" className="single-item-custom" icon={<ListIcon style={{}} />} onClick={() => { navigate('/tools/daily_task_review/Tasktracker'); show(); setMenuButton(true) }}>
                                                  Task Tracker
-                                            </Nav.Item> 
+                                            </Nav.Item>  */}
 
                                            
 
