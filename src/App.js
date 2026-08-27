@@ -492,11 +492,11 @@ function App() {
               </Suspense>
             } />
 
-              {/* <Route path="/tools/quality_team/pending_performance_re/*" element={
+              <Route path="/tools/quality_team/pending_performance_re/*" element={
               <Suspense fallback={<div>Loading...</div>}>
                 <ProtectedRoute element={PendingPerformanceRemark} allowedUserTypes={['admin', 'QT_PPR']} userType={userType} />
               </Suspense>
-            } /> */}
+            } />
             
 
 
