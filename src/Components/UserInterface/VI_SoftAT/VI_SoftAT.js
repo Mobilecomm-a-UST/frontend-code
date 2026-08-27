@@ -29,6 +29,7 @@ const VI_Hoto_FTR = lazy(() => import('./VI_Hoto_Dashboard/VI_Hoto_FTR'));
 const UploadVil = lazy(()=>import('./VIL ERICSSON/UploadVil'))
 const VI4G = lazy(()=>import('./VI GPL/VI4G'))
 const VI5G = lazy(()=> import('./VI GPL/VI5G'))
+const VIHuawei = lazy(()=> import('./VI Huawei/VI_Huawei'))
 
 
 const VI_SoftAT = () => {
@@ -108,6 +109,11 @@ const VI_SoftAT = () => {
                                             5G 
                                         </Nav.Item>
                                          </Nav.Menu>
+                                          <Nav.Menu eventKey="6" placement="rightStart" className="menu-title-custom" title="VI Huawei" icon={<DashboardIcon size="3em" />}>
+                                         <Nav.Item eventKey="6-1" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/VIHuawei')}>
+                                            Upload Logs
+                                        </Nav.Item>
+                                         </Nav.Menu>
                                          
                                     
                                         {/* <Nav.Item eventKey="2" placement="rightStart" icon={<DashboardIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/vi_ftr_dashboard')}>
@@ -141,6 +147,7 @@ const VI_SoftAT = () => {
                                 <Route element={<UploadVil/>} path='/UploadVil'/>
                                 <Route element={<VI4G/>} path='/VI4G'/>
                                 <Route element={<VI5G/>} path='/VI5G'/>
+                                <Route element={<VIHuawei/>} path='/VIHuawei'/>
 
                             </Routes>
                         </Suspense>

@@ -13,6 +13,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { FileScriptIcon } from "@hugeicons/core-free-icons";
 import { DashboardCircleEditIcon } from "@hugeicons/core-free-icons";
 import TrafficOutlinedIcon from '@mui/icons-material/TrafficOutlined';
+import PendingActionsOutlinedIcon from '@mui/icons-material/PendingActionsOutlined';
 
 const QualityTeamTool = () => {
     const dispatch = useDispatch()
@@ -26,6 +27,7 @@ const QualityTeamTool = () => {
     const allowedTrendRoles = ['Admin','quality','quality-s', 'trend_tool'];
     const allowedPerformanceRoles = ['Admin','PAT','PAT_Admin'];
     const allowedTrafficRoles = ['Admin', 'PTS', 'PTS_Admin'];
+    const allowedPendingPerformanceRemark = ['Admin','QT_PPR']
 
     const linker = window.location.pathname;
 
@@ -65,6 +67,16 @@ const QualityTeamTool = () => {
         } else {
             navigate('/tools/quality_team/alarm_logs')
         }
+    }
+
+    const handlePendingPerformanceRemark = ()=>{
+        if (chackToken === null) {
+            navigate('/login')
+            dispatch({ type: 'LINK_PAGES', payload: { linker } })
+        } else {
+            navigate('/tools/quality_team/pending_performance_re')
+        }
+
     }
 
     const backgroundStyle = {
@@ -168,6 +180,19 @@ const QualityTeamTool = () => {
                                         </Box>
                                     </Grid>
                                           )}
+
+                                          {/* {userTypes?.some(role => allowedPendingPerformanceRemark.map(r => r.toLowerCase()).includes(role?.toLowerCase())) && (
+                                    <Grid item xs={12} sm={6} md={3}>
+                                        <Box sx={backgroundStyle} className={classes.des} onClick={handlePendingPerformanceRemark}>
+                                            <div className={classes.centerIcon}>
+                                                <PendingActionsOutlinedIcon alt="Pending" style={{ width: "40px", height: "40px" }} />
+                                            </div>
+                                            <div>
+                                                <div className={classes.center}>Pending PR</div>
+                                            </div>
+                                        </Box>
+                                    </Grid>
+                                          )} */}
 
                             </Grid>
                         </Box>

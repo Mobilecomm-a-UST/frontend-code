@@ -36,6 +36,7 @@ const jsonData = [
     { folder_name: "TOD File", api: "mobinate_vs_cats/tod_file_upload", back_folder: "TOD_upload_data" },
     { folder_name: "RMO File", api: "mobinate_vs_cats/rmo", back_folder: "rmo_data" },
     { folder_name: "MO-VS-CAP", api: "mobinate_vs_cats/mo_vs_cap", back_folder: "mo_vs_cap" },
+    { folder_name: "Live In Mobinet", api: "mobinate_vs_cats/mobinet_livein", back_folder: "livein_mobinet_data" }
 ];
 const Transition = React.forwardRef(function Transition(props, ref) {
     return (
