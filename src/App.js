@@ -80,6 +80,7 @@ const BasebandRequirement = lazy(()=>import('./Components/UserInterface/Baseband
 const QualityTeamTool = lazy(()=>import('./Components/UserInterface/Quality Team Tools/QualityTeamTool'))
 const AlarmLogs = lazy(()=>import('./Components/UserInterface/Alarm Logs Tool/AlarmLogs'))
 const Tstracker = lazy(()=>import('./Components/UserInterface/TS Tracker/TS_Tracker'))
+const PendingPerformanceRemark = lazy(()=> import('./Components/UserInterface/Pending Performance Remarks/PendingPerformanceRemarks'))
 
 
 const queryClient = new QueryClient()
@@ -490,6 +491,12 @@ function App() {
                 <ProtectedRoute element={AlarmLogs} allowedUserTypes={['admin', 'QT_AL']} userType={userType} />
               </Suspense>
             } />
+
+              {/* <Route path="/tools/quality_team/pending_performance_re/*" element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProtectedRoute element={PendingPerformanceRemark} allowedUserTypes={['admin', 'QT_PPR']} userType={userType} />
+              </Suspense>
+            } /> */}
             
 
 

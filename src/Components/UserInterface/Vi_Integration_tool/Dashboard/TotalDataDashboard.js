@@ -93,6 +93,8 @@ const TotalDataDashboard = () => {
         { title: '4G HOTO Accepted Date.', field: 'HOTO_Accepted_Date_4g' },
         { title: '2G HOTO Offered Date.', field: 'HOTO_Offered_Date_2g' },
         { title: '2G HOTO Accepted Date.', field: 'HOTO_Accepted_Date_2g' },
+          { title: 'Uploaded By', field: 'uploaded_by',editable: 'never' },
+        { title: 'Upload Date', field: 'upload_date',editable: 'never' },
         // {
         //     title: 'Actions',
         //     field: 'actions',
