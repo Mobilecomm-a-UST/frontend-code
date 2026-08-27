@@ -181,7 +181,7 @@ const QualityTeamTool = () => {
                                     </Grid>
                                           )}
 
-                                          {/* {userTypes?.some(role => allowedPendingPerformanceRemark.map(r => r.toLowerCase()).includes(role?.toLowerCase())) && (
+                                          {userTypes?.some(role => allowedPendingPerformanceRemark.map(r => r.toLowerCase()).includes(role?.toLowerCase())) && (
                                     <Grid item xs={12} sm={6} md={3}>
                                         <Box sx={backgroundStyle} className={classes.des} onClick={handlePendingPerformanceRemark}>
                                             <div className={classes.centerIcon}>
@@ -192,7 +192,7 @@ const QualityTeamTool = () => {
                                             </div>
                                         </Box>
                                     </Grid>
-                                          )} */}
+                                          )}
 
                             </Grid>
                         </Box>
