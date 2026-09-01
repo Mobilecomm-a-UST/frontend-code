@@ -395,7 +395,7 @@ const Step2srn_cam_rmo = () => {
             // postData() swallows non-2xx responses and returns null,
             // which is why response.error was never reaching the Swal call.
             const rawRes = await fetch(
-                `${ServerURL}mobinate_vs_cats/forward_material_reconciliation_step2/`,
+                `${ServerURL}/mobinate_vs_cats/forward_material_reconciliation_step2/`,
                 { method: "POST", body: formData }
             );
 

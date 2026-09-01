@@ -26,6 +26,7 @@ import SendToDashboardIcon from '@rsuite/icons/SendToDashboard';
 // const UploadFile = lazy(() => import("./BasebandUpload"));
 // const Dashboard = lazy(() => import("./Dashboard"));
 const PendingPerformanceTools = lazy(()=> import('./PendingPerformanceRemarksTool'))
+const UploadFile = lazy(()=> import('./Upload/UploadFile'))
 
 
 
@@ -63,11 +64,11 @@ const PendingPerformanceRemarks = () => {
                                 <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#006e74", marginTop: 8, borderRadius: 10 }}>
                                     <Sidenav.Body>
                                         <Nav activeKey={activeKey} onSelect={setActiveKey} >
-                                            <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>Baseband Requirement</Nav>
+                                            <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>Pending Performance Remark</Nav>
                                             <Divider component="li" sx={{ backgroundColor: 'white' }} />
         
 
-                                              <Nav.Item eventKey="1" placement="rightStart" className="single-item-custom" icon={< FileUploadIcon style={{}} />} onClick={() => { navigate('/tools/quality_team/pending_performance_re'); show(); setMenuButton(true) }}>
+                                              <Nav.Item eventKey="1" placement="rightStart" className="single-item-custom" icon={< FileUploadIcon style={{}} />} onClick={() => { navigate('/tools/quality_team/pending_performance_re/UploadFile'); show(); setMenuButton(true) }}>
                                                         Upload File
                                             </Nav.Item> 
 
@@ -87,8 +88,8 @@ const PendingPerformanceRemarks = () => {
                         <Suspense fallback={<Loader/>}>
                             <Routes>
                                <Route path="/" element={<PendingPerformanceTools />} />
-                                {/* <Route path="/uploadfile" element={<UploadFile />} />
-                                <Route path="/dashboard" element={<Dashboard />} /> */}
+                                <Route path="/UploadFile" element={<UploadFile/>} />
+                                {/* <Route path="/dashboard" element={<Dashboard />} /> */}
                                 
 
                               {/* {userTypes?.includes('ran_admin') && 
