@@ -32,7 +32,7 @@ import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
 // ─────────────────────────────────────────────────────────────────────────────
 
 const circleArray = ['AP', 'CH', 'KK', 'DL', 'HR', 'RJ', 'JK', 'WB', 'OD', 'MU', 'TNCH', 'UE', 'BH', 'UW', 'MP', 'PB', 'KO', 'JH', 'UPW']
-const bandArray = ['4G', '5G']
+const bandArray = ['4G', '5G','Accepted']
 const tagArray = ['Workable', 'Non Workable']
 const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 

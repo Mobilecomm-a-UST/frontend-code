@@ -464,7 +464,7 @@ function App() {
 
             <Route path="/tools/quality_team/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={QualityTeamTool} allowedUserTypes={['admin','QT_AL','PAT','PAT_Admin','PTS', 'PTS_Admin','quality','quality-s', 'trend_tool']} userType={userType} />
+                <ProtectedRoute element={QualityTeamTool} allowedUserTypes={['admin','QT_AL','PAT','PAT_Admin','PTS', 'PTS_Admin','quality','quality-s', 'trend_tool','QT_PPR']} userType={userType} />
               </Suspense>
             } />
 
