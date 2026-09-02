@@ -19,6 +19,10 @@ import { use } from 'react';
 import Loader from '../../Skeleton/Loader';
 import FileUploadIcon from '@rsuite/icons/FileUpload';
 import SendToDashboardIcon from '@rsuite/icons/SendToDashboard';
+import FileDownloadIcon from '@rsuite/icons/FileDownload';
+import DownloadIcon from '@mui/icons-material/Download';
+import ConversionIcon from '@rsuite/icons/Conversion';
+import FolderVerifyIcon from '@rsuite/icons/FolderVerify';
 
 
 
@@ -27,6 +31,10 @@ import SendToDashboardIcon from '@rsuite/icons/SendToDashboard';
 // const Dashboard = lazy(() => import("./Dashboard"));
 const PendingPerformanceTools = lazy(()=> import('./PendingPerformanceRemarksTool'))
 const UploadFile = lazy(()=> import('./Upload/UploadFile'))
+const Uploadupdatedreport = lazy(()=> import('./Upload/Uploadupdatedreport'))
+const Sitewiseremark = lazy(()=> import('./Upload/Sitewiseremark'))
+const DownloadCompleteReport = lazy(()=> import('./Upload/DownloadCompleteReport'))
+const DownloadTemplate = lazy(()=> import('./Upload/DownloadTemplate'))
 
 
 
@@ -68,9 +76,26 @@ const PendingPerformanceRemarks = () => {
                                             <Divider component="li" sx={{ backgroundColor: 'white' }} />
         
 
-                                              <Nav.Item eventKey="1" placement="rightStart" className="single-item-custom" icon={< FileUploadIcon style={{}} />} onClick={() => { navigate('/tools/quality_team/pending_performance_re/UploadFile'); show(); setMenuButton(true) }}>
-                                                        Upload File
+                                              <Nav.Item eventKey="1" placement="rightStart" className="single-item-custom" icon={< FolderVerifyIcon style={{}} />} onClick={() => { navigate('/tools/quality_team/pending_performance_re/UploadFile'); show(); setMenuButton(true) }}>
+                                                        Input File
                                             </Nav.Item> 
+                                             <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={< ConversionIcon style={{}} />} onClick={() => { navigate('/tools/quality_team/pending_performance_re/Sitewiseremark'); show(); setMenuButton(true) }}>
+                                                        Site-Wise Remarks
+                                            </Nav.Item> 
+                                             <Nav.Item eventKey="3" placement="rightStart" className="single-item-custom" icon={< FileDownloadIcon style={{}} />} onClick={() => { navigate('/tools/quality_team/pending_performance_re/DownloadCompleteReport'); show(); setMenuButton(true) }}>
+                                                       Download Complete Report
+                                            </Nav.Item> 
+                                              <Nav.Item eventKey="4" placement="rightStart" className="single-item-custom" icon={< FileDownloadIcon style={{}} />} onClick={() => { navigate('/tools/quality_team/pending_performance_re/DownloadTemplate'); show(); setMenuButton(true) }}>
+                                                        Download Template
+                                            </Nav.Item> 
+                                              <Nav.Item eventKey="5" placement="rightStart" className="single-item-custom" icon={< FileUploadIcon style={{}} />} onClick={() => { navigate('/tools/quality_team/pending_performance_re/Uploadupdatedreport'); show(); setMenuButton(true) }}>
+                                                       Upload Updated Report
+                                            </Nav.Item> 
+                                             
+                                            
+
+                                            
+
 
                                             {/* <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={<SendToDashboardIcon style={{}} />} onClick={() => { navigate('/tools/baseband_requirement/Dashboard'); show(); setMenuButton(true) }}>
                                                 Dashboard
@@ -88,7 +113,13 @@ const PendingPerformanceRemarks = () => {
                         <Suspense fallback={<Loader/>}>
                             <Routes>
                                <Route path="/" element={<PendingPerformanceTools />} />
+                              
                                 <Route path="/UploadFile" element={<UploadFile/>} />
+                                <Route path='/Sitewiseremark' element={<Sitewiseremark/>}/>
+                                  <Route path='/DownloadCompleteReport' element={<DownloadCompleteReport/>}/>
+                                    <Route path='/DownloadTemplate' element={<DownloadTemplate/>}/>
+                                      <Route path='/Uploadupdatedreport' element={<Uploadupdatedreport/>}/>
+                                
                                 {/* <Route path="/dashboard" element={<Dashboard />} /> */}
                                 
 

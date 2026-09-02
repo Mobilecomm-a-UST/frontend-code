@@ -351,7 +351,7 @@ const Step2srn_cam_rmo = () => {
     const fetchMobinetFileData = async () => {
         action(true);
         const hardware = await getData('mobinate_vs_cats/hw/');
-        const mobinate = await getData('mobinate_vs_cats/mobinet_dump/');
+        const mobinate = await getData('mobinate_vs_cats/mobinet_livein/');
         const locator  = await getData('mobinate_vs_cats/locator/');
         const rmo      = await getData('mobinate_vs_cats/rmo/');
         const rfs      = await getData('mobinate_vs_cats/rfs/');

@@ -322,7 +322,7 @@ const Fmr = () => {
     const fetchMobinetFileData = async () => {
         action(true);
         const hardware = await getData('mobinate_vs_cats/hw/')
-        const mobinate = await getData('mobinate_vs_cats/mobinet_dump/');
+        const mobinate = await getData('mobinate_vs_cats/mobinet_livein/');
         const locator = await getData('mobinate_vs_cats/locator/');
         const mbf = await getData('mobinate_vs_cats/mobinet_baseline_upload/');
         const tod = await getData('mobinate_vs_cats/tod_file_upload/');
