@@ -1,3 +1,6 @@
+
+
+
 // import React, { useState, useEffect, useCallback } from "react";
 // import {
 //     Box, Button, Stack, Breadcrumbs, Link, Typography, Slide, Grid
@@ -54,7 +57,12 @@
 //     const fetchMobinetFileData = async () => {
 //         action(true);
 
-//         const response5 = await getData('mobinate_vs_cats/mobinet_livein');
+//         // FIX: added trailing slash — every other endpoint in this API family
+//         // ends with "/". Without it, a Django-style backend with APPEND_SLASH
+//         // enabled issues a 301 redirect that typically drops CORS headers,
+//         // which the browser then reports as a CORS error even though the
+//         // real cause is the missing slash.
+//         const response5 = await getData('mobinate_vs_cats/mobinet_livein/');
 
 //         action(false);
 
@@ -242,7 +250,6 @@
 //     );
 // };
 
-
 // export default LiveMobReco;
 
 
@@ -267,7 +274,7 @@ const LiveMobReco = () => {
     const [siteList, setSiteList] = useState({ filename: "", bytes: "" });
     const [hardWareFile, setHardWareFile] = useState({ filename: "", bytes: "" });
     const [olmidFile, setOlmidFile] = useState({ filename: "", bytes: "" });
-    const [recoFile, setRecoFile] = useState({ filename: "", bytes: "" }); // ✅ NEW
+    const [recoFile, setRecoFile] = useState({ filename: "", bytes: "" });
     const [fileData, setFileData] = useState();
     const [fileData1, setFileData1] = useState();
     const [download, setDownload] = useState(false);
@@ -281,7 +288,7 @@ const LiveMobReco = () => {
 
     const [showError, setShowError] = useState({
 
-        recoFile: false, // ✅ NEW
+        recoFile: false,
     });
 
     const { loading, action } = useLoadingDialog();
@@ -302,11 +309,6 @@ const LiveMobReco = () => {
     const fetchMobinetFileData = async () => {
         action(true);
 
-        // FIX: added trailing slash — every other endpoint in this API family
-        // ends with "/". Without it, a Django-style backend with APPEND_SLASH
-        // enabled issues a 301 redirect that typically drops CORS headers,
-        // which the browser then reports as a CORS error even though the
-        // real cause is the missing slash.
         const response5 = await getData('mobinate_vs_cats/mobinet_livein/');
 
         action(false);
@@ -321,12 +323,12 @@ const LiveMobReco = () => {
     const handleSubmit = async () => {
         const isValid =
 
-            recoFile.filename; // ✅ NEW validation
+            recoFile.filename;
 
         if (!isValid) {
             setShowError({
 
-                recoFile: !recoFile.filename, // ✅ NEW
+                recoFile: !recoFile.filename,
             });
             return;
         }
@@ -334,7 +336,7 @@ const LiveMobReco = () => {
         action(true);
         const formData = new FormData();
 
-        formData.append("reco_file", recoFile.bytes); // ✅ NEW
+        formData.append("reco_file", recoFile.bytes);
 
         const response = await postData("mobinate_vs_cats/live_in_mob/", formData);
         action(false);
@@ -342,7 +344,7 @@ const LiveMobReco = () => {
         if (response.status) {
             setDownload(true);
             setFileData(response.download_url);
-             setFileData1(response.download_url1); 
+            setFileData1(response.download_url1);
             Swal.fire({ icon: "success", title: "Done", text: response.message });
         } else {
             Swal.fire({ icon: "error", title: "Oops...", text: response.message });
@@ -351,9 +353,29 @@ const LiveMobReco = () => {
 
     const handleCancel = () => {
 
-        setRecoFile({ filename: "", bytes: "" }); // ✅ NEW
+        setRecoFile({ filename: "", bytes: "" });
         setDownload(false);
-        setShowError({ siteList: false, hardware: false, recoFile: false }); // ✅ NEW
+        setFileData();
+        setFileData1();
+        setShowError({ siteList: false, hardware: false, recoFile: false });
+    };
+
+    // ✅ NEW: single button triggers both downloads (fileData + fileData1)
+    const triggerDownload = (url) => {
+        if (!url) return;
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    };
+
+    const handleDownloadAll = () => {
+        triggerDownload(fileData);
+        if (fileData1) {
+            setTimeout(() => triggerDownload(fileData1), 400);
+        }
     };
 
     useEffect(() => {
@@ -384,7 +406,6 @@ const LiveMobReco = () => {
 
                             <Stack spacing={2} sx={{ mt: "-40px" }}>
 
-                                {/* Mobinet Dump Files — read-only list */}
                                 <Box className={OverAllCss().Front_Box}>
                                     <div className={OverAllCss().Front_Box_Hading}>Live In Mobinet Dump Files:</div>
                                     <div className={OverAllCss().Front_Box_Select_Button}>
@@ -404,9 +425,6 @@ const LiveMobReco = () => {
                                     </div>
                                 </Box>
 
-                                {/* Site List */}
-
-                                {/* ✅ NEW: Reco File upload */}
                                 <UploadSection
                                     label="Select Reco File"
                                     color={recoFile.filename ? "warning" : "primary"}
@@ -414,8 +432,6 @@ const LiveMobReco = () => {
                                     error={showError.recoFile}
                                     selectedText={recoFile.filename}
                                 />
-
-                                {/* ✅ REMOVED: RFS File, MS-MF File, Locator Files, MO VS CAP File */}
 
                             </Stack>
 
@@ -431,29 +447,17 @@ const LiveMobReco = () => {
                         </Box>
                     </Box>
 
-                    {download && (
+                    {/* ✅ Single button — clicking it downloads BOTH reports */}
+                    {download && (fileData || fileData1) && (
                         <Box textAlign="center">
-                            <a href={fileData} download>
-                                <Button
-                                    variant="outlined"
-                                    startIcon={<FileDownloadIcon sx={{ fontSize: 30, color: "green" }} />}
-                                    sx={{ mt: 2, textTransform: "none", fontWeight: 800, fontSize: "22px", fontFamily: "Poppins" }}
-                                >
-                                    Live In Mobinet Summary Report
-                                </Button>
-                            </a>
-
-                            {fileData1 && (
-                                <a href={fileData1} download>
-                                    <Button
-                                        variant="outlined"
-                                        startIcon={<FileDownloadIcon sx={{ fontSize: 30, color: "green" }} />}
-                                        sx={{ textTransform: "none", fontWeight: 800, fontSize: "22px", fontFamily: "Poppins" }}
-                                    >
-                                        Live In Mobinet Data Report
-                                    </Button>
-                                </a>
-                            )}
+                            <Button
+                                variant="outlined"
+                                startIcon={<FileDownloadIcon sx={{ fontSize: 30, color: "green" }} />}
+                                sx={{ mt: 2, textTransform: "none", fontWeight: 800, fontSize: "22px", fontFamily: "Poppins" }}
+                                onClick={handleDownloadAll}
+                            >
+                                Live In Mobinate Reco Report
+                            </Button>
                         </Box>
                     )}
                 </Box>

@@ -61,7 +61,7 @@ const ToolData = [
         icons: WidgetsIcon,
         fullname: 'Quality Team',
         link: '/tools/quality_team',
-        groupBy: ['admin','QT_AL','quality', 'quality-s', 'trend_tool','PAT','PAT_Admin','PTS', 'PTS_Admin']
+        groupBy: ['admin','QT_AL','quality', 'quality-s', 'trend_tool','PAT','PAT_Admin','PTS', 'PTS_Admin','QT_PPR']
     },
     // {
     //     id: 0,
@@ -525,7 +525,7 @@ const ToolData = [
     //     link: '/tools/performance_new',
     //     groupBy: ['admin',"performance_n"]
     // },
-    
+
 
     
 ]

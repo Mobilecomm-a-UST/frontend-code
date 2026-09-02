@@ -1,3 +1,6 @@
+
+
+
 // import React, { useState, useEffect, useCallback } from "react";
 // import {
 //   Box, Button, Stack, Breadcrumbs, Link, Typography, Slide, Grid
@@ -24,6 +27,7 @@
 //   const [manualFile, setManualFile] = useState({filename: "", bytes: "" })
 //   const [olmidFile, setOlmidFile] = useState({ filename: "", bytes: "" });
 //   const [fileData, setFileData] = useState();
+//   const [fileData1, setFileData1] = useState(); // ✅ NEW: RSF MS-MF report (download_url1)
 //   const [download, setDownload] = useState(false);
 //   // showFiles now also carries mobinetDump (for the first card) and moVsCap
 //   // (for the last card, replacing the old "stock" source).
@@ -52,6 +56,7 @@
 //   const classes = OverAllCss();
 
 //   const link = `${ServerURL}${fileData}`;
+//   const link1 = `${ServerURL}${fileData1}`; // ✅ NEW
 
 //   const updateFile = (event, setFileState, errorKey) => {
 //     const file = event.target.files[0];
@@ -128,6 +133,7 @@
 //     if (response.status) {
 //       setDownload(true);
 //       setFileData(response.download_url);
+//       setFileData1(response.download_url1); // ✅ NEW: RSF MS-MF Report
 //       Swal.fire({ icon: "success", title: "Done", text: response.message });
 //     } else {
 //       Swal.fire({ icon: "error", title: "Oops...", text: response.message });
@@ -143,6 +149,8 @@
 //     // setMsmfFile({ filename: "", bytes: "" });
 //     // setStockFile({ filename: "", bytes: "" });
 //     setDownload(false);
+//     setFileData(); // ✅ NEW
+//     setFileData1(); // ✅ NEW
 //     setShowError({ siteList: false, hardware: false, manual: false });
 //   };
 
@@ -351,17 +359,36 @@
 //             </Box>
 //           </Box>
 
+//           {/* ✅ Two report links: Reco Summary Report (download_url) + RSF MS-MF Report (download_url1) */}
 //           {download && (
 //             <Box textAlign="center">
-//               <a href={fileData} download>
-//                 <Button
-//                   variant="outlined"
-//                   startIcon={<FileDownloadIcon sx={{ fontSize: 30, color: "green" }} />}
-//                   sx={{ mt: 2, textTransform: "none", fontWeight: 800, fontSize: "22px", fontFamily: "Poppins" }}
-//                 >
-//                   Reco Summary Report
-//                 </Button>
-//               </a>
+//               <Stack direction={{ xs: "column", md: "row" }} spacing={2} justifyContent="center" alignItems="center" mt={2}>
+
+//                 {fileData && (
+//                   <a href={fileData} download>
+//                     <Button
+//                       variant="outlined"
+//                       startIcon={<FileDownloadIcon sx={{ fontSize: 30, color: "green" }} />}
+//                       sx={{ textTransform: "none", fontWeight: 800, fontSize: "22px", fontFamily: "Poppins" }}
+//                     >
+//                       Reco Summary Report
+//                     </Button>
+//                   </a>
+//                 )}
+
+//                 {fileData1 && (
+//                   <a href={fileData1} download>
+//                     <Button
+//                       variant="outlined"
+//                       startIcon={<FileDownloadIcon sx={{ fontSize: 30, color: "green" }} />}
+//                       sx={{ textTransform: "none", fontWeight: 800, fontSize: "22px", fontFamily: "Poppins" }}
+//                     >
+//                       RSF MS-MF Report
+//                     </Button>
+//                   </a>
+//                 )}
+
+//               </Stack>
 //             </Box>
 //           )}
 //         </Box>
@@ -406,6 +433,7 @@
 // export default RecoMaterial
 
 
+
 import React, { useState, useEffect, useCallback } from "react";
 import {
   Box, Button, Stack, Breadcrumbs, Link, Typography, Slide, Grid
@@ -424,18 +452,13 @@ import OverAllCss from "../../../csss/OverAllCss";
 import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
 
 const RecoMaterial = () => {
-  // NOTE: mobinateDump is no longer a user-selected upload — it's now a
-  // read-only list fetched from the API (see showFiles.mobinetDump below),
-  // so its old file-picker state has been removed.
   const [siteList, setSiteList] = useState({ filename: "", bytes: "" });
   const [hardWareFile, setHardWareFile] = useState({ filename: "", bytes: "" });
-  const [manualFile, setManualFile] = useState({filename: "", bytes: "" })
+  const [manualFile, setManualFile] = useState({filename: "", bytes: "" }) // ✅ now OPTIONAL
   const [olmidFile, setOlmidFile] = useState({ filename: "", bytes: "" });
   const [fileData, setFileData] = useState();
-  const [fileData1, setFileData1] = useState(); // ✅ NEW: RSF MS-MF report (download_url1)
+  const [fileData1, setFileData1] = useState(); // RSF MS-MF report (download_url1)
   const [download, setDownload] = useState(false);
-  // showFiles now also carries mobinetDump (for the first card) and moVsCap
-  // (for the last card, replacing the old "stock" source).
   const [showFiles, setShoweFiles] = useState({
     locator: [],
     stock: [],
@@ -448,12 +471,8 @@ const RecoMaterial = () => {
   const [showError, setShowError] = useState({
     siteList: false,
     hardware: false,
-    manual:false,
+    // ✅ "manual" removed from error state — it's no longer a required field
     olmId: false,
-    // rfs: false,
-    // msmf: false,
-    // stock: false,
-    // locater: false
   });
 
   const { loading, action } = useLoadingDialog();
@@ -461,7 +480,7 @@ const RecoMaterial = () => {
   const classes = OverAllCss();
 
   const link = `${ServerURL}${fileData}`;
-  const link1 = `${ServerURL}${fileData1}`; // ✅ NEW
+  const link1 = `${ServerURL}${fileData1}`;
 
   const updateFile = (event, setFileState, errorKey) => {
     const file = event.target.files[0];
@@ -478,8 +497,6 @@ const RecoMaterial = () => {
     const response2 = await getData('mobinate_vs_cats/msmf/');
     const response3 = await getData('mobinate_vs_cats/stock/');
     const response4 = await getData('mobinate_vs_cats/locator/');
-    // NEW: fetch the Mobinet Dump files (for the first card) and the
-    // MO-VS-CAP files (for the last card).
     const response5 = await getData('mobinate_vs_cats/mobinet_dump/');
     const response6 = await getData('mobinate_vs_cats/mo_vs_cap/');
 
@@ -495,42 +512,27 @@ const RecoMaterial = () => {
   }
 
   const handleSubmit = async () => {
+    // ✅ Manual File removed from required validation — it's optional now
     const isValid =
       siteList.filename &&
-      hardWareFile.filename &&
-      manualFile.filename;
-    // mobinate dump is no longer a manual upload, so it's dropped from validation
-    // olmidFile.filename ;
-    // rfsFile.filename &&
-    // msmfFile.filename &&
-    // stockFile.filename;
+      hardWareFile.filename;
 
     if (!isValid) {
       setShowError({
         siteList: !siteList.filename,
         hardware: !hardWareFile.filename,
-        manual: !manualFile.filename,
-        // olmId: !olmidFile.filename,
-        // rfs: !rfsFile.filename,
-        // msmf: !msmfFile.filename,
-        // stock: !stockFile.filename,
       });
       return;
     }
 
     action(true);
     const formData = new FormData();
-    // locaterFiles.forEach((file) => formData.append("locator_file", file));
-    // Array.from(locaterFiles).forEach((file) => {
-    //   formData.append("locator_file", file);
-    // });
     formData.append("site_list_file", siteList.bytes);
     formData.append("hw_file", hardWareFile.bytes);
-    formData.append("manual_file", manualFile.bytes);
-    // formData.append("olm_id_file", olmidFile.bytes);
-    // formData.append("rfs_file", rfsFile.bytes);
-    // formData.append("msmf_file", msmfFile.bytes);
-    // formData.append("stock_report_file", stockFile.bytes)
+    // ✅ Only append manual_file if the user actually chose one
+    if (manualFile.filename) {
+      formData.append("manual_file", manualFile.bytes);
+    }
 
     const response = await postData("mobinate_vs_cats/dismental_dash/", formData);
     action(false);
@@ -538,7 +540,7 @@ const RecoMaterial = () => {
     if (response.status) {
       setDownload(true);
       setFileData(response.download_url);
-      setFileData1(response.download_url1); // ✅ NEW: RSF MS-MF Report
+      setFileData1(response.download_url1);
       Swal.fire({ icon: "success", title: "Done", text: response.message });
     } else {
       Swal.fire({ icon: "error", title: "Oops...", text: response.message });
@@ -550,13 +552,31 @@ const RecoMaterial = () => {
     setHardWareFile({ filename: "", bytes: "" });
     setManualFile({filename:'', bytes:""});
     setOlmidFile({ filename: "", bytes: "" });
-    // setRfsFile({ filename: "", bytes: "" });
-    // setMsmfFile({ filename: "", bytes: "" });
-    // setStockFile({ filename: "", bytes: "" });
     setDownload(false);
-    setFileData(); // ✅ NEW
-    setFileData1(); // ✅ NEW
-    setShowError({ siteList: false, hardware: false, manual: false });
+    setFileData();
+    setFileData1();
+    setShowError({ siteList: false, hardware: false });
+  };
+
+  // Triggers both downloads from a single button click.
+  // Each file is downloaded via a programmatically-created, hidden <a> tag.
+  // A short stagger between the two clicks avoids browsers silently
+  // blocking "multiple simultaneous downloads" popups.
+  const triggerDownload = (url) => {
+    if (!url) return;
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
+
+  const handleDownloadAll = () => {
+    triggerDownload(fileData);
+    if (fileData1) {
+      setTimeout(() => triggerDownload(fileData1), 400);
+    }
   };
 
   useEffect(() => {
@@ -585,9 +605,6 @@ const RecoMaterial = () => {
               <Box className={classes.Box_Hading}>Reco Material</Box>
 
               <Stack spacing={2} sx={{ mt: "-40px" }}>
-                {/* ── Mobinet Dump Files (was: Select Mobinet Tool Files upload) ──
-                     No longer a file picker — this now just lists whatever the
-                     backend already has under mobinate_vs_cats/mobinet_dump/. */}
                 <Box className={OverAllCss().Front_Box}>
                   <div className={OverAllCss().Front_Box_Hading}>Mobinet Dump Files:</div>
                   <div className={OverAllCss().Front_Box_Select_Button}>
@@ -607,7 +624,6 @@ const RecoMaterial = () => {
                   </div>
                 </Box>
 
-                {/* Site List */}
                 <UploadSection
                   label="Select Site List File"
                   color={siteList.filename ? "warning" : "primary"}
@@ -616,7 +632,6 @@ const RecoMaterial = () => {
                   selectedText={siteList.filename}
                 />
 
-                {/* Hardware File */}
                 <UploadSection
                   label="Select Hardware File"
                   color={hardWareFile.filename ? "warning" : "primary"}
@@ -625,31 +640,16 @@ const RecoMaterial = () => {
                   selectedText={hardWareFile.filename}
                 />
 
-                 <UploadSection
-                  label="Select Manual File"
+                {/* ✅ Manual File is now OPTIONAL: no "required" on the input,
+                     no red error message, and label reflects it's optional. */}
+                <UploadSection
+                  label="Select Manual File (Optional)"
                   color={manualFile.filename ? "warning" : "primary"}
                   onChange={(e) => updateFile(e, setManualFile, "manual")}
-                  error={showError.manual}
                   selectedText={manualFile.filename}
+                  required={false}
                 />
 
-                {/* OLM ID File */}
-                {/* <UploadSection
-                  label="Select OLM ID File"
-                  color={olmidFile.filename ? "warning" : "primary"}
-                  onChange={(e) => updateFile(e, setOlmidFile, "olmidFile")}
-                  error={showError.olmId}
-                  selectedText={olmidFile.filename}
-                /> */}
-
-                {/* RFS File */}
-                {/* <UploadSection
-                  label="Select RFS File"
-                  color={rfsFile.filename ? "warning" : "primary"}
-                  onChange={(e) => updateFile(e, setRfsFile, "rfsFile")}
-                  error={showError.olmId}
-                  selectedText={rfsFile.filename}
-                /> */}
                 <Box className={OverAllCss().Front_Box}>
                   <div className={OverAllCss().Front_Box_Hading}>RFS File :</div>
                   <div className={OverAllCss().Front_Box_Select_Button}>
@@ -662,19 +662,8 @@ const RecoMaterial = () => {
                         </Grid>
                       ))}
                     </Grid>
-
                   </div>
                 </Box>
-
-
-                {/* MS-MF File */}
-                {/* <UploadSection
-                  label="Select MS-MF File"
-                  color={msmfFile.filename ? "warning" : "primary"}
-                  onChange={(e) => updateFile(e, setMsmfFile, "msmfFile")}
-                  error={showError.olmId}
-                  selectedText={msmfFile.filename}
-                /> */}
 
                 <Box className={OverAllCss().Front_Box}>
                   <div className={OverAllCss().Front_Box_Hading}>MS-MF File :</div>
@@ -688,23 +677,9 @@ const RecoMaterial = () => {
                         </Grid>
                       ))}
                     </Grid>
-
                   </div>
                 </Box>
 
-                {/* Locater files Dump */}
-                {/* <UploadSection
-                  label="Select Locator Files"
-                  color={locaterFiles.length > 0 ? "warning" : "primary"}
-                  multiple
-                  onChange={(e) => {
-                    // setLocaterFiles(e.target.files);
-                    setLocaterFiles(Array.from(e.target.files))
-                    setShowError((prev) => ({ ...prev, locater: false }));
-                  }}
-                  error={showError.mobinate}
-                  selectedText={locaterFiles.length > 0 ? `Selected File(s): ${locaterFiles.length}` : ""}
-                /> */}
                 <Box className={OverAllCss().Front_Box}>
                   <div className={OverAllCss().Front_Box_Hading}>Locator Files :</div>
                   <div className={OverAllCss().Front_Box_Select_Button}>
@@ -717,19 +692,9 @@ const RecoMaterial = () => {
                         </Grid>
                       ))}
                     </Grid>
-
                   </div>
                 </Box>
-                {/* Stock File */}
-                {/* <UploadSection
-                  label="Select Stock File"
-                  color={stockFile.filename ? "warning" : "primary"}
-                  onChange={(e) => updateFile(e, setStockFile, "stockFile")}
-                  error={showError.olmId}
-                  selectedText={stockFile.filename}
-                /> */}
-                {/* ── MO VS CAP File — now sourced from mobinate_vs_cats/mo_vs_cap/
-                     (was previously showing showFiles.stock). ── */}
+
                 <Box className={OverAllCss().Front_Box}>
                   <div className={OverAllCss().Front_Box_Hading}>MO VS CAP File :</div>
                   <div className={OverAllCss().Front_Box_Select_Button}>
@@ -749,7 +714,6 @@ const RecoMaterial = () => {
                   </div>
                 </Box>
 
-
               </Stack>
 
               <Stack
@@ -764,35 +728,18 @@ const RecoMaterial = () => {
             </Box>
           </Box>
 
-          {/* ✅ Two report links: Reco Summary Report (download_url) + RSF MS-MF Report (download_url1) */}
-          {download && (
+          {/* Single button — clicking it downloads BOTH reports (fileData + fileData1) */}
+          {download && (fileData || fileData1) && (
             <Box textAlign="center">
               <Stack direction={{ xs: "column", md: "row" }} spacing={2} justifyContent="center" alignItems="center" mt={2}>
-
-                {fileData && (
-                  <a href={fileData} download>
-                    <Button
-                      variant="outlined"
-                      startIcon={<FileDownloadIcon sx={{ fontSize: 30, color: "green" }} />}
-                      sx={{ textTransform: "none", fontWeight: 800, fontSize: "22px", fontFamily: "Poppins" }}
-                    >
-                      Reco Summary Report
-                    </Button>
-                  </a>
-                )}
-
-                {fileData1 && (
-                  <a href={fileData1} download>
-                    <Button
-                      variant="outlined"
-                      startIcon={<FileDownloadIcon sx={{ fontSize: 30, color: "green" }} />}
-                      sx={{ textTransform: "none", fontWeight: 800, fontSize: "22px", fontFamily: "Poppins" }}
-                    >
-                      RSF MS-MF Report
-                    </Button>
-                  </a>
-                )}
-
+                <Button
+                  variant="outlined"
+                  startIcon={<FileDownloadIcon sx={{ fontSize: 30, color: "green" }} />}
+                  sx={{ textTransform: "none", fontWeight: 800, fontSize: "22px", fontFamily: "Poppins" }}
+                  onClick={handleDownloadAll}
+                >
+                  Reco Summary Report
+                </Button>
               </Stack>
             </Box>
           )}
@@ -804,7 +751,10 @@ const RecoMaterial = () => {
   )
 }
 
-const UploadSection = ({ label, color, onChange, error, multiple = false, selectedText }) => {
+// ✅ Added a `required` prop (defaults to true) so individual sections can
+// opt out of the native "required" attribute on the file input, and out of
+// showing the red validation error.
+const UploadSection = ({ label, color, onChange, error, multiple = false, selectedText, required = true }) => {
   return (
     <Box className={OverAllCss().Front_Box}>
       <div className={OverAllCss().Front_Box_Hading}>{label}:</div>
@@ -813,7 +763,7 @@ const UploadSection = ({ label, color, onChange, error, multiple = false, select
           Select File
           <input
             hidden
-            required
+            required={required}
             type="file"
             accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
             multiple={multiple}
