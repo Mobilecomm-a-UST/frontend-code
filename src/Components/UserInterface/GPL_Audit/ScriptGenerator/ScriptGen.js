@@ -19,7 +19,7 @@ import { getDecreyptedData } from "../../../utils/localstorage";
 
 
 
-const circleArray = ['AP', 'CHN', 'KK', 'DEL', 'HR', 'RJ', 'JK', 'WB', 'OD', 'MU', 'TN', 'UE', 'BH', 'UPW', 'MP', 'PB', 'KO', 'WB', 'JH','AS','NE']
+const circleArray = ['AP', 'CHN', 'KK', 'DEL', 'DEL_Vi','HR', 'RJ', 'JK', 'WB', 'OD', 'MU', 'TN', 'UE', 'BH', 'UPW', 'MP', 'PB', 'KO', 'WB', 'JH','AS','NE']
 
 const ScriptGen = () => {
     const [make4GFiles, setMake4GFiles] = useState([])
