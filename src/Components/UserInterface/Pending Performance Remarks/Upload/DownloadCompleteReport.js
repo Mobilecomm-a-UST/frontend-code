@@ -620,12 +620,10 @@ import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
 // 1. upload/              key "file"                  -> upload site data, returns a summary object
 // 2. remarks/              keys "site_id","circle",     -> add/update remarks for a site
 //                          "additional_remarks","tag"
-// 3. download/              keys "band","month"          -> generate + download a report
-//                          "month" is now sent as a comma-separated list of
-//                          "MMM-YY" values covering the selected range
-//                          (e.g. "Jan-26,Feb-26,Mar-26") so the payload shape
-//                          the backend already expects doesn't change — only
-//                          the number of months in that string does.
+// 3. download/              keys "band","start_month",   -> generate + download a report
+//                          "end_month"                   "start_month"/"end_month" are each
+//                          sent as "MMM-YY" (e.g. "Jan-26" / "Mar-26"),
+//                          covering the selected range.
 // 4. remarks-template/      key "circle"                 -> generate + download an input template
 // 5. remarks-template/upload/  key "file"                -> upload a filled-in template back
 //
@@ -649,34 +647,16 @@ const formatMonthToMMMYY = (monthInputValue) => {
     return `${MONTH_NAMES[idx]}-${year.slice(-2)}`;
 };
 
-// Given two native <input type="month"> values ("2026-01", "2026-03"),
-// returns every month in between (inclusive) formatted as "MMM-YY" and
-// joined with commas: "Jan-26,Feb-26,Mar-26". This keeps the "month" field
-// the API already accepts unchanged in shape (a string) — it just now
-// carries a range instead of a single value.
-const buildMonthRangeMMMYY = (startValue, endValue) => {
-    if (!startValue || !endValue) return '';
-
+// Compares two native <input type="month"> values ("2026-01" vs "2026-03")
+// chronologically. Returns true when start is on or before end.
+const isChronologicalOrder = (startValue, endValue) => {
+    if (!startValue || !endValue) return false;
     const [startYear, startMonth] = startValue.split('-').map((v) => parseInt(v, 10));
     const [endYear, endMonth] = endValue.split('-').map((v) => parseInt(v, 10));
-
-    if (!startYear || !startMonth || !endYear || !endMonth) return '';
-
-    // Walk months as a single running index (year * 12 + monthIndex) so we
-    // never have to worry about month/year rollover by hand.
-    let cursor = startYear * 12 + (startMonth - 1);
-    const end = endYear * 12 + (endMonth - 1);
-
-    if (cursor > end) return ''; // start is after end — invalid range
-
-    const months = [];
-    while (cursor <= end) {
-        const y = Math.floor(cursor / 12);
-        const m = cursor % 12; // 0-indexed
-        months.push(`${MONTH_NAMES[m]}-${String(y).slice(-2)}`);
-        cursor += 1;
-    }
-    return months.join(',');
+    if (!startYear || !startMonth || !endYear || !endMonth) return false;
+    const startIndex = startYear * 12 + (startMonth - 1);
+    const endIndex = endYear * 12 + (endMonth - 1);
+    return startIndex <= endIndex;
 };
 
 // A single "card" matching the teal-gradient / pill-header style used across
@@ -823,24 +803,24 @@ const DownloadCompleteReport = () => {
 
     /* ───────────────────────── 3. Download Report ───────────────────────── */
     const [reportBand, setReportBand] = useState("");
-    // Native month input values, e.g. "2026-01" / "2026-03" — converted to a
-    // comma-joined "Jan-26,Feb-26,Mar-26" range string on submit, sent under
-    // the SAME "month" key the API already expects.
+    // Native month input values, e.g. "2026-01" / "2026-03" — each converted
+    // to "MMM-YY" on submit and sent as two separate fields: "start_month"
+    // and "end_month".
     const [reportStartMonth, setReportStartMonth] = useState("");
     const [reportEndMonth, setReportEndMonth] = useState("");
     const [reportErrors, setReportErrors] = useState({ band: false, month: false, range: false });
     const [reportResult, setReportResult] = useState(null);
 
-    // Live preview string + range validity, recomputed whenever either
+    // Live formatted previews + range validity, recomputed whenever either
     // month input changes — used both for the submit guard and the helper
     // text shown under the pickers.
-    const monthRangeValue = buildMonthRangeMMMYY(reportStartMonth, reportEndMonth);
-    const isRangeOrderInvalid =
-        reportStartMonth !== "" && reportEndMonth !== "" && monthRangeValue === "";
+    const formattedStartMonth = formatMonthToMMMYY(reportStartMonth);
+    const formattedEndMonth = formatMonthToMMMYY(reportEndMonth);
+    const bothMonthsPicked = reportStartMonth !== "" && reportEndMonth !== "";
+    const isRangeOrderInvalid = bothMonthsPicked && !isChronologicalOrder(reportStartMonth, reportEndMonth);
 
     const handleReportSubmit = async () => {
-        const bothMonthsPicked = reportStartMonth !== "" && reportEndMonth !== "";
-        const rangeIsValid = bothMonthsPicked && monthRangeValue !== "";
+        const rangeIsValid = bothMonthsPicked && isChronologicalOrder(reportStartMonth, reportEndMonth);
         const isValid = reportBand !== "" && rangeIsValid;
 
         if (!isValid) {
@@ -855,9 +835,9 @@ const DownloadCompleteReport = () => {
         action(true);
         const formData = new FormData();
         formData.append("band", reportBand);
-        // Same "month" field as before — now carries every month in the
-        // selected range instead of a single one.
-        formData.append("month", monthRangeValue);
+        // Two separate fields, each "MMM-YY".
+        formData.append("start_month", formattedStartMonth);
+        formData.append("end_month", formattedEndMonth);
         const response = await postData("pending_performance_at_remarks/download/", formData);
         action(false);
         if (response?.status) {
@@ -983,7 +963,7 @@ const DownloadCompleteReport = () => {
                                 <div className={classes.Front_Box_Hading}>Select Month Range:</div>
                                 <div className={classes.Front_Box_Select_Button}>
                                     <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5} alignItems={{ sm: "center" }}>
-                                        {/* Native month picker — start of range. */}
+                                        {/* Native month picker — sent as "start_month". */}
                                         <TextField
                                             size="small"
                                             type="month"
@@ -997,9 +977,9 @@ const DownloadCompleteReport = () => {
                                             sx={{ minWidth: 170, bgcolor: "#fff" }}
                                         />
                                         <Typography sx={{ color: "text.secondary" }}>to</Typography>
-                                        {/* Native month picker — end of range. Its own min is
-                                            clamped to the start month so an inverted range can't
-                                            be picked in the first place. */}
+                                        {/* Native month picker — sent as "end_month". Its own min
+                                            is clamped to the start month so an inverted range
+                                            can't be picked in the first place. */}
                                         <TextField
                                             size="small"
                                             type="month"
@@ -1015,10 +995,10 @@ const DownloadCompleteReport = () => {
                                         />
                                     </Stack>
 
-                                    {monthRangeValue && !reportErrors.month && !reportErrors.range && (
+                                    {bothMonthsPicked && !isRangeOrderInvalid && !reportErrors.month && !reportErrors.range && (
                                         <div style={{ marginTop: 6 }}>
                                             <span style={{ color: "gray", fontSize: 14 }}>
-                                                Will be sent as: {monthRangeValue}
+                                                Will be sent as: start_month={formattedStartMonth}, end_month={formattedEndMonth}
                                             </span>
                                         </div>
                                     )}
