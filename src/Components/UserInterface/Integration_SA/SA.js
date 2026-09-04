@@ -23,6 +23,7 @@ const MP_gpl_macro = lazy(()=>import('./Upload/MP_gpl_macro'))
 const MUM_gpl_macro = lazy(() => import('./Upload/MUM_gpl_macro'))
 const WB_gpl_macro = lazy(()=>import('./Upload/WB_gpl_macro'))
 const MAH_gpl_macro = lazy(()=>import('./Upload/MAH_gpl_macro'))
+const WB_gpl_uls = lazy(()=> import('./Upload/WB_gpl_uls'))
 
 const SA = () => {
         const [expanded, setExpanded] = useState(true);
@@ -79,6 +80,9 @@ const SA = () => {
                                         <Nav.Item eventKey="2-2" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/BIH_gpl_uls')}>
                                             BIH GPL ULS
                                         </Nav.Item>
+                                          <Nav.Item eventKey="2-3" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/WB_gpl_uls')}>
+                                            WB GPL ULS
+                                        </Nav.Item>
                                         </Nav.Menu>
                                         
 
@@ -101,6 +105,7 @@ const SA = () => {
                                   <Route element={<MUM_gpl_macro/>} path='/MUM_gpl_macro'/>
                                   <Route element={<WB_gpl_macro/>} path='/WB_gpl_macro'/>
                                   <Route element={<MAH_gpl_macro/>} path='/MAH_gpl_macro'/>
+                                   <Route element={<WB_gpl_uls/>} path='/WB_gpl_uls'/>
 
                             </Routes>
                         </Suspense>

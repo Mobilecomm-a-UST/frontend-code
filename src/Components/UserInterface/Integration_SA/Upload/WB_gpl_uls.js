@@ -13,7 +13,7 @@
 // import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
 
 
-// const BIH_gpl_uls = () => {
+// const WB_gpl_uls = () => {
 //     // selectedFiles: [{ id, name, file }]
 //     const [selectedFiles, setSelectedFiles] = useState([])
 //     const [selectCircle, setSelectCircle] = useState('')
@@ -63,7 +63,7 @@
 //             selectedFiles.forEach((f) => {
 //                 formData.append(`xml_file`, f.file);
 //             });
-//             const response = await postData('bih_uls/uls_bih/', formData)
+//             const response = await postData('wb_uls/uls_wb/', formData)
 //             console.log('response data', response)
 //             if (response.status === true) {
 //                 action(false)
@@ -108,7 +108,7 @@
 //                     <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
 //                     <Link underline='hover' onClick={() => { navigate('/tools/ix_tools') }}>IX Tools</Link>
 //                     <Link underline='hover' onClick={() => { navigate('/tools/ix_tools/sa_slicing') }}>5G GPL</Link>
-//                     <Typography color='text.primary'>BIH GPL ULS</Typography>
+//                     <Typography color='text.primary'>WB GPL ULS</Typography>
 //                 </Breadcrumbs>
 //             </div>
 //             <Slide
@@ -197,7 +197,7 @@
 //                                     textDecoration: "none"
 //                                 }}
 //                             >
-//                                 Download BIH GPL ULS Report
+//                                 Download WB GPL ULS Report
 //                             </span>
 //                         </Button>
 //                     </Box>
@@ -208,7 +208,7 @@
 //     )
 // }
 
-// export default BIH_gpl_uls;
+// export default WB_gpl_uls;
 
 
 import React, { useState, useEffect, useCallback } from "react";
@@ -226,7 +226,7 @@ import OverAllCss from "../../../csss/OverAllCss";
 import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
 
 
-const BIH_gpl_uls = () => {
+const WB_gpl_uls = () => {
     // selectedFiles: [{ id, name, file }]
     const [selectedFiles, setSelectedFiles] = useState([])
     const [selectCircle, setSelectCircle] = useState('')
@@ -279,7 +279,9 @@ const BIH_gpl_uls = () => {
             selectedFiles.forEach((f) => {
                 formData.append(`xml_file`, f.file);
             });
-            const response = await postData('bih_uls/uls_bih/', formData)
+            // WB now hits its own dedicated endpoint (previously this was
+            // mistakenly pointed at bih_uls/uls_bih/).
+            const response = await postData('wb_uls/uls_wb/', formData)
             console.log('response data', response)
             if (response.status === true) {
                 action(false)
@@ -328,7 +330,7 @@ const BIH_gpl_uls = () => {
                     <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
                     <Link underline='hover' onClick={() => { navigate('/tools/ix_tools') }}>IX Tools</Link>
                     <Link underline='hover' onClick={() => { navigate('/tools/ix_tools/sa_slicing') }}>5G GPL</Link>
-                    <Typography color='text.primary'>BIH GPL ULS</Typography>
+                    <Typography color='text.primary'>WB GPL ULS</Typography>
                 </Breadcrumbs>
             </div>
             <Slide
@@ -423,7 +425,7 @@ const BIH_gpl_uls = () => {
                                     textDecoration: "none"
                                 }}
                             >
-                                Download BIH GPL ULS Excel Report
+                                Download WB GPL ULS Excel Report
                             </span>
                         </Button>
 
@@ -447,7 +449,7 @@ const BIH_gpl_uls = () => {
                                     textDecoration: "none"
                                 }}
                             >
-                                Download BIH GPL ULS XML Report
+                                Download WB GPL ULS XML Report
                             </span>
                         </Button>
                     </Stack>
@@ -458,4 +460,4 @@ const BIH_gpl_uls = () => {
     )
 }
 
-export default BIH_gpl_uls;
+export default WB_gpl_uls;
