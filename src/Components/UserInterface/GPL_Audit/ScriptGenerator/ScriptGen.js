@@ -168,7 +168,7 @@ const ScriptGen = () => {
                                         <div style={{ float: "left" }}>
                                             <Button variant="contained" component="label" color={make4GFiles.length > 0 ? "warning" : "primary"}>
                                                 select file
-                                                <input required hidden accept=".xlsx" multiple type="file"
+                                                <input required hidden accept=".xlsx,.xls,.csv,.xlsb" multiple type="file"
                                                     onChange={(e) => { handle4GFileSelection(e); setShow4G(false); }} />
                                             </Button>
                                         </div>
