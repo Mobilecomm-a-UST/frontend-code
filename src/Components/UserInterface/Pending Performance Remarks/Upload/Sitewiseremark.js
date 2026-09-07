@@ -31,7 +31,7 @@ import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
 // official list against the backend.
 // ─────────────────────────────────────────────────────────────────────────────
 
-const circleArray = ['AP', 'CH', 'KK', 'DL', 'HR', 'RJ', 'JK', 'WB', 'OD', 'MU', 'TNCH', 'UE', 'BH', 'UW', 'MP', 'PB', 'KO', 'JH', 'UPW']
+const circleArray = ['AP', 'CH', 'KK', 'DL', 'HR', 'RJ', 'JK', 'WB', 'OD', 'MU', 'TNCH', 'UE', 'UW', 'MP', 'PB', 'KO', 'JH', 'UPW', 'NESA', 'BR', 'MH', 'JRK', 'HPHP', 'OR', 'WB/KOL']
 const bandArray = ['4G', '5G','Accepted']
 const tagArray = ['Workable', 'Non Workable']
 const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']

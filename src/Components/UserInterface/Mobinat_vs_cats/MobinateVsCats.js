@@ -26,7 +26,7 @@ const Step2srn_cam_rmo = lazy(()=> import('./Forword Material Reconcilation/Step
 const LiveMobReco = lazy(()=> import('./Reco Material/LiveMobReco'))
 const MicrowaveReconcilation = lazy(()=> import('./Microwave Reconcilation/MicrowaveReconcilation'))
 const DegrowReconcilation = lazy(()=>import('./Degrow Reconcilation/DegrowReconcilation'))
-
+const DPRControl = lazy(()=> import('./DPR Control/DPRControl'))
 
 
 
@@ -143,6 +143,10 @@ const MobinateVsCate = () => {
                                                 Degrow Reconcilation
                                             </Nav.Item>
 
+                                             <Nav.Item eventKey="8" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/DPRControl'); show(); setMenuButton(true) }}>
+                                                DPR Control
+                                            </Nav.Item>
+
 
                                             {/* <Nav.Menu eventKey="3" placement="rightStart" title="NOM Audit" icon={<DocPassIcon />}>
                                                 <Nav.Item eventKey="3-1" placement="rightStart" onClick={() => { navigate('/tools/nomenclature_scriptor/nom_audit_dashboard'); show(); setMenuButton(true) }}>
@@ -177,6 +181,7 @@ const MobinateVsCate = () => {
                                 <Route element={<LiveMobReco/>} path='/LiveMobReco'/>
                                 <Route element={<MicrowaveReconcilation/>} path='/MicrowaveReconcilation'/> 
                                 <Route element={<DegrowReconcilation/>} path='/DegrowReconcilation'/>
+                                <Route element={<DPRControl/>} path = '/DPRControl'/>
 
                             </Routes>
                         </Suspense>
