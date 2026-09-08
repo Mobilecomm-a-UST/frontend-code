@@ -239,7 +239,7 @@ import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import TextField from '@mui/material/TextField';
 
-const circleArray = ['AP', 'CHN', 'KK', 'DEL', 'DEL_Vi','HR', 'RJ', 'JK', 'WB', 'OD', 'MU', 'TN', 'UE', 'BH', 'UPW', 'MP', 'PB', 'KO', 'WB', 'JH', 'AS', 'NE']
+const circleArray = ['AP', 'CHN', 'KK', 'DEL', 'DEL_Vi','MAG_Vi','MP_Vi','HR', 'RJ', 'JK', 'WB', 'OD', 'MU', 'TN', 'UE', 'BH', 'UPW', 'MP', 'PB', 'KO', 'WB', 'JH', 'AS', 'NE']
 
 const Converter = () => {
     const [make4GFiles, setMake4GFiles] = useState([])
