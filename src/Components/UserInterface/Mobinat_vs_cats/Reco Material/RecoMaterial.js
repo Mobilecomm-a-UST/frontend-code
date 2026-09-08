@@ -451,10 +451,15 @@ import { postData, getData, ServerURL } from "../../../services/FetchNodeService
 import OverAllCss from "../../../csss/OverAllCss";
 import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
 
+
+
+
+
+
 const RecoMaterial = () => {
   const [siteList, setSiteList] = useState({ filename: "", bytes: "" });
   const [hardWareFile, setHardWareFile] = useState({ filename: "", bytes: "" });
-  const [manualFile, setManualFile] = useState({filename: "", bytes: "" }) // ✅ now OPTIONAL
+  const [manualFile, setManualFile] = useState({ filename: "", bytes: "" }) // ✅ now OPTIONAL
   const [olmidFile, setOlmidFile] = useState({ filename: "", bytes: "" });
   const [fileData, setFileData] = useState();
   const [fileData1, setFileData1] = useState(); // RSF MS-MF report (download_url1)
@@ -467,6 +472,9 @@ const RecoMaterial = () => {
     mobinetDump: [],
     moVsCap: [],
   });
+  const [fileurl, setFileurl] = useState([])
+
+  console.log("file url",fileurl )
 
   const [showError, setShowError] = useState({
     siteList: false,
@@ -537,20 +545,52 @@ const RecoMaterial = () => {
     const response = await postData("mobinate_vs_cats/dismental_dash/", formData);
     action(false);
 
+    console.log('responce', response)
+
+
+
     if (response.status) {
       setDownload(true);
-      setFileData(response.download_url);
-      setFileData1(response.download_url1);
+
+      let files = [
+        {
+          url: response.download_url,
+          name: "Reco_Report.xlsx",
+        },
+        {
+          url: response.download_url1,
+          name: "RFS_MSMF_Report.xlsx",
+        },
+      ];
+      setFileurl(files)
       Swal.fire({ icon: "success", title: "Done", text: response.message });
     } else {
       Swal.fire({ icon: "error", title: "Oops...", text: response.message });
     }
   };
 
+const downloadAllFiles = () => {
+  fileurl.forEach((file, index) => {
+    console.log("File URL:", file.url);
+    console.log("File Name:", file.name);
+
+    setTimeout(() => {
+      const link = document.createElement("a");
+
+      link.href = file.url;
+      link.download = file.name;
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }, index * 1000);
+  });
+};
+
   const handleCancel = () => {
     setSiteList({ filename: "", bytes: "" });
     setHardWareFile({ filename: "", bytes: "" });
-    setManualFile({filename:'', bytes:""});
+    setManualFile({ filename: '', bytes: "" });
     setOlmidFile({ filename: "", bytes: "" });
     setDownload(false);
     setFileData();
@@ -729,14 +769,14 @@ const RecoMaterial = () => {
           </Box>
 
           {/* Single button — clicking it downloads BOTH reports (fileData + fileData1) */}
-          {download && (fileData || fileData1) && (
+          {download  && fileurl.length > 0 && (
             <Box textAlign="center">
               <Stack direction={{ xs: "column", md: "row" }} spacing={2} justifyContent="center" alignItems="center" mt={2}>
                 <Button
                   variant="outlined"
                   startIcon={<FileDownloadIcon sx={{ fontSize: 30, color: "green" }} />}
                   sx={{ textTransform: "none", fontWeight: 800, fontSize: "22px", fontFamily: "Poppins" }}
-                  onClick={handleDownloadAll}
+                  onClick={downloadAllFiles}
                 >
                   Reco Summary Report
                 </Button>

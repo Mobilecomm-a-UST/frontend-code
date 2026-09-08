@@ -779,8 +779,8 @@ const LiveMobReco = () => {
     const [hardWareFile, setHardWareFile] = useState({ filename: "", bytes: "" });
     const [olmidFile, setOlmidFile] = useState({ filename: "", bytes: "" });
     const [recoFile, setRecoFile] = useState({ filename: "", bytes: "" });
-    const [fileData, setFileData] = useState();
-    const [fileData1, setFileData1] = useState();
+    // const [fileData, setFileData] = useState();
+    // const [fileData1, setFileData1] = useState();
     const [download, setDownload] = useState(false);
 
 
@@ -795,12 +795,18 @@ const LiveMobReco = () => {
         recoFile: false,
     });
 
+    const [fileurl, setFileurl] = useState([])
+
     const { loading, action } = useLoadingDialog();
     const navigate = useNavigate();
     const classes = OverAllCss();
 
-    const link = `${ServerURL}${fileData}`;
-    const link1 = `${ServerURL}${fileData1}`;
+
+
+    console.log("fileurl", fileurl)
+
+    // const link = `${ServerURL}${fileData}`;
+    // const link1 = `${ServerURL}${fileData1}`;
 
     const updateFile = (event, setFileState, errorKey) => {
         const file = event.target.files[0];
@@ -825,63 +831,97 @@ const LiveMobReco = () => {
     };
 
     const handleSubmit = async () => {
-        const isValid =
-
-            recoFile.filename;
+        const isValid = recoFile.filename;
 
         if (!isValid) {
             setShowError({
-
                 recoFile: !recoFile.filename,
             });
             return;
         }
 
         action(true);
-        const formData = new FormData();
 
-        formData.append("reco_file", recoFile.bytes);
+        try {
+            const formData = new FormData();
+            formData.append("reco_file", recoFile.bytes);
 
-        const response = await postData("mobinate_vs_cats/live_in_mob/", formData);
-        action(false);
+            const response = await postData(
+                "mobinate_vs_cats/live_in_mob/",
+                formData
+            );
 
-        if (response.status) {
-            setDownload(true);
-            setFileData(response.download_url);
-            setFileData1(response.download_url1);
-            Swal.fire({ icon: "success", title: "Done", text: response.message });
-        } else {
-            Swal.fire({ icon: "error", title: "Oops...", text: response.message });
+            console.log("API Response:", response);
+
+            if (response.status) {
+
+                const files = [
+                    {
+                        url: response.download_url,
+                        name: "Live_in_mob_Report.xlsx",
+                    },
+                    {
+                        url: response.download_url1,
+                        name: "Live_in_mob_Matched.xlsx",
+                    },
+                ]
+
+                setFileurl(files);
+                setDownload(true);
+
+                Swal.fire({
+                    icon: "success",
+                    title: "Done",
+                    text: response.message,
+                });
+
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: response.message,
+                });
+            }
+
+        } catch (error) {
+            console.error("Submit error:", error);
+
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "Something went wrong while generating the report.",
+            });
+        } finally {
+            action(false);
         }
     };
 
     const handleCancel = () => {
-
         setRecoFile({ filename: "", bytes: "" });
         setDownload(false);
-        setFileData();
-        setFileData1();
-        setShowError({ siteList: false, hardware: false, recoFile: false });
+        // setFileData();
+        // setFileData1();
+        setFileurl([]);
+        setShowError({ recoFile: false });
     };
 
-    // ✅ NEW: single button triggers both downloads (fileData + fileData1)
-    const triggerDownload = (url) => {
-        if (!url) return;
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "";
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-    };
+const downloadAllFiles = () => {
+  fileurl.forEach((file, index) => {
+    console.log("File URL:", file.url);
+    console.log("File Name:", file.name);
 
-    const handleDownloadAll = () => {
-        triggerDownload(fileData);
-        if (fileData1) {
-            setTimeout(() => triggerDownload(fileData1), 400);
-        }
-    };
+    setTimeout(() => {
+      const link = document.createElement("a");
 
+      link.href = file.url;
+      link.download = file.name;
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }, index * 1000);
+  });
+};
     useEffect(() => {
         const title = window.location.pathname
             .slice(1)
@@ -952,13 +992,13 @@ const LiveMobReco = () => {
                     </Box>
 
                     {/* ✅ Single button — clicking it downloads BOTH reports */}
-                    {download && (fileData || fileData1) && (
+                    {download && fileurl.length > 0 && (
                         <Box textAlign="center">
                             <Button
                                 variant="outlined"
                                 startIcon={<FileDownloadIcon sx={{ fontSize: 30, color: "green" }} />}
                                 sx={{ mt: 2, textTransform: "none", fontWeight: 800, fontSize: "22px", fontFamily: "Poppins" }}
-                                onClick={handleDownloadAll}
+                                onClick={downloadAllFiles}
                             >
                                 Live In Mobinate Reco Report
                             </Button>
@@ -970,7 +1010,7 @@ const LiveMobReco = () => {
             {loading}
         </>
     );
-};
+}
 
 const UploadSection = ({ label, color, onChange, error, multiple = false, selectedText }) => {
     return (

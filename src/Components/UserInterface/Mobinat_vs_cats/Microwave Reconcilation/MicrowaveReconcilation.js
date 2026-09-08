@@ -297,7 +297,7 @@ const UploadSection = ({ label, color, onChange, error, multiple = false, select
             hidden
             required
             type="file"
-            accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+            accept=".xlsx,.xls,.csv,.xlsb, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
             multiple={multiple}
             onChange={onChange}
           />
