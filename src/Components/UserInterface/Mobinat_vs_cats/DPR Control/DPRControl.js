@@ -1,1614 +1,1167 @@
-// import React, { useState } from "react";
+// import React, { useState, useEffect, useCallback } from "react";
+// import { Box, Button, Stack } from "@mui/material";
+// import { Breadcrumbs, Link, Typography } from "@mui/material";
 // import {
-//   Box,
-//   Button,
-//   Card,
-//   CardContent,
-//   CircularProgress,
-//   Container,
-//   Divider,
-//   Grid,
-//   LinearProgress,
-//   Paper,
-//   Stack,
-//   Table,
-//   TableBody,
-//   TableCell,
-//   TableContainer,
-//   TableHead,
-//   TableRow,
-//   Typography,
-//   Alert,
-//   Chip,
-//   Dialog,
-//   DialogTitle,
-//   DialogContent,
-//   DialogActions,
+//     Paper,
+//     Table,
+//     TableBody,
+//     TableCell,
+//     TableContainer,
+//     TableHead,
+//     TableRow,
 // } from "@mui/material";
-// import {
-//   Upload as UploadIcon,
-//   Download as DownloadIcon,
-//   CheckCircle as CheckCircleIcon,
-//   Warning as WarningIcon,
-//   Error as ErrorIcon,
-//   Close as CloseIcon,
-//   DeleteOutline as DeleteIcon,
-// } from "@mui/icons-material";
+// import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+// import { useNavigate } from "react-router-dom";
+// import Slide from '@mui/material/Slide';
+// import UploadIcon from '@mui/icons-material/Upload';
+// import DoDisturbIcon from '@mui/icons-material/DoDisturb';
 // import Swal from "sweetalert2";
 // import { postData, ServerURL } from "../../../services/FetchNodeServices";
+// import FileDownloadIcon from '@mui/icons-material/FileDownload';
+// import DnsIcon from '@mui/icons-material/Dns';
+// import OverAllCss from "../../../csss/OverAllCss";
+// import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
+// import MenuItem from '@mui/material/MenuItem';
+// import FormControl from '@mui/material/FormControl';
+// import Select from '@mui/material/Select';
+// import InputLabel from '@mui/material/InputLabel';
+// import { getDecreyptedData } from "../../../utils/localstorage";
+
+// /* ------------------------------------------------------------------ */
+// /*  Theme — matched to the teal "Baseband Requirement" screens          */
+// /* ------------------------------------------------------------------ */
+// const C = {
+//     teal: "#006e74",
+//     tealDark: "#00494d",
+//     headerBg: "#004d52",
+//     labelOdd: "#e3f2f2",
+//     labelEven: "#f2fafa",
+//     border: "#c9dcdc",
+//     valueText: "#0d3a3c",
+//     zeroText: "#a7bcbc",
+//     tick: "#1a7f37",
+//     cross: "#c62828",
+// };
+
+// const HEADER_GRADIENT = "linear-gradient(90deg, #004d52 0%, #006e74 55%, #4fa3a8 100%)";
+
+// const buildColumns = (rows) => {
+//     if (!rows || !rows.length) return [];
+//     const keySet = new Set();
+//     rows.forEach((r) => Object.keys(r).forEach((k) => keySet.add(k)));
+//     return Array.from(keySet);
+// };
+
+// const isTickCross = (val) =>
+//     typeof val === "string" && (val.trim().startsWith("✓") || val.trim() === "✗" || val.trim() === "X");
+
+// const cellColor = (val) => {
+//     if (typeof val === "string") {
+//         const v = val.trim();
+//         if (v.startsWith("✓")) return C.tick;
+//         if (v === "✗" || v === "X") return C.cross;
+//         if (v === "") return C.zeroText;
+//     }
+//     if (val === 0) return C.zeroText;
+//     return C.valueText;
+// };
+
+// /* ------------------------------------------------------------------ */
+// /*  Results table shown below the download button                      */
+// /* ------------------------------------------------------------------ */
+// function BasebandResultTable({ rows }) {
+//     const columns = buildColumns(rows);
+//     const hasData = Array.isArray(rows) && rows.length > 0;
+
+//     if (!hasData) return null;
+
+//     return (
+//         <Box sx={{ mt: 4, px: { xs: 1, md: 3 } }}>
+//             <Paper elevation={2} sx={{ borderRadius: 2, overflow: "hidden", border: `1px solid ${C.border}` }}>
+//                 <Box
+//                     sx={{
+//                         display: "flex",
+//                         alignItems: "center",
+//                         gap: 1,
+//                         px: 2,
+//                         py: 1.25,
+//                         background: HEADER_GRADIENT,
+//                     }}
+//                 >
+//                     <DnsIcon sx={{ color: "#bfe9e9", fontSize: 18 }} />
+//                     <Typography
+//                         variant="subtitle2"
+//                         sx={{ color: "#fff", fontWeight: 700, letterSpacing: 0.4, textTransform: "uppercase" }}
+//                     >
+//                         Baseband Site-wise Data
+//                     </Typography>
+//                 </Box>
+
+//                 <TableContainer sx={{ maxHeight: 600 }}>
+//                     <Table
+//                         size="small"
+//                         stickyHeader
+//                         sx={{
+//                             borderCollapse: "collapse",
+//                             "& .MuiTableCell-root": { border: `1px solid ${C.border}`, py: 0.75, fontSize: 12.5 },
+//                         }}
+//                     >
+//                         <TableHead>
+//                             <TableRow>
+//                                 {columns.map((c) => (
+//                                     <TableCell
+//                                         key={c}
+//                                         align="center"
+//                                         sx={{
+//                                             position: "sticky",
+//                                             top: 0,
+//                                             zIndex: 4,
+//                                             bgcolor: C.teal,
+//                                             color: "#fff",
+//                                             fontWeight: 700,
+//                                             whiteSpace: "nowrap",
+//                                             minWidth: 90,
+//                                         }}
+//                                     >
+//                                         {String(c).trim()}
+//                                     </TableCell>
+//                                 ))}
+//                             </TableRow>
+//                         </TableHead>
+
+//                         <TableBody>
+//                             {rows.map((row, i) => {
+//                                 const labelBg = i % 2 === 0 ? C.labelOdd : C.labelEven;
+//                                 return (
+//                                     <TableRow key={i}>
+//                                         {columns.map((c) => {
+//                                             const val = row[c];
+//                                             const display = val === "" || val == null ? "—" : val;
+//                                             return (
+//                                                 <TableCell
+//                                                     key={c}
+//                                                     align="center"
+//                                                     sx={{
+//                                                         bgcolor: labelBg,
+//                                                         fontVariantNumeric: "tabular-nums",
+//                                                         color: cellColor(val),
+//                                                         fontWeight: isTickCross(val) ? 800 : 600,
+//                                                         whiteSpace: "nowrap",
+//                                                     }}
+//                                                 >
+//                                                     {display}
+//                                                 </TableCell>
+//                                             );
+//                                         })}
+//                                     </TableRow>
+//                                 );
+//                             })}
+//                         </TableBody>
+//                     </Table>
+//                 </TableContainer>
+//             </Paper>
+//         </Box>
+//     );
+// }
 
 // const DPRControl = () => {
-//   const [circleFiles, setCircleFiles] = useState([]);
-//   const [milestoneFiles, setMilestoneFiles] = useState([]);
-//   const [loading, setLoading] = useState(false);
-//   const [responseData, setResponseData] = useState(null);
-//   const [detailsOpen, setDetailsOpen] = useState(false);
-//   const [detailsType, setDetailsType] = useState("");
+//     const [circleFiles, setCircleFiles] = useState([]);
+//     const [milestoneFiles, setMilestoneFiles] = useState([]);
+//     const [showCircleError, setShowCircleError] = useState(false);
+//     const [showMilestoneError, setShowMilestoneError] = useState(false);
+//     const [fileData, setFileData] = useState()
+//     const [download, setDownload] = useState(false);
+//     const [resultData, setResultData] = useState([]);
+//     const { loading, action } = useLoadingDialog()
+//     const navigate = useNavigate()
+//     const classes = OverAllCss()
 
-//   const handleCircleFilesChange = (e) => {
-//     const newFiles = Array.from(e.target.files);
-//     setCircleFiles([...circleFiles, ...newFiles]);
-//   };
+//     // Handle Circle Files Selection
+//     const handleCircleFileSelection = (event) => {
+//         setCircleFiles(event.target.files);
+//         setShowCircleError(false);
+//     };
 
-//   const handleMilestoneFilesChange = (e) => {
-//     const newFiles = Array.from(e.target.files);
-//     setMilestoneFiles([...milestoneFiles, ...newFiles]);
-//   };
+//     // Handle Milestone Files Selection
+//     const handleMilestoneFileSelection = (event) => {
+//         setMilestoneFiles(event.target.files);
+//         setShowMilestoneError(false);
+//     };
 
-//   const removeCircleFile = (index) => {
-//     setCircleFiles(circleFiles.filter((_, i) => i !== index));
-//   };
+//     const handleSubmit = async () => {
+//         let hasError = false;
 
-//   const removeMilestoneFile = (index) => {
-//     setMilestoneFiles(milestoneFiles.filter((_, i) => i !== index));
-//   };
+//         // Validate Circle Files
+//         if (circleFiles.length === 0) {
+//             setShowCircleError(true);
+//             hasError = true;
+//         }
 
-//   const handleSubmit = async () => {
-//     if (circleFiles.length === 0 || milestoneFiles.length === 0) {
-//       Swal.fire({
-//         icon: "warning",
-//         title: "Missing Files",
-//         text: "Please select at least one file from both circle and milestone sections",
-//       });
-//       return;
-//     }
+//         // Validate Milestone Files
+//         if (milestoneFiles.length === 0) {
+//             setShowMilestoneError(true);
+//             hasError = true;
+//         }
 
-//     setLoading(true);
-//     const formData = new FormData();
+//         if (hasError) return;
 
-//     // Append all circle files
-//     circleFiles.forEach((file) => {
-//       formData.append("circle_files", file);
-//     });
+//         action(true);
+//         var formData = new FormData();
 
-//     // Append all milestone files
-//     milestoneFiles.forEach((file) => {
-//       formData.append("milestone_file", file);
-//     });
+//         // Add circle files
+//         for (let i = 0; i < circleFiles.length; i++) {
+//             formData.append(`circle_files`, circleFiles[i]);
+//         }
 
-//     try {
-//       const response = await postData("dpr/merge_circle_dpr/", formData);
+//         // Add milestone files
+//         for (let i = 0; i < milestoneFiles.length; i++) {
+//             formData.append(`milestone_file`, milestoneFiles[i]);
+//         }
 
-//       if (response.status) {
-//         setResponseData(response);
-//         Swal.fire({
-//           icon: "success",
-//           title: "Success",
-//           text: response.message,
-//         });
-//       } else {
-//         Swal.fire({
-//           icon: "error",
-//           title: "Error",
-//           text: response.message,
-//         });
-//       }
-//     } catch (error) {
-//       Swal.fire({
-//         icon: "error",
-//         title: "Error",
-//         text: "Failed to process files",
-//       });
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
+//         const response = await postData('mobinate_vs_cats/dpr_data_stor/', formData);
 
-//   const handleCancel = () => {
-//     setCircleFiles([]);
-//     setMilestoneFiles([]);
-//     setResponseData(null);
-//   };
+//         if (response.status === true) {
+//             action(false);
+//             setDownload(true);
+//             setFileData(response.download_url);
+//             setResultData(Array.isArray(response.data) ? response.data : []);
 
-//   const downloadFile = () => {
-//     if (responseData?.download_url) {
-//       const link = document.createElement("a");
-//       link.href = responseData.download_url;
-//       link.click();
-//     }
-//   };
+//             Swal.fire({
+//                 icon: "success",
+//                 title: "Done",
+//                 text: `${response.message}`,
+//             });
+//         } else {
+//             action(false);
+//             Swal.fire({
+//                 icon: "error",
+//                 title: "Oops...",
+//                 text: `${response.message}`,
+//             });
+//         }
+//     };
 
-//   return (
-//     <Container maxWidth="lg" sx={{ py: 4 }}>
-//       {!responseData ? (
-//         <Card sx={{ p: 4 }}>
-//           <Typography variant="h5" sx={{ mb: 3, fontWeight: 600 }}>
-//             Upload Site Data
-//           </Typography>
+//     const handleCancel = () => {
+//         setCircleFiles([]);
+//         setMilestoneFiles([]);
+//         setShowCircleError(false);
+//         setShowMilestoneError(false);
+//         setDownload(false);
+//         setResultData([]);
+//     };
 
-//           <Stack spacing={3}>
-//             {/* Circle Files Upload */}
-//             <Box>
-//               <Typography variant="subtitle2" sx={{ mb: 2, fontWeight: 600 }}>
-//                 Select Circle Files
-//                 <span style={{ color: "red", marginLeft: "4px" }}>*</span>
-//                 <span style={{ fontSize: "12px", color: "#666", fontWeight: "400", marginLeft: "8px" }}>
-//                   (Multiple files allowed)
-//                 </span>
-//               </Typography>
-//               <Button
-//                 variant="contained"
-//                 component="label"
-//                 startIcon={<UploadIcon />}
-//                 sx={{ mb: 2 }}
-//               >
-//                 Add Circle Files
-//                 <input
-//                   hidden
-//                   multiple
-//                   accept=".csv,.xlsx,.xls"
-//                   onChange={handleCircleFilesChange}
-//                   type="file"
-//                 />
-//               </Button>
+//     useEffect(() => {
+//         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`;
+//     }, []);
 
-//               {circleFiles.length > 0 && (
-//                 <Box sx={{ mt: 2, p: 2, backgroundColor: "#f5f5f5", borderRadius: 1 }}>
-//                   <Typography variant="caption" sx={{ display: "block", mb: 1, fontWeight: 600, color: "#666" }}>
-//                     Selected Circle Files ({circleFiles.length})
-//                   </Typography>
-//                   <Stack spacing={1}>
-//                     {circleFiles.map((file, idx) => (
-//                       <Box
-//                         key={idx}
-//                         sx={{
-//                           display: "flex",
-//                           justifyContent: "space-between",
-//                           alignItems: "center",
-//                           p: 1.5,
-//                           backgroundColor: "#fff",
-//                           borderRadius: 1,
-//                           border: "0.5px solid #e0e0e0",
-//                         }}
-//                       >
-//                         <Box sx={{ display: "flex", alignItems: "center", gap: 1, flex: 1 }}>
-//                           <Typography variant="body2" sx={{ fontWeight: 500, flex: 1, wordBreak: "break-all" }}>
-//                             {file.name}
-//                           </Typography>
-//                           <Typography variant="caption" sx={{ color: "#999" }}>
-//                             {(file.size / 1024 / 1024).toFixed(2)} MB
-//                           </Typography>
-//                         </Box>
-//                         <Button
-//                           size="small"
-//                           onClick={() => removeCircleFile(idx)}
-//                           startIcon={<DeleteIcon />}
-//                           sx={{ ml: 1, color: "#f44336" }}
-//                         >
-//                           Remove
-//                         </Button>
-//                       </Box>
-//                     ))}
-//                   </Stack>
-//                 </Box>
-//               )}
-//             </Box>
-
-//             <Divider />
-
-//             {/* Milestone Files Upload */}
-//             <Box>
-//               <Typography variant="subtitle2" sx={{ mb: 2, fontWeight: 600 }}>
-//                 Select Milestone Files
-//                 <span style={{ color: "red", marginLeft: "4px" }}>*</span>
-//                 <span style={{ fontSize: "12px", color: "#666", fontWeight: "400", marginLeft: "8px" }}>
-//                   (Multiple files allowed)
-//                 </span>
-//               </Typography>
-//               <Button
-//                 variant="contained"
-//                 component="label"
-//                 startIcon={<UploadIcon />}
-//                 sx={{ mb: 2 }}
-//               >
-//                 Add Milestone Files
-//                 <input
-//                   hidden
-//                   multiple
-//                   accept=".csv,.xlsx,.xls"
-//                   onChange={handleMilestoneFilesChange}
-//                   type="file"
-//                 />
-//               </Button>
-
-//               {milestoneFiles.length > 0 && (
-//                 <Box sx={{ mt: 2, p: 2, backgroundColor: "#f5f5f5", borderRadius: 1 }}>
-//                   <Typography variant="caption" sx={{ display: "block", mb: 1, fontWeight: 600, color: "#666" }}>
-//                     Selected Milestone Files ({milestoneFiles.length})
-//                   </Typography>
-//                   <Stack spacing={1}>
-//                     {milestoneFiles.map((file, idx) => (
-//                       <Box
-//                         key={idx}
-//                         sx={{
-//                           display: "flex",
-//                           justifyContent: "space-between",
-//                           alignItems: "center",
-//                           p: 1.5,
-//                           backgroundColor: "#fff",
-//                           borderRadius: 1,
-//                           border: "0.5px solid #e0e0e0",
-//                         }}
-//                       >
-//                         <Box sx={{ display: "flex", alignItems: "center", gap: 1, flex: 1 }}>
-//                           <Typography variant="body2" sx={{ fontWeight: 500, flex: 1, wordBreak: "break-all" }}>
-//                             {file.name}
-//                           </Typography>
-//                           <Typography variant="caption" sx={{ color: "#999" }}>
-//                             {(file.size / 1024 / 1024).toFixed(2)} MB
-//                           </Typography>
-//                         </Box>
-//                         <Button
-//                           size="small"
-//                           onClick={() => removeMilestoneFile(idx)}
-//                           startIcon={<DeleteIcon />}
-//                           sx={{ ml: 1, color: "#f44336" }}
-//                         >
-//                           Remove
-//                         </Button>
-//                       </Box>
-//                     ))}
-//                   </Stack>
-//                 </Box>
-//               )}
-//             </Box>
-
-//             {/* Submit Buttons */}
-//             <Box sx={{ pt: 3, borderTop: "1px solid #e0e0e0" }}>
-//               <Stack direction="row" spacing={2}>
-//                 <Button
-//                   variant="contained"
-//                   color="success"
-//                   onClick={handleSubmit}
-//                   disabled={loading || circleFiles.length === 0 || milestoneFiles.length === 0}
-//                   startIcon={loading ? <CircularProgress size={20} /> : <UploadIcon />}
-//                   sx={{ px: 4 }}
+//     return (
+//         <>
+//             <div style={{ margin: 5, marginLeft: 10 }}>
+//                 <Breadcrumbs
+//                     aria-label="breadcrumb"
+//                     itemsBeforeCollapse={2}
+//                     maxItems={3}
+//                     separator={<KeyboardArrowRightIcon fontSize="small" />}
 //                 >
-//                   {loading ? "Processing..." : "Submit"}
-//                 </Button>
-//                 <Button
-//                   variant="outlined"
-//                   color="error"
-//                   onClick={handleCancel}
-//                   startIcon={<CloseIcon />}
-//                   sx={{ px: 4 }}
-//                 >
-//                   Cancel
-//                 </Button>
-//               </Stack>
-//               {(circleFiles.length === 0 || milestoneFiles.length === 0) && (
-//                 <Alert severity="info" sx={{ mt: 2 }}>
-//                   Please select at least one file from both sections to proceed
-//                 </Alert>
-//               )}
-//             </Box>
-//           </Stack>
-//         </Card>
-//       ) : (
-//         <Dashboard
-//           data={responseData}
-//           onBack={handleCancel}
-//           onDownload={downloadFile}
-//           onShowDetails={(type) => {
-//             setDetailsType(type);
-//             setDetailsOpen(true);
-//           }}
-//         />
-//       )}
+//                     <Link underline="hover" onClick={() => navigate("/tools")}>Tools</Link>
+//                     <Link underline="hover" onClick={() => navigate("/tools/mobinet_vs_cats")}>
+//                         Mobinate Vs Aws
+//                     </Link>
+//                     <Typography color="text.primary">DPR Control</Typography>
+//                 </Breadcrumbs>
+//             </div>
 
-//       {/* Details Dialog */}
-//       <DetailsDialog
-//         open={detailsOpen}
-//         type={detailsType}
-//         data={responseData}
-//         onClose={() => setDetailsOpen(false)}
-//       />
-//     </Container>
-//   );
-// };
+//             <Slide direction="left" in={true} timeout={1000}>
+//                 <Box>
+//                     <Box className={classes.main_Box}>
+//                         <Box className={classes.Back_Box} sx={{ width: { md: '75%', xs: '100%' } }}>
+//                             <Box className={classes.Box_Hading}>DPR CONTROL</Box>
 
-// const Dashboard = ({ data, onBack, onDownload, onShowDetails }) => {
-//   return (
-//     <Stack spacing={3}>
-//       {/* Header Section */}
-//       <Card
-//         sx={{
-//           p: 3,
-//           background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-//           color: "white",
-//         }}
-//       >
-//         <Stack direction="row" justifyContent="space-between" alignItems="center">
-//           <Box>
-//             <Typography variant="h4" sx={{ fontWeight: 700, mb: 1 }}>
-//               ✓ File Merged Successfully
-//             </Typography>
-//             <Typography variant="body1">{data.message}</Typography>
-//           </Box>
-//           <Button
-//             variant="contained"
-//             color="success"
-//             startIcon={<DownloadIcon />}
-//             onClick={onDownload}
-//             sx={{ whiteSpace: "nowrap" }}
-//           >
-//             Download Merged File
-//           </Button>
-//         </Stack>
-//       </Card>
+//                             <Stack spacing={2} sx={{ marginTop: "-40px" }} direction={'column'}>
+//                                 {/* Circle Files Upload Section */}
+//                                 <Box className={classes.Front_Box}>
+//                                     <div className={classes.Front_Box_Hading}>
+//                                         Select Circle Files:-
+//                                     </div>
+//                                     <div className={classes.Front_Box_Select_Button}>
+//                                         <div style={{ float: "left" }}>
+//                                             <Button
+//                                                 variant="contained"
+//                                                 component="label"
+//                                                 color={circleFiles.length > 0 ? "warning" : "primary"}
+//                                             >
+//                                                 Select File
+//                                                 <input
+//                                                     required
+//                                                     hidden
+//                                                     accept=".csv,.xlsx,.xls"
+//                                                     multiple
+//                                                     type="file"
+//                                                     onChange={handleCircleFileSelection}
+//                                                 />
+//                                             </Button>
+//                                         </div>
 
-//       {/* Key Metrics */}
-//       <Grid container spacing={2}>
-//         <Grid item xs={12} sm={6} md={3}>
-//           <MetricCard
-//             title="Total Rows"
-//             value={data.total_rows?.toLocaleString()}
-//             icon={<CheckCircleIcon sx={{ color: "#4CAF50", fontSize: 32 }} />}
-//           />
-//         </Grid>
-//         <Grid item xs={12} sm={6} md={3}>
-//           <MetricCard
-//             title="Records Updated"
-//             value={data.database_save?.updated?.toLocaleString()}
-//             icon={<CheckCircleIcon sx={{ color: "#2196F3", fontSize: 32 }} />}
-//           />
-//         </Grid>
-//         <Grid item xs={12} sm={6} md={3}>
-//           <MetricCard
-//             title="Records Failed"
-//             value={data.database_save?.failed?.toLocaleString()}
-//             icon={<ErrorIcon sx={{ color: "#F44336", fontSize: 32 }} />}
-//           />
-//         </Grid>
-//         <Grid item xs={12} sm={6} md={3}>
-//           <MetricCard
-//             title="Duplicate IDs"
-//             value={data.duplicate_unique_ids?.duplicate_count}
-//             icon={<WarningIcon sx={{ color: "#FF9800", fontSize: 32 }} />}
-//           />
-//         </Grid>
-//       </Grid>
+//                                         {circleFiles.length > 0 && (
+//                                             <span style={{ color: 'green', fontSize: '18px', fontWeight: 600 }}>
+//                                                 Selected File(s): {circleFiles.length}
+//                                             </span>
+//                                         )}
 
-//       {/* Database Save Summary */}
-//       <Card sx={{ p: 3 }}>
-//         <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
-//           Database Save Summary
-//         </Typography>
-//         <Stack spacing={2}>
-//           <Box>
-//             <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
-//               <Typography variant="body2">Records Created</Typography>
-//               <Typography variant="body2" sx={{ fontWeight: 600 }}>
-//                 {data.database_save?.created}
-//               </Typography>
-//             </Stack>
-//             <LinearProgress
-//               variant="determinate"
-//               value={
-//                 (data.database_save?.created /
-//                   (data.database_save?.created +
-//                     data.database_save?.updated +
-//                     data.database_save?.failed)) *
-//                   100 || 0
-//               }
-//               sx={{ backgroundColor: "#e0e0e0" }}
-//               color="success"
-//             />
-//           </Box>
-//           <Box>
-//             <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
-//               <Typography variant="body2">Records Updated</Typography>
-//               <Typography variant="body2" sx={{ fontWeight: 600 }}>
-//                 {data.database_save?.updated}
-//               </Typography>
-//             </Stack>
-//             <LinearProgress
-//               variant="determinate"
-//               value={
-//                 (data.database_save?.updated /
-//                   (data.database_save?.created +
-//                     data.database_save?.updated +
-//                     data.database_save?.failed)) *
-//                   100 || 0
-//               }
-//               sx={{ backgroundColor: "#e0e0e0" }}
-//               color="info"
-//             />
-//           </Box>
-//           <Box>
-//             <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
-//               <Typography variant="body2">Records Failed</Typography>
-//               <Typography variant="body2" sx={{ fontWeight: 600 }}>
-//                 {data.database_save?.failed}
-//               </Typography>
-//             </Stack>
-//             <LinearProgress
-//               variant="determinate"
-//               value={
-//                 (data.database_save?.failed /
-//                   (data.database_save?.created +
-//                     data.database_save?.updated +
-//                     data.database_save?.failed)) *
-//                   100 || 0
-//               }
-//               sx={{ backgroundColor: "#e0e0e0" }}
-//               color="error"
-//             />
-//           </Box>
-//           <Box sx={{ mt: 2, p: 2, backgroundColor: "#f5f5f5", borderRadius: 1 }}>
-//             <Typography variant="body2" sx={{ fontWeight: 600, color: "#666" }}>
-//               {data.database_save?.summary}
-//             </Typography>
-//             <Typography variant="caption" sx={{ color: "#999" }}>
-//               Batch ID: {data.database_save?.batch_id}
-//             </Typography>
-//           </Box>
-//         </Stack>
-//       </Card>
+//                                         <div>
+//                                             <span
+//                                                 style={{
+//                                                     display: showCircleError ? 'inherit' : 'none',
+//                                                     color: 'red',
+//                                                     fontSize: '18px',
+//                                                     fontWeight: 600,
+//                                                 }}
+//                                             >
+//                                                 This Field Is Required!
+//                                             </span>
+//                                         </div>
+//                                     </div>
+//                                 </Box>
 
-//       {/* Errors Section */}
-//       {data.database_save?.errors && data.database_save.errors.length > 0 && (
-//         <Card sx={{ p: 3, backgroundColor: "#ffebee" }}>
-//           <Stack
-//             direction="row"
-//             justifyContent="space-between"
-//             alignItems="center"
-//             sx={{ mb: 2 }}
-//           >
-//             <Typography variant="h6" sx={{ fontWeight: 600, color: "#c62828" }}>
-//               <ErrorIcon sx={{ mr: 1, verticalAlign: "middle" }} />
-//               Errors ({data.database_save.errors.length})
-//             </Typography>
-//             <Button size="small" onClick={() => onShowDetails("errors")}>
-//               View All
-//             </Button>
-//           </Stack>
-//           <TableContainer>
-//             <Table size="small">
-//               <TableBody>
-//                 {data.database_save.errors.slice(0, 5).map((error, idx) => (
-//                   <TableRow key={idx}>
-//                     <TableCell sx={{ color: "#c62828" }}>{error}</TableCell>
-//                   </TableRow>
-//                 ))}
-//               </TableBody>
-//             </Table>
-//           </TableContainer>
-//         </Card>
-//       )}
+//                                 {/* Milestone Files Upload Section */}
+//                                 <Box className={classes.Front_Box}>
+//                                     <div className={classes.Front_Box_Hading}>
+//                                         Select Milestone Files:-
+//                                     </div>
+//                                     <div className={classes.Front_Box_Select_Button}>
+//                                         <div style={{ float: "left" }}>
+//                                             <Button
+//                                                 variant="contained"
+//                                                 component="label"
+//                                                 color={milestoneFiles.length > 0 ? "warning" : "primary"}
+//                                             >
+//                                                 Select File
+//                                                 <input
+//                                                     required
+//                                                     hidden
+//                                                     accept=".csv,.xlsx,.xls"
+//                                                     multiple
+//                                                     type="file"
+//                                                     onChange={handleMilestoneFileSelection}
+//                                                 />
+//                                             </Button>
+//                                         </div>
 
-//       {/* Duplicate IDs Section */}
-//       {data.duplicate_unique_ids?.duplicate_count > 0 && (
-//         <Card sx={{ p: 3, backgroundColor: "#fff3e0" }}>
-//           <Stack
-//             direction="row"
-//             justifyContent="space-between"
-//             alignItems="center"
-//             sx={{ mb: 2 }}
-//           >
-//             <Typography variant="h6" sx={{ fontWeight: 600, color: "#e65100" }}>
-//               <WarningIcon sx={{ mr: 1, verticalAlign: "middle" }} />
-//               Duplicate Unique IDs ({data.duplicate_unique_ids.duplicate_count})
-//             </Typography>
-//             <Button size="small" onClick={() => onShowDetails("duplicates")}>
-//               View All
-//             </Button>
-//           </Stack>
-//           <TableContainer>
-//             <Table size="small">
-//               <TableHead>
-//                 <TableRow sx={{ backgroundColor: "#ffe0b2" }}>
-//                   <TableCell sx={{ fontWeight: 600 }}>Unique ID</TableCell>
-//                   <TableCell align="right" sx={{ fontWeight: 600 }}>
-//                     Occurrences
-//                   </TableCell>
-//                 </TableRow>
-//               </TableHead>
-//               <TableBody>
-//                 {data.duplicate_unique_ids.duplicates
-//                   .slice(0, 5)
-//                   .map((dup, idx) => (
-//                     <TableRow key={idx}>
-//                       <TableCell>{dup.unique_id}</TableCell>
-//                       <TableCell align="right">
-//                         <Chip
-//                           label={dup.occurrences}
-//                           color="warning"
-//                           size="small"
-//                         />
-//                       </TableCell>
-//                     </TableRow>
-//                   ))}
-//               </TableBody>
-//             </Table>
-//           </TableContainer>
-//         </Card>
-//       )}
+//                                         {milestoneFiles.length > 0 && (
+//                                             <span style={{ color: 'green', fontSize: '18px', fontWeight: 600 }}>
+//                                                 Selected File(s): {milestoneFiles.length}
+//                                             </span>
+//                                         )}
 
-//       {/* Past Month Warnings */}
-//       {data.past_month_dismantle_dates?.warning_count > 0 && (
-//         <Card sx={{ p: 3, backgroundColor: "#e3f2fd" }}>
-//           <Stack
-//             direction="row"
-//             justifyContent="space-between"
-//             alignItems="center"
-//             sx={{ mb: 2 }}
-//           >
-//             <Typography variant="h6" sx={{ fontWeight: 600, color: "#1565c0" }}>
-//               <WarningIcon sx={{ mr: 1, verticalAlign: "middle" }} />
-//               Past Month Dismantle Dates (
-//               {data.past_month_dismantle_dates.warning_count})
-//             </Typography>
-//             <Button size="small" onClick={() => onShowDetails("warnings")}>
-//               View All
-//             </Button>
-//           </Stack>
-//           <TableContainer>
-//             <Table size="small">
-//               <TableHead>
-//                 <TableRow sx={{ backgroundColor: "#bbdefb" }}>
-//                   <TableCell sx={{ fontWeight: 600 }}>Unique ID</TableCell>
-//                   <TableCell sx={{ fontWeight: 600 }}>Date</TableCell>
-//                   <TableCell sx={{ fontWeight: 600 }}>Message</TableCell>
-//                 </TableRow>
-//               </TableHead>
-//               <TableBody>
-//                 {data.past_month_dismantle_dates.warnings
-//                   .slice(0, 5)
-//                   .map((warn, idx) => (
-//                     <TableRow key={idx}>
-//                       <TableCell>{warn.unique_id}</TableCell>
-//                       <TableCell>{warn.dismantle_date}</TableCell>
-//                       <TableCell>{warn.message}</TableCell>
-//                     </TableRow>
-//                   ))}
-//               </TableBody>
-//             </Table>
-//           </TableContainer>
-//         </Card>
-//       )}
+//                                         <div>
+//                                             <span
+//                                                 style={{
+//                                                     display: showMilestoneError ? 'inherit' : 'none',
+//                                                     color: 'red',
+//                                                     fontSize: '18px',
+//                                                     fontWeight: 600,
+//                                                 }}
+//                                             >
+//                                                 This Field Is Required!
+//                                             </span>
+//                                         </div>
+//                                     </div>
+//                                 </Box>
+//                             </Stack>
 
-//       {/* Sample Details */}
-//       {data.database_save?.sample_details &&
-//         data.database_save.sample_details.length > 0 && (
-//           <Card sx={{ p: 3 }}>
-//             <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
-//               Sample Processed Records
-//             </Typography>
-//             <TableContainer>
-//               <Table size="small">
-//                 <TableHead>
-//                   <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
-//                     <TableCell sx={{ fontWeight: 600 }}>Unique ID</TableCell>
-//                     <TableCell sx={{ fontWeight: 600 }}>Action</TableCell>
-//                     <TableCell align="right" sx={{ fontWeight: 600 }}>
-//                       Fields Updated
-//                     </TableCell>
-//                   </TableRow>
-//                 </TableHead>
-//                 <TableBody>
-//                   {data.database_save.sample_details.map((sample, idx) => (
-//                     <TableRow key={idx}>
-//                       <TableCell>{sample.unique_id}</TableCell>
-//                       <TableCell>
-//                         <Chip
-//                           label={sample.action}
-//                           color={
-//                             sample.action === "created" ? "success" : "info"
-//                           }
-//                           size="small"
-//                         />
-//                       </TableCell>
-//                       <TableCell align="right">
-//                         {sample.field_count}
-//                       </TableCell>
-//                     </TableRow>
-//                   ))}
-//                 </TableBody>
-//               </Table>
-//             </TableContainer>
-//           </Card>
-//         )}
+//                             {/* Action Buttons */}
+//                             <Stack
+//                                 direction={{ xs: "column", sm: "column", md: "row" }}
+//                                 spacing={2}
+//                                 style={{ display: 'flex', justifyContent: "space-around", marginTop: "20px" }}
+//                             >
+//                                 <Button
+//                                     variant="contained"
+//                                     color="success"
+//                                     onClick={handleSubmit}
+//                                     endIcon={<UploadIcon />}
+//                                 >
+//                                     Submit
+//                                 </Button>
 
-//       {/* Back Button */}
-//       <Stack direction="row" spacing={2} justifyContent="center" sx={{ pt: 2 }}>
-//         <Button variant="outlined" onClick={onBack} sx={{ minWidth: 120 }}>
-//           Upload New Files
-//         </Button>
-//       </Stack>
-//     </Stack>
-//   );
-// };
+//                                 <Button
+//                                     variant="contained"
+//                                     onClick={handleCancel}
+//                                     style={{ backgroundColor: "red", color: 'white' }}
+//                                     endIcon={<DoDisturbIcon />}
+//                                 >
+//                                     Cancel
+//                                 </Button>
+//                             </Stack>
+//                         </Box>
+//                     </Box>
 
-// const MetricCard = ({ title, value, icon }) => (
-//   <Card sx={{ p: 2, textAlign: "center", backgroundColor: "#fafafa" }}>
-//     <Box sx={{ mb: 1 }}>{icon}</Box>
-//     <Typography variant="caption" sx={{ color: "#666", display: "block", mb: 0.5 }}>
-//       {title}
-//     </Typography>
-//     <Typography variant="h6" sx={{ fontWeight: 700 }}>
-//       {value}
-//     </Typography>
-//   </Card>
-// );
+//                     {/* Download Button - Show when data is available */}
+//                     <Box sx={{ display: download ? 'block' : 'none', textAlign: 'center' }}>
+//                         <a download href={fileData}>
+//                             <Button
+//                                 variant="outlined"
+//                                 title="Export Excel"
+//                                 startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />}
+//                                 sx={{ marginTop: "10px", width: "auto" }}
+//                             >
+//                                 <span
+//                                     style={{
+//                                         fontFamily: "Poppins",
+//                                         fontSize: "22px",
+//                                         fontWeight: 800,
+//                                         textTransform: "none",
+//                                         textDecorationLine: "none",
+//                                     }}
+//                                 >
+//                                     Download DPR Report
+//                                 </span>
+//                             </Button>
+//                         </a>
+//                     </Box>
 
-// const DetailsDialog = ({ open, type, data, onClose }) => {
-//   let content = [];
-//   let title = "";
+//                     {/* Results Table */}
+//                     <BasebandResultTable rows={resultData} />
+//                 </Box>
+//             </Slide>
 
-//   if (type === "errors" && data.database_save?.errors) {
-//     title = `Errors (${data.database_save.errors.length})`;
-//     content = data.database_save.errors;
-//   } else if (type === "duplicates" && data.duplicate_unique_ids?.duplicates) {
-//     title = `Duplicate Unique IDs (${data.duplicate_unique_ids.duplicate_count})`;
-//     content = data.duplicate_unique_ids.duplicates;
-//   } else if (type === "warnings" && data.past_month_dismantle_dates?.warnings) {
-//     title = `Past Month Warnings (${data.past_month_dismantle_dates.warning_count})`;
-//     content = data.past_month_dismantle_dates.warnings;
-//   }
-
-//   return (
-//     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-//       <DialogTitle sx={{ fontWeight: 600 }}>{title}</DialogTitle>
-//       <DialogContent
-//         sx={{ minHeight: "400px", maxHeight: "600px", overflow: "auto" }}
-//       >
-//         {type === "errors" && (
-//           <Stack spacing={1}>
-//             {content.map((error, idx) => (
-//               <Alert key={idx} severity="error" sx={{ mb: 1 }}>
-//                 {error}
-//               </Alert>
-//             ))}
-//           </Stack>
-//         )}
-
-//         {type === "duplicates" && (
-//           <TableContainer>
-//             <Table>
-//               <TableHead>
-//                 <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
-//                   <TableCell sx={{ fontWeight: 600 }}>Unique ID</TableCell>
-//                   <TableCell align="right" sx={{ fontWeight: 600 }}>
-//                     Occurrences
-//                   </TableCell>
-//                 </TableRow>
-//               </TableHead>
-//               <TableBody>
-//                 {content.map((dup, idx) => (
-//                   <TableRow key={idx}>
-//                     <TableCell>{dup.unique_id}</TableCell>
-//                     <TableCell align="right">
-//                       <Chip label={dup.occurrences} color="warning" />
-//                     </TableCell>
-//                   </TableRow>
-//                 ))}
-//               </TableBody>
-//             </Table>
-//           </TableContainer>
-//         )}
-
-//         {type === "warnings" && (
-//           <TableContainer>
-//             <Table>
-//               <TableHead>
-//                 <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
-//                   <TableCell sx={{ fontWeight: 600 }}>Unique ID</TableCell>
-//                   <TableCell sx={{ fontWeight: 600 }}>Date</TableCell>
-//                   <TableCell sx={{ fontWeight: 600 }}>Message</TableCell>
-//                 </TableRow>
-//               </TableHead>
-//               <TableBody>
-//                 {content.map((warn, idx) => (
-//                   <TableRow key={idx}>
-//                     <TableCell>{warn.unique_id}</TableCell>
-//                     <TableCell>{warn.dismantle_date}</TableCell>
-//                     <TableCell>{warn.message}</TableCell>
-//                   </TableRow>
-//                 ))}
-//               </TableBody>
-//             </Table>
-//           </TableContainer>
-//         )}
-//       </DialogContent>
-//       <DialogActions>
-//         <Button onClick={onClose}>Close</Button>
-//       </DialogActions>
-//     </Dialog>
-//   );
+//             {loading}
+//         </>
+//     );
 // };
 
 // export default DPRControl;
 
 
-import React, { useState } from "react";
-import {
-  Box,
-  Button,
-  Card,
-  CircularProgress,
-  Container,
-  Divider,
-  Grid,
-  LinearProgress,
-  Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography,
-  Alert,
-  Chip,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-} from "@mui/material";
-import {
-  Upload as UploadIcon,
-  Download as DownloadIcon,
-  CheckCircle as CheckCircleIcon,
-  Warning as WarningIcon,
-  Error as ErrorIcon,
-  Close as CloseIcon,
-  DeleteOutline as DeleteIcon,
-  FolderOutlined as FolderIcon,
-} from "@mui/icons-material";
+import React, { useState, useEffect } from "react";
+import { Box, Button, Stack, Card, CardContent, Grid, Typography, Alert, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { Breadcrumbs, Link } from "@mui/material";
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import { useNavigate } from "react-router-dom";
+import Slide from '@mui/material/Slide';
+import UploadIcon from '@mui/icons-material/Upload';
+import DoDisturbIcon from '@mui/icons-material/DoDisturb';
 import Swal from "sweetalert2";
-import { postData, ServerURL } from "../../../services/FetchNodeServices";
+import { postData } from "../../../services/FetchNodeServices";
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import DnsIcon from '@mui/icons-material/Dns';
+import OverAllCss from "../../../csss/OverAllCss";
+import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import WarningIcon from '@mui/icons-material/Warning';
+import InfoIcon from '@mui/icons-material/Info';
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 
-const DPRControl = () => {
-  const [circleFiles, setCircleFiles] = useState([]);
-  const [milestoneFiles, setMilestoneFiles] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [responseData, setResponseData] = useState(null);
-  const [detailsOpen, setDetailsOpen] = useState(false);
-  const [detailsType, setDetailsType] = useState("");
+const COLORS = {
+    primary: "#006e74",
+    primaryDark: "#00494d",
+    success: "#28a745",
+    warning: "#ffc107",
+    error: "#dc3545",
+    info: "#17a2b8",
+    lightBg: "#f8f9fa",
+    borderColor: "#c9dcdc",
+    headerGradient: "linear-gradient(90deg, #004d52 0%, #006e74 55%, #4fa3a8 100%)",
+};
 
-  const handleCircleFilesChange = (e) => {
-    const newFiles = Array.from(e.target.files);
-    setCircleFiles([...circleFiles, ...newFiles]);
-  };
-
-  const handleMilestoneFilesChange = (e) => {
-    const newFiles = Array.from(e.target.files);
-    setMilestoneFiles([...milestoneFiles, ...newFiles]);
-  };
-
-  const removeCircleFile = (index) => {
-    setCircleFiles(circleFiles.filter((_, i) => i !== index));
-  };
-
-  const removeMilestoneFile = (index) => {
-    setMilestoneFiles(milestoneFiles.filter((_, i) => i !== index));
-  };
-
-  const handleSubmit = async () => {
-    if (circleFiles.length === 0 || milestoneFiles.length === 0) {
-      Swal.fire({
-        icon: "warning",
-        title: "Missing Files",
-        text: "Please select at least one file from both circle and milestone sections",
-      });
-      return;
-    }
-
-    setLoading(true);
-    const formData = new FormData();
-
-    circleFiles.forEach((file) => {
-      formData.append("circle_files", file);
-    });
-
-    milestoneFiles.forEach((file) => {
-      formData.append("milestone_file", file);
-    });
-
+/* ================================================================ */
+/*  Export to Excel Helper Function                                 */
+/* ================================================================ */
+const exportToExcel = (data, fileName, sheetName = "Sheet1") => {
     try {
-      const response = await postData("dpr/merge_circle_dpr/", formData);
-
-      if (response.status) {
-        setResponseData(response);
-        Swal.fire({
-          icon: "success",
-          title: "Success",
-          text: response.message,
-        });
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: response.message,
-        });
-      }
+        // Create a new workbook
+        let csv = [];
+        
+        // Add headers
+        if (data.length > 0) {
+            const headers = Object.keys(data[0]);
+            csv.push(headers.join(","));
+            
+            // Add rows
+            data.forEach(row => {
+                const values = headers.map(header => {
+                    const value = row[header];
+                    // Handle values that might contain commas or quotes
+                    if (typeof value === "string" && (value.includes(",") || value.includes('"'))) {
+                        return `"${value.replace(/"/g, '""')}"`;
+                    }
+                    return value || "";
+                });
+                csv.push(values.join(","));
+            });
+        }
+        
+        // Create blob and download
+        const csvContent = csv.join("\n");
+        const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", `${fileName}.csv`);
+        link.style.visibility = "hidden";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Failed to process files",
-      });
-    } finally {
-      setLoading(false);
+        console.error("Export error:", error);
+        Swal.fire("Error", "Failed to export file", "error");
     }
-  };
+};
 
-  const handleCancel = () => {
-    setCircleFiles([]);
-    setMilestoneFiles([]);
-    setResponseData(null);
-  };
+/* ================================================================ */
+/*  Compact Summary Card Component                                  */
+/* ================================================================ */
+const CompactSummaryCard = ({ title, value, icon: Icon, color = COLORS.primary }) => {
+    return (
+        <Card
+            sx={{
+                background: "#fff",
+                border: `1px solid ${COLORS.borderColor}`,
+                borderRadius: 1.5,
+                boxShadow: "0 1px 4px rgba(0,0,0,0.05)",
+                transition: "all 0.3s ease",
+                "&:hover": {
+                    boxShadow: "0 4px 12px rgba(0,107,106,0.1)",
+                    transform: "translateY(-2px)",
+                },
+                overflow: "hidden",
+                height: "100%",
+            }}
+        >
+            <Box sx={{ height: 2, background: COLORS.headerGradient }} />
+            <CardContent sx={{ p: 1.5, textAlign: "center" }}>
+                <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
+                    {Icon && (
+                        <Box
+                            sx={{
+                                width: 36,
+                                height: 36,
+                                borderRadius: "8px",
+                                background: `${color}15`,
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                            }}
+                        >
+                            <Icon sx={{ color: color, fontSize: 18 }} />
+                        </Box>
+                    )}
+                </Box>
+                <Typography
+                    variant="caption"
+                    sx={{
+                        fontSize: "10px",
+                        color: "#666",
+                        fontWeight: 600,
+                        textTransform: "uppercase",
+                        letterSpacing: 0.3,
+                        display: "block",
+                        mb: 0.5,
+                    }}
+                >
+                    {title}
+                </Typography>
+                <Typography
+                    sx={{
+                        fontSize: "20px",
+                        fontWeight: 800,
+                        color: color,
+                    }}
+                >
+                    {typeof value === "number" ? value.toLocaleString() : value}
+                </Typography>
+            </CardContent>
+        </Card>
+    );
+};
 
-  const downloadFile = () => {
-    if (responseData?.download_url) {
-      const link = document.createElement("a");
-      link.href = responseData.download_url;
-      link.click();
-    }
-  };
+/* ================================================================ */
+/*  DPR Dashboard Component                                         */
+/* ================================================================ */
+const DPRDashboard = ({ data, downloadUrl }) => {
+    if (!data) return null;
 
-  return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
-      {!responseData ? (
+    const {
+        status,
+        message,
+        total_rows = 0,
+        database_save = {},
+        duplicate_unique_ids = {},
+        past_month_dismantle_dates = {},
+    } = data;
+
+    const { created = 0, updated = 0, failed = 0, batch_id = "N/A", sample_details = [] } = database_save;
+    const { duplicate_count = 0, duplicates = [] } = duplicate_unique_ids;
+    const { warning_count = 0, warnings = [] } = past_month_dismantle_dates;
+
+    const handleDownload = () => {
+        if (downloadUrl) {
+            window.open(downloadUrl, "_blank");
+        }
+    };
+
+    return (
         <Box
-          sx={{
-            background: "linear-gradient(135deg, #008B8B 0%, #20B2AA 100%)",
-            borderRadius: "20px",
-            p: 4,
-            position: "relative",
-          }}
-        >
-          {/* Header */}
-          <Box
             sx={{
-              background: "#ffffff",
-              borderRadius: "15px",
-              p: 2,
-              mb: 3,
-              textAlign: "center",
+                mt: 2,
+                p: 2,
+                background: COLORS.lightBg,
+                borderRadius: 1.5,
+                border: `1px solid ${COLORS.borderColor}`,
             }}
-          >
-            <Typography
-              variant="h4"
-              sx={{
-                fontWeight: 700,
-                color: "#008B8B",
-                letterSpacing: 1,
-              }}
-            >
-              DPR Control
-            </Typography>
-          </Box>
-
-          <Stack spacing={2}>
-            {/* Circle Files Section */}
-            <Box
-              sx={{
-                background: "#ffffff",
-                borderRadius: "15px",
-                p: 3,
-              }}
-            >
-              <Typography
-                variant="subtitle1"
-                sx={{
-                  fontWeight: 600,
-                  color: "#333",
-                  mb: 2,
-                  fontSize: "16px",
-                }}
-              >
-                Select Circle Files:
-              </Typography>
-              <Button
-                variant="contained"
-                component="label"
-                startIcon={<UploadIcon />}
-                sx={{
-                  backgroundColor: "#1976D2",
-                  textTransform: "none",
-                  fontWeight: 600,
-                  px: 3,
-                  mb: 2,
-                }}
-              >
-                SELECT FILES
-                <input
-                  hidden
-                  multiple
-                  accept=".csv,.xlsx,.xls"
-                  onChange={handleCircleFilesChange}
-                  type="file"
-                />
-              </Button>
-
-              {circleFiles.length > 0 && (
-                <Box sx={{ mt: 2, display: "flex", flexWrap: "wrap", gap: 2 }}>
-                  {circleFiles.map((file, idx) => (
-                    <Box
-                      key={idx}
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 1,
-                        backgroundColor: "#f5f5f5",
-                        p: 1.5,
-                        borderRadius: 1,
-                        flex: "1 0 calc(50% - 8px)",
-                        minWidth: "250px",
-                        position: "relative",
-                      }}
-                    >
-                      <FolderIcon sx={{ color: "#FF9800", fontSize: 24 }} />
-                      <Box sx={{ flex: 1, minWidth: 0 }}>
-                        <Typography
-                          variant="body2"
-                          sx={{
-                            fontWeight: 500,
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            whiteSpace: "nowrap",
-                          }}
-                        >
-                          {file.name}
-                        </Typography>
-                        <Typography variant="caption" sx={{ color: "#999" }}>
-                          {(file.size / 1024 / 1024).toFixed(2)} MB
-                        </Typography>
-                      </Box>
-                      <Button
-                        size="small"
-                        onClick={() => removeCircleFile(idx)}
-                        sx={{
-                          color: "#f44336",
-                          minWidth: "auto",
-                          p: 0.5,
-                        }}
-                      >
-                        <DeleteIcon fontSize="small" />
-                      </Button>
-                    </Box>
-                  ))}
-                </Box>
-              )}
-            </Box>
-
-            {/* Milestone Files Section */}
-            <Box
-              sx={{
-                background: "#ffffff",
-                borderRadius: "15px",
-                p: 3,
-              }}
-            >
-              <Typography
-                variant="subtitle1"
-                sx={{
-                  fontWeight: 600,
-                  color: "#333",
-                  mb: 2,
-                  fontSize: "16px",
-                }}
-              >
-                Select Milestone Files:
-              </Typography>
-              <Button
-                variant="contained"
-                component="label"
-                startIcon={<UploadIcon />}
-                sx={{
-                  backgroundColor: "#1976D2",
-                  textTransform: "none",
-                  fontWeight: 600,
-                  px: 3,
-                  mb: 2,
-                }}
-              >
-                SELECT FILES
-                <input
-                  hidden
-                  multiple
-                  accept=".csv,.xlsx,.xls"
-                  onChange={handleMilestoneFilesChange}
-                  type="file"
-                />
-              </Button>
-
-              {milestoneFiles.length > 0 && (
-                <Box sx={{ mt: 2, display: "flex", flexWrap: "wrap", gap: 2 }}>
-                  {milestoneFiles.map((file, idx) => (
-                    <Box
-                      key={idx}
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 1,
-                        backgroundColor: "#f5f5f5",
-                        p: 1.5,
-                        borderRadius: 1,
-                        flex: "1 0 calc(50% - 8px)",
-                        minWidth: "250px",
-                      }}
-                    >
-                      <FolderIcon sx={{ color: "#FF9800", fontSize: 24 }} />
-                      <Box sx={{ flex: 1, minWidth: 0 }}>
-                        <Typography
-                          variant="body2"
-                          sx={{
-                            fontWeight: 500,
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            whiteSpace: "nowrap",
-                          }}
-                        >
-                          {file.name}
-                        </Typography>
-                        <Typography variant="caption" sx={{ color: "#999" }}>
-                          {(file.size / 1024 / 1024).toFixed(2)} MB
-                        </Typography>
-                      </Box>
-                      <Button
-                        size="small"
-                        onClick={() => removeMilestoneFile(idx)}
-                        sx={{
-                          color: "#f44336",
-                          minWidth: "auto",
-                          p: 0.5,
-                        }}
-                      >
-                        <DeleteIcon fontSize="small" />
-                      </Button>
-                    </Box>
-                  ))}
-                </Box>
-              )}
-            </Box>
-
-            {/* Submit and Cancel Buttons */}
-            <Box
-              sx={{
-                display: "flex",
-                gap: 2,
-                justifyContent: "center",
-                pt: 2,
-              }}
-            >
-              <Button
-                variant="contained"
-                sx={{
-                  backgroundColor: "#4CAF50",
-                  color: "white",
-                  textTransform: "none",
-                  fontWeight: 700,
-                  fontSize: "16px",
-                  px: 4,
-                  py: 1.5,
-                  borderRadius: "8px",
-                  "&:hover": {
-                    backgroundColor: "#45a049",
-                  },
-                  disabled: loading || circleFiles.length === 0 || milestoneFiles.length === 0,
-                }}
-                disabled={loading || circleFiles.length === 0 || milestoneFiles.length === 0}
-                onClick={handleSubmit}
-                startIcon={loading ? <CircularProgress size={20} color="inherit" /> : <UploadIcon />}
-              >
-                {loading ? "PROCESSING..." : "SUBMIT"}
-              </Button>
-              <Button
-                variant="contained"
-                sx={{
-                  backgroundColor: "#F44336",
-                  color: "white",
-                  textTransform: "none",
-                  fontWeight: 700,
-                  fontSize: "16px",
-                  px: 4,
-                  py: 1.5,
-                  borderRadius: "8px",
-                  "&:hover": {
-                    backgroundColor: "#da190b",
-                  },
-                }}
-                onClick={handleCancel}
-                startIcon={<CloseIcon />}
-              >
-                CANCEL
-              </Button>
-            </Box>
-
-            {(circleFiles.length === 0 || milestoneFiles.length === 0) && (
-              <Alert severity="info" sx={{ borderRadius: "10px" }}>
-                Please select at least one file from both sections to proceed
-              </Alert>
+        >
+            {/* Status Alert */}
+            {status && (
+                <Alert
+                    icon={<CheckCircleIcon sx={{ fontSize: "18px" }} />}
+                    severity="success"
+                    sx={{
+                        background: `${COLORS.success}15`,
+                        border: `1px solid ${COLORS.success}`,
+                        color: COLORS.success,
+                        fontWeight: 600,
+                        fontSize: "12px",
+                        mb: 2,
+                        py: 1,
+                        px: 1.5,
+                    }}
+                >
+                    ✓ {message}
+                </Alert>
             )}
-          </Stack>
-        </Box>
-      ) : (
-        <Box sx={{ mt: 2 }}>
-          <Dashboard
-            data={responseData}
-            onBack={handleCancel}
-            onDownload={downloadFile}
-            onShowDetails={(type) => {
-              setDetailsType(type);
-              setDetailsOpen(true);
-            }}
-          />
-        </Box>
-      )}
 
-      {/* Details Dialog */}
-      <DetailsDialog
-        open={detailsOpen}
-        type={detailsType}
-        data={responseData}
-        onClose={() => setDetailsOpen(false)}
-      />
-    </Container>
-  );
+            {/* Summary Cards Grid */}
+            <Grid container spacing={1.5} sx={{ mb: 2 }}>
+                <Grid item xs={6} sm={3}>
+                    <CompactSummaryCard
+                        title="Total Rows"
+                        value={total_rows}
+                        icon={InfoIcon}
+                        color={COLORS.primary}
+                    />
+                </Grid>
+                <Grid item xs={6} sm={3}>
+                    <CompactSummaryCard
+                        title="Created"
+                        value={created}
+                        icon={CheckCircleIcon}
+                        color={COLORS.success}
+                    />
+                </Grid>
+                <Grid item xs={6} sm={3}>
+                    <CompactSummaryCard
+                        title="Updated"
+                        value={updated}
+                        icon={TrendingUpIcon}
+                        color={COLORS.primary}
+                    />
+                </Grid>
+                <Grid item xs={6} sm={3}>
+                    <CompactSummaryCard
+                        title="Failed"
+                        value={failed}
+                        icon={WarningIcon}
+                        color={COLORS.error}
+                    />
+                </Grid>
+            </Grid>
+
+            {/* Alerts for Issues */}
+            {(duplicate_count > 0 || warning_count > 0) && (
+                <Box sx={{ mb: 2 }}>
+                    {duplicate_count > 0 && (
+                        <Alert
+                            severity="warning"
+                            sx={{
+                                fontSize: "11px",
+                                background: `${COLORS.warning}15`,
+                                border: `1px solid ${COLORS.warning}`,
+                                color: "#000",
+                                mb: 1,
+                                py: 0.8,
+                            }}
+                        >
+                            ⚠ {duplicate_count} duplicate IDs found
+                        </Alert>
+                    )}
+                    {warning_count > 0 && (
+                        <Alert
+                            severity="info"
+                            sx={{
+                                fontSize: "11px",
+                                background: `${COLORS.info}15`,
+                                border: `1px solid ${COLORS.info}`,
+                                color: COLORS.info,
+                                py: 0.8,
+                            }}
+                        >
+                            ℹ {warning_count.toLocaleString()} records with past-month dates
+                        </Alert>
+                    )}
+                </Box>
+            )}
+
+            {/* Download Main Button */}
+            {downloadUrl && (
+                <Button
+                    variant="contained"
+                    startIcon={<FileDownloadIcon sx={{ fontSize: "16px" }} />}
+                    onClick={handleDownload}
+                    size="small"
+                    fullWidth
+                    sx={{
+                        background: COLORS.primary,
+                        color: "#fff",
+                        fontWeight: 700,
+                        textTransform: "none",
+                        fontSize: "12px",
+                        py: 1,
+                        borderRadius: 1,
+                        "&:hover": { background: COLORS.primaryDark },
+                        mb: 2,
+                    }}
+                >
+                    Download Main DPR Report
+                </Button>
+            )}
+
+            {/* Info */}
+            <Typography sx={{ fontSize: "11px", color: "#666", fontWeight: 600 }}>
+                Batch ID: {batch_id}
+            </Typography>
+        </Box>
+    );
 };
 
-const Dashboard = ({ data, onBack, onDownload, onShowDetails }) => {
-  return (
-    <Stack spacing={3}>
-      {/* Header Section */}
-      <Card
-        sx={{
-          p: 3,
-          background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-          color: "white",
-          borderRadius: "15px",
-        }}
-      >
-        <Stack direction="row" justifyContent="space-between" alignItems="center">
-          <Box>
-            <Typography variant="h4" sx={{ fontWeight: 700, mb: 1 }}>
-              ✓ File Merged Successfully
-            </Typography>
-            <Typography variant="body1">{data.message}</Typography>
-          </Box>
-          <Button
-            variant="contained"
-            color="success"
-            startIcon={<DownloadIcon />}
-            onClick={onDownload}
+/* ================================================================ */
+/*  Downloadable Table Section Component                            */
+/* ================================================================ */
+const DownloadableTableSection = ({ title, data, columns, onDownload, icon: Icon }) => {
+    return (
+        <Paper
             sx={{
-              whiteSpace: "nowrap",
-              textTransform: "none",
-              fontWeight: 700,
-              fontSize: "16px",
+                mt: 2,
+                borderRadius: 1.5,
+                border: `1px solid ${COLORS.borderColor}`,
+                overflow: "hidden",
             }}
-          >
-            Download Merged File
-          </Button>
-        </Stack>
-      </Card>
-
-      {/* Key Metrics */}
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={6} md={3}>
-          <MetricCard
-            title="Total Rows"
-            value={data.total_rows?.toLocaleString()}
-            icon={<CheckCircleIcon sx={{ color: "#4CAF50", fontSize: 32 }} />}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <MetricCard
-            title="Records Updated"
-            value={data.database_save?.updated?.toLocaleString()}
-            icon={<CheckCircleIcon sx={{ color: "#2196F3", fontSize: 32 }} />}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <MetricCard
-            title="Records Failed"
-            value={data.database_save?.failed?.toLocaleString()}
-            icon={<ErrorIcon sx={{ color: "#F44336", fontSize: 32 }} />}
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <MetricCard
-            title="Duplicate IDs"
-            value={data.duplicate_unique_ids?.duplicate_count}
-            icon={<WarningIcon sx={{ color: "#FF9800", fontSize: 32 }} />}
-          />
-        </Grid>
-      </Grid>
-
-      {/* Database Save Summary */}
-      <Card sx={{ p: 3, borderRadius: "15px" }}>
-        <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
-          Database Save Summary
-        </Typography>
-        <Stack spacing={2}>
-          <Box>
-            <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
-              <Typography variant="body2">Records Created</Typography>
-              <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                {data.database_save?.created}
-              </Typography>
-            </Stack>
-            <LinearProgress
-              variant="determinate"
-              value={
-                (data.database_save?.created /
-                  (data.database_save?.created +
-                    data.database_save?.updated +
-                    data.database_save?.failed)) *
-                  100 || 0
-              }
-              sx={{ backgroundColor: "#e0e0e0", borderRadius: "5px" }}
-              color="success"
-            />
-          </Box>
-          <Box>
-            <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
-              <Typography variant="body2">Records Updated</Typography>
-              <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                {data.database_save?.updated}
-              </Typography>
-            </Stack>
-            <LinearProgress
-              variant="determinate"
-              value={
-                (data.database_save?.updated /
-                  (data.database_save?.created +
-                    data.database_save?.updated +
-                    data.database_save?.failed)) *
-                  100 || 0
-              }
-              sx={{ backgroundColor: "#e0e0e0", borderRadius: "5px" }}
-              color="info"
-            />
-          </Box>
-          <Box>
-            <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
-              <Typography variant="body2">Records Failed</Typography>
-              <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                {data.database_save?.failed}
-              </Typography>
-            </Stack>
-            <LinearProgress
-              variant="determinate"
-              value={
-                (data.database_save?.failed /
-                  (data.database_save?.created +
-                    data.database_save?.updated +
-                    data.database_save?.failed)) *
-                  100 || 0
-              }
-              sx={{ backgroundColor: "#e0e0e0", borderRadius: "5px" }}
-              color="error"
-            />
-          </Box>
-          <Box sx={{ mt: 2, p: 2, backgroundColor: "#f5f5f5", borderRadius: "8px" }}>
-            <Typography variant="body2" sx={{ fontWeight: 600, color: "#666" }}>
-              {data.database_save?.summary}
-            </Typography>
-            <Typography variant="caption" sx={{ color: "#999" }}>
-              Batch ID: {data.database_save?.batch_id}
-            </Typography>
-          </Box>
-        </Stack>
-      </Card>
-
-      {/* Errors Section */}
-      {data.database_save?.errors && data.database_save.errors.length > 0 && (
-        <Card sx={{ p: 3, backgroundColor: "#ffebee", borderRadius: "15px" }}>
-          <Stack
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
-            sx={{ mb: 2 }}
-          >
-            <Typography variant="h6" sx={{ fontWeight: 600, color: "#c62828" }}>
-              <ErrorIcon sx={{ mr: 1, verticalAlign: "middle" }} />
-              Errors ({data.database_save.errors.length})
-            </Typography>
-            <Button size="small" onClick={() => onShowDetails("errors")}>
-              View All
-            </Button>
-          </Stack>
-          <TableContainer>
-            <Table size="small">
-              <TableBody>
-                {data.database_save.errors.slice(0, 5).map((error, idx) => (
-                  <TableRow key={idx}>
-                    <TableCell sx={{ color: "#c62828" }}>{error}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Card>
-      )}
-
-      {/* Duplicate IDs Section */}
-      {data.duplicate_unique_ids?.duplicate_count > 0 && (
-        <Card sx={{ p: 3, backgroundColor: "#fff3e0", borderRadius: "15px" }}>
-          <Stack
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
-            sx={{ mb: 2 }}
-          >
-            <Typography variant="h6" sx={{ fontWeight: 600, color: "#e65100" }}>
-              <WarningIcon sx={{ mr: 1, verticalAlign: "middle" }} />
-              Duplicate Unique IDs ({data.duplicate_unique_ids.duplicate_count})
-            </Typography>
-            <Button size="small" onClick={() => onShowDetails("duplicates")}>
-              View All
-            </Button>
-          </Stack>
-          <TableContainer>
-            <Table size="small">
-              <TableHead>
-                <TableRow sx={{ backgroundColor: "#ffe0b2" }}>
-                  <TableCell sx={{ fontWeight: 600 }}>Unique ID</TableCell>
-                  <TableCell align="right" sx={{ fontWeight: 600 }}>
-                    Occurrences
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {data.duplicate_unique_ids.duplicates
-                  .slice(0, 5)
-                  .map((dup, idx) => (
-                    <TableRow key={idx}>
-                      <TableCell>{dup.unique_id}</TableCell>
-                      <TableCell align="right">
-                        <Chip
-                          label={dup.occurrences}
-                          color="warning"
-                          size="small"
-                        />
-                      </TableCell>
-                    </TableRow>
-                  ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Card>
-      )}
-
-      {/* Past Month Warnings */}
-      {data.past_month_dismantle_dates?.warning_count > 0 && (
-        <Card sx={{ p: 3, backgroundColor: "#e3f2fd", borderRadius: "15px" }}>
-          <Stack
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
-            sx={{ mb: 2 }}
-          >
-            <Typography variant="h6" sx={{ fontWeight: 600, color: "#1565c0" }}>
-              <WarningIcon sx={{ mr: 1, verticalAlign: "middle" }} />
-              Past Month Dismantle Dates (
-              {data.past_month_dismantle_dates.warning_count})
-            </Typography>
-            <Button size="small" onClick={() => onShowDetails("warnings")}>
-              View All
-            </Button>
-          </Stack>
-          <TableContainer>
-            <Table size="small">
-              <TableHead>
-                <TableRow sx={{ backgroundColor: "#bbdefb" }}>
-                  <TableCell sx={{ fontWeight: 600 }}>Unique ID</TableCell>
-                  <TableCell sx={{ fontWeight: 600 }}>Date</TableCell>
-                  <TableCell sx={{ fontWeight: 600 }}>Message</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {data.past_month_dismantle_dates.warnings
-                  .slice(0, 5)
-                  .map((warn, idx) => (
-                    <TableRow key={idx}>
-                      <TableCell>{warn.unique_id}</TableCell>
-                      <TableCell>{warn.dismantle_date}</TableCell>
-                      <TableCell>{warn.message}</TableCell>
-                    </TableRow>
-                  ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Card>
-      )}
-
-      {/* Sample Details */}
-      {data.database_save?.sample_details &&
-        data.database_save.sample_details.length > 0 && (
-          <Card sx={{ p: 3, borderRadius: "15px" }}>
-            <Typography variant="h6" sx={{ fontWeight: 600, mb: 2 }}>
-              Sample Processed Records
-            </Typography>
-            <TableContainer>
-              <Table size="small">
-                <TableHead>
-                  <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
-                    <TableCell sx={{ fontWeight: 600 }}>Unique ID</TableCell>
-                    <TableCell sx={{ fontWeight: 600 }}>Action</TableCell>
-                    <TableCell align="right" sx={{ fontWeight: 600 }}>
-                      Fields Updated
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {data.database_save.sample_details.map((sample, idx) => (
-                    <TableRow key={idx}>
-                      <TableCell>{sample.unique_id}</TableCell>
-                      <TableCell>
-                        <Chip
-                          label={sample.action}
-                          color={
-                            sample.action === "created" ? "success" : "info"
-                          }
-                          size="small"
-                        />
-                      </TableCell>
-                      <TableCell align="right">
-                        {sample.field_count}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Card>
-        )}
-
-      {/* Back Button */}
-      <Stack direction="row" spacing={2} justifyContent="center" sx={{ pt: 2 }}>
-        <Button
-          variant="outlined"
-          onClick={onBack}
-          sx={{
-            minWidth: 120,
-            borderRadius: "8px",
-            textTransform: "none",
-            fontWeight: 600,
-          }}
         >
-          Upload New Files
-        </Button>
-      </Stack>
-    </Stack>
-  );
+            {/* Header with Download */}
+            <Box
+                sx={{
+                    background: COLORS.headerGradient,
+                    p: 1.5,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    gap: 1,
+                }}
+            >
+                <Box sx={{ display: "flex", alignItems: "center", gap: 0.8 }}>
+                    {Icon && <Icon sx={{ color: "#fff", fontSize: 18 }} />}
+                    <Typography
+                        sx={{
+                            color: "#fff",
+                            fontWeight: 700,
+                            fontSize: "12px",
+                            textTransform: "uppercase",
+                            letterSpacing: 0.3,
+                        }}
+                    >
+                        {title}
+                    </Typography>
+                    <Typography
+                        sx={{
+                            color: "rgba(255,255,255,0.8)",
+                            fontSize: "10px",
+                            fontWeight: 600,
+                            ml: "auto",
+                        }}
+                    >
+                        ({data.length} rows)
+                    </Typography>
+                </Box>
+                <Button
+                    variant="contained"
+                    size="small"
+                    startIcon={<FileDownloadIcon sx={{ fontSize: "14px" }} />}
+                    onClick={onDownload}
+                    sx={{
+                        background: "#fff",
+                        color: COLORS.primary,
+                        fontWeight: 700,
+                        fontSize: "10px",
+                        textTransform: "none",
+                        py: 0.4,
+                        px: 1,
+                        "&:hover": { background: "rgba(255,255,255,0.9)" },
+                    }}
+                >
+                    Export
+                </Button>
+            </Box>
+
+            {/* Table */}
+            <TableContainer sx={{ maxHeight: 300 }}>
+                <Table size="small">
+                    <TableHead>
+                        <TableRow sx={{ background: COLORS.primary }}>
+                            {columns.map((col) => (
+                                <TableCell
+                                    key={col.id}
+                                    align={col.align || "left"}
+                                    sx={{
+                                        color: "#fff",
+                                        fontWeight: 700,
+                                        fontSize: "11px",
+                                        textTransform: "uppercase",
+                                        py: 0.8,
+                                    }}
+                                >
+                                    {col.label}
+                                </TableCell>
+                            ))}
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {data.length > 0 ? (
+                            data.map((row, idx) => (
+                                <TableRow
+                                    key={idx}
+                                    sx={{
+                                        background: idx % 2 === 0 ? "#fff" : COLORS.lightBg,
+                                        "&:hover": { background: `${COLORS.primary}08` },
+                                    }}
+                                >
+                                    {columns.map((col) => (
+                                        <TableCell
+                                            key={`${idx}-${col.id}`}
+                                            align={col.align || "left"}
+                                            sx={{
+                                                fontSize: "11px",
+                                                py: 0.6,
+                                            }}
+                                        >
+                                            {col.render ? col.render(row[col.id], row) : row[col.id] || "-"}
+                                        </TableCell>
+                                    ))}
+                                </TableRow>
+                            ))
+                        ) : (
+                            <TableRow>
+                                <TableCell colSpan={columns.length} align="center" sx={{ py: 2, color: "#999", fontSize: "11px" }}>
+                                    No data available
+                                </TableCell>
+                            </TableRow>
+                        )}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </Paper>
+    );
 };
 
-const MetricCard = ({ title, value, icon }) => (
-  <Card
-    sx={{
-      p: 2,
-      textAlign: "center",
-      backgroundColor: "#fafafa",
-      borderRadius: "15px",
-    }}
-  >
-    <Box sx={{ mb: 1 }}>{icon}</Box>
-    <Typography variant="caption" sx={{ color: "#666", display: "block", mb: 0.5 }}>
-      {title}
-    </Typography>
-    <Typography variant="h6" sx={{ fontWeight: 700 }}>
-      {value}
-    </Typography>
-  </Card>
-);
+/* ================================================================ */
+/*  Main DPR Control Component                                      */
+/* ================================================================ */
+const DPRControl = () => {
+    const [circleFiles, setCircleFiles] = useState([]);
+    const [milestoneFiles, setMilestoneFiles] = useState([]);
+    const [showCircleError, setShowCircleError] = useState(false);
+    const [showMilestoneError, setShowMilestoneError] = useState(false);
+    const [fileData, setFileData] = useState();
+    const [download, setDownload] = useState(false);
+    const [resultData, setResultData] = useState(null);
+    const { loading, action } = useLoadingDialog();
+    const navigate = useNavigate();
+    const classes = OverAllCss();
 
-const DetailsDialog = ({ open, type, data, onClose }) => {
-  let content = [];
-  let title = "";
+    // Handle Circle Files Selection
+    const handleCircleFileSelection = (event) => {
+        setCircleFiles(event.target.files);
+        setShowCircleError(false);
+    };
 
-  if (type === "errors" && data.database_save?.errors) {
-    title = `Errors (${data.database_save.errors.length})`;
-    content = data.database_save.errors;
-  } else if (type === "duplicates" && data.duplicate_unique_ids?.duplicates) {
-    title = `Duplicate Unique IDs (${data.duplicate_unique_ids.duplicate_count})`;
-    content = data.duplicate_unique_ids.duplicates;
-  } else if (type === "warnings" && data.past_month_dismantle_dates?.warnings) {
-    title = `Past Month Warnings (${data.past_month_dismantle_dates.warning_count})`;
-    content = data.past_month_dismantle_dates.warnings;
-  }
+    // Handle Milestone Files Selection
+    const handleMilestoneFileSelection = (event) => {
+        setMilestoneFiles(event.target.files);
+        setShowMilestoneError(false);
+    };
 
-  return (
-    <Dialog
-      open={open}
-      onClose={onClose}
-      maxWidth="md"
-      fullWidth
-      PaperProps={{
-        sx: { borderRadius: "15px" },
-      }}
-    >
-      <DialogTitle sx={{ fontWeight: 600 }}>{title}</DialogTitle>
-      <DialogContent
-        sx={{ minHeight: "400px", maxHeight: "600px", overflow: "auto" }}
-      >
-        {type === "errors" && (
-          <Stack spacing={1}>
-            {content.map((error, idx) => (
-              <Alert key={idx} severity="error" sx={{ mb: 1, borderRadius: "8px" }}>
-                {error}
-              </Alert>
-            ))}
-          </Stack>
-        )}
+    const handleSubmit = async () => {
+        let hasError = false;
 
-        {type === "duplicates" && (
-          <TableContainer>
-            <Table>
-              <TableHead>
-                <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
-                  <TableCell sx={{ fontWeight: 600 }}>Unique ID</TableCell>
-                  <TableCell align="right" sx={{ fontWeight: 600 }}>
-                    Occurrences
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {content.map((dup, idx) => (
-                  <TableRow key={idx}>
-                    <TableCell>{dup.unique_id}</TableCell>
-                    <TableCell align="right">
-                      <Chip label={dup.occurrences} color="warning" />
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        )}
+        // Validate Circle Files
+        if (circleFiles.length === 0) {
+            setShowCircleError(true);
+            hasError = true;
+        }
 
-        {type === "warnings" && (
-          <TableContainer>
-            <Table>
-              <TableHead>
-                <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
-                  <TableCell sx={{ fontWeight: 600 }}>Unique ID</TableCell>
-                  <TableCell sx={{ fontWeight: 600 }}>Date</TableCell>
-                  <TableCell sx={{ fontWeight: 600 }}>Message</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {content.map((warn, idx) => (
-                  <TableRow key={idx}>
-                    <TableCell>{warn.unique_id}</TableCell>
-                    <TableCell>{warn.dismantle_date}</TableCell>
-                    <TableCell>{warn.message}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        )}
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>Close</Button>
-      </DialogActions>
-    </Dialog>
-  );
+        // Validate Milestone Files
+        if (milestoneFiles.length === 0) {
+            setShowMilestoneError(true);
+            hasError = true;
+        }
+
+        if (hasError) return;
+
+        try {
+            action(true);
+            const formData = new FormData();
+
+            // Add circle files
+            for (let i = 0; i < circleFiles.length; i++) {
+                formData.append("circle_files", circleFiles[i]);
+            }
+
+            // Add milestone files
+            for (let i = 0; i < milestoneFiles.length; i++) {
+                formData.append("milestone_file", milestoneFiles[i]);
+            }
+
+            const response = await postData("mobinate_vs_cats/dpr_data_stor/", formData);
+
+            if (response.status === true) {
+                setDownload(true);
+                setFileData(response.download_url);
+                setResultData(response);
+
+                Swal.fire({
+                    icon: "success",
+                    title: "Done",
+                    text: response.message,
+                });
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: response.message || "An error occurred",
+                });
+            }
+        } catch (error) {
+            console.error("Submit error:", error);
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: error.message || "Failed to submit files",
+            });
+        } finally {
+            action(false);
+        }
+    };
+
+    const handleCancel = () => {
+        setCircleFiles([]);
+        setMilestoneFiles([]);
+        setShowCircleError(false);
+        setShowMilestoneError(false);
+        setDownload(false);
+        setResultData(null);
+        setFileData(null);
+    };
+
+    useEffect(() => {
+        document.title = "DPR Control";
+    }, []);
+
+    // Extract data from response
+    const sampleDetails = resultData?.database_save?.sample_details || [];
+    const duplicates = resultData?.duplicate_unique_ids?.duplicates || [];
+    const warnings = resultData?.past_month_dismantle_dates?.warnings || [];
+
+    // Table columns
+    const activityColumns = [
+        { id: "unique_id", label: "Unique ID" },
+        { id: "action", label: "Action" },
+        { id: "updated_by", label: "Updated By" },
+        { id: "field_count", label: "Fields Changed", align: "center" },
+    ];
+
+    const duplicateColumns = [
+        { id: "unique_id", label: "Unique ID" },
+        { id: "occurrences", label: "Occurrences", align: "center" },
+    ];
+
+    const warningColumns = [
+        { id: "unique_id", label: "Unique ID" },
+        { id: "dismantle_date", label: "Dismantle Date" },
+        { id: "message", label: "Message" },
+    ];
+
+    return (
+        <>
+            <div style={{ margin: 5, marginLeft: 10 }}>
+                <Breadcrumbs
+                    aria-label="breadcrumb"
+                    itemsBeforeCollapse={2}
+                    maxItems={3}
+                    separator={<KeyboardArrowRightIcon fontSize="small" />}
+                >
+                    <Link underline="hover" onClick={() => navigate("/tools")} sx={{ cursor: "pointer" }}>
+                        Tools
+                    </Link>
+                    <Link underline="hover" onClick={() => navigate("/tools/mobinet_vs_cats")} sx={{ cursor: "pointer" }}>
+                        Mobinate Vs AWS
+                    </Link>
+                    <Typography color="text.primary">DPR Control</Typography>
+                </Breadcrumbs>
+            </div>
+
+            <Slide direction="left" in={true} timeout={1000}>
+                <Box>
+                    <Box className={classes.main_Box}>
+                        <Box className={classes.Back_Box} sx={{ width: { md: "75%", xs: "100%" } }}>
+                            <Box className={classes.Box_Hading}>DPR CONTROL</Box>
+
+                            <Stack spacing={2} sx={{ marginTop: "-40px" }} direction="column">
+                                {/* Circle Files Upload Section */}
+                                <Box className={classes.Front_Box}>
+                                    <div className={classes.Front_Box_Hading}>
+                                        Select Circle Files:-
+                                    </div>
+                                    <div className={classes.Front_Box_Select_Button}>
+                                        <div style={{ float: "left" }}>
+                                            <Button
+                                                variant="contained"
+                                                component="label"
+                                                color={circleFiles.length > 0 ? "warning" : "primary"}
+                                            >
+                                                Select File
+                                                <input
+                                                    required
+                                                    hidden
+                                                    accept=".csv,.xlsx,.xls"
+                                                    multiple
+                                                    type="file"
+                                                    onChange={handleCircleFileSelection}
+                                                />
+                                            </Button>
+                                        </div>
+
+                                        {circleFiles.length > 0 && (
+                                            <span style={{ color: "green", fontSize: "18px", fontWeight: 600 }}>
+                                                Selected File(s): {circleFiles.length}
+                                            </span>
+                                        )}
+
+                                        {showCircleError && (
+                                            <span style={{ color: "red", fontSize: "18px", fontWeight: 600 }}>
+                                                This Field Is Required!
+                                            </span>
+                                        )}
+                                    </div>
+                                </Box>
+
+                                {/* Milestone Files Upload Section */}
+                                <Box className={classes.Front_Box}>
+                                    <div className={classes.Front_Box_Hading}>
+                                        Select Milestone Files:-
+                                    </div>
+                                    <div className={classes.Front_Box_Select_Button}>
+                                        <div style={{ float: "left" }}>
+                                            <Button
+                                                variant="contained"
+                                                component="label"
+                                                color={milestoneFiles.length > 0 ? "warning" : "primary"}
+                                            >
+                                                Select File
+                                                <input
+                                                    required
+                                                    hidden
+                                                    accept=".csv,.xlsx,.xls"
+                                                    multiple
+                                                    type="file"
+                                                    onChange={handleMilestoneFileSelection}
+                                                />
+                                            </Button>
+                                        </div>
+
+                                        {milestoneFiles.length > 0 && (
+                                            <span style={{ color: "green", fontSize: "18px", fontWeight: 600 }}>
+                                                Selected File(s): {milestoneFiles.length}
+                                            </span>
+                                        )}
+
+                                        {showMilestoneError && (
+                                            <span style={{ color: "red", fontSize: "18px", fontWeight: 600 }}>
+                                                This Field Is Required!
+                                            </span>
+                                        )}
+                                    </div>
+                                </Box>
+                            </Stack>
+
+                            {/* Action Buttons */}
+                            <Stack
+                                direction={{ xs: "column", sm: "column", md: "row" }}
+                                spacing={2}
+                                style={{ display: "flex", justifyContent: "space-around", marginTop: "20px" }}
+                            >
+                                <Button
+                                    variant="contained"
+                                    color="success"
+                                    onClick={handleSubmit}
+                                    endIcon={<UploadIcon />}
+                                    disabled={circleFiles.length === 0 || milestoneFiles.length === 0}
+                                >
+                                    Submit
+                                </Button>
+
+                                <Button
+                                    variant="contained"
+                                    onClick={handleCancel}
+                                    style={{ backgroundColor: "red", color: "white" }}
+                                    endIcon={<DoDisturbIcon />}
+                                >
+                                    Cancel
+                                </Button>
+                            </Stack>
+
+                            {/* Dashboard - Show when data is available */}
+                            {download && <DPRDashboard data={resultData} downloadUrl={fileData} />}
+
+                            {/* Downloadable Tables */}
+                            {download && (
+                                <>
+                                    <DownloadableTableSection
+                                        title="Database Activity - Sample Details"
+                                        data={sampleDetails}
+                                        columns={activityColumns}
+                                        icon={InfoIcon}
+                                        onDownload={() =>
+                                            exportToExcel(sampleDetails, "DPR_Database_Activity", "Database Activity")
+                                        }
+                                    />
+
+                                    <DownloadableTableSection
+                                        title="Duplicate Unique IDs"
+                                        data={duplicates}
+                                        columns={duplicateColumns}
+                                        icon={WarningIcon}
+                                        onDownload={() =>
+                                            exportToExcel(duplicates, "DPR_Duplicate_IDs", "Duplicates")
+                                        }
+                                    />
+
+                                    <DownloadableTableSection
+                                        title="Past Month Dismantle Dates"
+                                        data={warnings.slice(0, 100)}
+                                        columns={warningColumns}
+                                        icon={InfoIcon}
+                                        onDownload={() =>
+                                            exportToExcel(warnings, "DPR_Past_Month_Warnings", "Warnings")
+                                        }
+                                    />
+                                </>
+                            )}
+                        </Box>
+                    </Box>
+                </Box>
+            </Slide>
+
+            {loading}
+        </>
+    );
 };
 
 export default DPRControl;
