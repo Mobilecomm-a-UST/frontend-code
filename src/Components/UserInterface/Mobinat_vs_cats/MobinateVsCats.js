@@ -13,6 +13,7 @@ import ChangeListIcon from '@rsuite/icons/ChangeList';
 import Loader from '../../Skeleton/Loader';
 import './../../../App.css'
 import ArrowRightIcon from '@rsuite/icons/ArrowRight';
+import GridIcon from '@rsuite/icons/Grid';
 
 const MobinateTool = lazy(() => import('./MobinateTool'))
 const MobinateFileHandle = lazy(() => import('./Mobinate/Mobinate'))
@@ -27,6 +28,8 @@ const LiveMobReco = lazy(()=> import('./Reco Material/LiveMobReco'))
 const MicrowaveReconcilation = lazy(()=> import('./Microwave Reconcilation/MicrowaveReconcilation'))
 const DegrowReconcilation = lazy(()=>import('./Degrow Reconcilation/DegrowReconcilation'))
 const DPRControl = lazy(()=> import('./DPR Control/DPRControl'))
+const DPRDashboard = lazy(()=> import('./Mobinet Dump Store/MobinetDumpStore'))
+const RecoReport = lazy(()=> import('./Reco Report/RecoReport'))
 
 
 
@@ -146,6 +149,12 @@ const MobinateVsCate = () => {
                                              <Nav.Item eventKey="8" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/DPRControl'); show(); setMenuButton(true) }}>
                                                 DPR Control
                                             </Nav.Item>
+                                             <Nav.Item eventKey="9" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/DPRDashboard'); show(); setMenuButton(true) }}>
+                                                Mobinet Dump Store
+                                            </Nav.Item>
+                                             <Nav.Item eventKey="10" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/RecoReport'); show(); setMenuButton(true) }}>
+                                                Reco Report
+                                            </Nav.Item>
 
 
                                             {/* <Nav.Menu eventKey="3" placement="rightStart" title="NOM Audit" icon={<DocPassIcon />}>
@@ -182,6 +191,8 @@ const MobinateVsCate = () => {
                                 <Route element={<MicrowaveReconcilation/>} path='/MicrowaveReconcilation'/> 
                                 <Route element={<DegrowReconcilation/>} path='/DegrowReconcilation'/>
                                 <Route element={<DPRControl/>} path = '/DPRControl'/>
+                                <Route element={<DPRDashboard/>} path = '/DPRDashboard'/>
+                                <Route element = {<RecoReport/>} path = '/RecoReport'/>
 
                             </Routes>
                         </Suspense>
