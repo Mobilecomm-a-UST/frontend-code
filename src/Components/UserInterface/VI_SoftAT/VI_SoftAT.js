@@ -109,11 +109,11 @@ const VI_SoftAT = () => {
                                             5G 
                                         </Nav.Item>
                                          </Nav.Menu>
-                                          <Nav.Menu eventKey="6" placement="rightStart" className="menu-title-custom" title="VI Huawei" icon={<DashboardIcon size="3em" />}>
+                                          {/* <Nav.Menu eventKey="6" placement="rightStart" className="menu-title-custom" title="VI Huawei" icon={<DashboardIcon size="3em" />}>
                                          <Nav.Item eventKey="6-1" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/VIHuawei')}>
                                             Upload Logs
                                         </Nav.Item>
-                                         </Nav.Menu>
+                                         </Nav.Menu> */}
                                          
                                     
                                         {/* <Nav.Item eventKey="2" placement="rightStart" icon={<DashboardIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/vi_ftr_dashboard')}>

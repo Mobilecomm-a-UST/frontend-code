@@ -408,7 +408,7 @@ const MobinateDumpStore = () => {
     };
 
     useEffect(() => {
-        document.title = "Mobinet Dump Store";
+        document.title = "Mobinet DB";
     }, []);
 
     return (
@@ -423,10 +423,10 @@ const MobinateDumpStore = () => {
                     <Link underline="hover" onClick={() => navigate("/tools")} sx={{ cursor: "pointer" }}>
                         Tools
                     </Link>
-                    <Link underline="hover" onClick={() => navigate("/tools/mobinet_vs_cats")} sx={{ cursor: "pointer" }}>
-                        Mobinate Vs AWS
+                    <Link underline="hover" onClick={() => navigate("/tools/material_management")} sx={{ cursor: "pointer" }}>
+                     Material Management
                     </Link>
-                    <Typography color="text.primary">Mobinet Dump Store</Typography>
+                    <Typography color="text.primary">Mobinet DB</Typography>
                 </Breadcrumbs>
             </div>
 
@@ -434,7 +434,7 @@ const MobinateDumpStore = () => {
                 <Box>
                     <Box className={classes.main_Box}>
                         <Box className={classes.Back_Box} sx={{ width: { md: "75%", xs: "100%" } }}>
-                            <Box className={classes.Box_Hading}>Mobinet Dump Store</Box>
+                            <Box className={classes.Box_Hading}>Mobinet DB</Box>
 
                             <Stack spacing={2} sx={{ marginTop: "-40px" }} direction="column">
                                 {/* File Upload Section */}
@@ -914,7 +914,7 @@ export default MobinateDumpStore;
 //     };
 
 //     useEffect(() => {
-//         document.title = "Mobinet Dump Store";
+//         document.title = "Mobinet DB";
 //     }, []);
 
 //     return (
@@ -929,10 +929,10 @@ export default MobinateDumpStore;
 //                     <Link underline="hover" onClick={() => navigate("/tools")} sx={{ cursor: "pointer" }}>
 //                         Tools
 //                     </Link>
-//                     <Link underline="hover" onClick={() => navigate("/tools/mobinet_vs_cats")} sx={{ cursor: "pointer" }}>
+//                     <Link underline="hover" onClick={() => navigate("/tools/material_management")} sx={{ cursor: "pointer" }}>
 //                         Mobinate Vs AWS
 //                     </Link>
-//                     <Typography color="text.primary">Mobinet Dump Store</Typography>
+//                     <Typography color="text.primary">Mobinet DB</Typography>
 //                 </Breadcrumbs>
 //             </div>
 
@@ -940,7 +940,7 @@ export default MobinateDumpStore;
 //                 <Box>
 //                     <Box className={classes.main_Box}>
 //                         <Box className={classes.Back_Box} sx={{ width: { md: "75%", xs: "100%" } }}>
-//                             <Box className={classes.Box_Hading}>Mobinet Dump Store</Box>
+//                             <Box className={classes.Box_Hading}>Mobinet DB</Box>
 
 //                             <Stack spacing={2} sx={{ marginTop: "-40px" }} direction="column">
 //                                 {/* File Upload Section */}

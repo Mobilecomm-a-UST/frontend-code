@@ -182,7 +182,7 @@ const SiteMaping = () => {
             <Box m={1} ml={2}>
                 <Breadcrumbs separator={<KeyboardArrowRightIcon fontSize="small" />}>
                     <Link underline="hover" onClick={() => navigate("/tools")}>Tools</Link>
-                    <Link underline="hover" onClick={() => navigate("/tools/mobinet_vs_cats")}>Mobinet Vs CATS</Link>
+                    <Link underline="hover" onClick={() => navigate("/tools/material_management")}>Material Management</Link>
                     <Typography color="text.primary">Site Mapping</Typography>
                 </Breadcrumbs>
             </Box>

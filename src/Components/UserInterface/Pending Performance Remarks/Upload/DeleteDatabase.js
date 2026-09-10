@@ -11,7 +11,7 @@ import {
 } from "@mui/icons-material";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-import { postData, ServerURL } from "../../../services/FetchNodeServices";
+import { postDataa, ServerURL } from "../../../services/FetchNodeServices";
 import OverAllCss from "../../../csss/OverAllCss";
 import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
 
@@ -72,7 +72,7 @@ const DeleteDatabase = () => {
             formData.append("tables", t);
         });
 
-        const response = await postData(
+        const response = await postDataa(
             "pending_performance_at_remarks/reset-all-data/",
             formData
         );
@@ -222,3 +222,265 @@ const DeleteDatabase = () => {
 };
 
 export default DeleteDatabase;
+
+
+// import React, { useState, useEffect } from "react";
+// import {
+//     Box, Button, Stack, Breadcrumbs, Link, Typography, Slide,
+//     FormControl, InputLabel, Select, MenuItem, Checkbox, ListItemText,
+//     OutlinedInput, Chip, Alert,
+// } from "@mui/material";
+// import {
+//     DeleteForever as DeleteForeverIcon,
+//     DoDisturb as DoDisturbIcon,
+//     KeyboardArrowRight as KeyboardArrowRightIcon,
+// } from "@mui/icons-material";
+// import Swal from "sweetalert2";
+// import { useNavigate } from "react-router-dom";
+// import { postData, ServerURL } from "../../../services/FetchNodeServices";
+// import OverAllCss from "../../../csss/OverAllCss";
+// import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
+
+// const tableArray = [
+//     { label: "4G", value: "4G" },
+//     { label: "5G", value: "5G" },
+//     { label: "Accepted", value: "ACCEPTED" },
+// ];
+
+// const DeleteDatabase = () => {
+//     const { loading, action } = useLoadingDialog();
+//     const navigate = useNavigate();
+//     const classes = OverAllCss();
+
+//     const [selectedTables, setSelectedTables] = useState([]);
+
+//     const handleTablesChange = (event) => {
+//         const { value } = event.target;
+//         setSelectedTables(typeof value === "string" ? value.split(",") : value);
+//     };
+
+//     const performDelete = async () => {
+//         action(true);
+
+//         try {
+//             const formData = new FormData();
+
+//             selectedTables.forEach((t) => {
+//                 formData.append("tables", t);
+//             });
+
+//             const response = await postData(
+//                 "pending_performance_at_remarks/reset-all-data/",
+//                 formData
+//             );
+
+//             action(false);
+
+//             if (response?.status === true) {
+//                 Swal.fire({
+//                     icon: "success",
+//                     title: "Success",
+//                     text: response.message || "Data deleted successfully.",
+//                     confirmButtonColor: "#198754",
+//                 });
+
+//                 setSelectedTables([]);
+//             } else {
+//                 // Extract error message
+//                 const errorMessage = response?.message || " Not unauthorized to delete this data";
+                
+//                 // Check if it's an authentication or authorization error
+//                 const isAuthError = 
+//                     errorMessage.toLowerCase().includes("not authenticated") ||
+//                     errorMessage.toLowerCase().includes("not authorized") ||
+//                     errorMessage.toLowerCase().includes("permission") ||
+//                     errorMessage.toLowerCase().includes("unauthorized") ||
+//                     errorMessage.toLowerCase().includes("403") ||
+//                     errorMessage.toLowerCase().includes("401");
+
+//                 if (isAuthError) {
+//                     Swal.fire({
+//                         icon: "error",
+//                         title: "Access Denied",
+//                         html: `
+//                             <div style="text-align: center; padding: 20px;">
+//                                 <div style="margin-bottom: 15px;">
+//                                     <p style="font-size: 18px; font-weight: 600; color: #d32f2f; margin: 0;">
+//                                         You are not authorized to delete this data.
+//                                     </p>
+//                                 </div>
+//                                 <div style="background-color: #f5f5f5; padding: 15px; border-radius: 8px; border-left: 4px solid #d32f2f;">
+//                                     <p style="font-size: 14px; color: #666; margin: 0; word-wrap: break-word;">
+//                                         <strong>Error Details:</strong>
+//                                     </p>
+//                                     <p style="font-size: 13px; color: #d32f2f; margin: 8px 0 0 0; word-wrap: break-word;">
+//                                         ${errorMessage}
+//                                     </p>
+//                                 </div>
+//                             </div>
+//                         `,
+//                         confirmButtonColor: "#d32f2f",
+//                         confirmButtonText: "OK",
+//                         allowOutsideClick: false,
+//                         didOpen: (modal) => {
+//                             modal.classList.add('swal-error-modal');
+//                         }
+//                     });
+//                 } else {
+//                     Swal.fire({
+//                         icon: "error",
+//                         title: "Failed to Delete Data",
+//                         html: `
+//                             <div style="text-align: center; padding: 20px;">
+//                                 <div style="background-color: #f5f5f5; padding: 15px; border-radius: 8px; border-left: 4px solid #d32f2f;">
+//                                     <p style="font-size: 14px; color: #666; margin: 0; word-wrap: break-word;">
+//                                         ${errorMessage}
+//                                     </p>
+//                                 </div>
+//                             </div>
+//                         `,
+//                         confirmButtonColor: "#d32f2f",
+//                         confirmButtonText: "OK",
+//                         allowOutsideClick: false,
+//                     });
+//                 }
+//             }
+
+//         } catch (error) {
+//             action(false);
+
+//             const errorMessage = error?.message || "Unable to delete data.";
+
+//             Swal.fire({
+//                 icon: "error",
+//                 title: "Error",
+//                 html: `
+//                     <div style="text-align: center; padding: 20px;">
+//                         <div style="background-color: #f5f5f5; padding: 15px; border-radius: 8px; border-left: 4px solid #d32f2f;">
+//                             <p style="font-size: 14px; color: #666; margin: 0; word-wrap: break-word;">
+//                                 ${errorMessage}
+//                             </p>
+//                         </div>
+//                     </div>
+//                 `,
+//                 confirmButtonColor: "#d32f2f",
+//                 confirmButtonText: "OK",
+//                 allowOutsideClick: false,
+//             });
+//         }
+//     };
+
+//     const handleDeleteClick = () => {
+//         const scopeText = selectedTables.length > 0
+//             ? `the ${selectedTables.join(", ")} table(s)`
+//             : "ALL tables (4G, 5G, Accepted)";
+
+//         Swal.fire({
+//             icon: "warning",
+//             title: "Are you sure?",
+//             html: `<b>This will permanently delete data for ${scopeText}.</b><br/>This action cannot be undone.`,
+//             showCancelButton: true,
+//             confirmButtonText: "Yes, delete it",
+//             confirmButtonColor: "#d32f2f",
+//             cancelButtonText: "Cancel",
+//             reverseButtons: true,
+//         }).then((result) => {
+//             if (result.isConfirmed) {
+//                 performDelete();
+//             }
+//         });
+//     };
+
+//     const handleCancel = () => {
+//         setSelectedTables([]);
+//     };
+
+//     useEffect(() => {
+//         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`;
+//     }, []);
+
+//     return (
+//         <>
+//             <Box m={1} ml={2}>
+//                 <Breadcrumbs separator={<KeyboardArrowRightIcon fontSize="small" />}>
+//                     <Link underline="hover" onClick={() => navigate("/tools")} sx={{ cursor: 'pointer' }}>
+//                         Tools
+//                     </Link>
+//                     <Typography color="text.primary">Delete Database</Typography>
+//                 </Breadcrumbs>
+//             </Box>
+
+//             <Slide direction="left" in timeout={1000}>
+//                 <Box>
+//                     <Box className={classes.main_Box}>
+//                         <Box className={classes.Back_Box} sx={{ width: { md: "75%", xs: "100%" } }}>
+//                             <Box className={classes.Box_Hading}>Delete Database</Box>
+
+//                             <Stack spacing={2} sx={{ mt: "-40px" }}>
+//                                 <Alert severity="warning" sx={{ fontFamily: "Poppins" }}>
+//                                     This permanently deletes data and cannot be undone. Leave the table selection
+//                                     empty to delete <b>all</b> tables (4G, 5G, Accepted).
+//                                 </Alert>
+
+//                                 <Box className={classes.Front_Box}>
+//                                     <div className={classes.Front_Box_Hading}>Select Table(s):</div>
+//                                     <div className={classes.Front_Box_Select_Button}>
+//                                         <FormControl sx={{ minWidth: 260 }}>
+//                                             <InputLabel id="tables-to-delete-label">
+//                                                 All Tables (leave empty)
+//                                             </InputLabel>
+//                                             <Select
+//                                                 labelId="tables-to-delete-label"
+//                                                 multiple
+//                                                 value={selectedTables}
+//                                                 onChange={handleTablesChange}
+//                                                 input={<OutlinedInput label="All Tables (leave empty)" />}
+//                                                 renderValue={(selected) => (
+//                                                     <Stack direction="row" spacing={1} flexWrap="wrap">
+//                                                         {selected.map((value) => (
+//                                                             <Chip key={value} label={value} size="small" />
+//                                                         ))}
+//                                                     </Stack>
+//                                                 )}
+//                                             >
+//                                                 {tableArray.map((t) => (
+//                                                     <MenuItem key={t.value} value={t.value}>
+//                                                         <Checkbox checked={selectedTables.indexOf(t.value) > -1} />
+//                                                         <ListItemText primary={t.label} />
+//                                                     </MenuItem>
+//                                                 ))}
+//                                             </Select>
+//                                         </FormControl>
+//                                     </div>
+//                                 </Box>
+//                             </Stack>
+
+//                             <Stack direction={{ xs: "column", md: "row" }} spacing={2} justifyContent="space-around" mt={2}>
+//                                 <Button
+//                                     variant="contained"
+//                                     color="error"
+//                                     onClick={handleDeleteClick}
+//                                     endIcon={<DeleteForeverIcon />}
+//                                 >
+//                                     Delete
+//                                 </Button>
+//                                 <Button
+//                                     variant="contained"
+//                                     onClick={handleCancel}
+//                                     sx={{ backgroundColor: "grey.500", color: "white" }}
+//                                     endIcon={<DoDisturbIcon />}
+//                                 >
+//                                     Cancel
+//                                 </Button>
+//                             </Stack>
+//                         </Box>
+//                     </Box>
+//                 </Box>
+//             </Slide>
+
+//             {loading}
+//         </>
+//     );
+// };
+
+// export default DeleteDatabase;
