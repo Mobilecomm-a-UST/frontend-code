@@ -264,7 +264,7 @@
 //                     separator={<KeyboardArrowRightIcon fontSize="small" />}
 //                 >
 //                     <Link underline="hover" onClick={() => navigate("/tools")}>Tools</Link>
-//                     <Link underline="hover" onClick={() => navigate("/tools/mobinet_vs_cats")}>
+//                     <Link underline="hover" onClick={() => navigate("/tools/material_management")}>
 //                         Mobinate Vs Aws
 //                     </Link>
 //                     <Typography color="text.primary">DPR Control</Typography>
@@ -275,7 +275,7 @@
 //                 <Box>
 //                     <Box className={classes.main_Box}>
 //                         <Box className={classes.Back_Box} sx={{ width: { md: '75%', xs: '100%' } }}>
-//                             <Box className={classes.Box_Hading}>DPR CONTROL</Box>
+//                             <Box className={classes.Box_Hading}>Full Site Dismental DPR</Box>
 
 //                             <Stack spacing={2} sx={{ marginTop: "-40px" }} direction={'column'}>
 //                                 {/* Circle Files Upload Section */}
@@ -471,12 +471,12 @@ const exportToExcel = (data, fileName, sheetName = "Sheet1") => {
     try {
         // Create a new workbook
         let csv = [];
-        
+
         // Add headers
         if (data.length > 0) {
             const headers = Object.keys(data[0]);
             csv.push(headers.join(","));
-            
+
             // Add rows
             data.forEach(row => {
                 const values = headers.map(header => {
@@ -490,7 +490,7 @@ const exportToExcel = (data, fileName, sheetName = "Sheet1") => {
                 csv.push(values.join(","));
             });
         }
-        
+
         // Create blob and download
         const csvContent = csv.join("\n");
         const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
@@ -658,7 +658,7 @@ const DPRDashboard = ({ data, downloadUrl }) => {
                 </Grid>
                 <Grid item xs={6} sm={3}>
                     <CompactSummaryCard
-                        title="Failed"
+                        title="Failed (Old Site Id Blank)"
                         value={failed}
                         icon={WarningIcon}
                         color={COLORS.error}
@@ -973,8 +973,10 @@ const DPRControl = () => {
     const activityColumns = [
         { id: "unique_id", label: "Unique ID" },
         { id: "action", label: "Action" },
-        { id: "updated_by", label: "Updated By" },
+        // { id: "updated_fields", label: "Updated Fields" },
+        { id: "updated_fields", label: "Updated Fields", children: [{ id: "updated_by", label: "Updated By" }] },
         { id: "field_count", label: "Fields Changed", align: "center" },
+        { id: "updated_by", label: "Updated By" },
     ];
 
     const duplicateColumns = [
@@ -1000,8 +1002,8 @@ const DPRControl = () => {
                     <Link underline="hover" onClick={() => navigate("/tools")} sx={{ cursor: "pointer" }}>
                         Tools
                     </Link>
-                    <Link underline="hover" onClick={() => navigate("/tools/mobinet_vs_cats")} sx={{ cursor: "pointer" }}>
-                        Mobinate Vs AWS
+                    <Link underline="hover" onClick={() => navigate("/tools/material_management")} sx={{ cursor: "pointer" }}>
+                        Material Management
                     </Link>
                     <Typography color="text.primary">DPR Control</Typography>
                 </Breadcrumbs>
@@ -1011,7 +1013,7 @@ const DPRControl = () => {
                 <Box>
                     <Box className={classes.main_Box}>
                         <Box className={classes.Back_Box} sx={{ width: { md: "75%", xs: "100%" } }}>
-                            <Box className={classes.Box_Hading}>DPR CONTROL</Box>
+                            <Box className={classes.Box_Hading}>Full Site Dismental DPR</Box>
 
                             <Stack spacing={2} sx={{ marginTop: "-40px" }} direction="column">
                                 {/* Circle Files Upload Section */}

@@ -132,8 +132,8 @@
 //             <Box m={1} ml={2}>
 //                 <Breadcrumbs separator={<KeyboardArrowRightIcon fontSize="small" />}>
 //                     <Link underline="hover" onClick={() => navigate("/tools")}>Tools</Link>
-//                     <Link underline="hover" onClick={() => navigate("/tools/mobinet_vs_cats")}>
-//                         Mobinet Vs CATS
+//                     <Link underline="hover" onClick={() => navigate("/tools/material_management")}>
+//                         Material Management
 //                     </Link>
 //                     <Typography color="text.primary">Step 2-SRN CAM RMO</Typography>
 //                 </Breadcrumbs>
@@ -443,8 +443,8 @@ const Step2srn_cam_rmo = () => {
             <Box m={1} ml={2}>
                 <Breadcrumbs separator={<KeyboardArrowRightIcon fontSize="small" />}>
                     <Link underline="hover" onClick={() => navigate("/tools")}>Tools</Link>
-                    <Link underline="hover" onClick={() => navigate("/tools/mobinet_vs_cats")}>
-                        Mobinet Vs CATS
+                    <Link underline="hover" onClick={() => navigate("/tools/material_management")}>
+                        Material Management
                     </Link>
                     <Typography color="text.primary">Step 2-SRN CAM RMO</Typography>
                 </Breadcrumbs>

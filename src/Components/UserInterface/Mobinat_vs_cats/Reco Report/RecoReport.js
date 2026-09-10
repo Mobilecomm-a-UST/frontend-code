@@ -7,7 +7,7 @@ import Slide from '@mui/material/Slide';
 import UploadIcon from '@mui/icons-material/Upload';
 import DoDisturbIcon from '@mui/icons-material/DoDisturb';
 import Swal from "sweetalert2";
-import { postData } from "../../../services/FetchNodeServices";
+import { postDataa } from "../../../services/FetchNodeServices";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import DnsIcon from '@mui/icons-material/Dns';
 import OverAllCss from "../../../csss/OverAllCss";
@@ -364,7 +364,7 @@ const RecoReport = () => {
                 formData.append("file", circleFiles[i]);
             }
 
-            const response = await postData("mobinate_vs_cats/upload_reco_report/", formData);
+            const response = await postDataa("mobinate_vs_cats/upload_reco_report/", formData);
 
             if (response && response.status === true) {
                 setDownload(true);
@@ -404,7 +404,7 @@ const RecoReport = () => {
     };
 
     useEffect(() => {
-        document.title = "Reco Report";
+        document.title = "Reco DB";
     }, []);
 
     return (
@@ -419,10 +419,10 @@ const RecoReport = () => {
                     <Link underline="hover" onClick={() => navigate("/tools")} sx={{ cursor: "pointer" }}>
                         Tools
                     </Link>
-                    <Link underline="hover" onClick={() => navigate("/tools/mobinet_vs_cats")} sx={{ cursor: "pointer" }}>
-                        Mobinate Vs AWS
+                    <Link underline="hover" onClick={() => navigate("/tools/material_management")} sx={{ cursor: "pointer" }}>
+                        Material Management
                     </Link>
-                    <Typography color="text.primary">Reco Report</Typography>
+                    <Typography color="text.primary">Reco DB</Typography>
                 </Breadcrumbs>
             </div>
 
@@ -430,13 +430,13 @@ const RecoReport = () => {
                 <Box>
                     <Box className={classes.main_Box}>
                         <Box className={classes.Back_Box} sx={{ width: { md: "75%", xs: "100%" } }}>
-                            <Box className={classes.Box_Hading}>Reco Report</Box>
+                            <Box className={classes.Box_Hading}>Reco DB</Box>
 
                             <Stack spacing={2} sx={{ marginTop: "-40px" }} direction="column">
                                 {/* File Upload Section */}
                                 <Box className={classes.Front_Box}>
                                     <div className={classes.Front_Box_Hading}>
-                                        Select Reco Report Files:-
+                                        Select Reco DB Files:-
                                     </div>
                                     <div className={classes.Front_Box_Select_Button}>
                                         <div style={{ float: "left" }}>

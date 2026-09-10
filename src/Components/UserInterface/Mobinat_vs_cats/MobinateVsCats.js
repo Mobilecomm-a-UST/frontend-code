@@ -102,58 +102,58 @@ const MobinateVsCate = () => {
                                 <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#006e74", marginTop: 8, borderRadius: 10 }}>
                                     <Sidenav.Body>
                                         <Nav activeKey={activeKey} onSelect={setActiveKey} >
-                                            <Nav style={{ fontWeight: 500, color: 'white', textAlign: 'center', fontSize: 20 }}>Mobinet Vs AWS</Nav>
+                                            <Nav style={{ fontWeight: 500, color: 'white', textAlign: 'center', fontSize: 20 }}>Material Management</Nav>
                                             {/* <Nav.Menu eventKey="1" placement="rightStart" title="Acceptance" icon={<CheckOutlineIcon size="3em" />}>
                                                 <Nav.Item eventKey="1-1" onClick={() => { navigate('/tools/mcom_physical_at/acceptance_summary'); show(); setMenuButton(true) }} >
                                                     Acceptance Summary
                                                 </Nav.Item>
                                             </Nav.Menu> */}
-                                            <Nav.Item eventKey="1" placement="rightStart" className="single-item-custom" icon={<FolderIcon style={{}} />} onClick={() => { navigate('/tools/mobinet_vs_cats/file_manager'); show(); setMenuButton(true) }}>
+                                            <Nav.Item eventKey="1" placement="rightStart" className="single-item-custom" icon={<FolderIcon style={{}} />} onClick={() => { navigate('/tools/material_management/file_manager'); show(); setMenuButton(true) }}>
                                                 File Manager
                                             </Nav.Item>
-                                            {/* <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/mobinet'); show(); setMenuButton(true) }}>
+                                            {/* <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/material_management/mobinet'); show(); setMenuButton(true) }}>
                                                 Step 1: Mobinet
                                             </Nav.Item>
-                                            <Nav.Item eventKey="3" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/CATS'); show(); setMenuButton(true) }}>
+                                            <Nav.Item eventKey="3" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/material_management/CATS'); show(); setMenuButton(true) }}>
                                                 Step 2: CATS
                                             </Nav.Item> */}
-                                             {/* <Nav.Item eventKey="4" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/site_mapping'); show(); setMenuButton(true) }}>
+                                             {/* <Nav.Item eventKey="4" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/material_management/site_mapping'); show(); setMenuButton(true) }}>
                                                 Site Mapping
                                             </Nav.Item>
-                                              <Nav.Item eventKey="5" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/sn_mapping'); show(); setMenuButton(true) }}>
+                                              <Nav.Item eventKey="5" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/material_management/sn_mapping'); show(); setMenuButton(true) }}>
                                                 SN Mapping
                                             </Nav.Item> */}
                                             <Nav.Menu eventKey="4" placement='rightstart' title="Forword Material Reconcilation" className="menu-title-custom" icon={<ChangeListIcon /> }>
-                                            <Nav.Item eventKey="4-1" placement="rightStart" className="single-item-custom" icon={<ArrowRightIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/fmr'); show(); setMenuButton(true) }}>
+                                            <Nav.Item eventKey="4-1" placement="rightStart" className="single-item-custom" icon={<ArrowRightIcon />} onClick={() => { navigate('/tools/material_management/fmr'); show(); setMenuButton(true) }}>
                                               Step 1-Mobinate Working
                                             </Nav.Item>
-                                            <Nav.Item eventKey="4-2" placement="rightStart" className="single-item-custom" icon={<ArrowRightIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/Step2srn_cam_rmo'); show(); setMenuButton(true) }}>
+                                            <Nav.Item eventKey="4-2" placement="rightStart" className="single-item-custom" icon={<ArrowRightIcon />} onClick={() => { navigate('/tools/material_management/Step2srn_cam_rmo'); show(); setMenuButton(true) }}>
                                                Step 2-SRN/CAM/RMO
                                             </Nav.Item>
                                             </Nav.Menu>
                                             <Nav.Menu eventKey="5" placement='rightstart' title=" Reverse Material Reconcilation" className="menu-title-custom" icon={<ChangeListIcon /> }>
-                                             <Nav.Item eventKey="5-1" placement="rightStart" className="single-item-custom" icon={<ArrowRightIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/RecoMaterial'); show(); setMenuButton(true) }}>
+                                             <Nav.Item eventKey="5-1" placement="rightStart" className="single-item-custom" icon={<ArrowRightIcon />} onClick={() => { navigate('/tools/material_management/RecoMaterial'); show(); setMenuButton(true) }}>
                                                 Step 1-Reco Data
                                             </Nav.Item>
-                                             <Nav.Item eventKey="5-2" placement="rightStart" className="single-item-custom" icon={<ArrowRightIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/LiveMobReco'); show(); setMenuButton(true) }}>
+                                             <Nav.Item eventKey="5-2" placement="rightStart" className="single-item-custom" icon={<ArrowRightIcon />} onClick={() => { navigate('/tools/material_management/LiveMobReco'); show(); setMenuButton(true) }}>
                                                 Step 2-Live Mob + Reco
                                             </Nav.Item>
                                             </Nav.Menu>
-                                             <Nav.Item eventKey="6" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/MicrowaveReconcilation'); show(); setMenuButton(true) }}>
+                                             <Nav.Item eventKey="6" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/material_management/MicrowaveReconcilation'); show(); setMenuButton(true) }}>
                                                 Microwave Reconcilation
                                             </Nav.Item>
-                                            <Nav.Item eventKey="7" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/DegrowReconcilation'); show(); setMenuButton(true) }}>
+                                            <Nav.Item eventKey="7" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/material_management/DegrowReconcilation'); show(); setMenuButton(true) }}>
                                                 Degrow Reconcilation
                                             </Nav.Item>
 
-                                             <Nav.Item eventKey="8" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/DPRControl'); show(); setMenuButton(true) }}>
-                                                DPR Control
+                                             <Nav.Item eventKey="8" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/material_management/DPRControl'); show(); setMenuButton(true) }}>
+                                                Full Site Dismental DPR
                                             </Nav.Item>
-                                             <Nav.Item eventKey="9" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/DPRDashboard'); show(); setMenuButton(true) }}>
-                                                Mobinet Dump Store
+                                             <Nav.Item eventKey="9" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/material_management/DPRDashboard'); show(); setMenuButton(true) }}>
+                                                Mobinet DB
                                             </Nav.Item>
-                                             <Nav.Item eventKey="10" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobinet_vs_cats/RecoReport'); show(); setMenuButton(true) }}>
-                                                Reco Report
+                                             <Nav.Item eventKey="10" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/material_management/RecoReport'); show(); setMenuButton(true) }}>
+                                                Reco DB
                                             </Nav.Item>
 
 

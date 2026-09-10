@@ -50,6 +50,7 @@ const NokiaUploadAlarm = lazy(()=>import('./Nokia_SA_NSA/UploadNokiaAlarm'))
 const UserCount = lazy(()=>import('./NokiaStatus/UserCounter'))
 const Summary_5G = lazy(()=>import('./NokiaStatus/Summary_5G'))
 const NRRELParser = lazy(()=>import('./5G NRREL Parser/NRRELParser'))
+const HuaweiChecklist = lazy(()=>import('./Huawei Soft AT/HuaweiChecklist'))
 
 
 const SoftAT = () => {
@@ -215,6 +216,9 @@ const SoftAT = () => {
                       <Nav.Item eventKey="9" className="single-item-custom" placement="rightStart" icon={<PageIcon />} onClick={() => { navigate('/tools/soft_at_tools/airtel_soft_at/5g_nrrel_parser'); show(); setMenuButton(true) }}>
                         5G NRREL Parser
                       </Nav.Item>
+                       <Nav.Item eventKey="10" className="single-item-custom" placement="rightStart" icon={<PageIcon />} onClick={() => { navigate('/tools/soft_at_tools/airtel_soft_at/huawei_checklist'); show(); setMenuButton(true) }}>
+                       Huawei Checklist
+                      </Nav.Item>
                        
 
                     </Nav>
@@ -258,6 +262,7 @@ const SoftAT = () => {
                 <Route element={<NRRELParser />} path='/5g_nrrel_parser' />
                 <Route element={<Nokiacheclist5g />} path='/nokia_5g_checklist' />
                 {userTypes?.includes('Admin') && <Route element={<UserCount />} path='/nokia_user_count' />}
+                <Route element={<HuaweiChecklist />} path='/huawei_checklist' />
 
               </Routes>
             </Suspense>

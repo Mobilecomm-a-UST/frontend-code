@@ -82,18 +82,19 @@ const PendingPerformanceRemarks = () => {
                                             <Nav.Item eventKey="1" placement="rightStart" className="single-item-custom" icon={< FolderVerifyIcon style={{}} />} onClick={() => { navigate('/tools/quality_team/pending_performance_re/UploadFile'); show(); setMenuButton(true) }}>
                                                 Input File
                                             </Nav.Item>
+                                             <Nav.Item eventKey="4" placement="rightStart" className="single-item-custom" icon={< FileDownloadIcon style={{}} />} onClick={() => { navigate('/tools/quality_team/pending_performance_re/DownloadTemplate'); show(); setMenuButton(true) }}>
+                                                Download Template
+                                            </Nav.Item>
+                                             <Nav.Item eventKey="5" placement="rightStart" className="single-item-custom" icon={< FileUploadIcon style={{}} />} onClick={() => { navigate('/tools/quality_team/pending_performance_re/Uploadupdatedreport'); show(); setMenuButton(true) }}>
+                                                Upload Updated Report
+                                            </Nav.Item>
                                             <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={< ConversionIcon style={{}} />} onClick={() => { navigate('/tools/quality_team/pending_performance_re/Sitewiseremark'); show(); setMenuButton(true) }}>
                                                 Site-Wise Remarks
                                             </Nav.Item>
                                             <Nav.Item eventKey="3" placement="rightStart" className="single-item-custom" icon={< FileDownloadIcon style={{}} />} onClick={() => { navigate('/tools/quality_team/pending_performance_re/DownloadCompleteReport'); show(); setMenuButton(true) }}>
                                                 Download Complete Report
                                             </Nav.Item>
-                                            <Nav.Item eventKey="4" placement="rightStart" className="single-item-custom" icon={< FileDownloadIcon style={{}} />} onClick={() => { navigate('/tools/quality_team/pending_performance_re/DownloadTemplate'); show(); setMenuButton(true) }}>
-                                                Download Template
-                                            </Nav.Item>
-                                            <Nav.Item eventKey="5" placement="rightStart" className="single-item-custom" icon={< FileUploadIcon style={{}} />} onClick={() => { navigate('/tools/quality_team/pending_performance_re/Uploadupdatedreport'); show(); setMenuButton(true) }}>
-                                                Upload Updated Report
-                                            </Nav.Item>
+                                           
                                             <Nav.Item eventKey="6" placement="rightStart" className="single-item-custom" icon={< WarningRoundIcon style={{}} />} onClick={() => { navigate('/tools/quality_team/pending_performance_re/DeleteDatabase'); show(); setMenuButton(true) }}>
                                                 Delete Database
                                             </Nav.Item>

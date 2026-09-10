@@ -43,6 +43,8 @@ import BytedanceIcon from '@rsuite/icons/Bytedance';
 import WidgetsIcon from '@mui/icons-material/Widgets';
 import LocationSearchingRoundedIcon from '@mui/icons-material/LocationSearchingRounded';
 
+
+
 import { groupBy } from 'lodash';
 
 // const userType =  ['admin','quality','central','soft_at','circle']
@@ -322,11 +324,11 @@ const ToolData = [
     ,
     {
         id: 28,
-        name: 'Mobinet VS AWS',
-        title: 'This is a Mobinet VS AWS Tool',
+        name: 'Material Mgmt',
+        title: 'This is a Material Management Tool',
         icons: FunnelStepsIcon,
-        fullname: 'Mobinet VS AWS Tool',
-        link: '/tools/mobinet_vs_cats',
+        fullname: 'Material Management Tool',
+        link: '/tools/material_management',
         groupBy: ['admin', 'ran']
     },
     {
@@ -456,7 +458,7 @@ const ToolData = [
     },
     {
         id: 40,
-        name: 'Resource Mgt',
+        name: 'Resource Mgmt',
         title: 'Resource Management System',
         icons: DateTaskIcon,
         fullname: 'Resource Management',

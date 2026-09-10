@@ -304,7 +304,7 @@ function App() {
               </Suspense>
             } />
 
-            <Route path="/tools/mobinet_vs_cats/*" element={
+            <Route path="/tools/material_management/*" element={
               <Suspense fallback={<div>Loading...</div>}>
                 <ProtectedRoute element={MobinateVsCate} allowedUserTypes={['admin', 'ran']} userType={userType} />
               </Suspense>

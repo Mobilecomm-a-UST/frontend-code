@@ -12,7 +12,7 @@
 // } from "@mui/icons-material";
 // import Swal from "sweetalert2";
 // import { useNavigate } from "react-router-dom";
-// import { postData, ServerURL } from "../../../services/FetchNodeServices";
+// import { postDataa, ServerURL } from "../../../services/FetchNodeServices";
 // import OverAllCss from "../../../csss/OverAllCss";
 // import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
 
@@ -129,7 +129,7 @@
 //         action(true);
 //         const formData = new FormData();
 //         formData.append("file", uploadFile);
-//         const response = await postData("pending_performance_at_remarks/upload/", formData);
+//         const response = await postDataa("pending_performance_at_remarks/upload/", formData);
 //         action(false);
 //         if (response?.message) {
 //             setUploadSummary(response.summary || null);
@@ -169,7 +169,7 @@
 //         formData.append("circle", remarksCircle);
 //         formData.append("additional_remarks", additionalRemarks);
 //         formData.append("tag", tag);
-//         const response = await postData("pending_performance_at_remarks/remarks/", formData);
+//         const response = await postDataa("pending_performance_at_remarks/remarks/", formData);
 //         action(false);
 //         if (response?.message) {
 //             setRemarksResult(response);
@@ -206,7 +206,7 @@
 //         const formData = new FormData();
 //         formData.append("band", reportBand);
 //         formData.append("month", formattedMonth);
-//         const response = await postData("pending_performance_at_remarks/download/", formData);
+//         const response = await postDataa("pending_performance_at_remarks/download/", formData);
 //         action(false);
 //         if (response?.status) {
 //             setReportResult(response);
@@ -236,7 +236,7 @@
 //         action(true);
 //         const formData = new FormData();
 //         formData.append("circle", templateCircle);
-//         const response = await postData("pending_performance_at_remarks/remarks-template/", formData);
+//         const response = await postDataa("pending_performance_at_remarks/remarks-template/", formData);
 //         action(false);
 //         if (response?.status) {
 //             setTemplateResult(response);
@@ -273,7 +273,7 @@
 //         action(true);
 //         const formData = new FormData();
 //         formData.append("file", reportUploadFile);
-//         const response = await postData("pending_performance_at_remarks/remarks-template/upload/", formData);
+//         const response = await postDataa("pending_performance_at_remarks/remarks-template/upload/", formData);
 //         action(false);
 //         if (response?.status) {
 //             setReportUploadResult(response);
@@ -610,7 +610,7 @@ import {
 } from "@mui/icons-material";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-import { postData, ServerURL } from "../../../services/FetchNodeServices";
+import { postDataa, ServerURL } from "../../../services/FetchNodeServices";
 import OverAllCss from "../../../csss/OverAllCss";
 import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
 
@@ -742,7 +742,7 @@ const DownloadCompleteReport = () => {
         action(true);
         const formData = new FormData();
         formData.append("file", uploadFile);
-        const response = await postData("pending_performance_at_remarks/upload/", formData);
+        const response = await postDataa("pending_performance_at_remarks/upload/", formData);
         action(false);
         if (response?.message) {
             setUploadSummary(response.summary || null);
@@ -782,7 +782,7 @@ const DownloadCompleteReport = () => {
         formData.append("circle", remarksCircle);
         formData.append("additional_remarks", additionalRemarks);
         formData.append("tag", tag);
-        const response = await postData("pending_performance_at_remarks/remarks/", formData);
+        const response = await postDataa("pending_performance_at_remarks/remarks/", formData);
         action(false);
         if (response?.message) {
             setRemarksResult(response);
@@ -838,7 +838,7 @@ const DownloadCompleteReport = () => {
         // Two separate fields, each "MMM-YY".
         formData.append("start_month", formattedStartMonth);
         formData.append("end_month", formattedEndMonth);
-        const response = await postData("pending_performance_at_remarks/download/", formData);
+        const response = await postDataa("pending_performance_at_remarks/download/", formData);
         action(false);
         if (response?.status) {
             setReportResult(response);
@@ -869,7 +869,7 @@ const DownloadCompleteReport = () => {
         action(true);
         const formData = new FormData();
         formData.append("circle", templateCircle);
-        const response = await postData("pending_performance_at_remarks/remarks-template/", formData);
+        const response = await postDataa("pending_performance_at_remarks/remarks-template/", formData);
         action(false);
         if (response?.status) {
             setTemplateResult(response);
@@ -906,7 +906,7 @@ const DownloadCompleteReport = () => {
         action(true);
         const formData = new FormData();
         formData.append("file", reportUploadFile);
-        const response = await postData("pending_performance_at_remarks/remarks-template/upload/", formData);
+        const response = await postDataa("pending_performance_at_remarks/remarks-template/upload/", formData);
         action(false);
         if (response?.status) {
             setReportUploadResult(response);
