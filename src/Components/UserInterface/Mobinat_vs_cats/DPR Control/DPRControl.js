@@ -434,7 +434,7 @@
 
 
 import React, { useState, useEffect } from "react";
-import { Box, Button, Stack, Card, CardContent, Grid, Typography, Alert, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { Box, Button, Stack, Card, CardContent, Grid, Typography, Alert, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Tooltip } from "@mui/material";
 import { Breadcrumbs, Link } from "@mui/material";
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { useNavigate } from "react-router-dom";
@@ -442,9 +442,10 @@ import Slide from '@mui/material/Slide';
 import UploadIcon from '@mui/icons-material/Upload';
 import DoDisturbIcon from '@mui/icons-material/DoDisturb';
 import Swal from "sweetalert2";
-import { postData } from "../../../services/FetchNodeServices";
+import { postDataa } from "../../../services/FetchNodeServices";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import DnsIcon from '@mui/icons-material/Dns';
+import SearchIcon from '@mui/icons-material/Search';
 import OverAllCss from "../../../csss/OverAllCss";
 import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -862,6 +863,117 @@ const DownloadableTableSection = ({ title, data, columns, onDownload, icon: Icon
 };
 
 /* ================================================================ */
+/*  DPR Log Export Result Display - ADDED                           */
+/* ================================================================ */
+const DPRLogExportResult = ({ data }) => {
+    if (!data) return null;
+
+    const {
+        message,
+        filter_type,
+        filter,
+        from_date,
+        to_date,
+        total_unique_ids,
+        total_dates,
+        total_log_rows,
+        download_url,
+    } = data;
+
+    const handleDownload = () => {
+        if (download_url) {
+            window.open(download_url, "_blank");
+        }
+    };
+
+    return (
+        <Box
+            sx={{
+                mt: 2,
+                p: 2,
+                background: COLORS.lightBg,
+                borderRadius: 1.5,
+                border: `1px solid ${COLORS.borderColor}`,
+            }}
+        >
+            <Alert
+                icon={<CheckCircleIcon sx={{ fontSize: "18px" }} />}
+                severity="success"
+                sx={{
+                    background: `${COLORS.success}15`,
+                    border: `1px solid ${COLORS.success}`,
+                    color: COLORS.success,
+                    fontWeight: 600,
+                    fontSize: "12px",
+                    mb: 2,
+                    py: 1,
+                    px: 1.5,
+                }}
+            >
+                ✓ {message}
+            </Alert>
+
+            <Grid container spacing={1.5} sx={{ mb: 2 }}>
+                {/* <Grid item xs={6} sm={3}>
+                    <CompactSummaryCard
+                        title="Filter Type"
+                        value={filter_type || "-"}
+                        icon={SearchIcon}
+                        color={COLORS.primary}
+                    />
+                </Grid> */}
+                <Grid item xs={6} sm={3}>
+                    <CompactSummaryCard
+                        title="Unique IDs"
+                        value={total_unique_ids || 0}
+                        icon={InfoIcon}
+                        color={COLORS.info}
+                    />
+                </Grid>
+                <Grid item xs={6} sm={3}>
+                    <CompactSummaryCard
+                        title="Dates"
+                        value={total_dates || 0}
+                        icon={FileDownloadIcon}
+                        color={COLORS.primary}
+                    />
+                </Grid>
+                {/* <Grid item xs={6} sm={3}>
+                    <CompactSummaryCard
+                        title="Log Rows"
+                        value={total_log_rows || 0}
+                        icon={TrendingUpIcon}
+                        color={COLORS.success}
+                    />
+                </Grid> */}
+            </Grid>
+
+            {download_url && (
+                <Button
+                    variant="contained"
+                    startIcon={<FileDownloadIcon sx={{ fontSize: "16px" }} />}
+                    onClick={handleDownload}
+                    size="small"
+                    fullWidth
+                    sx={{
+                        background: COLORS.primary,
+                        color: "#fff",
+                        fontWeight: 700,
+                        textTransform: "none",
+                        fontSize: "12px",
+                        py: 1,
+                        borderRadius: 1,
+                        "&:hover": { background: COLORS.primaryDark },
+                    }}
+                >
+                    Download DPR Log Excel
+                </Button>
+            )}
+        </Box>
+    );
+};
+
+/* ================================================================ */
 /*  Main DPR Control Component                                      */
 /* ================================================================ */
 const DPRControl = () => {
@@ -872,9 +984,17 @@ const DPRControl = () => {
     const [fileData, setFileData] = useState();
     const [download, setDownload] = useState(false);
     const [resultData, setResultData] = useState(null);
+    const [isDownloadingDump, setIsDownloadingDump] = useState(false);
     const { loading, action } = useLoadingDialog();
     const navigate = useNavigate();
     const classes = OverAllCss();
+
+    // ADDED: State for DPR Log filter
+    const [logUniqueId, setLogUniqueId] = useState("");
+    const [logFromDate, setLogFromDate] = useState("");
+    const [logToDate, setLogToDate] = useState("");
+    const [isExportingLog, setIsExportingLog] = useState(false);
+    const [logExportResult, setLogExportResult] = useState(null);
 
     // Handle Circle Files Selection
     const handleCircleFileSelection = (event) => {
@@ -919,7 +1039,7 @@ const DPRControl = () => {
                 formData.append("milestone_file", milestoneFiles[i]);
             }
 
-            const response = await postData("mobinate_vs_cats/dpr_data_stor/", formData);
+            const response = await postDataa("mobinate_vs_cats/dpr_data_stor/", formData);
 
             if (response.status === true) {
                 setDownload(true);
@@ -960,6 +1080,116 @@ const DPRControl = () => {
         setFileData(null);
     };
 
+    // ADDED: Download DPR Dump from Database
+    // ADDED: Download DPR Dump from Database
+    // ADDED: Download DPR Dump from Database
+    const handleDownloadDPRDump = async () => {
+        try {
+            setIsDownloadingDump(true);
+            const dprDumpUrl = "https://commtoolapi.mcpspmis.com/mobinate_vs_cats/export_dpr_excel/";
+
+            // Fetch the API response
+            const response = await fetch(dprDumpUrl, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            const result = await response.json();
+
+            // Check if API response is successful
+            if (result.success && result.download_url) {
+                // Open the download_url directly
+                window.open(result.download_url, "_blank");
+
+                Swal.fire({
+                    icon: "success",
+                    title: "Success",
+                    text: result.message || "DPR Dump downloaded successfully",
+                });
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: result.message || "Failed to generate DPR Dump",
+                });
+            }
+        } catch (error) {
+            console.error("Download error:", error);
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: error.message || "Failed to download DPR Dump",
+            });
+        } finally {
+            setIsDownloadingDump(false);
+        }
+    };
+    // ADDED: Export DPR Log Excel
+    const handleExportDPRLog = async () => {
+        try {
+            setIsExportingLog(true);
+
+            const formData = new FormData();
+
+            if (logUniqueId && logUniqueId.trim() !== "") {
+                formData.append("unique_id", logUniqueId.trim());
+            }
+
+            if (logFromDate) {
+                formData.append("from_date", logFromDate);
+            }
+
+            if (logToDate) {
+                formData.append("to_date", logToDate);
+            }
+
+            const response = await fetch(
+                "https://commtoolapi.mcpspmis.com/mobinate_vs_cats/export_dpr_log_excel/",
+                {
+                    method: "POST",
+                    body: formData,
+                }
+            );
+
+            const result = await response.json();
+
+            if (result.success) {
+                setLogExportResult(result);
+                Swal.fire({
+                    icon: "success",
+                    title: "Success",
+                    text: result.message || "DPR log Excel generated successfully.",
+                });
+            } else {
+                setLogExportResult(null);
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: result.message || "Failed to generate DPR log Excel",
+                });
+            }
+        } catch (error) {
+            console.error("Export DPR Log error:", error);
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: error.message || "Failed to export DPR log Excel",
+            });
+        } finally {
+            setIsExportingLog(false);
+        }
+    };
+
+    // ADDED: Reset the log filter fields
+    const handleResetLogFilter = () => {
+        setLogUniqueId("");
+        setLogFromDate("");
+        setLogToDate("");
+        setLogExportResult(null);
+    };
+
     useEffect(() => {
         document.title = "DPR Control";
     }, []);
@@ -973,8 +1203,7 @@ const DPRControl = () => {
     const activityColumns = [
         { id: "unique_id", label: "Unique ID" },
         { id: "action", label: "Action" },
-        // { id: "updated_fields", label: "Updated Fields" },
-        { id: "updated_fields", label: "Updated Fields", children: [{ id: "updated_by", label: "Updated By" }] },
+        { id: "updated_fields", label: "Updated Fields" },
         { id: "field_count", label: "Fields Changed", align: "center" },
         { id: "updated_by", label: "Updated By" },
     ];
@@ -1011,6 +1240,44 @@ const DPRControl = () => {
 
             <Slide direction="left" in={true} timeout={1000}>
                 <Box>
+                    {/* ADDED: Floating Download Button for DPR Dump - Top Right */}
+                    <Tooltip title="Download DPR Dump from Database" placement="left">
+                        <Button
+                            onClick={handleDownloadDPRDump}
+                            disabled={isDownloadingDump}
+                            sx={{
+                                position: "fixed",
+                                top: 100,
+                                right: 20,
+                                backgroundColor: "#0066CC",
+                                color: "#fff",
+                                borderRadius: "50px",
+                                padding: "10px 24px",
+                                fontWeight: 700,
+                                fontSize: "14px",
+                                textTransform: "none",
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 1,
+                                zIndex: 1000,
+                                boxShadow: "0 4px 12px rgba(0, 102, 204, 0.3)",
+                                transition: "all 0.3s ease",
+                                "&:hover": {
+                                    backgroundColor: "#0052A3",
+                                    transform: "translateY(-2px)",
+                                    boxShadow: "0 6px 16px rgba(0, 102, 204, 0.4)",
+                                },
+                                "&:disabled": {
+                                    backgroundColor: "#cccccc",
+                                    cursor: "not-allowed",
+                                },
+                            }}
+                        >
+                            <FileDownloadIcon sx={{ fontSize: 20 }} />
+                            <span>DPR Dump</span>
+                        </Button>
+                    </Tooltip>
+
                     <Box className={classes.main_Box}>
                         <Box className={classes.Back_Box} sx={{ width: { md: "75%", xs: "100%" } }}>
                             <Box className={classes.Box_Hading}>Full Site Dismental DPR</Box>
@@ -1156,6 +1423,106 @@ const DPRControl = () => {
                                     />
                                 </>
                             )}
+
+                            {/* ================================================================ */}
+                            {/* ADDED: DPR Log Excel Export Filter Section                       */}
+                            {/* ================================================================ */}
+                            <Paper
+                                sx={{
+                                    mt: 4,
+                                    borderRadius: 1.5,
+                                    border: `1px solid ${COLORS.borderColor}`,
+                                    overflow: "hidden",
+                                }}
+                            >
+                                <Box
+                                    sx={{
+                                        background: COLORS.headerGradient,
+                                        p: 1.5,
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: 1,
+                                    }}
+                                >
+                                    <FileDownloadIcon sx={{ color: "#fff", fontSize: 18 }} />
+                                    <Typography
+                                        sx={{
+                                            color: "#fff",
+                                            fontWeight: 700,
+                                            fontSize: "12px",
+                                            textTransform: "uppercase",
+                                            letterSpacing: 0.3,
+                                        }}
+                                    >
+                                        Export DPR Log Excel (Filter by Unique ID / Date Range)
+                                    </Typography>
+                                </Box>
+
+                                <Box sx={{ p: 2 }}>
+                                    <Grid container spacing={2} alignItems="center">
+                                        <Grid item xs={12} sm={4}>
+                                            <TextField
+                                                label="Unique ID (optional)"
+                                                placeholder="e.g. GUW689_NESA"
+                                                fullWidth
+                                                size="small"
+                                                value={logUniqueId}
+                                                onChange={(e) => setLogUniqueId(e.target.value)}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={6} sm={4}>
+                                            <TextField
+                                                label="From Date"
+                                                type="date"
+                                                fullWidth
+                                                size="small"
+                                                InputLabelProps={{ shrink: true }}
+                                                value={logFromDate}
+                                                onChange={(e) => setLogFromDate(e.target.value)}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={6} sm={4}>
+                                            <TextField
+                                                label="To Date"
+                                                type="date"
+                                                fullWidth
+                                                size="small"
+                                                InputLabelProps={{ shrink: true }}
+                                                value={logToDate}
+                                                onChange={(e) => setLogToDate(e.target.value)}
+                                            />
+                                        </Grid>
+                                    </Grid>
+
+                                    <Typography sx={{ fontSize: "11px", color: "#888", mt: 1 }}>
+                                        Leave Unique ID empty to export data for all unique IDs.
+                                    </Typography>
+
+                                    <Stack direction={{ xs: "column", sm: "row" }} spacing={2} sx={{ mt: 2 }}>
+                                        <Button
+                                            variant="contained"
+                                            color="success"
+                                            onClick={handleExportDPRLog}
+                                            disabled={isExportingLog}
+                                            endIcon={<SearchIcon />}
+                                        >
+                                            {isExportingLog ? "Exporting..." : "Export DPR Log"}
+                                        </Button>
+
+                                        <Button
+                                            variant="contained"
+                                            onClick={handleResetLogFilter}
+                                            style={{ backgroundColor: "red", color: "white" }}
+                                            endIcon={<DoDisturbIcon />}
+                                        >
+                                            Reset
+                                        </Button>
+                                    </Stack>
+
+                                    {/* Result of the DPR Log export */}
+                                    <DPRLogExportResult data={logExportResult} />
+                                </Box>
+                            </Paper>
                         </Box>
                     </Box>
                 </Box>

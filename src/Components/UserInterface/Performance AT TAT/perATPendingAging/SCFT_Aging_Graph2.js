@@ -121,9 +121,9 @@ const METRIC_THEME = {
 const CATEGORY_FILTERS = [
     { key: "ALL", label: "All", color: "#546e7a" },
     { key: "0-3days%", label: "0-3days%", color: "#1565C0" },
-    { key: "3-5days%", label: "3-5days%", color: "#2E7D32" },
-    { key: "5-7days%", label: "5-7days%", color: "#E65100" },
-    { key: ">7days%", label: ">7days%", color: "#6A1B9A" },
+    { key: "3-7days%", label: "3-7days%", color: "#2E7D32" },
+    { key: "7-14days%", label: "7-14days%", color: "#E65100" },
+    { key: ">14days%", label: ">14days%", color: "#6A1B9A" },
     { key: "Pending%", label: "Pending%", color: "#C62828" },
 ];
 

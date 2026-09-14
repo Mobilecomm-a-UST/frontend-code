@@ -1,5 +1,326 @@
 // import React, { useState, useEffect } from "react";
 // import {
+//     Box, Button, Stack, Breadcrumbs, Link, Typography, Slide,
+//     TextField, MenuItem, Select, InputLabel, FormControl, Grid,
+// } from "@mui/material";
+// // ✅ Import all icons from @mui/icons-material
+// import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+// import DownloadIcon from '@mui/icons-material/Download';
+// import DoDisturbIcon from '@mui/icons-material/DoDisturb';
+// import Swal from "sweetalert2";
+// import { useNavigate } from "react-router-dom";
+// import { postDataa } from "../../../services/FetchNodeServices";
+// import OverAllCss from "../../../csss/OverAllCss";
+// import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
+// import { getDecreyptedData } from "../../../utils/localstorage";
+
+// const bandArray = ['4G', '5G', 'Accepted'];
+// const archivedArray = ['Archived'];
+
+// const DownloadCompleteReport = () => {
+//     const { loading, action } = useLoadingDialog();
+//     const navigate = useNavigate();
+//     const classes = OverAllCss();
+
+//     // User info from localStorage
+//     const userTypes = (getDecreyptedData('user_type')?.split(","))
+
+//     // Check if user is QT_PPR
+
+
+//     // State variables
+//     const [selectedBand, setSelectedBand] = useState("");
+//     const [archived, setArchived] = useState("");
+//     const [startDate, setStartDate] = useState("");
+//     const [endDate, setEndDate] = useState("");
+//     const [errors, setErrors] = useState({
+//         band: false,
+//         startDate: false,
+//         endDate: false,
+//     });
+//     const [reportData, setReportData] = useState(null);
+
+//     // Handle form submission
+//     const handleSubmit = async () => {
+//         // Validation
+//         const isValid = selectedBand !== "" && startDate !== "" && endDate !== "";
+
+//         if (!isValid) {
+//             setErrors({
+//                 band: selectedBand === "",
+//                 startDate: startDate === "",
+//                 endDate: endDate === "",
+//             });
+//             return;
+//         }
+
+//         // Validate date range
+//         if (new Date(startDate) > new Date(endDate)) {
+//             Swal.fire({
+//                 icon: "warning",
+//                 title: "Invalid Date Range",
+//                 text: "Start date must be before end date",
+//             });
+//             return;
+//         }
+
+//         try {
+//             action(true);
+
+//             const formData = new FormData();
+//             formData.append("band", selectedBand);
+//             formData.append("start_date", startDate);
+//             formData.append("end_date", endDate);
+//             formData.append("archived", archived);
+
+//             // Add archived only if QT_PPR user selected it
+
+//             formData.append("archived", archived);
+
+
+//             const response = await postDataa(
+//                 "pending_performance_at_remarks/download-report/",
+//                 formData
+//             );
+
+//             action(false);
+
+//             if (response?.status === true) {
+//                 if (response.download_url) {
+//                     // Download the file
+//                     window.open(response.download_url, "_blank");
+//                     Swal.fire({
+//                         icon: "success",
+//                         title: "Success",
+//                         text: response.message || "Report downloaded successfully",
+//                     });
+//                 } else {
+//                     Swal.fire({
+//                         icon: "success",
+//                         title: "Success",
+//                         text: response.message || "Report generated successfully",
+//                     });
+//                 }
+//                 setReportData(response);
+//             } else {
+//                 Swal.fire({
+//                     icon: "error",
+//                     title: "Error",
+//                     text: response?.message || "Failed to download report",
+//                 });
+//             }
+//         } catch (error) {
+//             action(false);
+//             Swal.fire({
+//                 icon: "error",
+//                 title: "Error",
+//                 text: error.message || "Failed to download report",
+//             });
+//         }
+//     };
+
+//     // Handle form reset
+//     const handleCancel = () => {
+//         setSelectedBand("");
+//         setArchived("");
+//         setStartDate("");
+//         setEndDate("");
+//         setErrors({ band: false, startDate: false, endDate: false });
+//         setReportData(null);
+//     };
+
+//     useEffect(() => {
+//         document.title = "Download Report";
+//     }, []);
+
+//     return (
+//         <>
+//             <Box m={1} ml={2}>
+//                 <Breadcrumbs separator={<KeyboardArrowRightIcon fontSize="small" />}>
+//                     <Link underline="hover" onClick={() => navigate("/tools")} sx={{ cursor: 'pointer' }}>
+//                         Tools
+//                     </Link>
+//                     <Link underline="hover" onClick={() => navigate("/tools/pending_performance_at_remarks")} sx={{ cursor: 'pointer' }}>
+//                         Pending Performance AT
+//                     </Link>
+//                     <Typography color="text.primary">Download Report</Typography>
+//                 </Breadcrumbs>
+//             </Box>
+
+//             <Slide direction="left" in timeout={1000}>
+//                 <Box>
+//                     <Box className={classes.main_Box}>
+//                         <Box className={classes.Back_Box} sx={{ width: { md: "75%", xs: "100%" } }}>
+//                             <Box className={classes.Box_Hading}>Download Report</Box>
+
+//                             <Stack spacing={2} sx={{ mt: "-40px" }}>
+//                                 {/* Select Band Row */}
+//                                 <Grid container spacing={2}>
+//                                     {/* Select Band */}
+//                                     <Grid item xs={12} sm={6}>
+//                                         <Box className={classes.Front_Box}>
+//                                             <div className={classes.Front_Box_Hading}>Select Band:</div>
+//                                             <div className={classes.Front_Box_Select_Button}>
+//                                                 <FormControl sx={{ minWidth: "100%", maxWidth: 300 }}>
+//                                                     <InputLabel id="band-label">Select Band</InputLabel>
+//                                                     <Select
+//                                                         labelId="band-label"
+//                                                         id="band-select"
+//                                                         value={selectedBand}
+//                                                         label="Select Band"
+//                                                         onChange={(e) => {
+//                                                             setSelectedBand(e.target.value);
+//                                                             setErrors((p) => ({ ...p, band: false }));
+//                                                         }}
+//                                                     >
+//                                                         <MenuItem value="">
+//                                                             <em>None</em>
+//                                                         </MenuItem>
+//                                                         {bandArray.map((b) => (
+//                                                             <MenuItem key={b} value={b}>
+//                                                                 {b}
+//                                                             </MenuItem>
+//                                                         ))}
+//                                                     </Select>
+//                                                 </FormControl>
+//                                                 {errors.band && (
+//                                                     <span style={{ color: "red", fontSize: 14, fontWeight: 600, marginLeft: 10 }}>
+//                                                         This Field Is Required!
+//                                                     </span>
+//                                                 )}
+//                                             </div>
+//                                         </Box>
+//                                     </Grid>
+
+//                                     {/* Overall Report (Archived) - Only for QT_PPR users */}
+//                                     {!userTypes?.includes('QT_PPR') &&
+//                                         <Grid item xs={12} sm={6}>
+//                                             <Box className={classes.Front_Box}>
+//                                                 <div className={classes.Front_Box_Hading}>Overall Report:</div>
+//                                                 <div className={classes.Front_Box_Select_Button}>
+//                                                     <FormControl sx={{ minWidth: "100%", maxWidth: 300 }}>
+//                                                         <InputLabel id="archived-label">Select Status</InputLabel>
+//                                                         <Select
+//                                                             labelId="archived-label"
+//                                                             id="archived-select"
+//                                                             value={archived}
+//                                                             label="Select Status"
+//                                                             onChange={(e) => setArchived(e.target.value)}
+//                                                         >
+//                                                             <MenuItem value="">
+//                                                                 <em>None</em>
+//                                                             </MenuItem>
+//                                                             {archivedArray.map((a) => (
+//                                                                 <MenuItem key={a} value={a}>
+//                                                                     {a}
+//                                                                 </MenuItem>
+//                                                             ))}
+//                                                         </Select>
+//                                                     </FormControl>
+//                                                 </div>
+//                                             </Box>
+//                                         </Grid>}
+
+//                                 </Grid>
+
+//                                 {/* Date Range Selection */}
+//                                 <Box className={classes.Front_Box}>
+//                                     <div className={classes.Front_Box_Hading}>Select Month Range:</div>
+//                                     <div className={classes.Front_Box_Select_Button}>
+//                                         <Stack direction={{ xs: "column", sm: "row" }} spacing={2} alignItems="center">
+//                                             <Box>
+//                                                 <Typography variant="caption" sx={{ color: "#666", fontWeight: 600, display: "block", mb: 0.5 }}>
+//                                                     From
+//                                                 </Typography>
+//                                                 <TextField
+//                                                     size="small"
+//                                                     type="month"
+//                                                     value={startDate}
+//                                                     onChange={(e) => {
+//                                                         setStartDate(e.target.value);
+//                                                         setErrors((p) => ({ ...p, startDate: false }));
+//                                                     }}
+//                                                     InputLabelProps={{ shrink: true }}
+//                                                     sx={{ minWidth: 200, bgcolor: "#fff" }}
+//                                                     error={errors.startDate}
+//                                                 />
+//                                                 {errors.startDate && (
+//                                                     <span style={{ color: "red", fontSize: 12, fontWeight: 600 }}>
+//                                                         Required
+//                                                     </span>
+//                                                 )}
+//                                             </Box>
+
+//                                             <Typography sx={{ color: "#666", fontWeight: 600 }}>To</Typography>
+
+//                                             <Box>
+//                                                 <Typography variant="caption" sx={{ color: "#666", fontWeight: 600, display: "block", mb: 0.5 }}>
+//                                                     To
+//                                                 </Typography>
+//                                                 <TextField
+//                                                     size="small"
+//                                                     type="month"
+//                                                     value={endDate}
+//                                                     onChange={(e) => {
+//                                                         setEndDate(e.target.value);
+//                                                         setErrors((p) => ({ ...p, endDate: false }));
+//                                                     }}
+//                                                     InputLabelProps={{ shrink: true }}
+//                                                     sx={{ minWidth: 200, bgcolor: "#fff" }}
+//                                                     error={errors.endDate}
+//                                                 />
+//                                                 {errors.endDate && (
+//                                                     <span style={{ color: "red", fontSize: 12, fontWeight: 600 }}>
+//                                                         Required
+//                                                     </span>
+//                                                 )}
+//                                             </Box>
+//                                         </Stack>
+//                                     </div>
+//                                 </Box>
+//                             </Stack>
+
+//                             {/* Action Buttons */}
+//                             <Stack
+//                                 direction={{ xs: "column", sm: "column", md: "row" }}
+//                                 spacing={2}
+//                                 justifyContent="space-around"
+//                                 mt={3}
+//                             >
+//                                 <Button
+//                                     variant="contained"
+//                                     color="success"
+//                                     onClick={handleSubmit}
+//                                     endIcon={<DownloadIcon />}
+//                                     sx={{ minWidth: 150 }}
+//                                 >
+//                                     Submit
+//                                 </Button>
+
+//                                 <Button
+//                                     variant="contained"
+//                                     onClick={handleCancel}
+//                                     sx={{ backgroundColor: "red", color: "white", minWidth: 150 }}
+//                                     endIcon={<DoDisturbIcon />}
+//                                 >
+//                                     Cancel
+//                                 </Button>
+//                             </Stack>
+//                         </Box>
+//                     </Box>
+//                 </Box>
+//             </Slide>
+
+//             {loading}
+//         </>
+//     );
+// };
+
+// export default DownloadCompleteReport;
+
+
+// import React, { useState, useEffect } from "react";
+// import {
 //     Box, Button, Stack, Breadcrumbs, Link, Typography, Slide, Grid,
 //     TextField, MenuItem, Select, InputLabel, FormControl, Divider,
 //     Chip, List, ListItem, ListItemText,
@@ -22,7 +343,10 @@
 // // 1. upload/              key "file"                  -> upload site data, returns a summary object
 // // 2. remarks/              keys "site_id","circle",     -> add/update remarks for a site
 // //                          "additional_remarks","tag"
-// // 3. download/              keys "band","month"          -> generate + download a report (e.g. band="4G", month="Jul-26")
+// // 3. download/              keys "band","start_month",   -> generate + download a report
+// //                          "end_month"                   "start_month"/"end_month" are each
+// //                          sent as "MMM-YY" (e.g. "Jan-26" / "Mar-26"),
+// //                          covering the selected range.
 // // 4. remarks-template/      key "circle"                 -> generate + download an input template
 // // 5. remarks-template/upload/  key "file"                -> upload a filled-in template back
 // //
@@ -33,6 +357,7 @@
 
 // const circleArray = ['AP', 'CH', 'KK', 'DL', 'HR', 'RJ', 'JK', 'WB', 'OD', 'MU', 'TNCH', 'UE', 'BH', 'UW', 'MP', 'PB', 'KO', 'JH', 'UPW']
 // const bandArray = ['4G', '5G','Accepted']
+
 // const tagArray = ['Workable', 'Non Workable']
 // const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
@@ -44,6 +369,18 @@
 //     const idx = parseInt(month, 10) - 1;
 //     if (idx < 0 || idx > 11 || !year) return '';
 //     return `${MONTH_NAMES[idx]}-${year.slice(-2)}`;
+// };
+
+// // Compares two native <input type="month"> values ("2026-01" vs "2026-03")
+// // chronologically. Returns true when start is on or before end.
+// const isChronologicalOrder = (startValue, endValue) => {
+//     if (!startValue || !endValue) return false;
+//     const [startYear, startMonth] = startValue.split('-').map((v) => parseInt(v, 10));
+//     const [endYear, endMonth] = endValue.split('-').map((v) => parseInt(v, 10));
+//     if (!startYear || !startMonth || !endYear || !endMonth) return false;
+//     const startIndex = startYear * 12 + (startMonth - 1);
+//     const endIndex = endYear * 12 + (endMonth - 1);
+//     return startIndex <= endIndex;
 // };
 
 // // A single "card" matching the teal-gradient / pill-header style used across
@@ -190,22 +527,42 @@
 
 //     /* ───────────────────────── 3. Download Report ───────────────────────── */
 //     const [reportBand, setReportBand] = useState("");
-//     // Native month input value, e.g. "2026-01" — converted to "Jan-26" on submit.
-//     const [reportMonthValue, setReportMonthValue] = useState("");
-//     const [reportErrors, setReportErrors] = useState({ band: false, month: false });
+    
+//     // Native month input values, e.g. "2026-01" / "2026-03" — each converted
+//     // to "MMM-YY" on submit and sent as two separate fields: "start_month"
+//     // and "end_month".
+//     const [reportStartMonth, setReportStartMonth] = useState("");
+//     const [reportEndMonth, setReportEndMonth] = useState("");
+//     const [reportErrors, setReportErrors] = useState({ band: false, month: false, range: false });
 //     const [reportResult, setReportResult] = useState(null);
 
+//     // Live formatted previews + range validity, recomputed whenever either
+//     // month input changes — used both for the submit guard and the helper
+//     // text shown under the pickers.
+//     const formattedStartMonth = formatMonthToMMMYY(reportStartMonth);
+//     const formattedEndMonth = formatMonthToMMMYY(reportEndMonth);
+//     const bothMonthsPicked = reportStartMonth !== "" && reportEndMonth !== "";
+//     const isRangeOrderInvalid = bothMonthsPicked && !isChronologicalOrder(reportStartMonth, reportEndMonth);
+
 //     const handleReportSubmit = async () => {
-//         const formattedMonth = formatMonthToMMMYY(reportMonthValue);
-//         const isValid = reportBand !== "" && formattedMonth !== "";
+//         const rangeIsValid = bothMonthsPicked && isChronologicalOrder(reportStartMonth, reportEndMonth);
+//         const isValid = reportBand !== "" && rangeIsValid;
+
 //         if (!isValid) {
-//             setReportErrors({ band: reportBand === "", month: formattedMonth === "" });
+//             setReportErrors({
+//                 band: reportBand === "",
+//                 month: !bothMonthsPicked,
+//                 range: bothMonthsPicked && !rangeIsValid,
+//             });
 //             return;
 //         }
+
 //         action(true);
 //         const formData = new FormData();
 //         formData.append("band", reportBand);
-//         formData.append("month", formattedMonth);
+//         // Two separate fields, each "MMM-YY".
+//         formData.append("start_month", formattedStartMonth);
+//         formData.append("end_month", formattedEndMonth);
 //         const response = await postDataa("pending_performance_at_remarks/download/", formData);
 //         action(false);
 //         if (response?.status) {
@@ -218,8 +575,9 @@
 
 //     const handleReportCancel = () => {
 //         setReportBand("");
-//         setReportMonthValue("");
-//         setReportErrors({ band: false, month: false });
+//         setReportStartMonth("");
+//         setReportEndMonth("");
+//         setReportErrors({ band: false, month: false, range: false });
 //         setReportResult(null);
 //     };
 
@@ -305,126 +663,6 @@
 //             <Slide direction="left" in timeout={1000}>
 //                 <Box>
 
-//                     {/* 1. Upload Site Data */}
-//                     {/* <StyledCard title="Upload Site Data" classes={classes}>
-//                         <Stack spacing={2}>
-//                             <Box className={classes.Front_Box}>
-//                                 <div className={classes.Front_Box_Hading}>Select File:</div>
-//                                 <div className={classes.Front_Box_Select_Button}>
-//                                     <Button variant="contained" component="label" color={uploadFile ? "warning" : "primary"}>
-//                                         Select File
-//                                         <input hidden type="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" onChange={handleUploadFileChange} />
-//                                     </Button>
-//                                     {uploadFile && <span style={{ color: "green", fontSize: 18, fontWeight: 600, marginLeft: 10 }}>{uploadFile.name}</span>}
-//                                     {uploadFileError && <div><span style={{ color: "red", fontSize: 18, fontWeight: 600 }}>This Field Is Required!</span></div>}
-//                                 </div>
-//                             </Box>
-
-//                             {uploadSummary && (
-//                                 <Box className={classes.Front_Box}>
-//                                     <div className={classes.Front_Box_Hading}>Summary:</div>
-//                                     <Box sx={{ p: 2 }}>
-//                                         <SummaryGrid summary={uploadSummary} />
-//                                     </Box>
-//                                 </Box>
-//                             )}
-//                         </Stack>
-
-//                         <Stack direction={{ xs: "column", md: "row" }} spacing={2} justifyContent="space-around" mt={2}>
-//                             <Button variant="contained" color="success" onClick={handleUploadSubmit} endIcon={<UploadIcon />}>Submit</Button>
-//                             <Button variant="contained" onClick={handleUploadCancel} sx={{ backgroundColor: "red", color: "white" }} endIcon={<DoDisturbIcon />}>Cancel</Button>
-//                         </Stack>
-//                     </StyledCard> */}
-
-//                     {/* 2. Add / Update Remarks */}
-//                     {/* <StyledCard title="Add / Update Remarks" classes={classes}>
-//                         <Stack spacing={2}>
-//                             <Box className={classes.Front_Box}>
-//                                 <div className={classes.Front_Box_Hading}>Site ID:</div>
-//                                 <div className={classes.Front_Box_Select_Button}>
-//                                     <TextField
-//                                         size="small"
-//                                         value={siteId}
-//                                         onChange={(e) => { setSiteId(e.target.value); setRemarksErrors((p) => ({ ...p, siteId: false })); }}
-//                                         sx={{ minWidth: 220, bgcolor: "#fff" }}
-//                                     />
-//                                     {remarksErrors.siteId && <div><span style={{ color: "red", fontSize: 18, fontWeight: 600, marginLeft: 10 }}>This Field Is Required!</span></div>}
-//                                 </div>
-//                             </Box>
-
-//                             <Box className={classes.Front_Box}>
-//                                 <div className={classes.Front_Box_Hading}>Select Circle:</div>
-//                                 <div className={classes.Front_Box_Select_Button}>
-//                                     <FormControl sx={{ minWidth: 150 }}>
-//                                         <InputLabel id="remarks-circle-label">Select Circle</InputLabel>
-//                                         <Select
-//                                             labelId="remarks-circle-label"
-//                                             label="Select Circle"
-//                                             value={remarksCircle}
-//                                             onChange={(e) => { setRemarksCircle(e.target.value); setRemarksErrors((p) => ({ ...p, circle: false })); }}
-//                                         >
-//                                             {circleArray.map((c) => <MenuItem key={c} value={c}>{c}</MenuItem>)}
-//                                         </Select>
-//                                     </FormControl>
-//                                     {remarksErrors.circle && <div><span style={{ color: "red", fontSize: 18, fontWeight: 600, marginLeft: 10 }}>This Field Is Required!</span></div>}
-//                                 </div>
-//                             </Box>
-
-//                             <Box className={classes.Front_Box}>
-//                                 <div className={classes.Front_Box_Hading}>Additional Remarks:</div>
-//                                 <div className={classes.Front_Box_Select_Button}>
-//                                     <TextField
-//                                         size="small"
-//                                         multiline
-//                                         minRows={2}
-//                                         value={additionalRemarks}
-//                                         onChange={(e) => setAdditionalRemarks(e.target.value)}
-//                                         sx={{ minWidth: 300, bgcolor: "#fff" }}
-//                                     />
-//                                 </div>
-//                             </Box>
-
-//                             <Box className={classes.Front_Box}>
-//                                 <div className={classes.Front_Box_Hading}>Select Tag:</div>
-//                                 <div className={classes.Front_Box_Select_Button}>
-//                                     <FormControl sx={{ minWidth: 170 }}>
-//                                         <InputLabel id="remarks-tag-label">Select Tag</InputLabel>
-//                                         <Select
-//                                             labelId="remarks-tag-label"
-//                                             label="Select Tag"
-//                                             value={tag}
-//                                             onChange={(e) => { setTag(e.target.value); setRemarksErrors((p) => ({ ...p, tag: false })); }}
-//                                         >
-//                                             {tagArray.map((t) => <MenuItem key={t} value={t}>{t}</MenuItem>)}
-//                                         </Select>
-//                                     </FormControl>
-//                                     {remarksErrors.tag && <div><span style={{ color: "red", fontSize: 18, fontWeight: 600, marginLeft: 10 }}>This Field Is Required!</span></div>}
-//                                 </div>
-//                             </Box>
-
-//                             {remarksResult && (
-//                                 <Box className={classes.Front_Box}>
-//                                     <div className={classes.Front_Box_Hading}>Result:</div>
-//                                     <Box sx={{ p: 2 }}>
-//                                         <Typography variant="body2" sx={{ mb: 1 }}>
-//                                             Site <strong>{remarksResult.site_id}</strong> updated in:
-//                                         </Typography>
-//                                         <Stack direction="row" spacing={1} flexWrap="wrap">
-//                                             {(remarksResult.updated_in || []).map((band, i) => (
-//                                                 <Chip key={i} label={band} color="success" size="small" sx={{ mb: 1 }} />
-//                                             ))}
-//                                         </Stack>
-//                                     </Box>
-//                                 </Box>
-//                             )}
-//                         </Stack>
-
-//                         <Stack direction={{ xs: "column", md: "row" }} spacing={2} justifyContent="space-around" mt={2}>
-//                             <Button variant="contained" color="success" onClick={handleRemarksSubmit} endIcon={<UploadIcon />}>Submit</Button>
-//                             <Button variant="contained" onClick={handleRemarksCancel} sx={{ backgroundColor: "red", color: "white" }} endIcon={<DoDisturbIcon />}>Cancel</Button>
-//                         </Stack>
-//                     </StyledCard> */}
-
 //                     {/* 3. Download Report */}
 //                     <StyledCard title="Download Report" classes={classes}>
 //                         <Stack spacing={2}>
@@ -446,25 +684,74 @@
 //                                 </div>
 //                             </Box>
 
-//                             <Box className={classes.Front_Box}>
-//                                 <div className={classes.Front_Box_Hading}>Select Month:</div>
+//                               <Box className={classes.Front_Box}>
+//                                 <div className={classes.Front_Box_Hading}>Select Archived:</div>
 //                                 <div className={classes.Front_Box_Select_Button}>
-//                                     {/* Native month picker — opens a calendar-style month/year grid.
-//                                         Value ("2026-01") is converted to "Jan-26" before being sent. */}
-//                                     <TextField
-//                                         size="small"
-//                                         type="month"
-//                                         InputLabelProps={{ shrink: true }}
-//                                         value={reportMonthValue}
-//                                         onChange={(e) => { setReportMonthValue(e.target.value); setReportErrors((p) => ({ ...p, month: false })); }}
-//                                         sx={{ minWidth: 180, bgcolor: "#fff" }}
-//                                     />
-//                                     {reportMonthValue && !reportErrors.month && (
-//                                         <span style={{ color: "gray", fontSize: 14, marginLeft: 10 }}>
-//                                             Will be sent as: {formatMonthToMMMYY(reportMonthValue)}
-//                                         </span>
+//                                     <FormControl sx={{ minWidth: 150 }}>
+//                                         <InputLabel id="report-band-label">Select Archived</InputLabel>
+//                                         <Select
+//                                             labelId="report-band-label"
+//                                             label="Select Archived"
+//                                             value={reportBand}
+//                                             onChange={(e) => { setReportBand(e.target.value); setReportErrors((p) => ({ ...p, band: false })); }}
+//                                         >
+//                                             {bandArray.map((b) => <MenuItem key={b} value={b}>{b}</MenuItem>)}
+//                                         </Select>
+//                                     </FormControl>
+//                                     {reportErrors.band && <div><span style={{ color: "red", fontSize: 18, fontWeight: 600, marginLeft: 10 }}>This Field Is Required!</span></div>}
+//                                 </div>
+//                             </Box>
+
+//                             <Box className={classes.Front_Box}>
+//                                 <div className={classes.Front_Box_Hading}>Select Month Range:</div>
+//                                 <div className={classes.Front_Box_Select_Button}>
+//                                     <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5} alignItems={{ sm: "center" }}>
+//                                         {/* Native month picker — sent as "start_month". */}
+//                                         <TextField
+//                                             size="small"
+//                                             type="month"
+//                                             label="From"
+//                                             InputLabelProps={{ shrink: true }}
+//                                             value={reportStartMonth}
+//                                             onChange={(e) => {
+//                                                 setReportStartMonth(e.target.value);
+//                                                 setReportErrors((p) => ({ ...p, month: false, range: false }));
+//                                             }}
+//                                             sx={{ minWidth: 170, bgcolor: "#fff" }}
+//                                         />
+//                                         <Typography sx={{ color: "text.secondary" }}>to</Typography>
+//                                         {/* Native month picker — sent as "end_month". Its own min
+//                                             is clamped to the start month so an inverted range
+//                                             can't be picked in the first place. */}
+//                                         <TextField
+//                                             size="small"
+//                                             type="month"
+//                                             label="To"
+//                                             InputLabelProps={{ shrink: true }}
+//                                             value={reportEndMonth}
+//                                             inputProps={{ min: reportStartMonth || undefined }}
+//                                             onChange={(e) => {
+//                                                 setReportEndMonth(e.target.value);
+//                                                 setReportErrors((p) => ({ ...p, month: false, range: false }));
+//                                             }}
+//                                             sx={{ minWidth: 170, bgcolor: "#fff" }}
+//                                         />
+//                                     </Stack>
+
+//                                     {bothMonthsPicked && !isRangeOrderInvalid && !reportErrors.month && !reportErrors.range && (
+//                                         <div style={{ marginTop: 6 }}>
+//                                             <span style={{ color: "gray", fontSize: 14 }}>
+//                                                 Will be sent as: start_month={formattedStartMonth}, end_month={formattedEndMonth}
+//                                             </span>
+//                                         </div>
 //                                     )}
-//                                     {reportErrors.month && <div><span style={{ color: "red", fontSize: 18, fontWeight: 600, marginLeft: 10 }}>This Field Is Required!</span></div>}
+
+//                                     {reportErrors.month && (
+//                                         <div><span style={{ color: "red", fontSize: 18, fontWeight: 600 }}>Please select both a start and end month!</span></div>
+//                                     )}
+//                                     {(reportErrors.range || isRangeOrderInvalid) && !reportErrors.month && (
+//                                         <div><span style={{ color: "red", fontSize: 18, fontWeight: 600 }}>"From" month must be the same as or before the "To" month!</span></div>
+//                                     )}
 //                                 </div>
 //                             </Box>
 
@@ -483,106 +770,6 @@
 //                             <Button variant="contained" onClick={handleReportCancel} sx={{ backgroundColor: "red", color: "white" }} endIcon={<DoDisturbIcon />}>Cancel</Button>
 //                         </Stack>
 //                     </StyledCard>
-
-//                     {/* 4. Download Input Template */}
-//                     {/* <StyledCard title="Download Input Template" classes={classes}>
-//                         <Stack spacing={2}>
-//                             <Box className={classes.Front_Box}>
-//                                 <div className={classes.Front_Box_Hading}>Select Circle:</div>
-//                                 <div className={classes.Front_Box_Select_Button}>
-//                                     <FormControl sx={{ minWidth: 150 }}>
-//                                         <InputLabel id="template-circle-label">Select Circle</InputLabel>
-//                                         <Select
-//                                             labelId="template-circle-label"
-//                                             label="Select Circle"
-//                                             value={templateCircle}
-//                                             onChange={(e) => { setTemplateCircle(e.target.value); setTemplateError(false); }}
-//                                         >
-//                                             {circleArray.map((c) => <MenuItem key={c} value={c}>{c}</MenuItem>)}
-//                                         </Select>
-//                                     </FormControl>
-//                                     {templateError && <div><span style={{ color: "red", fontSize: 18, fontWeight: 600, marginLeft: 10 }}>This Field Is Required!</span></div>}
-//                                 </div>
-//                             </Box>
-
-//                             {templateResult && (
-//                                 <Box className={classes.Front_Box}>
-//                                     <div className={classes.Front_Box_Hading}>Result:</div>
-//                                     <Box sx={{ p: 2 }}>
-//                                         <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>{templateResult.message}</Typography>
-//                                         <Stack direction="row" spacing={1} sx={{ mb: 1 }} flexWrap="wrap">
-//                                             {(templateResult.circle_filter || []).map((c, i) => (
-//                                                 <Chip key={i} label={c} size="small" />
-//                                             ))}
-//                                         </Stack>
-//                                         <DownloadButton url={templateResult?.download_url} label="Download Template" />
-//                                     </Box>
-//                                 </Box>
-//                             )}
-//                         </Stack>
-
-//                         <Stack direction={{ xs: "column", md: "row" }} spacing={2} justifyContent="space-around" mt={2}>
-//                             <Button variant="contained" color="success" onClick={handleTemplateSubmit} endIcon={<UploadIcon />}>Submit</Button>
-//                             <Button variant="contained" onClick={handleTemplateCancel} sx={{ backgroundColor: "red", color: "white" }} endIcon={<DoDisturbIcon />}>Cancel</Button>
-//                         </Stack>
-//                     </StyledCard> */}
-
-//                     {/* 5. Upload Updated Report */}
-//                     {/* <StyledCard title="Upload Updated Report" classes={classes}>
-//                         <Stack spacing={2}>
-//                             <Box className={classes.Front_Box}>
-//                                 <div className={classes.Front_Box_Hading}>Select File:</div>
-//                                 <div className={classes.Front_Box_Select_Button}>
-//                                     <Button variant="contained" component="label" color={reportUploadFile ? "warning" : "primary"}>
-//                                         Select File
-//                                         <input hidden type="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" onChange={handleReportUploadFileChange} />
-//                                     </Button>
-//                                     {reportUploadFile && <span style={{ color: "green", fontSize: 18, fontWeight: 600, marginLeft: 10 }}>{reportUploadFile.name}</span>}
-//                                     {reportUploadError && <div><span style={{ color: "red", fontSize: 18, fontWeight: 600 }}>This Field Is Required!</span></div>}
-//                                 </div>
-//                             </Box>
-
-//                             {reportUploadResult && (
-//                                 <Box className={classes.Front_Box}>
-//                                     <div className={classes.Front_Box_Hading}>Result:</div>
-//                                     <Box sx={{ p: 2 }}>
-//                                         <Grid container spacing={1.5}>
-//                                             <Grid item xs={6} sm={4}>
-//                                                 <Box sx={{ p: 1.25, textAlign: "center", borderRadius: 2, bgcolor: "#fff", border: "1px solid #E0E0E0" }}>
-//                                                     <Typography variant="caption" color="text.secondary">Updated</Typography>
-//                                                     <Typography variant="h6" sx={{ fontWeight: 800 }}>{reportUploadResult.updated}</Typography>
-//                                                 </Box>
-//                                             </Grid>
-//                                             <Grid item xs={6} sm={4}>
-//                                                 <Box sx={{ p: 1.25, textAlign: "center", borderRadius: 2, bgcolor: "#fff", border: "1px solid #E0E0E0" }}>
-//                                                     <Typography variant="caption" color="text.secondary">Skipped Blank Rows</Typography>
-//                                                     <Typography variant="h6" sx={{ fontWeight: 800 }}>{reportUploadResult.skipped_blank_rows}</Typography>
-//                                                 </Box>
-//                                             </Grid>
-//                                         </Grid>
-
-//                                         {reportUploadResult.not_found && reportUploadResult.not_found.length > 0 && (
-//                                             <Box sx={{ mt: 2 }}>
-//                                                 <Typography variant="body2" sx={{ fontWeight: 600, mb: 0.5 }}>Not Found:</Typography>
-//                                                 <List dense sx={{ maxHeight: 200, overflow: "auto", bgcolor: "#fff", borderRadius: 1 }}>
-//                                                     {reportUploadResult.not_found.map((item, i) => (
-//                                                         <ListItem key={i}>
-//                                                             <ListItemText primary={item} />
-//                                                         </ListItem>
-//                                                     ))}
-//                                                 </List>
-//                                             </Box>
-//                                         )}
-//                                     </Box>
-//                                 </Box>
-//                             )}
-//                         </Stack>
-
-//                         <Stack direction={{ xs: "column", md: "row" }} spacing={2} justifyContent="space-around" mt={2}>
-//                             <Button variant="contained" color="success" onClick={handleReportUploadSubmit} endIcon={<UploadIcon />}>Submit</Button>
-//                             <Button variant="contained" onClick={handleReportUploadCancel} sx={{ backgroundColor: "red", color: "white" }} endIcon={<DoDisturbIcon />}>Cancel</Button>
-//                         </Stack>
-//                     </StyledCard> */}
 
 //                 </Box>
 //             </Slide>
@@ -613,6 +800,7 @@ import { useNavigate } from "react-router-dom";
 import { postDataa, ServerURL } from "../../../services/FetchNodeServices";
 import OverAllCss from "../../../csss/OverAllCss";
 import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
+import { getDecreyptedData } from '../../../utils/localstorage'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // 5 APIs on this page (base: pending_performance_at_remarks/):
@@ -621,9 +809,10 @@ import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
 // 2. remarks/              keys "site_id","circle",     -> add/update remarks for a site
 //                          "additional_remarks","tag"
 // 3. download/              keys "band","start_month",   -> generate + download a report
-//                          "end_month"                   "start_month"/"end_month" are each
+//                          "end_month","archived"         "start_month"/"end_month" are each
 //                          sent as "MMM-YY" (e.g. "Jan-26" / "Mar-26"),
-//                          covering the selected range.
+//                          covering the selected range. "archived" is an
+//                          optional single-choice flag ("Archived").
 // 4. remarks-template/      key "circle"                 -> generate + download an input template
 // 5. remarks-template/upload/  key "file"                -> upload a filled-in template back
 //
@@ -634,6 +823,8 @@ import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
 
 const circleArray = ['AP', 'CH', 'KK', 'DL', 'HR', 'RJ', 'JK', 'WB', 'OD', 'MU', 'TNCH', 'UE', 'BH', 'UW', 'MP', 'PB', 'KO', 'JH', 'UPW']
 const bandArray = ['4G', '5G','Accepted']
+const archivedArray = ['Archived'] // ADDED: single-option list for the "Select Archived" dropdown
+
 const tagArray = ['Workable', 'Non Workable']
 const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
@@ -725,6 +916,7 @@ const DownloadCompleteReport = () => {
     const [uploadFile, setUploadFile] = useState(null);
     const [uploadFileError, setUploadFileError] = useState(false);
     const [uploadSummary, setUploadSummary] = useState(null);
+    const userTypes = getDecreyptedData('user_type')?.split(",").map((t) => t.trim())
 
     const handleUploadFileChange = (e) => {
         const file = e.target.files[0];
@@ -803,6 +995,10 @@ const DownloadCompleteReport = () => {
 
     /* ───────────────────────── 3. Download Report ───────────────────────── */
     const [reportBand, setReportBand] = useState("");
+
+    // ADDED: separate state for the "Select Archived" dropdown (key: "archived")
+    const [reportArchived, setReportArchived] = useState("");
+
     // Native month input values, e.g. "2026-01" / "2026-03" — each converted
     // to "MMM-YY" on submit and sent as two separate fields: "start_month"
     // and "end_month".
@@ -838,6 +1034,10 @@ const DownloadCompleteReport = () => {
         // Two separate fields, each "MMM-YY".
         formData.append("start_month", formattedStartMonth);
         formData.append("end_month", formattedEndMonth);
+        // ADDED: optional "archived" flag, only appended when selected
+        if (reportArchived) {
+            formData.append("archived", reportArchived);
+        }
         const response = await postDataa("pending_performance_at_remarks/download/", formData);
         action(false);
         if (response?.status) {
@@ -850,6 +1050,7 @@ const DownloadCompleteReport = () => {
 
     const handleReportCancel = () => {
         setReportBand("");
+        setReportArchived(""); // ADDED: reset archived selection
         setReportStartMonth("");
         setReportEndMonth("");
         setReportErrors({ band: false, month: false, range: false });
@@ -958,6 +1159,23 @@ const DownloadCompleteReport = () => {
                                     {reportErrors.band && <div><span style={{ color: "red", fontSize: 18, fontWeight: 600, marginLeft: 10 }}>This Field Is Required!</span></div>}
                                 </div>
                             </Box>
+
+                              {userTypes?.includes('QT_AR') && <Box className={classes.Front_Box}>
+                                <div className={classes.Front_Box_Hading}>Select Archived:</div>
+                                <div className={classes.Front_Box_Select_Button}>
+                                    <FormControl sx={{ minWidth: 150 }}>
+                                        <InputLabel id="report-archived-label">Select Archived</InputLabel>
+                                        <Select
+                                            labelId="report-archived-label"
+                                            label="Select Archived"
+                                            value={reportArchived}
+                                            onChange={(e) => setReportArchived(e.target.value)}
+                                        >
+                                            {archivedArray.map((a) => <MenuItem key={a} value={a}>{a}</MenuItem>)}
+                                        </Select>
+                                    </FormControl>
+                                </div>
+                            </Box>}
 
                             <Box className={classes.Front_Box}>
                                 <div className={classes.Front_Box_Hading}>Select Month Range:</div>
