@@ -26,7 +26,7 @@ const UPLOADHOTO = lazy(() => import('./VI_Hoto_Dashboard/UPLOADHOTO'));
 const VIHotoFtr = lazy(() => import('./VI_Hoto_Dashboard/VIHotoFtr'));
 const FTR_Dashboard = lazy(() => import('./VI_Hoto_Dashboard/FTR_Dashboard'));
 const VI_Hoto_FTR = lazy(() => import('./VI_Hoto_Dashboard/VI_Hoto_FTR'));
-const UploadVil = lazy(()=>import('./VIL ERICSSON/UploadVil'))
+const UploadVil = lazy(()=>import('./VIL SRVCC/Uploadsrvcc'))
 const VI4G = lazy(()=>import('./VI GPL/VI4G'))
 const VI5G = lazy(()=> import('./VI GPL/VI5G'))
 const VIHuawei = lazy(()=> import('./VI Huawei/VI_Huawei'))
@@ -90,16 +90,20 @@ const VI_SoftAT = () => {
                                          <Nav.Item eventKey="3-4" placement="rightStart" icon={<DashboardIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/FTR_Dashboard')}>
                                             FTR Dasboard
                                         </Nav.Item>  */}
-                                         <Nav.Item eventKey="3-5" placement="rightStart" icon={<DashboardIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/VI_Hoto_FTR')}>
+                                         <Nav.Item eventKey="3-3" placement="rightStart" icon={<DashboardIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/VI_Hoto_FTR')}>
                                             VI Hoto FTR
                                         </Nav.Item> 
 
-                                         </Nav.Menu>
-                                         <Nav.Menu eventKey="4" placement="rightStart" className="menu-title-custom" title="VIL ERICSSON" icon={<DashboardIcon size="3em" />}>
-                                         <Nav.Item eventKey="4-1" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/UploadVil')}>
-                                            Upload VIL 
+                                         <Nav.Item eventKey="3-4" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/UploadVil')}>
+                                          VIL SRVCC
                                         </Nav.Item>
+
                                          </Nav.Menu>
+                                         {/* <Nav.Menu eventKey="4" placement="rightStart" className="menu-title-custom" title="VIL ERICSSON" icon={<DashboardIcon size="3em" />}>
+                                         <Nav.Item eventKey="4-1" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/UploadVil')}>
+                                          VIL SRVCC
+                                        </Nav.Item>
+                                         </Nav.Menu> */}
 
                                           <Nav.Menu eventKey="5" placement="rightStart" className="menu-title-custom" title="VI GPL" icon={<DashboardIcon size="3em" />}>
                                          <Nav.Item eventKey="5-1" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/VI4G')}>

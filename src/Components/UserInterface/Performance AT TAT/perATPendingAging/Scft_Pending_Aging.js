@@ -86,9 +86,9 @@ const TECH_TABS = [
 // ── Fixed columns ────────────────────────────────────────────────────────────
 const COLUMNS = [
     { label: "0-3", key: "0-3" },
-    { label: "3-5", key: "3-5" },
-    { label: "5-7", key: "5-7" },
-    { label: ">7", key: ">7" },
+    { label: "3-7", key: "3-7" },
+    { label: "7-14", key: "7-14" },
+    { label: ">14", key: ">14" },
     { label: "Total", key: "Total" },
 ];
 

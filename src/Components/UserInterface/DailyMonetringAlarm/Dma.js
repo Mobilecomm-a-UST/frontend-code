@@ -146,8 +146,6 @@ const Dma = () => {
                                  <Route element={<Alarm4G />} path="/old_vs_new_4g" />
                                  <Route element={<Alarm5G />} path="/old_vs_new_5g" />
                                  <Route element={<Snmp />} path="/snmp" />
-                          
-
 
                             </Routes>
                         </Suspense>

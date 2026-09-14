@@ -1317,15 +1317,15 @@ const YearMonthPicker = ({ value, onChange, apiMonths }) => {
 const TechTable = ({ tech, apiResponse, titleLabel }) => {
     const columns = [
         { label: "0-3days", key: "0-3days" },
-        { label: "3-5days", key: "3-5days" },
-        { label: "5-7days", key: "5-7days" },
-        { label: ">7days", key: ">7days" },
+        { label: "3-7days", key: "3-7days" },
+        { label: "7-14days", key: "7-14days" },
+        { label: ">14days", key: ">14days" },
         { label: "Pending", key: "Pending" },
         { label: "Total", key: "Total" },
         { label: "0-3days%", key: "0-3days%" },
-        { label: "3-5days%", key: "3-5days%" },
-        { label: "5-7days%", key: "5-7days%" },
-        { label: ">7days%", key: ">7days%" },
+        { label: "3-7days%", key: "3-7days%" },
+        { label: "7-14days%", key: "7-14days%" },
+        { label: ">14days%", key: ">14days%" },
         { label: "Pending%", key: "Pending%" },
     ];
 

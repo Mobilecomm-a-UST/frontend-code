@@ -2362,9 +2362,9 @@ const METRIC_THEME = {
 const CATEGORY_FILTERS = [
     { key: "ALL", label: "All", color: "#546e7a" },
     { key: "0-3days%", label: "0-3days%", color: "#1565C0" },
-    { key: "3-5days%", label: "3-5days%", color: "#2E7D32" },
-    { key: "5-7days%", label: "5-7days%", color: "#E65100" },
-    { key: ">7days%", label: ">7days%", color: "#6A1B9A" },
+    { key: "3-7days%", label: "3-7days%", color: "#2E7D32" },
+    { key: "7-14days%", label: "7-14days%", color: "#E65100" },
+    { key: ">14days%", label: ">14days%", color: "#6A1B9A" },
     { key: "Pending%", label: "Pending%", color: "#C62828" },
 ];
 
@@ -2406,9 +2406,9 @@ const PERCENT_AXIS_TICKS = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 
 const CATEGORY_INDEX_MAP = {
     "0-3days%": 0,
-    "3-5days%": 1,
-    "5-7days%": 2,
-    ">7days%": 3,
+    "3-7days%": 1,
+    "7-14days%": 2,
+    ">14days%": 3,
     "Pending%": 4,
 };
 const PENDING_IDX = CATEGORY_INDEX_MAP["Pending%"];
