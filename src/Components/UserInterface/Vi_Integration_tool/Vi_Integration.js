@@ -19,7 +19,8 @@ const FinalDashboard = lazy(() => import('./Dashboard/FinalDashboard'))
 const ComanDashboard = lazy(() => import('./Dashboard/ComanDashboard'))
 const MDashboard = lazy(() => import('./MasterDashboard/MDashboard'))
 const TotalDataDashboard = lazy(() => import('./Dashboard/TotalDataDashboard'));
-
+const Ztesite = lazy(() => import('./Upload/Ztesite'));
+const Ztemo = lazy(() => import('./Upload/Ztemo'));
 
 const Vi_Integration = () => {
     const [expanded, setExpanded] = useState(true);
@@ -53,13 +54,20 @@ const Vi_Integration = () => {
                                         <Nav.Item eventKey="2" placement="rightStart" icon={<DashboardIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/vi_integration/dashboard')}>
                                             Dashboard
                                         </Nav.Item>
-                                        {!userTypes?.includes('VI_IX_reader') &&    <Nav.Item eventKey="3" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/vi_integration/upload_file')} >
+                                        {!userTypes?.includes('VI_IX_reader') && <Nav.Item eventKey="3" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/vi_integration/upload_file')} >
                                             Upload File
                                         </Nav.Item>}
+                                        <Nav.Item eventKey="4" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/vi_integration/zte_mo_creation')} >
+                                            ZTE MO Creation
+                                        </Nav.Item>
+                                        <Nav.Item eventKey="5" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/vi_integration/zte_site_creation')} >
+                                            ZTE Site Creation
+                                        </Nav.Item>
 
-                                        
 
-                                     
+
+
+
                                     </Nav>
                                 </Sidenav.Body>
 
@@ -67,7 +75,7 @@ const Vi_Integration = () => {
                         </Box>
                     </Grid>
                     <Grid item xs={12} md={10}>
-                        <Suspense fallback={<Loader/>}>
+                        <Suspense fallback={<Loader />}>
                             <Routes>
                                 <Route element={<Integration_Tool />} path="/" />
                                 {!userTypes?.includes('VI_IX_reader') && <Route element={<UploadFile />} path="/upload_file" />}
@@ -75,7 +83,9 @@ const Vi_Integration = () => {
                                 <Route element={<TotalDataDashboard />} path="/dashboard/total_count/:name" />
                                 <Route element={<ComanDashboard />} path="/dashboard/:name" />
                                 <Route element={<MDashboard />} path="/master_dashboard" />
-                               
+                                <Route element={<Ztesite />} path="/zte_site_creation" />
+                                <Route element={<Ztemo />} path="/zte_mo_creation" />
+
                             </Routes>
                         </Suspense>
                     </Grid>
