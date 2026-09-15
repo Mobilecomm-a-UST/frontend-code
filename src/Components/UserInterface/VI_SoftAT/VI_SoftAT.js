@@ -26,10 +26,12 @@ const UPLOADHOTO = lazy(() => import('./VI_Hoto_Dashboard/UPLOADHOTO'));
 const VIHotoFtr = lazy(() => import('./VI_Hoto_Dashboard/VIHotoFtr'));
 const FTR_Dashboard = lazy(() => import('./VI_Hoto_Dashboard/FTR_Dashboard'));
 const VI_Hoto_FTR = lazy(() => import('./VI_Hoto_Dashboard/VI_Hoto_FTR'));
-const UploadVil = lazy(()=>import('./VIL SRVCC/Uploadsrvcc'))
+const UploadVil = lazy(()=>import('./VIL ERICSSON/Uploadsrvcc'))
 const VI4G = lazy(()=>import('./VI GPL/VI4G'))
 const VI5G = lazy(()=> import('./VI GPL/VI5G'))
 const VIHuawei = lazy(()=> import('./VI Huawei/VI_Huawei'))
+const UploadAtnd = lazy(()=>import('./VIL ERICSSON/UploadAtnd'))
+const UploadLayered = lazy(()=>import('./VIL ERICSSON/UploadLayered'))
 
 
 const VI_SoftAT = () => {
@@ -94,38 +96,31 @@ const VI_SoftAT = () => {
                                             VI Hoto FTR
                                         </Nav.Item> 
 
-                                         <Nav.Item eventKey="3-4" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/UploadVil')}>
-                                          VIL SRVCC
-                                        </Nav.Item>
+                                       
 
                                          </Nav.Menu>
-                                         {/* <Nav.Menu eventKey="4" placement="rightStart" className="menu-title-custom" title="VIL ERICSSON" icon={<DashboardIcon size="3em" />}>
-                                         <Nav.Item eventKey="4-1" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/UploadVil')}>
-                                          VIL SRVCC
-                                        </Nav.Item>
-                                         </Nav.Menu> */}
+                                        
 
-                                          <Nav.Menu eventKey="5" placement="rightStart" className="menu-title-custom" title="VI GPL" icon={<DashboardIcon size="3em" />}>
-                                         <Nav.Item eventKey="5-1" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/VI4G')}>
+                                          <Nav.Menu eventKey="4" placement="rightStart" className="menu-title-custom" title="VI GPL" icon={<DashboardIcon size="3em" />}>
+                                         <Nav.Item eventKey="4-1" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/VI4G')}>
                                             4G
                                         </Nav.Item>
-                                         <Nav.Item eventKey="5-2" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/VI5G')}>
+                                         <Nav.Item eventKey="4-2" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/VI5G')}>
                                             5G 
                                         </Nav.Item>
                                          </Nav.Menu>
-                                          {/* <Nav.Menu eventKey="6" placement="rightStart" className="menu-title-custom" title="VI Huawei" icon={<DashboardIcon size="3em" />}>
-                                         <Nav.Item eventKey="6-1" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/VIHuawei')}>
-                                            Upload Logs
+                                          <Nav.Menu eventKey="5" placement="rightStart" className="menu-title-custom" title="VIL ERICSSON" icon={<DashboardIcon size="3em" />}>
+                                          <Nav.Item eventKey="5-1" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/UploadVil')}>
+                                          VIL SRVCC
                                         </Nav.Item>
-                                         </Nav.Menu> */}
+                                         <Nav.Item eventKey="5-2" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/UploadLayered')}>
+                                         Layer Addition
+                                        </Nav.Item>
+                                         <Nav.Item eventKey="5-3" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/UploadAtnd')}>
+                                          ATND
+                                        </Nav.Item>
+                                         </Nav.Menu> 
                                          
-                                    
-                                        {/* <Nav.Item eventKey="2" placement="rightStart" icon={<DashboardIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/vi_ftr_dashboard')}>
-                                            VI FTR Dashboard
-                                        </Nav.Item>
-                                         <Nav.Item eventKey="3" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/upload_file')} >
-                                            Upload FTR
-                                        </Nav.Item> */}
                                      
                                     </Nav>
                                 </Sidenav.Body>
@@ -152,6 +147,8 @@ const VI_SoftAT = () => {
                                 <Route element={<VI4G/>} path='/VI4G'/>
                                 <Route element={<VI5G/>} path='/VI5G'/>
                                 <Route element={<VIHuawei/>} path='/VIHuawei'/>
+                                <Route element={<UploadAtnd/>} path='/UploadAtnd'/>
+                                <Route element={<UploadLayered/>} path='/UploadLayered'/>
 
                             </Routes>
                         </Suspense>

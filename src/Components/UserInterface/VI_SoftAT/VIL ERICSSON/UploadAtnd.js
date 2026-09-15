@@ -194,7 +194,7 @@ function BasebandResultTable({ rows }) {
     );
 }
 
-const UploadVil = () => {
+const UploadAtnd = () => {
     const [make4GFiles, setMake4GFiles] = useState([])
     const [show4G, setShow4G] = useState(false)
     const [fileData, setFileData] = useState()
@@ -219,7 +219,7 @@ const UploadVil = () => {
                 formData.append(`file`, make4GFiles[i]); 
             }
 
-            const response = await postData('api/vil/', formData)
+            const response = await postData('vil_srvcc/vil/', formData)
 
             // console.log('response data', response)
 
@@ -271,7 +271,7 @@ const UploadVil = () => {
                 <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
                     <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
                     <Link underline="hover" onClick={() => { navigate('/tools/soft_at_tools') }}>VI Soft-AT Tool</Link>
-                    <Typography color='text.primary'>Upload SRVCC</Typography>
+                    <Typography color='text.primary'>Upload ATND</Typography>
                 </Breadcrumbs>
             </div>
             <Slide
@@ -284,13 +284,13 @@ const UploadVil = () => {
                     <Box className={classes.main_Box}>
                         <Box className={classes.Back_Box} sx={{ width: { md: '75%', xs: '100%' } }}>44
                             <Box className={classes.Box_Hading} >
-                                Create SRVCC Summary
+                                Create ATND Summary
                             </Box>
                             <Stack spacing={2} sx={{ marginTop: "-40px" }} direction={'column'}>
 
                                 <Box className={classes.Front_Box} >
                                     <div className={classes.Front_Box_Hading}>
-                                        Select Log File:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{ }</span>
+                                        Select Files:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{ }</span>
                                     </div>
                                     <div className={classes.Front_Box_Select_Button} >
                                         <div style={{ float: "left" }}>
@@ -319,7 +319,7 @@ const UploadVil = () => {
                         </Box>
                     </Box>
                     <Box sx={{ display: download ? 'block' : 'none', textAlign: 'center' }}>
-                        <a download href={fileData}><Button variant="outlined" onClick='' title="Export Excel" startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />} sx={{ marginTop: "10px", width: "auto" }}><span style={{ fontFamily: "Poppins", fontSize: "22px", fontWeight: 800, textTransform: "none", textDecorationLine: "none" }}>Download SRVCC Details </span></Button></a>
+                        <a download href={fileData}><Button variant="outlined" onClick='' title="Export Excel" startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />} sx={{ marginTop: "10px", width: "auto" }}><span style={{ fontFamily: "Poppins", fontSize: "22px", fontWeight: 800, textTransform: "none", textDecorationLine: "none" }}>Download ATND Details </span></Button></a>
                     </Box>
 
                     {/* ✅ New: results table showing the uploaded/parsed Baseband data */}
@@ -331,4 +331,4 @@ const UploadVil = () => {
     )
 }
 
-export default UploadVil
+export default UploadAtnd
