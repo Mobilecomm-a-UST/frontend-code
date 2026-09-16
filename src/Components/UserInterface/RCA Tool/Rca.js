@@ -15,6 +15,8 @@ import WaitIcon from '@rsuite/icons/Wait';
 import Loader from '../../Skeleton/Loader';
 import './../../../App.css'
 
+
+
 const Kpi_Data = lazy(() => import('./Kpi_table/Kpi_Data'));
 const Rca_tool = lazy(() => import('./Rca_tool'));
 const Rca_data = lazy(() => import('./Rca_table/Rca_data'));
@@ -63,9 +65,9 @@ const Rca = () => {
                                     <Nav activeKey={activeKey} onSelect={setActiveKey} >
                                         <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 18 }}>RCA Genie</Nav>
 
-                                        {/* <Nav.Item eventKey="0" placement="rightStart" icon={<AppSelectIcon size="3em" />} onClick={() => navigate('/tools/rca/master_dashboard')}>
+                                        <Nav.Item eventKey="0" placement="rightStart"  onClick={() => navigate('/tools/rca/master_dashboard')}>
                                             Master Dashboard
-                                        </Nav.Item> */}
+                                        </Nav.Item> 
 
                                         <Nav.Menu eventKey="4" placement="rightStart" title="Dashboard" icon={<DashboardIcon size="3em" />}>
                                             <Nav.Item eventKey='4-1' placement="rightStart" onClick={() => navigate('/tools/rca/ticket_dashboard')}>
@@ -103,7 +105,7 @@ const Rca = () => {
                                             <Nav.Item eventKey="7" className="single-item-custom" placement="rightStart" icon={<WaitIcon size="3em" />} onClick={() => navigate('/tools/rca/sa_performance')}>
                                             SA Performance
                                         </Nav.Item>
-{/* 
+
                                         {(!userType.includes('Circle_Rno')) ? (<Nav.Menu eventKey="1" placement="rightStart" title="Threshold Data" icon={<DashboardIcon size="3em" />}>
                                             <Nav.Item eventKey="1-1" placement="rightStart" onClick={() => navigate('/tools/rca/kpi_table')}>
                                                 KPI Table
@@ -115,7 +117,7 @@ const Rca = () => {
                                                 Escalation Mail
                                             </Nav.Item>
                                         </Nav.Menu>
-                                        ) : null} */}
+                                        ) : null} 
 
 
                                         {(!userType.includes('Circle_Rno')) ? (<Nav.Menu eventKey="2" placement="rightStart" title="Upload Data" icon={<FileUploadIcon size="3em" />}>
@@ -142,25 +144,32 @@ const Rca = () => {
                             <Routes>
                                 <Route element={<Rca_tool />} path="/" />
 
-                                {/* {!userType.includes('Circle_Rno') && <Route element={<Rca_data />} path="/rca_table" />}
-                                {!userType.includes('Circle_Rno') && <Route element={<Kpi_Data />} path="/kpi_table" />} */}
+                             
 
 
                                 {!userType.includes('Circle_Rno') && <Route element={<Daily4G_KPI />} path="/daily_4G_kpi" />}
                                 {!userType.includes('Circle_Rno') && <Route element={<TentativeCounter />} path="/tentative_counter" />}
                                 {!userType.includes('Circle_Rno') && <Route element={<AlarmFiles />} path="/alarm_files" />}
-                                {/* {!userType.includes('Circle_Rno') && <Route element={<MailData />} path="/escalation_mail" />} */}
                                 <Route element={<Generate_rca />} path="/generate_rca" />
-                                {/* <Route element={<MDashboard />} path="/master_dashboard" /> */}
                                 <Route element={<Graphs />} path="/ticket_dashboard" />
                                 <Route element={<OverallSummary />} path="/overall_summary" />
                                 <Route element={<LteKpiTrend />} path="/lte_kpi_trend" />
                                 <Route element={<ZeroPayload />} path="/sleeping_cell" />
                                 <Route element={<DayWisePayload />} path="/day_wise_payload_variation" />
                                 <Route element={<WeekWisePayload />} path="/week_wise_payload_variation" />
-                                {/* <Route element={<RaiseTicket />} path="/raise_ticket" /> */}
                                 <Route element={<RaiseTicket2 />} path="/ticket" />
                                 <Route element={<SAper />} path="/sa_performance" />
+
+                                // =================================================================================
+
+                                {!userType.includes('Circle_Rno') && <Route element={<Rca_data />} path="/rca_table" />}
+                                {!userType.includes('Circle_Rno') && <Route element={<Kpi_Data />} path="/kpi_table" />} 
+                                {!userType.includes('Circle_Rno') && <Route element={<MailData />} path="/escalation_mail" />} 
+                                <Route element={<MDashboard />} path="/master_dashboard" /> 
+                                {/* <Route element={<RaiseTicket />} path="/raise_ticket" />  */}
+
+
+
 
                             </Routes>
                         </Suspense>

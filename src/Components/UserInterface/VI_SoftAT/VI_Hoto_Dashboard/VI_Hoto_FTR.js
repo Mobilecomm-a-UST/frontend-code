@@ -1,50 +1,4 @@
-// import React, { useEffect } from 'react'
-// import { Box } from '@mui/material'
-// import { Breadcrumbs, Link, Typography } from "@mui/material";
-// import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-// import { useNavigate } from "react-router-dom";
 
-
-// import { MemoVIHotoFtr } from './VIHotoFtr';
-// import { MemoFTR_Dashboard } from './FTR_Dashboard';
-
-// const VI_Hoto_FTR = () => {
-//     const navigate = useNavigate()
-
-//     useEffect(() => {
-//         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
-
-//     }, [])
-//     return (<>
-//         <div style={{ margin: 5, marginLeft: 10 }}>
-//             <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
-//                 <Link underline="hover" onClick={() => navigate("/tools")}>
-//                     Tools
-//                 </Link>
-//                 <Link underline="hover" onClick={() => navigate("/tools/ix_tools")}>
-//                     IX Tools
-//                 </Link>
-//                 <Link underline="hover" onClick={() => navigate("/tools/ix_tools/Vi_Hoto")}>
-//                     VI Tracker
-//                 </Link>
-//                 <Typography color='text.primary'>VI_Hoto_FTR</Typography>
-//             </Breadcrumbs>
-//         </div>
-
-//         <Box>
-//             <MemoFTR_Dashboard />
-//         </Box>
-//         <Box>
-
-//             <MemoVIHotoFtr />
-//         </Box>
-
-//     </>
-
-//     )
-// }
-
-// export default VI_Hoto_FTR
 
 // import React, { useEffect, useState } from 'react'
 // import { Box, alpha } from '@mui/material'
@@ -52,6 +6,7 @@
 // import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 // import DashboardIcon from '@mui/icons-material/Dashboard';
 // import InsightsIcon from '@mui/icons-material/Insights';
+// import LocationOnIcon from '@mui/icons-material/LocationOn';
 // import { useNavigate } from "react-router-dom";
 // import { MemoFTR_OfferedSiteWise } from './FTR_OfferedSiteWise';
 
@@ -63,8 +18,10 @@
 
 // // ── Toggle options: which view to show ──
 // const VIEW_TABS = [
-//     { key: "dashboard", label: "FTR Dashboard", icon: DashboardIcon },
-//     { key: "hoto", label: "FTR Analysis", icon: InsightsIcon  },
+//     { key: "dashboard", label: "MS1 Wise", icon: DashboardIcon },
+//      { key: "offered", label: "Offered Site Wise", icon: LocationOnIcon },
+//     { key: "hoto", label: "FTR Analysis", icon: InsightsIcon },
+   
 // ];
 
 // const ViewToggle = ({ active, onChange }) => (
@@ -104,7 +61,7 @@
 
 // const VI_Hoto_FTR = () => {
 //     const navigate = useNavigate()
-//     const [activeView, setActiveView] = useState("dashboard"); // "dashboard" | "hoto"
+//     const [activeView, setActiveView] = useState("dashboard"); // "dashboard" | "hoto" | "offered"
 
 //     useEffect(() => {
 //         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
@@ -130,20 +87,25 @@
 //             <ViewToggle active={activeView} onChange={setActiveView} />
 //         </Box>
 
-//         {activeView === "dashboard" ? (
+//         {activeView === "dashboard" && (
 //             <Box>
 //                 <MemoFTR_Dashboard />
 //             </Box>
-//         ) : (
-            
+//         )}
 
+//          {activeView === "offered" && (
+//             <Box>
+//                 <MemoFTR_OfferedSiteWise />
+//             </Box>
+//         )}
+
+//         {activeView === "hoto" && (
 //             <Box>
 //                 <MemoVIHotoFtr />
 //             </Box>
 //         )}
-//      <Box>
-//                 <MemoFTR_OfferedSiteWise />
-//             </Box>
+
+       
 //     </>
 
 //     )
@@ -151,54 +113,6 @@
 
 // export default VI_Hoto_FTR
 
-
-// import React, { useEffect } from 'react'
-// import { Box } from '@mui/material'
-// import { Breadcrumbs, Link, Typography } from "@mui/material";
-// import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-// import { useNavigate } from "react-router-dom";
-
-
-// import { MemoVIHotoFtr } from './VIHotoFtr';
-// import { MemoFTR_Dashboard } from './FTR_Dashboard';
-
-// const VI_Hoto_FTR = () => {
-//     const navigate = useNavigate()
-
-//     useEffect(() => {
-//         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
-
-//     }, [])
-//     return (<>
-//         <div style={{ margin: 5, marginLeft: 10 }}>
-//             <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
-//                 <Link underline="hover" onClick={() => navigate("/tools")}>
-//                     Tools
-//                 </Link>
-//                 <Link underline="hover" onClick={() => navigate("/tools/ix_tools")}>
-//                     IX Tools
-//                 </Link>
-//                 <Link underline="hover" onClick={() => navigate("/tools/ix_tools/Vi_Hoto")}>
-//                     VI Tracker
-//                 </Link>
-//                 <Typography color='text.primary'>VI_Hoto_FTR</Typography>
-//             </Breadcrumbs>
-//         </div>
-
-//         <Box>
-//             <MemoFTR_Dashboard />
-//         </Box>
-//         <Box>
-
-//             <MemoVIHotoFtr />
-//         </Box>
-
-//     </>
-
-//     )
-// }
-
-// export default VI_Hoto_FTR
 
 import React, { useEffect, useState } from 'react'
 import { Box, alpha } from '@mui/material'
@@ -214,7 +128,7 @@ import { MemoFTR_OfferedSiteWise } from './FTR_OfferedSiteWise';
 import { MemoVIHotoFtr } from './VIHotoFtr';
 import { MemoFTR_Dashboard } from './FTR_Dashboard';
 
-const HEADER_GRADIENT_FROM = "#1e3c72";
+const HEADER_GRADIENT_FROM = "#006e74";
 
 // ── Toggle options: which view to show ──
 const VIEW_TABS = [
@@ -248,10 +162,12 @@ const ViewToggle = ({ active, onChange }) => (
                         borderRadius: "20px",
                         cursor: "pointer",
                         border: `1.5px solid ${HEADER_GRADIENT_FROM}`,
-                        bgcolor: isActive ? HEADER_GRADIENT_FROM : "#fff",
+                        background: isActive
+                            ? "linear-gradient(90deg, #004d52 0%, #006e74 55%, #4fa3a8 100%)"
+                            : "#fff",
                         color: isActive ? "#fff" : HEADER_GRADIENT_FROM,
                         transition: "all 0.15s",
-                        "&:hover": { bgcolor: isActive ? HEADER_GRADIENT_FROM : alpha(HEADER_GRADIENT_FROM, 0.08) },
+                        "&:hover": { bgcolor: isActive ? undefined : alpha(HEADER_GRADIENT_FROM, 0.08) },
                     }}
                 />
             );
