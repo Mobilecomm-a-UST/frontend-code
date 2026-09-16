@@ -144,7 +144,7 @@ const CATEGORY_CONFIG = {
 };
 
 
-const MONTHS = [ "Jan-26", "Feb-26", "Mar-26", "Apr-26", "May-26", "Jun-26", "Jul-26"];
+const MONTHS = [ "Jan-26", "Feb-26", "Mar-26", "Apr-26", "May-26", "Jun-26", "Jul-26","Aug-26"];
 
 const CATEGORY_LIST = [
     { id: "", label: "All" },
