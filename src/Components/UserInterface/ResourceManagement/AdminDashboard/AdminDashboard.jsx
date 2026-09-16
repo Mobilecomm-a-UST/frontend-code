@@ -27,7 +27,7 @@ const MONTHS = [
 
 export default function Analytics() {
 
-    const [month, setMonth] = useState("Jul-26");
+    const [month, setMonth] = useState("Aug-26");
     const [loading, setLoading] = useState(false);
     const [records, setRecords] = useState([]);
     const [revenueFilter, setRevenueFilter] = useState("");
