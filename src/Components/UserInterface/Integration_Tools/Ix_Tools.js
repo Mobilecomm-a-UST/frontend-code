@@ -216,7 +216,7 @@ const Ix_Tools = () => {
     const userTypes = (getDecreyptedData('user_type')?.split(","))
     const allowedAirtelRoles = ['Admin', 'IX'];
     const allowedAirtelReader = ['quality', 'IX_reader', 'quality-s']
-    const allowedViRoles = ['Admin', 'VI_IX', 'VI_IX_reader'];
+    const allowedViRoles = ['Admin', 'VI_IX', 'VI_IX_reader','IX_ZTE','IX_T_VI'];
     const allowedSaRoles = ['Admin', 'IX_SA']
     const allowedErRoles = ['Admin', 'IX_ER']
     const allowedTsRoles = ['Admin', 'IX_TS']

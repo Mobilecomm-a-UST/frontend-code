@@ -1,3 +1,161 @@
+// import React, { Suspense, lazy } from 'react'
+// import { useState, useEffect } from 'react'
+// import { Box } from '@mui/material'
+// import { Grid } from '@mui/material'
+// import { Sidenav, Nav } from 'rsuite';
+// import DashboardIcon from '@rsuite/icons/legacy/Dashboard';
+// import AppSelectIcon from '@rsuite/icons/AppSelect';
+// import { useNavigate } from 'react-router-dom';
+// import { BrowserRouter, Routes, Route } from "react-router-dom";
+// import FileUploadIcon from '@rsuite/icons/FileUpload';
+// import ConversionIcon from '@rsuite/icons/Conversion';
+// import { getDecreyptedData } from '../../utils/localstorage'
+// import Loader from '../../Skeleton/Loader';
+// import './../../../App.css'
+
+// const Integration_Tool = lazy(() => import('./Vi_Integration_Tool'))
+// const UploadFile = lazy(() => import('./Upload/UploadFile'))
+// const FinalDashboard = lazy(() => import('./Dashboard/FinalDashboard'))
+// const ComanDashboard = lazy(() => import('./Dashboard/ComanDashboard'))
+// const MDashboard = lazy(() => import('./MasterDashboard/MDashboard'))
+// const TotalDataDashboard = lazy(() => import('./Dashboard/TotalDataDashboard'));
+// const Ztesite = lazy(() => import('./Upload/Ztesite'));
+// const Ztemo = lazy(() => import('./Upload/Ztemo'));
+
+// const Vi_Integration = () => {
+//     const [expanded, setExpanded] = useState(true);
+//     const [activeKey, setActiveKey] = useState();
+//     const [states, setStates] = useState([])
+//     const userTypes = getDecreyptedData('user_type')?.split(",").map((t) => t.trim())
+//     const navigate = useNavigate()
+
+//     useEffect(() => {
+//         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
+//     }, [])
+
+//     // onClick={() => navigate('/tools/Integration/relocation')} 
+//     return (
+//         <>
+
+//             <Box style={{ marginTop: '60px' }}>
+//                 <Grid container spacing={2}>
+//                     <Grid item xs={0} md={2} sx={{}}>
+//                         <Box style={{ position: 'fixed', width: '16.5%' }}>
+//                             <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#006e74", marginTop: 8, borderRadius: 10 }}>
+//                                 <Sidenav.Body>
+//                                     <Nav activeKey={activeKey} onSelect={setActiveKey} >
+//                                         <Nav style={{ fontWeight: 550, color: 'white', textAlign: 'center', fontSize: 19 }}>VI Tracker Tool</Nav>
+//                                         {/* <Nav.Men eventKey="1" placement="rightStart" icon={<DashboardIcon />} title="Dashboard">
+//                                          <Nav.Item>dfdf</Nav.Item>
+//                                         </Nav.Men > */}
+//                                         {userTypes?.some(type => ['VI_IX_reader', 'VI_IX'].includes(type)) &&
+//                                             <>
+//                                                 <Nav.Item eventKey="1" placement="rightStart" icon={<AppSelectIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/vi_integration/master_dashboard')}>
+//                                                     Master Dashboard
+//                                                 </Nav.Item>
+//                                                 <Nav.Item eventKey="2" placement="rightStart" icon={<DashboardIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/vi_integration/dashboard')}>
+//                                                     Dashboard
+//                                                 </Nav.Item>
+//                                             </>
+
+//                                         }
+
+//                                         {!userTypes?.some(type => ['VI_IX_reader', 'IX_ZTE'].includes(type)) && <Nav.Item eventKey="3" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/vi_integration/upload_file')} >
+//                                             Upload File
+//                                         </Nav.Item>}
+
+//                                         {userTypes?.includes('IX_ZTE') &&
+
+//                                             <>
+//                                                 <Nav.Item eventKey="4" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/vi_integration/zte_mo_creation')} >
+//                                                     ZTE MO Creation
+//                                                 </Nav.Item>
+//                                                 <Nav.Item eventKey="5" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/vi_integration/zte_site_creation')} >
+//                                                     ZTE Site Creation
+//                                                 </Nav.Item>
+//                                             </>
+
+
+//                                         }
+//                                         {userTypes?.some(type => ['admin', 'IX_T_VI'].includes(type)) &&
+
+//                                             <>
+//                                                 <Nav.Item eventKey="1" placement="rightStart" icon={<AppSelectIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/vi_integration/master_dashboard')}>
+//                                                     Master Dashboard
+//                                                 </Nav.Item>
+//                                                 <Nav.Item eventKey="2" placement="rightStart" icon={<DashboardIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/vi_integration/dashboard')}>
+//                                                     Dashboard
+//                                                 </Nav.Item>
+//                                                 <Nav.Item eventKey="3" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/vi_integration/upload_file')} >
+//                                                     Upload File
+//                                                 </Nav.Item>
+//                                                 <Nav.Item eventKey="4" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/vi_integration/zte_mo_creation')} >
+//                                                     ZTE MO Creation
+//                                                 </Nav.Item>
+//                                                 <Nav.Item eventKey="5" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/vi_integration/zte_site_creation')} >
+//                                                     ZTE Site Creation
+//                                                 </Nav.Item>
+
+//                                             </>
+
+//                                         }
+
+
+//                                     </Nav>
+//                                 </Sidenav.Body>
+
+//                             </Sidenav>
+//                         </Box>
+//                     </Grid>
+//                     <Grid item xs={12} md={10}>
+//                         <Suspense fallback={<Loader />}>
+//                             <Routes>
+//                                 <Route element={<Integration_Tool />} path="/" />
+
+
+//                                 {!userTypes?.includes('VI_IX_reader') && <Route element={<UploadFile />} path="/upload_file" />}
+//                                 {userTypes?.some(type => ['VI_IX_reader', 'VI_IX'].includes(type)) && <>
+//                                     <Route element={<FinalDashboard />} path="/dashboard/*" />
+//                                     <Route element={<TotalDataDashboard />} path="/dashboard/total_count/:name" />
+//                                     <Route element={<ComanDashboard />} path="/dashboard/:name" />
+//                                     <Route element={<MDashboard />} path="/master_dashboard" />
+//                                 </>}
+//                                 {userTypes?.includes('IX_ZTE') && <>
+//                                     <Route element={<Ztesite />} path="/zte_site_creation" />
+//                                     <Route element={<Ztemo />} path="/zte_mo_creation" />
+//                                 </>}
+
+//                                 {userTypes?.some(type => ['admin', 'IX_T_VI'].includes(type)) &&
+//                                     <>
+//                                         <Route element={<FinalDashboard />} path="/dashboard/*" />
+//                                         <Route element={<TotalDataDashboard />} path="/dashboard/total_count/:name" />
+//                                         <Route element={<ComanDashboard />} path="/dashboard/:name" />
+//                                         <Route element={<MDashboard />} path="/master_dashboard" />
+//                                         {/* <Route element={<UploadFile />} path="/upload_file" /> */}
+//                                         <Route element={<Ztesite />} path="/zte_site_creation" />
+//                                         <Route element={<Ztemo />} path="/zte_mo_creation" />
+//                                     </>
+//                                 }
+
+//                                 {/* {userTypes?.includes('IX_ZTE') &&
+//                                     <Route element={<Ztesite />} path="/zte_site_creation" />}
+//                                 {userTypes?.includes('IX_ZTE') &&
+//                                     <Route element={<Ztemo />} path="/zte_mo_creation" />} */}
+
+//                             </Routes>
+//                         </Suspense>
+//                     </Grid>
+//                 </Grid>
+//             </Box>
+//         </>
+//     )
+// }
+
+// export default Vi_Integration
+
+
+
+
 import React, { Suspense, lazy } from 'react'
 import { useState, useEffect } from 'react'
 import { Box } from '@mui/material'
@@ -26,8 +184,21 @@ const Vi_Integration = () => {
     const [expanded, setExpanded] = useState(true);
     const [activeKey, setActiveKey] = useState();
     const [states, setStates] = useState([])
-    const userTypes = (getDecreyptedData('user_type')?.split(","))
+    const userTypes = getDecreyptedData('user_type')?.split(",").map((t) => t.trim())
     const navigate = useNavigate()
+
+    // ── Permission flags, computed once ──────────────────────────────────
+    // Each flag ORs together every role allowed to see that item, so a user
+    // matching more than one role condition (e.g. IX_T_VI) still only ever
+    // renders each Nav item / Route once instead of once per matching block.
+    const canSeeDashboards = userTypes?.some(type => ['VI_IX_reader', 'VI_IX'].includes(type))
+        || userTypes?.some(type => ['admin', 'IX_T_VI'].includes(type));
+
+    const canSeeUpload = !userTypes?.some(type => ['VI_IX_reader', 'IX_ZTE'].includes(type))
+        || userTypes?.some(type => ['admin', 'IX_T_VI'].includes(type));
+
+    const canSeeZte = userTypes?.includes('IX_ZTE')
+        || userTypes?.some(type => ['admin', 'IX_T_VI'].includes(type));
 
     useEffect(() => {
         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
@@ -45,28 +216,34 @@ const Vi_Integration = () => {
                                 <Sidenav.Body>
                                     <Nav activeKey={activeKey} onSelect={setActiveKey} >
                                         <Nav style={{ fontWeight: 550, color: 'white', textAlign: 'center', fontSize: 19 }}>VI Tracker Tool</Nav>
-                                        {/* <Nav.Men eventKey="1" placement="rightStart" icon={<DashboardIcon />} title="Dashboard">
-                                         <Nav.Item>dfdf</Nav.Item>
-                                        </Nav.Men > */}
-                                        <Nav.Item eventKey="1" placement="rightStart" icon={<AppSelectIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/vi_integration/master_dashboard')}>
-                                            Master Dashboard
-                                        </Nav.Item>
-                                        <Nav.Item eventKey="2" placement="rightStart" icon={<DashboardIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/vi_integration/dashboard')}>
-                                            Dashboard
-                                        </Nav.Item>
-                                        {!userTypes?.includes('VI_IX_reader') && <Nav.Item eventKey="3" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/vi_integration/upload_file')} >
-                                            Upload File
-                                        </Nav.Item>}
-                                        <Nav.Item eventKey="4" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/vi_integration/zte_mo_creation')} >
-                                            ZTE MO Creation
-                                        </Nav.Item>
-                                        <Nav.Item eventKey="5" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/vi_integration/zte_site_creation')} >
-                                            ZTE Site Creation
-                                        </Nav.Item>
 
+                                        {canSeeDashboards && (
+                                            <>
+                                                <Nav.Item eventKey="1" placement="rightStart" icon={<AppSelectIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/vi_integration/master_dashboard')}>
+                                                    Master Dashboard
+                                                </Nav.Item>
+                                                <Nav.Item eventKey="2" placement="rightStart" icon={<DashboardIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/vi_integration/dashboard')}>
+                                                    Dashboard
+                                                </Nav.Item>
+                                            </>
+                                        )}
 
+                                        {canSeeUpload && (
+                                            <Nav.Item eventKey="3" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/vi_integration/upload_file')}>
+                                                Upload File
+                                            </Nav.Item>
+                                        )}
 
-
+                                        {canSeeZte && (
+                                            <>
+                                                <Nav.Item eventKey="4" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/vi_integration/zte_mo_creation')}>
+                                                    ZTE MO Creation
+                                                </Nav.Item>
+                                                <Nav.Item eventKey="5" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/vi_integration/zte_site_creation')}>
+                                                    ZTE Site Creation
+                                                </Nav.Item>
+                                            </>
+                                        )}
 
                                     </Nav>
                                 </Sidenav.Body>
@@ -78,13 +255,24 @@ const Vi_Integration = () => {
                         <Suspense fallback={<Loader />}>
                             <Routes>
                                 <Route element={<Integration_Tool />} path="/" />
-                                {!userTypes?.includes('VI_IX_reader') && <Route element={<UploadFile />} path="/upload_file" />}
-                                <Route element={<FinalDashboard />} path="/dashboard/*" />
-                                <Route element={<TotalDataDashboard />} path="/dashboard/total_count/:name" />
-                                <Route element={<ComanDashboard />} path="/dashboard/:name" />
-                                <Route element={<MDashboard />} path="/master_dashboard" />
-                                <Route element={<Ztesite />} path="/zte_site_creation" />
-                                <Route element={<Ztemo />} path="/zte_mo_creation" />
+
+                                {canSeeUpload && <Route element={<UploadFile />} path="/upload_file" />}
+
+                                {canSeeDashboards && (
+                                    <>
+                                        <Route element={<FinalDashboard />} path="/dashboard/*" />
+                                        <Route element={<TotalDataDashboard />} path="/dashboard/total_count/:name" />
+                                        <Route element={<ComanDashboard />} path="/dashboard/:name" />
+                                        <Route element={<MDashboard />} path="/master_dashboard" />
+                                    </>
+                                )}
+
+                                {canSeeZte && (
+                                    <>
+                                        <Route element={<Ztesite />} path="/zte_site_creation" />
+                                        <Route element={<Ztemo />} path="/zte_mo_creation" />
+                                    </>
+                                )}
 
                             </Routes>
                         </Suspense>
