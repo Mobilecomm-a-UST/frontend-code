@@ -1,7 +1,6 @@
 
 
-
-// import React, { useState, useEffect, useCallback } from "react";
+// import React, { useState, useEffect, useCallback, useRef } from "react";
 // import {
 //     Box,
 //     Paper,
@@ -23,6 +22,10 @@
 //     Tooltip,
 //     Chip,
 //     TextField,
+//     Select,
+//     MenuItem,
+//     FormControl,
+//     InputLabel,
 // } from "@mui/material";
 // import LayersIcon from "@mui/icons-material/Layers";
 // import AccessTimeIcon from "@mui/icons-material/AccessTime";
@@ -63,23 +66,19 @@
 // const ROW_H = 37; // approx header row height, used for sticky offset of 2nd header row
 
 // /* ------------------------------------------------------------------ */
-// /*  Date helpers — format as YYYY-MM-DD (matches API's start_date /    */
-// /*  end_date fields, e.g. "2026-07-01")                                */
+// /*  Month / Year helpers                                                */
+// /*  IMPORTANT: the backend expects "month" as a NUMBER (1–12), not a   */
+// /*  month name string. We still show readable names in the dropdown,   */
+// /*  but the value stored in state (and sent to the API) is numeric —   */
+// /*  e.g. selecting "July" sends month=7, "August" sends month=8.       */
 // /* ------------------------------------------------------------------ */
-// const toYMD = (d) => {
-//     const yyyy = d.getFullYear();
-//     const mm = String(d.getMonth() + 1).padStart(2, "0");
-//     const dd = String(d.getDate()).padStart(2, "0");
-//     return `${yyyy}-${mm}-${dd}`;
-// };
+// const MONTHS = [
+//     "January", "February", "March", "April", "May", "June",
+//     "July", "August", "September", "October", "November", "December",
+// ];
 
-// const defaultStartDate = () => {
-//     const d = new Date();
-//     d.setDate(1); // first day of current month
-//     return toYMD(d);
-// };
-
-// const defaultEndDate = () => toYMD(new Date());
+// const defaultMonth = () => new Date().getMonth() + 1; // 1–12
+// const defaultYear = () => String(new Date().getFullYear());
 
 // /* ------------------------------------------------------------------ */
 // /*  Helpers                                                             */
@@ -552,21 +551,41 @@
 //     const [loading, setLoading] = useState(true);
 //     const [error, setError] = useState(false);
 
-//     // ── Date range filters (YYYY-MM-DD), sent to the API ──
-//     const [startDate, setStartDate] = useState(defaultStartDate());
-//     const [endDate, setEndDate] = useState(defaultEndDate());
+//     // ── Month / Year filters, sent to the API ──
+//     // month is stored as a NUMBER (1–12) because the backend expects an
+//     // integer, not a month name string (see notes above MONTHS).
+//     const [month, setMonth] = useState(defaultMonth());
+//     const [year, setYear] = useState(defaultYear());
+
+//     // ── Race-condition guards ──
+//     // abortControllerRef cancels any in-flight request before a new one
+//     // starts. requestIdRef is a belt-and-braces check so that even if an
+//     // old request can't be aborted in time (e.g. browser quirks), its
+//     // response is ignored once a newer request has been issued.
+//     const abortControllerRef = useRef(null);
+//     const requestIdRef = useRef(0);
 
 //     const fetchDashboard = useCallback(async () => {
+//         if (abortControllerRef.current) {
+//             abortControllerRef.current.abort();
+//         }
+//         const controller = new AbortController();
+//         abortControllerRef.current = controller;
+//         const thisRequestId = ++requestIdRef.current;
+
 //         setLoading(true);
 //         setError(false);
 //         try {
 //             const params = new URLSearchParams();
-//             if (startDate) params.append("start_date", startDate);
-//             if (endDate) params.append("end_date", endDate);
+//             if (month) params.append("month", month); // numeric, e.g. 7 for July
+//             if (year) params.append("year", year);
 
 //             const url = `${BASE_URL}${API_PATH}${params.toString() ? `?${params.toString()}` : ""}`;
-//             const res = await fetch(url);
+//             const res = await fetch(url, { signal: controller.signal });
 //             const json = await res.json();
+
+//             // A newer request has since been issued — discard this response.
+//             if (thisRequestId !== requestIdRef.current) return;
 
 //             if (!json || !json.dashboard) {
 //                 setDashboard(null);
@@ -576,22 +595,47 @@
 //                 setDownloadLink(json.download_link ?? null);
 //             }
 //         } catch (e) {
-//             console.error("Vi_Hoto fetchDashboard:", e);
-//             setError(true);
-//             setDashboard(null);
-//             setDownloadLink(null);
+//             if (e.name === "AbortError") return; // expected when a newer request supersedes this one
+//             console.error("FTR_Dashboard fetchDashboard:", e);
+//             if (thisRequestId === requestIdRef.current) {
+//                 setError(true);
+//                 setDashboard(null);
+//                 setDownloadLink(null);
+//             }
 //         } finally {
-//             setLoading(false);
+//             if (thisRequestId === requestIdRef.current) {
+//                 setLoading(false);
+//             }
 //         }
-//     }, [startDate, endDate]);
+//     }, [month, year]);
 
 //     useEffect(() => {
 //         fetchDashboard();
+//         // Cancel any in-flight request if the component unmounts mid-fetch.
+//         return () => {
+//             if (abortControllerRef.current) {
+//                 abortControllerRef.current.abort();
+//             }
+//         };
 //     }, [fetchDashboard]);
 
 //     const ftrDashboardRows = dashboard?.["FTR Dashboard"];
 
 //     const hasAnyData = !!dashboard;
+
+//     // Shared sx for the dark-header Select/TextField controls
+//     const controlSx = {
+//         bgcolor: "rgba(255,255,255,0.08)",
+//         borderRadius: 1,
+//         "& .MuiOutlinedInput-root": {
+//             color: "#fff",
+//             "& fieldset": { borderColor: "rgba(255,255,255,0.3)" },
+//             "&:hover fieldset": { borderColor: "rgba(255,255,255,0.5)" },
+//             "&.Mui-focused fieldset": { borderColor: "#7dd3fc" },
+//         },
+//         "& .MuiInputLabel-root": { color: "rgba(255,255,255,0.8)" },
+//         "& .MuiSvgIcon-root": { color: "#fff" },
+//     };
 
 //     return (
 //         <Slide direction="left" in="true" timeout={1000}>
@@ -625,45 +669,32 @@
 //                                 </Box>
 //                             </Stack>
 
-//                             {/* Date range filters */}
+//                             {/* Month / Year filters */}
 //                             <Stack direction="row" spacing={1.5} alignItems="center" flexWrap="wrap">
+//                                 <FormControl size="small" sx={{ minWidth: 140, ...controlSx }}>
+//                                     <InputLabel id="ftr-month-label">Month</InputLabel>
+//                                     <Select
+//                                         labelId="ftr-month-label"
+//                                         label="Month"
+//                                         value={month}
+//                                         onChange={(e) => setMonth(e.target.value)}
+//                                     >
+//                                         {MONTHS.map((m, idx) => (
+//                                             <MenuItem key={m} value={idx + 1}>
+//                                                 {m}
+//                                             </MenuItem>
+//                                         ))}
+//                                     </Select>
+//                                 </FormControl>
+
 //                                 <TextField
-//                                     type="date"
+//                                     type="number"
 //                                     size="small"
-//                                     label="Start Date"
-//                                     value={startDate}
-//                                     onChange={(e) => setStartDate(e.target.value)}
+//                                     label="Year"
+//                                     value={year}
+//                                     onChange={(e) => setYear(e.target.value)}
 //                                     InputLabelProps={{ shrink: true, sx: { color: "rgba(255,255,255,0.8)" } }}
-//                                     sx={{
-//                                         bgcolor: "rgba(255,255,255,0.08)",
-//                                         borderRadius: 1,
-//                                         "& .MuiOutlinedInput-root": {
-//                                             color: "#fff",
-//                                             "& fieldset": { borderColor: "rgba(255,255,255,0.3)" },
-//                                             "&:hover fieldset": { borderColor: "rgba(255,255,255,0.5)" },
-//                                             "&.Mui-focused fieldset": { borderColor: "#7dd3fc" },
-//                                         },
-//                                         "& input": { colorScheme: "dark" },
-//                                     }}
-//                                 />
-//                                 <TextField
-//                                     type="date"
-//                                     size="small"
-//                                     label="End Date"
-//                                     value={endDate}
-//                                     onChange={(e) => setEndDate(e.target.value)}
-//                                     InputLabelProps={{ shrink: true, sx: { color: "rgba(255,255,255,0.8)" } }}
-//                                     sx={{
-//                                         bgcolor: "rgba(255,255,255,0.08)",
-//                                         borderRadius: 1,
-//                                         "& .MuiOutlinedInput-root": {
-//                                             color: "#fff",
-//                                             "& fieldset": { borderColor: "rgba(255,255,255,0.3)" },
-//                                             "&:hover fieldset": { borderColor: "rgba(255,255,255,0.5)" },
-//                                             "&.Mui-focused fieldset": { borderColor: "#7dd3fc" },
-//                                         },
-//                                         "& input": { colorScheme: "dark" },
-//                                     }}
+//                                     sx={{ width: 110, ...controlSx }}
 //                                 />
 
 //                                 <Tooltip title={downloadLink ? "Download Excel" : "No file available"}>
@@ -774,19 +805,21 @@ const BASE_URL = "https://commtoolapi.mcpspmis.com/";
 const API_PATH = "ix_tracker_vi/HOTO_dashboard/";
 
 /* ------------------------------------------------------------------ */
-/*  Colors — matched to the Excel-style reference screenshots          */
+/*  Colors — teal theme, matching the sidebar (#006e74) with gradient  */
 /* ------------------------------------------------------------------ */
 const C = {
-    corner: "#2e4463",       // top-left / date-row dark navy
-    headerBg: "#4d8fd1",     // column header medium blue
-    labelOdd: "#dbe9f8",     // circle label column - light blue
-    labelEven: "#eef4fb",    // circle label column - lighter blue
+    corner: "#004d52",       // top-left / dark teal
+    headerBg: "#00838f",     // column header medium teal
+    labelOdd: "#dbf2f2",     // circle label column - light teal
+    labelEven: "#eef9f9",    // circle label column - lighter teal
     grandTotalBg: "#c9f7d6", // total row green
     grandTotalText: "#0b6b3a",
     zeroText: "#b7bfc9",
-    valueText: "#1a2f52",
+    valueText: "#0d3a3c",
     border: "#c3cbd6",
 };
+
+const HEADER_GRADIENT = "linear-gradient(90deg, #004d52 0%, #006e74 55%, #4fa3a8 100%)";
 
 const PAGE_BG = "#fdece0"; // warm peach/orange page background (replaces bluish tone)
 
@@ -881,7 +914,7 @@ function MatrixTable({ title, rows, labelKey, icon }) {
                     gap: 1,
                     px: 2,
                     py: 1.25,
-                    background: "linear-gradient(90deg, #446698 0%, #173d73 100%)",
+                    background: HEADER_GRADIENT,
                 }}
             >
                 {icon}
@@ -1057,7 +1090,7 @@ function FtrDashboardTable({ title, rows, icon }) {
                     gap: 1,
                     px: 2,
                     py: 1.25,
-                    background: "linear-gradient(90deg, #446698 0%, #173d73 100%)",
+                    background: HEADER_GRADIENT,
                 }}
             >
                 {icon}
@@ -1358,7 +1391,7 @@ function FTR_Dashboard() {
             color: "#fff",
             "& fieldset": { borderColor: "rgba(255,255,255,0.3)" },
             "&:hover fieldset": { borderColor: "rgba(255,255,255,0.5)" },
-            "&.Mui-focused fieldset": { borderColor: "#7dd3fc" },
+            "&.Mui-focused fieldset": { borderColor: "#4fa3a8" },
         },
         "& .MuiInputLabel-root": { color: "rgba(255,255,255,0.8)" },
         "& .MuiSvgIcon-root": { color: "#fff" },
@@ -1377,7 +1410,7 @@ function FTR_Dashboard() {
                                 px: 2.5,
                                 py: 2,
                                 mb: 3,
-                                background: "linear-gradient(90deg, #0a1f3d 0%, #446698 0%, #173d73 100%)",
+                                background: HEADER_GRADIENT,
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "space-between",
@@ -1387,7 +1420,7 @@ function FTR_Dashboard() {
                         >
                             <Stack direction="row" spacing={1.5} alignItems="center">
                                 <Avatar sx={{ bgcolor: "rgba(255,255,255,0.1)", width: 40, height: 40 }}>
-                                    <LayersIcon sx={{ color: "#7dd3fc" }} />
+                                    <LayersIcon sx={{ color: "#bfe9e9" }} />
                                 </Avatar>
                                 <Box>
                                     <Typography variant="subtitle1" sx={{ color: "#fff", fontWeight: 700, letterSpacing: 0.3 }}>
@@ -1431,7 +1464,7 @@ function FTR_Dashboard() {
                                             href={downloadLink || undefined}
                                             disabled={!downloadLink}
                                             sx={{
-                                                color: "#7dd3fc",
+                                                color: "#bfe9e9",
                                                 bgcolor: "rgba(255,255,255,0.08)",
                                                 "&:hover": { bgcolor: "rgba(255,255,255,0.16)" },
                                                 "&.Mui-disabled": { color: "rgba(255,255,255,0.3)" },
@@ -1447,7 +1480,7 @@ function FTR_Dashboard() {
                         {/* Loading state */}
                         {loading && (
                             <Box sx={{ display: "flex", justifyContent: "center", py: 8 }}>
-                                <CircularProgress size={32} sx={{ color: "#0f2a52" }} />
+                                <CircularProgress size={32} sx={{ color: C.corner }} />
                             </Box>
                         )}
 
@@ -1467,7 +1500,7 @@ function FTR_Dashboard() {
                                             <FtrDashboardTable
                                                 title="MS1 Wise"
                                                 rows={ftrDashboardRows}
-                                                icon={<TrendingUpIcon sx={{ color: "#7dd3fc", fontSize: 18 }} />}
+                                                icon={<TrendingUpIcon sx={{ color: "#bfe9e9", fontSize: 18 }} />}
                                             />
                                         </>
                                     ) : (

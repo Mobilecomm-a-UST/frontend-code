@@ -26,12 +26,12 @@ const UPLOADHOTO = lazy(() => import('./VI_Hoto_Dashboard/UPLOADHOTO'));
 const VIHotoFtr = lazy(() => import('./VI_Hoto_Dashboard/VIHotoFtr'));
 const FTR_Dashboard = lazy(() => import('./VI_Hoto_Dashboard/FTR_Dashboard'));
 const VI_Hoto_FTR = lazy(() => import('./VI_Hoto_Dashboard/VI_Hoto_FTR'));
-const UploadVil = lazy(()=>import('./VIL ERICSSON/Uploadsrvcc'))
+const UploadVil = lazy(()=>import('./VIL SRVCC/Uploadsrvcc'))
 const VI4G = lazy(()=>import('./VI GPL/VI4G'))
 const VI5G = lazy(()=> import('./VI GPL/VI5G'))
 const VIHuawei = lazy(()=> import('./VI Huawei/VI_Huawei'))
-const UploadAtnd = lazy(()=>import('./VIL ERICSSON/UploadAtnd'))
-const UploadLayered = lazy(()=>import('./VIL ERICSSON/UploadLayered'))
+const UploadAtnd = lazy(()=>import('./VIL SRVCC/UploadAtnd'))
+const UploadLayered = lazy(()=>import('./VIL SRVCC/UploadLayered'))
 
 
 const VI_SoftAT = () => {
