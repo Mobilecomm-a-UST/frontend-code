@@ -13,30 +13,31 @@ import Loader from '../../Skeleton/Loader';
 import './../../../App.css'
 
 
-const SA_upload = lazy(()=>import('./Upload/Upload'))
-const SA_tool = lazy(()=>import('./SA_tool'))
-const UPE_GPL_ULS = lazy(()=>import('./Upload/UPE_GPL_ULS'))
-const ORI_gpl_macro = lazy(()=>import('./Upload/ORI_gpl_macro'))
-const BIH_gpl_uls = lazy(()=>import('./Upload/BIH_gpl_uls'))
-const BIH_gpl_macro = lazy(() => import ('./Upload/BIH_gpl_macro'))
-const MP_gpl_macro = lazy(()=>import('./Upload/MP_gpl_macro'))
+const SA_upload = lazy(() => import('./Upload/Upload'))
+const SA_tool = lazy(() => import('./SA_tool'))
+const UPE_GPL_ULS = lazy(() => import('./Upload/UPE_GPL_ULS'))
+const ORI_gpl_macro = lazy(() => import('./Upload/ORI_gpl_macro'))
+const BIH_gpl_uls = lazy(() => import('./Upload/BIH_gpl_uls'))
+const BIH_gpl_macro = lazy(() => import('./Upload/BIH_gpl_macro'))
+const MP_gpl_macro = lazy(() => import('./Upload/MP_gpl_macro'))
 const MUM_gpl_macro = lazy(() => import('./Upload/MUM_gpl_macro'))
-const WB_gpl_macro = lazy(()=>import('./Upload/WB_gpl_macro'))
-const MAH_gpl_macro = lazy(()=>import('./Upload/MAH_gpl_macro'))
-const WB_gpl_uls = lazy(()=> import('./Upload/WB_gpl_uls'))
+const WB_gpl_macro = lazy(() => import('./Upload/WB_gpl_macro'))
+const MAH_gpl_macro = lazy(() => import('./Upload/MAH_gpl_macro'))
+const WB_gpl_uls = lazy(() => import('./Upload/WB_gpl_uls'))
+const UploadOr = lazy(() => import('./5G Scripting/UploadOr')) 
 
 const SA = () => {
-        const [expanded, setExpanded] = useState(true);
-        const [activeKey, setActiveKey] = useState();
-        const [states, setStates] = useState([])
-        const navigate = useNavigate()
-    
-        useEffect(() => {
-            document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
-        }, [])
-    
-  return (
- <>
+    const [expanded, setExpanded] = useState(true);
+    const [activeKey, setActiveKey] = useState();
+    const [states, setStates] = useState([])
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
+    }, [])
+
+    return (
+        <>
 
             <Box style={{ marginTop: '60px' }}>
                 <Grid container spacing={2}>
@@ -46,45 +47,51 @@ const SA = () => {
                                 <Sidenav.Body>
                                     <Nav activeKey={activeKey} onSelect={setActiveKey} >
                                         <Nav style={{ fontWeight: 550, color: 'white', textAlign: 'center', fontSize: 19 }}>5G GPL Tool</Nav>
-                                         <Nav.Menu eventKey="1" placement="rightStart"  icon={<ConversionIcon />}  className="menu-title-custom" title="GPL MACRO" >
-                                   
-                                        <Nav.Item eventKey="1-1" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/sa_upload_xml')}>
-                                            UPE GPL Macro
-                                        </Nav.Item>
-                                          <Nav.Item eventKey="1-2" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/ORI_gpl_macro')}>
-                                            ORI GPL Macro
-                                        </Nav.Item>
-                                          <Nav.Item eventKey="1-3" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/BIH_gpl_macro')}>
-                                            BIH GPL Macro
-                                        </Nav.Item>
-                                          <Nav.Item eventKey="1-4" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/MP_gpl_macro')}>
-                                            MP GPL Macro
-                                        </Nav.Item>
-                                          <Nav.Item eventKey="1-5" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/MUM_gpl_macro')}>
-                                            MUM GPL Macro
-                                        </Nav.Item>
-                                        <Nav.Item eventKey="1-6" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/WB_gpl_macro')}>
-                                            WB GPL Macro
-                                        </Nav.Item>
-                                        <Nav.Item eventKey="1-7" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/MAH_gpl_macro')}>
-                                            MAH GPL Macro
-                                        </Nav.Item>
-                                        
+                                        <Nav.Menu eventKey="1" placement="rightStart" icon={<ConversionIcon />} className="menu-title-custom" title="GPL MACRO" >
+
+                                            <Nav.Item eventKey="1-1" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/sa_upload_xml')}>
+                                                UPE GPL Macro
+                                            </Nav.Item>
+                                            <Nav.Item eventKey="1-2" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/ORI_gpl_macro')}>
+                                                ORI GPL Macro
+                                            </Nav.Item>
+                                            <Nav.Item eventKey="1-3" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/BIH_gpl_macro')}>
+                                                BIH GPL Macro
+                                            </Nav.Item>
+                                            <Nav.Item eventKey="1-4" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/MP_gpl_macro')}>
+                                                MP GPL Macro
+                                            </Nav.Item>
+                                            <Nav.Item eventKey="1-5" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/MUM_gpl_macro')}>
+                                                MUM GPL Macro
+                                            </Nav.Item>
+                                            <Nav.Item eventKey="1-6" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/WB_gpl_macro')}>
+                                                WB GPL Macro
+                                            </Nav.Item>
+                                            <Nav.Item eventKey="1-7" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/MAH_gpl_macro')}>
+                                                MAH GPL Macro
+                                            </Nav.Item>
+
                                         </Nav.Menu>
 
                                         <Nav.Menu eventKey="2" placement="rightStart" icon={<ConversionIcon />} className="menu-title-custom" title="GPL ULS" >
-                                        <Nav.Item eventKey="2-1" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/UPE_GPL_ULS')}>
-                                            UPE GPL ULS
-                                        </Nav.Item>
-                                      
-                                        <Nav.Item eventKey="2-2" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/BIH_gpl_uls')}>
-                                            BIH GPL ULS
-                                        </Nav.Item>
-                                          <Nav.Item eventKey="2-3" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/WB_gpl_uls')}>
-                                            WB GPL ULS
-                                        </Nav.Item>
+                                            <Nav.Item eventKey="2-1" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/UPE_GPL_ULS')}>
+                                                UPE GPL ULS
+                                            </Nav.Item>
+
+                                            <Nav.Item eventKey="2-2" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/BIH_gpl_uls')}>
+                                                BIH GPL ULS
+                                            </Nav.Item>
+                                            <Nav.Item eventKey="2-3" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/WB_gpl_uls')}>
+                                                WB GPL ULS
+                                            </Nav.Item>
                                         </Nav.Menu>
-                                        
+                                        <Nav.Menu eventKey="3" placement="rightStart" icon={<ConversionIcon />} className="menu-title-custom" title="5G Scripting" >
+                                            <Nav.Item eventKey="3-1" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/upload_or')}>
+                                                Orissa Scripting
+                                            </Nav.Item>
+
+                                        </Nav.Menu>
+
 
                                     </Nav>
                                 </Sidenav.Body>
@@ -93,19 +100,20 @@ const SA = () => {
                         </Box>
                     </Grid>
                     <Grid item xs={12} md={10}>
-                        <Suspense fallback={<Loader/>}>
+                        <Suspense fallback={<Loader />}>
                             <Routes>
                                 <Route element={<SA_tool />} path="/" />
-                                <Route element={<SA_upload/>} path='/sa_upload_xml' />
-                                <Route element={<UPE_GPL_ULS/>} path='/UPE_GPL_ULS' />
-                                <Route element={<ORI_gpl_macro/>} path='/ORI_gpl_macro' />
-                                <Route element={<BIH_gpl_uls/>} path='/BIH_gpl_uls' />
-                                <Route element={<BIH_gpl_macro/>} path='/BIH_gpl_macro'/>
-                                 <Route element={<MP_gpl_macro/>} path='/MP_gpl_macro'/>
-                                  <Route element={<MUM_gpl_macro/>} path='/MUM_gpl_macro'/>
-                                  <Route element={<WB_gpl_macro/>} path='/WB_gpl_macro'/>
-                                  <Route element={<MAH_gpl_macro/>} path='/MAH_gpl_macro'/>
-                                   <Route element={<WB_gpl_uls/>} path='/WB_gpl_uls'/>
+                                <Route element={<SA_upload />} path='/sa_upload_xml' />
+                                <Route element={<UPE_GPL_ULS />} path='/UPE_GPL_ULS' />
+                                <Route element={<ORI_gpl_macro />} path='/ORI_gpl_macro' />
+                                <Route element={<BIH_gpl_uls />} path='/BIH_gpl_uls' />
+                                <Route element={<BIH_gpl_macro />} path='/BIH_gpl_macro' />
+                                <Route element={<MP_gpl_macro />} path='/MP_gpl_macro' />
+                                <Route element={<MUM_gpl_macro />} path='/MUM_gpl_macro' />
+                                <Route element={<WB_gpl_macro />} path='/WB_gpl_macro' />
+                                <Route element={<MAH_gpl_macro />} path='/MAH_gpl_macro' />
+                                <Route element={<WB_gpl_uls />} path='/WB_gpl_uls' />
+                                <Route element ={<UploadOr />} path='/upload_or' />
 
                             </Routes>
                         </Suspense>
@@ -113,7 +121,7 @@ const SA = () => {
                 </Grid>
             </Box>
         </>
-  )
+    )
 }
 
 export default SA

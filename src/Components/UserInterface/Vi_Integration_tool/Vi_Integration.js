@@ -192,13 +192,13 @@ const Vi_Integration = () => {
     // matching more than one role condition (e.g. IX_T_VI) still only ever
     // renders each Nav item / Route once instead of once per matching block.
     const canSeeDashboards = userTypes?.some(type => ['VI_IX_reader', 'VI_IX'].includes(type))
-        || userTypes?.some(type => ['admin', 'IX_T_VI'].includes(type));
+        || userTypes?.some(type => ['Admin', 'IX_T_VI'].includes(type));
 
     const canSeeUpload = !userTypes?.some(type => ['VI_IX_reader', 'IX_ZTE'].includes(type))
-        || userTypes?.some(type => ['admin', 'IX_T_VI'].includes(type));
+        || userTypes?.some(type => ['Admin', 'IX_T_VI'].includes(type));
 
     const canSeeZte = userTypes?.includes('IX_ZTE')
-        || userTypes?.some(type => ['admin', 'IX_T_VI'].includes(type));
+        || userTypes?.some(type => ['Admin', 'IX_T_VI'].includes(type));
 
     useEffect(() => {
         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
