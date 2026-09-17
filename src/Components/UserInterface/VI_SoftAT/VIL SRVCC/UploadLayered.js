@@ -206,30 +206,61 @@ const UploadLayered = () => {
 
 
     const handle4GFileSelection = (event) => {
-
         setMake4GFiles(event.target.files)
     }
 
+    // ✅ NEW: Download handler function
+    const handleDownload = () => {
+        if (!fileData) {
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "Download link is not available. Please try uploading again.",
+            });
+            return;
+        }
+
+        try {
+            const link = document.createElement('a');
+            link.href = fileData;
+            link.download = 'layered-addition-details.xlsx';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            Swal.fire({
+                icon: "success",
+                title: "Download Started",
+                text: "Your file is being downloaded",
+                timer: 2000
+            });
+        } catch (error) {
+            console.error('Download error:', error);
+            Swal.fire({
+                icon: "error",
+                title: "Download Failed",
+                text: "Failed to download the file. Please try again.",
+            });
+        }
+    }
 
     const handleSubmit = async () => {
         if (make4GFiles.length > 0) {
             action(true)
             var formData = new FormData();
             for (let i = 0; i < make4GFiles.length; i++) {
-                formData.append(`files`, make4GFiles[i]); 
+                formData.append(`file`, make4GFiles[i]);
             }
 
             const response = await postData('vil/layer_addition/', formData)
-
-            // console.log('response data', response)
-
 
             if (response.status === true) {
                 action(false)
                 setDownload(true)
 
-                setFileData(response.download_link)
-                setResultData(Array.isArray(response.data) ? response.data : []) // ✅ store table rows
+                // ✅ FIXED: Changed download_link to download_url
+                setFileData(response.download_url)
+                setResultData(Array.isArray(response.data) ? response.data : [])
 
                 Swal.fire({
                     icon: "success",
@@ -249,22 +280,21 @@ const UploadLayered = () => {
         }
         else {
             setShow4G(true);
-
         }
     }
 
     const handleCancel = () => {
         setMake4GFiles([])
-
-
         setShow4G(false)
-
+        setDownload(false)
+        setFileData(null)
+        setResultData([])
     }
 
     useEffect(() => {
         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
-
     }, [])
+
     return (
         <>
             <div style={{ margin: 5, marginLeft: 10 }}>
@@ -277,12 +307,11 @@ const UploadLayered = () => {
             <Slide
                 direction='left'
                 in={true}
-                // style={{ transformOrigin: '0 0 0' }}
                 timeout={1000}
             >
                 <Box>
                     <Box className={classes.main_Box}>
-                        <Box className={classes.Back_Box} sx={{ width: { md: '75%', xs: '100%' } }}>44
+                        <Box className={classes.Back_Box} sx={{ width: { md: '75%', xs: '100%' } }}>
                             <Box className={classes.Box_Hading} >
                                 Create Layered Addition Summary
                             </Box>
@@ -296,10 +325,17 @@ const UploadLayered = () => {
                                         <div style={{ float: "left" }}>
                                             <Button variant="contained" component="label" color={make4GFiles.length > 0 ? "warning" : "primary"}>
                                                 select file
-                                                <input required hidden accept=".xlsx,.xls,.xlsb,.txt,.log" multiple type="file"
-                                                    // webkitdirectory="true"
-                                                    // directory="true"
-                                                    onChange={(e) => { handle4GFileSelection(e); setShow4G(false); }} />
+                                                <input
+                                                    required
+                                                    hidden
+                                                    accept=".xlsx,.xls,.xlsb,.txt,.log"
+                                                    multiple
+                                                    type="file"
+                                                    onChange={(e) => {
+                                                        handle4GFileSelection(e);
+                                                        setShow4G(false);
+                                                    }}
+                                                />
                                             </Button>
                                         </div>
 
@@ -313,16 +349,28 @@ const UploadLayered = () => {
 
                                 <Button variant="contained" color="success" onClick={handleSubmit} endIcon={<UploadIcon />}>Submit</Button>
 
-                                <Button variant="contained" onClick={handleCancel} style={{ backgroundColor: "red", color: 'white' }} endIcon={<DoDisturbIcon />} >cancel</Button>
+                                <Button variant="contained" onClick={handleCancel} style={{ backgroundColor: "red", color: 'white' }} endIcon={<DoDisturbIcon />} >Cancel</Button>
 
                             </Stack>
                         </Box>
                     </Box>
+
+                    {/* ✅ UPDATED: Download button with fixed handler */}
                     <Box sx={{ display: download ? 'block' : 'none', textAlign: 'center' }}>
-                        <a download href={fileData}><Button variant="outlined" onClick='' title="Export Excel" startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />} sx={{ marginTop: "10px", width: "auto" }}><span style={{ fontFamily: "Poppins", fontSize: "22px", fontWeight: 800, textTransform: "none", textDecorationLine: "none" }}>Download Layered Addition Details </span></Button></a>
+                        <Button
+                            variant="outlined"
+                            onClick={handleDownload}
+                            title="Export Excel"
+                            startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />}
+                            sx={{ marginTop: "10px", width: "auto" }}
+                        >
+                            <span style={{ fontFamily: "Poppins", fontSize: "22px", fontWeight: 800, textTransform: "none", textDecorationLine: "none" }}>
+                                Download Layered Addition Details
+                            </span>
+                        </Button>
                     </Box>
 
-                    {/* ✅ New: results table showing the uploaded/parsed Baseband data */}
+                    {/* ✅ Results table showing the uploaded/parsed Baseband data */}
                     <BasebandResultTable rows={resultData} />
                 </Box>
             </Slide>
