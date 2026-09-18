@@ -27,7 +27,7 @@ const QualityTeamTool = () => {
     const allowedTrendRoles = ['Admin','quality','quality-s', 'trend_tool'];
     const allowedPerformanceRoles = ['Admin','PAT','PAT_Admin'];
     const allowedTrafficRoles = ['Admin', 'PTS', 'PTS_Admin'];
-    const allowedPendingPerformanceRemark = ['Admin','QT_PPR','QT_AR']
+    const allowedPendingPerformanceRemark = ['Admin','QT_PPR','QT_AR','QT_DUS']
 
     const linker = window.location.pathname;
 
