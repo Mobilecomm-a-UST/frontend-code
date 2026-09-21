@@ -779,7 +779,7 @@ const LiveMobReco = () => {
     const [hardWareFile, setHardWareFile] = useState({ filename: "", bytes: "" });
     const [olmidFile, setOlmidFile] = useState({ filename: "", bytes: "" });
     const [recoFile, setRecoFile] = useState({ filename: "", bytes: "" });
-    
+
     // const [fileData, setFileData] = useState();
     // const [fileData1, setFileData1] = useState();
     const [download, setDownload] = useState(false);
@@ -792,7 +792,7 @@ const LiveMobReco = () => {
     });
 
     const [showError, setShowError] = useState({
-
+        siteList: false,
         recoFile: false,
     });
 
@@ -832,10 +832,11 @@ const LiveMobReco = () => {
     };
 
     const handleSubmit = async () => {
-        const isValid = recoFile.filename && hardWareFile.filename;
+        const isValid = siteList.filename && recoFile.filename && hardWareFile.filename;
 
         if (!isValid) {
             setShowError({
+                siteList: !siteList.filename,
                 recoFile: !recoFile.filename,
                 hardware: !hardWareFile.filename,
             });
@@ -846,6 +847,7 @@ const LiveMobReco = () => {
 
         try {
             const formData = new FormData();
+            formData.append("site_list_file", siteList.bytes);
             formData.append("reco_file", recoFile.bytes);
             formData.append("hw_file", hardWareFile.bytes);
 
@@ -905,7 +907,7 @@ const LiveMobReco = () => {
         // setFileData();
         // setFileData1();
         setFileurl([]);
-        setShowError({ recoFile: false });
+        setShowError({ siteList: false, recoFile: false, hw_file: false });
     };
 
     const downloadAllFiles = () => {
@@ -971,6 +973,15 @@ const LiveMobReco = () => {
                                         )}
                                     </div>
                                 </Box>
+                                
+                                <UploadSection
+                                    label="Select Site List File"
+                                    color={siteList.filename ? "warning" : "primary"}
+                                    onChange={(e) => updateFile(e, setSiteList, "siteList")}
+                                    error={showError.siteList}
+                                    selectedText={siteList.filename}
+                                />
+
 
                                 <UploadSection
                                     label="Select Reco File"

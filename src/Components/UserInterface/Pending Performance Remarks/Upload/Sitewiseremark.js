@@ -17,7 +17,7 @@ import { postDataa } from "../../../services/FetchNodeServices";
 import OverAllCss from "../../../csss/OverAllCss";
 import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
 
-const circleArray = ['AP', 'CH', 'KK', 'DL', 'HR', 'RJ', 'JK', 'WB', 'OD', 'MU', 'TNCH', 'UE', 'UW', 'MP', 'PB', 'KO', 'JH', 'UPW', 'NESA', 'BR', 'MH', 'JRK', 'HPHP', 'OR', 'WB/KOL'];
+const circleArray = ['AP','DL','TNCH', 'NESA','RJ','JK','BR','MH', 'MP','MU','JRK','KK','UE','UW','HPHP','OR','WB/KOL'];
 const tagArray = ['Workable', 'Non Workable'];
 const bucketArray = [
     'KPI AT Offered',
@@ -33,6 +33,11 @@ const bucketArray = [
     'Waiting for 5 days KPI',
     'Media Issue',
     'High Latency',
+    'Under exclusion',
+    'Physical visit planned',
+    'KPI AT Accepted',
+    'Power Issue/RNA Poor'
+
 ];
 
 const StyledCard = ({ title, classes, children }) => (

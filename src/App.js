@@ -336,7 +336,7 @@ function App() {
 
             <Route path="/tools/ix_tools/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={IxTools} allowedUserTypes={['admin', 'IX', 'VI_IX', 'VI_IX_reader', 'soft_at_team', "IX_SA", "IX_ER",'quality', 'IX_reader', 'quality-s','IX_TS','IX_ZTE','IX_T_VI']} userType={userType} />
+                <ProtectedRoute element={IxTools} allowedUserTypes={['admin', 'IX', 'VI_IX', 'VI_IX_reader', 'soft_at_team', "IX_SA", "IX_ER",'quality', 'IX_reader', 'quality-s','IX_TS','IX_ZTE','IX_T_VI','5G_SCR']} userType={userType} />
               </Suspense>
             } />
 
@@ -348,7 +348,7 @@ function App() {
 
             <Route path="/tools/ix_tools/sa_slicing/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={SA_Slicing} allowedUserTypes={['admin', 'IX_SA']} userType={userType} />
+                <ProtectedRoute element={SA_Slicing} allowedUserTypes={['admin', 'IX_SA','5G_SCR']} userType={userType} />
               </Suspense>
             } />
 

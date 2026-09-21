@@ -1318,6 +1318,7 @@ function VIHotoFtr() {
     }, [fetchDashboard]);
 
     const circleFtrStatus = dashboard?.["FTR Status"];
+    const dateinfo = dashboard?.["data contains period"]
 
     const hasAnyData = !!dashboard;
 
@@ -1338,7 +1339,7 @@ function VIHotoFtr() {
     return (
         <Slide direction="left" in="true" timeout={1000}>
             <div>
-                <Box sx={{ minHeight: "100%", width: "100%",  fontFamily: "Roboto, sans-serif" }}>
+                <Box sx={{ minHeight: "100%", width: "100%", fontFamily: "Roboto, sans-serif" }}>
                     <Box sx={{ width: "100%", px: { xs: 2, sm: 3, md: 4 }, py: 3 }}>
                         {/* Header */}
                         <Paper
@@ -1364,6 +1365,22 @@ function VIHotoFtr() {
                                     <Typography variant="subtitle1" sx={{ color: "#fff", fontWeight: 700, letterSpacing: 0.3 }}>
                                         FTR Analysis Dashboard
                                     </Typography>
+                                    <Typography
+                                        component="span"
+                                        variant="body2"
+                                        sx={{
+                                            color: "#fff",
+                                            fontWeight: 400,
+                                            opacity: 0.9,
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            textAlign: "center"
+                                        }}
+                                    >
+                                        {dateinfo}
+                                    </Typography>
+
                                 </Box>
                             </Stack>
 

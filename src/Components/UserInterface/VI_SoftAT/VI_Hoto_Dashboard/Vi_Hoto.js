@@ -333,6 +333,7 @@ function Vi_Hoto() {
     const circlePendingBucket = dashboard?.["circle pending bucket"];
     const oemStatus = dashboard?.["ageing wise pending bucket"];
     const oemPendingBucket = dashboard?.["oem wise pending bucket"];
+    const dateinfo = dashboard?.["data contains period"]
 
     const hasAnyData = !!dashboard;
 
@@ -396,9 +397,29 @@ function Vi_Hoto() {
                                     <LayersIcon sx={{ color: "#bfe9e9" }} />
                                 </Avatar>
                                 <Box>
+                                    {/* <Typography variant="subtitle1" sx={{ color: "#fff", fontWeight: 700, letterSpacing: 0.3 }}>
+                                        VI HOTO Dashboard
+                                    </Typography> */}
                                     <Typography variant="subtitle1" sx={{ color: "#fff", fontWeight: 700, letterSpacing: 0.3 }}>
                                         VI HOTO Dashboard
+
+                                        <Typography
+                                            component="span"
+                                            variant="body2"
+                                            sx={{
+                                                color: "#fff",
+                                                fontWeight: 400,
+                                                opacity: 0.9,
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: "center",
+                                                textAlign: "center"
+                                            }}
+                                        >
+                                            {dateinfo}
+                                        </Typography>
                                     </Typography>
+
                                 </Box>
                             </Stack>
 
