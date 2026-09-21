@@ -453,6 +453,8 @@ const MoResult = ({ message, urls }) => {
 
 const Ztemo = () => {
     const [make4GFiles, setMake4GFiles] = useState([]);
+    const [make2GFiles, setMake2GFiles] = useState([]);
+    const [show2G, setShow2G] = useState(false);
     const [show4G, setShow4G] = useState(false);
     const [download, setDownload] = useState(false);
     const [fileUrls, setFileUrls] = useState([]);
@@ -461,45 +463,122 @@ const Ztemo = () => {
     const navigate = useNavigate();
     const classes = OverAllCss();
 
+    // ======== 4G FILE HANDLER ========
     const handle4GFileSelection = (event) => {
         setMake4GFiles(event.target.files);
     };
 
+    // ======== 2G FILE HANDLER ========
+    const handle2GFileSelection = (event) => {
+        setMake2GFiles(event.target.files);
+    };
+
+    // ======== SUBMIT HANDLER ========
     const handleSubmit = async () => {
-        if (make4GFiles.length > 0) {
-            action(true);
-            const formData = new FormData();
+        // ======== VALIDATION ========
+        if (make4GFiles.length === 0) {
+            setShow4G(true);
+            return;
+        }
+
+        if (make2GFiles.length === 0) {
+            setShow2G(true);
+            return;
+        }
+
+        action(true);
+
+        try {
+            // ======== PREPARE 4G DATA ========
+            const formData4G = new FormData();
             for (let i = 0; i < make4GFiles.length; i++) {
-                formData.append(`rf_file`, make4GFiles[i]);
+                formData4G.append("rf_file", make4GFiles[i]);
             }
 
-            const response = await postData('zte_vil/mo_creation/', formData);
+            // ======== PREPARE 2G DATA ========
+            const formData2G = new FormData();
+            for (let i = 0; i < make2GFiles.length; i++) {
+                formData2G.append("rf_file", make2GFiles[i]);
+            }
+
+            // ======== SUBMIT 4G FILES ========
+            const response4G = await postData('zte_vil/mo_creation/', formData4G);
+
+            // ======== SUBMIT 2G FILES ========
+            const response2G = await postData('zte_vil/mo_creation_2g/', formData2G);
+
             action(false);
 
-            if (response.status === true) {
+            // ======== HANDLE RESPONSES ========
+            if (response4G?.status && response2G?.status) {
+                // Both successful
+                const all4GUrls = Array.isArray(response4G.download_url) ? response4G.download_url : [];
+                const all2GUrls = Array.isArray(response2G.download_url) ? response2G.download_url : [];
+                const allUrls = [...all4GUrls, ...all2GUrls];
+
                 setDownload(true);
-                setFileUrls(Array.isArray(response.download_url) ? response.download_url : []);
-                setResultMessage(response.message || "");
+                setFileUrls(allUrls);
+                setResultMessage(`4G: ${response4G.message || ''} | 2G: ${response2G.message || ''}`);
 
-                // NOTE: no automatic window.open here — files are only opened when
-                // the person clicks "Download All Files" or an individual file
-                // button, same as RecoReport. This is what makes it reliable.
+                Swal.fire({
+                    icon: "success",
+                    title: "Done",
+                    text: `4G: ${response4G.message}\n2G: ${response2G.message}`
+                });
+            } else if (response4G?.status && !response2G?.status) {
+                // 4G success, 2G failed
+                const all4GUrls = Array.isArray(response4G.download_url) ? response4G.download_url : [];
 
-                Swal.fire({ icon: "success", title: "Done", text: `${response.message}` });
+                setDownload(true);
+                setFileUrls(all4GUrls);
+                setResultMessage(`4G: ${response4G.message || ''}`);
+
+                Swal.fire({
+                    icon: "warning",
+                    title: "Partial Success",
+                    text: `4G: ${response4G.message}\n2G Error: ${response2G?.message || 'Failed'}`
+                });
+            } else if (!response4G?.status && response2G?.status) {
+                // 2G success, 4G failed
+                const all2GUrls = Array.isArray(response2G.download_url) ? response2G.download_url : [];
+
+                setDownload(true);
+                setFileUrls(all2GUrls);
+                setResultMessage(`2G: ${response2G.message || ''}`);
+
+                Swal.fire({
+                    icon: "warning",
+                    title: "Partial Success",
+                    text: `4G Error: ${response4G?.message || 'Failed'}\n2G: ${response2G.message}`
+                });
             } else {
-                Swal.fire({ icon: "error", title: "Oops...", text: `${response.message}` });
+                // Both failed
+                Swal.fire({
+                    icon: "error",
+                    title: "Failed",
+                    text: `4G Error: ${response4G?.message || 'Failed'}\n2G Error: ${response2G?.message || 'Failed'}`
+                });
             }
-        } else {
-            setShow4G(true);
+        } catch (error) {
+            action(false);
+
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: error?.message || "Failed to process files"
+            });
         }
     };
 
+    // ======== CANCEL HANDLER ========
     const handleCancel = () => {
         setMake4GFiles([]);
+        setMake2GFiles([]);
         setDownload(false);
         setFileUrls([]);
         setResultMessage("");
         setShow4G(false);
+        setShow2G(false);
     };
 
     useEffect(() => {
@@ -511,45 +590,135 @@ const Ztemo = () => {
             <div style={{ margin: 5, marginLeft: 10 }}>
                 <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
                     <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
-                     <Link underline="hover" onClick={() => { navigate('/tools/ix_tools') }}>IX Tools</Link>
-                     <Link underline="hover" onClick={() => { navigate('/tools/ix_tools/vi_integration') }}>VI Tracker</Link>
+                    <Link underline="hover" onClick={() => { navigate('/tools/ix_tools') }}>IX Tools</Link>
+                    <Link underline="hover" onClick={() => { navigate('/tools/ix_tools/vi_integration') }}>VI Tracker</Link>
                     <Typography color='text.primary'>Upload ZTE MO</Typography>
                 </Breadcrumbs>
             </div>
+
             <Slide direction='left' in={true} timeout={1000}>
                 <Box>
                     <Box className={classes.main_Box}>
                         <Box className={classes.Back_Box} sx={{ width: { md: '75%', xs: '100%' } }}>
                             <Box className={classes.Box_Hading}>Create ZTE MO Summary</Box>
+
                             <Stack spacing={2} sx={{ marginTop: "-40px" }} direction={'column'}>
+                                {/* ====== 4G FILE SELECTION ====== */}
                                 <Box className={classes.Front_Box}>
                                     <div className={classes.Front_Box_Hading}>
-                                        Select File:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{ }</span>
+                                        Select ZTE 4G RF File:
                                     </div>
                                     <div className={classes.Front_Box_Select_Button}>
                                         <div style={{ float: "left" }}>
-                                            <Button variant="contained" component="label" color={make4GFiles.length > 0 ? "warning" : "primary"}>
+                                            <Button
+                                                variant="contained"
+                                                component="label"
+                                                color={make4GFiles.length > 0 ? "warning" : "primary"}
+                                            >
                                                 select file
-                                                <input required hidden accept=".xlsx,.xls,.xlsm" multiple type="file"
-                                                    onChange={(e) => { handle4GFileSelection(e); setShow4G(false); }} />
+                                                <input
+                                                    required
+                                                    hidden
+                                                    accept=".xlsx,.xls,.xlsm"
+                                                    multiple
+                                                    type="file"
+                                                    onChange={(e) => { handle4GFileSelection(e); setShow4G(false); }}
+                                                />
                                             </Button>
                                         </div>
-                                        {make4GFiles.length > 0 && <span style={{ color: 'green', fontSize: '18px', fontWeight: 600 }}>Selected File(s) : {make4GFiles.length}</span>}
-                                        <div>  <span style={{ display: show4G ? 'inherit' : 'none', color: 'red', fontSize: '18px', fontWeight: 600 }}>This Field Is Required !</span> </div>
+                                        {make4GFiles.length > 0 && (
+                                            <span style={{ color: 'green', fontSize: '18px', fontWeight: 600, marginLeft: '15px' }}>
+                                                Selected File(s): {make4GFiles.length}
+                                            </span>
+                                        )}
+                                        <div>
+                                            <span
+                                                style={{
+                                                    display: show4G ? 'inherit' : 'none',
+                                                    color: 'red',
+                                                    fontSize: '18px',
+                                                    fontWeight: 600,
+                                                    marginLeft: '15px'
+                                                }}
+                                            >
+                                                This Field Is Required!
+                                            </span>
+                                        </div>
+                                    </div>
+                                </Box>
+
+                                {/* ====== 2G FILE SELECTION ====== */}
+                                <Box className={classes.Front_Box}>
+                                    <div className={classes.Front_Box_Hading}>
+                                        Select ZTE 2G RF File:
+                                    </div>
+                                    <div className={classes.Front_Box_Select_Button}>
+                                        <div style={{ float: "left" }}>
+                                            <Button
+                                                variant="contained"
+                                                component="label"
+                                                color={make2GFiles.length > 0 ? "warning" : "primary"}
+                                            >
+                                                select file
+                                                <input
+                                                    required
+                                                    hidden
+                                                    accept=".xlsx,.xls,.xlsm"
+                                                    multiple
+                                                    type="file"
+                                                    onChange={(e) => { handle2GFileSelection(e); setShow2G(false); }}
+                                                />
+                                            </Button>
+                                        </div>
+                                        {make2GFiles.length > 0 && (
+                                            <span style={{ color: 'green', fontSize: '18px', fontWeight: 600, marginLeft: '15px' }}>
+                                                Selected File(s): {make2GFiles.length}
+                                            </span>
+                                        )}
+                                        <div>
+                                            <span
+                                                style={{
+                                                    display: show2G ? 'inherit' : 'none',
+                                                    color: 'red',
+                                                    fontSize: '18px',
+                                                    fontWeight: 600,
+                                                    marginLeft: '15px'
+                                                }}
+                                            >
+                                                This Field Is Required!
+                                            </span>
+                                        </div>
                                     </div>
                                 </Box>
                             </Stack>
+
+                            {/* ====== ACTION BUTTONS ====== */}
                             <Stack direction={{ xs: "column", sm: "column", md: "row" }} spacing={2} style={{ display: 'flex', justifyContent: "space-around", marginTop: "20px" }}>
-                                <Button variant="contained" color="success" onClick={handleSubmit} endIcon={<UploadIcon />}>Submit</Button>
-                                <Button variant="contained" onClick={handleCancel} style={{ backgroundColor: "red", color: 'white' }} endIcon={<DoDisturbIcon />}>cancel</Button>
+                                <Button
+                                    variant="contained"
+                                    color="success"
+                                    onClick={handleSubmit}
+                                    endIcon={<UploadIcon />}
+                                >
+                                    Submit
+                                </Button>
+                                <Button
+                                    variant="contained"
+                                    onClick={handleCancel}
+                                    style={{ backgroundColor: "red", color: 'white' }}
+                                    endIcon={<DoDisturbIcon />}
+                                >
+                                    Cancel
+                                </Button>
                             </Stack>
 
-                            {/* Result — files open only when the person clicks a download button */}
+                            {/* ====== RESULT DISPLAY ====== */}
                             {download && <MoResult message={resultMessage} urls={fileUrls} />}
                         </Box>
                     </Box>
                 </Box>
             </Slide>
+
             {loading}
         </>
     );
