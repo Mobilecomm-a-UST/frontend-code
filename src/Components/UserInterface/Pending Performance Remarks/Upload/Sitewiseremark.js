@@ -276,7 +276,7 @@ const Sitewiseremark = () => {
                             </Box>
 
                             {/* Delay Reason */}
-                            <Box className={classes.Front_Box}>
+                            {/* <Box className={classes.Front_Box}>
                                 <div className={classes.Front_Box_Hading}>Delay Reason:</div>
                                 <div className={classes.Front_Box_Select_Button}>
                                     <TextField
@@ -289,7 +289,7 @@ const Sitewiseremark = () => {
                                         sx={{ minWidth: 300, bgcolor: "#fff" }}
                                     />
                                 </div>
-                            </Box>
+                            </Box> */}
 
                             {/* Bucket Selection */}
                             <Box className={classes.Front_Box}>
