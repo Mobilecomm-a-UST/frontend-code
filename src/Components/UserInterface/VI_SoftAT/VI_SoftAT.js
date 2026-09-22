@@ -32,6 +32,7 @@ const VI5G = lazy(()=> import('./VI GPL/VI5G'))
 const VIHuawei = lazy(()=> import('./VI Huawei/VI_Huawei'))
 const UploadAtnd = lazy(()=>import('./VIL SRVCC/UploadAtnd'))
 const UploadLayered = lazy(()=>import('./VIL SRVCC/UploadLayered'))
+const WeeklyComparison = lazy(()=>import('./VI_Hoto_Dashboard/WeeklyComparison'))
 
 
 const VI_SoftAT = () => {
@@ -95,6 +96,9 @@ const VI_SoftAT = () => {
                                          <Nav.Item eventKey="3-3" placement="rightStart" icon={<DashboardIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/VI_Hoto_FTR')}>
                                             VI Hoto FTR
                                         </Nav.Item> 
+                                             <Nav.Item eventKey="3-4" placement="rightStart" icon={<DashboardIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/WeeklyComparison')}>
+                                            Weekly Comparison
+                                        </Nav.Item> 
 
                                        
 
@@ -149,6 +153,7 @@ const VI_SoftAT = () => {
                                 <Route element={<VIHuawei/>} path='/VIHuawei'/>
                                 <Route element={<UploadAtnd/>} path='/UploadAtnd'/>
                                 <Route element={<UploadLayered/>} path='/UploadLayered'/>
+                                <Route element={<WeeklyComparison/>} path='/WeeklyComparison'/>
 
                             </Routes>
                         </Suspense>
