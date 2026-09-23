@@ -779,6 +779,7 @@ const LiveMobReco = () => {
     const [hardWareFile, setHardWareFile] = useState({ filename: "", bytes: "" });
     const [olmidFile, setOlmidFile] = useState({ filename: "", bytes: "" });
     const [recoFile, setRecoFile] = useState({ filename: "", bytes: "" });
+
     // const [fileData, setFileData] = useState();
     // const [fileData1, setFileData1] = useState();
     const [download, setDownload] = useState(false);
@@ -791,7 +792,7 @@ const LiveMobReco = () => {
     });
 
     const [showError, setShowError] = useState({
-
+        siteList: false,
         recoFile: false,
     });
 
@@ -831,11 +832,13 @@ const LiveMobReco = () => {
     };
 
     const handleSubmit = async () => {
-        const isValid = recoFile.filename;
+        const isValid = siteList.filename && recoFile.filename && hardWareFile.filename;
 
         if (!isValid) {
             setShowError({
+                siteList: !siteList.filename,
                 recoFile: !recoFile.filename,
+                hardware: !hardWareFile.filename,
             });
             return;
         }
@@ -844,7 +847,9 @@ const LiveMobReco = () => {
 
         try {
             const formData = new FormData();
+            formData.append("site_list_file", siteList.bytes);
             formData.append("reco_file", recoFile.bytes);
+            formData.append("hw_file", hardWareFile.bytes);
 
             const response = await postData(
                 "mobinate_vs_cats/live_in_mob/",
@@ -902,26 +907,26 @@ const LiveMobReco = () => {
         // setFileData();
         // setFileData1();
         setFileurl([]);
-        setShowError({ recoFile: false });
+        setShowError({ siteList: false, recoFile: false, hw_file: false });
     };
 
-const downloadAllFiles = () => {
-  fileurl.forEach((file, index) => {
-    console.log("File URL:", file.url);
-    console.log("File Name:", file.name);
+    const downloadAllFiles = () => {
+        fileurl.forEach((file, index) => {
+            console.log("File URL:", file.url);
+            console.log("File Name:", file.name);
 
-    setTimeout(() => {
-      const link = document.createElement("a");
+            setTimeout(() => {
+                const link = document.createElement("a");
 
-      link.href = file.url;
-      link.download = file.name;
+                link.href = file.url;
+                link.download = file.name;
 
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }, index * 1000);
-  });
-};
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }, index * 1000);
+        });
+    };
     useEffect(() => {
         const title = window.location.pathname
             .slice(1)
@@ -968,6 +973,15 @@ const downloadAllFiles = () => {
                                         )}
                                     </div>
                                 </Box>
+                                
+                                <UploadSection
+                                    label="Select Site List File"
+                                    color={siteList.filename ? "warning" : "primary"}
+                                    onChange={(e) => updateFile(e, setSiteList, "siteList")}
+                                    error={showError.siteList}
+                                    selectedText={siteList.filename}
+                                />
+
 
                                 <UploadSection
                                     label="Select Reco File"
@@ -975,6 +989,14 @@ const downloadAllFiles = () => {
                                     onChange={(e) => updateFile(e, setRecoFile, "recoFile")}
                                     error={showError.recoFile}
                                     selectedText={recoFile.filename}
+                                />
+
+                                <UploadSection
+                                    label="Select Hardware File"
+                                    color={hardWareFile.filename ? "warning" : "primary"}
+                                    onChange={(e) => updateFile(e, setHardWareFile, "hardware")}
+                                    error={showError.hardware}
+                                    selectedText={hardWareFile.filename}
                                 />
 
                             </Stack>

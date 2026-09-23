@@ -254,8 +254,8 @@ const FiveGScriptingTool = () => {
     const classes = OverAllCss();
 
     // STATE MANAGEMENT
-    const [xmlFile, setXmlFile] = useState(null);
-    const [excelFile, setExcelFile] = useState(null);
+    const [xmlFiles, setXmlFiles] = useState([]);
+    const [excelFiles, setExcelFiles] = useState([]);
     const [hwTypeSmod, setHwTypeSmod] = useState("");
     const [hwTypeBbmod, setHwTypeBbmod] = useState("");
     const [showXmlError, setShowXmlError] = useState(false);
@@ -269,41 +269,68 @@ const FiveGScriptingTool = () => {
 
     // ======== FILE HANDLERS ========
     const handleXmlFileChange = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            if (file.name.endsWith(".xml")) {
-                setXmlFile(file);
-                setShowXmlError(false);
-            } else {
-                setShowXmlError(true);
-                Swal.fire({
-                    icon: "error",
-                    title: "Invalid File",
-                    text: "Please select a valid XML file",
-                });
-            }
+        const files = Array.from(event.target.files || []);
+
+        if (files.length === 0) {
+            return;
         }
+
+        // Validate all selected files
+        const invalidFiles = files.filter(
+            (file) => !file.name.toLowerCase().endsWith(".xml") && !file.name.toLowerCase().endsWith(".txt")
+        );
+
+        if (invalidFiles.length > 0) {
+            setShowXmlError(true);
+
+            Swal.fire({
+                icon: "error",
+                title: "Invalid File",
+                text: "Please select only valid XML or TXT files.",
+            });
+
+            // Clear the invalid selection
+            event.target.value = "";
+            return;
+        }
+
+        // Store all XML files
+        setXmlFiles(files);
+        setShowXmlError(false);
     };
 
     const handleExcelFileChange = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            if (file.name.endsWith(".xlsx") || file.name.endsWith(".xls")) {
-                setExcelFile(file);
-            } else {
-                Swal.fire({
-                    icon: "error",
-                    title: "Invalid File",
-                    text: "Please select a valid Excel file (.xlsx or .xls)",
-                });
-            }
+        const files = Array.from(event.target.files || []);
+
+        if (files.length === 0) {
+            return;
         }
+
+        // Validate all selected files
+        const invalidFiles = files.filter((file) => {
+            const fileName = file.name.toLowerCase();
+            return !fileName.endsWith(".xlsx") && !fileName.endsWith(".xls");
+        });
+
+        if (invalidFiles.length > 0) {
+            Swal.fire({
+                icon: "error",
+                title: "Invalid File",
+                text: "Please select only valid Excel files (.xlsx or .xls)",
+            });
+
+            event.target.value = "";
+            return;
+        }
+
+        // Store all Excel files
+        setExcelFiles(files);
     };
 
     // ======== SUBMIT HANDLER ========
     const handleSubmit = async () => {
         // VALIDATION - Only XML is mandatory
-        if (!xmlFile) {
+        if (xmlFiles.length === 0) {
             setShowXmlError(true);
             return;
         }
@@ -313,12 +340,19 @@ const FiveGScriptingTool = () => {
             action(true);
 
             const formData = new FormData();
-            formData.append("file", xmlFile);
-            
-            // Add optional fields only if they exist
-            if (excelFile) {
-                formData.append("nr_excel", excelFile);
+
+            // Append all XML files
+            xmlFiles.forEach((file) => {
+                formData.append("file", file);
+            });
+
+            // Append all Excel files if they exist
+            if (excelFiles.length > 0) {
+                excelFiles.forEach((file) => {
+                    formData.append("nr_excel", file);
+                });
             }
+
             if (hwTypeSmod) {
                 formData.append("hw_type_smod", hwTypeSmod);
             }
@@ -360,8 +394,8 @@ const FiveGScriptingTool = () => {
 
     // ======== CANCEL HANDLER ========
     const handleCancel = () => {
-        setXmlFile(null);
-        setExcelFile(null);
+        setXmlFiles([]);
+        setExcelFiles([]);
         setHwTypeSmod("");
         setHwTypeBbmod("");
         setShowXmlError(false);
@@ -428,35 +462,57 @@ const FiveGScriptingTool = () => {
                                 {/* ====== XML FILE CARD ====== */}
                                 <Box className={classes.Front_Box}>
                                     <div className={classes.Front_Box_Hading}>
-                                        Select SCF XML File:-
+                                        Select XML File:-
                                     </div>
+
                                     <div className={classes.Front_Box_Select_Button}>
                                         <div style={{ float: "left" }}>
                                             <Button
                                                 variant="contained"
                                                 component="label"
-                                                color={xmlFile ? "warning" : "primary"}
+                                                color={xmlFiles.length > 0 ? "warning" : "primary"}
                                                 startIcon={<UploadIcon />}
                                             >
-                                                {xmlFile ? "Change XML" : "Select XML File"}
+                                                {xmlFiles.length > 0
+                                                    ? "Change XML Files"
+                                                    : "Select XML Files"}
+
                                                 <input
                                                     required
                                                     hidden
-                                                    accept=".xml"
+                                                    multiple
+                                                    accept=".xml,.txt"
                                                     type="file"
                                                     onChange={handleXmlFileChange}
                                                 />
                                             </Button>
                                         </div>
 
-                                        {xmlFile && (
-                                            <span style={{ color: "green", fontSize: "14px", fontWeight: 600, marginLeft: "12px" }}>
-                                                ✓ {xmlFile.name}
+                                        {/* Selected file count */}
+                                        {xmlFiles.length > 0 && (
+                                            <span
+                                                style={{
+                                                    color: "green",
+                                                    fontSize: "14px",
+                                                    fontWeight: 600,
+                                                    marginLeft: "12px",
+                                                }}
+                                            >
+                                                ✓ {xmlFiles.length} file
+                                                {xmlFiles.length > 1 ? "s" : ""} selected
                                             </span>
                                         )}
 
+                                        {/* Error */}
                                         {showXmlError && (
-                                            <span style={{ color: COLORS.error, fontSize: "14px", fontWeight: 600, marginLeft: "12px" }}>
+                                            <span
+                                                style={{
+                                                    color: COLORS.error,
+                                                    fontSize: "14px",
+                                                    fontWeight: 600,
+                                                    marginLeft: "12px",
+                                                }}
+                                            >
                                                 This field is required!
                                             </span>
                                         )}
@@ -514,19 +570,24 @@ const FiveGScriptingTool = () => {
                                 {/* ====== EXCEL FILE CARD ====== */}
                                 <Box className={classes.Front_Box}>
                                     <div className={classes.Front_Box_Hading}>
-                                        Select NR Excel File (Optional):-
+                                        Select Excel File (Optional):-
                                     </div>
+
                                     <div className={classes.Front_Box_Select_Button}>
                                         <div style={{ float: "left" }}>
                                             <Button
                                                 variant="contained"
                                                 component="label"
-                                                color={excelFile ? "warning" : "primary"}
+                                                color={excelFiles.length > 0 ? "warning" : "primary"}
                                                 startIcon={<UploadIcon />}
                                             >
-                                                {excelFile ? "Change Excel" : "Select Excel File"}
+                                                {excelFiles.length > 0
+                                                    ? "Change Excel Files"
+                                                    : "Select Excel Files"}
+
                                                 <input
                                                     hidden
+                                                    multiple
                                                     accept=".xlsx,.xls"
                                                     type="file"
                                                     onChange={handleExcelFileChange}
@@ -534,9 +595,18 @@ const FiveGScriptingTool = () => {
                                             </Button>
                                         </div>
 
-                                        {excelFile && (
-                                            <span style={{ color: "green", fontSize: "14px", fontWeight: 600, marginLeft: "12px" }}>
-                                                ✓ {excelFile.name}
+                                        {/* Selected Excel file count */}
+                                        {excelFiles.length > 0 && (
+                                            <span
+                                                style={{
+                                                    color: "green",
+                                                    fontSize: "14px",
+                                                    fontWeight: 600,
+                                                    marginLeft: "12px",
+                                                }}
+                                            >
+                                                ✓ {excelFiles.length} Excel file
+                                                {excelFiles.length > 1 ? "s" : ""} selected
                                             </span>
                                         )}
                                     </div>
@@ -553,7 +623,7 @@ const FiveGScriptingTool = () => {
                                         color="success"
                                         onClick={handleSubmit}
                                         endIcon={<UploadIcon />}
-                                        disabled={isProcessing || !xmlFile}
+                                        disabled={isProcessing || xmlFiles.length === 0}
                                         sx={{ minWidth: "120px" }}
                                     >
                                         {isProcessing ? <CircularProgress size={20} /> : "Submit"}

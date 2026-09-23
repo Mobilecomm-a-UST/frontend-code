@@ -1211,8 +1211,8 @@ function FtrDashboardTable({ title, rows, icon }) {
                                 const ftrPctColor = isGrandTotal
                                     ? C.grandTotalText
                                     : ftrPctNum == null || ftrPctNum === 0
-                                    ? C.zeroText
-                                    : C.valueText;
+                                        ? C.zeroText
+                                        : C.valueText;
 
                                 return (
                                     <TableRow key={`${circle}-${row["RAN OEM"]}-${i}`}>
@@ -1247,8 +1247,8 @@ function FtrDashboardTable({ title, rows, icon }) {
                                                 color: isGrandTotal
                                                     ? C.grandTotalText
                                                     : ms1 === 0
-                                                    ? C.zeroText
-                                                    : C.valueText,
+                                                        ? C.zeroText
+                                                        : C.valueText,
                                                 fontWeight: ms1 === 0 && !isGrandTotal ? 400 : 700,
                                             }}
                                         >
@@ -1262,8 +1262,8 @@ function FtrDashboardTable({ title, rows, icon }) {
                                                 color: isGrandTotal
                                                     ? C.grandTotalText
                                                     : ftrCount === 0
-                                                    ? C.zeroText
-                                                    : C.valueText,
+                                                        ? C.zeroText
+                                                        : C.valueText,
                                                 fontWeight: ftrCount === 0 && !isGrandTotal ? 400 : 700,
                                             }}
                                         >
@@ -1380,6 +1380,7 @@ function FTR_Dashboard() {
     }, [fetchDashboard]);
 
     const ftrDashboardRows = dashboard?.["FTR Dashboard"];
+    const dateinfo = dashboard?.["data contains period"]
 
     const hasAnyData = !!dashboard;
 
@@ -1424,8 +1425,26 @@ function FTR_Dashboard() {
                                 </Avatar>
                                 <Box>
                                     <Typography variant="subtitle1" sx={{ color: "#fff", fontWeight: 700, letterSpacing: 0.3 }}>
-                                       FTR Dashboard-MS1 Wise
-                                    </Typography>
+                                        FTR Dashboard-MS1 Wise
+
+
+                                            <Typography
+                                                component="span"
+                                                variant="body2"
+                                                sx={{
+                                                    color: "#fff",
+                                                    fontWeight: 400,
+                                                    opacity: 0.9,
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    justifyContent: "center",
+                                                    textAlign: "center"
+                                                }}
+                                            >
+                                                {dateinfo}
+                                            </Typography>
+                                        </Typography>
+                                
                                 </Box>
                             </Stack>
 
@@ -1512,7 +1531,7 @@ function FTR_Dashboard() {
                     </Box>
                 </Box>
             </div>
-        </Slide>
+        </Slide >
     );
 }
 

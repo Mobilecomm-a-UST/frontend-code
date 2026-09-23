@@ -1305,10 +1305,12 @@ const MobinetDB = () => {
     const [searchError, setSearchError] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [hasSearched, setHasSearched] = useState(false);
+    const [downloadLoading, setDownloadLoading] = useState(false);
 
     const totalPages = Math.ceil(totalCount / PAGINATION_LIMIT);
 
-    // Parse values for display
+    // Parse values
+    //  for display
     const siteIds = parseMultipleValues(siteIdInput);
     const serialNumbers = parseMultipleValues(serialNumberInput);
 
@@ -1373,7 +1375,7 @@ const MobinetDB = () => {
     const fetchResults = useCallback(async (pageNum = 1) => {
         // Check if at least one filter is provided
         const hasFilters = circle.trim() || siteIds.length > 0 || serialNumbers.length > 0;
-        
+
         if (!hasFilters) {
             Swal.fire({
                 icon: "warning",
@@ -1388,7 +1390,7 @@ const MobinetDB = () => {
 
         try {
             const formData = new FormData();
-            
+
             // ALWAYS send circle (even if empty) - backend requirement
             formData.append("circle", circle || "");
 
@@ -1458,6 +1460,175 @@ const MobinetDB = () => {
             setSearchLoading(false);
         }
     }, [circle, siteIds, serialNumbers]);
+
+    // ========= Download Excel ==========
+    const downloadExcel = async () => {
+        // ---------------------------------------------------------
+        // Check if at least one filter is provided
+        // ---------------------------------------------------------
+
+        const hasFilters =
+            circle.trim() ||
+            siteIds.length > 0 ||
+            serialNumbers.length > 0 ;
+
+        if (!hasFilters) {
+            Swal.fire({
+                icon: "warning",
+                title: "Required",
+                text: "Please provide at least one search filter before downloading.",
+            });
+
+            return;
+        }
+
+        setDownloadLoading(true);
+
+        try {
+            const formData = new FormData();
+
+            // -----------------------------------------------------
+            // Circle - optional
+            // -----------------------------------------------------
+
+            if (circle.trim()) {
+                formData.append(
+                    "circle",
+                    circle.trim()
+                );
+            }
+
+            // -----------------------------------------------------
+            // Site IDs - multiple values
+            // Example:
+            // AALL11,AALR11,ACPT19
+            // -----------------------------------------------------
+
+            if (siteIds.length > 0) {
+                formData.append(
+                    "site_id",
+                    siteIds.join(",")
+                );
+            }
+
+            // -----------------------------------------------------
+            // Serial Numbers - multiple values
+            // -----------------------------------------------------
+
+            if (serialNumbers.length > 0) {
+                formData.append(
+                    "serial_number",
+                    serialNumbers.join(",")
+                );
+            }
+
+
+
+
+
+            // console.log(
+            //     "Excel Export Request:",
+            //     {
+            //         circle: circle || "",
+            //         site_id:
+            //             siteIds.length > 0
+            //                 ? siteIds.join(",")
+            //                 : "not provided",
+            //         serial_number:
+            //             serialNumbers.length > 0
+            //                 ? serialNumbers.join(",")
+            //                 : "not provided",
+            //     }
+            // );
+
+            // -----------------------------------------------------
+            // Call export API
+            // -----------------------------------------------------
+
+            const response = await postData(
+                "mobinate_vs_cats/mobinet_db_search_export/",
+                formData
+            );
+
+            // console.log(
+            //     "Export Response:",
+            //     response
+            // );
+
+            // -----------------------------------------------------
+            // API success
+            // -----------------------------------------------------
+
+            if (
+                response &&
+                response.success &&
+                response.download_url
+            ) {
+                // -------------------------------------------------
+                // Automatic download
+                // -------------------------------------------------
+
+                const link =
+                    document.createElement("a");
+
+                link.href =
+                    response.download_url;
+
+                link.download =
+                    response.filename ||
+                    "Mobinet_Data.xlsx";
+
+                link.target = "_blank";
+
+                document.body.appendChild(link);
+
+                link.click();
+
+                document.body.removeChild(link);
+
+                // -------------------------------------------------
+                // Success message
+                // -------------------------------------------------
+
+                Swal.fire({
+                    icon: "success",
+                    title: "Export Ready",
+                    text:
+                        `${response.exported_rows || 0} records exported successfully.`,
+                    timer: 2500,
+                    showConfirmButton: false,
+                });
+
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Export Failed",
+                    text:
+                        response?.message ||
+                        "Failed to export Mobinet data.",
+                });
+            }
+
+        } catch (error) {
+            console.error(
+                "Excel export error:",
+                error
+            );
+
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text:
+                    error?.message ||
+                    "Error while exporting data. Please try again.",
+            });
+
+        } finally {
+            setDownloadLoading(false);
+        }
+
+    };
+
 
     const handleSearch = () => {
         setCurrentPage(1);
@@ -1735,7 +1906,8 @@ const MobinetDB = () => {
                                                         variant="contained"
                                                         size="small"
                                                         startIcon={<FileDownloadIcon />}
-                                                        onClick={handleDownload}
+                                                        // onClick={handleDownload}
+                                                        onClick={downloadExcel}//downloadExcel
                                                         sx={{
                                                             background: COLORS.headerGradient,
                                                             color: "#fff",
