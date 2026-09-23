@@ -32,7 +32,7 @@ const VI5G = lazy(()=> import('./VI GPL/VI5G'))
 const VIHuawei = lazy(()=> import('./VI Huawei/VI_Huawei'))
 const UploadAtnd = lazy(()=>import('./VIL SRVCC/UploadAtnd'))
 const UploadLayered = lazy(()=>import('./VIL SRVCC/UploadLayered'))
-
+const Upload4G_ER = lazy(()=>import('./VIL SRVCC/Upload4G_ER'))
 
 const VI_SoftAT = () => {
     const [expanded, setExpanded] = useState(true);
@@ -119,6 +119,9 @@ const VI_SoftAT = () => {
                                          <Nav.Item eventKey="5-3" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/UploadAtnd')}>
                                           ATND
                                         </Nav.Item>
+                                         <Nav.Item eventKey="5-4" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/Upload4G_ER')}>
+                                          4G
+                                        </Nav.Item>
                                          </Nav.Menu> 
                                          
                                      
@@ -149,6 +152,7 @@ const VI_SoftAT = () => {
                                 <Route element={<VIHuawei/>} path='/VIHuawei'/>
                                 <Route element={<UploadAtnd/>} path='/UploadAtnd'/>
                                 <Route element={<UploadLayered/>} path='/UploadLayered'/>
+                                <Route element={<Upload4G_ER/>} path='/Upload4G_ER'/>
 
                             </Routes>
                         </Suspense>
