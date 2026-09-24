@@ -847,7 +847,7 @@ const MobinetDB = () => {
             </div>
 
             {/* ✅ NEW: Reference Download Button at Top-Right Corner */}
-            <Box sx={{ position: "fixed", top: 70, right: 30, zIndex: 1200 }}>
+            <Box sx={{ position: "fixed", top: 20, right: 30, zIndex: 1200 }}>
                 <Tooltip title="Download Mobinate Reference">
                     <Button
                         variant="contained"
@@ -876,7 +876,7 @@ const MobinetDB = () => {
                         {referenceDownloadLoading ? (
                             <CircularProgress size={20} sx={{ color: "#fff" }} />
                         ) : (
-                            "Mobinet Reference"
+                            "Mobinate Reference"
                         )}
                     </Button>
                 </Tooltip>
@@ -1101,16 +1101,31 @@ const MobinetDB = () => {
                                                     <Button
                                                         variant="contained"
                                                         size="small"
-                                                        startIcon={<FileDownloadIcon />}
+                                                        startIcon={downloadLoading ? undefined : <FileDownloadIcon />}
                                                         onClick={downloadExcel}
+                                                        disabled={downloadLoading}
                                                         sx={{
                                                             background: COLORS.headerGradient,
                                                             color: "#fff",
                                                             fontWeight: 700,
                                                             textTransform: "none",
+                                                            "&:hover": {
+                                                                background: downloadLoading ? COLORS.headerGradient : "linear-gradient(90deg, #003a3e 0%, #005555 55%, #3a8b91 100%)",
+                                                            },
+                                                            "&:disabled": {
+                                                                background: COLORS.headerGradient,
+                                                                color: "#fff",
+                                                            },
                                                         }}
                                                     >
-                                                        Download
+                                                        {downloadLoading ? (
+                                                            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                                                                <CircularProgress size={16} sx={{ color: "#fff" }} />
+                                                                <span>Downloading...</span>
+                                                            </Box>
+                                                        ) : (
+                                                            "Download"
+                                                        )}
                                                     </Button>
                                                 )}
                                             </Box>
