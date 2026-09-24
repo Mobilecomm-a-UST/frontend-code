@@ -23,6 +23,7 @@ import SendToDashboardIcon from '@rsuite/icons/SendToDashboard';
 
 
 const IX_VI_ScriptingTool = lazy(() => import("./IX_VI_ScriptingTool"));
+const UPE_Scripting = lazy(() => import("./Circle Scripting/UPE_Scripting"));
 // const UploadFile = lazy(() => import("./BasebandUpload"));
 // const Dashboard = lazy(() => import("./Dashboard"));
 
@@ -66,8 +67,8 @@ const IX_VI_Scripting = () => {
                                             <Divider component="li" sx={{ backgroundColor: 'white' }} />
         
 
-                                              <Nav.Item eventKey="1" placement="rightStart" className="single-item-custom" icon={< FileUploadIcon style={{}} />} onClick={() => { navigate('/tools/ix_tools/ix_vi_scripting/uploadfile'); show(); setMenuButton(true) }}>
-                                                        Upload File
+                                              <Nav.Item eventKey="1" placement="rightStart" className="single-item-custom" icon={< FileUploadIcon style={{}} />} onClick={() => { navigate('/tools/ix_tools/ix_vi_scripting/UPE_Scripting'); show(); setMenuButton(true) }}>
+                                                        UPE Scripting
                                             </Nav.Item> 
 
                                             {/* <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={<SendToDashboardIcon style={{}} />} onClick={() => { navigate('/tools/baseband_requirement/Dashboard'); show(); setMenuButton(true) }}>
@@ -86,6 +87,7 @@ const IX_VI_Scripting = () => {
                         <Suspense fallback={<Loader/>}>
                             <Routes>
                                <Route path="/" element={<IX_VI_ScriptingTool />} />
+                               <Route path="/UPE_Scripting" element={<UPE_Scripting />} />
                                 {/* <Route path="/uploadfile" element={<UploadFile />} />
                                 <Route path="/dashboard" element={<Dashboard />} />
                                  */}
