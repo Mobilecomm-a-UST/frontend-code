@@ -3,8 +3,10 @@ import Grow from '@mui/material/Grow';
 import { Box } from '@mui/material';
 import { Breadcrumbs, Link, Typography } from "@mui/material";
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import { useNavigate } from 'react-router-dom';
 
 const IX_VI_ScriptingTool = () => {
+  const navigate = useNavigate();
   return (
       <>
                  <Box sx={{ display: { xs: 'none', md: 'inherit' } }}>
@@ -16,8 +18,8 @@ const IX_VI_ScriptingTool = () => {
                          <div>
                              <div style={{ margin: 10, marginLeft: 10 }}>
                                  <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
-                                     <Link underline="hover" href='/tools'>Tools</Link>
-                                     {/* <Link underline="hover" href='/trends'>Trend</Link> */}
+                                    <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>ix_vi_scripting
+                                     <Link underline='hover' onClick={() => { navigate('/tools/ix_tools') }}>IX Tools</Link>
                                      <Typography color='text.primary'>IX_VI_Scripting</Typography>
                                  </Breadcrumbs>
                              </div>

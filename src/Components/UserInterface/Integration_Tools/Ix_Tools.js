@@ -207,6 +207,7 @@ import Zoom from '@mui/material/Zoom';
 import CodeIcon from '@rsuite/icons/Code';
 import { getDecreyptedData } from '../../utils/localstorage'
 import LocationSearchingRoundedIcon from '@mui/icons-material/LocationSearchingRounded';
+import PageIcon from '@rsuite/icons/Page';
 
 const Ix_Tools = () => {
     const dispatch = useDispatch()
@@ -422,9 +423,9 @@ const Ix_Tools = () => {
 
                                  {userTypes?.some(role => allowedIxViScriptingRoles.map(r => r.toLowerCase()).includes(role?.toLowerCase())) && (
                                     <Grid item xs={12} sm={6} md={3}>
-                                        <Box sx={backgroundStyle} className={classes.des} onClick={handleTS}>
+                                        <Box sx={backgroundStyle} className={classes.des} onClick={handleIX_VI_Scripting}>
                                             <div className={classes.centerIcon}>
-                                                <LocationSearchingRoundedIcon alt="IX_VI_Scripting" style={{ width: "40px", height: "40px" }} />
+                                                <PageIcon alt="IX_VI_Scripting" style={{ width: "40px", height: "40px" }} />
                                             </div>
                                             <div>
                                                 <div className={classes.center}>VI Scripting</div>
