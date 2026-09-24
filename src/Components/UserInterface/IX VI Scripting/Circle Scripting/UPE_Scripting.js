@@ -125,7 +125,7 @@ const ScriptingToolResult = ({ data, onDownload }) => {
 
     const { status, message, download_url } = data;
 
-    // ✅ CHANGE: Handle download_url as array or single URL
+    // ✅ Handle download_url as array or single URL
     const downloadUrls = Array.isArray(download_url) ? download_url : (download_url ? [download_url] : []);
 
     // Extract filename from URL
@@ -213,7 +213,7 @@ const ScriptingToolResult = ({ data, onDownload }) => {
                 </Grid>
             </Grid>
 
-            {/* ✅ CHANGE: Download Section - Handle multiple files */}
+            {/* ✅ Download Section - Handle multiple files (2, 4, 5, any number) */}
             {status && downloadUrls.length > 0 && (
                 <Box
                     sx={{
@@ -224,7 +224,7 @@ const ScriptingToolResult = ({ data, onDownload }) => {
                         borderRadius: 1.5,
                     }}
                 >
-                    {/* Download All Button */}
+                    {/* Download All Button (when multiple files) */}
                     {downloadUrls.length > 1 && (
                         <Box sx={{ mb: 2 }}>
                             <Button
@@ -248,7 +248,7 @@ const ScriptingToolResult = ({ data, onDownload }) => {
                         </Box>
                     )}
 
-                    {/* Individual Files */}
+                    {/* Individual Files List */}
                     <Stack spacing={1}>
                         {downloadUrls.map((url, idx) => (
                             <Box
@@ -308,58 +308,24 @@ const ScriptingToolResult = ({ data, onDownload }) => {
 };
 
 /* ================================================================ */
-/*  Main 5G Scripting Tool Component                                */
+/*  Main 5G Scripting Tool Component - UPDATED (XML REMOVED)        */
 /* ================================================================ */
 const UPE_Scripting = () => {
     const navigate = useNavigate();
     const { loading, action } = useLoadingDialog();
     const classes = OverAllCss();
 
-    // ✅ CHANGE: Updated state management
-    // STATE MANAGEMENT
-    const [xmlFiles, setXmlFiles] = useState([]);
+    // ✅ STATE MANAGEMENT - XML REMOVED
     const [excelFiles, setExcelFiles] = useState([]);
     const [bandwidth, setBandwidth] = useState("");
-    const [showXmlError, setShowXmlError] = useState(false);
     const [uploadSuccess, setUploadSuccess] = useState(false);
     const [uploadResultData, setUploadResultData] = useState(null);
     const [isProcessing, setIsProcessing] = useState(false);
 
-    // ✅ CHANGE: Bandwidth options (removed SMOD and BBMOD)
+    // ✅ Bandwidth options
     const BANDWIDTH_OPTIONS = ["5Mhz", "3Mhz"];
 
-    // ======== FILE HANDLERS ========
-    const handleXmlFileChange = (event) => {
-        const files = Array.from(event.target.files || []);
-
-        if (files.length === 0) {
-            return;
-        }
-
-        // Validate all selected files
-        const invalidFiles = files.filter(
-            (file) => !file.name.toLowerCase().endsWith(".xml") && !file.name.toLowerCase().endsWith(".txt")
-        );
-
-        if (invalidFiles.length > 0) {
-            setShowXmlError(true);
-
-            Swal.fire({
-                icon: "error",
-                title: "Invalid File",
-                text: "Please select only valid XML or TXT files.",
-            });
-
-            // Clear the invalid selection
-            event.target.value = "";
-            return;
-        }
-
-        // Store all XML files
-        setXmlFiles(files);
-        setShowXmlError(false);
-    };
-
+    // ======== EXCEL FILE HANDLER ========
     const handleExcelFileChange = (event) => {
         const files = Array.from(event.target.files || []);
 
@@ -390,9 +356,13 @@ const UPE_Scripting = () => {
 
     // ======== SUBMIT HANDLER ========
     const handleSubmit = async () => {
-        // VALIDATION - Only XML is mandatory
-        if (xmlFiles.length === 0) {
-            setShowXmlError(true);
+        // VALIDATION - Only Bandwidth is mandatory
+        if (!bandwidth) {
+            Swal.fire({
+                icon: "warning",
+                title: "Required",
+                text: "Please select Bandwidth",
+            });
             return;
         }
 
@@ -402,25 +372,17 @@ const UPE_Scripting = () => {
 
             const formData = new FormData();
 
-            // ✅ CHANGE: Updated key names to match new API
-            // Append all XML files with key "file"
-            xmlFiles.forEach((file) => {
-                formData.append("file", file);
-            });
+            // ✅ Append bandwidth (mandatory)
+            formData.append("bandwidth", bandwidth);
 
-            // Append bandwidth
-            if (bandwidth) {
-                formData.append("bandwidth", bandwidth);
-            }
-
-            // Append all Excel files if they exist with key "excel_file"
+            // ✅ Append all Excel files if they exist (optional)
             if (excelFiles.length > 0) {
                 excelFiles.forEach((file) => {
                     formData.append("excel_file", file);
                 });
             }
 
-            // ✅ CHANGE: Updated API endpoint
+            // ✅ Updated API endpoint
             const response = await postData("vi_ntscrpting/nt/", formData);
 
             if (response && response.status) {
@@ -430,7 +392,7 @@ const UPE_Scripting = () => {
                 Swal.fire({
                     icon: "success",
                     title: "Success",
-                    text: response.message || "5G configuration created successfully",
+                    text: response.message || "Configuration created successfully",
                 });
             } else {
                 Swal.fire({
@@ -445,7 +407,7 @@ const UPE_Scripting = () => {
             Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: error.message || "Failed to process files",
+                text: error.message || "Failed to process request",
             });
         } finally {
             action(false);
@@ -455,15 +417,13 @@ const UPE_Scripting = () => {
 
     // ======== CANCEL HANDLER ========
     const handleCancel = () => {
-        setXmlFiles([]);
         setExcelFiles([]);
         setBandwidth("");
-        setShowXmlError(false);
         setUploadSuccess(false);
         setUploadResultData(null);
     };
 
-    // ======== DOWNLOAD HANDLER ========
+    // ======== DOWNLOAD HANDLER - Supports multiple files ========
     const downloadFile = (downloadUrl) => {
         try {
             const link = document.createElement("a");
@@ -512,70 +472,10 @@ const UPE_Scripting = () => {
                 <Box>
                     <Box className={classes.main_Box}>
                         <Box className={classes.Back_Box} sx={{ width: { md: "75%", xs: "100%" } }}>
-                            <Box className={classes.Box_Hading}>VI Scripting</Box>
+                            <Box className={classes.Box_Hading}>VI Scripting Tool</Box>
 
-                            <Stack spacing={2.5} sx={{ marginTop: "-40px" }} direction="column">
-                                {/* ✅ CHANGE 1: XML FILE CARD (First) */}
-                                <Box className={classes.Front_Box}>
-                                    <div className={classes.Front_Box_Hading}>
-                                        Select XML File:-
-                                    </div>
-
-                                    <div className={classes.Front_Box_Select_Button}>
-                                        <div style={{ float: "left" }}>
-                                            <Button
-                                                variant="contained"
-                                                component="label"
-                                                color={xmlFiles.length > 0 ? "warning" : "primary"}
-                                                startIcon={<UploadIcon />}
-                                            >
-                                                {xmlFiles.length > 0
-                                                    ? "Change XML Files"
-                                                    : "Select XML Files"}
-
-                                                <input
-                                                    required
-                                                    hidden
-                                                    multiple
-                                                    accept=".xml,.txt"
-                                                    type="file"
-                                                    onChange={handleXmlFileChange}
-                                                />
-                                            </Button>
-                                        </div>
-
-                                        {/* Selected file count */}
-                                        {xmlFiles.length > 0 && (
-                                            <span
-                                                style={{
-                                                    color: "green",
-                                                    fontSize: "14px",
-                                                    fontWeight: 600,
-                                                    marginLeft: "12px",
-                                                }}
-                                            >
-                                                ✓ {xmlFiles.length} file
-                                                {xmlFiles.length > 1 ? "s" : ""} selected
-                                            </span>
-                                        )}
-
-                                        {/* Error */}
-                                        {showXmlError && (
-                                            <span
-                                                style={{
-                                                    color: COLORS.error,
-                                                    fontSize: "14px",
-                                                    fontWeight: 600,
-                                                    marginLeft: "12px",
-                                                }}
-                                            >
-                                                This field is required!
-                                            </span>
-                                        )}
-                                    </div>
-                                </Box>
-
-                                {/* ✅ CHANGE 2: BANDWIDTH DROPDOWN (Second) */}
+                            <Stack spacing={2.5} sx={{ marginTop: "10px" }} direction="column">
+                                {/* ✅ BANDWIDTH DROPDOWN (First) */}
                                 <Box className={classes.Front_Box}>
                                     <div className={classes.Front_Box_Hading}>
                                         Select Bandwidth:-
@@ -602,7 +502,7 @@ const UPE_Scripting = () => {
                                     </Box>
                                 </Box>
 
-                                {/* ✅ CHANGE 3: EXCEL FILE CARD (Third) */}
+                                {/* ✅ EXCEL FILE CARD (Second) - Optional */}
                                 <Box className={classes.Front_Box}>
                                     <div className={classes.Front_Box_Hading}>
                                         Select Excel File:-
@@ -658,10 +558,17 @@ const UPE_Scripting = () => {
                                         color="success"
                                         onClick={handleSubmit}
                                         endIcon={<UploadIcon />}
-                                        disabled={isProcessing || xmlFiles.length === 0}
+                                        disabled={isProcessing || !bandwidth}
                                         sx={{ minWidth: "120px" }}
                                     >
-                                        {isProcessing ? <CircularProgress size={20} /> : "Submit"}
+                                        {isProcessing ? (
+                                            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                                                <CircularProgress size={16} sx={{ color: "#fff" }} />
+                                                <span>Processing...</span>
+                                            </Box>
+                                        ) : (
+                                            "Submit"
+                                        )}
                                     </Button>
 
                                     <Button
@@ -676,7 +583,7 @@ const UPE_Scripting = () => {
                                     </Button>
                                 </Stack>
 
-                                {/* ✅ CHANGE 4: RESULT DISPLAY - Handles multiple file downloads */}
+                                {/* ✅ RESULT DISPLAY - Handles multiple file downloads (2, 4, 5, any number) */}
                                 {uploadSuccess && (
                                     <ScriptingToolResult data={uploadResultData} onDownload={downloadFile} />
                                 )}
