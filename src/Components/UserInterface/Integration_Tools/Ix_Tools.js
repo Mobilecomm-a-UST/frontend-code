@@ -220,6 +220,7 @@ const Ix_Tools = () => {
     const allowedSaRoles = ['Admin', 'IX_SA','5G_SCR']
     const allowedErRoles = ['Admin', 'IX_ER']
     const allowedTsRoles = ['Admin', 'IX_TS']
+    const allowedIxViScriptingRoles = ['Admin', 'IX_VI_SCRPT']
 
     const linker = window.location.pathname;
 
@@ -274,6 +275,15 @@ const Ix_Tools = () => {
             dispatch({ type: 'LINK_PAGES', payload: { linker } })
         } else {
             navigate('/tools/ix_tools/ix_tstracker')
+        }
+    }
+
+     const handleIX_VI_Scripting = () => {
+        if (chackToken === null) {
+            navigate('/login')
+            dispatch({ type: 'LINK_PAGES', payload: { linker } })
+        } else {
+            navigate('/tools/ix_tools/ix_vi_scripting')
         }
     }
 
@@ -376,7 +386,7 @@ const Ix_Tools = () => {
                                                 <CodeIcon alt="SA" style={{ width: "50px", height: "60px" }} />
                                             </div>
                                             <div>
-                                                <div className={classes.center}>5G GPL</div>
+                                                <div className={classes.center}>Bharti 5G GPL</div>
                                             </div>
                                         </Box>
                                     </Grid>
@@ -405,6 +415,19 @@ const Ix_Tools = () => {
                                             </div>
                                             <div>
                                                 <div className={classes.center}>TS Tracker</div>
+                                            </div>
+                                        </Box>
+                                    </Grid>
+                                )}
+
+                                 {userTypes?.some(role => allowedIxViScriptingRoles.map(r => r.toLowerCase()).includes(role?.toLowerCase())) && (
+                                    <Grid item xs={12} sm={6} md={3}>
+                                        <Box sx={backgroundStyle} className={classes.des} onClick={handleTS}>
+                                            <div className={classes.centerIcon}>
+                                                <LocationSearchingRoundedIcon alt="IX_VI_Scripting" style={{ width: "40px", height: "40px" }} />
+                                            </div>
+                                            <div>
+                                                <div className={classes.center}>VI Scripting</div>
                                             </div>
                                         </Box>
                                     </Grid>
