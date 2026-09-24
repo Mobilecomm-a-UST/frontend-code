@@ -81,6 +81,7 @@ const QualityTeamTool = lazy(()=>import('./Components/UserInterface/Quality Team
 const AlarmLogs = lazy(()=>import('./Components/UserInterface/Alarm Logs Tool/AlarmLogs'))
 const Tstracker = lazy(()=>import('./Components/UserInterface/TS Tracker/TS_Tracker'))
 const PendingPerformanceRemark = lazy(()=> import('./Components/UserInterface/Pending Performance Remarks/PendingPerformanceRemarks'))
+const IX_VI_Scripting = lazy(()=>import('./Components/UserInterface/IX VI Scripting/IX_VI_Scripting'))
 
 
 const queryClient = new QueryClient()
@@ -361,6 +362,12 @@ function App() {
             <Route path="/tools/ix_tools/ix_tstracker/*" element={
               <Suspense fallback={<div>Loading...</div>}>
                 <ProtectedRoute element={Tstracker} allowedUserTypes={['admin', 'IX_TS']} userType={userType} />
+              </Suspense>
+            } />
+
+              <Route path="/tools/ix_tools/ix_vi_scripting/*" element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProtectedRoute element={IX_VI_Scripting} allowedUserTypes={['admin', 'IX_VI_SCRPT']} userType={userType} />
               </Suspense>
             } />
 
