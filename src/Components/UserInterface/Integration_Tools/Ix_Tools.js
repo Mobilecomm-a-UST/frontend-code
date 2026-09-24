@@ -387,7 +387,7 @@ const Ix_Tools = () => {
                                                 <CodeIcon alt="SA" style={{ width: "50px", height: "60px" }} />
                                             </div>
                                             <div>
-                                                <div className={classes.center}>Bharti 5G GPL</div>
+                                                <div className={classes.center}>Airtel 5G NT</div>
                                             </div>
                                         </Box>
                                     </Grid>
