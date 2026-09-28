@@ -296,7 +296,7 @@ const UploadAtnd = () => {
                                         <div style={{ float: "left" }}>
                                             <Button variant="contained" component="label" color={make4GFiles.length > 0 ? "warning" : "primary"}>
                                                 select file
-                                                <input required hidden accept=".xlsx,.xls,.xlsb,.txt,.log" multiple type="file"
+                                                <input required hidden accept=".xlsx,.xls,.xlsb" multiple type="file"
                                                     // webkitdirectory="true"
                                                     // directory="true"
                                                     onChange={(e) => { handle4GFileSelection(e); setShow4G(false); }} />
