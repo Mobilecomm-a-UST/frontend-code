@@ -441,7 +441,7 @@ const UPE_GPL_ULS = () => {
                             sx={{ mt: 1, width: "auto" }}
                         >
                             <span
-                                style={{
+                                style={{ 
                                     fontFamily: "Poppins",
                                     fontSize: "22px",
                                     fontWeight: 800,
@@ -461,3 +461,4 @@ const UPE_GPL_ULS = () => {
 }
 
 export default UPE_GPL_ULS;
+
