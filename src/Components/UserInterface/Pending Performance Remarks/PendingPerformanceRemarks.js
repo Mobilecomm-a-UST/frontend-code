@@ -187,6 +187,7 @@ import DownloadIcon from '@mui/icons-material/Download';
 import ConversionIcon from '@rsuite/icons/Conversion';
 import FolderVerifyIcon from '@rsuite/icons/FolderVerify';
 import WarningRoundIcon from '@rsuite/icons/WarningRound';
+import EyeRoundIcon from '@rsuite/icons/EyeRound';
 
 const PendingPerformanceTools = lazy(() => import('./PendingPerformanceRemarksTool'))
 const UploadFile = lazy(() => import('./Upload/UploadFile'))
@@ -195,6 +196,7 @@ const Sitewiseremark = lazy(() => import('./Upload/Sitewiseremark'))
 const DownloadCompleteReport = lazy(() => import('./Upload/DownloadCompleteReport'))
 const DownloadTemplate = lazy(() => import('./Upload/DownloadTemplate'))
 const DeleteDatabase = lazy(() => import('./Upload/DeleteDatabase'))
+const BucketOverview = lazy(()=> import('./Upload/BucketOverview'))
 
 const PendingPerformanceRemarks = () => {
     const [expanded, setExpanded] = useState(true);
@@ -328,6 +330,21 @@ const PendingPerformanceRemarks = () => {
                                                     >
                                                         Delete Database
                                                     </Nav.Item>
+
+
+                                                      <Nav.Item
+                                                        eventKey="5"
+                                                        placement="rightStart"
+                                                        className="single-item-custom"
+                                                        icon={<EyeRoundIcon />}
+                                                        onClick={() => {
+                                                            navigate('/tools/quality_team/pending_performance_re/BucketOverview');
+                                                            show();
+                                                            setMenuButton(true)
+                                                        }}
+                                                    >
+                                                        Bucket Overview
+                                                    </Nav.Item>
                                                 </>
                                             )}
 
@@ -392,6 +409,20 @@ const PendingPerformanceRemarks = () => {
                                                     >
                                                         Download Complete Report
                                                     </Nav.Item>
+
+                                                    <Nav.Item
+                                                        eventKey="5"
+                                                        placement="rightStart"
+                                                        className="single-item-custom"
+                                                        icon={<EyeRoundIcon />}
+                                                        onClick={() => {
+                                                            navigate('/tools/quality_team/pending_performance_re/BucketOverview');
+                                                            show();
+                                                            setMenuButton(true)
+                                                        }}
+                                                    >
+                                                        Bucket Overview
+                                                    </Nav.Item>
                                                 </>
                                             )}
                                         </Nav>
@@ -415,6 +446,7 @@ const PendingPerformanceRemarks = () => {
                                         <Route path='/Sitewiseremark' element={<Sitewiseremark />} />
                                         <Route path='/DownloadCompleteReport' element={<DownloadCompleteReport />} />
                                         <Route path='/DeleteDatabase' element={<DeleteDatabase />} />
+                                        <Route path='/BucketOverview' element={<BucketOverview/>}/>
                                     </>
                                 )}
 
@@ -425,6 +457,7 @@ const PendingPerformanceRemarks = () => {
                                         <Route path='/Uploadupdatedreport' element={<Uploadupdatedreport />} />
                                         <Route path='/Sitewiseremark' element={<Sitewiseremark />} />
                                         <Route path='/DownloadCompleteReport' element={<DownloadCompleteReport />} />
+                                        <Route path='/BucketOverview' element={<BucketOverview/>}/>
                                     </>
                                 )}
                             </Routes>

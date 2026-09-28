@@ -166,6 +166,7 @@ const MAH_gpl_macro = lazy(() => import('./Upload/MAH_gpl_macro'))
 const WB_gpl_uls = lazy(() => import('./Upload/WB_gpl_uls'))
 const UploadOr = lazy(() => import('./5G Scripting/UploadOr'))
 
+
 // ======== PROTECTED ROUTE COMPONENT ========
 const ProtectedRoute = ({ children, hasAccess }) => {
     if (!hasAccess) {
@@ -257,6 +258,7 @@ const SA = () => {
                                                 <Nav.Item eventKey="3-1" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/upload_or')}>
                                                     Orissa Scripting
                                                 </Nav.Item>
+
                                             </Nav.Menu>
                                         )}
 

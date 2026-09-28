@@ -310,20 +310,20 @@ const ScriptingToolResult = ({ data, onDownload }) => {
 /* ================================================================ */
 /*  Main 5G Scripting Tool Component - UPDATED (XML REMOVED)        */
 /* ================================================================ */
-const UPE_Scripting = () => {
+const HRY_Scripting = () => {
     const navigate = useNavigate();
     const { loading, action } = useLoadingDialog();
     const classes = OverAllCss();
 
     // ✅ STATE MANAGEMENT - XML REMOVED
     const [excelFiles, setExcelFiles] = useState([]);
-    const [bandwidth, setBandwidth] = useState("");
+    const [bbu, setBbu] = useState("");
     const [uploadSuccess, setUploadSuccess] = useState(false);
     const [uploadResultData, setUploadResultData] = useState(null);
     const [isProcessing, setIsProcessing] = useState(false);
 
     // ✅ Bandwidth options
-    const BANDWIDTH_OPTIONS = ["5Mhz", "3Mhz"];
+    const BBU_OPTIONS = ["ASIM", "ASOG"];
 
     // ======== EXCEL FILE HANDLER ========
     const handleExcelFileChange = (event) => {
@@ -357,11 +357,11 @@ const UPE_Scripting = () => {
     // ======== SUBMIT HANDLER ========
     const handleSubmit = async () => {
         // VALIDATION - Only Bandwidth is mandatory
-        if (!bandwidth) {
+        if (!bbu) {
             Swal.fire({
                 icon: "warning",
                 title: "Required",
-                text: "Please select Bandwidth",
+                text: "Please select BBU",
             });
             return;
         }
@@ -372,8 +372,8 @@ const UPE_Scripting = () => {
 
             const formData = new FormData();
 
-            // ✅ Append bandwidth (mandatory)
-            formData.append("bandwidth", bandwidth);
+            // ✅ Append bbu (mandatory)
+            formData.append("bbu", bbu);
 
             // ✅ Append all Excel files if they exist (optional)
             if (excelFiles.length > 0) {
@@ -383,7 +383,7 @@ const UPE_Scripting = () => {
             }
 
             // ✅ Updated API endpoint
-            const response = await postData("vi_ntscrpting/nt/", formData);
+            const response = await postData("ntscrpting_hry/hry/", formData);
 
             if (response && response.status) {
                 setUploadSuccess(true);
@@ -418,7 +418,7 @@ const UPE_Scripting = () => {
     // ======== CANCEL HANDLER ========
     const handleCancel = () => {
         setExcelFiles([]);
-        setBandwidth("");
+        setBbu("");
         setUploadSuccess(false);
         setUploadResultData(null);
     };
@@ -472,27 +472,27 @@ const UPE_Scripting = () => {
                 <Box>
                     <Box className={classes.main_Box}>
                         <Box className={classes.Back_Box} sx={{ width: { md: "75%", xs: "100%" } }}>
-                            <Box className={classes.Box_Hading}>UPE Scripting</Box>
+                            <Box className={classes.Box_Hading}>HRY Scripting</Box>
 
                             <Stack spacing={2.5} sx={{ marginTop: "10px" }} direction="column">
                                 {/* ✅ BANDWIDTH DROPDOWN (First) */}
                                 <Box className={classes.Front_Box}>
                                     <div className={classes.Front_Box_Hading}>
-                                        Select Bandwidth:-
+                                        Select BBU:-
                                     </div>
                                     <Box sx={{ p: 1.5, maxWidth: "400px" }}>
                                         <FormControl size="small" fullWidth>
-                                            <InputLabel id="bandwidth-label">Bandwidth</InputLabel>
+                                            <InputLabel id="bbu-label">Bandwidth</InputLabel>
                                             <Select
-                                                labelId="bandwidth-label"
+                                                labelId="bbu-label"
                                                 label="Bandwidth"
-                                                value={bandwidth}
-                                                onChange={(e) => setBandwidth(e.target.value)}
+                                                value={bbu}
+                                                onChange={(e) => setBbu(e.target.value)}
                                             >
                                                 <MenuItem value="">
-                                                    <em>Select Bandwidth</em>
+                                                    <em>Select BBU</em>
                                                 </MenuItem>
-                                                {BANDWIDTH_OPTIONS.map((option) => (
+                                                {BBU_OPTIONS.map((option) => (
                                                     <MenuItem key={option} value={option}>
                                                         {option}
                                                     </MenuItem>
@@ -558,7 +558,7 @@ const UPE_Scripting = () => {
                                         color="success"
                                         onClick={handleSubmit}
                                         endIcon={<UploadIcon />}
-                                        disabled={isProcessing || !bandwidth}
+                                        disabled={isProcessing || !bbu}
                                         sx={{ minWidth: "120px" }}
                                     >
                                         {isProcessing ? (
@@ -598,4 +598,4 @@ const UPE_Scripting = () => {
     );
 };
 
-export default UPE_Scripting;
+export default HRY_Scripting;

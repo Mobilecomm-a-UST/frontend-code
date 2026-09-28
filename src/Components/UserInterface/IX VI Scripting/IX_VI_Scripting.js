@@ -24,6 +24,7 @@ import SendToDashboardIcon from '@rsuite/icons/SendToDashboard';
 
 const IX_VI_ScriptingTool = lazy(() => import("./IX_VI_ScriptingTool"));
 const UPE_Scripting = lazy(() => import("./Circle Scripting/UPE_Scripting"));
+const HRY_Scripting =lazy(() => import("./Circle Scripting/HRY_Scripting"))
 // const UploadFile = lazy(() => import("./BasebandUpload"));
 // const Dashboard = lazy(() => import("./Dashboard"));
 
@@ -71,6 +72,11 @@ const IX_VI_Scripting = () => {
                                                         UPE Scripting
                                             </Nav.Item> 
 
+                                            
+                                              <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={< FileUploadIcon style={{}} />} onClick={() => { navigate('/tools/ix_tools/ix_vi_scripting/HRY_Scripting'); show(); setMenuButton(true) }}>
+                                                        HRY Scripting
+                                            </Nav.Item> 
+
                                             {/* <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={<SendToDashboardIcon style={{}} />} onClick={() => { navigate('/tools/baseband_requirement/Dashboard'); show(); setMenuButton(true) }}>
                                                 Dashboard
                                             </Nav.Item> */}
@@ -88,6 +94,8 @@ const IX_VI_Scripting = () => {
                             <Routes>
                                <Route path="/" element={<IX_VI_ScriptingTool />} />
                                <Route path="/UPE_Scripting" element={<UPE_Scripting />} />
+                               <Route path='/HRY_Scripting' element={<HRY_Scripting/>} />
+
                                 {/* <Route path="/uploadfile" element={<UploadFile />} />
                                 <Route path="/dashboard" element={<Dashboard />} />
                                  */}
