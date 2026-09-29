@@ -15,6 +15,8 @@ import { DashboardCircleEditIcon } from "@hugeicons/core-free-icons";
 import TrafficOutlinedIcon from '@mui/icons-material/TrafficOutlined';
 import PendingActionsOutlinedIcon from '@mui/icons-material/PendingActionsOutlined';
 
+
+
 const QualityTeamTool = () => {
     const dispatch = useDispatch()
     const classes = useStyles()
@@ -27,7 +29,7 @@ const QualityTeamTool = () => {
     const allowedTrendRoles = ['Admin','quality','quality-s', 'trend_tool'];
     const allowedPerformanceRoles = ['Admin','PAT','PAT_Admin'];
     const allowedTrafficRoles = ['Admin', 'PTS', 'PTS_Admin'];
-    const allowedPendingPerformanceRemark = ['Admin','QT_PPR','QT_AR','QT_DUS']
+    const allowedPendingPerformanceRemark = ['Admin','QT_PPR','QT_AR','QT_DUS','QT_CH']
 
     const linker = window.location.pathname;
 
@@ -189,6 +191,7 @@ const QualityTeamTool = () => {
                                             </div>
                                             <div>
                                                 <div className={classes.center}>Pending PR</div>
+                                                 {/* <div className={classes.center}>Q-360-Track Analyze Improve</div> */}
                                             </div>
                                         </Box>
                                     </Grid>

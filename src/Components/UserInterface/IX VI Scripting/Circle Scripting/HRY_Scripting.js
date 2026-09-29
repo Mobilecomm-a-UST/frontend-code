@@ -482,7 +482,7 @@ const HRY_Scripting = () => {
                                     </div>
                                     <Box sx={{ p: 1.5, maxWidth: "400px" }}>
                                         <FormControl size="small" fullWidth>
-                                            <InputLabel id="bbu-label">Bandwidth</InputLabel>
+                                            <InputLabel id="bbu-label">BBU</InputLabel>
                                             <Select
                                                 labelId="bbu-label"
                                                 label="Bandwidth"

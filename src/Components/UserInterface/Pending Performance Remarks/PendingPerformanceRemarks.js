@@ -212,6 +212,7 @@ const PendingPerformanceRemarks = () => {
     // Check if user is QT_PPR or QT_DUS
     const isQTPPR = userTypes?.includes('QT_PPR')
     const isQTDUS = userTypes?.includes('QT_DUS')
+    const isQTAR = userTypes?.includes('QT_AR')
 
     const show = () => {
         setChecked(!checked)
@@ -316,23 +317,7 @@ const PendingPerformanceRemarks = () => {
                                                         Download Complete Report
                                                     </Nav.Item>
 
-                                                    {/* TAB 6: DELETE DATABASE */}
-                                                    <Nav.Item
-                                                        eventKey="6"
-                                                        placement="rightStart"
-                                                        className="single-item-custom"
-                                                        icon={<WarningRoundIcon />}
-                                                        onClick={() => {
-                                                            navigate('/tools/quality_team/pending_performance_re/DeleteDatabase');
-                                                            show();
-                                                            setMenuButton(true)
-                                                        }}
-                                                    >
-                                                        Delete Database
-                                                    </Nav.Item>
-
-
-                                                      <Nav.Item
+                                                       <Nav.Item
                                                         eventKey="5"
                                                         placement="rightStart"
                                                         className="single-item-custom"
@@ -347,6 +332,23 @@ const PendingPerformanceRemarks = () => {
                                                     </Nav.Item>
                                                 </>
                                             )}
+
+                                             {/* TAB 6: DELETE DATABASE */}
+                                                    {isQTAR && (
+                                                    <Nav.Item
+                                                        eventKey="6"
+                                                        placement="rightStart"
+                                                        className="single-item-custom"
+                                                        icon={<WarningRoundIcon />}
+                                                        onClick={() => {
+                                                            navigate('/tools/quality_team/pending_performance_re/DeleteDatabase');
+                                                            show();
+                                                            setMenuButton(true)
+                                                        }}
+                                                    >
+                                                        Delete Database
+                                                    </Nav.Item>
+                                                    )}
 
                                             {/* QT_DUS SEES ONLY 3 TABS */}
                                             {isQTDUS && (
@@ -445,9 +447,13 @@ const PendingPerformanceRemarks = () => {
                                         <Route path='/Uploadupdatedreport' element={<Uploadupdatedreport />} />
                                         <Route path='/Sitewiseremark' element={<Sitewiseremark />} />
                                         <Route path='/DownloadCompleteReport' element={<DownloadCompleteReport />} />
-                                        <Route path='/DeleteDatabase' element={<DeleteDatabase />} />
                                         <Route path='/BucketOverview' element={<BucketOverview/>}/>
                                     </>
+                                )}
+
+                                {isQTAR && (
+                                     <Route path='/DeleteDatabase' element={<DeleteDatabase />} />
+
                                 )}
 
                                 {/* ONLY 3 ROUTES AVAILABLE FOR QT_DUS */}
