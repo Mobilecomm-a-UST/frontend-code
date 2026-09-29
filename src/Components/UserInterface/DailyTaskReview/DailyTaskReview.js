@@ -124,7 +124,6 @@ const DailyTaskReview = () => {
                                             <Nav.Item eventKey="3" placement="rightStart" className="single-item-custom" icon={<ListIcon style={{}} />} onClick={() => { navigate('/tools/daily_task_review/AssignTask'); show(); setMenuButton(true) }}>
                                                 Assign Task
                                             </Nav.Item>
-
                                             
                                             <Nav.Item eventKey="3" placement="rightStart" className="single-item-custom" icon={<ListIcon style={{}} />} onClick={() => { navigate('/tools/daily_task_review/MyTask'); show(); setMenuButton(true) }}>
                                                  My Task
@@ -134,8 +133,7 @@ const DailyTaskReview = () => {
                                                  Task Tracker
                                             </Nav.Item>   */}
 
-                                           
-
+                                        
                                             {/* <Nav.Item eventKey="1" placement="rightStart" className="single-item-custom" icon={<FolderIcon style={{}} />} onClick={() => { navigate('/tools/full_site_dismantle/file_manager'); show(); setMenuButton(true) }}>
                                                 File Manager
                                             </Nav.Item> */}
