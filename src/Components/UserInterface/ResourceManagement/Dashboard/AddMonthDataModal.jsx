@@ -774,7 +774,7 @@ const AddMonthDataModal = ({ catColor,costCenter,modelData,onSubmit}) => {
                         <tr style={{ background: idx % 2 === 0 ? "#fafafa" : "#fff" }}>
                           <td style={{ ...tdStyle, fontWeight: 500, color: "#333" }}>{r.role}</td>
                           <td style={{ ...tdStyle, padding: "3px 4px" }}>
-                            <select
+                            {/* <select
                               value={resources[r.id].count}
                               onChange={e => updateResourceCount(r.id, e.target.value)}
                               style={{
@@ -784,7 +784,20 @@ const AddMonthDataModal = ({ catColor,costCenter,modelData,onSubmit}) => {
                             >
                               <option value="">--</option>
                               {COUNT_OPTIONS.map(n => <option key={n} value={n}>{n}</option>)}
-                            </select>
+                            </select> */}
+                            <input
+                              value={resources[r.id].count}
+                              onChange={e => updateResourceCount(r.id, e.target.value)}
+                              type="number"
+                              min={0}
+                              style={{
+                                ...inp,
+                                padding: "4px 6px",
+                                fontSize: 12,
+                                textAlign: "center",
+                                borderColor: errors[r.id]?.count ? "red" : undefined,
+                              }}
+                            />
                             {errors[r.id]?.count && (<div style={errTxt}>{errors[r.id].count}</div>)}
                           </td>
 
