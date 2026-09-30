@@ -8,10 +8,18 @@ import { saveAs } from "file-saver";
 
 const USER_CONFIG = {
   'Vishal.Yadav@ust.com':{
-    "circle":"MUM",
-    "category":"C",
-    "customer":"VI",
-    "costCenter":"MCT0414"
+    // "circle":"MUM",
+    // "category":"C",
+    // "customer":"VI",
+    // "costCenter":"MCT0414"
+    // "circle":"HPHP",
+    // "category":"A",
+    // "customer":"Airtel",
+    // "costCenter":"MCT0384"
+    "circle":"UPE",
+    "category":"A",
+    "customer":"Airtel",
+    "costCenter":"MCT0385"
   },
   'Anurag.Singh@ust.com':{
     "circle":"UPE",
@@ -742,6 +750,15 @@ const MonthWise = () => {
   const sh    = { border:bdr, padding:"4px 4px", fontSize:10, fontWeight:500, textAlign:"center", background:"#e6a817", color:"#4a2800", whiteSpace:"nowrap" };
   const shSub = { border:bdr, padding:"3px 4px", fontSize:10, textAlign:"center", background:"#f0ede0", color:"#555", whiteSpace:"nowrap" };
   const emptyHeader = { border: "none",background: "#f0ede0",padding: 0};
+  const textCs = {
+    ...cs,
+    whiteSpace: "normal",
+    overflowWrap: "break-word",
+    wordBreak: "break-word",
+    verticalAlign: "top",
+    minWidth: "150px",
+    maxWidth: "250px"
+  };
 
   const DisplayCell = ({value,align = "center",onClick = null}) => (
     <span
@@ -1089,8 +1106,8 @@ const MonthWise = () => {
                       return (
                         <>
                           <td key={m+"cnt"} style={cs}><DisplayCell value={cell?.count} onClick={Number(cell.count) > 0 ?() => handleMemberClick(m, r,"resource"): null}/></td>
-                          <td key={m+"cmt"} style={cs}><DisplayCell value={cell?.comment} align="left" /></td>
-                          <td key={m+"act"} style={cs}><DisplayCell value={cell?.action} align="left" /></td>
+                          <td key={m+"cmt"} style={textCs}><DisplayCell value={cell?.comment} align="left" /></td>
+                          <td key={m+"act"} style={textCs}><DisplayCell value={cell?.action} align="left" /></td>
                         </>
                       );
                     })}
@@ -1136,8 +1153,8 @@ const MonthWise = () => {
                       return (
                         <>
                           <td key={m+"cnt"} style={cs}><DisplayCell value={cell?.count} onClick={Number(cell.count) > 0 ? () => handleMemberClick(m, r,"other_resource"): null}/></td>
-                          <td key={m+"cmt"} style={cs}><DisplayCell value={cell?.comment} align="left" /></td>
-                          <td key={m+"act"} style={cs}><DisplayCell value={cell?.action} align="left" /></td>
+                          <td key={m+"cmt"} style={textCs}><DisplayCell value={cell?.comment} align="left" /></td>
+                          <td key={m+"act"} style={textCs}><DisplayCell value={cell?.action} align="left" /></td>
                         </>
                       );
                     })}
