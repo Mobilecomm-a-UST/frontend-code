@@ -607,7 +607,7 @@ const AddMonthDataModal = ({ catColor,costCenter,modelData,onSubmit}) => {
         <span style={{ fontSize: 18, lineHeight: 1 }}>+</span> Add
       </button>
       
-      {/* <button
+      <button
         onClick={() => {
           const Resources = Object.fromEntries(
               RESOURCE_ROLES.map((role) => {
@@ -680,7 +680,7 @@ const AddMonthDataModal = ({ catColor,costCenter,modelData,onSubmit}) => {
         }}
       >
         Update
-      </button> */}
+      </button>
 
       {open && (
         <div
