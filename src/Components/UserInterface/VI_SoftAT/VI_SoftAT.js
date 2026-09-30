@@ -125,9 +125,9 @@ const VI_SoftAT = () => {
                                          <Nav.Item eventKey="5-3" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/UploadAtnd')}>
                                           ATND
                                         </Nav.Item>
-                                         <Nav.Item eventKey="5-4" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/Upload4G_ER')}>
+                                         {/* <Nav.Item eventKey="5-4" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/Upload4G_ER')}>
                                           4G
-                                        </Nav.Item>
+                                        </Nav.Item> */}
                                          </Nav.Menu> 
                                          
                                      
