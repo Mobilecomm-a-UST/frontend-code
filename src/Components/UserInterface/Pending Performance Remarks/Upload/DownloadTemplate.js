@@ -906,7 +906,7 @@ const DownloadTemplate = () => {
                 <Box>
 
                     {/* 3. Download Report */}
-                    <StyledCard title="Download Report" classes={classes}>
+                    {/* <StyledCard title="Download Report" classes={classes}>
                         <Stack spacing={2}>
                             <Box className={classes.Front_Box}>
                                 <div className={classes.Front_Box_Hading}>Select Band:</div>
@@ -960,7 +960,7 @@ const DownloadTemplate = () => {
                             <Button variant="contained" color="success" onClick={handleReportSubmit} endIcon={<UploadIcon />}>Submit</Button>
                             <Button variant="contained" onClick={handleReportCancel} sx={{ backgroundColor: "red", color: "white" }} endIcon={<DoDisturbIcon />}>Cancel</Button>
                         </Stack>
-                    </StyledCard>
+                    </StyledCard> */}
 
                     {/* 4. Download Input Template */}
                     <StyledCard title="Download Input Template" classes={classes}>

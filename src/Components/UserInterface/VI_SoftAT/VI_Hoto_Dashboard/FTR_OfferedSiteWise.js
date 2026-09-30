@@ -760,6 +760,790 @@
 // export const MemoFTR_OfferedSiteWise = React.memo(FTR_OfferedSiteWise);
 
 
+// import React, { useState, useEffect, useCallback, useRef } from "react";
+// import {
+//     Box,
+//     Paper,
+//     Table,
+//     TableBody,
+//     TableCell,
+//     TableContainer,
+//     TableHead,
+//     TableRow,
+//     Tabs,
+//     Tab,
+//     Typography,
+//     Avatar,
+//     IconButton,
+//     Stack,
+//     CircularProgress,
+//     Breadcrumbs,
+//     Link,
+//     Tooltip,
+//     Chip,
+//     TextField,
+//     Select,
+//     MenuItem,
+//     FormControl,
+//     InputLabel,
+// } from "@mui/material";
+// import LayersIcon from "@mui/icons-material/Layers";
+// import AccessTimeIcon from "@mui/icons-material/AccessTime";
+// import CellTowerIcon from "@mui/icons-material/CellTower";
+// import ApartmentIcon from "@mui/icons-material/Apartment";
+// import FileDownloadIcon from "@mui/icons-material/FileDownload";
+// import InboxIcon from "@mui/icons-material/Inbox";
+// import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+// import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+// import Slide from "@mui/material/Slide";
+// import { useNavigate } from "react-router-dom";
+// import VI_FTR_Dashboard from "../VI_Checklist/VI_FTR_Dashboard/VI_FTR_Dashboard";
+
+// /* ------------------------------------------------------------------ */
+// /*  Config — same pattern as the Daily Task Review dashboard:          */
+// /*  plain fetch, BASE_URL (trailing slash) + path (no leading slash)   */
+// /* ------------------------------------------------------------------ */
+// const BASE_URL = "https://commtoolapi.mcpspmis.com/";
+// const API_PATH = "ix_tracker_vi/HOTO_dashboard/";
+
+// /* ------------------------------------------------------------------ */
+// /*  Colors — teal theme, matching the sidebar (#006e74) with gradient  */
+// /* ------------------------------------------------------------------ */
+// const C = {
+//     corner: "#004d52",       // top-left / dark teal
+//     headerBg: "#00838f",     // column header medium teal
+//     labelOdd: "#dbf2f2",     // circle label column - light teal
+//     labelEven: "#eef9f9",    // circle label column - lighter teal
+//     grandTotalBg: "#c9f7d6", // total row green
+//     grandTotalText: "#0b6b3a",
+//     zeroText: "#b7bfc9",
+//     valueText: "#0d3a3c",
+//     border: "#c3cbd6",
+// };
+
+// const HEADER_GRADIENT = "linear-gradient(90deg, #004d52 0%, #006e74 55%, #4fa3a8 100%)";
+
+// const PAGE_BG = "#fdece0"; // warm peach/orange page background (replaces bluish tone)
+// const ROW_H = 37; // approx header row height, used for sticky offset of 2nd header row
+
+// /* ------------------------------------------------------------------ */
+// /*  Month / Year helpers...
+
+// /* ------------------------------------------------------------------ */
+// /*  Month / Year helpers                                                */
+// /*  IMPORTANT: the backend expects "month" as a NUMBER (1–12), not a   */
+// /*  month name string. We still show readable names in the dropdown,   */
+// /*  but the value stored in state (and sent to the API) is numeric —   */
+// /*  e.g. selecting "July" sends month=7, "August" sends month=8.       */
+// /* ------------------------------------------------------------------ */
+// const MONTHS = [
+//     "January", "February", "March", "April", "May", "June",
+//     "July", "August", "September", "October", "November", "December",
+// ];
+
+// const defaultMonth = () => new Date().getMonth() + 1; // 1–12
+// const defaultYear = () => String(new Date().getFullYear());
+
+// /* ------------------------------------------------------------------ */
+// /*  Helpers                                                             */
+// /* ------------------------------------------------------------------ */
+// const getCols = (rows, labelKey) =>
+//     rows && rows.length
+//         ? Object.keys(rows[0]).filter((k) => k !== labelKey && k !== "Grand Total")
+//         : [];
+
+// const todayLabel = () => {
+//     const d = new Date();
+//     const dd = String(d.getDate()).padStart(2, "0");
+//     const mm = String(d.getMonth() + 1).padStart(2, "0");
+//     const yyyy = d.getFullYear();
+//     return `${dd}-${mm}-${yyyy}`;
+// };
+
+// // Parse "FTR %" values whether they arrive as "1%" (string) or 0.01 / 1 (number)
+// const parseFtrPercent = (val) => {
+//     if (val == null) return null;
+//     if (typeof val === "string") {
+//         const n = parseFloat(val.replace("%", ""));
+//         return Number.isNaN(n) ? null : n;
+//     }
+//     if (typeof val === "number") return val <= 1 ? val * 100 : val;
+//     return null;
+// };
+
+// const formatFtrPercent = (val) => {
+//     const n = parseFtrPercent(val);
+//     if (n == null) return "0%";
+//     // keep original string as-is if it was already formatted with %
+//     return typeof val === "string" && val.includes("%") ? val : `${n}%`;
+// };
+
+// /* ------------------------------------------------------------------ */
+// /*  No data placeholder                                                 */
+// /* ------------------------------------------------------------------ */
+// function NoData({ label = "No data found", compact = false }) {
+//     return (
+//         <Box
+//             sx={{
+//                 display: "flex",
+//                 flexDirection: "column",
+//                 alignItems: "center",
+//                 justifyContent: "center",
+//                 gap: 1,
+//                 py: compact ? 4 : 8,
+//                 color: "#94a3b8",
+//             }}
+//         >
+//             <InboxIcon sx={{ fontSize: compact ? 30 : 42 }} />
+//             <Typography variant="body2" sx={{ fontWeight: 500 }}>
+//                 {label}
+//             </Typography>
+//         </Box>
+//     );
+// }
+
+// /* ------------------------------------------------------------------ */
+// /*  Excel-style matrix table (kept for other pivoted datasets)          */
+// /* ------------------------------------------------------------------ */
+// function MatrixTable({ title, rows, labelKey, icon }) {
+//     const cols = getCols(rows, labelKey);
+//     const hasData = Array.isArray(rows) && rows.length > 0;
+
+//     return (
+//         <Paper elevation={2} sx={{ borderRadius: 2, overflow: "hidden", border: `1px solid ${C.border}` }}>
+//             <Box
+//                 sx={{
+//                     display: "flex",
+//                     alignItems: "center",
+//                     gap: 1,
+//                     px: 2,
+//                     py: 1.25,
+//                     background: HEADER_GRADIENT,
+//                 }}
+//             >
+//                 {icon}
+//                 <Typography
+//                     variant="subtitle2"
+//                     sx={{ color: "#fff", fontWeight: 700, letterSpacing: 0.4, textTransform: "uppercase" }}
+//                 >
+//                     {title}
+//                 </Typography>
+//             </Box>
+
+//             {!hasData ? (
+//                 <NoData compact />
+//             ) : (
+//                 <TableContainer sx={{ maxHeight: 460 }}>
+//                     <Table
+//                         size="small"
+//                         stickyHeader
+//                         sx={{
+//                             borderCollapse: "collapse",
+//                             "& .MuiTableCell-root": { border: `1px solid ${C.border}`, py: 0.75 },
+//                         }}
+//                     >
+//                         <TableHead>
+//                             {/* date row */}
+//                             <TableRow>
+//                                 <TableCell
+//                                     rowSpan={2}
+//                                     sx={{
+//                                         position: "sticky",
+//                                         left: 0,
+//                                         top: 0,
+//                                         zIndex: 6,
+//                                         bgcolor: C.corner,
+//                                         color: "#fff",
+//                                         fontWeight: 700,
+//                                         minWidth: 110,
+//                                     }}
+//                                 >
+//                                     {labelKey}
+//                                 </TableCell>
+//                                 <TableCell
+//                                     colSpan={cols.length + 1}
+//                                     align="right"
+//                                     sx={{
+//                                         position: "sticky",
+//                                         top: 0,
+//                                         zIndex: 4,
+//                                         bgcolor: C.corner,
+//                                         color: "#fff",
+//                                         fontWeight: 700,
+//                                     }}
+//                                 >
+//                                     {todayLabel()}
+//                                 </TableCell>
+//                             </TableRow>
+//                             {/* column header row */}
+//                             <TableRow>
+//                                 {cols.map((c) => (
+//                                     <TableCell
+//                                         key={c}
+//                                         align="center"
+//                                         sx={{
+//                                             position: "sticky",
+//                                             top: ROW_H,
+//                                             zIndex: 3,
+//                                             bgcolor: C.headerBg,
+//                                             color: "#fff",
+//                                             fontWeight: 700,
+//                                             whiteSpace: "nowrap",
+//                                         }}
+//                                     >
+//                                         {c}
+//                                     </TableCell>
+//                                 ))}
+//                                 <TableCell
+//                                     align="center"
+//                                     sx={{
+//                                         position: "sticky",
+//                                         top: ROW_H,
+//                                         right: 0,
+//                                         zIndex: 4,
+//                                         bgcolor: C.corner,
+//                                         color: "#fff",
+//                                         fontWeight: 700,
+//                                         whiteSpace: "nowrap",
+//                                     }}
+//                                 >
+//                                     Grand Total
+//                                 </TableCell>
+//                             </TableRow>
+//                         </TableHead>
+
+//                         <TableBody>
+//                             {rows.map((row, i) => {
+//                                 const isGrandTotal = row[labelKey] === "Grand Total" || row[labelKey] === "Total";
+//                                 const labelBg = isGrandTotal ? C.grandTotalBg : i % 2 === 0 ? C.labelOdd : C.labelEven;
+
+//                                 return (
+//                                     <TableRow key={row[labelKey] ?? i}>
+//                                         <TableCell
+//                                             sx={{
+//                                                 position: "sticky",
+//                                                 left: 0,
+//                                                 zIndex: 2,
+//                                                 bgcolor: labelBg,
+//                                                 fontWeight: 700,
+//                                                 color: isGrandTotal ? C.grandTotalText : C.corner,
+//                                                 whiteSpace: "nowrap",
+//                                             }}
+//                                         >
+//                                             {row[labelKey]}
+//                                         </TableCell>
+//                                         {cols.map((c) => {
+//                                             const val = row[c] ?? 0;
+//                                             return (
+//                                                 <TableCell
+//                                                     key={c}
+//                                                     align="center"
+//                                                     sx={{
+//                                                         bgcolor: isGrandTotal ? C.grandTotalBg : "#ffffff",
+//                                                         fontVariantNumeric: "tabular-nums",
+//                                                         color: val === 0 ? C.zeroText : isGrandTotal ? C.grandTotalText : C.valueText,
+//                                                         fontWeight: val === 0 ? 400 : 700,
+//                                                     }}
+//                                                 >
+//                                                     {val}
+//                                                 </TableCell>
+//                                             );
+//                                         })}
+//                                         <TableCell
+//                                             align="center"
+//                                             sx={{
+//                                                 position: "sticky",
+//                                                 right: 0,
+//                                                 bgcolor: isGrandTotal ? C.grandTotalBg : C.labelOdd,
+//                                                 fontVariantNumeric: "tabular-nums",
+//                                                 color: isGrandTotal ? C.grandTotalText : C.corner,
+//                                                 fontWeight: 800,
+//                                             }}
+//                                         >
+//                                             {row["Grand Total"] ?? 0}
+//                                         </TableCell>
+//                                     </TableRow>
+//                                 );
+//                             })}
+//                         </TableBody>
+//                     </Table>
+//                 </TableContainer>
+//             )}
+//         </Paper>
+//     );
+// }
+
+// /* ------------------------------------------------------------------ */
+// /*  Flat FTR Offered Dashboard table — matches the API shape:          */
+// /*  [{ Circle, "RAN OEM", Offered, "FTR Count", "FTR %" }, ...]         */
+// /* ------------------------------------------------------------------ */
+// function FtrDashboardTable({ title, rows, icon }) {
+//     const hasData = Array.isArray(rows) && rows.length > 0;
+
+//     // group rows by Circle so consecutive rows for the same circle share a
+//     // background tint, similar to the Excel-style banding used elsewhere
+//     let lastCircle = null;
+//     let bandToggle = false;
+
+//     return (
+//         <Paper elevation={2} sx={{ borderRadius: 2, overflow: "hidden", border: `1px solid ${C.border}` }}>
+//             <Box
+//                 sx={{
+//                     display: "flex",
+//                     alignItems: "center",
+//                     gap: 1,
+//                     px: 2,
+//                     py: 1.25,
+//                     background: HEADER_GRADIENT,
+//                 }}
+//             >
+//                 {icon}
+//                 <Typography
+//                     variant="subtitle2"
+//                     sx={{ color: "#fff", fontWeight: 700, letterSpacing: 0.4, textTransform: "uppercase" }}
+//                 >
+//                     {title}
+//                 </Typography>
+//             </Box>
+
+//             {!hasData ? (
+//                 <NoData compact />
+//             ) : (
+//                 <TableContainer sx={{ maxHeight: 560 }}>
+//                     <Table
+//                         size="small"
+//                         stickyHeader
+//                         sx={{
+//                             borderCollapse: "collapse",
+//                             "& .MuiTableCell-root": { border: `1px solid ${C.border}`, py: 0.75 },
+//                         }}
+//                     >
+//                         <TableHead>
+//                             <TableRow>
+//                                 <TableCell
+//                                     sx={{
+//                                         position: "sticky",
+//                                         left: 0,
+//                                         top: 0,
+//                                         zIndex: 6,
+//                                         bgcolor: C.corner,
+//                                         color: "#fff",
+//                                         fontWeight: 700,
+//                                         minWidth: 90,
+//                                     }}
+//                                 >
+//                                     Circle
+//                                 </TableCell>
+//                                 <TableCell
+//                                     align="center"
+//                                     sx={{
+//                                         position: "sticky",
+//                                         top: 0,
+//                                         zIndex: 4,
+//                                         bgcolor: C.headerBg,
+//                                         color: "#fff",
+//                                         fontWeight: 700,
+//                                         minWidth: 120,
+//                                     }}
+//                                 >
+//                                     RAN OEM
+//                                 </TableCell>
+//                                 <TableCell
+//                                     align="center"
+//                                     sx={{
+//                                         position: "sticky",
+//                                         top: 0,
+//                                         zIndex: 4,
+//                                         bgcolor: C.headerBg,
+//                                         color: "#fff",
+//                                         fontWeight: 700,
+//                                         minWidth: 90,
+//                                     }}
+//                                 >
+//                                     Offered
+//                                 </TableCell>
+//                                 <TableCell
+//                                     align="center"
+//                                     sx={{
+//                                         position: "sticky",
+//                                         top: 0,
+//                                         zIndex: 4,
+//                                         bgcolor: C.headerBg,
+//                                         color: "#fff",
+//                                         fontWeight: 700,
+//                                         minWidth: 100,
+//                                     }}
+//                                 >
+//                                     FTR Count
+//                                 </TableCell>
+//                                 <TableCell
+//                                     align="center"
+//                                     sx={{
+//                                         position: "sticky",
+//                                         top: 0,
+//                                         right: 0,
+//                                         zIndex: 5,
+//                                         bgcolor: C.corner,
+//                                         color: "#fff",
+//                                         fontWeight: 700,
+//                                         minWidth: 90,
+//                                     }}
+//                                 >
+//                                     FTR %
+//                                 </TableCell>
+//                             </TableRow>
+//                         </TableHead>
+
+//                         <TableBody>
+//                             {rows.map((row, i) => {
+//                                 const circle = row["Circle"];
+//                                 const isGrandTotal =
+//                                     typeof circle === "string" &&
+//                                     (circle.trim().toLowerCase() === "grand total" ||
+//                                         circle.trim().toLowerCase() === "total");
+
+//                                 if (circle !== lastCircle) {
+//                                     bandToggle = !bandToggle;
+//                                     lastCircle = circle;
+//                                 }
+//                                 const labelBg = isGrandTotal ? C.grandTotalBg : bandToggle ? C.labelOdd : C.labelEven;
+
+//                                 const offered = row["Offered Count"] ?? 0;
+//                                 const ftrCount = row["FTR Count"] ?? 0;
+//                                 const ftrPctNum = parseFtrPercent(row["FTR %"]);
+//                                 // Grand Total row => green. Otherwise: zero => gray, else navy.
+//                                 const ftrPctColor = isGrandTotal
+//                                     ? C.grandTotalText
+//                                     : ftrPctNum == null || ftrPctNum === 0
+//                                         ? C.zeroText
+//                                         : C.valueText;
+
+//                                 return (
+//                                     <TableRow key={`${circle}-${row["RAN OEM"]}-${i}`}>
+//                                         <TableCell
+//                                             sx={{
+//                                                 position: "sticky",
+//                                                 left: 0,
+//                                                 zIndex: 2,
+//                                                 bgcolor: labelBg,
+//                                                 fontWeight: 700,
+//                                                 color: isGrandTotal ? C.grandTotalText : C.corner,
+//                                                 whiteSpace: "nowrap",
+//                                             }}
+//                                         >
+//                                             {circle}
+//                                         </TableCell>
+//                                         <TableCell
+//                                             align="center"
+//                                             sx={{
+//                                                 bgcolor: isGrandTotal ? C.grandTotalBg : "#fff",
+//                                                 color: isGrandTotal ? C.grandTotalText : C.valueText,
+//                                                 fontWeight: 600,
+//                                             }}
+//                                         >
+//                                             {row["RAN OEM"]}
+//                                         </TableCell>
+//                                         <TableCell
+//                                             align="center"
+//                                             sx={{
+//                                                 bgcolor: isGrandTotal ? C.grandTotalBg : "#fff",
+//                                                 fontVariantNumeric: "tabular-nums",
+//                                                 color: isGrandTotal
+//                                                     ? C.grandTotalText
+//                                                     : offered === 0
+//                                                         ? C.zeroText
+//                                                         : C.valueText,
+//                                                 fontWeight: offered === 0 && !isGrandTotal ? 400 : 700,
+//                                             }}
+//                                         >
+//                                             {offered}
+//                                         </TableCell>
+//                                         <TableCell
+//                                             align="center"
+//                                             sx={{
+//                                                 bgcolor: isGrandTotal ? C.grandTotalBg : "#fff",
+//                                                 fontVariantNumeric: "tabular-nums",
+//                                                 color: isGrandTotal
+//                                                     ? C.grandTotalText
+//                                                     : ftrCount === 0
+//                                                         ? C.zeroText
+//                                                         : C.valueText,
+//                                                 fontWeight: ftrCount === 0 && !isGrandTotal ? 400 : 700,
+//                                             }}
+//                                         >
+//                                             {ftrCount}
+//                                         </TableCell>
+//                                         <TableCell
+//                                             align="center"
+//                                             sx={{
+//                                                 position: "sticky",
+//                                                 right: 0,
+//                                                 bgcolor: labelBg,
+//                                             }}
+//                                         >
+//                                             <Chip
+//                                                 label={formatFtrPercent(row["FTR %"])}
+//                                                 size="small"
+//                                                 sx={{
+//                                                     fontWeight: 800,
+//                                                     fontSize: 11.5,
+//                                                     color: ftrPctColor,
+//                                                     bgcolor: "transparent",
+//                                                 }}
+//                                             />
+//                                         </TableCell>
+//                                     </TableRow>
+//                                 );
+//                             })}
+//                         </TableBody>
+//                     </Table>
+//                 </TableContainer>
+//             )}
+//         </Paper>
+//     );
+// }
+
+// /* ------------------------------------------------------------------ */
+// /*  Main Dashboard                                                      */
+// /* ------------------------------------------------------------------ */
+// function FTR_OfferedSiteWise() {
+//     const navigate = useNavigate();
+
+//     const [tab, setTab] = useState(0); // 0 = Circle, 1 = OEM
+//     const [dashboard, setDashboard] = useState(null);
+//     const [downloadLink, setDownloadLink] = useState(null);
+//     const [loading, setLoading] = useState(true);
+//     const [error, setError] = useState(false);
+
+//     // ── Month / Year filters, sent to the API ──
+//     // month is stored as a NUMBER (1–12) because the backend expects an
+//     // integer, not a month name string (see notes above MONTHS).
+//     const [month, setMonth] = useState(defaultMonth());
+//     const [year, setYear] = useState(defaultYear());
+
+//     // ── Race-condition guards ──
+//     // abortControllerRef cancels any in-flight request before a new one
+//     // starts. requestIdRef is a belt-and-braces check so that even if an
+//     // old request can't be aborted in time (e.g. browser quirks), its
+//     // response is ignored once a newer request has been issued.
+//     const abortControllerRef = useRef(null);
+//     const requestIdRef = useRef(0);
+
+//     const fetchDashboard = useCallback(async () => {
+//         if (abortControllerRef.current) {
+//             abortControllerRef.current.abort();
+//         }
+//         const controller = new AbortController();
+//         abortControllerRef.current = controller;
+//         const thisRequestId = ++requestIdRef.current;
+
+//         setLoading(true);
+//         setError(false);
+//         try {
+//             const params = new URLSearchParams();
+//             if (month) params.append("month", month); // numeric, e.g. 7 for July
+//             if (year) params.append("year", year);
+
+//             const url = `${BASE_URL}${API_PATH}${params.toString() ? `?${params.toString()}` : ""}`;
+//             const res = await fetch(url, { signal: controller.signal });
+//             const json = await res.json();
+
+//             // A newer request has since been issued — discard this response.
+//             if (thisRequestId !== requestIdRef.current) return;
+
+//             if (!json || !json.dashboard) {
+//                 setDashboard(null);
+//                 setDownloadLink(null);
+//             } else {
+//                 setDashboard(json.dashboard);
+//                 setDownloadLink(json.download_link ?? null);
+//             }
+//         } catch (e) {
+//             if (e.name === "AbortError") return; // expected when a newer request supersedes this one
+//             console.error("FTR_OfferedSiteWise fetchDashboard:", e);
+//             if (thisRequestId === requestIdRef.current) {
+//                 setError(true);
+//                 setDashboard(null);
+//                 setDownloadLink(null);
+//             }
+//         } finally {
+//             if (thisRequestId === requestIdRef.current) {
+//                 setLoading(false);
+//             }
+//         }
+//     }, [month, year]);
+
+//     useEffect(() => {
+//         fetchDashboard();
+//         // Cancel any in-flight request if the component unmounts mid-fetch.
+//         return () => {
+//             if (abortControllerRef.current) {
+//                 abortControllerRef.current.abort();
+//             }
+//         };
+//     }, [fetchDashboard]);
+
+//     // ✅ Updated: new key — "FTR Offered Dashboard" list —
+//     // [{ Circle, "RAN OEM", Offered, "FTR Count", "FTR %" }]
+//     const ftrOfferedRows = dashboard?.["FTR Offered Dashboard"];
+//     const dateinfo = dashboard?.["data contains period"]
+
+//     const hasAnyData = !!dashboard;
+
+//     // Shared sx for the dark-header Select/TextField controls
+//     const controlSx = {
+//         bgcolor: "rgba(255,255,255,0.08)",
+//         borderRadius: 1,
+//         "& .MuiOutlinedInput-root": {
+//             color: "#fff",
+//             "& fieldset": { borderColor: "rgba(255,255,255,0.3)" },
+//             "&:hover fieldset": { borderColor: "rgba(255,255,255,0.5)" },
+//             "&.Mui-focused fieldset": { borderColor: "#4fa3a8" },
+//         },
+//         "& .MuiInputLabel-root": { color: "rgba(255,255,255,0.8)" },
+//         "& .MuiSvgIcon-root": { color: "#fff" },
+//     };
+
+//     return (
+//         <Slide direction="left" in="true" timeout={1000}>
+//             <div>
+//                 <Box sx={{ minHeight: "100%", width: "100%", fontFamily: "Roboto, sans-serif" }}>
+//                     <Box sx={{ width: "100%", px: { xs: 2, sm: 3, md: 4 }, py: 3 }}>
+//                         {/* Header */}
+//                         <Paper
+//                             elevation={3}
+//                             sx={{
+//                                 borderRadius: 2,
+//                                 px: 2.5,
+//                                 py: 2,
+//                                 mb: 3,
+//                                 background: HEADER_GRADIENT,
+//                                 display: "flex",
+//                                 alignItems: "center",
+//                                 justifyContent: "space-between",
+//                                 gap: 2,
+//                                 flexWrap: "wrap",
+//                             }}
+//                         >
+//                             <Stack direction="row" spacing={1.5} alignItems="center">
+//                                 <Avatar sx={{ bgcolor: "rgba(255,255,255,0.1)", width: 40, height: 40 }}>
+//                                     <LayersIcon sx={{ color: "#bfe9e9" }} />
+//                                 </Avatar>
+//                                 <Box>
+//                                     <Typography variant="subtitle1" sx={{ color: "#fff", fontWeight: 700, letterSpacing: 0.3 }}>
+//                                         FTR Dashboard-Offered Site Wise
+//                                     </Typography>
+//                                     <Typography
+//                                         component="span"
+//                                         variant="body2"
+//                                         sx={{
+//                                             color: "#fff",
+//                                             fontWeight: 400,
+//                                             opacity: 0.9,
+//                                             display: "flex",
+//                                             alignItems: "center",
+//                                             justifyContent: "center",
+//                                             textAlign: "center"
+//                                         }}
+//                                     >
+//                                         {dateinfo}
+//                                     </Typography>
+
+
+
+//                                 </Box>
+//                             </Stack>
+
+//                             {/* Month / Year filters */}
+//                             <Stack direction="row" spacing={1.5} alignItems="center" flexWrap="wrap">
+//                                 <FormControl size="small" sx={{ minWidth: 140, ...controlSx }}>
+//                                     <InputLabel id="ftr-offered-month-label">Month</InputLabel>
+//                                     <Select
+//                                         labelId="ftr-offered-month-label"
+//                                         label="Month"
+//                                         value={month}
+//                                         onChange={(e) => setMonth(e.target.value)}
+//                                     >
+//                                         {MONTHS.map((m, idx) => (
+//                                             <MenuItem key={m} value={idx + 1}>
+//                                                 {m}
+//                                             </MenuItem>
+//                                         ))}
+//                                     </Select>
+//                                 </FormControl>
+
+//                                 <TextField
+//                                     type="number"
+//                                     size="small"
+//                                     label="Year"
+//                                     value={year}
+//                                     onChange={(e) => setYear(e.target.value)}
+//                                     InputLabelProps={{ shrink: true, sx: { color: "rgba(255,255,255,0.8)" } }}
+//                                     sx={{ width: 110, ...controlSx }}
+//                                 />
+
+//                                 <Tooltip title={downloadLink ? "Download Excel" : "No file available"}>
+//                                     <span>
+//                                         <IconButton
+//                                             component={downloadLink ? "a" : "button"}
+//                                             href={downloadLink || undefined}
+//                                             disabled={!downloadLink}
+//                                             sx={{
+//                                                 color: "#bfe9e9",
+//                                                 bgcolor: "rgba(255,255,255,0.08)",
+//                                                 "&:hover": { bgcolor: "rgba(255,255,255,0.16)" },
+//                                                 "&.Mui-disabled": { color: "rgba(255,255,255,0.3)" },
+//                                             }}
+//                                         >
+//                                             <FileDownloadIcon />
+//                                         </IconButton>
+//                                     </span>
+//                                 </Tooltip>
+//                             </Stack>
+//                         </Paper>
+
+//                         {/* Loading state */}
+//                         {loading && (
+//                             <Box sx={{ display: "flex", justifyContent: "center", py: 8 }}>
+//                                 <CircularProgress size={32} sx={{ color: C.corner }} />
+//                             </Box>
+//                         )}
+
+//                         {/* Error / no data state */}
+//                         {!loading && (error || !hasAnyData) && (
+//                             <Paper elevation={1} sx={{ borderRadius: 2 }}>
+//                                 <NoData label={error ? "No data found — could not reach the server" : "No data found"} />
+//                             </Paper>
+//                         )}
+
+//                         {/* Content */}
+//                         {!loading && !error && hasAnyData && (
+//                             <>
+//                                 <Stack spacing={3}>
+//                                     {tab === 0 ? (
+//                                         <>
+//                                             <FtrDashboardTable
+//                                                 title="Offered Site Wise"
+//                                                 rows={ftrOfferedRows}
+//                                                 icon={<TrendingUpIcon sx={{ color: "#bfe9e9", fontSize: 18 }} />}
+//                                             />
+//                                         </>
+//                                     ) : (
+//                                         <></>
+//                                     )}
+//                                 </Stack>
+//                             </>
+//                         )}
+//                     </Box>
+//                 </Box>
+//             </div>
+//         </Slide>
+//     );
+// }
+
+// export const MemoFTR_OfferedSiteWise = React.memo(FTR_OfferedSiteWise);
+
+
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import {
     Box,
@@ -786,6 +1570,8 @@ import {
     MenuItem,
     FormControl,
     InputLabel,
+    ToggleButton,
+    ToggleButtonGroup,
 } from "@mui/material";
 import LayersIcon from "@mui/icons-material/Layers";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
@@ -825,9 +1611,6 @@ const HEADER_GRADIENT = "linear-gradient(90deg, #004d52 0%, #006e74 55%, #4fa3a8
 
 const PAGE_BG = "#fdece0"; // warm peach/orange page background (replaces bluish tone)
 const ROW_H = 37; // approx header row height, used for sticky offset of 2nd header row
-
-/* ------------------------------------------------------------------ */
-/*  Month / Year helpers...
 
 /* ------------------------------------------------------------------ */
 /*  Month / Year helpers                                                */
@@ -1315,6 +2098,10 @@ function FTR_OfferedSiteWise() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
 
+    // UPDATED: View mode state — "overall" (all data) or "monthly" (filtered by month/year)
+    // Default to "overall" to show all data by default
+    const [viewMode, setViewMode] = useState("overall");
+
     // ── Month / Year filters, sent to the API ──
     // month is stored as a NUMBER (1–12) because the backend expects an
     // integer, not a month name string (see notes above MONTHS).
@@ -1341,8 +2128,13 @@ function FTR_OfferedSiteWise() {
         setError(false);
         try {
             const params = new URLSearchParams();
-            if (month) params.append("month", month); // numeric, e.g. 7 for July
-            if (year) params.append("year", year);
+            
+            // UPDATED: Only add month/year params if in "monthly" view mode
+            if (viewMode === "monthly") {
+                if (month) params.append("month", month); // numeric, e.g. 7 for July
+                if (year) params.append("year", year);
+            }
+            // If viewMode is "overall", don't append month/year (sends empty params)
 
             const url = `${BASE_URL}${API_PATH}${params.toString() ? `?${params.toString()}` : ""}`;
             const res = await fetch(url, { signal: controller.signal });
@@ -1371,7 +2163,7 @@ function FTR_OfferedSiteWise() {
                 setLoading(false);
             }
         }
-    }, [month, year]);
+    }, [viewMode, month, year]);
 
     useEffect(() => {
         fetchDashboard();
@@ -1449,20 +2241,66 @@ function FTR_OfferedSiteWise() {
                                         {dateinfo}
                                     </Typography>
 
-
-
                                 </Box>
                             </Stack>
 
-                            {/* Month / Year filters */}
+                            {/* UPDATED: View Mode toggle + Month / Year filters */}
                             <Stack direction="row" spacing={1.5} alignItems="center" flexWrap="wrap">
-                                <FormControl size="small" sx={{ minWidth: 140, ...controlSx }}>
+                                {/* View Mode Toggle — NEW */}
+                                <ToggleButtonGroup
+                                    value={viewMode}
+                                    exclusive
+                                    onChange={(e, newMode) => {
+                                        if (newMode !== null) {
+                                            setViewMode(newMode);
+                                        }
+                                    }}
+                                    size="small"
+                                    sx={{
+                                        bgcolor: "rgba(255,255,255,0.08)",
+                                        border: "1px solid rgba(255,255,255,0.3)",
+                                        borderRadius: 1,
+                                    }}
+                                >
+                                    <ToggleButton
+                                        value="overall"
+                                        sx={{
+                                            color: "#bfe9e9",
+                                            textTransform: "none",
+                                            fontWeight: 600,
+                                            "&.Mui-selected": {
+                                                bgcolor: "rgba(79, 163, 168, 0.3)",
+                                                color: "#fff",
+                                            },
+                                        }}
+                                    >
+                                        Overall
+                                    </ToggleButton>
+                                    <ToggleButton
+                                        value="monthly"
+                                        sx={{
+                                            color: "#bfe9e9",
+                                            textTransform: "none",
+                                            fontWeight: 600,
+                                            "&.Mui-selected": {
+                                                bgcolor: "rgba(79, 163, 168, 0.3)",
+                                                color: "#fff",
+                                            },
+                                        }}
+                                    >
+                                        Monthly
+                                    </ToggleButton>
+                                </ToggleButtonGroup>
+
+                                {/* Month / Year filters — UPDATED: Only enabled when in "monthly" view mode */}
+                                <FormControl size="small" sx={{ minWidth: 140, ...controlSx, opacity: viewMode === "monthly" ? 1 : 0.5 }}>
                                     <InputLabel id="ftr-offered-month-label">Month</InputLabel>
                                     <Select
                                         labelId="ftr-offered-month-label"
                                         label="Month"
                                         value={month}
                                         onChange={(e) => setMonth(e.target.value)}
+                                        disabled={viewMode === "overall"}
                                     >
                                         {MONTHS.map((m, idx) => (
                                             <MenuItem key={m} value={idx + 1}>
@@ -1479,7 +2317,8 @@ function FTR_OfferedSiteWise() {
                                     value={year}
                                     onChange={(e) => setYear(e.target.value)}
                                     InputLabelProps={{ shrink: true, sx: { color: "rgba(255,255,255,0.8)" } }}
-                                    sx={{ width: 110, ...controlSx }}
+                                    disabled={viewMode === "overall"}
+                                    sx={{ width: 110, ...controlSx, opacity: viewMode === "monthly" ? 1 : 0.5 }}
                                 />
 
                                 <Tooltip title={downloadLink ? "Download Excel" : "No file available"}>

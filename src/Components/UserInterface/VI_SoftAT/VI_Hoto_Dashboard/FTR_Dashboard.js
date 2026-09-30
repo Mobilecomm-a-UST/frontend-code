@@ -47,19 +47,21 @@
 // const API_PATH = "ix_tracker_vi/HOTO_dashboard/";
 
 // /* ------------------------------------------------------------------ */
-// /*  Colors — matched to the Excel-style reference screenshots          */
+// /*  Colors — teal theme, matching the sidebar (#006e74) with gradient  */
 // /* ------------------------------------------------------------------ */
 // const C = {
-//     corner: "#2e4463",       // top-left / date-row dark navy
-//     headerBg: "#4d8fd1",     // column header medium blue
-//     labelOdd: "#dbe9f8",     // circle label column - light blue
-//     labelEven: "#eef4fb",    // circle label column - lighter blue
+//     corner: "#004d52",       // top-left / dark teal
+//     headerBg: "#00838f",     // column header medium teal
+//     labelOdd: "#dbf2f2",     // circle label column - light teal
+//     labelEven: "#eef9f9",    // circle label column - lighter teal
 //     grandTotalBg: "#c9f7d6", // total row green
 //     grandTotalText: "#0b6b3a",
 //     zeroText: "#b7bfc9",
-//     valueText: "#1a2f52",
+//     valueText: "#0d3a3c",
 //     border: "#c3cbd6",
 // };
+
+// const HEADER_GRADIENT = "linear-gradient(90deg, #004d52 0%, #006e74 55%, #4fa3a8 100%)";
 
 // const PAGE_BG = "#fdece0"; // warm peach/orange page background (replaces bluish tone)
 
@@ -154,7 +156,7 @@
 //                     gap: 1,
 //                     px: 2,
 //                     py: 1.25,
-//                     background: "linear-gradient(90deg, #446698 0%, #173d73 100%)",
+//                     background: HEADER_GRADIENT,
 //                 }}
 //             >
 //                 {icon}
@@ -330,7 +332,7 @@
 //                     gap: 1,
 //                     px: 2,
 //                     py: 1.25,
-//                     background: "linear-gradient(90deg, #446698 0%, #173d73 100%)",
+//                     background: HEADER_GRADIENT,
 //                 }}
 //             >
 //                 {icon}
@@ -451,8 +453,8 @@
 //                                 const ftrPctColor = isGrandTotal
 //                                     ? C.grandTotalText
 //                                     : ftrPctNum == null || ftrPctNum === 0
-//                                     ? C.zeroText
-//                                     : C.valueText;
+//                                         ? C.zeroText
+//                                         : C.valueText;
 
 //                                 return (
 //                                     <TableRow key={`${circle}-${row["RAN OEM"]}-${i}`}>
@@ -487,8 +489,8 @@
 //                                                 color: isGrandTotal
 //                                                     ? C.grandTotalText
 //                                                     : ms1 === 0
-//                                                     ? C.zeroText
-//                                                     : C.valueText,
+//                                                         ? C.zeroText
+//                                                         : C.valueText,
 //                                                 fontWeight: ms1 === 0 && !isGrandTotal ? 400 : 700,
 //                                             }}
 //                                         >
@@ -502,8 +504,8 @@
 //                                                 color: isGrandTotal
 //                                                     ? C.grandTotalText
 //                                                     : ftrCount === 0
-//                                                     ? C.zeroText
-//                                                     : C.valueText,
+//                                                         ? C.zeroText
+//                                                         : C.valueText,
 //                                                 fontWeight: ftrCount === 0 && !isGrandTotal ? 400 : 700,
 //                                             }}
 //                                         >
@@ -620,6 +622,7 @@
 //     }, [fetchDashboard]);
 
 //     const ftrDashboardRows = dashboard?.["FTR Dashboard"];
+//     const dateinfo = dashboard?.["data contains period"]
 
 //     const hasAnyData = !!dashboard;
 
@@ -631,7 +634,7 @@
 //             color: "#fff",
 //             "& fieldset": { borderColor: "rgba(255,255,255,0.3)" },
 //             "&:hover fieldset": { borderColor: "rgba(255,255,255,0.5)" },
-//             "&.Mui-focused fieldset": { borderColor: "#7dd3fc" },
+//             "&.Mui-focused fieldset": { borderColor: "#4fa3a8" },
 //         },
 //         "& .MuiInputLabel-root": { color: "rgba(255,255,255,0.8)" },
 //         "& .MuiSvgIcon-root": { color: "#fff" },
@@ -650,7 +653,7 @@
 //                                 px: 2.5,
 //                                 py: 2,
 //                                 mb: 3,
-//                                 background: "linear-gradient(90deg, #0a1f3d 0%, #446698 0%, #173d73 100%)",
+//                                 background: HEADER_GRADIENT,
 //                                 display: "flex",
 //                                 alignItems: "center",
 //                                 justifyContent: "space-between",
@@ -660,12 +663,30 @@
 //                         >
 //                             <Stack direction="row" spacing={1.5} alignItems="center">
 //                                 <Avatar sx={{ bgcolor: "rgba(255,255,255,0.1)", width: 40, height: 40 }}>
-//                                     <LayersIcon sx={{ color: "#7dd3fc" }} />
+//                                     <LayersIcon sx={{ color: "#bfe9e9" }} />
 //                                 </Avatar>
 //                                 <Box>
 //                                     <Typography variant="subtitle1" sx={{ color: "#fff", fontWeight: 700, letterSpacing: 0.3 }}>
-//                                        FTR Dashboard-MS1 Wise
-//                                     </Typography>
+//                                         FTR Dashboard-MS1 Wise
+
+
+//                                             <Typography
+//                                                 component="span"
+//                                                 variant="body2"
+//                                                 sx={{
+//                                                     color: "#fff",
+//                                                     fontWeight: 400,
+//                                                     opacity: 0.9,
+//                                                     display: "flex",
+//                                                     alignItems: "center",
+//                                                     justifyContent: "center",
+//                                                     textAlign: "center"
+//                                                 }}
+//                                             >
+//                                                 {dateinfo}
+//                                             </Typography>
+//                                         </Typography>
+
 //                                 </Box>
 //                             </Stack>
 
@@ -704,7 +725,7 @@
 //                                             href={downloadLink || undefined}
 //                                             disabled={!downloadLink}
 //                                             sx={{
-//                                                 color: "#7dd3fc",
+//                                                 color: "#bfe9e9",
 //                                                 bgcolor: "rgba(255,255,255,0.08)",
 //                                                 "&:hover": { bgcolor: "rgba(255,255,255,0.16)" },
 //                                                 "&.Mui-disabled": { color: "rgba(255,255,255,0.3)" },
@@ -720,7 +741,7 @@
 //                         {/* Loading state */}
 //                         {loading && (
 //                             <Box sx={{ display: "flex", justifyContent: "center", py: 8 }}>
-//                                 <CircularProgress size={32} sx={{ color: "#0f2a52" }} />
+//                                 <CircularProgress size={32} sx={{ color: C.corner }} />
 //                             </Box>
 //                         )}
 
@@ -740,7 +761,7 @@
 //                                             <FtrDashboardTable
 //                                                 title="MS1 Wise"
 //                                                 rows={ftrDashboardRows}
-//                                                 icon={<TrendingUpIcon sx={{ color: "#7dd3fc", fontSize: 18 }} />}
+//                                                 icon={<TrendingUpIcon sx={{ color: "#bfe9e9", fontSize: 18 }} />}
 //                                             />
 //                                         </>
 //                                     ) : (
@@ -752,11 +773,13 @@
 //                     </Box>
 //                 </Box>
 //             </div>
-//         </Slide>
+//         </Slide >
 //     );
 // }
 
 // export const MemoFTR_Dashboard = React.memo(FTR_Dashboard);
+
+
 
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import {
@@ -784,6 +807,8 @@ import {
     MenuItem,
     FormControl,
     InputLabel,
+    ToggleButton,
+    ToggleButtonGroup,
 } from "@mui/material";
 import LayersIcon from "@mui/icons-material/Layers";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
@@ -821,9 +846,7 @@ const C = {
 
 const HEADER_GRADIENT = "linear-gradient(90deg, #004d52 0%, #006e74 55%, #4fa3a8 100%)";
 
-const PAGE_BG = "#fdece0"; // warm peach/orange page background (replaces bluish tone)
-
-const ROW_H = 37; // approx header row height, used for sticky offset of 2nd header row
+const PAGE_BG = "#fdece0"; // warm peach/orange page background
 
 /* ------------------------------------------------------------------ */
 /*  Month / Year helpers                                                */
@@ -979,7 +1002,7 @@ function MatrixTable({ title, rows, labelKey, icon }) {
                                         align="center"
                                         sx={{
                                             position: "sticky",
-                                            top: ROW_H,
+                                            top: 37,
                                             zIndex: 3,
                                             bgcolor: C.headerBg,
                                             color: "#fff",
@@ -994,7 +1017,7 @@ function MatrixTable({ title, rows, labelKey, icon }) {
                                     align="center"
                                     sx={{
                                         position: "sticky",
-                                        top: ROW_H,
+                                        top: 37,
                                         right: 0,
                                         zIndex: 4,
                                         bgcolor: C.corner,
@@ -1299,9 +1322,9 @@ function FtrDashboardTable({ title, rows, icon }) {
     );
 }
 
-/* ------------------------------------------------------------------ */
-/*  Main Dashboard                                                      */
-/* ------------------------------------------------------------------ */
+/* ================================================================ */
+/*  Main Dashboard                                                   */
+/* ================================================================ */
 function FTR_Dashboard() {
     const navigate = useNavigate();
 
@@ -1310,6 +1333,10 @@ function FTR_Dashboard() {
     const [downloadLink, setDownloadLink] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
+
+    // UPDATED: View mode state — "overall" (all data) or "monthly" (filtered by month/year)
+    // Default to "overall" to show all data by default
+    const [viewMode, setViewMode] = useState("overall");
 
     // ── Month / Year filters, sent to the API ──
     // month is stored as a NUMBER (1–12) because the backend expects an
@@ -1337,8 +1364,13 @@ function FTR_Dashboard() {
         setError(false);
         try {
             const params = new URLSearchParams();
-            if (month) params.append("month", month); // numeric, e.g. 7 for July
-            if (year) params.append("year", year);
+            
+            // UPDATED: Only add month/year params if in "monthly" view mode
+            if (viewMode === "monthly") {
+                if (month) params.append("month", month); // numeric, e.g. 7 for July
+                if (year) params.append("year", year);
+            }
+            // If viewMode is "overall", don't append month/year (sends empty params)
 
             const url = `${BASE_URL}${API_PATH}${params.toString() ? `?${params.toString()}` : ""}`;
             const res = await fetch(url, { signal: controller.signal });
@@ -1367,7 +1399,7 @@ function FTR_Dashboard() {
                 setLoading(false);
             }
         }
-    }, [month, year]);
+    }, [viewMode, month, year]);
 
     useEffect(() => {
         fetchDashboard();
@@ -1427,36 +1459,83 @@ function FTR_Dashboard() {
                                     <Typography variant="subtitle1" sx={{ color: "#fff", fontWeight: 700, letterSpacing: 0.3 }}>
                                         FTR Dashboard-MS1 Wise
 
-
-                                            <Typography
-                                                component="span"
-                                                variant="body2"
-                                                sx={{
-                                                    color: "#fff",
-                                                    fontWeight: 400,
-                                                    opacity: 0.9,
-                                                    display: "flex",
-                                                    alignItems: "center",
-                                                    justifyContent: "center",
-                                                    textAlign: "center"
-                                                }}
-                                            >
-                                                {dateinfo}
-                                            </Typography>
+                                        <Typography
+                                            component="span"
+                                            variant="body2"
+                                            sx={{
+                                                color: "#fff",
+                                                fontWeight: 400,
+                                                opacity: 0.9,
+                                                display: "flex",
+                                                alignItems: "center",
+                                                justifyContent: "center",
+                                                textAlign: "center"
+                                            }}
+                                        >
+                                            {dateinfo}
                                         </Typography>
-                                
+                                    </Typography>
+
                                 </Box>
                             </Stack>
 
-                            {/* Month / Year filters */}
+                            {/* UPDATED: View Mode toggle + Month / Year filters */}
                             <Stack direction="row" spacing={1.5} alignItems="center" flexWrap="wrap">
-                                <FormControl size="small" sx={{ minWidth: 140, ...controlSx }}>
+                                {/* View Mode Toggle — NEW */}
+                                <ToggleButtonGroup
+                                    value={viewMode}
+                                    exclusive
+                                    onChange={(e, newMode) => {
+                                        if (newMode !== null) {
+                                            setViewMode(newMode);
+                                        }
+                                    }}
+                                    size="small"
+                                    sx={{
+                                        bgcolor: "rgba(255,255,255,0.08)",
+                                        border: "1px solid rgba(255,255,255,0.3)",
+                                        borderRadius: 1,
+                                    }}
+                                >
+                                    <ToggleButton
+                                        value="overall"
+                                        sx={{
+                                            color: "#bfe9e9",
+                                            textTransform: "none",
+                                            fontWeight: 600,
+                                            "&.Mui-selected": {
+                                                bgcolor: "rgba(79, 163, 168, 0.3)",
+                                                color: "#fff",
+                                            },
+                                        }}
+                                    >
+                                        Overall
+                                    </ToggleButton>
+                                    <ToggleButton
+                                        value="monthly"
+                                        sx={{
+                                            color: "#bfe9e9",
+                                            textTransform: "none",
+                                            fontWeight: 600,
+                                            "&.Mui-selected": {
+                                                bgcolor: "rgba(79, 163, 168, 0.3)",
+                                                color: "#fff",
+                                            },
+                                        }}
+                                    >
+                                        Monthly
+                                    </ToggleButton>
+                                </ToggleButtonGroup>
+
+                                {/* Month / Year filters — UPDATED: Only enabled when in "monthly" view mode */}
+                                <FormControl size="small" sx={{ minWidth: 140, ...controlSx, opacity: viewMode === "monthly" ? 1 : 0.5 }}>
                                     <InputLabel id="ftr-month-label">Month</InputLabel>
                                     <Select
                                         labelId="ftr-month-label"
                                         label="Month"
                                         value={month}
                                         onChange={(e) => setMonth(e.target.value)}
+                                        disabled={viewMode === "overall"}
                                     >
                                         {MONTHS.map((m, idx) => (
                                             <MenuItem key={m} value={idx + 1}>
@@ -1473,7 +1552,8 @@ function FTR_Dashboard() {
                                     value={year}
                                     onChange={(e) => setYear(e.target.value)}
                                     InputLabelProps={{ shrink: true, sx: { color: "rgba(255,255,255,0.8)" } }}
-                                    sx={{ width: 110, ...controlSx }}
+                                    disabled={viewMode === "overall"}
+                                    sx={{ width: 110, ...controlSx, opacity: viewMode === "monthly" ? 1 : 0.5 }}
                                 />
 
                                 <Tooltip title={downloadLink ? "Download Excel" : "No file available"}>
