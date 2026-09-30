@@ -462,6 +462,76 @@ const AddMonthDataModal = ({ catColor,costCenter,modelData,onSubmit}) => {
   }
 
 
+
+
+  function removeResourceMember(roleId, index) {
+    setResources(prev => {
+      const members = (prev[roleId]?.members || []).filter(
+        (_, i) => i !== index
+      );
+
+      return {
+        ...prev,
+        [roleId]: {
+          ...prev[roleId],
+          members,
+          count: String(members.length)
+        }
+      };
+    });
+
+    setErrors(prev => {
+      const roleErr = prev[roleId] || {};
+      const memberErrs = (roleErr.members || []).filter(
+        (_, i) => i !== index
+      );
+
+      return {
+        ...prev,
+        [roleId]: {
+          ...roleErr,
+          count: "",
+          members: memberErrs
+        }
+      };
+    });
+  }
+
+  function removeOtherResourceMember(roleId, index) {
+    setOtherResources(prev => {
+      const members = (prev[roleId]?.members || []).filter(
+        (_, i) => i !== index
+      );
+
+      return {
+        ...prev,
+        [roleId]: {
+          ...prev[roleId],
+          members,
+          count: String(members.length)
+        }
+      };
+    });
+
+    setOtherErrors(prev => {
+      const roleErr = prev[roleId] || {};
+      const memberErrs = (roleErr.members || []).filter(
+        (_, i) => i !== index
+      );
+
+      return {
+        ...prev,
+        [roleId]: {
+          ...roleErr,
+          count: "",
+          members: memberErrs
+        }
+      };
+    });
+  }
+
+
+
   function validateResourceSection(resourcesObj, roles) {
     let newErrors = {};
     let isValid = true;
@@ -715,7 +785,7 @@ const AddMonthDataModal = ({ catColor,costCenter,modelData,onSubmit}) => {
           >
             {/* Header */}
             <div style={{background: catColor,color: "#fff",padding: "14px 20px",display: "flex",alignItems: "center",justifyContent: "space-between",flexShrink: 0}}>
-                <div style={{ fontSize: 11, opacity: 0.8, marginTop: 2 }}>{editData ? "Edit Data" : "Add Data"}</div>
+                <div style={{ fontSize: 12, opacity: 1, marginTop: 2 }}>{editData ? "Update Data" : "Add Data"}</div>
                 <button onClick={closeModal} style={{ background: "none", border: "none", color: "#fff", fontSize: 22, cursor: "pointer", lineHeight: 1 }}>×</button>
             </div>
 
@@ -790,6 +860,12 @@ const AddMonthDataModal = ({ catColor,costCenter,modelData,onSubmit}) => {
                               onChange={e => updateResourceCount(r.id, e.target.value)}
                               type="number"
                               min={0}
+                              onWheel={e => e.currentTarget.blur()}
+                              // onKeyDown={e => {
+                              //   if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+                              //     e.preventDefault();
+                              //   }
+                              // }}
                               style={{
                                 ...inp,
                                 padding: "4px 6px",
@@ -861,6 +937,31 @@ const AddMonthDataModal = ({ catColor,costCenter,modelData,onSubmit}) => {
                                         />
                                         {mErr.projects && <div style={errTxt}>{mErr.projects}</div>}
                                       </div>
+
+                                      <button
+                                        type="button"
+                                        onClick={() => removeResourceMember(r.id, i)}
+                                        title="Remove employee"
+                                        style={{
+                                        width: 28,
+                                        height: 28,
+                                        marginTop: 1,
+                                        border: "1px solid #dc3545",
+                                        borderRadius: 6,
+                                        background: "#fff",
+                                        color: "#dc3545",
+                                        fontSize: 18,
+                                        fontWeight: 600,
+                                        lineHeight: "24px",
+                                        cursor: "pointer",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        flexShrink: 0
+                                        }}
+                                        >
+                                        ×
+                                      </button>
                                     </div>
                                   );
                                 })}
@@ -901,6 +1002,7 @@ const AddMonthDataModal = ({ catColor,costCenter,modelData,onSubmit}) => {
                             onChange={e => updateOtherResourceCount(r.id, e.target.value)}
                             type="number"
                             min={0}
+                            onWheel={e => e.currentTarget.blur()}
                             style={{
                               ...inp,
                               padding: "4px 6px",
@@ -972,6 +1074,34 @@ const AddMonthDataModal = ({ catColor,costCenter,modelData,onSubmit}) => {
                                         />
                                         {mErr.projects && <div style={errTxt}>{mErr.projects}</div>}
                                       </div>
+
+                                      <button
+                                        type="button"
+                                        onClick={() => removeOtherResourceMember(r.id, i)}
+                                        title="Remove employee"
+                                        style={{
+                                        width: 28,
+                                        height: 28,
+                                        marginTop: 1,
+                                        border: "1px solid #dc3545",
+                                        borderRadius: 6,
+                                        background: "#fff",
+                                        color: "#dc3545",
+                                        fontSize: 18,
+                                        fontWeight: 600,
+                                        lineHeight: 1,
+                                        cursor: "pointer",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        flexShrink: 0
+                                        }}
+                                        >
+                                        ×
+                                      </button>
+
+
+
                                     </div>
                                   );
                                 })}
