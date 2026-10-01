@@ -655,7 +655,7 @@ const AddMonthDataModal = ({ catColor,costCenter,modelData,onSubmit}) => {
 
   return (
     <>
-      <button
+      {/* <button
         onClick={() =>{
           setEditData(null);
           setOpen(true)
@@ -675,10 +675,17 @@ const AddMonthDataModal = ({ catColor,costCenter,modelData,onSubmit}) => {
         }}
       >
         <span style={{ fontSize: 18, lineHeight: 1 }}>+</span> Add
-      </button>
+      </button> */}
       
       <button
         onClick={() => {
+
+          if (!modelData) {
+            setEditData(null);
+            setOpen(true);
+            return;
+          }
+
           const Resources = Object.fromEntries(
               RESOURCE_ROLES.map((role) => {
                   const resource = modelData.resources?.[role.id];
@@ -686,7 +693,7 @@ const AddMonthDataModal = ({ catColor,costCenter,modelData,onSubmit}) => {
                   return [
                       role.id,
                       {
-                          count: resource?.count || "",
+                          count: resource?.count ?? "",
                           action: resource?.action || "",
                           comment: resource?.comment || "",
                           members: (resource?.members || []).map((member) => ({
@@ -709,7 +716,7 @@ const AddMonthDataModal = ({ catColor,costCenter,modelData,onSubmit}) => {
                   return [
                       role.id,
                       {
-                          count: resource?.count || "",
+                          count: resource?.count ?? "",
                           action: resource?.action || "",
                           comment: resource?.comment || "",
                           members: (resource?.members || []).map((member) => ({
