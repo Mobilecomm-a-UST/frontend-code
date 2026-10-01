@@ -1,11 +1,9 @@
-
-
-// import React, { useMemo, useState } from 'react';
+// import React, { useMemo, useState, useEffect } from 'react';
 // import {
 //   Box, Container, Stack, Grid, Paper, Typography, TextField, MenuItem, Button,
 //   IconButton, Tooltip, Chip, Table, TableHead, TableBody, TableRow, TableCell,
 //   TableContainer, Dialog, DialogTitle, DialogContent, DialogActions, Divider,
-//   Snackbar, Alert, Menu, ListItemIcon, ListItemText,
+//   Snackbar, Alert, Menu, ListItemIcon, ListItemText, CircularProgress,
 // } from '@mui/material';
 // import RefreshRoundedIcon from '@mui/icons-material/RefreshRounded';
 // import FileDownloadRoundedIcon from '@mui/icons-material/FileDownloadRounded';
@@ -35,39 +33,43 @@
 // import { v4 as uuidv4 } from 'uuid';
 // import ExcelJS from 'exceljs';
 // import { saveAs } from 'file-saver';
-
+// import { getDecreyptedData } from "../../../utils/localstorage";
+ 
 // /* ============================== CONSTANTS ============================== */
-
+ 
+// const API_BASE_URL = 'https://commtoolapi.mcpspmis.com/task_tracking/tasks/';
+ 
+// // ✅ ADMIN USERS - SAME AS BACKEND
+// const ADMIN_USERS = ["abhinav@ust.com", "mohit@ust.com"];
+ 
 // const STATUS_OPTIONS = [
 //   'Not Started', 'In Progress', 'In Review', 'Testing', 'Completed', 'Delayed', 'On Hold',
 // ];
-
+ 
 // const PRIORITY_OPTIONS = ['High', 'Medium', 'Low'];
-
+ 
 // const REASON_OPTIONS = [
 //   'None', 'Resource Constraint', 'Dependency Delay', 'Scope Change',
 //   'Client Delay', 'Technical Issue', 'Requirement Change', 'Other',
 // ];
-
-// // Status color tokens — drive the chips, charts, and Excel export alike.
+ 
+// // Status color tokens
 // const STATUS_COLORS = {
 //   'Not Started': { main: '#64748B', bg: '#F1F5F9' },
 //   'In Progress': { main: '#2563EB', bg: '#EAF1FE' },
-//   'In Review':   { main: '#D97706', bg: '#FEF3E2' },
-//   'Testing':     { main: '#7C3AED', bg: '#F3ECFE' },
-//   'Completed':   { main: '#0E9F6E', bg: '#E7F9F1' },
-//   'Delayed':     { main: '#DC2626', bg: '#FDECEC' },
-//   'On Hold':     { main: '#475569', bg: '#EEF1F4' },
+//   'In Review': { main: '#D97706', bg: '#FEF3E2' },
+//   'Testing': { main: '#7C3AED', bg: '#F3ECFE' },
+//   'Completed': { main: '#0E9F6E', bg: '#E7F9F1' },
+//   'Delayed': { main: '#DC2626', bg: '#FDECEC' },
+//   'On Hold': { main: '#475569', bg: '#EEF1F4' },
 // };
-
-// // Priority color tokens — drive the chip in the table and the colored
-// // cell fill in the Excel export.
+ 
 // const PRIORITY_COLORS = {
-//   High:   { main: '#DC2626', bg: '#FDECEC' },
+//   High: { main: '#DC2626', bg: '#FDECEC' },
 //   Medium: { main: '#D97706', bg: '#FEF3E2' },
-//   Low:    { main: '#0E9F6E', bg: '#E7F9F1' },
+//   Low: { main: '#0E9F6E', bg: '#E7F9F1' },
 // };
-
+ 
 // const KPI_ICONS = {
 //   'Total Tasks': AssignmentRoundedIcon,
 //   'Not Started': HourglassEmptyRoundedIcon,
@@ -78,61 +80,77 @@
 //   'Delayed': ReportProblemRoundedIcon,
 //   'Completion %': DonutLargeRoundedIcon,
 // };
-
+ 
 // const REASON_PALETTE = ['#0E7C7B', '#D97706', '#DC2626', '#2563EB', '#7C3AED', '#0EA5E9', '#64748B', '#B45309'];
-
-// const PRIMARY = '#0E7C7B'; // matches the teal sidebar in your app
+ 
+// const PRIMARY = '#0E7C7B';
 // const PRIMARY_DARK = '#0A5D5C';
-
-// const emptyForm = {
+ 
+// /* ============================== HELPERS ============================== */
+ 
+// // ✅ GET CURRENT USERNAME
+// const getCurrentUsername = () => {
+//   const username = getDecreyptedData('userID') || getDecreyptedData('username') || 'anonymous';
+//   console.log('Current username:', username);
+//   return username;
+// };
+ 
+// // ✅ CHECK IF USER IS ADMIN
+// const isUserAdmin = () => {
+//   const username = getCurrentUsername();
+//   return ADMIN_USERS.includes(username);
+// };
+ 
+// // ✅ GET EMPTY FORM WITH USERNAME
+// const getEmptyForm = () => ({
 //   date: new Date().toISOString().slice(0, 10),
-//   name: '',
-//   assignedBy: '',
-//   projectName: '',
-//   // roleTask: '', // commented out for now — re-enable when needed
-//   startDate: '',
-//   // expectedDate: '', // commented out for now — re-enable when needed
-//   completedDate: '',
+//   username: getCurrentUsername(),
+//   assigned_by: '',
+//   project_name: '',
+//   start_date: '',
+//   expected_date: '',
+//   completed_date: '',
 //   status: 'Not Started',
 //   priority: 'Medium',
-//   reasonForDelay: 'None',
+//   reason_for_delay: 'None',
 //   remarks: '',
-// };
-
-// // No sample/seed data — dashboard starts empty every session since
-// // nothing is persisted (see change log above).
-// const sampleTasks = [];
-
-// /* ============================== HELPERS ============================== */
-
+// });
+ 
 // function getTotalTime(task) {
-//   if (!task.startDate) return '—';
-//   const start = dayjs(task.startDate);
-//   if (task.completedDate) {
-//     const days = dayjs(task.completedDate).diff(start, 'day');
+//   if (!task.start_date) return '—';
+//   const start = dayjs(task.start_date);
+//   if (task.completed_date) {
+//     const days = dayjs(task.completed_date).diff(start, 'day');
 //     return `${days} day${days === 1 ? '' : 's'}`;
 //   }
 //   const days = dayjs().diff(start, 'day');
 //   return `${days} day${days === 1 ? '' : 's'} (ongoing)`;
 // }
-
-// // Filters now operate on a single optional "date" (the task's entry
-// // date) instead of a from/to range, so you can look back at any one
-// // previous date's tasks, or leave it blank to see everything.
-// function filterTasks(tasks, { date, status, priority, search }) {
+ 
+// // Updated filter function to handle date range
+// function filterTasks(tasks, { dateFilterType, singleDate, fromDate, toDate, status, priority, search }) {
 //   return tasks.filter((t) => {
-//     if (date && t.date !== date) return false;
+//     // Apply date filter
+//     if (dateFilterType === 'single' && singleDate && t.date !== singleDate) return false;
+//     if (dateFilterType === 'range' && fromDate && toDate) {
+//       if (!t.start_date) return false;
+//       const taskDate = dayjs(t.start_date);
+//       const from = dayjs(fromDate);
+//       const to = dayjs(toDate);
+//       if (taskDate.isBefore(from, 'day') || taskDate.isAfter(to, 'day')) return false;
+//     }
+ 
 //     if (status && status !== 'All' && t.status !== status) return false;
 //     if (priority && priority !== 'All' && t.priority !== priority) return false;
 //     if (search) {
 //       const q = search.toLowerCase();
-//       const hay = `${t.name} ${t.assignedBy} ${t.projectName}`.toLowerCase();
+//       const hay = `${t.project_name || ''} ${t.assigned_by || ''} ${t.remarks || ''}`.toLowerCase();
 //       if (!hay.includes(q)) return false;
 //     }
 //     return true;
 //   });
 // }
-
+ 
 // function computeKpis(tasks) {
 //   const total = tasks.length;
 //   const counts = {};
@@ -141,41 +159,171 @@
 //   const completionPct = total ? Math.round((completed / total) * 100) : 0;
 //   return { total, counts, completed, completionPct };
 // }
-
+ 
 // function computeStatusBreakdown(tasks) {
 //   return STATUS_OPTIONS.map((s) => ({ name: s, value: tasks.filter((t) => t.status === s).length })).filter((d) => d.value > 0);
 // }
-
+ 
 // function computeReasonBreakdown(tasks) {
 //   const counts = {};
 //   tasks.forEach((t) => {
-//     if (t.reasonForDelay && t.reasonForDelay !== 'None') counts[t.reasonForDelay] = (counts[t.reasonForDelay] || 0) + 1;
+//     if (t.reason_for_delay && t.reason_for_delay !== 'None') counts[t.reason_for_delay] = (counts[t.reason_for_delay] || 0) + 1;
 //   });
 //   return Object.entries(counts).map(([name, value]) => ({ name, value }));
 // }
-
+ 
 // function computePriorityBreakdown(tasks) {
 //   return PRIORITY_OPTIONS.map((p) => ({ name: p, value: tasks.filter((t) => t.priority === p).length }));
 // }
-
+ 
 // function fmt(d) { return d ? dayjs(d).format('DD MMM YYYY') : '—'; }
-
+ 
+// /* ========================= API FUNCTIONS ========================= */
+ 
+// // ✅ FETCH TASKS - SEND USERNAME AS QUERY PARAM
+// async function fetchTasks() {
+//   try {
+//     const username = getCurrentUsername();
+//     console.log('Fetching tasks for user:', username);
+   
+//     // Send username as query parameter for filtering
+//     const response = await fetch(`${API_BASE_URL}?username=${encodeURIComponent(username)}`);
+   
+//     if (!response.ok) {
+//       console.error('Fetch error:', response.status);
+//       throw new Error('Failed to fetch tasks');
+//     }
+   
+//     const data = await response.json();
+//     console.log('Fetched tasks:', data);
+//     return Array.isArray(data) ? data : data.results || [];
+//   } catch (error) {
+//     console.error('Error fetching tasks:', error);
+//     return [];
+//   }
+// }
+ 
+// // ✅ CREATE TASK - INCLUDES USERNAME
+// async function createTask(taskData) {
+//   try {
+//     const username = getCurrentUsername();
+//     const payload = {
+//       date: taskData.date,
+//       username: taskData.username || username,
+//       assigned_by: taskData.assigned_by,
+//       project_name: taskData.project_name,
+//       start_date: taskData.start_date,
+//       expected_date: taskData.expected_date || null,
+//       completed_date: taskData.completed_date || null,
+//       status: taskData.status,
+//       priority: taskData.priority,
+//       reason_for_delay: taskData.reason_for_delay,
+//       remarks: taskData.remarks,
+//     };
+   
+//     console.log('Creating task with payload:', payload);
+   
+//     const response = await fetch(API_BASE_URL, {
+//       method: 'POST',
+//       headers: { 'Content-Type': 'application/json' },
+//       body: JSON.stringify(payload),
+//     });
+   
+//     if (!response.ok) {
+//       const errorData = await response.json();
+//       console.error('Create error:', errorData);
+//       throw new Error(JSON.stringify(errorData));
+//     }
+   
+//     const responseData = await response.json();
+//     console.log('Task created:', responseData);
+//     return responseData;
+//   } catch (error) {
+//     console.error('Error creating task:', error);
+//     throw error;
+//   }
+// }
+ 
+// // ✅ UPDATE TASK - INCLUDES USERNAME
+// async function updateTask(taskId, taskData) {
+//   try {
+//     const username = getCurrentUsername();
+//     const payload = {
+//       date: taskData.date,
+//       username: taskData.username || username,
+//       assigned_by: taskData.assigned_by,
+//       project_name: taskData.project_name,
+//       start_date: taskData.start_date,
+//       expected_date: taskData.expected_date || null,
+//       completed_date: taskData.completed_date || null,
+//       status: taskData.status,
+//       priority: taskData.priority,
+//       reason_for_delay: taskData.reason_for_delay,
+//       remarks: taskData.remarks,
+//     };
+   
+//     console.log('Updating task with payload:', payload);
+   
+//     const response = await fetch(`${API_BASE_URL}${taskId}/?username=${encodeURIComponent(username)}`, {
+//       method: 'PUT',
+//       headers: { 'Content-Type': 'application/json' },
+//       body: JSON.stringify(payload),
+//     });
+   
+//     if (!response.ok) {
+//       const errorData = await response.json();
+//       console.error('Update error:', errorData);
+//       throw new Error(JSON.stringify(errorData));
+//     }
+   
+//     const responseData = await response.json();
+//     console.log('Task updated:', responseData);
+//     return responseData;
+//   } catch (error) {
+//     console.error('Error updating task:', error);
+//     throw error;
+//   }
+// }
+ 
+// // ✅ DELETE TASK - SEND USERNAME
+// async function deleteTask(taskId) {
+//   try {
+//     const username = getCurrentUsername();
+//     console.log('Deleting task:', taskId, 'for user:', username);
+   
+//     const response = await fetch(`${API_BASE_URL}${taskId}/?username=${encodeURIComponent(username)}`, {
+//       method: 'DELETE',
+//     });
+   
+//     if (!response.ok) {
+//       const errorData = await response.json();
+//       console.error('Delete error:', errorData);
+//       throw new Error('Failed to delete task');
+//     }
+   
+//     console.log('Task deleted successfully');
+//   } catch (error) {
+//     console.error('Error deleting task:', error);
+//     throw error;
+//   }
+// }
+ 
 // /* ========================= COLORFUL EXCEL EXPORT ========================= */
-
+ 
 // async function exportTasksToExcel(tasks, filename) {
 //   const STATUS_FILL = {
 //     'Not Started': { fg: 'FFD9D9D9', font: 'FF595959' },
 //     'In Progress': { fg: 'FFBDD7EE', font: 'FF1F4E78' },
-//     'In Review':   { fg: 'FFFFE9B3', font: 'FF7F6000' },
-//     'Testing':     { fg: 'FFE3D2FB', font: 'FF5A2D9C' },
-//     'Completed':   { fg: 'FFC6EFCE', font: 'FF006100' },
-//     'Delayed':     { fg: 'FFFFC7CE', font: 'FF9C0006' },
-//     'On Hold':     { fg: 'FFE4DFEC', font: 'FF5F497A' },
+//     'In Review': { fg: 'FFFFE9B3', font: 'FF7F6000' },
+//     'Testing': { fg: 'FFE3D2FB', font: 'FF5A2D9C' },
+//     'Completed': { fg: 'FFC6EFCE', font: 'FF006100' },
+//     'Delayed': { fg: 'FFFFC7CE', font: 'FF9C0006' },
+//     'On Hold': { fg: 'FFE4DFEC', font: 'FF5F497A' },
 //   };
 //   const PRIORITY_FILL = {
-//     High:   { fg: 'FFFFC7CE', font: 'FF9C0006' },
+//     High: { fg: 'FFFFC7CE', font: 'FF9C0006' },
 //     Medium: { fg: 'FFFFE9B3', font: 'FF7F6000' },
-//     Low:    { fg: 'FFC6EFCE', font: 'FF006100' },
+//     Low: { fg: 'FFC6EFCE', font: 'FF006100' },
 //   };
 //   const NAVY = 'FF1F4E78';
 //   const WHITE = 'FFFFFFFF';
@@ -183,12 +331,12 @@
 //     top: { style: 'thin', color: { argb: 'FFB7B7B7' } }, left: { style: 'thin', color: { argb: 'FFB7B7B7' } },
 //     bottom: { style: 'thin', color: { argb: 'FFB7B7B7' } }, right: { style: 'thin', color: { argb: 'FFB7B7B7' } },
 //   };
-
+ 
 //   const wb = new ExcelJS.Workbook();
 //   wb.creator = 'Task Tracker';
 //   wb.created = new Date();
-
-//   // ---- Sheet 1: Dashboard summary ----
+ 
+//   // Summary sheet
 //   const summary = wb.addWorksheet('Dashboard', { views: [{ showGridLines: false }] });
 //   summary.columns = [{ width: 4 }, { width: 26 }, { width: 16 }, { width: 4 }, { width: 26 }, { width: 16 }];
 //   summary.mergeCells('B2:F2');
@@ -196,8 +344,8 @@
 //   summary.getCell('B2').font = { name: 'Arial', size: 18, bold: true, color: { argb: NAVY } };
 //   summary.mergeCells('B3:F3');
 //   summary.getCell('B3').value = `Generated ${dayjs().format('DD MMM YYYY, HH:mm')} · ${tasks.length} tasks`;
-//   summary.getCell('B3').font = { name: 'Arial', size: 10, italic: true, color: { argb: 'FF5B6B75' } };
-
+//   summary.getCell('B3').font = { name: 'Arial', size: 10, italic: true, color: { argb: '5B6B75' } };
+ 
 //   const kpis = computeKpis(tasks);
 //   let r = 5;
 //   summary.getCell(`B${r}`).value = 'Key Metrics';
@@ -211,7 +359,7 @@
 //       summary.getCell(`C${r}`).font = { name: 'Arial', size: 12, bold: true, color: { argb: NAVY } };
 //       r += 1;
 //     });
-
+ 
 //   let statusRow = 5;
 //   summary.getCell(`E${statusRow}`).value = 'Status Breakdown';
 //   summary.getCell(`E${statusRow}`).font = { name: 'Arial', size: 12, bold: true, color: { argb: NAVY } };
@@ -237,71 +385,14 @@
 //     countCell.border = border;
 //     statusRow += 1;
 //   });
-
-//   let priorityRow = statusRow + 2;
-//   summary.getCell(`E${priorityRow}`).value = 'Priority Breakdown';
-//   summary.getCell(`E${priorityRow}`).font = { name: 'Arial', size: 12, bold: true, color: { argb: NAVY } };
-//   priorityRow += 1;
-//   ['Priority', 'Count'].forEach((h, i) => {
-//     const cell = summary.getCell(priorityRow, 5 + i);
-//     cell.value = h;
-//     cell.font = { name: 'Arial', size: 10, bold: true, color: { argb: WHITE } };
-//     cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: NAVY } };
-//     cell.border = border;
-//   });
-//   priorityRow += 1;
-//   computePriorityBreakdown(tasks).forEach(({ name, value }) => {
-//     const fill = PRIORITY_FILL[name] || { fg: 'FFEFEFEF', font: 'FF333333' };
-//     const nameCell = summary.getCell(`E${priorityRow}`);
-//     nameCell.value = name;
-//     nameCell.font = { name: 'Arial', size: 10, bold: true, color: { argb: fill.font } };
-//     nameCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: fill.fg } };
-//     nameCell.border = border;
-//     const countCell = summary.getCell(`F${priorityRow}`);
-//     countCell.value = value;
-//     countCell.alignment = { horizontal: 'center' };
-//     countCell.border = border;
-//     priorityRow += 1;
-//   });
-
-//   let reasonRow = Math.max(r, priorityRow) + 2;
-//   summary.getCell(`B${reasonRow}`).value = 'Delay Reason Breakdown';
-//   summary.getCell(`B${reasonRow}`).font = { name: 'Arial', size: 12, bold: true, color: { argb: NAVY } };
-//   reasonRow += 1;
-//   ['Reason', 'Count'].forEach((h, i) => {
-//     const cell = summary.getCell(reasonRow, 2 + i);
-//     cell.value = h;
-//     cell.font = { name: 'Arial', size: 10, bold: true, color: { argb: WHITE } };
-//     cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: NAVY } };
-//     cell.border = border;
-//   });
-//   reasonRow += 1;
-//   const reasons = computeReasonBreakdown(tasks);
-//   if (reasons.length === 0) {
-//     summary.getCell(`B${reasonRow}`).value = 'No delays recorded';
-//     summary.getCell(`B${reasonRow}`).font = { name: 'Arial', size: 10, italic: true, color: { argb: 'FF5B6B75' } };
-//   } else {
-//     reasons.forEach(({ name, value }) => {
-//       summary.getCell(`B${reasonRow}`).value = name;
-//       summary.getCell(`B${reasonRow}`).font = { name: 'Arial', size: 10 };
-//       summary.getCell(`B${reasonRow}`).border = border;
-//       summary.getCell(`C${reasonRow}`).value = value;
-//       summary.getCell(`C${reasonRow}`).alignment = { horizontal: 'center' };
-//       summary.getCell(`C${reasonRow}`).border = border;
-//       reasonRow += 1;
-//     });
-//   }
-
-//   // ---- Sheet 2: Task Data ----
-//   // NOTE: "UST ID" removed. "Expected Completion Date" and "Role/Task"
-//   // are intentionally left out of the export for now (see change log).
-//   // "Assigned By" is now included.
+ 
+//   // Task Data sheet
 //   const ws = wb.addWorksheet('Task Data', { views: [{ state: 'frozen', ySplit: 1, showGridLines: false }] });
-//   const headers = ['SR No', 'Date', 'Name', 'Assigned By', 'Project Name', 'Project Start Date',
-//     'Completed Date', 'Status', 'Total Time Taken', 'Priority', 'Reason for Delay', 'Remarks'];
-//   ws.columns = [{ width: 7 }, { width: 12 }, { width: 20 }, { width: 18 }, { width: 28 },
-//     { width: 16 }, { width: 16 }, { width: 14 }, { width: 18 }, { width: 12 }, { width: 20 }, { width: 30 }];
-
+//   const headers = ['SR No', 'Date', 'User', 'Assigned By', 'Project', 'Start Date',
+//     'Expected Date', 'Completed Date', 'Status', 'Priority', 'Reason for Delay', 'Remarks'];
+//   ws.columns = [{ width: 7 }, { width: 12 }, { width: 18 }, { width: 18 }, { width: 28 },
+//   { width: 14 }, { width: 14 }, { width: 14 }, { width: 14 }, { width: 12 }, { width: 20 }, { width: 30 }];
+ 
 //   const headerRow = ws.getRow(1);
 //   headers.forEach((h, i) => {
 //     const cell = headerRow.getCell(i + 1);
@@ -312,34 +403,32 @@
 //     cell.border = border;
 //   });
 //   headerRow.height = 24;
-
-//   // Column indices (1-based) for the fixed-fill cells below.
-//   const STATUS_COL = 8;
+ 
+//   const STATUS_COL = 9;
 //   const PRIORITY_COL = 10;
-//   const REMARKS_INDEX = 11; // 0-based index into `values` for wrapText/alignment
-
+ 
 //   tasks.forEach((t, idx) => {
 //     const row = ws.getRow(idx + 2);
 //     const values = [
 //       idx + 1,
 //       t.date ? dayjs(t.date).format('DD-MMM-YYYY') : '',
-//       t.name,
-//       t.assignedBy,
-//       t.projectName,
-//       t.startDate ? dayjs(t.startDate).format('DD-MMM-YYYY') : '',
-//       t.completedDate ? dayjs(t.completedDate).format('DD-MMM-YYYY') : '',
-//       t.status,
-//       getTotalTime(t),
-//       t.priority,
-//       t.reasonForDelay,
-//       t.remarks,
+//       t.username || '',
+//       t.assigned_by || '',
+//       t.project_name || '',
+//       t.start_date ? dayjs(t.start_date).format('DD-MMM-YYYY') : '',
+//       t.expected_date ? dayjs(t.expected_date).format('DD-MMM-YYYY') : '',
+//       t.completed_date ? dayjs(t.completed_date).format('DD-MMM-YYYY') : '',
+//       t.status || '',
+//       t.priority || '',
+//       t.reason_for_delay || '',
+//       t.remarks || '',
 //     ];
 //     values.forEach((v, i) => {
 //       const cell = row.getCell(i + 1);
 //       cell.value = v;
 //       cell.font = { name: 'Arial', size: 10 };
 //       cell.border = border;
-//       cell.alignment = { vertical: 'middle', wrapText: i === REMARKS_INDEX, horizontal: [0, 7, 9].includes(i) ? 'center' : 'left' };
+//       cell.alignment = { vertical: 'middle', wrapText: i === 11, horizontal: [0, 8, 9].includes(i) ? 'center' : 'left' };
 //     });
 //     if (idx % 2 === 1) {
 //       for (let c = 1; c <= headers.length; c++) {
@@ -347,28 +436,26 @@
 //         if (!cell.fill) cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF6F8F9' } };
 //       }
 //     }
-//     // Status column
 //     const statusFill = STATUS_FILL[t.status] || { fg: 'FFEFEFEF', font: 'FF333333' };
 //     const statusCell = row.getCell(STATUS_COL);
 //     statusCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: statusFill.fg } };
 //     statusCell.font = { name: 'Arial', size: 10, bold: true, color: { argb: statusFill.font } };
 //     statusCell.alignment = { horizontal: 'center' };
-//     // Priority column
-//     const priorityFill = PRIORITY_FILL[t.priority] || { fg: 'FFEFEFEF', font: 'FF333333' };
+//     const priorityFill = PRIORITY_COLORS[t.priority] || { fg: 'FFEFEFEF', font: 'FF333333' };
 //     const priorityCell = row.getCell(PRIORITY_COL);
 //     priorityCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: priorityFill.fg } };
 //     priorityCell.font = { name: 'Arial', size: 10, bold: true, color: { argb: priorityFill.font } };
 //     priorityCell.alignment = { horizontal: 'center' };
 //   });
-
+ 
 //   ws.autoFilter = { from: 'A1', to: `L${tasks.length + 1}` };
-
+ 
 //   const buffer = await wb.xlsx.writeBuffer();
 //   saveAs(new Blob([buffer], { type: 'application/octet-stream' }), filename);
 // }
-
+ 
 // /* ============================== SUBCOMPONENTS ============================== */
-
+ 
 // function KpiCard({ label, value, color }) {
 //   const Icon = KPI_ICONS[label] || AssignmentRoundedIcon;
 //   return (
@@ -396,81 +483,100 @@
 //     </Paper>
 //   );
 // }
-
-// function TaskFormDialog({ open, onClose, onSave, initialTask }) {
-//   const [form, setForm] = useState(emptyForm);
+ 
+// function TaskFormDialog({ open, onClose, onSave, initialTask, currentUsername }) {
+//   const [form, setForm] = useState(getEmptyForm());
 //   const [errors, setErrors] = useState({});
-
+//   const [loading, setLoading] = useState(false);
+ 
 //   React.useEffect(() => {
 //     if (open) {
-//       setForm(initialTask ? { ...initialTask } : { ...emptyForm, date: new Date().toISOString().slice(0, 10) });
+//       if (initialTask) {
+//         setForm({
+//           date: initialTask.date || new Date().toISOString().slice(0, 10),
+//           username: initialTask.username || currentUsername,
+//           assigned_by: initialTask.assigned_by || '',
+//           project_name: initialTask.project_name || '',
+//           start_date: initialTask.start_date || '',
+//           expected_date: initialTask.expected_date || '',
+//           completed_date: initialTask.completed_date || '',
+//           status: initialTask.status || 'Not Started',
+//           priority: initialTask.priority || 'Medium',
+//           reason_for_delay: initialTask.reason_for_delay || 'None',
+//           remarks: initialTask.remarks || '',
+//         });
+//       } else {
+//         setForm(getEmptyForm());
+//       }
 //       setErrors({});
 //     }
-//   }, [open, initialTask]);
-
+//   }, [open, initialTask, currentUsername]);
+ 
 //   const handleChange = (field) => (e) => setForm((f) => ({ ...f, [field]: e.target.value }));
-
+ 
 //   const validate = () => {
 //     const e = {};
-//     if (!form.name.trim()) e.name = 'Required';
-//     if (!form.assignedBy.trim()) e.assignedBy = 'Required';
-//     if (!form.projectName.trim()) e.projectName = 'Required';
-//     if (!form.startDate) e.startDate = 'Required';
-//     if (form.completedDate && form.startDate && form.completedDate < form.startDate) e.completedDate = 'Cannot be before start date';
+//     if (!form.assigned_by.trim()) e.assigned_by = 'Required';
+//     if (!form.project_name.trim()) e.project_name = 'Required';
+//     if (!form.start_date) e.start_date = 'Required';
+//     if (form.expected_date && form.start_date && form.expected_date < form.start_date) {
+//       e.expected_date = 'Cannot be before start date';
+//     }
+//     if (form.completed_date && form.start_date && form.completed_date < form.start_date) {
+//       e.completed_date = 'Cannot be before start date';
+//     }
 //     setErrors(e);
 //     return Object.keys(e).length === 0;
 //   };
-
-//   const handleSubmit = () => { if (validate()) onSave(form); };
-
+ 
+//   const handleSubmit = async () => {
+//     if (validate()) {
+//       setLoading(true);
+//       try {
+//         await onSave(form);
+//       } finally {
+//         setLoading(false);
+//       }
+//     }
+//   };
+ 
 //   return (
 //     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth PaperProps={{ sx: { borderRadius: 3 } }}>
 //       <DialogTitle sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
 //         <Typography variant="h6" sx={{ fontWeight: 800 }}>{initialTask ? 'Edit Task' : 'Add Task'}</Typography>
-//         <IconButton size="small" onClick={onClose}><CloseRoundedIcon /></IconButton>
+//         <IconButton size="small" onClick={onClose} disabled={loading}><CloseRoundedIcon /></IconButton>
 //       </DialogTitle>
 //       <Divider />
 //       <DialogContent sx={{ pt: 3 }}>
 //         <Grid container spacing={2}>
 //           <Grid item xs={12} sm={6}>
-//             <TextField label="Date" type="date" fullWidth size="small" InputLabelProps={{ shrink: true }} value={form.date} onChange={handleChange('date')} />
+//             <TextField label="Date" type="date" fullWidth size="small" InputLabelProps={{ shrink: true }} value={form.date} onChange={handleChange('date')} disabled={loading} />
 //           </Grid>
 //           <Grid item xs={12} sm={6}>
-//             <TextField label="Name" fullWidth size="small" value={form.name} onChange={handleChange('name')} error={!!errors.name} helperText={errors.name} />
+//             <TextField label="Username" fullWidth size="small" value={form.username} disabled helperText="Auto from login" FormHelperTextProps={{ sx: { fontSize: '0.7rem' } }} />
 //           </Grid>
 //           <Grid item xs={12} sm={6}>
-//             <TextField label="Assigned By" fullWidth size="small" value={form.assignedBy} onChange={handleChange('assignedBy')} error={!!errors.assignedBy} helperText={errors.assignedBy} />
+//             <TextField label="Assigned By" fullWidth size="small" value={form.assigned_by} onChange={handleChange('assigned_by')} error={!!errors.assigned_by} helperText={errors.assigned_by} disabled={loading} />
 //           </Grid>
 //           <Grid item xs={12} sm={6}>
-//             <TextField label="Project Name" fullWidth size="small" value={form.projectName} onChange={handleChange('projectName')} error={!!errors.projectName} helperText={errors.projectName} />
-//           </Grid>
-
-//           {/* Role / Task — commented out for now, re-enable when needed
-//           <Grid item xs={12}>
-//             <TextField label="Role / Task" fullWidth size="small" value={form.roleTask} onChange={handleChange('roleTask')} />
-//           </Grid>
-//           */}
-
-//           <Grid item xs={12} sm={6}>
-//             <TextField label="Project Start Date" type="date" fullWidth size="small" InputLabelProps={{ shrink: true }} value={form.startDate} onChange={handleChange('startDate')} error={!!errors.startDate} helperText={errors.startDate} />
+//             <TextField label="Project Name" fullWidth size="small" value={form.project_name} onChange={handleChange('project_name')} error={!!errors.project_name} helperText={errors.project_name} disabled={loading} />
 //           </Grid>
 //           <Grid item xs={12} sm={6}>
-//             <TextField label="Project Completed By" type="date" fullWidth size="small" InputLabelProps={{ shrink: true }} value={form.completedDate} onChange={handleChange('completedDate')} error={!!errors.completedDate} helperText={errors.completedDate} />
+//             <TextField label="Project Start Date" type="date" fullWidth size="small" InputLabelProps={{ shrink: true }} value={form.start_date} onChange={handleChange('start_date')} error={!!errors.start_date} helperText={errors.start_date} disabled={loading} />
 //           </Grid>
-
-//           {/* Expected Completion Date — commented out for now, re-enable when needed
 //           <Grid item xs={12} sm={6}>
-//             <TextField label="Expected Completion" type="date" fullWidth size="small" InputLabelProps={{ shrink: true }} value={form.expectedDate} onChange={handleChange('expectedDate')} />
+//             <TextField label="Expected Completion" type="date" fullWidth size="small" InputLabelProps={{ shrink: true }} value={form.expected_date} onChange={handleChange('expected_date')} error={!!errors.expected_date} helperText={errors.expected_date} disabled={loading} />
 //           </Grid>
-//           */}
-
+//           <Grid item xs={12} sm={6}>
+//             <TextField label="Project Completed By" type="date" fullWidth size="small" InputLabelProps={{ shrink: true }} value={form.completed_date} onChange={handleChange('completed_date')} error={!!errors.completed_date} helperText={errors.completed_date} disabled={loading} />
+//           </Grid>
 //           <Grid item xs={12} sm={4}>
-//             <TextField select label="Status" fullWidth size="small" value={form.status} onChange={handleChange('status')}>
+//             <TextField select label="Status" fullWidth size="small" value={form.status} onChange={handleChange('status')} disabled={loading}>
 //               {STATUS_OPTIONS.map((s) => <MenuItem key={s} value={s}>{s}</MenuItem>)}
 //             </TextField>
 //           </Grid>
 //           <Grid item xs={12} sm={4}>
-//             <TextField select label="Priority" fullWidth size="small" value={form.priority} onChange={handleChange('priority')}>
+//             <TextField select label="Priority" fullWidth size="small" value={form.priority} onChange={handleChange('priority')} disabled={loading}>
 //               {PRIORITY_OPTIONS.map((p) => (
 //                 <MenuItem key={p} value={p}>
 //                   <Stack direction="row" spacing={1} alignItems="center">
@@ -482,71 +588,103 @@
 //             </TextField>
 //           </Grid>
 //           <Grid item xs={12} sm={4}>
-//             <TextField select label="Reason for Delay" fullWidth size="small" value={form.reasonForDelay} onChange={handleChange('reasonForDelay')}>
+//             <TextField select label="Reason for Delay" fullWidth size="small" value={form.reason_for_delay} onChange={handleChange('reason_for_delay')} disabled={loading}>
 //               {REASON_OPTIONS.map((s) => <MenuItem key={s} value={s}>{s}</MenuItem>)}
 //             </TextField>
 //           </Grid>
 //           <Grid item xs={12}>
-//             <TextField label="Remarks" fullWidth multiline minRows={2} size="small" value={form.remarks} onChange={handleChange('remarks')} />
+//             <TextField label="Remarks" fullWidth multiline minRows={2} size="small" value={form.remarks} onChange={handleChange('remarks')} disabled={loading} />
 //           </Grid>
 //         </Grid>
 //       </DialogContent>
 //       <Divider />
 //       <DialogActions sx={{ p: 2 }}>
-//         <Button onClick={onClose} color="inherit">Cancel</Button>
-//         <Button onClick={handleSubmit} variant="contained" sx={{ bgcolor: PRIMARY, '&:hover': { bgcolor: PRIMARY_DARK } }}>
+//         <Button onClick={onClose} color="inherit" disabled={loading}>Cancel</Button>
+//         <Button onClick={handleSubmit} variant="contained" disabled={loading} sx={{ bgcolor: PRIMARY, '&:hover': { bgcolor: PRIMARY_DARK } }}>
+//           {loading ? <CircularProgress size={20} sx={{ mr: 1 }} /> : null}
 //           {initialTask ? 'Save changes' : 'Add task'}
 //         </Button>
 //       </DialogActions>
 //     </Dialog>
 //   );
 // }
-
+ 
 // /* ============================== MAIN COMPONENT ============================== */
-
+ 
 // export default function TaskTracker() {
-//   // Data lives ONLY in React state for this session — no localStorage,
-//   // no backend call. Refreshing the page will reset it, by design.
-//   const [tasks, setTasks] = useState(sampleTasks);
-//   const [filters, setFilters] = useState({ date: '', status: 'All', priority: 'All', search: '' });
+ 
+//   const currentUsername = useMemo(() => getCurrentUsername(), []);
+//   const isAdmin = useMemo(() => isUserAdmin(), []);
+ 
+//   const [tasks, setTasks] = useState([]);
+//   const [loading, setLoading] = useState(true);
+//   const [filters, setFilters] = useState({
+//     dateFilterType: 'range',
+//     singleDate: '',
+//     fromDate: dayjs().startOf('month').format('YYYY-MM-DD'),
+//     toDate: dayjs().format('YYYY-MM-DD'),
+//     status: 'All',
+//     priority: 'All',
+//     search: '',
+//   });
 //   const [dialogOpen, setDialogOpen] = useState(false);
 //   const [editingTask, setEditingTask] = useState(null);
 //   const [snack, setSnack] = useState(null);
-
-//   // Export menu + custom range dialog
 //   const [exportAnchorEl, setExportAnchorEl] = useState(null);
 //   const [rangeDialogOpen, setRangeDialogOpen] = useState(false);
 //   const [customRange, setCustomRange] = useState({ from: '', to: '' });
-
+ 
 //   const today = dayjs().format('YYYY-MM-DD');
-
+//   const monthStart = dayjs().startOf('month').format('YYYY-MM-DD');
+ 
+//   useEffect(() => {
+//     loadTasks();
+//   }, []);
+ 
+//   const loadTasks = async () => {
+//     setLoading(true);
+//     const data = await fetchTasks();
+//     setTasks(data);
+//     setLoading(false);
+//   };
+ 
 //   const filtered = useMemo(() => filterTasks(tasks, filters), [tasks, filters]);
 //   const kpis = useMemo(() => computeKpis(filtered), [filtered]);
 //   const statusBreakdown = useMemo(() => computeStatusBreakdown(filtered), [filtered]);
 //   const reasonBreakdown = useMemo(() => computeReasonBreakdown(filtered), [filtered]);
 //   const priorityBreakdown = useMemo(() => computePriorityBreakdown(filtered), [filtered]);
-
+ 
 //   const openAdd = () => { setEditingTask(null); setDialogOpen(true); };
 //   const openEdit = (t) => { setEditingTask(t); setDialogOpen(true); };
-
-//   const handleSave = (form) => {
-//     if (editingTask) {
-//       setTasks((prev) => prev.map((t) => (t.id === editingTask.id ? { ...form, id: editingTask.id } : t)));
-//       setSnack({ severity: 'success', message: 'Task updated.' });
-//     } else {
-//       setTasks((prev) => [...prev, { ...form, id: uuidv4() }]);
-//       setSnack({ severity: 'success', message: 'Task added.' });
+ 
+//   const handleSave = async (form) => {
+//     try {
+//       if (editingTask) {
+//         await updateTask(editingTask.id, form);
+//         setTasks((prev) => prev.map((t) => (t.id === editingTask.id ? { ...editingTask, ...form } : t)));
+//         setSnack({ severity: 'success', message: 'Task updated.' });
+//       } else {
+//         const newTask = await createTask(form);
+//         setSnack({ severity: 'success', message: 'Task added.' });
+//         // ✅ RELOAD TASKS TO SHOW NEW TASK ON DASHBOARD
+//         await loadTasks();
+//       }
+//       setDialogOpen(false);
+//     } catch (error) {
+//       setSnack({ severity: 'error', message: `Error: ${error.message}` });
 //     }
-//     setDialogOpen(false);
 //   };
-
-//   const handleDelete = (id) => {
-//     setTasks((prev) => prev.filter((t) => t.id !== id));
-//     setSnack({ severity: 'info', message: 'Task deleted.' });
+ 
+//   const handleDelete = async (id) => {
+//     try {
+//       await deleteTask(id);
+//       setTasks((prev) => prev.filter((t) => t.id !== id));
+//       setSnack({ severity: 'info', message: 'Task deleted.' });
+//     } catch (error) {
+//       setSnack({ severity: 'error', message: `Error: ${error.message}` });
+//     }
 //   };
-
-//   /* ---------------------- Export: presets + custom range ---------------------- */
-
+ 
 //   const doExport = async (data, label) => {
 //     if (!data.length) {
 //       setSnack({ severity: 'warning', message: `No tasks found for "${label}".` });
@@ -556,14 +694,14 @@
 //     await exportTasksToExcel(data, filename);
 //     setSnack({ severity: 'success', message: `Exported ${data.length} task(s) — ${label}.` });
 //   };
-
+ 
 //   const tasksInRange = (from, to) => tasks.filter((t) => {
-//     if (!t.startDate) return false;
-//     if (from && dayjs(t.startDate).isBefore(dayjs(from), 'day')) return false;
-//     if (to && dayjs(t.startDate).isAfter(dayjs(to), 'day')) return false;
+//     if (!t.start_date) return false;
+//     if (from && dayjs(t.start_date).isBefore(dayjs(from), 'day')) return false;
+//     if (to && dayjs(t.start_date).isAfter(dayjs(to), 'day')) return false;
 //     return true;
 //   });
-
+ 
 //   const handleExportPreset = async (type) => {
 //     setExportAnchorEl(null);
 //     const now = dayjs();
@@ -572,13 +710,12 @@
 //       return;
 //     }
 //     if (type === 'today') {
-//       // ONLY tasks entered/dated today — nothing else.
 //       const data = tasks.filter((t) => t.date === today);
 //       await doExport(data, `Today (${dayjs(today).format('DD MMM YYYY')})`);
 //       return;
 //     }
 //     if (type === 'custom') {
-//       setCustomRange({ from: filters.from || now.startOf('month').format('YYYY-MM-DD'), to: filters.to || now.format('YYYY-MM-DD') });
+//       setCustomRange({ from: monthStart, to: today });
 //       setRangeDialogOpen(true);
 //       return;
 //     }
@@ -589,7 +726,7 @@
 //     const data = tasksInRange(from.format('YYYY-MM-DD'), to.format('YYYY-MM-DD'));
 //     await doExport(data, label);
 //   };
-
+ 
 //   const handleCustomRangeExport = async () => {
 //     if (!customRange.from || !customRange.to) {
 //       setSnack({ severity: 'warning', message: 'Please select both From and To dates.' });
@@ -599,7 +736,7 @@
 //     setRangeDialogOpen(false);
 //     await doExport(data, `${dayjs(customRange.from).format('DD MMM YYYY')} to ${dayjs(customRange.to).format('DD MMM YYYY')}`);
 //   };
-
+ 
 //   const kpiCards = [
 //     { label: 'Total Tasks', value: kpis.total, color: '#1B2A4A' },
 //     { label: 'Not Started', value: kpis.counts['Not Started'] || 0, color: STATUS_COLORS['Not Started'].main },
@@ -610,11 +747,22 @@
 //     { label: 'Delayed', value: kpis.counts['Delayed'] || 0, color: STATUS_COLORS['Delayed'].main },
 //     { label: 'Completion %', value: `${kpis.completionPct}%`, color: PRIMARY },
 //   ];
-
+ 
+//   if (loading) {
+//     return (
+//       <Box sx={{ minHeight: '100vh', bgcolor: '#F3F6F7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+//         <Stack alignItems="center" spacing={2}>
+//           <CircularProgress size={50} sx={{ color: PRIMARY }} />
+//           <Typography color="text.secondary">Loading tasks...</Typography>
+//         </Stack>
+//       </Box>
+//     );
+//   }
+ 
 //   return (
 //     <Box sx={{ minHeight: '100vh', bgcolor: '#F3F6F7', py: { xs: 2, md: 4 } }}>
 //       <Container maxWidth="xl">
-//         {/* Header */}
+//         {/* Header with User Info */}
 //         <Paper
 //           elevation={0}
 //           sx={{
@@ -630,20 +778,52 @@
 //               <Typography variant="caption" sx={{ opacity: 0.85, display: 'flex', alignItems: 'center', gap: 0.5, mt: 0.5 }}>
 //                 <TodayRoundedIcon sx={{ fontSize: 14 }} /> Today: {dayjs(today).format('DD MMM YYYY')}
 //               </Typography>
+//               {/* ✅ SHOW USER INFO */}
+//               <Typography variant="caption" sx={{ opacity: 0.85, display: 'flex', alignItems: 'center', gap: 0.5, mt: 0.5, fontWeight: 600 }}>
+//                 👤 Logged in as: <strong>{currentUsername}</strong> {isAdmin && <Chip label="ADMIN" size="small" variant="filled" sx={{ ml: 1, bgcolor: 'rgba(255,255,255,0.3)', color: '#fff' }} />}
+//               </Typography>
 //             </Box>
 //             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.25} alignItems={{ xs: 'stretch', sm: 'center' }} flexWrap="wrap"
 //               sx={{ bgcolor: 'rgba(255,255,255,0.94)', p: 1.25, borderRadius: 3 }}>
-//               <TextField
-//                 label="Filter by Date"
-//                 type="date"
-//                 size="small"
-//                 InputLabelProps={{ shrink: true }}
-//                 value={filters.date}
-//                 onChange={(e) => setFilters((f) => ({ ...f, date: e.target.value }))}
-//                 sx={{ width: 165, bgcolor: '#fff', borderRadius: 1 }}
-//                 helperText="Blank = all dates"
-//                 FormHelperTextProps={{ sx: { fontSize: '0.65rem', ml: 0, mt: 0.25 } }}
-//               />
+//               <TextField select label="Date Filter" size="small" value={filters.dateFilterType}
+//                 onChange={(e) => setFilters((f) => ({ ...f, dateFilterType: e.target.value }))} sx={{ width: 140, bgcolor: '#fff', borderRadius: 1 }}>
+//                 <MenuItem value="range">Month Range</MenuItem>
+//                 <MenuItem value="single">Single Date</MenuItem>
+//               </TextField>
+ 
+//               {filters.dateFilterType === 'single' ? (
+//                 <TextField
+//                   label="Filter by Date"
+//                   type="date"
+//                   size="small"
+//                   InputLabelProps={{ shrink: true }}
+//                   value={filters.singleDate}
+//                   onChange={(e) => setFilters((f) => ({ ...f, singleDate: e.target.value }))}
+//                   sx={{ width: 160, bgcolor: '#fff', borderRadius: 1 }}
+//                 />
+//               ) : (
+//                 <>
+//                   <TextField
+//                     label="From"
+//                     type="date"
+//                     size="small"
+//                     InputLabelProps={{ shrink: true }}
+//                     value={filters.fromDate}
+//                     onChange={(e) => setFilters((f) => ({ ...f, fromDate: e.target.value }))}
+//                     sx={{ width: 140, bgcolor: '#fff', borderRadius: 1 }}
+//                   />
+//                   <TextField
+//                     label="To"
+//                     type="date"
+//                     size="small"
+//                     InputLabelProps={{ shrink: true }}
+//                     value={filters.toDate}
+//                     onChange={(e) => setFilters((f) => ({ ...f, toDate: e.target.value }))}
+//                     sx={{ width: 140, bgcolor: '#fff', borderRadius: 1 }}
+//                   />
+//                 </>
+//               )}
+ 
 //               <TextField select label="Status" size="small" value={filters.status}
 //                 onChange={(e) => setFilters((f) => ({ ...f, status: e.target.value }))} sx={{ width: 140, bgcolor: '#fff', borderRadius: 1 }}>
 //                 <MenuItem value="All">All statuses</MenuItem>
@@ -654,10 +834,10 @@
 //                 <MenuItem value="All">All priorities</MenuItem>
 //                 {PRIORITY_OPTIONS.map((p) => <MenuItem key={p} value={p}>{p}</MenuItem>)}
 //               </TextField>
-//               <TextField label="Search" size="small" placeholder="Name, project…" value={filters.search}
+//               <TextField label="Search" size="small" placeholder="Project…" value={filters.search}
 //                 onChange={(e) => setFilters((f) => ({ ...f, search: e.target.value }))} sx={{ width: 160, bgcolor: '#fff', borderRadius: 1 }} />
 //               <Tooltip title="Reset filters">
-//                 <IconButton onClick={() => setFilters({ date: '', status: 'All', priority: 'All', search: '' })} sx={{ border: '1px solid #E4E9EC', bgcolor: '#fff' }}>
+//                 <IconButton onClick={() => setFilters({ dateFilterType: 'range', singleDate: '', fromDate: monthStart, toDate: today, status: 'All', priority: 'All', search: '' })} sx={{ border: '1px solid #E4E9EC', bgcolor: '#fff' }}>
 //                   <RefreshRoundedIcon fontSize="small" />
 //                 </IconButton>
 //               </Tooltip>
@@ -677,8 +857,7 @@
 //             </Stack>
 //           </Stack>
 //         </Paper>
-
-//         {/* Export menu */}
+ 
 //         <Menu anchorEl={exportAnchorEl} open={!!exportAnchorEl} onClose={() => setExportAnchorEl(null)}
 //           anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} transformOrigin={{ vertical: 'top', horizontal: 'right' }}>
 //           <MenuItem onClick={() => handleExportPreset('today')}>
@@ -708,8 +887,7 @@
 //             <ListItemText primary="Current Filtered View" />
 //           </MenuItem>
 //         </Menu>
-
-//         {/* Custom range dialog */}
+ 
 //         <Dialog open={rangeDialogOpen} onClose={() => setRangeDialogOpen(false)} maxWidth="xs" fullWidth PaperProps={{ sx: { borderRadius: 3 } }}>
 //           <DialogTitle sx={{ fontWeight: 800 }}>Custom Export Range</DialogTitle>
 //           <Divider />
@@ -729,9 +907,8 @@
 //             </Button>
 //           </DialogActions>
 //         </Dialog>
-
+ 
 //         <Stack spacing={3}>
-//           {/* KPI cards */}
 //           <Grid container spacing={2}>
 //             {kpiCards.map((c) => (
 //               <Grid item xs={12} sm={6} md={3} lg={1.5} key={c.label} sx={{ flexGrow: 1 }}>
@@ -739,8 +916,7 @@
 //               </Grid>
 //             ))}
 //           </Grid>
-
-//           {/* Charts */}
+ 
 //           <Stack direction={{ xs: 'column', md: 'row' }} spacing={3} alignItems="stretch">
 //             <Paper elevation={0} sx={{ p: 2.5, flex: 1.2, minWidth: 0, borderRadius: 3, border: '1px solid #E9EDEF', boxShadow: '0 1px 2px rgba(16,24,40,0.04)' }}>
 //               <Typography variant="h6" sx={{ mb: 1, fontWeight: 700 }}>Task status breakdown</Typography>
@@ -766,7 +942,7 @@
 //                 </Box>
 //               )}
 //             </Paper>
-
+ 
 //             <Paper elevation={0} sx={{ p: 2.5, flex: 1.2, minWidth: 0, borderRadius: 3, border: '1px solid #E9EDEF', boxShadow: '0 1px 2px rgba(16,24,40,0.04)' }}>
 //               <Typography variant="h6" sx={{ mb: 1, fontWeight: 700 }}>Delay reasons this period</Typography>
 //               {reasonBreakdown.length === 0 ? (
@@ -789,7 +965,7 @@
 //                 </Box>
 //               )}
 //             </Paper>
-
+ 
 //             <Paper elevation={0} sx={{ p: 2.5, flex: 0.8, minWidth: 220, borderRadius: 3, border: '1px solid #E9EDEF', boxShadow: '0 1px 2px rgba(16,24,40,0.04)' }}>
 //               <Typography variant="h6" sx={{ mb: 2, fontWeight: 700 }}>Priority mix</Typography>
 //               <Stack spacing={2.5}>
@@ -814,8 +990,7 @@
 //               </Stack>
 //             </Paper>
 //           </Stack>
-
-//           {/* Table */}
+ 
 //           <Paper elevation={0} sx={{ overflow: 'hidden', borderRadius: 3, border: '1px solid #E9EDEF', boxShadow: '0 1px 2px rgba(16,24,40,0.04)' }}>
 //             <Box sx={{ p: 2, pb: 1 }}>
 //               <Typography variant="h6" sx={{ fontWeight: 700 }}>All tasks ({filtered.length})</Typography>
@@ -824,19 +999,19 @@
 //               <Table stickyHeader size="small">
 //                 <TableHead>
 //                   <TableRow>
-//                     {['SR', 'Name', 'Assigned By', 'Project', 'Start', 'Completed',
-//                       'Status', 'Priority', 'Time Taken', 'Reason for Delay', 'Remarks', 'Actions'].map((h) => (
-//                       <TableCell key={h} align={h === 'Actions' ? 'center' : 'left'}
-//                         sx={{ fontWeight: 700, color: 'text.secondary', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-//                         {h}
-//                       </TableCell>
-//                     ))}
+//                     {['SR', 'User', 'Assigned By', 'Project', 'Start', 'Expected', 'Completed',
+//                       'Status', 'Priority', 'Time Taken', 'Reason', 'Remarks', 'Actions'].map((h) => (
+//                         <TableCell key={h} align={h === 'Actions' ? 'center' : 'left'}
+//                           sx={{ fontWeight: 700, color: 'text.secondary', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+//                           {h}
+//                         </TableCell>
+//                       ))}
 //                   </TableRow>
 //                 </TableHead>
 //                 <TableBody>
 //                   {filtered.length === 0 && (
 //                     <TableRow>
-//                       <TableCell colSpan={12}>
+//                       <TableCell colSpan={13}>
 //                         <Box sx={{ py: 6, textAlign: 'center' }}>
 //                           <Typography color="text.secondary">No tasks yet — click &ldquo;Add Task&rdquo; to create the first one.</Typography>
 //                         </Box>
@@ -849,11 +1024,12 @@
 //                     return (
 //                       <TableRow key={t.id} hover sx={{ bgcolor: idx % 2 ? '#FAFBFC' : 'transparent' }}>
 //                         <TableCell>{idx + 1}</TableCell>
-//                         <TableCell sx={{ fontWeight: 600 }}>{t.name}</TableCell>
-//                         <TableCell>{t.assignedBy || '—'}</TableCell>
-//                         <TableCell sx={{ maxWidth: 200 }}>{t.projectName}</TableCell>
-//                         <TableCell>{fmt(t.startDate)}</TableCell>
-//                         <TableCell>{fmt(t.completedDate)}</TableCell>
+//                         <TableCell sx={{ fontSize: '0.8rem' }}>{t.username || '—'}</TableCell>
+//                         <TableCell>{t.assigned_by || '—'}</TableCell>
+//                         <TableCell sx={{ maxWidth: 200 }}>{t.project_name}</TableCell>
+//                         <TableCell>{fmt(t.start_date)}</TableCell>
+//                         <TableCell>{fmt(t.expected_date)}</TableCell>
+//                         <TableCell>{fmt(t.completed_date)}</TableCell>
 //                         <TableCell>
 //                           <Chip label={t.status} size="small" sx={{ bgcolor: statusColors.bg, color: statusColors.main, fontWeight: 700 }} />
 //                         </TableCell>
@@ -862,7 +1038,7 @@
 //                         </TableCell>
 //                         <TableCell sx={{ whiteSpace: 'nowrap' }}>{getTotalTime(t)}</TableCell>
 //                         <TableCell>
-//                           {t.reasonForDelay && t.reasonForDelay !== 'None' ? <Chip label={t.reasonForDelay} size="small" variant="outlined" /> : '—'}
+//                           {t.reason_for_delay && t.reason_for_delay !== 'None' ? <Chip label={t.reason_for_delay} size="small" variant="outlined" /> : '—'}
 //                         </TableCell>
 //                         <TableCell sx={{ maxWidth: 200 }}>
 //                           <Typography variant="body2" color="text.secondary" noWrap title={t.remarks}>{t.remarks || '—'}</Typography>
@@ -882,9 +1058,9 @@
 //           </Paper>
 //         </Stack>
 //       </Container>
-
-//       <TaskFormDialog open={dialogOpen} onClose={() => setDialogOpen(false)} onSave={handleSave} initialTask={editingTask} />
-
+ 
+//       <TaskFormDialog open={dialogOpen} onClose={() => setDialogOpen(false)} onSave={handleSave} initialTask={editingTask} currentUsername={currentUsername} />
+ 
 //       <Snackbar open={!!snack} autoHideDuration={3000} onClose={() => setSnack(null)} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
 //         {snack && <Alert severity={snack.severity} variant="filled" onClose={() => setSnack(null)}>{snack.message}</Alert>}
 //       </Snackbar>
@@ -928,23 +1104,25 @@ import { v4 as uuidv4 } from 'uuid';
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import { getDecreyptedData } from "../../../utils/localstorage";
-
+ 
 /* ============================== CONSTANTS ============================== */
-
+ 
 const API_BASE_URL = 'https://commtoolapi.mcpspmis.com/task_tracking/tasks/';
-
-
+ 
+// ✅ ADMIN USERS - SAME AS BACKEND
+const ADMIN_USERS = ["abhinav@ust.com", "mohit@ust.com"];
+ 
 const STATUS_OPTIONS = [
   'Not Started', 'In Progress', 'In Review', 'Testing', 'Completed', 'Delayed', 'On Hold',
 ];
-
+ 
 const PRIORITY_OPTIONS = ['High', 'Medium', 'Low'];
-
+ 
 const REASON_OPTIONS = [
   'None', 'Resource Constraint', 'Dependency Delay', 'Scope Change',
   'Client Delay', 'Technical Issue', 'Requirement Change', 'Other',
 ];
-
+ 
 // Status color tokens
 const STATUS_COLORS = {
   'Not Started': { main: '#64748B', bg: '#F1F5F9' },
@@ -955,13 +1133,13 @@ const STATUS_COLORS = {
   'Delayed': { main: '#DC2626', bg: '#FDECEC' },
   'On Hold': { main: '#475569', bg: '#EEF1F4' },
 };
-
+ 
 const PRIORITY_COLORS = {
   High: { main: '#DC2626', bg: '#FDECEC' },
   Medium: { main: '#D97706', bg: '#FEF3E2' },
   Low: { main: '#0E9F6E', bg: '#E7F9F1' },
 };
-
+ 
 const KPI_ICONS = {
   'Total Tasks': AssignmentRoundedIcon,
   'Not Started': HourglassEmptyRoundedIcon,
@@ -972,15 +1150,31 @@ const KPI_ICONS = {
   'Delayed': ReportProblemRoundedIcon,
   'Completion %': DonutLargeRoundedIcon,
 };
-
+ 
 const REASON_PALETTE = ['#0E7C7B', '#D97706', '#DC2626', '#2563EB', '#7C3AED', '#0EA5E9', '#64748B', '#B45309'];
-
+ 
 const PRIMARY = '#0E7C7B';
 const PRIMARY_DARK = '#0A5D5C';
-
-const emptyForm = {
+ 
+/* ============================== HELPERS ============================== */
+ 
+// ✅ GET CURRENT USERNAME
+const getCurrentUsername = () => {
+  const username = getDecreyptedData('userID') || getDecreyptedData('username') || 'anonymous';
+  console.log('Current username:', username);
+  return username;
+};
+ 
+// ✅ CHECK IF USER IS ADMIN
+const isUserAdmin = () => {
+  const username = getCurrentUsername();
+  return ADMIN_USERS.includes(username);
+};
+ 
+// ✅ GET EMPTY FORM WITH USERNAME
+const getEmptyForm = () => ({
   date: new Date().toISOString().slice(0, 10),
-  username: getDecreyptedData('userID') || '',
+  username: getCurrentUsername(),
   assigned_by: '',
   project_name: '',
   start_date: '',
@@ -990,10 +1184,8 @@ const emptyForm = {
   priority: 'Medium',
   reason_for_delay: 'None',
   remarks: '',
-};
-
-/* ============================== HELPERS ============================== */
-
+});
+ 
 function getTotalTime(task) {
   if (!task.start_date) return '—';
   const start = dayjs(task.start_date);
@@ -1004,9 +1196,9 @@ function getTotalTime(task) {
   const days = dayjs().diff(start, 'day');
   return `${days} day${days === 1 ? '' : 's'} (ongoing)`;
 }
-
-// Updated filter function to handle date range
-function filterTasks(tasks, { dateFilterType, singleDate, fromDate, toDate, status, priority, search }) {
+ 
+// ✅ UPDATED FILTER FUNCTION - INCLUDES USERNAME FILTER
+function filterTasks(tasks, { dateFilterType, singleDate, fromDate, toDate, status, priority, search, username }) {
   return tasks.filter((t) => {
     // Apply date filter
     if (dateFilterType === 'single' && singleDate && t.date !== singleDate) return false;
@@ -1017,9 +1209,13 @@ function filterTasks(tasks, { dateFilterType, singleDate, fromDate, toDate, stat
       const to = dayjs(toDate);
       if (taskDate.isBefore(from, 'day') || taskDate.isAfter(to, 'day')) return false;
     }
-
+ 
     if (status && status !== 'All' && t.status !== status) return false;
     if (priority && priority !== 'All' && t.priority !== priority) return false;
+    
+    // ✅ NEW: Username filter
+    if (username && username !== 'All' && t.username !== username) return false;
+    
     if (search) {
       const q = search.toLowerCase();
       const hay = `${t.project_name || ''} ${t.assigned_by || ''} ${t.remarks || ''}`.toLowerCase();
@@ -1028,7 +1224,7 @@ function filterTasks(tasks, { dateFilterType, singleDate, fromDate, toDate, stat
     return true;
   });
 }
-
+ 
 function computeKpis(tasks) {
   const total = tasks.length;
   const counts = {};
@@ -1037,11 +1233,11 @@ function computeKpis(tasks) {
   const completionPct = total ? Math.round((completed / total) * 100) : 0;
   return { total, counts, completed, completionPct };
 }
-
+ 
 function computeStatusBreakdown(tasks) {
   return STATUS_OPTIONS.map((s) => ({ name: s, value: tasks.filter((t) => t.status === s).length })).filter((d) => d.value > 0);
 }
-
+ 
 function computeReasonBreakdown(tasks) {
   const counts = {};
   tasks.forEach((t) => {
@@ -1049,32 +1245,45 @@ function computeReasonBreakdown(tasks) {
   });
   return Object.entries(counts).map(([name, value]) => ({ name, value }));
 }
-
+ 
 function computePriorityBreakdown(tasks) {
   return PRIORITY_OPTIONS.map((p) => ({ name: p, value: tasks.filter((t) => t.priority === p).length }));
 }
-
+ 
 function fmt(d) { return d ? dayjs(d).format('DD MMM YYYY') : '—'; }
-
+ 
 /* ========================= API FUNCTIONS ========================= */
-
+ 
+// ✅ FETCH TASKS - SEND USERNAME AS QUERY PARAM
 async function fetchTasks() {
   try {
-    const response = await fetch(API_BASE_URL);
-    if (!response.ok) throw new Error('Failed to fetch tasks');
+    const username = getCurrentUsername();
+    console.log('Fetching tasks for user:', username);
+   
+    // Send username as query parameter for filtering
+    const response = await fetch(`${API_BASE_URL}?username=${encodeURIComponent(username)}`);
+   
+    if (!response.ok) {
+      console.error('Fetch error:', response.status);
+      throw new Error('Failed to fetch tasks');
+    }
+   
     const data = await response.json();
+    console.log('Fetched tasks:', data);
     return Array.isArray(data) ? data : data.results || [];
   } catch (error) {
     console.error('Error fetching tasks:', error);
     return [];
   }
 }
-
+ 
+// ✅ CREATE TASK - INCLUDES USERNAME
 async function createTask(taskData) {
   try {
+    const username = getCurrentUsername();
     const payload = {
       date: taskData.date,
-      username: taskData.username,
+      username: taskData.username || username,
       assigned_by: taskData.assigned_by,
       project_name: taskData.project_name,
       start_date: taskData.start_date,
@@ -1085,24 +1294,37 @@ async function createTask(taskData) {
       reason_for_delay: taskData.reason_for_delay,
       remarks: taskData.remarks,
     };
+   
+    console.log('Creating task with payload:', payload);
+   
     const response = await fetch(API_BASE_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     });
-    if (!response.ok) throw new Error('Failed to create task');
-    return await response.json();
+   
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('Create error:', errorData);
+      throw new Error(JSON.stringify(errorData));
+    }
+   
+    const responseData = await response.json();
+    console.log('Task created:', responseData);
+    return responseData;
   } catch (error) {
     console.error('Error creating task:', error);
     throw error;
   }
 }
-
+ 
+// ✅ UPDATE TASK - INCLUDES USERNAME
 async function updateTask(taskId, taskData) {
   try {
+    const username = getCurrentUsername();
     const payload = {
       date: taskData.date,
-      username: taskData.username,
+      username: taskData.username || username,
       assigned_by: taskData.assigned_by,
       project_name: taskData.project_name,
       start_date: taskData.start_date,
@@ -1113,33 +1335,55 @@ async function updateTask(taskId, taskData) {
       reason_for_delay: taskData.reason_for_delay,
       remarks: taskData.remarks,
     };
-    const response = await fetch(`${API_BASE_URL}${taskId}/`, {
+   
+    console.log('Updating task with payload:', payload);
+   
+    const response = await fetch(`${API_BASE_URL}${taskId}/?username=${encodeURIComponent(username)}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
     });
-    if (!response.ok) throw new Error('Failed to update task');
-    return await response.json();
+   
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('Update error:', errorData);
+      throw new Error(JSON.stringify(errorData));
+    }
+   
+    const responseData = await response.json();
+    console.log('Task updated:', responseData);
+    return responseData;
   } catch (error) {
     console.error('Error updating task:', error);
     throw error;
   }
 }
-
+ 
+// ✅ DELETE TASK - SEND USERNAME
 async function deleteTask(taskId) {
   try {
-    const response = await fetch(`${API_BASE_URL}${taskId}/`, {
+    const username = getCurrentUsername();
+    console.log('Deleting task:', taskId, 'for user:', username);
+   
+    const response = await fetch(`${API_BASE_URL}${taskId}/?username=${encodeURIComponent(username)}`, {
       method: 'DELETE',
     });
-    if (!response.ok) throw new Error('Failed to delete task');
+   
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('Delete error:', errorData);
+      throw new Error('Failed to delete task');
+    }
+   
+    console.log('Task deleted successfully');
   } catch (error) {
     console.error('Error deleting task:', error);
     throw error;
   }
 }
-
+ 
 /* ========================= COLORFUL EXCEL EXPORT ========================= */
-
+ 
 async function exportTasksToExcel(tasks, filename) {
   const STATUS_FILL = {
     'Not Started': { fg: 'FFD9D9D9', font: 'FF595959' },
@@ -1161,11 +1405,11 @@ async function exportTasksToExcel(tasks, filename) {
     top: { style: 'thin', color: { argb: 'FFB7B7B7' } }, left: { style: 'thin', color: { argb: 'FFB7B7B7' } },
     bottom: { style: 'thin', color: { argb: 'FFB7B7B7' } }, right: { style: 'thin', color: { argb: 'FFB7B7B7' } },
   };
-
+ 
   const wb = new ExcelJS.Workbook();
   wb.creator = 'Task Tracker';
   wb.created = new Date();
-
+ 
   // Summary sheet
   const summary = wb.addWorksheet('Dashboard', { views: [{ showGridLines: false }] });
   summary.columns = [{ width: 4 }, { width: 26 }, { width: 16 }, { width: 4 }, { width: 26 }, { width: 16 }];
@@ -1174,8 +1418,8 @@ async function exportTasksToExcel(tasks, filename) {
   summary.getCell('B2').font = { name: 'Arial', size: 18, bold: true, color: { argb: NAVY } };
   summary.mergeCells('B3:F3');
   summary.getCell('B3').value = `Generated ${dayjs().format('DD MMM YYYY, HH:mm')} · ${tasks.length} tasks`;
-  summary.getCell('B3').font = { name: 'Arial', size: 10, italic: true, color: { argb: 'FF5B6B75' } };
-
+  summary.getCell('B3').font = { name: 'Arial', size: 10, italic: true, color: { argb: '5B6B75' } };
+ 
   const kpis = computeKpis(tasks);
   let r = 5;
   summary.getCell(`B${r}`).value = 'Key Metrics';
@@ -1189,7 +1433,7 @@ async function exportTasksToExcel(tasks, filename) {
       summary.getCell(`C${r}`).font = { name: 'Arial', size: 12, bold: true, color: { argb: NAVY } };
       r += 1;
     });
-
+ 
   let statusRow = 5;
   summary.getCell(`E${statusRow}`).value = 'Status Breakdown';
   summary.getCell(`E${statusRow}`).font = { name: 'Arial', size: 12, bold: true, color: { argb: NAVY } };
@@ -1215,14 +1459,14 @@ async function exportTasksToExcel(tasks, filename) {
     countCell.border = border;
     statusRow += 1;
   });
-
+ 
   // Task Data sheet
   const ws = wb.addWorksheet('Task Data', { views: [{ state: 'frozen', ySplit: 1, showGridLines: false }] });
   const headers = ['SR No', 'Date', 'User', 'Assigned By', 'Project', 'Start Date',
     'Expected Date', 'Completed Date', 'Status', 'Priority', 'Reason for Delay', 'Remarks'];
   ws.columns = [{ width: 7 }, { width: 12 }, { width: 18 }, { width: 18 }, { width: 28 },
   { width: 14 }, { width: 14 }, { width: 14 }, { width: 14 }, { width: 12 }, { width: 20 }, { width: 30 }];
-
+ 
   const headerRow = ws.getRow(1);
   headers.forEach((h, i) => {
     const cell = headerRow.getCell(i + 1);
@@ -1233,10 +1477,10 @@ async function exportTasksToExcel(tasks, filename) {
     cell.border = border;
   });
   headerRow.height = 24;
-
+ 
   const STATUS_COL = 9;
   const PRIORITY_COL = 10;
-
+ 
   tasks.forEach((t, idx) => {
     const row = ws.getRow(idx + 2);
     const values = [
@@ -1277,15 +1521,15 @@ async function exportTasksToExcel(tasks, filename) {
     priorityCell.font = { name: 'Arial', size: 10, bold: true, color: { argb: priorityFill.font } };
     priorityCell.alignment = { horizontal: 'center' };
   });
-
+ 
   ws.autoFilter = { from: 'A1', to: `L${tasks.length + 1}` };
-
+ 
   const buffer = await wb.xlsx.writeBuffer();
   saveAs(new Blob([buffer], { type: 'application/octet-stream' }), filename);
 }
-
+ 
 /* ============================== SUBCOMPONENTS ============================== */
-
+ 
 function KpiCard({ label, value, color }) {
   const Icon = KPI_ICONS[label] || AssignmentRoundedIcon;
   return (
@@ -1313,12 +1557,12 @@ function KpiCard({ label, value, color }) {
     </Paper>
   );
 }
-
+ 
 function TaskFormDialog({ open, onClose, onSave, initialTask, currentUsername }) {
-  const [form, setForm] = useState(emptyForm);
+  const [form, setForm] = useState(getEmptyForm());
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
-
+ 
   React.useEffect(() => {
     if (open) {
       if (initialTask) {
@@ -1336,18 +1580,14 @@ function TaskFormDialog({ open, onClose, onSave, initialTask, currentUsername })
           remarks: initialTask.remarks || '',
         });
       } else {
-        setForm({
-          ...emptyForm,
-          date: new Date().toISOString().slice(0, 10),
-          username: currentUsername,
-        });
+        setForm(getEmptyForm());
       }
       setErrors({});
     }
   }, [open, initialTask, currentUsername]);
-
+ 
   const handleChange = (field) => (e) => setForm((f) => ({ ...f, [field]: e.target.value }));
-
+ 
   const validate = () => {
     const e = {};
     if (!form.assigned_by.trim()) e.assigned_by = 'Required';
@@ -1362,7 +1602,7 @@ function TaskFormDialog({ open, onClose, onSave, initialTask, currentUsername })
     setErrors(e);
     return Object.keys(e).length === 0;
   };
-
+ 
   const handleSubmit = async () => {
     if (validate()) {
       setLoading(true);
@@ -1373,7 +1613,7 @@ function TaskFormDialog({ open, onClose, onSave, initialTask, currentUsername })
       }
     }
   };
-
+ 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth PaperProps={{ sx: { borderRadius: 3 } }}>
       <DialogTitle sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -1442,15 +1682,14 @@ function TaskFormDialog({ open, onClose, onSave, initialTask, currentUsername })
     </Dialog>
   );
 }
-
+ 
 /* ============================== MAIN COMPONENT ============================== */
-
+ 
 export default function TaskTracker() {
-
-  const currentUsername = useMemo(
-    () => getDecreyptedData("userID") || "",
-    []
-  );
+ 
+  const currentUsername = useMemo(() => getCurrentUsername(), []);
+  const isAdmin = useMemo(() => isUserAdmin(), []);
+ 
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
@@ -1461,6 +1700,7 @@ export default function TaskTracker() {
     status: 'All',
     priority: 'All',
     search: '',
+    username: 'All',
   });
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
@@ -1468,30 +1708,36 @@ export default function TaskTracker() {
   const [exportAnchorEl, setExportAnchorEl] = useState(null);
   const [rangeDialogOpen, setRangeDialogOpen] = useState(false);
   const [customRange, setCustomRange] = useState({ from: '', to: '' });
-
+ 
   const today = dayjs().format('YYYY-MM-DD');
   const monthStart = dayjs().startOf('month').format('YYYY-MM-DD');
-
+ 
   useEffect(() => {
     loadTasks();
   }, []);
-
+ 
   const loadTasks = async () => {
     setLoading(true);
     const data = await fetchTasks();
     setTasks(data);
     setLoading(false);
   };
-
+ 
   const filtered = useMemo(() => filterTasks(tasks, filters), [tasks, filters]);
   const kpis = useMemo(() => computeKpis(filtered), [filtered]);
   const statusBreakdown = useMemo(() => computeStatusBreakdown(filtered), [filtered]);
   const reasonBreakdown = useMemo(() => computeReasonBreakdown(filtered), [filtered]);
   const priorityBreakdown = useMemo(() => computePriorityBreakdown(filtered), [filtered]);
-
+ 
+  // ✅ GET UNIQUE USERNAMES FOR ADMIN FILTER
+  const uniqueUsernames = useMemo(() => {
+    const names = [...new Set(tasks.map(t => t.username).filter(Boolean))];
+    return names.sort();
+  }, [tasks]);
+ 
   const openAdd = () => { setEditingTask(null); setDialogOpen(true); };
   const openEdit = (t) => { setEditingTask(t); setDialogOpen(true); };
-
+ 
   const handleSave = async (form) => {
     try {
       if (editingTask) {
@@ -1500,15 +1746,15 @@ export default function TaskTracker() {
         setSnack({ severity: 'success', message: 'Task updated.' });
       } else {
         const newTask = await createTask(form);
-        setTasks((prev) => [...prev, newTask]);
         setSnack({ severity: 'success', message: 'Task added.' });
+        await loadTasks();
       }
       setDialogOpen(false);
     } catch (error) {
       setSnack({ severity: 'error', message: `Error: ${error.message}` });
     }
   };
-
+ 
   const handleDelete = async (id) => {
     try {
       await deleteTask(id);
@@ -1518,7 +1764,7 @@ export default function TaskTracker() {
       setSnack({ severity: 'error', message: `Error: ${error.message}` });
     }
   };
-
+ 
   const doExport = async (data, label) => {
     if (!data.length) {
       setSnack({ severity: 'warning', message: `No tasks found for "${label}".` });
@@ -1528,14 +1774,14 @@ export default function TaskTracker() {
     await exportTasksToExcel(data, filename);
     setSnack({ severity: 'success', message: `Exported ${data.length} task(s) — ${label}.` });
   };
-
+ 
   const tasksInRange = (from, to) => tasks.filter((t) => {
     if (!t.start_date) return false;
     if (from && dayjs(t.start_date).isBefore(dayjs(from), 'day')) return false;
     if (to && dayjs(t.start_date).isAfter(dayjs(to), 'day')) return false;
     return true;
   });
-
+ 
   const handleExportPreset = async (type) => {
     setExportAnchorEl(null);
     const now = dayjs();
@@ -1560,7 +1806,7 @@ export default function TaskTracker() {
     const data = tasksInRange(from.format('YYYY-MM-DD'), to.format('YYYY-MM-DD'));
     await doExport(data, label);
   };
-
+ 
   const handleCustomRangeExport = async () => {
     if (!customRange.from || !customRange.to) {
       setSnack({ severity: 'warning', message: 'Please select both From and To dates.' });
@@ -1570,7 +1816,7 @@ export default function TaskTracker() {
     setRangeDialogOpen(false);
     await doExport(data, `${dayjs(customRange.from).format('DD MMM YYYY')} to ${dayjs(customRange.to).format('DD MMM YYYY')}`);
   };
-
+ 
   const kpiCards = [
     { label: 'Total Tasks', value: kpis.total, color: '#1B2A4A' },
     { label: 'Not Started', value: kpis.counts['Not Started'] || 0, color: STATUS_COLORS['Not Started'].main },
@@ -1581,7 +1827,7 @@ export default function TaskTracker() {
     { label: 'Delayed', value: kpis.counts['Delayed'] || 0, color: STATUS_COLORS['Delayed'].main },
     { label: 'Completion %', value: `${kpis.completionPct}%`, color: PRIMARY },
   ];
-
+ 
   if (loading) {
     return (
       <Box sx={{ minHeight: '100vh', bgcolor: '#F3F6F7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -1592,34 +1838,84 @@ export default function TaskTracker() {
       </Box>
     );
   }
-
+ 
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: '#F3F6F7', py: { xs: 2, md: 4 } }}>
       <Container maxWidth="xl">
+        
+        {/* ✅ HEADER WITH LOGO - LEFT (DATE) | CENTER (TITLE + LOGO) | RIGHT (LOGIN) - NARROW */}
         <Paper
           elevation={0}
           sx={{
-            p: { xs: 2, md: 3 }, mb: 3, borderRadius: 4, border: '1px solid #E9EDEF',
+            p: '12px 24px', mb: 3, borderRadius: 3, border: '1px solid #E9EDEF',
             background: `linear-gradient(120deg, ${PRIMARY} 0%, #12A39A 55%, #1AC2A4 100%)`,
             color: '#fff', boxShadow: '0 10px 24px rgba(14,124,123,0.18)',
           }}
         >
-          <Stack direction={{ xs: 'column', md: 'row' }} justifyContent="space-between" alignItems={{ xs: 'flex-start', md: 'center' }} spacing={2}>
-            <Box>
-              <Typography variant="h5" sx={{ fontWeight: 800 }}>Task Tracker</Typography>
-              <Typography variant="body2" sx={{ opacity: 0.85 }}>Team work status &amp; analytics</Typography>
-              <Typography variant="caption" sx={{ opacity: 0.85, display: 'flex', alignItems: 'center', gap: 0.5, mt: 0.5 }}>
-                <TodayRoundedIcon sx={{ fontSize: 14 }} /> Today: {dayjs(today).format('DD MMM YYYY')}
+          <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
+            
+            {/* LEFT: Date */}
+            <Box sx={{ minWidth: '180px' }}>
+              <Typography variant="caption" sx={{ opacity: 0.85, display: 'flex', alignItems: 'center', gap: 0.5, fontWeight: 600 }}>
+                <TodayRoundedIcon sx={{ fontSize: 16 }} /> {dayjs(today).format('DD MMM YYYY')}
               </Typography>
             </Box>
-            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.25} alignItems={{ xs: 'stretch', sm: 'center' }} flexWrap="wrap"
-              sx={{ bgcolor: 'rgba(255,255,255,0.94)', p: 1.25, borderRadius: 3 }}>
-              <TextField select label="Date Filter" size="small" value={filters.dateFilterType}
-                onChange={(e) => setFilters((f) => ({ ...f, dateFilterType: e.target.value }))} sx={{ width: 140, bgcolor: '#fff', borderRadius: 1 }}>
+
+            {/* CENTER: Logo + Title */}
+            <Box sx={{ flex: 1, textAlign: 'center' }}>
+              <Stack direction="row" alignItems="center" justifyContent="center" spacing={1} sx={{ mb: 0.5 }}>
+                <Box sx={{
+                  width: 32, height: 32, borderRadius: '8px', bgcolor: 'rgba(255,255,255,0.2)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid rgba(255,255,255,0.3)'
+                }}>
+                  <AssignmentRoundedIcon sx={{ fontSize: 18, color: '#fff' }} />
+                </Box>
+                <Typography variant="h6" sx={{ fontWeight: 800, letterSpacing: '0.5px' }}>Task Tracker</Typography>
+              </Stack>
+              <Typography variant="caption" sx={{ opacity: 0.85, fontSize: '12px' }}>Team work status &amp; analytics</Typography>
+            </Box>
+
+            {/* RIGHT: Login Info */}
+            <Box sx={{ minWidth: '220px', textAlign: 'right' }}>
+              <Typography variant="caption" sx={{ opacity: 0.85, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 0.5, fontWeight: 600 }}>
+                👤 {currentUsername}
+              </Typography>
+              {isAdmin && (
+                <Chip 
+                  label="ADMIN" 
+                  size="small" 
+                  variant="filled" 
+                  sx={{ 
+                    bgcolor: 'rgba(255,255,255,0.25)', 
+                    color: '#fff',
+                    fontWeight: 700,
+                    mt: 0.5,
+                    border: '1px solid rgba(255,255,255,0.4)'
+                  }} 
+                />
+              )}
+            </Box>
+          </Stack>
+        </Paper>
+
+        {/* ✅ FILTERS ROW - REORGANIZED FOR BETTER LAYOUT */}
+        <Paper elevation={0} sx={{ p: 2, mb: 3, borderRadius: 3, border: '1px solid #E9EDEF', bgcolor: '#fff' }}>
+          <Stack direction={{ xs: 'column', md: 'row' }} spacing={1.5} alignItems="center" flexWrap="wrap" justifyContent="space-between">
+            
+            {/* Left side: Date and Status filters */}
+            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} alignItems="center" flex={1} minWidth={0}>
+              <TextField 
+                select 
+                label="Date Filter" 
+                size="small" 
+                value={filters.dateFilterType}
+                onChange={(e) => setFilters((f) => ({ ...f, dateFilterType: e.target.value }))} 
+                sx={{ minWidth: 120, bgcolor: '#f5f5f5', borderRadius: 1 }}
+              >
                 <MenuItem value="range">Month Range</MenuItem>
                 <MenuItem value="single">Single Date</MenuItem>
               </TextField>
-
+ 
               {filters.dateFilterType === 'single' ? (
                 <TextField
                   label="Filter by Date"
@@ -1628,7 +1924,7 @@ export default function TaskTracker() {
                   InputLabelProps={{ shrink: true }}
                   value={filters.singleDate}
                   onChange={(e) => setFilters((f) => ({ ...f, singleDate: e.target.value }))}
-                  sx={{ width: 160, bgcolor: '#fff', borderRadius: 1 }}
+                  sx={{ minWidth: 140, bgcolor: '#f5f5f5', borderRadius: 1 }}
                 />
               ) : (
                 <>
@@ -1639,7 +1935,7 @@ export default function TaskTracker() {
                     InputLabelProps={{ shrink: true }}
                     value={filters.fromDate}
                     onChange={(e) => setFilters((f) => ({ ...f, fromDate: e.target.value }))}
-                    sx={{ width: 140, bgcolor: '#fff', borderRadius: 1 }}
+                    sx={{ minWidth: 120, bgcolor: '#f5f5f5', borderRadius: 1 }}
                   />
                   <TextField
                     label="To"
@@ -1648,28 +1944,83 @@ export default function TaskTracker() {
                     InputLabelProps={{ shrink: true }}
                     value={filters.toDate}
                     onChange={(e) => setFilters((f) => ({ ...f, toDate: e.target.value }))}
-                    sx={{ width: 140, bgcolor: '#fff', borderRadius: 1 }}
+                    sx={{ minWidth: 120, bgcolor: '#f5f5f5', borderRadius: 1 }}
                   />
                 </>
               )}
-
-              <TextField select label="Status" size="small" value={filters.status}
-                onChange={(e) => setFilters((f) => ({ ...f, status: e.target.value }))} sx={{ width: 140, bgcolor: '#fff', borderRadius: 1 }}>
+ 
+              <TextField 
+                select 
+                label="Status" 
+                size="small" 
+                value={filters.status}
+                onChange={(e) => setFilters((f) => ({ ...f, status: e.target.value }))} 
+                sx={{ minWidth: 110, bgcolor: '#f5f5f5', borderRadius: 1 }}
+              >
                 <MenuItem value="All">All statuses</MenuItem>
                 {STATUS_OPTIONS.map((s) => <MenuItem key={s} value={s}>{s}</MenuItem>)}
               </TextField>
-              <TextField select label="Priority" size="small" value={filters.priority}
-                onChange={(e) => setFilters((f) => ({ ...f, priority: e.target.value }))} sx={{ width: 130, bgcolor: '#fff', borderRadius: 1 }}>
+
+              <TextField 
+                select 
+                label="Priority" 
+                size="small" 
+                value={filters.priority}
+                onChange={(e) => setFilters((f) => ({ ...f, priority: e.target.value }))} 
+                sx={{ minWidth: 100, bgcolor: '#f5f5f5', borderRadius: 1 }}
+              >
                 <MenuItem value="All">All priorities</MenuItem>
                 {PRIORITY_OPTIONS.map((p) => <MenuItem key={p} value={p}>{p}</MenuItem>)}
               </TextField>
-              <TextField label="Search" size="small" placeholder="Project…" value={filters.search}
-                onChange={(e) => setFilters((f) => ({ ...f, search: e.target.value }))} sx={{ width: 160, bgcolor: '#fff', borderRadius: 1 }} />
+            </Stack>
+
+            {/* Right side: Admin username filter, search, and action buttons */}
+            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} alignItems="center" flex={1} minWidth={0} justifyContent="flex-end">
+              
+              {/* ✅ ADMIN USERNAME FILTER */}
+              {isAdmin && (
+                <TextField 
+                  select 
+                  label="User" 
+                  size="small" 
+                  value={filters.username}
+                  onChange={(e) => setFilters((f) => ({ ...f, username: e.target.value }))} 
+                  sx={{ minWidth: 120, bgcolor: '#f5f5f5', borderRadius: 1 }}
+                >
+                  <MenuItem value="All">All users</MenuItem>
+                  {uniqueUsernames.map((u) => <MenuItem key={u} value={u}>{u}</MenuItem>)}
+                </TextField>
+              )}
+
+              <TextField 
+                label="Search" 
+                size="small" 
+                placeholder="Project…" 
+                value={filters.search}
+                onChange={(e) => setFilters((f) => ({ ...f, search: e.target.value }))} 
+                sx={{ minWidth: 140, bgcolor: '#f5f5f5', borderRadius: 1 }}
+              />
+
               <Tooltip title="Reset filters">
-                <IconButton onClick={() => setFilters({ dateFilterType: 'range', singleDate: '', fromDate: monthStart, toDate: today, status: 'All', priority: 'All', search: '' })} sx={{ border: '1px solid #E4E9EC', bgcolor: '#fff' }}>
+                <IconButton 
+                  onClick={() => setFilters({ dateFilterType: 'range', singleDate: '', fromDate: monthStart, toDate: today, status: 'All', priority: 'All', search: '', username: 'All' })} 
+                  sx={{ border: '1px solid #E4E9EC', bgcolor: '#f5f5f5', borderRadius: 1 }}
+                >
                   <RefreshRoundedIcon fontSize="small" />
                 </IconButton>
               </Tooltip>
+
+              {/* ✅ ADD TASK BUTTON - PRIMARY POSITION */}
+              <Button 
+                variant="contained" 
+                startIcon={<AddRoundedIcon />} 
+                onClick={openAdd}
+                sx={{ bgcolor: PRIMARY, whiteSpace: 'nowrap', '&:hover': { bgcolor: PRIMARY_DARK } }}
+              >
+                Add Task
+              </Button>
+
+              {/* ✅ EXPORT EXCEL BUTTON */}
               <Button
                 variant="outlined"
                 startIcon={<FileDownloadRoundedIcon />}
@@ -1677,16 +2028,12 @@ export default function TaskTracker() {
                 onClick={(e) => setExportAnchorEl(e.currentTarget)}
                 sx={{ borderColor: PRIMARY, color: PRIMARY, whiteSpace: 'nowrap' }}
               >
-                Export Excel
-              </Button>
-              <Button variant="contained" startIcon={<AddRoundedIcon />} onClick={openAdd}
-                sx={{ bgcolor: PRIMARY, whiteSpace: 'nowrap', '&:hover': { bgcolor: PRIMARY_DARK } }}>
-                Add Task
+                Export
               </Button>
             </Stack>
           </Stack>
         </Paper>
-
+ 
         <Menu anchorEl={exportAnchorEl} open={!!exportAnchorEl} onClose={() => setExportAnchorEl(null)}
           anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} transformOrigin={{ vertical: 'top', horizontal: 'right' }}>
           <MenuItem onClick={() => handleExportPreset('today')}>
@@ -1716,7 +2063,7 @@ export default function TaskTracker() {
             <ListItemText primary="Current Filtered View" />
           </MenuItem>
         </Menu>
-
+ 
         <Dialog open={rangeDialogOpen} onClose={() => setRangeDialogOpen(false)} maxWidth="xs" fullWidth PaperProps={{ sx: { borderRadius: 3 } }}>
           <DialogTitle sx={{ fontWeight: 800 }}>Custom Export Range</DialogTitle>
           <Divider />
@@ -1736,7 +2083,7 @@ export default function TaskTracker() {
             </Button>
           </DialogActions>
         </Dialog>
-
+ 
         <Stack spacing={3}>
           <Grid container spacing={2}>
             {kpiCards.map((c) => (
@@ -1745,7 +2092,7 @@ export default function TaskTracker() {
               </Grid>
             ))}
           </Grid>
-
+ 
           <Stack direction={{ xs: 'column', md: 'row' }} spacing={3} alignItems="stretch">
             <Paper elevation={0} sx={{ p: 2.5, flex: 1.2, minWidth: 0, borderRadius: 3, border: '1px solid #E9EDEF', boxShadow: '0 1px 2px rgba(16,24,40,0.04)' }}>
               <Typography variant="h6" sx={{ mb: 1, fontWeight: 700 }}>Task status breakdown</Typography>
@@ -1771,7 +2118,7 @@ export default function TaskTracker() {
                 </Box>
               )}
             </Paper>
-
+ 
             <Paper elevation={0} sx={{ p: 2.5, flex: 1.2, minWidth: 0, borderRadius: 3, border: '1px solid #E9EDEF', boxShadow: '0 1px 2px rgba(16,24,40,0.04)' }}>
               <Typography variant="h6" sx={{ mb: 1, fontWeight: 700 }}>Delay reasons this period</Typography>
               {reasonBreakdown.length === 0 ? (
@@ -1794,7 +2141,7 @@ export default function TaskTracker() {
                 </Box>
               )}
             </Paper>
-
+ 
             <Paper elevation={0} sx={{ p: 2.5, flex: 0.8, minWidth: 220, borderRadius: 3, border: '1px solid #E9EDEF', boxShadow: '0 1px 2px rgba(16,24,40,0.04)' }}>
               <Typography variant="h6" sx={{ mb: 2, fontWeight: 700 }}>Priority mix</Typography>
               <Stack spacing={2.5}>
@@ -1819,7 +2166,7 @@ export default function TaskTracker() {
               </Stack>
             </Paper>
           </Stack>
-
+ 
           <Paper elevation={0} sx={{ overflow: 'hidden', borderRadius: 3, border: '1px solid #E9EDEF', boxShadow: '0 1px 2px rgba(16,24,40,0.04)' }}>
             <Box sx={{ p: 2, pb: 1 }}>
               <Typography variant="h6" sx={{ fontWeight: 700 }}>All tasks ({filtered.length})</Typography>
@@ -1850,6 +2197,7 @@ export default function TaskTracker() {
                   {filtered.map((t, idx) => {
                     const statusColors = STATUS_COLORS[t.status] || { main: '#94A3B8', bg: '#F1F5F9' };
                     const priorityColors = PRIORITY_COLORS[t.priority] || { main: '#94A3B8', bg: '#F1F5F9' };
+                    const isCompleted = t.status === 'Completed';
                     return (
                       <TableRow key={t.id} hover sx={{ bgcolor: idx % 2 ? '#FAFBFC' : 'transparent' }}>
                         <TableCell>{idx + 1}</TableCell>
@@ -1874,8 +2222,20 @@ export default function TaskTracker() {
                         </TableCell>
                         <TableCell align="center">
                           <Stack direction="row" spacing={0.5} justifyContent="center">
-                            <IconButton size="small" onClick={() => openEdit(t)}><EditRoundedIcon fontSize="small" /></IconButton>
-                            <IconButton size="small" onClick={() => handleDelete(t.id)}><DeleteRoundedIcon fontSize="small" color="error" /></IconButton>
+                            <Tooltip title={isCompleted ? "Cannot edit completed tasks" : "Edit task"}>
+                              <span>
+                                <IconButton 
+                                  size="small" 
+                                  onClick={() => openEdit(t)}
+                                  disabled={isCompleted}
+                                >
+                                  <EditRoundedIcon fontSize="small" />
+                                </IconButton>
+                              </span>
+                            </Tooltip>
+                            <IconButton size="small" onClick={() => handleDelete(t.id)}>
+                              <DeleteRoundedIcon fontSize="small" color="error" />
+                            </IconButton>
                           </Stack>
                         </TableCell>
                       </TableRow>
@@ -1887,9 +2247,9 @@ export default function TaskTracker() {
           </Paper>
         </Stack>
       </Container>
-
+ 
       <TaskFormDialog open={dialogOpen} onClose={() => setDialogOpen(false)} onSave={handleSave} initialTask={editingTask} currentUsername={currentUsername} />
-
+ 
       <Snackbar open={!!snack} autoHideDuration={3000} onClose={() => setSnack(null)} anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
         {snack && <Alert severity={snack.severity} variant="filled" onClose={() => setSnack(null)}>{snack.message}</Alert>}
       </Snackbar>
