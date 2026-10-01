@@ -318,12 +318,14 @@ const HRY_Scripting = () => {
     // ✅ STATE MANAGEMENT - XML REMOVED
     const [excelFiles, setExcelFiles] = useState([]);
     const [bbu, setBbu] = useState("");
+    const [mimo, setMimo] = useState("");
     const [uploadSuccess, setUploadSuccess] = useState(false);
     const [uploadResultData, setUploadResultData] = useState(null);
     const [isProcessing, setIsProcessing] = useState(false);
 
     // ✅ Bandwidth options
     const BBU_OPTIONS = ["ASIM", "ASOG"];
+    const Mimo_Mode = ['1-SECTOR-4TR', '2-SECTOR-4TR', '3-SECTOR-4TR']
 
     // ======== EXCEL FILE HANDLER ========
     const handleExcelFileChange = (event) => {
@@ -366,6 +368,15 @@ const HRY_Scripting = () => {
             return;
         }
 
+        if (!mimo) {
+            Swal.fire({
+                icon: "warning",
+                title: "Required",
+                text: "Please select Mimo Mode",
+            });
+            return;
+        }
+
         try {
             setIsProcessing(true);
             action(true);
@@ -374,6 +385,7 @@ const HRY_Scripting = () => {
 
             // ✅ Append bbu (mandatory)
             formData.append("bbu", bbu);
+            formData.append("mimo", mimo);
 
             // ✅ Append all Excel files if they exist (optional)
             if (excelFiles.length > 0) {
@@ -394,6 +406,10 @@ const HRY_Scripting = () => {
                     title: "Success",
                     text: response.message || "Configuration created successfully",
                 });
+
+                setBbu("");
+                setMimo("");
+                setExcelFiles([]);
             } else {
                 Swal.fire({
                     icon: "error",
@@ -419,9 +435,11 @@ const HRY_Scripting = () => {
     const handleCancel = () => {
         setExcelFiles([]);
         setBbu("");
+        setMimo(""); // Added
         setUploadSuccess(false);
         setUploadResultData(null);
     };
+
 
     // ======== DOWNLOAD HANDLER - Supports multiple files ========
     const downloadFile = (downloadUrl) => {
@@ -485,7 +503,7 @@ const HRY_Scripting = () => {
                                             <InputLabel id="bbu-label">BBU</InputLabel>
                                             <Select
                                                 labelId="bbu-label"
-                                                label="Bandwidth"
+                                                label="BBU"
                                                 value={bbu}
                                                 onChange={(e) => setBbu(e.target.value)}
                                             >
@@ -493,6 +511,38 @@ const HRY_Scripting = () => {
                                                     <em>Select BBU</em>
                                                 </MenuItem>
                                                 {BBU_OPTIONS.map((option) => (
+                                                    <MenuItem key={option} value={option}>
+                                                        {option}
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                    </Box>
+
+
+                                </Box>
+                                <Box className={classes.Front_Box}>
+                                    <div className={classes.Front_Box_Hading}>
+                                        Select Mimo Mode:-
+                                    </div>
+                                    <Box sx={{ p: 1.5, maxWidth: "400px" }}>
+                                        <FormControl size="small" fullWidth>
+                                            <InputLabel id="mimo-mode-label">
+                                                Mimo Mode
+                                            </InputLabel>
+
+                                            <Select
+                                                labelId="mimo-mode-label"
+                                                id="mimo-mode"
+                                                value={mimo}
+                                                label="Mimo Mode"
+                                                onChange={(e) => setMimo(e.target.value)}
+                                            >
+                                                <MenuItem value="">
+                                                    <em>Select Mimo Mode</em>
+                                                </MenuItem>
+
+                                                {Mimo_Mode.map((option) => (
                                                     <MenuItem key={option} value={option}>
                                                         {option}
                                                     </MenuItem>
@@ -558,7 +608,7 @@ const HRY_Scripting = () => {
                                         color="success"
                                         onClick={handleSubmit}
                                         endIcon={<UploadIcon />}
-                                        disabled={isProcessing || !bbu}
+                                        disabled={isProcessing || !bbu || !mimo}
                                         sx={{ minWidth: "120px" }}
                                     >
                                         {isProcessing ? (
