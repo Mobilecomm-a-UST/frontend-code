@@ -1,334 +1,668 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { Box, Button, Stack } from "@mui/material";
-import { Breadcrumbs, Link, Typography } from "@mui/material";
+import React, { useState, useEffect } from "react";
 import {
+    Box,
+    Button,
+    Stack,
+    Card,
+    CardContent,
+    Grid,
+    Typography,
+    Alert,
     Paper,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
+    Breadcrumbs,
+    Link,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
+    CircularProgress,
+    Divider,
+    Tooltip,
 } from "@mui/material";
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { useNavigate } from "react-router-dom";
-import Slide from '@mui/material/Slide';
-import UploadIcon from '@mui/icons-material/Upload';
-import DoDisturbIcon from '@mui/icons-material/DoDisturb';
+import Slide from "@mui/material/Slide";
+import UploadIcon from "@mui/icons-material/Upload";
+import DoDisturbIcon from "@mui/icons-material/DoDisturb";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import Swal from "sweetalert2";
-import { postData, ServerURL } from "../../../services/FetchNodeServices";
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import DnsIcon from '@mui/icons-material/Dns';
+import { postData } from "../../../services/FetchNodeServices";
 import OverAllCss from "../../../csss/OverAllCss";
 import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import InputLabel from '@mui/material/InputLabel';
-import { getDecreyptedData } from "../../../utils/localstorage";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import InfoIcon from "@mui/icons-material/Info";
+import WarningIcon from "@mui/icons-material/Warning";
+import ErrorIcon from "@mui/icons-material/Error";
+import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 
-/* ------------------------------------------------------------------ */
-/*  Theme — matched to the teal "Baseband Requirement" screens          */
-/* ------------------------------------------------------------------ */
-const C = {
-    teal: "#006e74",
-    tealDark: "#00494d",
-    headerBg: "#004d52",
-    labelOdd: "#e3f2f2",
-    labelEven: "#f2fafa",
-    border: "#c9dcdc",
-    valueText: "#0d3a3c",
-    zeroText: "#a7bcbc",
-    tick: "#1a7f37",
-    cross: "#c62828",
+const COLORS = {
+    primary: "#006e74",
+    primaryDark: "#00494d",
+    success: "#28a745",
+    warning: "#ffc107",
+    error: "#dc3545",
+    info: "#17a2b8",
+    lightBg: "#f8f9fa",
+    borderColor: "#c9dcdc",
+    headerGradient: "linear-gradient(90deg, #004d52 0%, #006e74 55%, #4fa3a8 100%)",
 };
 
-const HEADER_GRADIENT = "linear-gradient(90deg, #004d52 0%, #006e74 55%, #4fa3a8 100%)";
-
-const PINNED_KEY = "Site ID";
-
-const buildColumns = (rows) => {
-    if (!rows || !rows.length) return [];
-    const keySet = new Set();
-    rows.forEach((r) => Object.keys(r).forEach((k) => keySet.add(k)));
-    keySet.delete(PINNED_KEY);
-    return Array.from(keySet);
+const FILE_TYPE_NAMES = {
+    "Cell para_FDD OR TDD OR MIMO_file": "Cell Parameters",
+    "freqrel_file": "Frequency Related",
+    "dnprefix_file": "DN Prefix",
+    "pwr_scheduling_file": "Power Scheduling",
+    "srvcc_file": "SRVCC",
+    "mme_file": "MME",
+    "qci_value_file": "QCI Value",
 };
 
-const isTickCross = (val) =>
-    typeof val === "string" && (val.trim().startsWith("✓") || val.trim() === "✗" || val.trim() === "X");
-
-const cellColor = (val) => {
-    if (typeof val === "string") {
-        const v = val.trim();
-        if (v.startsWith("✓")) return C.tick;
-        if (v === "✗" || v === "X") return C.cross;
-        if (v === "") return C.zeroText;
-    }
-    if (val === 0) return C.zeroText;
-    return C.valueText;
-};
-
-/* ------------------------------------------------------------------ */
-/*  Results table shown below the download button                      */
-/* ------------------------------------------------------------------ */
-function BasebandResultTable({ rows }) {
-    const columns = buildColumns(rows);
-    const hasData = Array.isArray(rows) && rows.length > 0;
-
-    if (!hasData) return null;
-
+/* ================================================================ */
+/*  Result Card Component                                           */
+/* ================================================================ */
+const ResultCard = ({ title, value, icon: Icon, color = COLORS.primary }) => {
     return (
-        <Box sx={{ mt: 4, px: { xs: 1, md: 3 } }}>
-            <Paper elevation={2} sx={{ borderRadius: 2, overflow: "hidden", border: `1px solid ${C.border}` }}>
-                <Box
+        <Card
+            sx={{
+                background: "#fff",
+                border: `1px solid ${COLORS.borderColor}`,
+                borderRadius: 1.5,
+                boxShadow: "0 1px 4px rgba(0,0,0,0.05)",
+                transition: "all 0.3s ease",
+                "&:hover": {
+                    boxShadow: "0 4px 12px rgba(0,107,106,0.1)",
+                    transform: "translateY(-2px)",
+                },
+                overflow: "hidden",
+                height: "100%",
+            }}
+        >
+            <Box sx={{ height: 2, background: COLORS.headerGradient }} />
+            <CardContent sx={{ p: 1.5, textAlign: "center" }}>
+                <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
+                    {Icon && (
+                        <Box
+                            sx={{
+                                width: 36,
+                                height: 36,
+                                borderRadius: "8px",
+                                background: `${color}15`,
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                            }}
+                        >
+                            <Icon sx={{ color: color, fontSize: 18 }} />
+                        </Box>
+                    )}
+                </Box>
+                <Typography
+                    variant="caption"
                     sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 1,
-                        px: 2,
-                        py: 1.25,
-                        background: HEADER_GRADIENT,
+                        fontSize: "10px",
+                        color: "#666",
+                        fontWeight: 600,
+                        textTransform: "uppercase",
+                        letterSpacing: 0.3,
+                        display: "block",
+                        mb: 0.5,
                     }}
                 >
-                    <DnsIcon sx={{ color: "#bfe9e9", fontSize: 18 }} />
-                    <Typography
-                        variant="subtitle2"
-                        sx={{ color: "#fff", fontWeight: 700, letterSpacing: 0.4, textTransform: "uppercase" }}
-                    >
-                        Baseband Site-wise Data
-                    </Typography>
-                </Box>
+                    {title}
+                </Typography>
+                <Typography
+                    sx={{
+                        fontSize: "16px",
+                        fontWeight: 700,
+                        color: color,
+                        wordBreak: "break-word",
+                    }}
+                    title={value}
+                >
+                    {value}
+                </Typography>
+            </CardContent>
+        </Card>
+    );
+};
 
-                <TableContainer sx={{ maxHeight: 600 }}>
-                    <Table
-                        size="small"
-                        stickyHeader
+/* ================================================================ */
+/*  Upload Result Display Component with Multiple Files             */
+/* ================================================================ */
+const ScriptingToolResult = ({ data, onDownload, onDownloadAll, allFiles }) => {
+    if (!data) return null;
+
+    const { status, message } = data;
+
+    return (
+        <Box
+            sx={{
+                mt: 3,
+                p: 2.5,
+                background: COLORS.lightBg,
+                borderRadius: 1.5,
+                border: `1px solid ${COLORS.borderColor}`,
+            }}
+        >
+            {/* Status Alert */}
+            {status && (
+                <Alert
+                    icon={<CheckCircleIcon sx={{ fontSize: "18px" }} />}
+                    severity="success"
+                    sx={{
+                        background: `${COLORS.success}15`,
+                        border: `1px solid ${COLORS.success}`,
+                        color: COLORS.success,
+                        fontWeight: 600,
+                        fontSize: "13px",
+                        mb: 2.5,
+                        py: 1.2,
+                        px: 1.5,
+                    }}
+                >
+                    ✓ {message}
+                </Alert>
+            )}
+
+            {!status && (
+                <Alert
+                    icon={<ErrorIcon sx={{ fontSize: "18px" }} />}
+                    severity="error"
+                    sx={{
+                        background: `${COLORS.error}15`,
+                        border: `1px solid ${COLORS.error}`,
+                        color: COLORS.error,
+                        fontWeight: 600,
+                        fontSize: "13px",
+                        mb: 2.5,
+                        py: 1.2,
+                        px: 1.5,
+                    }}
+                >
+                    ✗ {message}
+                </Alert>
+            )}
+
+            {/* Result Cards */}
+            <Grid container spacing={1.5} sx={{ mb: 2.5 }}>
+                <Grid item xs={12} sm={6}>
+                    <ResultCard
+                        title="Status"
+                        value={status ? "Success" : "Failed"}
+                        icon={status ? CheckCircleIcon : ErrorIcon}
+                        color={status ? COLORS.success : COLORS.error}
+                    />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <ResultCard
+                        title="Files Generated"
+                        value={`${allFiles.length} Files`}
+                        icon={InfoIcon}
+                        color={COLORS.info}
+                    />
+                </Grid>
+            </Grid>
+
+            {/* Download All Button */}
+            {status && allFiles.length > 0 && (
+                <Box sx={{ mb: 2.5, textAlign: "center" }}>
+                    <Button
+                        variant="contained"
+                        color="success"
+                        startIcon={<FileDownloadIcon />}
+                        onClick={onDownloadAll}
                         sx={{
-                            borderCollapse: "collapse",
-                            "& .MuiTableCell-root": { border: `1px solid ${C.border}`, py: 0.75, fontSize: 12.5 },
+                            background: COLORS.headerGradient,
+                            color: "#fff",
+                            fontWeight: 700,
+                            textTransform: "none",
+                            px: 3,
                         }}
                     >
-                        <TableHead>
-                            <TableRow>
-                                <TableCell
-                                    sx={{
-                                        position: "sticky",
-                                        left: 0,
-                                        top: 0,
-                                        zIndex: 6,
-                                        bgcolor: C.headerBg,
-                                        color: "#fff",
-                                        fontWeight: 700,
-                                        minWidth: 100,
-                                    }}
-                                >
-                                    {PINNED_KEY}
-                                </TableCell>
-                                {columns.map((c) => (
-                                    <TableCell
-                                        key={c}
-                                        align="center"
-                                        sx={{
-                                            position: "sticky",
-                                            top: 0,
-                                            zIndex: 4,
-                                            bgcolor: C.teal,
-                                            color: "#fff",
-                                            fontWeight: 700,
-                                            whiteSpace: "nowrap",
-                                            minWidth: 90,
-                                        }}
-                                    >
-                                        {String(c).trim()}
-                                    </TableCell>
-                                ))}
-                            </TableRow>
-                        </TableHead>
+                        Download All Files ({allFiles.length})
+                    </Button>
+                </Box>
+            )}
 
-                        <TableBody>
-                            {rows.map((row, i) => {
-                                const labelBg = i % 2 === 0 ? C.labelOdd : C.labelEven;
-                                return (
-                                    <TableRow key={row[PINNED_KEY] ?? i}>
-                                        <TableCell
+            {/* Individual Files List */}
+            {status && allFiles.length > 0 && (
+                <Box>
+                    <Typography
+                        variant="subtitle2"
+                        sx={{
+                            fontWeight: 700,
+                            color: COLORS.primary,
+                            mb: 1.5,
+                            fontSize: "13px",
+                        }}
+                    >
+                        📥 Generated Files
+                    </Typography>
+                    <Stack spacing={1}>
+                        {allFiles.map((file, index) => (
+                            <Paper
+                                key={index}
+                                sx={{
+                                    p: 1.5,
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "space-between",
+                                    borderRadius: 1,
+                                    border: `1px solid ${COLORS.borderColor}`,
+                                    backgroundColor: "#fff",
+                                    transition: "all 0.2s ease",
+                                    "&:hover": {
+                                        boxShadow: 2,
+                                        borderColor: COLORS.primary,
+                                    },
+                                }}
+                            >
+                                <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, flex: 1 }}>
+                                    <InsertDriveFileIcon sx={{ color: COLORS.primary, fontSize: 20 }} />
+                                    <Box>
+                                        <Typography
                                             sx={{
-                                                position: "sticky",
-                                                left: 0,
-                                                zIndex: 2,
-                                                bgcolor: labelBg,
-                                                fontWeight: 700,
-                                                color: C.tealDark,
-                                                whiteSpace: "nowrap",
+                                                fontWeight: 600,
+                                                color: COLORS.primaryDark,
+                                                fontSize: "13px",
                                             }}
                                         >
-                                            {row[PINNED_KEY] ?? "—"}
-                                        </TableCell>
-                                        {columns.map((c) => {
-                                            const val = row[c];
-                                            const display = val === "" || val == null ? "—" : val;
-                                            return (
-                                                <TableCell
-                                                    key={c}
-                                                    align="center"
-                                                    sx={{
-                                                        bgcolor: "#ffffff",
-                                                        fontVariantNumeric: "tabular-nums",
-                                                        color: cellColor(val),
-                                                        fontWeight: isTickCross(val) ? 800 : 600,
-                                                        whiteSpace: "nowrap",
-                                                    }}
-                                                >
-                                                    {display}
-                                                </TableCell>
-                                            );
-                                        })}
-                                    </TableRow>
-                                );
-                            })}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </Paper>
+                                            {file.base_name}
+                                        </Typography>
+                                        <Typography
+                                            variant="caption"
+                                            sx={{
+                                                color: "#666",
+                                                fontSize: "11px",
+                                            }}
+                                        >
+                                            {file.display_name}
+                                        </Typography>
+                                    </Box>
+                                </Box>
+                                <Tooltip title={`Download ${file.display_name}`}>
+                                    <Button
+                                        variant="contained"
+                                        size="small"
+                                        startIcon={<FileDownloadIcon />}
+                                        onClick={() => onDownload(file.url, file.file_name)}
+                                        sx={{
+                                            background: COLORS.headerGradient,
+                                            color: "#fff",
+                                            fontWeight: 700,
+                                            textTransform: "none",
+                                            whiteSpace: "nowrap",
+                                            "&:hover": {
+                                                background: "linear-gradient(90deg, #003a3e 0%, #005555 55%, #3a8b91 100%)",
+                                            },
+                                        }}
+                                    >
+                                        Download
+                                    </Button>
+                                </Tooltip>
+                            </Paper>
+                        ))}
+                    </Stack>
+                </Box>
+            )}
         </Box>
     );
-}
+};
 
-const UploadVil = () => {
-    const [make4GFiles, setMake4GFiles] = useState([])
-    const [show4G, setShow4G] = useState(false)
-    const [fileData, setFileData] = useState()
-    const [download, setDownload] = useState(false);
-    const [resultData, setResultData] = useState([]); // ✅ new: holds response.data for the table
-    const { loading, action } = useLoadingDialog()
-    const navigate = useNavigate()
-    const classes = OverAllCss()
+/* ================================================================ */
+/*  Main 5G Scripting Tool Component                                */
+/* ================================================================ */
+const FiveGScriptingTool = () => {
+    const navigate = useNavigate();
+    const { loading, action } = useLoadingDialog();
+    const classes = OverAllCss();
 
+    // STATE MANAGEMENT
+    const [xmlFiles, setXmlFiles] = useState([]);
+    const [excelFiles, setExcelFiles] = useState([]);
+    const [hwTypeSmod, setHwTypeSmod] = useState("");
+    const [hwTypeBbmod, setHwTypeBbmod] = useState("");
+    const [showXmlError, setShowXmlError] = useState(false);
+    const [uploadSuccess, setUploadSuccess] = useState(false);
+    const [uploadResultData, setUploadResultData] = useState(null);
+    const [downloadFiles, setDownloadFiles] = useState([]);
+    const [isProcessing, setIsProcessing] = useState(false);
 
-    const handle4GFileSelection = (event) => {
+    // DROPDOWN OPTIONS
+    const SMOD_OPTIONS = ["ASIA", "ASIB", "ASIM", ""];
+    const BBMOD_OPTIONS = ["ABIP", "ABIO", "ABIA", ""];
 
-        setMake4GFiles(event.target.files)
-    }
+    // ======== FILE HANDLERS ========
+    const handleXmlFileChange = (event) => {
+        const files = Array.from(event.target.files || []);
 
+        if (files.length === 0) {
+            return;
+        }
 
+        const invalidFiles = files.filter(
+            (file) => !file.name.toLowerCase().endsWith(".xml") && !file.name.toLowerCase().endsWith(".txt")
+        );
+
+        if (invalidFiles.length > 0) {
+            setShowXmlError(true);
+
+            Swal.fire({
+                icon: "error",
+                title: "Invalid File",
+                text: "Please select only valid XML or TXT files.",
+            });
+
+            event.target.value = "";
+            return;
+        }
+
+        setXmlFiles(files);
+        setShowXmlError(false);
+    };
+
+    const handleExcelFileChange = (event) => {
+        const files = Array.from(event.target.files || []);
+
+        if (files.length === 0) {
+            return;
+        }
+
+        const invalidFiles = files.filter((file) => {
+            const fileName = file.name.toLowerCase();
+            return !fileName.endsWith(".xlsx") && !fileName.endsWith(".xls");
+        });
+
+        if (invalidFiles.length > 0) {
+            Swal.fire({
+                icon: "error",
+                title: "Invalid File",
+                text: "Please select only valid Excel files (.xlsx or .xls)",
+            });
+
+            event.target.value = "";
+            return;
+        }
+
+        setExcelFiles(files);
+    };
+
+    // ======== EXTRACT ALL DOWNLOAD FILES ========
+    const extractDownloadFiles = (response) => {
+        const files = [];
+
+        if (Array.isArray(response.files)) {
+            response.files.forEach((fileItem) => {
+                const baseName = fileItem.base_name || fileItem.input_file || "Output";
+
+                Object.entries(fileItem).forEach(([key, value]) => {
+                    if (typeof value === "string" && value.startsWith("http")) {
+                        const displayName = FILE_TYPE_NAMES[key] || key.replace(/_/g, " ").toUpperCase();
+                        const fileName = value.split("/").pop();
+
+                        files.push({
+                            base_name: baseName,
+                            display_name: displayName,
+                            url: value,
+                            file_name: fileName,
+                        });
+                    }
+                });
+            });
+        }
+
+        return files;
+    };
+
+    // ======== SUBMIT HANDLER ========
     const handleSubmit = async () => {
-        if (make4GFiles.length > 0) {
-            action(true)
-            var formData = new FormData();
-            for (let i = 0; i < make4GFiles.length; i++) {
-                formData.append(`file`, make4GFiles[i]); 
+        if (xmlFiles.length === 0) {
+            setShowXmlError(true);
+            return;
+        }
+
+        try {
+            setIsProcessing(true);
+            action(true);
+
+            const formData = new FormData();
+
+            xmlFiles.forEach((file) => {
+                formData.append("files", file);
+            });
+
+            if (excelFiles.length > 0) {
+                excelFiles.forEach((file) => {
+                    formData.append("nr_excel", file);
+                });
             }
 
-            const response = await postData('vil_srvcc/vil/', formData)
+            if (hwTypeSmod) {
+                formData.append("hw_type_smod", hwTypeSmod);
+            }
+            if (hwTypeBbmod) {
+                formData.append("hw_type_bbmod", hwTypeBbmod);
+            }
 
-            // console.log('response data', response)
+            const response = await postData("vil_srvcc/vil/", formData);
 
-
-            if (response.status === true) {
-                action(false)
-                setDownload(true)
-
-                setFileData(response.download_link)
-                setResultData(Array.isArray(response.data) ? response.data : []) // ✅ store table rows
+            if (response && response.status) {
+                const allFiles = extractDownloadFiles(response);
+                setDownloadFiles(allFiles);
+                setUploadSuccess(true);
+                setUploadResultData(response);
 
                 Swal.fire({
                     icon: "success",
-                    title: "Done",
-                    text: `${response.message}`,
+                    title: "Success",
+                    text: response.message || "5G configuration created successfully",
                 });
-
             } else {
-                action(false)
-
                 Swal.fire({
                     icon: "error",
-                    title: "Oops...",
-                    text: `${response.message}`,
+                    title: "Error",
+                    text: response?.message || "Failed to create configuration",
                 });
+                setUploadResultData(response);
             }
+        } catch (error) {
+            console.error("Submit error:", error);
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: error.message || "Failed to process files",
+            });
+        } finally {
+            action(false);
+            setIsProcessing(false);
         }
-        else {
-            setShow4G(true);
+    };
 
-        }
-    }
-
+    // ======== CANCEL HANDLER ========
     const handleCancel = () => {
-        setMake4GFiles([])
+        setXmlFiles([]);
+        setExcelFiles([]);
+        setHwTypeSmod("");
+        setHwTypeBbmod("");
+        setShowXmlError(false);
+        setUploadSuccess(false);
+        setUploadResultData(null);
+        setDownloadFiles([]);
+    };
 
+    // ======== SINGLE FILE DOWNLOAD - DIRECT APPROACH ========
+    const downloadFile = (downloadUrl, fileName) => {
+        try {
+            const link = document.createElement("a");
+            link.href = downloadUrl;
+            link.download = fileName || "download";
+            link.target = "_blank";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
 
-        setShow4G(false)
+            Swal.fire({
+                icon: "success",
+                title: "Downloading",
+                text: `${fileName} download started`,
+                timer: 1500,
+                showConfirmButton: false,
+            });
+        } catch (error) {
+            console.error("Download error:", error);
+            Swal.fire({
+                icon: "error",
+                title: "Download Failed",
+                text: `Error: ${error.message}`,
+            });
+        }
+    };
 
-    }
+    // ======== DOWNLOAD ALL FILES ========
+    const downloadAllFiles = () => {
+        if (downloadFiles.length === 0) return;
+
+        downloadFiles.forEach((file, index) => {
+            setTimeout(() => {
+                downloadFile(file.url, file.file_name);
+            }, index * 500);
+        });
+
+        Swal.fire({
+            icon: "success",
+            title: "Bulk Download Started",
+            text: `Downloading ${downloadFiles.length} files...`,
+            timer: 2000,
+            showConfirmButton: false,
+        });
+    };
 
     useEffect(() => {
-        document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
+        document.title = "5G Scripting Tool";
+    }, []);
 
-    }, [])
     return (
         <>
             <div style={{ margin: 5, marginLeft: 10 }}>
-                <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
-                    <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
-                    <Link underline="hover" onClick={() => { navigate('/tools/soft_at_tools') }}>VI Soft-AT Tool</Link>
-                    <Typography color='text.primary'>Upload SRVCC</Typography>
-                </Breadcrumbs>
+              <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
+                                 <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
+                                 <Link underline="hover" onClick={() => { navigate('/tools/soft_at_tools') }}>VI Soft-AT Tool</Link>
+                                 <Typography color='text.primary'>Upload Layered Addition</Typography>
+                             </Breadcrumbs>
             </div>
-            <Slide
-                direction='left'
-                in={true}
-                // style={{ transformOrigin: '0 0 0' }}
-                timeout={1000}
-            >
+
+            <Slide direction="left" in={true} timeout={1000}>
                 <Box>
                     <Box className={classes.main_Box}>
-                        <Box className={classes.Back_Box} sx={{ width: { md: '75%', xs: '100%' } }}>44
-                            <Box className={classes.Box_Hading} >
-                                Create SRVCC Summary
-                            </Box>
-                            <Stack spacing={2} sx={{ marginTop: "-40px" }} direction={'column'}>
+                        <Box className={classes.Back_Box} sx={{ width: { md: "75%", xs: "100%" } }}>
+                            <Box className={classes.Box_Hading}>Create VIL SRVCC Addition Summary</Box>
 
-                                <Box className={classes.Front_Box} >
+                            <Stack spacing={2.5} sx={{ marginTop: "-40px" }} direction="column">
+                                {/* ====== XML FILE CARD ====== */}
+                                <Box className={classes.Front_Box}>
                                     <div className={classes.Front_Box_Hading}>
-                                        Select Log File:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{ }</span>
+                                        Select Log File:-
                                     </div>
-                                    <div className={classes.Front_Box_Select_Button} >
+
+                                    <div className={classes.Front_Box_Select_Button}>
                                         <div style={{ float: "left" }}>
-                                            <Button variant="contained" component="label" color={make4GFiles.length > 0 ? "warning" : "primary"}>
-                                                select file
-                                                <input required hidden accept=".logs,log,txt" multiple type="file"
-                                                    // webkitdirectory="true"
-                                                    // directory="true"
-                                                    onChange={(e) => { handle4GFileSelection(e); setShow4G(false); }} />
+                                            <Button
+                                                variant="contained"
+                                                component="label"
+                                                color={xmlFiles.length > 0 ? "warning" : "primary"}
+                                                startIcon={<UploadIcon />}
+                                            >
+                                                {xmlFiles.length > 0
+                                                    ? "Change Log Files"
+                                                    : "Select Log Files"}
+
+                                                <input
+                                                    required
+                                                    hidden
+                                                    multiple
+                                                    accept=".log,.logs,.txt"
+                                                    type="file"
+                                                    onChange={handleXmlFileChange}
+                                                />
                                             </Button>
                                         </div>
 
-                                        {make4GFiles.length > 0 && <span style={{ color: 'green', fontSize: '18px', fontWeight: 600 }}>Selected File(s) : {make4GFiles.length}</span>}
+                                        {xmlFiles.length > 0 && (
+                                            <span
+                                                style={{
+                                                    color: "green",
+                                                    fontSize: "14px",
+                                                    fontWeight: 600,
+                                                    marginLeft: "12px",
+                                                }}
+                                            >
+                                                ✓ {xmlFiles.length} file
+                                                {xmlFiles.length > 1 ? "s" : ""} selected
+                                            </span>
+                                        )}
 
-                                        <div>  <span style={{ display: show4G ? 'inherit' : 'none', color: 'red', fontSize: '18px', fontWeight: 600 }}>This Field Is Required !</span> </div>
+                                        {showXmlError && (
+                                            <span
+                                                style={{
+                                                    color: COLORS.error,
+                                                    fontSize: "14px",
+                                                    fontWeight: 600,
+                                                    marginLeft: "12px",
+                                                }}
+                                            >
+                                                This field is required!
+                                            </span>
+                                        )}
                                     </div>
                                 </Box>
-                            </Stack>
-                            <Stack direction={{ xs: "column", sm: "column", md: "row" }} spacing={2} style={{ display: 'flex', justifyContent: "space-around", marginTop: "20px" }}>
 
-                                <Button variant="contained" color="success" onClick={handleSubmit} endIcon={<UploadIcon />}>Submit</Button>
+                                {/* ACTION BUTTONS */}
+                                <Stack
+                                    direction={{ xs: "column", sm: "row" }}
+                                    spacing={2}
+                                    sx={{ display: "flex", justifyContent: "center", marginTop: "16px" }}
+                                >
+                                    <Button
+                                        variant="contained"
+                                        color="success"
+                                        onClick={handleSubmit}
+                                        endIcon={<UploadIcon />}
+                                        disabled={isProcessing || xmlFiles.length === 0}
+                                        sx={{ minWidth: "120px" }}
+                                    >
+                                        {isProcessing ? <CircularProgress size={20} /> : "Submit"}
+                                    </Button>
 
-                                <Button variant="contained" onClick={handleCancel} style={{ backgroundColor: "red", color: 'white' }} endIcon={<DoDisturbIcon />} >cancel</Button>
+                                    <Button
+                                        variant="contained"
+                                        onClick={handleCancel}
+                                        style={{ backgroundColor: COLORS.error, color: "white" }}
+                                        endIcon={<DoDisturbIcon />}
+                                        disabled={isProcessing}
+                                        sx={{ minWidth: "120px" }}
+                                    >
+                                        Cancel
+                                    </Button>
+                                </Stack>
 
+                                {/* RESULT DISPLAY */}
+                                {uploadSuccess && (
+                                    <ScriptingToolResult
+                                        data={uploadResultData}
+                                        onDownload={downloadFile}
+                                        onDownloadAll={downloadAllFiles}
+                                        allFiles={downloadFiles}
+                                    />
+                                )}
                             </Stack>
                         </Box>
                     </Box>
-                    <Box sx={{ display: download ? 'block' : 'none', textAlign: 'center' }}>
-                        <a download href={fileData}><Button variant="outlined" onClick='' title="Export Excel" startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />} sx={{ marginTop: "10px", width: "auto" }}><span style={{ fontFamily: "Poppins", fontSize: "22px", fontWeight: 800, textTransform: "none", textDecorationLine: "none" }}>Download SRVCC Details </span></Button></a>
-                    </Box>
-
-                    {/* ✅ New: results table showing the uploaded/parsed Baseband data */}
-                    <BasebandResultTable rows={resultData} />
                 </Box>
             </Slide>
+
             {loading}
         </>
-    )
-}
+    );
+};
 
-export default UploadVil
+export default FiveGScriptingTool;

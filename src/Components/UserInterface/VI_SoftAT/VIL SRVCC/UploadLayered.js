@@ -328,7 +328,7 @@ const UploadLayered = () => {
                                                 <input
                                                     required
                                                     hidden
-                                                    accept=".xlsx,.xls,.xlsb,.txt,.log"
+                                                    accept=".xlsx,.xls,.xlsb,.txt,.log,.logs"
                                                     multiple
                                                     type="file"
                                                     onChange={(e) => {

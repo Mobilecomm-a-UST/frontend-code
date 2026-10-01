@@ -1,585 +1,854 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { Box, Button, Stack } from "@mui/material";
-import { Breadcrumbs, Link, Typography } from "@mui/material";
+import React, { useState, useEffect } from "react";
 import {
+    Box,
+    Button,
+    Stack,
+    Card,
+    CardContent,
+    Grid,
+    Typography,
+    Alert,
     Paper,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
+    Breadcrumbs,
+    Link,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
+    CircularProgress,
+    Divider,
+    Tooltip,
 } from "@mui/material";
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { useNavigate } from "react-router-dom";
-import Slide from '@mui/material/Slide';
-import UploadIcon from '@mui/icons-material/Upload';
-import DoDisturbIcon from '@mui/icons-material/DoDisturb';
+import Slide from "@mui/material/Slide";
+import UploadIcon from "@mui/icons-material/Upload";
+import DoDisturbIcon from "@mui/icons-material/DoDisturb";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import Swal from "sweetalert2";
-import { postData, ServerURL } from "../../../services/FetchNodeServices";
-import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import DnsIcon from '@mui/icons-material/Dns';
+import { postData } from "../../../services/FetchNodeServices";
 import OverAllCss from "../../../csss/OverAllCss";
 import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import InputLabel from '@mui/material/InputLabel';
-import { getDecreyptedData } from "../../../utils/localstorage";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import InfoIcon from "@mui/icons-material/Info";
+import WarningIcon from "@mui/icons-material/Warning";
+import ErrorIcon from "@mui/icons-material/Error";
+import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+import ClearIcon from "@mui/icons-material/Clear";
 
-/* ------------------------------------------------------------------ */
-/*  Theme — matched to the teal "Baseband Requirement" screens          */
-/* ------------------------------------------------------------------ */
-const C = {
-    teal: "#006e74",
-    tealDark: "#00494d",
-    headerBg: "#004d52",
-    labelOdd: "#e3f2f2",
-    labelEven: "#f2fafa",
-    border: "#c9dcdc",
-    valueText: "#0d3a3c",
-    zeroText: "#a7bcbc",
-    tick: "#1a7f37",
-    cross: "#c62828",
+const COLORS = {
+    primary: "#006e74",
+    primaryDark: "#00494d",
+    success: "#28a745",
+    warning: "#ffc107",
+    error: "#dc3545",
+    info: "#17a2b8",
+    lightBg: "#f8f9fa",
+    borderColor: "#c9dcdc",
+    headerGradient: "linear-gradient(90deg, #004d52 0%, #006e74 55%, #4fa3a8 100%)",
 };
 
-const HEADER_GRADIENT = "linear-gradient(90deg, #004d52 0%, #006e74 55%, #4fa3a8 100%)";
-
-const PINNED_KEY = "Site ID";
-
-const buildColumns = (rows) => {
-    if (!rows || !rows.length) return [];
-    const keySet = new Set();
-    rows.forEach((r) => Object.keys(r).forEach((k) => keySet.add(k)));
-    keySet.delete(PINNED_KEY);
-    return Array.from(keySet);
-};
-
-const isTickCross = (val) =>
-    typeof val === "string" && (val.trim().startsWith("✓") || val.trim() === "✗" || val.trim() === "X");
-
-const cellColor = (val) => {
-    if (typeof val === "string") {
-        const v = val.trim();
-        if (v.startsWith("✓")) return C.tick;
-        if (v === "✗" || v === "X") return C.cross;
-        if (v === "") return C.zeroText;
-    }
-    if (val === 0) return C.zeroText;
-    return C.valueText;
-};
-
-/* ------------------------------------------------------------------ */
-/*  Results table shown below the download button                      */
-/* ------------------------------------------------------------------ */
-function BasebandResultTable({ rows }) {
-    const columns = buildColumns(rows);
-    const hasData = Array.isArray(rows) && rows.length > 0;
-
-    if (!hasData) return null;
-
+/* ================================================================ */
+/*  Result Card Component                                           */
+/* ================================================================ */
+const ResultCard = ({ title, value, icon: Icon, color = COLORS.primary }) => {
     return (
-        <Box sx={{ mt: 4, px: { xs: 1, md: 3 } }}>
-            <Paper elevation={2} sx={{ borderRadius: 2, overflow: "hidden", border: `1px solid ${C.border}` }}>
-                <Box
+        <Card
+            sx={{
+                background: "#fff",
+                border: `1px solid ${COLORS.borderColor}`,
+                borderRadius: 1.5,
+                boxShadow: "0 1px 4px rgba(0,0,0,0.05)",
+                transition: "all 0.3s ease",
+                "&:hover": {
+                    boxShadow: "0 4px 12px rgba(0,107,106,0.1)",
+                    transform: "translateY(-2px)",
+                },
+                overflow: "hidden",
+                height: "100%",
+            }}
+        >
+            <Box sx={{ height: 2, background: COLORS.headerGradient }} />
+            <CardContent sx={{ p: 1.5, textAlign: "center" }}>
+                <Box sx={{ display: "flex", justifyContent: "center", mb: 1 }}>
+                    {Icon && (
+                        <Box
+                            sx={{
+                                width: 36,
+                                height: 36,
+                                borderRadius: "8px",
+                                background: `${color}15`,
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                            }}
+                        >
+                            <Icon sx={{ color: color, fontSize: 18 }} />
+                        </Box>
+                    )}
+                </Box>
+                <Typography
+                    variant="caption"
                     sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 1,
-                        px: 2,
-                        py: 1.25,
-                        background: HEADER_GRADIENT,
+                        fontSize: "10px",
+                        color: "#666",
+                        fontWeight: 600,
+                        textTransform: "uppercase",
+                        letterSpacing: 0.3,
+                        display: "block",
+                        mb: 0.5,
                     }}
                 >
-                    <DnsIcon sx={{ color: "#bfe9e9", fontSize: 18 }} />
-                    <Typography
-                        variant="subtitle2"
-                        sx={{ color: "#fff", fontWeight: 700, letterSpacing: 0.4, textTransform: "uppercase" }}
-                    >
-                        Baseband Site-wise Data
-                    </Typography>
-                </Box>
+                    {title}
+                </Typography>
+                <Typography
+                    sx={{
+                        fontSize: "16px",
+                        fontWeight: 700,
+                        color: color,
+                        wordBreak: "break-word",
+                    }}
+                    title={value}
+                >
+                    {value}
+                </Typography>
+            </CardContent>
+        </Card>
+    );
+};
 
-                <TableContainer sx={{ maxHeight: 600 }}>
-                    <Table
-                        size="small"
-                        stickyHeader
+/* ================================================================ */
+/*  File Item Component - Display selected files                    */
+/* ================================================================ */
+const FileItem = ({ file, onRemove, isLoading }) => {
+    const getFileIcon = (fileName) => {
+        const ext = fileName.split(".").pop().toLowerCase();
+        if (["xlsx", "xls", "xlsb"].includes(ext)) {
+            return "📊";
+        }
+        return "📄";
+    };
+
+    return (
+        <Paper
+            elevation={1}
+            sx={{
+                p: 1.5,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                borderRadius: 1,
+                border: `1px solid ${COLORS.borderColor}`,
+                backgroundColor: "#ffffff",
+                transition: "all 0.2s ease",
+                "&:hover": {
+                    boxShadow: 2,
+                    borderColor: COLORS.primary,
+                },
+            }}
+        >
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1, flex: 1, minWidth: 0 }}>
+                <InsertDriveFileIcon sx={{ color: COLORS.primary, fontSize: 20 }} />
+                <Box sx={{ minWidth: 0, flex: 1 }}>
+                    <Typography
                         sx={{
-                            borderCollapse: "collapse",
-                            "& .MuiTableCell-root": { border: `1px solid ${C.border}`, py: 0.75, fontSize: 12.5 },
+                            fontWeight: 600,
+                            color: COLORS.primaryDark,
+                            fontSize: "13px",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            whiteSpace: "nowrap",
+                        }}
+                        title={file.name}
+                    >
+                        {getFileIcon(file.name)} {file.name}
+                    </Typography>
+                    <Typography
+                        variant="caption"
+                        sx={{
+                            color: "#999",
+                            fontSize: "11px",
                         }}
                     >
-                        <TableHead>
-                            <TableRow>
-                                <TableCell
-                                    sx={{
-                                        position: "sticky",
-                                        left: 0,
-                                        top: 0,
-                                        zIndex: 6,
-                                        bgcolor: C.headerBg,
-                                        color: "#fff",
-                                        fontWeight: 700,
-                                        minWidth: 100,
-                                    }}
-                                >
-                                    {PINNED_KEY}
-                                </TableCell>
-                                {columns.map((c) => (
-                                    <TableCell
-                                        key={c}
-                                        align="center"
-                                        sx={{
-                                            position: "sticky",
-                                            top: 0,
-                                            zIndex: 4,
-                                            bgcolor: C.teal,
-                                            color: "#fff",
-                                            fontWeight: 700,
-                                            whiteSpace: "nowrap",
-                                            minWidth: 90,
-                                        }}
-                                    >
-                                        {String(c).trim()}
-                                    </TableCell>
-                                ))}
-                            </TableRow>
-                        </TableHead>
+                        {(file.size / 1024).toFixed(2)} KB
+                    </Typography>
+                </Box>
+            </Box>
 
-                        <TableBody>
-                            {rows.map((row, i) => {
-                                const labelBg = i % 2 === 0 ? C.labelOdd : C.labelEven;
-                                return (
-                                    <TableRow key={row[PINNED_KEY] ?? i}>
-                                        <TableCell
+            <Button
+                size="small"
+                onClick={() => onRemove(file.name)}
+                disabled={isLoading}
+                sx={{
+                    minWidth: "auto",
+                    padding: "4px 8px",
+                    color: COLORS.error,
+                    "&:hover": {
+                        backgroundColor: "#ffebee",
+                    },
+                }}
+            >
+                <ClearIcon fontSize="small" />
+            </Button>
+        </Paper>
+    );
+};
+
+/* ================================================================ */
+/*  Upload Result Display Component                                 */
+/* ================================================================ */
+const ScriptingToolResult = ({ data, onDownload, onDownloadAll, downloadFiles }) => {
+    if (!data) return null;
+
+    const { status, message } = data;
+
+    return (
+        <Box
+            sx={{
+                mt: 3,
+                p: 2.5,
+                background: COLORS.lightBg,
+                borderRadius: 1.5,
+                border: `1px solid ${COLORS.borderColor}`,
+            }}
+        >
+            {/* Status Alert */}
+            {status && (
+                <Alert
+                    icon={<CheckCircleIcon sx={{ fontSize: "18px" }} />}
+                    severity="success"
+                    sx={{
+                        background: `${COLORS.success}15`,
+                        border: `1px solid ${COLORS.success}`,
+                        color: COLORS.success,
+                        fontWeight: 600,
+                        fontSize: "13px",
+                        mb: 2.5,
+                        py: 1.2,
+                        px: 1.5,
+                    }}
+                >
+                    ✓ {message}
+                </Alert>
+            )}
+
+            {!status && (
+                <Alert
+                    icon={<ErrorIcon sx={{ fontSize: "18px" }} />}
+                    severity="error"
+                    sx={{
+                        background: `${COLORS.error}15`,
+                        border: `1px solid ${COLORS.error}`,
+                        color: COLORS.error,
+                        fontWeight: 600,
+                        fontSize: "13px",
+                        mb: 2.5,
+                        py: 1.2,
+                        px: 1.5,
+                    }}
+                >
+                    ✗ {message}
+                </Alert>
+            )}
+
+            {/* Result Cards */}
+            <Grid container spacing={1.5} sx={{ mb: 2.5 }}>
+                <Grid item xs={12} sm={6}>
+                    <ResultCard
+                        title="Status"
+                        value={status ? "Success" : "Failed"}
+                        icon={status ? CheckCircleIcon : ErrorIcon}
+                        color={status ? COLORS.success : COLORS.error}
+                    />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <ResultCard
+                        title="Message"
+                        value={message}
+                        icon={InfoIcon}
+                        color={COLORS.info}
+                    />
+                </Grid>
+            </Grid>
+
+            {/* Download All Button */}
+            {status && downloadFiles && downloadFiles.length > 0 && (
+                <Box sx={{ mb: 2.5, textAlign: "center" }}>
+                    <Button
+                        variant="contained"
+                        color="success"
+                        startIcon={<FileDownloadIcon />}
+                        onClick={onDownloadAll}
+                        sx={{
+                            background: COLORS.headerGradient,
+                            color: "#fff",
+                            fontWeight: 700,
+                            textTransform: "none",
+                            px: 3,
+                        }}
+                    >
+                        Download All Files ({downloadFiles.length})
+                    </Button>
+                </Box>
+            )}
+
+            {/* Individual Files List */}
+            {status && downloadFiles && downloadFiles.length > 0 && (
+                <Box>
+                    <Typography
+                        variant="subtitle2"
+                        sx={{
+                            fontWeight: 700,
+                            color: COLORS.primary,
+                            mb: 1.5,
+                            fontSize: "13px",
+                        }}
+                    >
+                        📥 Generated Files
+                    </Typography>
+                    <Stack spacing={1}>
+                        {downloadFiles.map((file, index) => (
+                            <Paper
+                                key={index}
+                                sx={{
+                                    p: 1.5,
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "space-between",
+                                    borderRadius: 1,
+                                    border: `1px solid ${COLORS.borderColor}`,
+                                    backgroundColor: "#fff",
+                                    transition: "all 0.2s ease",
+                                    "&:hover": {
+                                        boxShadow: 2,
+                                        borderColor: COLORS.primary,
+                                    },
+                                }}
+                            >
+                                <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, flex: 1 }}>
+                                    <InsertDriveFileIcon sx={{ color: COLORS.primary, fontSize: 20 }} />
+                                    <Box>
+                                        <Typography
                                             sx={{
-                                                position: "sticky",
-                                                left: 0,
-                                                zIndex: 2,
-                                                bgcolor: labelBg,
-                                                fontWeight: 700,
-                                                color: C.tealDark,
-                                                whiteSpace: "nowrap",
+                                                fontWeight: 600,
+                                                color: COLORS.primaryDark,
+                                                fontSize: "13px",
                                             }}
                                         >
-                                            {row[PINNED_KEY] ?? "—"}
-                                        </TableCell>
-                                        {columns.map((c) => {
-                                            const val = row[c];
-                                            const display = val === "" || val == null ? "—" : val;
-                                            return (
-                                                <TableCell
-                                                    key={c}
-                                                    align="center"
-                                                    sx={{
-                                                        bgcolor: "#ffffff",
-                                                        fontVariantNumeric: "tabular-nums",
-                                                        color: cellColor(val),
-                                                        fontWeight: isTickCross(val) ? 800 : 600,
-                                                        whiteSpace: "nowrap",
-                                                    }}
-                                                >
-                                                    {display}
-                                                </TableCell>
-                                            );
-                                        })}
-                                    </TableRow>
-                                );
-                            })}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </Paper>
+                                            {file.name}
+                                        </Typography>
+                                        <Typography
+                                            variant="caption"
+                                            sx={{
+                                                color: "#666",
+                                                fontSize: "11px",
+                                            }}
+                                        >
+                                            {file.path}
+                                        </Typography>
+                                    </Box>
+                                </Box>
+                                <Tooltip title={`Download ${file.name}`}>
+                                    <Button
+                                        variant="contained"
+                                        size="small"
+                                        startIcon={<FileDownloadIcon />}
+                                        onClick={() => onDownload(file.url, file.name)}
+                                        sx={{
+                                            background: COLORS.headerGradient,
+                                            color: "#fff",
+                                            fontWeight: 700,
+                                            textTransform: "none",
+                                            whiteSpace: "nowrap",
+                                            "&:hover": {
+                                                background: "linear-gradient(90deg, #003a3e 0%, #005555 55%, #3a8b91 100%)",
+                                            },
+                                        }}
+                                    >
+                                        Download
+                                    </Button>
+                                </Tooltip>
+                            </Paper>
+                        ))}
+                    </Stack>
+                </Box>
+            )}
         </Box>
     );
-}
+};
 
-const UploadAtnd = () => {
-    const [make4GFiles, setMake4GFiles] = useState([])
-    const [show4G, setShow4G] = useState(false)
-    const [fileData, setFileData] = useState()
-    const [download, setDownload] = useState(false);
-    const [resultData, setResultData] = useState([]); // ✅ new: holds response.data for the table
-    const { loading, action } = useLoadingDialog()
-    const navigate = useNavigate()
-    const classes = OverAllCss()
+/* ================================================================ */
+/*  Main 5G Scripting Tool Component                                */
+/* ================================================================ */
+const FiveGScriptingTool = () => {
+    const navigate = useNavigate();
+    const { loading, action } = useLoadingDialog();
+    const classes = OverAllCss();
 
+    // STATE MANAGEMENT
+    const [inputFiles, setInputFiles] = useState([]);
+    const [showFileError, setShowFileError] = useState(false);
+    const [hwTypeSmod, setHwTypeSmod] = useState("");
+    const [hwTypeBbmod, setHwTypeBbmod] = useState("");
+    const [uploadSuccess, setUploadSuccess] = useState(false);
+    const [uploadResultData, setUploadResultData] = useState(null);
+    const [downloadFiles, setDownloadFiles] = useState([]);
+    const [isProcessing, setIsProcessing] = useState(false);
 
-    const handle4GFileSelection = (event) => {
+    // DROPDOWN OPTIONS
+    const SMOD_OPTIONS = ["ASIA", "ASIB", "ASIM", ""];
+    const BBMOD_OPTIONS = ["ABIP", "ABIO", "ABIA", ""];
 
-        setMake4GFiles(event.target.files)
-    }
+    // ======== FILE HANDLER ========
+    const handleFileChange = (event) => {
+        const files = Array.from(event.target.files || []);
 
+        if (files.length === 0) {
+            return;
+        }
 
+        const invalidFiles = files.filter((file) => {
+            const fileName = file.name.toLowerCase();
+            return !(
+                fileName.endsWith(".xlsx") ||
+                fileName.endsWith(".xls") ||
+                fileName.endsWith(".xlsb") ||
+                fileName.endsWith(".txt") ||
+                fileName.endsWith(".log") ||
+                fileName.endsWith(".logs")
+            );
+        });
+
+        if (invalidFiles.length > 0) {
+            const invalidNames = invalidFiles.map(f => f.name).join(", ");
+            setShowFileError(true);
+
+            Swal.fire({
+                icon: "error",
+                title: "Invalid File Type",
+                text: `The following files are not supported: ${invalidNames}\n\nPlease select only .xlsx, .xls,.xlsb, .txt, .log, or .logs files.`,
+                width: 500,
+            });
+
+            event.target.value = "";
+            return;
+        }
+
+        setInputFiles([...inputFiles, ...files]);
+        setShowFileError(false);
+        event.target.value = "";
+
+        if (files.length > 1) {
+            Swal.fire({
+                icon: "success",
+                title: "Files Added",
+                text: `${files.length} file(s) added successfully`,
+                timer: 2000,
+                showConfirmButton: false,
+            });
+        }
+    };
+
+    // Remove single file
+    const handleRemoveFile = (fileName) => {
+        setInputFiles(prevFiles => prevFiles.filter(f => f.name !== fileName));
+    };
+
+    // Clear all files
+    const handleClearAllFiles = () => {
+        Swal.fire({
+            title: "Clear All Files?",
+            text: "Are you sure you want to remove all selected files?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: COLORS.error,
+            cancelButtonColor: "#999",
+            confirmButtonText: "Yes, Clear All",
+            cancelButtonText: "Cancel",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                setInputFiles([]);
+                setShowFileError(false);
+            }
+        });
+    };
+
+    // ======== EXTRACT DOWNLOAD FILES FROM RESPONSE ========
+    const extractDownloadFiles = (response) => {
+        const files = [];
+
+        // Check if download_url exists and is an array
+        if (response.download_url && Array.isArray(response.download_url)) {
+            response.download_url.forEach((url) => {
+                const fileName = url.split("/").pop();
+
+                // FILTER: Only .xlsx, .xls files - NO XML
+                if (!fileName.toLowerCase().endsWith(".xml")) {
+                    files.push({
+                        name: fileName,
+                        path: url,
+                        url: url, // Use path as-is from server
+                    });
+                }
+            });
+        }
+
+        return files;
+    };
+
+    // ======== SUBMIT HANDLER ========
     const handleSubmit = async () => {
-        if (make4GFiles.length > 0) {
-            action(true)
-            var formData = new FormData();
-            for (let i = 0; i < make4GFiles.length; i++) {
-                formData.append(`files`, make4GFiles[i]); 
+        if (inputFiles.length === 0) {
+            setShowFileError(true);
+            Swal.fire({
+                icon: "warning",
+                title: "No Files Selected",
+                text: "Please select at least one file to continue",
+            });
+            return;
+        }
+
+        try {
+            setIsProcessing(true);
+            action(true);
+
+            const formData = new FormData();
+
+            inputFiles.forEach((file) => {
+                formData.append("files", file);
+            });
+
+            if (hwTypeSmod) {
+                formData.append("hw_type_smod", hwTypeSmod);
+            }
+            if (hwTypeBbmod) {
+                formData.append("hw_type_bbmod", hwTypeBbmod);
             }
 
-            const response = await postData('atnd/mapping/', formData)
+            const response = await postData("atnd/mapping/", formData);
 
-            // console.log('response data', response)
-
-
-            if (response.status === true) {
-                action(false)
-                setDownload(true)
-
-                setFileData(response.download_link)
-                setResultData(Array.isArray(response.data) ? response.data : []) // ✅ store table rows
+            if (response && response.status) {
+                // Extract all download files from response
+                const allFiles = extractDownloadFiles(response);
+                setDownloadFiles(allFiles);
+                setUploadSuccess(true);
+                setUploadResultData(response);
 
                 Swal.fire({
                     icon: "success",
-                    title: "Done",
-                    text: `${response.message}`,
+                    title: "Success",
+                    text: response.message || "5G configuration created successfully",
+                    confirmButtonColor: COLORS.primary,
                 });
-
             } else {
-                action(false)
-
                 Swal.fire({
                     icon: "error",
-                    title: "Oops...",
-                    text: `${response.message}`,
+                    title: "Error",
+                    text: response?.message || "Failed to create configuration",
                 });
+                setUploadResultData(response);
             }
+        } catch (error) {
+            console.error("Submit error:", error);
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: error.message || "Failed to process files",
+            });
+        } finally {
+            action(false);
+            setIsProcessing(false);
         }
-        else {
-            setShow4G(true);
+    };
 
-        }
-    }
-
+    // ======== CANCEL HANDLER ========
     const handleCancel = () => {
-        setMake4GFiles([])
+        if (inputFiles.length > 0) {
+            Swal.fire({
+                title: "Cancel Upload?",
+                text: "All selected files will be cleared",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: COLORS.error,
+                cancelButtonColor: "#999",
+                confirmButtonText: "Yes, Cancel",
+                cancelButtonText: "Keep Files",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    resetAll();
+                }
+            });
+        } else {
+            resetAll();
+        }
+    };
 
+    const resetAll = () => {
+        setInputFiles([]);
+        setHwTypeSmod("");
+        setHwTypeBbmod("");
+        setShowFileError(false);
+        setUploadSuccess(false);
+        setUploadResultData(null);
+        setDownloadFiles([]);
+    };
 
-        setShow4G(false)
+    // ======== SINGLE FILE DOWNLOAD ========
+    const downloadFile = (downloadUrl, fileName) => {
+        try {
+            console.log("Downloading from:", downloadUrl);
+            
+            // Create anchor element
+            const link = document.createElement("a");
+            link.href = downloadUrl;
+            link.download = fileName || "download";
+            link.style.display = "none";
+            
+            // Append to body, click, and remove
+            document.body.appendChild(link);
+            link.click();
+            
+            // Clean up
+            setTimeout(() => {
+                document.body.removeChild(link);
+            }, 100);
 
-    }
+            // Show success notification
+            Swal.fire({
+                icon: "success",
+                title: "Downloading",
+                text: `${fileName} download started`,
+                timer: 2000,
+                showConfirmButton: false,
+            });
+        } catch (error) {
+            console.error("Download error:", error);
+            Swal.fire({
+                icon: "error",
+                title: "Download Failed",
+                text: `Failed to download: ${fileName}. URL: ${downloadUrl}`,
+                confirmButtonColor: COLORS.primary,
+            });
+        }
+    };
+
+    // ======== DOWNLOAD ALL FILES ========
+    const downloadAllFiles = () => {
+        if (downloadFiles.length === 0) return;
+
+        downloadFiles.forEach((file, index) => {
+            setTimeout(() => {
+                downloadFile(file.url, file.name);
+            }, index * 500);
+        });
+
+        Swal.fire({
+            icon: "success",
+            title: "Bulk Download Started",
+            text: `Downloading ${downloadFiles.length} files...`,
+            timer: 2000,
+            showConfirmButton: false,
+        });
+    };
 
     useEffect(() => {
-        document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
+        document.title = "5G Scripting Tool";
+    }, []);
 
-    }, [])
     return (
         <>
             <div style={{ margin: 5, marginLeft: 10 }}>
                 <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
-                    <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
-                    <Link underline="hover" onClick={() => { navigate('/tools/soft_at_tools') }}>VI Soft-AT Tool</Link>
-                    <Typography color='text.primary'>Upload ATND</Typography>
-                </Breadcrumbs>
+                                 <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
+                                 <Link underline="hover" onClick={() => { navigate('/tools/soft_at_tools') }}>VI Soft-AT Tool</Link>
+                                 <Typography color='text.primary'>Upload Atnd Addition</Typography>
+                             </Breadcrumbs>
             </div>
-            <Slide
-                direction='left'
-                in={true}
-                // style={{ transformOrigin: '0 0 0' }}
-                timeout={1000}
-            >
+
+            <Slide direction="left" in={true} timeout={1000}>
                 <Box>
                     <Box className={classes.main_Box}>
-                        <Box className={classes.Back_Box} sx={{ width: { md: '75%', xs: '100%' } }}>44
-                            <Box className={classes.Box_Hading} >
-                                Create ATND Summary
-                            </Box>
-                            <Stack spacing={2} sx={{ marginTop: "-40px" }} direction={'column'}>
+                        <Box className={classes.Back_Box} sx={{ width: { md: "75%", xs: "100%" } }}>
+                            <Box className={classes.Box_Hading}>Create ATND Summary</Box>
 
-                                <Box className={classes.Front_Box} >
+                            <Stack spacing={2.5} sx={{ marginTop: "-40px" }} direction="column">
+                                {/* ====== FILE INPUT CARD ====== */}
+                                <Box className={classes.Front_Box}>
                                     <div className={classes.Front_Box_Hading}>
-                                        Select Files:-<span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>{ }</span>
+                                        Select Input File(s):-
+                                        <span style={{ fontFamily: "Poppins", color: "gray", marginLeft: 20, fontSize: "12px" }}>
+                                            (Supports .xlsx, .xls, .xlsb, .txt, .log, .logs)
+                                        </span>
                                     </div>
-                                    <div className={classes.Front_Box_Select_Button} >
-                                        <div style={{ float: "left" }}>
-                                            <Button variant="contained" component="label" color={make4GFiles.length > 0 ? "warning" : "primary"}>
-                                                select file
-                                                <input required hidden accept=".xlsx,.xls,.xlsb,.txt,.log" multiple type="file"
-                                                    // webkitdirectory="true"
-                                                    // directory="true"
-                                                    onChange={(e) => { handle4GFileSelection(e); setShow4G(false); }} />
+
+                                    <div className={classes.Front_Box_Select_Button}>
+                                        <div style={{ float: "left", marginBottom: "10px" }}>
+                                            <Button
+                                                variant="contained"
+                                                component="label"
+                                                color={inputFiles.length > 0 ? "warning" : "primary"}
+                                                disabled={isProcessing}
+                                                startIcon={<UploadIcon />}
+                                                sx={{
+                                                    fontWeight: 700,
+                                                    textTransform: "uppercase",
+                                                    fontSize: "14px",
+                                                }}
+                                            >
+                                                {inputFiles.length > 0 ? "Add More File(s)" : "Select File(s)"}
+                                                <input
+                                                    hidden
+                                                    multiple
+                                                    type="file"
+                                                    accept=".xlsx,.xls,.xlsb,.txt,.log,.logs"
+                                                    onChange={handleFileChange}
+                                                    autoComplete="off"
+                                                />
                                             </Button>
                                         </div>
 
-                                        {make4GFiles.length > 0 && <span style={{ color: 'green', fontSize: '18px', fontWeight: 600 }}>Selected File(s) : {make4GFiles.length}</span>}
+                                        {inputFiles.length > 0 && (
+                                            <Box
+                                                sx={{
+                                                    clear: "both",
+                                                    mt: 2,
+                                                    p: 2,
+                                                    backgroundColor: "#f0f8f8",
+                                                    borderRadius: 1,
+                                                    border: `2px solid ${COLORS.primary}`,
+                                                }}
+                                            >
+                                                <Box
+                                                    sx={{
+                                                        display: "flex",
+                                                        justifyContent: "space-between",
+                                                        alignItems: "center",
+                                                        mb: 1.5,
+                                                    }}
+                                                >
+                                                    <Typography
+                                                        sx={{
+                                                            color: COLORS.success,
+                                                            fontSize: "16px",
+                                                            fontWeight: 700,
+                                                        }}
+                                                    >
+                                                        ✓ Selected File{inputFiles.length > 1 ? "s" : ""} ({inputFiles.length})
+                                                    </Typography>
+                                                    {inputFiles.length > 0 && (
+                                                        <Button
+                                                            size="small"
+                                                            color="error"
+                                                            onClick={handleClearAllFiles}
+                                                            disabled={isProcessing}
+                                                            startIcon={<ClearIcon />}
+                                                        >
+                                                            Clear All
+                                                        </Button>
+                                                    )}
+                                                </Box>
 
-                                        <div>  <span style={{ display: show4G ? 'inherit' : 'none', color: 'red', fontSize: '18px', fontWeight: 600 }}>This Field Is Required !</span> </div>
+                                                <Stack spacing={1}>
+                                                    {inputFiles.map((file) => (
+                                                        <FileItem
+                                                            key={file.name}
+                                                            file={file}
+                                                            onRemove={handleRemoveFile}
+                                                            isLoading={isProcessing}
+                                                        />
+                                                    ))}
+                                                </Stack>
+                                            </Box>
+                                        )}
+
+                                        {showFileError && (
+                                            <Box
+                                                sx={{
+                                                    clear: "both",
+                                                    mt: 2,
+                                                    p: 2,
+                                                    backgroundColor: "#ffebee",
+                                                    borderRadius: 1,
+                                                    border: `2px solid ${COLORS.error}`,
+                                                }}
+                                            >
+                                                <Typography
+                                                    sx={{
+                                                        color: COLORS.error,
+                                                        fontSize: "16px",
+                                                        fontWeight: 700,
+                                                    }}
+                                                >
+                                                    ⚠️ This Field Is Required!
+                                                </Typography>
+                                                <Typography
+                                                    sx={{
+                                                        color: COLORS.error,
+                                                        fontSize: "13px",
+                                                        mt: 1,
+                                                    }}
+                                                >
+                                                    Please select at least one file (.xlsx,.xlsb, .xls, .txt, .log, or .logs) to continue
+                                                </Typography>
+                                            </Box>
+                                        )}
                                     </div>
                                 </Box>
-                            </Stack>
-                            <Stack direction={{ xs: "column", sm: "column", md: "row" }} spacing={2} style={{ display: 'flex', justifyContent: "space-around", marginTop: "20px" }}>
 
-                                <Button variant="contained" color="success" onClick={handleSubmit} endIcon={<UploadIcon />}>Submit</Button>
+                                {/* ACTION BUTTONS */}
+                                <Stack
+                                    direction={{ xs: "column", sm: "row" }}
+                                    spacing={2}
+                                    sx={{ display: "flex", justifyContent: "center", marginTop: "16px" }}
+                                >
+                                    <Button
+                                        variant="contained"
+                                        color="success"
+                                        onClick={handleSubmit}
+                                        endIcon={<UploadIcon />}
+                                        disabled={isProcessing || inputFiles.length === 0}
+                                        sx={{ minWidth: "120px", fontWeight: 700, textTransform: "uppercase" }}
+                                    >
+                                        {isProcessing ? (
+                                            <>
+                                                <CircularProgress size={20} sx={{ mr: 1, color: "white" }} />
+                                                Processing...
+                                            </>
+                                        ) : (
+                                            "Submit"
+                                        )}
+                                    </Button>
 
-                                <Button variant="contained" onClick={handleCancel} style={{ backgroundColor: "red", color: 'white' }} endIcon={<DoDisturbIcon />} >cancel</Button>
+                                    <Button
+                                        variant="contained"
+                                        onClick={handleCancel}
+                                        style={{ backgroundColor: COLORS.error, color: "white" }}
+                                        endIcon={<DoDisturbIcon />}
+                                        disabled={isProcessing}
+                                        sx={{ minWidth: "120px", fontWeight: 700, textTransform: "uppercase" }}
+                                    >
+                                        Cancel
+                                    </Button>
+                                </Stack>
 
+                                {/* RESULT DISPLAY */}
+                                {uploadSuccess && (
+                                    <ScriptingToolResult
+                                        data={uploadResultData}
+                                        onDownload={downloadFile}
+                                        onDownloadAll={downloadAllFiles}
+                                        downloadFiles={downloadFiles}
+                                    />
+                                )}
                             </Stack>
                         </Box>
                     </Box>
-                    <Box sx={{ display: download ? 'block' : 'none', textAlign: 'center' }}>
-                        <a download href={fileData}><Button variant="outlined" onClick='' title="Export Excel" startIcon={<FileDownloadIcon style={{ fontSize: 30, color: "green" }} />} sx={{ marginTop: "10px", width: "auto" }}><span style={{ fontFamily: "Poppins", fontSize: "22px", fontWeight: 800, textTransform: "none", textDecorationLine: "none" }}>Download ATND Details </span></Button></a>
-                    </Box>
-
-                    {/* ✅ New: results table showing the uploaded/parsed Baseband data */}
-                    <BasebandResultTable rows={resultData} />
                 </Box>
             </Slide>
+
             {loading}
         </>
-    )
-}
+    );
+};
 
-export default UploadAtnd
-
-
-
-// import React, { useState, useEffect, useCallback } from "react";
-// import { Box, Button, Stack, Chip } from "@mui/material";
-// import { Breadcrumbs, Link, Typography } from "@mui/material";
-// import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-// import { useNavigate } from "react-router-dom";
-// import Slide from '@mui/material/Slide';
-// import UploadIcon from '@mui/icons-material/Upload';
-// import DoDisturbIcon from '@mui/icons-material/DoDisturb';
-// import Swal from "sweetalert2";
-// import { postData, ServerURL } from "../../../services/FetchNodeServices";
-// import FileDownloadIcon from '@mui/icons-material/FileDownload';
-// import OverAllCss from "../../../csss/OverAllCss";
-// import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
-
-
-// const UploadAtnd = () => {
-//     // selectedFiles: [{ id, name, file }]
-//     const [selectedFiles, setSelectedFiles] = useState([])
-//     const [selectCircle, setSelectCircle] = useState('')
-//     const [show4G, setShow4G] = useState(false)
-//     const [show, setShow] = useState(false)
-//     // Excel report (download_url)
-//     const [fileData, setFileData] = useState()
-//     // XML report (xml_download_url)
-//     const [xmlFileData, setXmlFileData] = useState()
-//     const [download, setDownload] = useState(false);
-//     const { loading, action } = useLoadingDialog()
-//     const navigate = useNavigate()
-//     const classes = OverAllCss()
-//     const link = `${ServerURL}${fileData}`;
-
-
-//     const handle4GFileSelection = (event) => {
-//         const newFiles = Array.from(event.target.files || []);
-//         if (newFiles.length === 0) return;
-
-//         setShow4G(false);
-//         setSelectedFiles((prev) => {
-//             // avoid adding the same file (by name + size) twice
-//             const existingKeys = new Set(prev.map((f) => `${f.name}_${f.file.size}`));
-//             const merged = [...prev];
-//             newFiles.forEach((file) => {
-//                 const key = `${file.name}_${file.size}`;
-//                 if (!existingKeys.has(key)) {
-//                     merged.push({ id: `${key}_${Date.now()}_${Math.random()}`, name: file.name, file });
-//                     existingKeys.add(key);
-//                 }
-//             });
-//             return merged;
-//         });
-
-//         // allow re-selecting the same file again later
-//         event.target.value = "";
-//     }
-
-//     const handleRemoveFile = (id) => {
-//         setSelectedFiles((prev) => prev.filter((f) => f.id !== id));
-//     }
-
-
-
-//     const handleSubmit = async () => {
-//         if (selectedFiles.length > 0) {
-//             action(true)
-//             var formData = new FormData();
-//             selectedFiles.forEach((f) => {
-//                 formData.append(`xml_file`, f.file);
-//             });
-//             const response = await postData('atnd/mapping/', formData)
-//             console.log('response data', response)
-//             if (response.status === true) {
-//                 action(false)
-//                 setDownload(true)
-//                 setFileData(response.download_url)
-//                 setXmlFileData(response.xml_download_url)
-//                 Swal.fire({
-//                     icon: "success",
-//                     title: "Done",
-//                     text: `${response.message}`,
-//                 });
-//                 // console.log('sssssssssssssssssssss', response)
-//             } else {
-//                 action(false)
-
-//                 Swal.fire({
-//                     icon: "error",
-//                     title: "Oops...",
-//                     text: `${response.message}`,
-//                 });
-//             }
-//         }
-//         else {
-//             setShow4G(true)
-//         }
-//     }
-
-//     const handleCancel = () => {
-//         setSelectedFiles([])
-//         setShow4G(false)
-//         setDownload(false)
-//         setFileData()
-//         setXmlFileData()
-
-//     }
-
-//     useEffect(() => {
-//         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
-
-//     }, [])
-
-//     return (
-//         <>
-//             <div style={{ margin: 5, marginLeft: 10 }}>
-//                 <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
-//                     <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
-//                     <Link underline="hover" onClick={() => { navigate('/tools/soft_at_tools') }}>VI Soft-AT Tool</Link>
-//                     <Typography color='text.primary'>Upload ATND</Typography>
-//                 </Breadcrumbs>
-//             </div>
-//             <Slide
-//                 direction='left'
-//                 in='true'
-//                 // style={{ transformOrigin: '0 0 0' }}
-//                 timeout={1000}
-//             >
-//                 <Box>
-//                     <Box className={classes.main_Box}>
-//                         <Box className={classes.Back_Box} sx={{ width: { md: '75%', xs: '100%' } }}>
-//                             <Box className={classes.Box_Hading} >
-//                                 Upload GPL for ULS
-//                             </Box>
-//                             <Stack spacing={2} sx={{ marginTop: "-40px" }} direction={'column'}>
-
-
-//                                 <Box className={classes.Front_Box} >
-//                                     <div className={classes.Front_Box_Hading}>
-//                                         Select Files:-
-//                                     </div>
-//                                     <div className={classes.Front_Box_Select_Button} >
-//                                         <div style={{ float: "left" }}>
-//                                             <Button variant="contained" component="label" color={selectedFiles.length > 0 ? "warning" : "primary"}>
-//                                                 select files
-//                                                 <input
-//                                                     required
-//                                                     hidden
-//                                                     multiple
-//                                                     type="file"
-//                                                     accept=".xlsx,.xls,.xlsb,.txt,.log"
-//                                                     onChange={(e) => handle4GFileSelection(e)}
-//                                                 />
-//                                             </Button>
-//                                         </div>
-
-//                                         <div>  <span style={{ display: show4G ? 'inherit' : 'none', color: 'red', fontSize: '18px', fontWeight: 600 }}>This Field Is Required !</span> </div>
-//                                     </div>
-
-//                                     {selectedFiles.length > 0 && (
-//                                         <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap" sx={{ marginTop: 2 }}>
-//                                             {selectedFiles.map((f) => (
-//                                                 <Chip
-//                                                     key={f.id}
-//                                                     label={f.name}
-//                                                     onDelete={() => handleRemoveFile(f.id)}
-//                                                     color="primary"
-//                                                     variant="outlined"
-//                                                     sx={{ fontFamily: 'Poppins' }}
-//                                                 />
-//                                             ))}
-//                                         </Stack>
-//                                     )}
-//                                 </Box>
-//                             </Stack>
-//                             <Stack direction={{ xs: "column", sm: "column", md: "row" }} spacing={2} style={{ display: 'flex', justifyContent: "space-around", marginTop: "20px" }}>
-
-//                                 <Button variant="contained" color="success" onClick={handleSubmit} endIcon={<UploadIcon />}>Submit</Button>
-
-//                                 <Button variant="contained" onClick={handleCancel} style={{ backgroundColor: "red", color: 'white' }} endIcon={<DoDisturbIcon />} >cancel</Button>
-
-//                             </Stack>
-//                         </Box>
-//                     </Box>
-
-//                     <Stack
-//                         direction={{ xs: "column", sm: "row" }}
-//                         spacing={2}
-//                         justifyContent="center"
-//                         alignItems="center"
-//                         sx={{ display: download ? 'flex' : 'none', mt: 1 }}
-//                     >
-//                         <Button
-//                             component="a"
-//                             href={fileData}
-//                             download
-//                             // target="_blank"
-//                             // rel="noopener noreferrer"
-//                             variant="outlined"
-//                             title="Export Excel"
-//                             startIcon={
-//                                 <FileDownloadIcon style={{ fontSize: 30, color: "green" }} />
-//                             }
-//                             sx={{ mt: 1, width: "auto" }}
-//                         >
-//                             <span
-//                                 style={{
-//                                     fontFamily: "Poppins",
-//                                     fontSize: "22px",
-//                                     fontWeight: 800,
-//                                     textTransform: "none",
-//                                     textDecoration: "none"
-//                                 }}
-//                             >
-//                                 Download UPE GPL ULS Excel Report
-//                             </span>
-//                         </Button>
-
-//                         <Button
-//                             component="a"
-//                             href={xmlFileData}
-//                             download
-//                             variant="outlined"
-//                             title="Export XML"
-//                             startIcon={
-//                                 <FileDownloadIcon style={{ fontSize: 30, color: "green" }} />
-//                             }
-//                             sx={{ mt: 1, width: "auto" }}
-//                         >
-//                             {/* <span
-//                                 style={{
-//                                     fontFamily: "Poppins",
-//                                     fontSize: "22px",
-//                                     fontWeight: 800,
-//                                     textTransform: "none",
-//                                     textDecoration: "none"
-//                                 }}
-//                             >
-//                                 Download UPE GPL ULS XML Report
-//                             </span> */}
-//                         </Button>
-//                     </Stack>
-//                 </Box>
-//             </Slide>
-//             {loading}
-//         </>
-//     )
-// }
-
-// export default UploadAtnd;
-
+export default FiveGScriptingTool;

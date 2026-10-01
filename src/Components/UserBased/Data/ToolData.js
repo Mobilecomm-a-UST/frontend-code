@@ -58,6 +58,7 @@ const ToolData = [
 
      {
         id: 1,
+        // name: 'RAN Quality Monitoring & Governance',
         name: 'Quality Team',
         title: 'Quality Team System',
         icons: WidgetsIcon,
