@@ -19,7 +19,7 @@ const ComanDashboard = lazy(() => import('./Dashboard/ComanDashboard'))
 const MDashboard = lazy(() => import('./MasterDashboard/MDashboard'))
 const Relocation = lazy(() => import('./Relocation/Relocation'))
 const MasterTable = lazy(() => import('./Relocation/MasterTable'))
-const RelocationUpload = lazy(()=>import('./Relocation/RelocationUpload'))
+const RelocationUpload = lazy(() => import('./Relocation/RelocationUpload'))
 const TotalDataDashboard = lazy(() => import('./Dashboard/TotalDataDashboard'));
 
 
@@ -62,7 +62,7 @@ const IntegrationRead = () => {
                                             </Nav.Item>
                                             {userType?.includes('Quality-s') && <Nav.Item eventKey="4-3" placement="rightStart" onClick={() => navigate('/tools/IX_Tracker/relocation_upload')}>
                                                 Upload File</Nav.Item>}
-                                       
+
                                         </Nav.Menu>
                                     </Nav>
                                 </Sidenav.Body>
@@ -71,7 +71,7 @@ const IntegrationRead = () => {
                         </div>
                     </Grid>
                     <Grid item xs={12} md={10}>
-                        <Suspense fallback={<Loader/>}>
+                        <Suspense fallback={<Loader />}>
                             <Routes>
                                 <Route element={<Integration_Tool />} path="/" />
                                 <Route element={<FinalDashboard />} path="/dashboard/*" />

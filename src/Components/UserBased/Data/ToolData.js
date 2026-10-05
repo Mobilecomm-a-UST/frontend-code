@@ -55,17 +55,46 @@ const ToolData = [
 
 
 
-
-     {
+    {
         id: 1,
-        // name: 'RAN Quality Monitoring & Governance',
-        name: 'Quality Team',
+        name: 'Q-360',
         title: 'Quality Team System',
-        icons: WidgetsIcon,
+ 
+        icons: () => (
+            <img
+                src="/assets/pending-pr.png"
+                alt="Quality Team Logo"
+                width={45}
+                height={45}
+            />
+        ),
         fullname: 'Quality Team',
         link: '/tools/quality_team',
-        groupBy: ['admin','QT_AL','quality', 'quality-s', 'trend_tool','PAT','PAT_Admin','PTS', 'PTS_Admin','QT_PPR','QT_AR','QT_DUS']
+        groupBy: [
+            'admin',
+            'QT_AL',
+            'quality',
+            'quality-s',
+            'trend_tool',
+            'PAT',
+            'PAT_Admin',
+            'PTS',
+            'PTS_Admin',
+            'QT_PPR',
+            'QT_AR',
+            'QT_DUS'
+        ]
     },
+    //  {
+    //     id: 1,
+    //     // name: 'RAN Quality Monitoring & Governance',
+    //     name: 'Quality Team',
+    //     title: 'Quality Team System',
+    //     icons: WidgetsIcon,
+    //     fullname: 'Quality Team',
+    //     link: '/tools/quality_team',
+    //     groupBy: ['admin','QT_AL','quality', 'quality-s', 'trend_tool','PAT','PAT_Admin','PTS', 'PTS_Admin','QT_PPR','QT_AR','QT_DUS']
+    // },
     // {
     //     id: 0,
     //     name: 'TREND',

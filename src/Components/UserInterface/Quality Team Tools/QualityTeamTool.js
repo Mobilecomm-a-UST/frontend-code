@@ -454,13 +454,14 @@ const QualityTeamTool = () => {
                     >
                       <div className={classes.centerIcon}>
                         <img
-                          src="/assets/pending-pr.png"
+                           src="/assets/qt-tool.png"
+                          
                           alt="Pending PR"
-                          style={{ width: "40px", height: "40px", borderRadius: "15px" }}
+                          style={{ width: "80px", height: "80px", borderRadius: "15px" }}
                         />
                       </div>
                       <div>
-                        <div className={classes.center}>Q-360</div>
+                        <div className={classes.center}>Q-Pulse</div>
                       </div>
                     </Box>
                   </Grid>

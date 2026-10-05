@@ -188,6 +188,9 @@ import ConversionIcon from '@rsuite/icons/Conversion';
 import FolderVerifyIcon from '@rsuite/icons/FolderVerify';
 import WarningRoundIcon from '@rsuite/icons/WarningRound';
 import EyeRoundIcon from '@rsuite/icons/EyeRound';
+import SiteIcon from '@rsuite/icons/Site';
+import HistoryIcon from '@rsuite/icons/History';
+
 
 const PendingPerformanceTools = lazy(() => import('./PendingPerformanceRemarksTool'))
 const UploadFile = lazy(() => import('./Upload/UploadFile'))
@@ -197,6 +200,8 @@ const DownloadCompleteReport = lazy(() => import('./Upload/DownloadCompleteRepor
 const DownloadTemplate = lazy(() => import('./Upload/DownloadTemplate'))
 const DeleteDatabase = lazy(() => import('./Upload/DeleteDatabase'))
 const BucketOverview = lazy(()=> import('./Upload/BucketOverview'))
+const SkippedSites = lazy(()=> import('./Upload/SkippedSites'))
+const History = lazy(()=> import('./Upload/History'))
 
 const PendingPerformanceRemarks = () => {
     const [expanded, setExpanded] = useState(true);
@@ -330,6 +335,36 @@ const PendingPerformanceRemarks = () => {
                                                     >
                                                         Bucket Overview
                                                     </Nav.Item>
+
+                                                     <Nav.Item
+                                                        eventKey="5"
+                                                        placement="rightStart"
+                                                        className="single-item-custom"
+                                                        icon={<SiteIcon />}
+                                                        onClick={() => {
+                                                            navigate('/tools/quality_team/pending_performance_re/SkippedSites');
+                                                            show();
+                                                            setMenuButton(true)
+                                                        }}
+                                                    >
+                                                        Skipped Sites
+                                                    </Nav.Item>
+
+                                                     <Nav.Item
+                                                        eventKey="5"
+                                                        placement="rightStart"
+                                                        className="single-item-custom"
+                                                        icon={<HistoryIcon />}
+                                                        onClick={() => {
+                                                            navigate('/tools/quality_team/pending_performance_re/History');
+                                                            show();
+                                                            setMenuButton(true)
+                                                        }}
+                                                    >
+                                                        History
+                                                    </Nav.Item>
+
+                                                    
                                                 </>
                                             )}
 
@@ -425,6 +460,20 @@ const PendingPerformanceRemarks = () => {
                                                     >
                                                         Bucket Overview
                                                     </Nav.Item>
+
+                                                     <Nav.Item
+                                                        eventKey="5"
+                                                        placement="rightStart"
+                                                        className="single-item-custom"
+                                                        icon={<HistoryIcon />}
+                                                        onClick={() => {
+                                                            navigate('/tools/quality_team/pending_performance_re/History');
+                                                            show();
+                                                            setMenuButton(true)
+                                                        }}
+                                                    >
+                                                        History
+                                                    </Nav.Item>
                                                 </>
                                             )}
                                         </Nav>
@@ -448,6 +497,8 @@ const PendingPerformanceRemarks = () => {
                                         <Route path='/Sitewiseremark' element={<Sitewiseremark />} />
                                         <Route path='/DownloadCompleteReport' element={<DownloadCompleteReport />} />
                                         <Route path='/BucketOverview' element={<BucketOverview/>}/>
+                                        <Route path='/SkippedSites' element={<SkippedSites/>}/>
+                                        <Route path='/History' element={<History/>}/>
                                     </>
                                 )}
 
@@ -464,6 +515,7 @@ const PendingPerformanceRemarks = () => {
                                         <Route path='/Sitewiseremark' element={<Sitewiseremark />} />
                                         <Route path='/DownloadCompleteReport' element={<DownloadCompleteReport />} />
                                         <Route path='/BucketOverview' element={<BucketOverview/>}/>
+                                        <Route path='/History' element={<History/>}/>
                                     </>
                                 )}
                             </Routes>

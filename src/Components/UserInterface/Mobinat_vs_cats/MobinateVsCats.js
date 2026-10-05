@@ -14,22 +14,24 @@ import Loader from '../../Skeleton/Loader';
 import './../../../App.css'
 import ArrowRightIcon from '@rsuite/icons/ArrowRight';
 import GridIcon from '@rsuite/icons/Grid';
+import DashboardIcon from '@rsuite/icons/legacy/Dashboard';
 
 const MobinateTool = lazy(() => import('./MobinateTool'))
 const MobinateFileHandle = lazy(() => import('./Mobinate/Mobinate'))
 const CateFileHandle = lazy(() => import('./CATS/Cats'))
 const FileManager = lazy(() => import('./File_manager/FileManager'))
-const SiteMaping = lazy(()=>import('./Site_maping/SiteMaping'))
-const SNmaping = lazy(()=>import('./SNmapping/SNmaping'))
-const Fmr = lazy(()=>import('./Forword Material Reconcilation/Fmr'))
-const RecoMaterial = lazy(()=> import('./Reco Material/RecoMaterial'))
-const Step2srn_cam_rmo = lazy(()=> import('./Forword Material Reconcilation/Step2srn_cam_rmo'))
-const LiveMobReco = lazy(()=> import('./Reco Material/LiveMobReco'))
-const MicrowaveReconcilation = lazy(()=> import('./Microwave Reconcilation/MicrowaveReconcilation'))
-const DegrowReconcilation = lazy(()=>import('./Degrow Reconcilation/DegrowReconcilation'))
-const DPRControl = lazy(()=> import('./DPR Control/DPRControl'))
-const DPRDashboard = lazy(()=> import('./Mobinet Dump Store/MobinetDumpStore'))
-const RecoReport = lazy(()=> import('./Reco Report/RecoReport'))
+const SiteMaping = lazy(() => import('./Site_maping/SiteMaping'))
+const SNmaping = lazy(() => import('./SNmapping/SNmaping'))
+const Fmr = lazy(() => import('./Forword Material Reconcilation/Fmr'))
+const RecoMaterial = lazy(() => import('./Reco Material/RecoMaterial'))
+const Step2srn_cam_rmo = lazy(() => import('./Forword Material Reconcilation/Step2srn_cam_rmo'))
+const LiveMobReco = lazy(() => import('./Reco Material/LiveMobReco'))
+const MicrowaveReconcilation = lazy(() => import('./Microwave Reconcilation/MicrowaveReconcilation'))
+const DegrowReconcilation = lazy(() => import('./Degrow Reconcilation/DegrowReconcilation'))
+const DPRControl = lazy(() => import('./DPR Control/DPRControl'))
+const DPRDashboard = lazy(() => import('./Mobinet Dump Store/MobinetDumpStore'))
+const RecoReport = lazy(() => import('./Reco Report/RecoReport'))
+const Dashboard = lazy(() => import('./Dashboard/Dashboard'))
 
 
 
@@ -117,44 +119,48 @@ const MobinateVsCate = () => {
                                             <Nav.Item eventKey="3" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/material_management/CATS'); show(); setMenuButton(true) }}>
                                                 Step 2: CATS
                                             </Nav.Item> */}
-                                             {/* <Nav.Item eventKey="4" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/material_management/site_mapping'); show(); setMenuButton(true) }}>
+                                            {/* <Nav.Item eventKey="4" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/material_management/site_mapping'); show(); setMenuButton(true) }}>
                                                 Site Mapping
                                             </Nav.Item>
                                               <Nav.Item eventKey="5" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/material_management/sn_mapping'); show(); setMenuButton(true) }}>
                                                 SN Mapping
                                             </Nav.Item> */}
-                                            <Nav.Menu eventKey="4" placement='rightstart' title="Forword Material Reconcilation" className="menu-title-custom" icon={<ChangeListIcon /> }>
-                                            <Nav.Item eventKey="4-1" placement="rightStart" className="single-item-custom" icon={<ArrowRightIcon />} onClick={() => { navigate('/tools/material_management/fmr'); show(); setMenuButton(true) }}>
-                                              Step 1-Mobinate Working
-                                            </Nav.Item>
-                                            <Nav.Item eventKey="4-2" placement="rightStart" className="single-item-custom" icon={<ArrowRightIcon />} onClick={() => { navigate('/tools/material_management/Step2srn_cam_rmo'); show(); setMenuButton(true) }}>
-                                               Step 2-SRN/CAM/RMO
-                                            </Nav.Item>
+                                            <Nav.Menu eventKey="4" placement='rightstart' title="Forword Material Reconcilation" className="menu-title-custom" icon={<ChangeListIcon />}>
+                                                <Nav.Item eventKey="4-1" placement="rightStart" className="single-item-custom" icon={<ArrowRightIcon />} onClick={() => { navigate('/tools/material_management/fmr'); show(); setMenuButton(true) }}>
+                                                    Step 1-Mobinate Working
+                                                </Nav.Item>
+                                                <Nav.Item eventKey="4-2" placement="rightStart" className="single-item-custom" icon={<ArrowRightIcon />} onClick={() => { navigate('/tools/material_management/Step2srn_cam_rmo'); show(); setMenuButton(true) }}>
+                                                    Step 2-SRN/CAM/RMO
+                                                </Nav.Item>
                                             </Nav.Menu>
-                                            <Nav.Menu eventKey="5" placement='rightstart' title=" Reverse Material Reconcilation" className="menu-title-custom" icon={<ChangeListIcon /> }>
-                                             <Nav.Item eventKey="5-1" placement="rightStart" className="single-item-custom" icon={<ArrowRightIcon />} onClick={() => { navigate('/tools/material_management/RecoMaterial'); show(); setMenuButton(true) }}>
-                                                Step 1-Reco Data
-                                            </Nav.Item>
-                                             <Nav.Item eventKey="5-2" placement="rightStart" className="single-item-custom" icon={<ArrowRightIcon />} onClick={() => { navigate('/tools/material_management/LiveMobReco'); show(); setMenuButton(true) }}>
-                                                Step 2-Live Mob + Reco
-                                            </Nav.Item>
+                                            <Nav.Menu eventKey="5" placement='rightstart' title=" Reverse Material Reconcilation" className="menu-title-custom" icon={<ChangeListIcon />}>
+                                                <Nav.Item eventKey="5-1" placement="rightStart" className="single-item-custom" icon={<ArrowRightIcon />} onClick={() => { navigate('/tools/material_management/RecoMaterial'); show(); setMenuButton(true) }}>
+                                                    Step 1-Reco Data
+                                                </Nav.Item>
+                                                <Nav.Item eventKey="5-2" placement="rightStart" className="single-item-custom" icon={<ArrowRightIcon />} onClick={() => { navigate('/tools/material_management/LiveMobReco'); show(); setMenuButton(true) }}>
+                                                    Step 2-Live Mob + Reco
+                                                </Nav.Item>
                                             </Nav.Menu>
-                                             <Nav.Item eventKey="6" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/material_management/MicrowaveReconcilation'); show(); setMenuButton(true) }}>
+                                            <Nav.Item eventKey="6" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/material_management/MicrowaveReconcilation'); show(); setMenuButton(true) }}>
                                                 Microwave Reconcilation
                                             </Nav.Item>
                                             <Nav.Item eventKey="7" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/material_management/DegrowReconcilation'); show(); setMenuButton(true) }}>
                                                 Degrow Reconcilation
                                             </Nav.Item>
 
-                                             <Nav.Item eventKey="8" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/material_management/DPRControl'); show(); setMenuButton(true) }}>
+                                            <Nav.Item eventKey="8" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/material_management/DPRControl'); show(); setMenuButton(true) }}>
                                                 Full Site Dismental DPR
                                             </Nav.Item>
-                                             <Nav.Item eventKey="9" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/material_management/DPRDashboard'); show(); setMenuButton(true) }}>
+                                            <Nav.Item eventKey="9" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/material_management/DPRDashboard'); show(); setMenuButton(true) }}>
                                                 Mobinet DB
                                             </Nav.Item>
-                                             <Nav.Item eventKey="10" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/material_management/RecoReport'); show(); setMenuButton(true) }}>
+                                            <Nav.Item eventKey="10" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/material_management/RecoReport'); show(); setMenuButton(true) }}>
                                                 Reco DB
                                             </Nav.Item>
+                                            <Nav.Item eventKey="11" placement="rightStart" icon={<DashboardIcon />} className="single-item-custom" onClick={() => navigate('/tools/material_management/dashboard')}>
+                                                Dashboard
+                                            </Nav.Item>
+
 
 
                                             {/* <Nav.Menu eventKey="3" placement="rightStart" title="NOM Audit" icon={<DocPassIcon />}>
@@ -176,23 +182,24 @@ const MobinateVsCate = () => {
                     <Grid item xs={12} md={10}>
 
 
-                        <Suspense fallback={<Loader/>}>
+                        <Suspense fallback={<Loader />}>
                             <Routes>
                                 <Route element={<MobinateTool />} path="/" />
                                 <Route element={<MobinateFileHandle />} path="/mobinet" />
                                 <Route element={<CateFileHandle />} path="/CATS" />
                                 <Route element={<FileManager />} path="/file_manager" />
                                 <Route element={<SiteMaping />} path="/site_mapping" />
-                                <Route element={<SNmaping/>} path='/sn_mapping' />
-                                <Route element={<Fmr/>} path='/fmr' />
-                                <Route element={<RecoMaterial/>} path='/RecoMaterial'/>
-                                <Route element={<Step2srn_cam_rmo/>} path='/Step2srn_cam_rmo'/>
-                                <Route element={<LiveMobReco/>} path='/LiveMobReco'/>
-                                <Route element={<MicrowaveReconcilation/>} path='/MicrowaveReconcilation'/> 
-                                <Route element={<DegrowReconcilation/>} path='/DegrowReconcilation'/>
-                                <Route element={<DPRControl/>} path = '/DPRControl'/>
-                                <Route element={<DPRDashboard/>} path = '/DPRDashboard'/>
-                                <Route element = {<RecoReport/>} path = '/RecoReport'/>
+                                <Route element={<SNmaping />} path='/sn_mapping' />
+                                <Route element={<Fmr />} path='/fmr' />
+                                <Route element={<RecoMaterial />} path='/RecoMaterial' />
+                                <Route element={<Step2srn_cam_rmo />} path='/Step2srn_cam_rmo' />
+                                <Route element={<LiveMobReco />} path='/LiveMobReco' />
+                                <Route element={<MicrowaveReconcilation />} path='/MicrowaveReconcilation' />
+                                <Route element={<DegrowReconcilation />} path='/DegrowReconcilation' />
+                                <Route element={<DPRControl />} path='/DPRControl' />
+                                <Route element={<DPRDashboard />} path='/DPRDashboard' />
+                                <Route element={<RecoReport />} path='/RecoReport' />
+                                <Route element={<Dashboard />} path='/dashboard' />
 
                             </Routes>
                         </Suspense>
