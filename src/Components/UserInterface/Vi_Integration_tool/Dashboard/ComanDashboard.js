@@ -587,25 +587,25 @@ const ComanDashboard = () => {
          { title: 'Uploaded By', field: 'uploaded_by',editable: 'never' },
         { title: 'Upload Date', field: 'upload_date',editable: 'never' },
         {
-            // title: 'Actions',
-            // field: 'actions',
-            // render: rowData => (
-            //     <>
-            //         {!userTypes?.includes('VI_IX_reader') && <IconButton aria-label="delete" title={'Edit'} size="large" onClick={() => { handleEdit(rowData) }}>
-            //             <DriveFileRenameOutlineIcon
-            //                 style={{ cursor: 'pointer' }}
-            //                 color='success'
-            //             />
-            //         </IconButton>}
-            //         {!userTypes?.includes('VI_IX_reader') && <IconButton aria-label="delete" title={'Delete'} size="large" onClick={() => { handleDelete(rowData) }}>
-            //             <DeleteOutlineIcon
-            //                 style={{ cursor: 'pointer' }}
-            //                 color='error'
-            //             />
-            //         </IconButton>}
-            //     </>
+            title: 'Actions',
+            field: 'actions',
+            render: rowData => (
+                <>
+                    {/* {!userTypes?.includes('VI_IX_reader') && <IconButton aria-label="delete" title={'Edit'} size="large" onClick={() => { handleEdit(rowData) }}>
+                        <DriveFileRenameOutlineIcon
+                            style={{ cursor: 'pointer' }}
+                            color='success'
+                        />
+                    </IconButton>} */}
+                    {!userTypes?.includes('VI_IX_reader') && <IconButton aria-label="delete" title={'Delete'} size="large" onClick={() => { handleDelete(rowData) }}>
+                        <DeleteOutlineIcon
+                            style={{ cursor: 'pointer' }}
+                            color='error'
+                        />
+                    </IconButton>}
+                </>
 
-            // )
+            )
         }
 
     ]

@@ -108,7 +108,7 @@
 //   assigned_by: '',
 //   project_name: '',
 //   start_date: '',
-//   expected_date: '',
+//   expacted_date: '',
 //   completed_date: '',
 //   status: 'Not Started',
 //   priority: 'Medium',
@@ -213,7 +213,7 @@
 //       assigned_by: taskData.assigned_by,
 //       project_name: taskData.project_name,
 //       start_date: taskData.start_date,
-//       expected_date: taskData.expected_date || null,
+//       expacted_date: taskData.expacted_date || null,
 //       completed_date: taskData.completed_date || null,
 //       status: taskData.status,
 //       priority: taskData.priority,
@@ -254,7 +254,7 @@
 //       assigned_by: taskData.assigned_by,
 //       project_name: taskData.project_name,
 //       start_date: taskData.start_date,
-//       expected_date: taskData.expected_date || null,
+//       expacted_date: taskData.expacted_date || null,
 //       completed_date: taskData.completed_date || null,
 //       status: taskData.status,
 //       priority: taskData.priority,
@@ -416,7 +416,7 @@
 //       t.assigned_by || '',
 //       t.project_name || '',
 //       t.start_date ? dayjs(t.start_date).format('DD-MMM-YYYY') : '',
-//       t.expected_date ? dayjs(t.expected_date).format('DD-MMM-YYYY') : '',
+//       t.expacted_date ? dayjs(t.expacted_date).format('DD-MMM-YYYY') : '',
 //       t.completed_date ? dayjs(t.completed_date).format('DD-MMM-YYYY') : '',
 //       t.status || '',
 //       t.priority || '',
@@ -498,7 +498,7 @@
 //           assigned_by: initialTask.assigned_by || '',
 //           project_name: initialTask.project_name || '',
 //           start_date: initialTask.start_date || '',
-//           expected_date: initialTask.expected_date || '',
+//           expacted_date: initialTask.expacted_date || '',
 //           completed_date: initialTask.completed_date || '',
 //           status: initialTask.status || 'Not Started',
 //           priority: initialTask.priority || 'Medium',
@@ -519,8 +519,8 @@
 //     if (!form.assigned_by.trim()) e.assigned_by = 'Required';
 //     if (!form.project_name.trim()) e.project_name = 'Required';
 //     if (!form.start_date) e.start_date = 'Required';
-//     if (form.expected_date && form.start_date && form.expected_date < form.start_date) {
-//       e.expected_date = 'Cannot be before start date';
+//     if (form.expacted_date && form.start_date && form.expacted_date < form.start_date) {
+//       e.expacted_date = 'Cannot be before start date';
 //     }
 //     if (form.completed_date && form.start_date && form.completed_date < form.start_date) {
 //       e.completed_date = 'Cannot be before start date';
@@ -565,7 +565,7 @@
 //             <TextField label="Project Start Date" type="date" fullWidth size="small" InputLabelProps={{ shrink: true }} value={form.start_date} onChange={handleChange('start_date')} error={!!errors.start_date} helperText={errors.start_date} disabled={loading} />
 //           </Grid>
 //           <Grid item xs={12} sm={6}>
-//             <TextField label="Expected Completion" type="date" fullWidth size="small" InputLabelProps={{ shrink: true }} value={form.expected_date} onChange={handleChange('expected_date')} error={!!errors.expected_date} helperText={errors.expected_date} disabled={loading} />
+//             <TextField label="Expected Completion" type="date" fullWidth size="small" InputLabelProps={{ shrink: true }} value={form.expacted_date} onChange={handleChange('expacted_date')} error={!!errors.expacted_date} helperText={errors.expacted_date} disabled={loading} />
 //           </Grid>
 //           <Grid item xs={12} sm={6}>
 //             <TextField label="Project Completed By" type="date" fullWidth size="small" InputLabelProps={{ shrink: true }} value={form.completed_date} onChange={handleChange('completed_date')} error={!!errors.completed_date} helperText={errors.completed_date} disabled={loading} />
@@ -1028,7 +1028,7 @@
 //                         <TableCell>{t.assigned_by || '—'}</TableCell>
 //                         <TableCell sx={{ maxWidth: 200 }}>{t.project_name}</TableCell>
 //                         <TableCell>{fmt(t.start_date)}</TableCell>
-//                         <TableCell>{fmt(t.expected_date)}</TableCell>
+//                         <TableCell>{fmt(t.expacted_date)}</TableCell>
 //                         <TableCell>{fmt(t.completed_date)}</TableCell>
 //                         <TableCell>
 //                           <Chip label={t.status} size="small" sx={{ bgcolor: statusColors.bg, color: statusColors.main, fontWeight: 700 }} />
@@ -1178,7 +1178,7 @@ const getEmptyForm = () => ({
   assigned_by: '',
   project_name: '',
   start_date: '',
-  expected_date: '',
+  expacted_date: '',
   completed_date: '',
   status: 'Not Started',
   priority: 'Medium',
@@ -1287,7 +1287,7 @@ async function createTask(taskData) {
       assigned_by: taskData.assigned_by,
       project_name: taskData.project_name,
       start_date: taskData.start_date,
-      expected_date: taskData.expected_date || null,
+      expacted_date: taskData.expacted_date || null,
       completed_date: taskData.completed_date || null,
       status: taskData.status,
       priority: taskData.priority,
@@ -1328,7 +1328,7 @@ async function updateTask(taskId, taskData) {
       assigned_by: taskData.assigned_by,
       project_name: taskData.project_name,
       start_date: taskData.start_date,
-      expected_date: taskData.expected_date || null,
+      expacted_date: taskData.expacted_date || null,
       completed_date: taskData.completed_date || null,
       status: taskData.status,
       priority: taskData.priority,
@@ -1490,7 +1490,7 @@ async function exportTasksToExcel(tasks, filename) {
       t.assigned_by || '',
       t.project_name || '',
       t.start_date ? dayjs(t.start_date).format('DD-MMM-YYYY') : '',
-      t.expected_date ? dayjs(t.expected_date).format('DD-MMM-YYYY') : '',
+      t.expacted_date ? dayjs(t.expacted_date).format('DD-MMM-YYYY') : '',
       t.completed_date ? dayjs(t.completed_date).format('DD-MMM-YYYY') : '',
       t.status || '',
       t.priority || '',
@@ -1572,7 +1572,7 @@ function TaskFormDialog({ open, onClose, onSave, initialTask, currentUsername })
           assigned_by: initialTask.assigned_by || '',
           project_name: initialTask.project_name || '',
           start_date: initialTask.start_date || '',
-          expected_date: initialTask.expected_date || '',
+          expacted_date: initialTask.expacted_date || '',
           completed_date: initialTask.completed_date || '',
           status: initialTask.status || 'Not Started',
           priority: initialTask.priority || 'Medium',
@@ -1593,8 +1593,8 @@ function TaskFormDialog({ open, onClose, onSave, initialTask, currentUsername })
     if (!form.assigned_by.trim()) e.assigned_by = 'Required';
     if (!form.project_name.trim()) e.project_name = 'Required';
     if (!form.start_date) e.start_date = 'Required';
-    if (form.expected_date && form.start_date && form.expected_date < form.start_date) {
-      e.expected_date = 'Cannot be before start date';
+    if (form.expacted_date && form.start_date && form.expacted_date < form.start_date) {
+      e.expacted_date = 'Cannot be before start date';
     }
     if (form.completed_date && form.start_date && form.completed_date < form.start_date) {
       e.completed_date = 'Cannot be before start date';
@@ -1639,7 +1639,7 @@ function TaskFormDialog({ open, onClose, onSave, initialTask, currentUsername })
             <TextField label="Project Start Date" type="date" fullWidth size="small" InputLabelProps={{ shrink: true }} value={form.start_date} onChange={handleChange('start_date')} error={!!errors.start_date} helperText={errors.start_date} disabled={loading} />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <TextField label="Expected Completion" type="date" fullWidth size="small" InputLabelProps={{ shrink: true }} value={form.expected_date} onChange={handleChange('expected_date')} error={!!errors.expected_date} helperText={errors.expected_date} disabled={loading} />
+            <TextField label="Expected Completion" type="date" fullWidth size="small" InputLabelProps={{ shrink: true }} value={form.expacted_date} onChange={handleChange('expacted_date')} error={!!errors.expacted_date} helperText={errors.expacted_date} disabled={loading} />
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField label="Project Completed By" type="date" fullWidth size="small" InputLabelProps={{ shrink: true }} value={form.completed_date} onChange={handleChange('completed_date')} error={!!errors.completed_date} helperText={errors.completed_date} disabled={loading} />
@@ -1912,8 +1912,8 @@ export default function TaskTracker() {
                 onChange={(e) => setFilters((f) => ({ ...f, dateFilterType: e.target.value }))} 
                 sx={{ minWidth: 120, bgcolor: '#f5f5f5', borderRadius: 1 }}
               >
-                <MenuItem value="range">Month Range</MenuItem>
-                <MenuItem value="single">Single Date</MenuItem>
+                <MenuItem value="range">Date Range</MenuItem>
+                <MenuItem value="single">All Dates</MenuItem>
               </TextField>
  
               {filters.dateFilterType === 'single' ? (
@@ -2205,7 +2205,7 @@ export default function TaskTracker() {
                         <TableCell>{t.assigned_by || '—'}</TableCell>
                         <TableCell sx={{ maxWidth: 200 }}>{t.project_name}</TableCell>
                         <TableCell>{fmt(t.start_date)}</TableCell>
-                        <TableCell>{fmt(t.expected_date)}</TableCell>
+                        <TableCell>{fmt(t.expacted_date)}</TableCell>
                         <TableCell>{fmt(t.completed_date)}</TableCell>
                         <TableCell>
                           <Chip label={t.status} size="small" sx={{ bgcolor: statusColors.bg, color: statusColors.main, fontWeight: 700 }} />
