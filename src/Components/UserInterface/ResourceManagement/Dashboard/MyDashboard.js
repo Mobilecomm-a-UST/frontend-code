@@ -12,14 +12,16 @@ const USER_CONFIG = {
     // "category":"C",
     // "customer":"VI",
     // "costCenter":"MCT0414"
-    // "circle":"HPHP",
-    // "category":"A",
-    // "customer":"Airtel",
-    // "costCenter":"MCT0384"
-    "circle":"UPE",
+
+    "circle":"HPHP",
     "category":"A",
     "customer":"Airtel",
-    "costCenter":"MCT0385"
+    "costCenter":"MCT0384"
+    
+    // "circle":"UPE",
+    // "category":"A",
+    // "customer":"Airtel",
+    // "costCenter":"MCT0385"
   },
   'Anurag.Singh@ust.com':{
     "circle":"UPE",
