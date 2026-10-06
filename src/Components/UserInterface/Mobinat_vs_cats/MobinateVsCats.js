@@ -158,7 +158,7 @@ const MobinateVsCate = () => {
                                                 Reco DB
                                             </Nav.Item>
                                             <Nav.Item eventKey="11" placement="rightStart" icon={<DashboardIcon />} className="single-item-custom" onClick={() => navigate('/tools/material_management/dashboard')}>
-                                                Dashboard
+                                                Reco DB Dashboard
                                             </Nav.Item>
 
 

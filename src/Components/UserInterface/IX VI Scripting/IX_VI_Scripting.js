@@ -25,6 +25,8 @@ import SendToDashboardIcon from '@rsuite/icons/SendToDashboard';
 const IX_VI_ScriptingTool = lazy(() => import("./IX_VI_ScriptingTool"));
 const UPE_Scripting = lazy(() => import("./Circle Scripting/UPE_Scripting"));
 const HRY_Scripting =lazy(() => import("./Circle Scripting/HRY_Scripting"))
+const Hpscfdd = lazy(() => import("./Circle Scripting/MUM/Hpscfdd"))
+const Hpsctdd = lazy(() => import("./Circle Scripting/MUM/Hpsctdd"))
 // const UploadFile = lazy(() => import("./BasebandUpload"));
 // const Dashboard = lazy(() => import("./Dashboard"));
 
@@ -77,6 +79,15 @@ const IX_VI_Scripting = () => {
                                                         HRY Scripting
                                             </Nav.Item> 
 
+                                            <Nav.Menu eventKey="3" title="MUM" icon={<ListIcon />} placement="rightStart" className="menu-title-custom">
+                                                <Nav.Item eventKey="3-1" placement="rightStart" className="single-item-custom" icon={<FileUploadIcon style={{}} />} onClick={() => { navigate('/tools/ix_tools/ix_vi_scripting/Hpscfdd'); show(); setMenuButton(true) }}>
+                                                    HPSC FDD
+                                                </Nav.Item>
+                                                 <Nav.Item eventKey="3-2" placement="rightStart" className="single-item-custom" icon={<FileUploadIcon style={{}} />} onClick={() => { navigate('/tools/ix_tools/ix_vi_scripting/Hpsctdd'); show(); setMenuButton(true) }}>
+                                                    HPSC TDD
+                                                </Nav.Item>
+                                            </Nav.Menu>
+
                                             {/* <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={<SendToDashboardIcon style={{}} />} onClick={() => { navigate('/tools/baseband_requirement/Dashboard'); show(); setMenuButton(true) }}>
                                                 Dashboard
                                             </Nav.Item> */}
@@ -95,7 +106,8 @@ const IX_VI_Scripting = () => {
                                <Route path="/" element={<IX_VI_ScriptingTool />} />
                                <Route path="/UPE_Scripting" element={<UPE_Scripting />} />
                                <Route path='/HRY_Scripting' element={<HRY_Scripting/>} />
-
+                               <Route path='/Hpscfdd' element={<Hpscfdd/>} />
+                               <Route path='/Hpsctdd' element={<Hpsctdd/>} />
                                 {/* <Route path="/uploadfile" element={<UploadFile />} />
                                 <Route path="/dashboard" element={<Dashboard />} />
                                  */}
