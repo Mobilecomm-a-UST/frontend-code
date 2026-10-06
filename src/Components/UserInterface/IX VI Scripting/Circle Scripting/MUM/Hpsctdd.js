@@ -368,14 +368,14 @@ const HRY_Scripting = () => {
         //     return;
         // }
 
-        if (!mimo) {
-            Swal.fire({
-                icon: "warning",
-                title: "Required",
-                text: "Please select Mimo Mode",
-            });
-            return;
-        }
+        // if (!mimo) {
+        //     Swal.fire({
+        //         icon: "warning",
+        //         title: "Required",
+        //         text: "Please select Mimo Mode",
+        //     });
+        //     return;
+        // }
 
         try {
             setIsProcessing(true);
@@ -385,7 +385,7 @@ const HRY_Scripting = () => {
 
             // ✅ Append bbu (mandatory)
             // formData.append("bbu", bbu);
-            formData.append("mimo", mimo);
+            // formData.append("mimo", mimo);
 
             // ✅ Append all Excel files if they exist (optional)
             if (excelFiles.length > 0) {
