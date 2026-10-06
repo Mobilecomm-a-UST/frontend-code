@@ -1,713 +1,465 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
-    Box,
-    Button,
-    Card,
-    CardContent,
-    CardHeader,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Paper,
-    Typography,
-    Grid,
-    CircularProgress,
-    Alert,
-    Chip,
-    Divider,
-    Tabs,
-    Tab,
-    Stack,
-} from "@mui/material";
-import {
-    FileDownload as FileDownloadIcon,
-    MoreVert as MoreVertIcon,
-    Refresh as RefreshIcon,
-} from "@mui/icons-material";
-import Breadcrumbs from "@mui/material/Breadcrumbs";
-import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+  Container,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TablePagination,
+  CircularProgress,
+  Alert,
+  Box,
+  Typography,
+  Card,
+  CardContent,
+  Grid,
+  TextField,
+  Button,
+  ToggleButton,
+  ToggleButtonGroup,
+  Chip,
+} from '@mui/material';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import DownloadIcon from '@mui/icons-material/Download';
+import { Breadcrumbs, Link } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import Slide from "@mui/material/Slide";
-import OverAllCss from "../../../csss/OverAllCss";
-import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
-/* ================================================================ */
-/*  API Constants                                                   */
-/* ================================================================ */
-const API_BASE_URL = "https://commtoolapi.mcpsmis.com/mobinate_vs_cats";
+const Dashboard = () => {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [filteredData, setFilteredData] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [apiType, setApiType] = useState('count');
+  const navigate = useNavigate();
 
-const APIs = {
-    CIRCLE_SUMMARY: `${API_BASE_URL}/reverse_reconciliation_circle_wise_summary_report/`,
-    CIRCLE_COUNT: `${API_BASE_URL}/reverse_reconciliation_circle_wise_count_summary_report/`,
-};
+  // API URLs
+  const APIs = {
+    summary: 'https://commtoolapi.mcpspmis.com/mobinate_vs_cats/reverse_reconciliation_circle_wise_summary_report/',
+    count: 'https://commtoolapi.mcpspmis.com/mobinate_vs_cats/reverse_reconciliation_circle_wise_count_summary_report/',
+  };
 
-/* ================================================================ */
-/*  Color Scheme                                                    */
-/* ================================================================ */
-const COLORS = {
-    primary: "#006e74",
-    primaryDark: "#00494d",
-    success: "#28a745",
-    warning: "#ffc107",
-    error: "#dc3545",
-    info: "#17a2b8",
-    lightBg: "#f8f9fa",
-    borderColor: "#c9dcdc",
-    headerGradient: "linear-gradient(90deg, #004d52 0%, #006e74 55%, #4fa3a8 100%)",
-};
+  // Teal color scheme matching sidebar
+  const TEAL_COLOR = '#00897B';
+  const LIGHT_TEAL = '#E0F2F1';
+  const DARK_TEAL = '#004D40';
 
-/* ================================================================ */
-/*  CSV Download Utility                                            */
-/* ================================================================ */
-const downloadCSV = (data, filename, headers) => {
-    if (!data || data.length === 0) {
-        alert("No data to download");
-        return;
+  // Fetch data from API
+  const fetchData = async (type = apiType) => {
+    setLoading(true);
+    setError(null);
+    setPage(0);
+    try {
+      const response = await fetch(APIs[type], {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      const dataArray = Array.isArray(result) ? result : result.data || [];
+
+      setData(dataArray);
+      setFilteredData(dataArray);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setError(error.message);
+      setLoading(false);
+    }
+  };
+
+  // Fetch data on component mount and when API type changes
+  useEffect(() => {
+    fetchData(apiType);
+  }, [apiType]);
+
+  // Handle search/filter
+  const handleSearch = (event) => {
+    const value = event.target.value.toLowerCase();
+    setSearchTerm(value);
+    setPage(0);
+
+    const filtered = data.filter((item) => {
+      return Object.values(item).some((val) =>
+        String(val).toLowerCase().includes(value)
+      );
+    });
+
+    setFilteredData(filtered);
+  };
+
+  // Handle pagination
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  // Handle API type change
+  const handleApiTypeChange = (event, newType) => {
+    if (newType !== null) {
+      setApiType(newType);
+    }
+  };
+
+  // Get table headers from first data object
+  const getTableHeaders = () => {
+    if (data.length === 0) return [];
+    return Object.keys(data[0]);
+  };
+
+  // Download data as CSV
+  const downloadCSV = () => {
+    if (filteredData.length === 0) {
+      alert('No data to download');
+      return;
     }
 
+    const headers = getTableHeaders();
     const csvContent = [
-        headers.join(","),
-        ...data.map((row) =>
-            headers
-                .map((header) => {
-                    const value = row[header];
-                    // Escape commas and quotes
-                    if (typeof value === "string" && (value.includes(",") || value.includes('"'))) {
-                        return `"${value.replace(/"/g, '""')}"`;
-                    }
-                    return value;
-                })
-                .join(",")
-        ),
-    ].join("\n");
+      headers.join(','),
+      ...filteredData.map((row) =>
+        headers.map((header) => {
+          const value = row[header];
+          const stringValue = String(value);
+          return stringValue.includes(',') ? `"${stringValue}"` : stringValue;
+        }).join(',')
+      ),
+    ].join('\n');
 
-    const element = document.createElement("a");
-    element.setAttribute(
-        "href",
-        `data:text/csv;charset=utf-8,${encodeURIComponent(csvContent)}`
-    );
-    element.setAttribute("download", `${filename}.csv`);
-    element.style.display = "none";
+    const element = document.createElement('a');
+    element.setAttribute('href', 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvContent));
+    element.setAttribute('download', `${apiType}-report-${new Date().toISOString().split('T')[0]}.csv`);
+    element.style.display = 'none';
     document.body.appendChild(element);
     element.click();
     document.body.removeChild(element);
-};
+  };
 
-/* ================================================================ */
-/*  Status Chip Component                                           */
-/* ================================================================ */
-const StatusChip = ({ status }) => {
-    let color = "default";
-    let backgroundColor = "#e0e0e0";
-
-    if (status?.toLowerCase().includes("fully")) {
-        color = "success";
-        backgroundColor = COLORS.success;
-    } else if (status?.toLowerCase().includes("partially")) {
-        color = "warning";
-        backgroundColor = COLORS.warning;
-    } else if (status?.toLowerCase().includes("not")) {
-        color = "error";
-        backgroundColor = COLORS.error;
-    }
-
+  // Render loading state
+  if (loading) {
     return (
-        <Chip
-            label={status}
-            color={color}
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="100vh"
+        sx={{ backgroundColor: '#f5f5f5' }}
+      >
+        <CircularProgress sx={{ color: TEAL_COLOR }} />
+      </Box>
+    );
+  }
+
+  const paginatedData = filteredData.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
+
+  return (
+    <>
+
+      <div style={{ margin: 5, marginLeft: 10 }}>
+                    <Breadcrumbs
+                        aria-label="breadcrumb"
+                        itemsBeforeCollapse={2}
+                        maxItems={3}
+                        separator={<KeyboardArrowRightIcon fontSize="small" />}
+                    >
+                        <Link underline="hover" onClick={() => navigate("/tools")} sx={{ cursor: "pointer" }}>
+                            Tools
+                        </Link>
+                        <Link underline="hover" onClick={() => navigate("/tools/material_management")} sx={{ cursor: "pointer" }}>
+                            Material Management
+                        </Link>
+                        <Typography color="text.primary">RECO DB Dashboard</Typography>
+                    </Breadcrumbs>
+                </div>
+    
+    <Container maxWidth="lg" sx={{ py: 4, backgroundColor: '#f5f5f5', minHeight: '100vh' }}>
+      {/* Header Section */}
+      <Box sx={{ mb: 4 }}>
+        <Typography
+          variant="h4"
+          component="h1"
+          gutterBottom
+          sx={{ fontWeight: 'bold', color: DARK_TEAL }}
+        >
+          Reverse Reconciliation Report
+        </Typography>
+
+        {/* API Type Toggle */}
+        <Box sx={{ mt: 2, mb: 3 }}>
+          <Typography variant="subtitle2" sx={{ mb: 2, color: '#666' }}>
+            Select Report Type:
+          </Typography>
+          <ToggleButtonGroup
+            value={apiType}
+            exclusive
+            onChange={handleApiTypeChange}
+            aria-label="api type"
+          >
+
+             <ToggleButton
+              value="count"
+              sx={{
+                '&.Mui-selected': {
+                  backgroundColor: TEAL_COLOR,
+                  color: '#fff',
+                  '&:hover': {
+                    backgroundColor: DARK_TEAL,
+                  },
+                },
+              }}
+            >
+              Circle Wise Count Summary
+            </ToggleButton>
+            <ToggleButton
+              value="summary"
+              sx={{
+                '&.Mui-selected': {
+                  backgroundColor: TEAL_COLOR,
+                  color: '#fff',
+                  '&:hover': {
+                    backgroundColor: DARK_TEAL,
+                  },
+                },
+              }}
+            >
+              Circle Wise Summary
+            </ToggleButton>
+           
+          </ToggleButtonGroup>
+        </Box>
+      </Box>
+
+      {/* Stats Cards */}
+      {data.length > 0 && (
+        <Grid container spacing={2} sx={{ mb: 4 }}>
+          {/* <Grid item xs={12} sm={6} md={3}>
+            <Card sx={{ backgroundColor: LIGHT_TEAL, border: `2px solid ${TEAL_COLOR}` }}>
+              <CardContent>
+                <Typography color="textSecondary" gutterBottom sx={{ fontWeight: 'bold' }}>
+                  Total Records
+                </Typography>
+                <Typography variant="h4" sx={{ color: TEAL_COLOR, fontWeight: 'bold' }}>
+                  {data.length}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid> */}
+          {/* <Grid item xs={12} sm={6} md={3}>
+            <Card sx={{ backgroundColor: LIGHT_TEAL, border: `2px solid ${TEAL_COLOR}` }}>
+              <CardContent>
+                <Typography color="textSecondary" gutterBottom sx={{ fontWeight: 'bold' }}>
+                  Total Columns
+                </Typography>
+                <Typography variant="h4" sx={{ color: TEAL_COLOR, fontWeight: 'bold' }}>
+                  {getTableHeaders().length}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid> */}
+          {/* <Grid item xs={12} sm={6} md={3}>
+            <Card sx={{ backgroundColor: LIGHT_TEAL, border: `2px solid ${TEAL_COLOR}` }}>
+              <CardContent>
+                <Typography color="textSecondary" gutterBottom sx={{ fontWeight: 'bold' }}>
+                  Filtered Records
+                </Typography>
+                <Typography variant="h4" sx={{ color: TEAL_COLOR, fontWeight: 'bold' }}>
+                  {filteredData.length}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid> */}
+          {/* <Grid item xs={12} sm={6} md={3}>
+            <Card sx={{ backgroundColor: LIGHT_TEAL, border: `2px solid ${TEAL_COLOR}` }}>
+              <CardContent>
+                <Typography color="textSecondary" gutterBottom sx={{ fontWeight: 'bold' }}>
+                  Report Type
+                </Typography>
+                <Chip
+                  label={apiType === 'summary' ? 'Summary' : 'Count'}
+                  sx={{
+                    backgroundColor: TEAL_COLOR,
+                    color: '#fff',
+                    fontWeight: 'bold',
+                    marginTop: '8px',
+                  }}
+                />
+              </CardContent>
+            </Card>
+          </Grid> */}
+        </Grid>
+      )}
+
+      {/* Error Alert */}
+      {error && (
+        <Alert severity="error" sx={{ mb: 3 }}>
+          <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>
+            Error Loading Data
+          </Typography>
+          {error}
+        </Alert>
+      )}
+
+      {/* Search and Refresh */}
+      <Paper sx={{ p: 3, mb: 3, backgroundColor: '#fff' }}>
+        <Box display="flex" gap={2} sx={{ flexWrap: 'wrap' }}>
+          <TextField
+            placeholder="Search data..."
+            value={searchTerm}
+            onChange={handleSearch}
             variant="outlined"
             size="small"
+            fullWidth
             sx={{
-                fontWeight: 600,
-                fontSize: "11px",
-                borderColor: backgroundColor,
-                color: backgroundColor,
-            }}
-        />
-    );
-};
-
-/* ================================================================ */
-/*  Summary Card Component                                          */
-/* ================================================================ */
-const SummaryCard = ({ title, value, unit = "", color = COLORS.primary }) => {
-    return (
-        <Card
-            sx={{
-                background: "#fff",
-                border: `1px solid ${COLORS.borderColor}`,
-                borderRadius: 1.5,
-                boxShadow: "0 1px 4px rgba(0,0,0,0.05)",
-                transition: "all 0.3s ease",
-                "&:hover": {
-                    boxShadow: "0 4px 12px rgba(0,107,106,0.1)",
-                    transform: "translateY(-2px)",
+              '& .MuiOutlinedInput-root': {
+                '&:hover fieldset': {
+                  borderColor: TEAL_COLOR,
                 },
-                overflow: "hidden",
-                height: "100%",
+                '&.Mui-focused fieldset': {
+                  borderColor: TEAL_COLOR,
+                },
+              },
             }}
-        >
-            <Box sx={{ height: 3, background: COLORS.headerGradient }} />
-            <CardContent sx={{ p: 2, textAlign: "center" }}>
-                <Typography
-                    variant="caption"
-                    sx={{
-                        fontSize: "11px",
-                        color: "#666",
-                        fontWeight: 600,
-                        textTransform: "uppercase",
-                        letterSpacing: 0.3,
-                        display: "block",
-                        mb: 1,
-                    }}
-                >
-                    {title}
-                </Typography>
-                <Typography
-                    sx={{
-                        fontSize: "28px",
-                        fontWeight: 800,
-                        color: color,
-                        mb: 0.5,
-                    }}
-                >
-                    {typeof value === "number" ? value.toLocaleString() : value}
-                </Typography>
-                {unit && (
-                    <Typography
-                        sx={{
-                            fontSize: "12px",
-                            color: "#999",
-                            fontWeight: 500,
-                        }}
-                    >
-                        {unit}
-                    </Typography>
-                )}
-            </CardContent>
-        </Card>
-    );
-};
-
-/* ================================================================ */
-/*  Circle Summary Table Component                                  */
-/* ================================================================ */
-const CircleSummaryTable = ({ data, loading, onRefresh, onDownload }) => {
-    if (loading) {
-        return (
-            <Box sx={{ display: "flex", justifyContent: "center", p: 4 }}>
-                <CircularProgress />
-            </Box>
-        );
-    }
-
-    if (!data || data.length === 0) {
-        return (
-            <Alert severity="info">No data available for Circle Summary</Alert>
-        );
-    }
-
-    const columns = [
-        { key: "Circle", label: "Circle" },
-        { key: "Site ID", label: "Site ID" },
-        { key: "Module Qty", label: "Module Qty" },
-        { key: "WH Submission Qty", label: "WH Submission Qty" },
-        { key: "Gap", label: "Gap" },
-        { key: "Submission Status", label: "Submission Status" },
-    ];
-
-    return (
-        <TableContainer
-            component={Paper}
+          />
+          <Button
+            variant="contained"
+            startIcon={<RefreshIcon />}
+            onClick={() => fetchData(apiType)}
             sx={{
-                borderRadius: 1.5,
-                border: `1px solid ${COLORS.borderColor}`,
-                overflow: "hidden",
+              backgroundColor: TEAL_COLOR,
+              '&:hover': {
+                backgroundColor: DARK_TEAL,
+              },
             }}
-        >
-            <Box
-                sx={{
-                    background: COLORS.headerGradient,
-                    p: 2,
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                }}
-            >
-                <Typography
-                    sx={{
-                        color: "#fff",
-                        fontWeight: 700,
-                        fontSize: "14px",
-                        textTransform: "uppercase",
-                        letterSpacing: 0.3,
-                    }}
-                >
-                    📊 Circle Wise Summary Report
-                </Typography>
-                <Stack direction="row" spacing={1}>
-                    <Button
-                        size="small"
-                        variant="contained"
-                        startIcon={<RefreshIcon sx={{ fontSize: "16px" }} />}
-                        onClick={onRefresh}
-                        sx={{
-                            background: "#fff",
-                            color: COLORS.primary,
-                            fontWeight: 700,
-                            textTransform: "none",
-                            fontSize: "12px",
-                            "&:hover": { background: "#f0f0f0" },
-                        }}
-                    >
-                        Refresh
-                    </Button>
-                    <Button
-                        size="small"
-                        variant="contained"
-                        startIcon={<FileDownloadIcon sx={{ fontSize: "16px" }} />}
-                        onClick={onDownload}
-                        sx={{
-                            background: "#fff",
-                            color: COLORS.primary,
-                            fontWeight: 700,
-                            textTransform: "none",
-                            fontSize: "12px",
-                            "&:hover": { background: "#f0f0f0" },
-                        }}
-                    >
-                        Download
-                    </Button>
-                </Stack>
-            </Box>
-            <Table size="small" stickyHeader>
-                <TableHead>
-                    <TableRow sx={{ background: COLORS.primary }}>
-                        {columns.map((col) => (
-                            <TableCell
-                                key={col.key}
-                                sx={{
-                                    color: "#fff",
-                                    fontWeight: 700,
-                                    fontSize: "11px",
-                                    textTransform: "uppercase",
-                                    py: 1,
-                                    backgroundColor: COLORS.primary,
-                                }}
-                            >
-                                {col.label}
-                            </TableCell>
-                        ))}
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {data.map((row, index) => (
-                        <TableRow
-                            key={index}
-                            sx={{
-                                background: index % 2 === 0 ? "#fff" : COLORS.lightBg,
-                                "&:hover": { background: `${COLORS.primary}08` },
-                                borderBottom: `1px solid ${COLORS.borderColor}`,
-                            }}
-                        >
-                            {columns.map((col) => (
-                                <TableCell
-                                    key={`${index}-${col.key}`}
-                                    sx={{
-                                        fontSize: "12px",
-                                        py: 1,
-                                        fontWeight: col.key === "Circle" ? 600 : 400,
-                                    }}
-                                >
-                                    {col.key === "Submission Status" ? (
-                                        <StatusChip status={row[col.key]} />
-                                    ) : col.key === "Gap" ? (
-                                        <Typography
-                                            sx={{
-                                                color: parseInt(row[col.key]) < 0 ? COLORS.error : COLORS.success,
-                                                fontWeight: 700,
-                                            }}
-                                        >
-                                            {row[col.key]}
-                                        </Typography>
-                                    ) : (
-                                        row[col.key]
-                                    )}
-                                </TableCell>
-                            ))}
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
-    );
-};
-
-/* ================================================================ */
-/*  Circle Count Summary Table Component                            */
-/* ================================================================ */
-const CircleCountTable = ({ data, loading, onRefresh, onDownload }) => {
-    if (loading) {
-        return (
-            <Box sx={{ display: "flex", justifyContent: "center", p: 4 }}>
-                <CircularProgress />
-            </Box>
-        );
-    }
-
-    if (!data || data.length === 0) {
-        return (
-            <Alert severity="info">No data available for Circle Count Summary</Alert>
-        );
-    }
-
-    const columns = [
-        { key: "Circle", label: "Circle" },
-        { key: "Fully Closed", label: "Fully Closed" },
-        { key: "Partially submitted", label: "Partially Submitted" },
-        { key: "not submitted", label: "Not Submitted" },
-        { key: "Grand Total", label: "Grand Total" },
-    ];
-
-    return (
-        <TableContainer
-            component={Paper}
+          >
+            Refresh
+          </Button>
+          <Button
+            variant="contained"
+            startIcon={<DownloadIcon />}
+            onClick={downloadCSV}
             sx={{
-                borderRadius: 1.5,
-                border: `1px solid ${COLORS.borderColor}`,
-                overflow: "hidden",
+              backgroundColor: 'TEAL_COLOR',
+              '&:hover': {
+                backgroundColor: 'TEAL_COLOR',
+              },
             }}
-        >
-            <Box
-                sx={{
-                    background: COLORS.headerGradient,
-                    p: 2,
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                }}
-            >
-                <Typography
+          >
+            Download
+          </Button>
+        </Box>
+      </Paper>
+
+      {/* Data Table */}
+      {filteredData.length > 0 ? (
+        <Paper sx={{ boxShadow: 2 }}>
+          <TableContainer>
+            <Table stickyHeader aria-label="sticky table">
+              <TableHead>
+                <TableRow sx={{ backgroundColor: TEAL_COLOR }}>
+                  <TableCell
                     sx={{
-                        color: "#fff",
-                        fontWeight: 700,
-                        fontSize: "14px",
-                        textTransform: "uppercase",
-                        letterSpacing: 0.3,
+                      fontWeight: 'bold',
+                      backgroundColor: TEAL_COLOR,
+                      color: '#fff',
                     }}
-                >
-                    📈 Circle Wise Count Summary Report
-                </Typography>
-                <Stack direction="row" spacing={1}>
-                    <Button
-                        size="small"
-                        variant="contained"
-                        startIcon={<RefreshIcon sx={{ fontSize: "16px" }} />}
-                        onClick={onRefresh}
-                        sx={{
-                            background: "#fff",
-                            color: COLORS.primary,
-                            fontWeight: 700,
-                            textTransform: "none",
-                            fontSize: "12px",
-                            "&:hover": { background: "#f0f0f0" },
-                        }}
+                  >
+                    #
+                  </TableCell>
+                  {getTableHeaders().map((header) => (
+                    <TableCell
+                      key={header}
+                      sx={{
+                        fontWeight: 'bold',
+                        backgroundColor: TEAL_COLOR,
+                        color: '#fff',
+                      }}
                     >
-                        Refresh
-                    </Button>
-                    <Button
-                        size="small"
-                        variant="contained"
-                        startIcon={<FileDownloadIcon sx={{ fontSize: "16px" }} />}
-                        onClick={onDownload}
-                        sx={{
-                            background: "#fff",
-                            color: COLORS.primary,
-                            fontWeight: 700,
-                            textTransform: "none",
-                            fontSize: "12px",
-                            "&:hover": { background: "#f0f0f0" },
-                        }}
-                    >
-                        Download
-                    </Button>
-                </Stack>
-            </Box>
-            <Table size="small" stickyHeader>
-                <TableHead>
-                    <TableRow sx={{ background: COLORS.primary }}>
-                        {columns.map((col) => (
-                            <TableCell
-                                key={col.key}
-                                align={col.key === "Circle" ? "left" : "center"}
-                                sx={{
-                                    color: "#fff",
-                                    fontWeight: 700,
-                                    fontSize: "11px",
-                                    textTransform: "uppercase",
-                                    py: 1,
-                                    backgroundColor: COLORS.primary,
-                                }}
-                            >
-                                {col.label}
-                            </TableCell>
-                        ))}
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {data.map((row, index) => (
-                        <TableRow
-                            key={index}
-                            sx={{
-                                background: index % 2 === 0 ? "#fff" : COLORS.lightBg,
-                                "&:hover": { background: `${COLORS.primary}08` },
-                                borderBottom: `1px solid ${COLORS.borderColor}`,
-                            }}
-                        >
-                            {columns.map((col) => (
-                                <TableCell
-                                    key={`${index}-${col.key}`}
-                                    align={col.key === "Circle" ? "left" : "center"}
-                                    sx={{
-                                        fontSize: "12px",
-                                        py: 1,
-                                        fontWeight: col.key === "Circle" ? 600 : 700,
-                                        color: col.key === "Grand Total" ? COLORS.primary : "inherit",
-                                    }}
-                                >
-                                    {row[col.key]}
-                                </TableCell>
-                            ))}
-                        </TableRow>
+                      {header}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {paginatedData.map((row, index) => (
+                  <TableRow
+                    key={index}
+                    sx={{
+                      '&:nth-of-type(odd)': {
+                        backgroundColor: '#f9f9f9',
+                      },
+                      '&:hover': {
+                        backgroundColor: LIGHT_TEAL,
+                      },
+                    }}
+                  >
+                    <TableCell sx={{ fontWeight: 'bold', color: TEAL_COLOR }}>
+                      {page * rowsPerPage + index + 1}
+                    </TableCell>
+                    {getTableHeaders().map((header) => (
+                      <TableCell key={`${index}-${header}`}>
+                        {typeof row[header] === 'object'
+                          ? JSON.stringify(row[header])
+                          : String(row[header])}
+                      </TableCell>
                     ))}
-                </TableBody>
+                  </TableRow>
+                ))}
+              </TableBody>
             </Table>
-        </TableContainer>
-    );
-};
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25, 50]}
+            component="div"
+            count={filteredData.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            sx={{
+              '& .MuiTablePagination-select': {
+                color: TEAL_COLOR,
+              },
+              '& .MuiIconButton-root': {
+                color: TEAL_COLOR,
+              },
+            }}
+          />
+        </Paper>
+      ) : (
+        <Alert severity="info">No data available</Alert>
+      )}
 
-/* ================================================================ */
-/*  Main Dashboard Component                                        */
-/* ================================================================ */
-const Dashboard = () => {
-    const [circleSummaryData, setCircleSummaryData] = useState([]);
-    const [circleCountData, setCircleCountData] = useState([]);
-    const [loadingSummary, setLoadingSummary] = useState(false);
-    const [loadingCount, setLoadingCount] = useState(false);
-    const [error, setError] = useState(null);
-    const [tabValue, setTabValue] = useState(0);
-    const { loading, action } = useLoadingDialog();
-    const navigate = useNavigate();
-    const classes = OverAllCss();
-
-    /* ================================================================ */
-    /*  Fetch Circle Summary Data                                       */
-    /* ================================================================ */
-    const fetchCircleSummary = async () => {
-        setLoadingSummary(true);
-        setError(null);
-        try {
-            const response = await fetch(APIs.CIRCLE_SUMMARY);
-            const result = await response.json();
-
-            if (result.status === true && result.data) {
-                setCircleSummaryData(result.data);
-            } else {
-                setError(result.message || "Failed to fetch Circle Summary data");
-            }
-        } catch (err) {
-            console.error("Fetch error:", err);
-            setError(err.message || "Error fetching Circle Summary data");
-        } finally {
-            setLoadingSummary(false);
-        }
-    };
-
-    /* ================================================================ */
-    /*  Fetch Circle Count Data                                         */
-    /* ================================================================ */
-    const fetchCircleCount = async () => {
-        setLoadingCount(true);
-        setError(null);
-        try {
-            const response = await fetch(APIs.CIRCLE_COUNT);
-            const result = await response.json();
-
-            if (result.status === true && result.data) {
-                setCircleCountData(result.data);
-            } else {
-                setError(result.message || "Failed to fetch Circle Count data");
-            }
-        } catch (err) {
-            console.error("Fetch error:", err);
-            setError(err.message || "Error fetching Circle Count data");
-        } finally {
-            setLoadingCount(false);
-        }
-    };
-
-    /* ================================================================ */
-    /*  Download Handlers                                               */
-    /* ================================================================ */
-    const handleDownloadCircleSummary = () => {
-        const headers = ["Circle", "Site ID", "Module Qty", "WH Submission Qty", "Gap", "Submission Status"];
-        downloadCSV(circleSummaryData, "circle_wise_summary_report", headers);
-    };
-
-    const handleDownloadCircleCount = () => {
-        const headers = ["Circle", "Fully Closed", "Partially submitted", "not submitted", "Grand Total"];
-        downloadCSV(circleCountData, "circle_wise_count_summary_report", headers);
-    };
-
-    /* ================================================================ */
-    /*  Initial Data Fetch                                              */
-    /* ================================================================ */
-    useEffect(() => {
-        document.title = "Dashboard - Reverse Reconciliation";
-        fetchCircleSummary();
-        fetchCircleCount();
-    }, []);
-
-    /* ================================================================ */
-    /*  Calculate Summary Statistics                                    */
-    /* ================================================================ */
-    const summaryStats = {
-        totalCircles: circleCountData.length,
-        totalItems: circleCountData.reduce((sum, row) => sum + parseInt(row["Grand Total"] || 0), 0),
-        fullyClosed: circleCountData.reduce((sum, row) => sum + parseInt(row["Fully Closed"] || 0), 0),
-        partiallySubmitted: circleCountData.reduce((sum, row) => sum + parseInt(row["Partially submitted"] || 0), 0),
-    };
-
-    return (
-        <>
-            <div style={{ margin: 5, marginLeft: 10 }}>
-                <Breadcrumbs
-                    separator={<NavigateNextIcon fontSize="small" />}
-                    aria-label="breadcrumb"
-                >
-                    <Typography
-                        sx={{ cursor: "pointer", color: COLORS.primary, fontWeight: 600 }}
-                        onClick={() => navigate("/tools")}
-                    >
-                        Tools
-                    </Typography>
-                    <Typography
-                        sx={{ cursor: "pointer", color: COLORS.primary, fontWeight: 600 }}
-                        onClick={() => navigate("/tools/material_management")}
-                    >
-                        Material Management
-                    </Typography>
-                    <Typography color="text.primary" sx={{ fontWeight: 600 }}>
-                        Reverse Reconciliation Dashboard
-                    </Typography>
-                </Breadcrumbs>
-            </div>
-
-            <Slide direction="left" in={true} timeout={1000}>
-                <Box>
-                    <Box className={classes.main_Box}>
-                        <Box className={classes.Back_Box} sx={{ width: { md: "95%", xs: "100%" } }}>
-                            <Box className={classes.Box_Hading}>
-                                Reverse Reconciliation Dashboard
-                            </Box>
-
-                            {/* Error Alert */}
-                            {error && (
-                                <Alert severity="error" sx={{ mb: 2 }}>
-                                    {error}
-                                </Alert>
-                            )}
-
-                            {/* Summary Statistics */}
-                            <Grid container spacing={2} sx={{ mb: 3 }}>
-                                <Grid item xs={12} sm={6} md={3}>
-                                    <SummaryCard
-                                        title="Total Circles"
-                                        value={summaryStats.totalCircles}
-                                        color={COLORS.primary}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={6} md={3}>
-                                    <SummaryCard
-                                        title="Total Items"
-                                        value={summaryStats.totalItems}
-                                        color={COLORS.info}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={6} md={3}>
-                                    <SummaryCard
-                                        title="Fully Closed"
-                                        value={summaryStats.fullyClosed}
-                                        color={COLORS.success}
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={6} md={3}>
-                                    <SummaryCard
-                                        title="Partially Submitted"
-                                        value={summaryStats.partiallySubmitted}
-                                        color={COLORS.warning}
-                                    />
-                                </Grid>
-                            </Grid>
-
-                            <Divider sx={{ my: 2 }} />
-
-                            {/* Tabs for Tables */}
-                            <Box sx={{ borderBottom: 1, borderColor: COLORS.borderColor, mb: 2 }}>
-                                <Tabs
-                                    value={tabValue}
-                                    onChange={(e, newValue) => setTabValue(newValue)}
-                                    sx={{
-                                        "& .MuiTab-root": {
-                                            fontWeight: 600,
-                                            color: "#666",
-                                            textTransform: "none",
-                                            fontSize: "13px",
-                                            "&.Mui-selected": {
-                                                color: COLORS.primary,
-                                                fontWeight: 700,
-                                            },
-                                        },
-                                        "& .MuiTabs-indicator": {
-                                            backgroundColor: COLORS.primary,
-                                        },
-                                    }}
-                                >
-                                    <Tab label="Circle Summary" />
-                                    <Tab label="Circle Count" />
-                                </Tabs>
-                            </Box>
-
-                            {/* Circle Summary Table */}
-                            {tabValue === 0 && (
-                                <CircleSummaryTable
-                                    data={circleSummaryData}
-                                    loading={loadingSummary}
-                                    onRefresh={fetchCircleSummary}
-                                    onDownload={handleDownloadCircleSummary}
-                                />
-                            )}
-
-                            {/* Circle Count Table */}
-                            {tabValue === 1 && (
-                                <CircleCountTable
-                                    data={circleCountData}
-                                    loading={loadingCount}
-                                    onRefresh={fetchCircleCount}
-                                    onDownload={handleDownloadCircleCount}
-                                />
-                            )}
-                        </Box>
-                    </Box>
-                </Box>
-            </Slide>
-
-            {loading}
-        </>
-    );
+      {/* Results Info */}
+      {filteredData.length > 0 && (
+        <Box sx={{ mt: 3, textAlign: 'right' }}>
+          <Typography variant="body2" color="textSecondary">
+            Showing {paginatedData.length} of {filteredData.length} records
+            {filteredData.length !== data.length && ` (filtered from ${data.length})`}
+          </Typography>
+        </Box>
+      )}
+    </Container>
+    </>
+  );
 };
 
 export default Dashboard;

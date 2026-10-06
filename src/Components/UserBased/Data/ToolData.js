@@ -54,7 +54,6 @@ import { groupBy } from 'lodash';
 const ToolData = [
 
 
-
     {
         id: 1,
         name: 'Q-360',
@@ -65,7 +64,8 @@ const ToolData = [
                 src="/assets/pending-pr.png"
                 alt="Quality Team Logo"
                 width={45}
-                height={45}
+                height={40}
+                style={{ borderRadius: '15%' }}
             />
         ),
         fullname: 'Quality Team',
@@ -85,6 +85,8 @@ const ToolData = [
             'QT_DUS'
         ]
     },
+
+
     //  {
     //     id: 1,
     //     // name: 'RAN Quality Monitoring & Governance',
