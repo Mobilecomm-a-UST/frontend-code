@@ -295,7 +295,7 @@ function App() {
             } />
             <Route path="/tools/mobile_network_integration/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={Gpl} allowedUserTypes={['admin', 'MNIT']} userType={userType} />
+                <ProtectedRoute element={Gpl} allowedUserTypes={['admin', 'MNIT','MNITBK']} userType={userType} />
               </Suspense>
             } />
 

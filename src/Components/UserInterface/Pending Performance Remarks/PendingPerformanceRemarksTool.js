@@ -17,8 +17,8 @@ const PendingPerformanceRemarksTool = () => {
                         <div style={{ margin: 10, marginLeft: 10 }}>
                             <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
                                 <Link underline="hover" href='/tools'>Tools</Link>
-                                <Link underline="hover" href='/tools/quality_team'>Quality Team</Link>
-                                <Typography color='text.primary'>Pending Performance Remark</Typography>
+                                <Link underline="hover" href='/tools/quality_team'>Q-360-Track Analyze Improve </Link>
+                                <Typography color='text.primary'>Daily RAN Quality Monitoring & Governance</Typography>
                             </Breadcrumbs>
                         </div>
                         <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: "20px" }}>
@@ -29,7 +29,7 @@ const PendingPerformanceRemarksTool = () => {
                                     backgroundImage: "linear-gradient(160deg, #006e74 0%, #80D0C7 100%)", borderRadius: "10px", boxShadow: "rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset"
                                 }}>
                                     <div style={{ fontFamily: "sans-serif", fontSize: "60px", fontWeight: 500, marginTop: "100px" }}>
-                                        <span style={{ color: "yellow" }}>Pending Performance Remarks</span > <span style={{ textAlign: 'center' }}>Tool</span></div>
+                                        <span style={{ color: "yellow" }}>Daily RAN Quality Monitoring & Governance</span > <span style={{ textAlign: 'center' }}>Tool</span></div>
                                 </div></Tilt>
                         </div>
                     </div>
