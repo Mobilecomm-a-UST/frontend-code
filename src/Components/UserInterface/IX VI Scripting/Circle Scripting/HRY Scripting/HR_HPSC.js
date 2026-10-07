@@ -26,9 +26,9 @@ import UploadIcon from "@mui/icons-material/Upload";
 import DoDisturbIcon from "@mui/icons-material/DoDisturb";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import Swal from "sweetalert2";
-import { postData } from "../../../services/FetchNodeServices";
-import OverAllCss from "../../../csss/OverAllCss";
-import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
+import { postData } from "../../../../services/FetchNodeServices";
+import OverAllCss from "../../../../csss/OverAllCss";
+import { useLoadingDialog } from "../../../../Hooks/LoadingDialog";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import InfoIcon from "@mui/icons-material/Info";
 import WarningIcon from "@mui/icons-material/Warning";
@@ -310,20 +310,22 @@ const ScriptingToolResult = ({ data, onDownload }) => {
 /* ================================================================ */
 /*  Main 5G Scripting Tool Component - UPDATED (XML REMOVED)        */
 /* ================================================================ */
-const UPE_Scripting = () => {
+const HRY_Scripting = () => {
     const navigate = useNavigate();
     const { loading, action } = useLoadingDialog();
     const classes = OverAllCss();
 
     // ✅ STATE MANAGEMENT - XML REMOVED
     const [excelFiles, setExcelFiles] = useState([]);
-    const [bandwidth, setBandwidth] = useState("");
+    const [bbu, setBbu] = useState("");
+    const [mimo, setMimo] = useState("");
     const [uploadSuccess, setUploadSuccess] = useState(false);
     const [uploadResultData, setUploadResultData] = useState(null);
     const [isProcessing, setIsProcessing] = useState(false);
 
     // ✅ Bandwidth options
-    const BANDWIDTH_OPTIONS = ["5Mhz", "3Mhz"];
+    // const BBU_OPTIONS = ["ASIM", "ASOG"];
+    // const Mimo_Mode = ['1-SECTOR-4TR', '2-SECTOR-4TR', '3-SECTOR-4TR']
 
     // ======== EXCEL FILE HANDLER ========
     const handleExcelFileChange = (event) => {
@@ -357,14 +359,23 @@ const UPE_Scripting = () => {
     // ======== SUBMIT HANDLER ========
     const handleSubmit = async () => {
         // VALIDATION - Only Bandwidth is mandatory
-        if (!bandwidth) {
-            Swal.fire({
-                icon: "warning",
-                title: "Required",
-                text: "Please select Bandwidth",
-            });
-            return;
-        }
+        // if (!bbu) {
+        //     Swal.fire({
+        //         icon: "warning",
+        //         title: "Required",
+        //         text: "Please select BBU",
+        //     });
+        //     return;
+        // }
+
+        // if (!mimo) {
+        //     Swal.fire({
+        //         icon: "warning",
+        //         title: "Required",
+        //         text: "Please select Mimo Mode",
+        //     });
+        //     return;
+        // }
 
         try {
             setIsProcessing(true);
@@ -372,8 +383,9 @@ const UPE_Scripting = () => {
 
             const formData = new FormData();
 
-            // ✅ Append bandwidth (mandatory)
-            formData.append("bandwidth", bandwidth);
+            // ✅ Append bbu (mandatory)
+            // formData.append("bbu", bbu);
+            // formData.append("mimo", mimo);
 
             // ✅ Append all Excel files if they exist (optional)
             if (excelFiles.length > 0) {
@@ -383,7 +395,7 @@ const UPE_Scripting = () => {
             }
 
             // ✅ Updated API endpoint
-            const response = await postData("vi_ntscrpting/nt/", formData);
+            const response = await postData("hrscscrpting/hr_hpsc/", formData);
 
             if (response && response.status) {
                 setUploadSuccess(true);
@@ -394,6 +406,10 @@ const UPE_Scripting = () => {
                     title: "Success",
                     text: response.message || "Configuration created successfully",
                 });
+
+                setBbu("");
+                setMimo("");
+                setExcelFiles([]);
             } else {
                 Swal.fire({
                     icon: "error",
@@ -418,10 +434,12 @@ const UPE_Scripting = () => {
     // ======== CANCEL HANDLER ========
     const handleCancel = () => {
         setExcelFiles([]);
-        setBandwidth("");
+        setBbu("");
+        setMimo(""); // Added
         setUploadSuccess(false);
         setUploadResultData(null);
     };
+
 
     // ======== DOWNLOAD HANDLER - Supports multiple files ========
     const downloadFile = (downloadUrl) => {
@@ -472,27 +490,27 @@ const UPE_Scripting = () => {
                 <Box>
                     <Box className={classes.main_Box}>
                         <Box className={classes.Back_Box} sx={{ width: { md: "75%", xs: "100%" } }}>
-                            <Box className={classes.Box_Hading}>UPE Scripting</Box>
+                            <Box className={classes.Box_Hading}>HPSC Scripting</Box>
 
                             <Stack spacing={2.5} sx={{ marginTop: "10px" }} direction="column">
                                 {/* ✅ BANDWIDTH DROPDOWN (First) */}
-                                <Box className={classes.Front_Box}>
+                                {/* <Box className={classes.Front_Box}>
                                     <div className={classes.Front_Box_Hading}>
-                                        Select Bandwidth:-
+                                        Select BBU:-
                                     </div>
                                     <Box sx={{ p: 1.5, maxWidth: "400px" }}>
                                         <FormControl size="small" fullWidth>
-                                            <InputLabel id="bandwidth-label">Bandwidth</InputLabel>
+                                            <InputLabel id="bbu-label">BBU</InputLabel>
                                             <Select
-                                                labelId="bandwidth-label"
-                                                label="Bandwidth"
-                                                value={bandwidth}
-                                                onChange={(e) => setBandwidth(e.target.value)}
+                                                labelId="bbu-label"
+                                                label="BBU"
+                                                value={bbu}
+                                                onChange={(e) => setBbu(e.target.value)}
                                             >
                                                 <MenuItem value="">
-                                                    <em>Select Bandwidth</em>
+                                                    <em>Select BBU</em>
                                                 </MenuItem>
-                                                {BANDWIDTH_OPTIONS.map((option) => (
+                                                {BBU_OPTIONS.map((option) => (
                                                     <MenuItem key={option} value={option}>
                                                         {option}
                                                     </MenuItem>
@@ -500,7 +518,37 @@ const UPE_Scripting = () => {
                                             </Select>
                                         </FormControl>
                                     </Box>
-                                </Box>
+                                </Box> */}
+                                {/* <Box className={classes.Front_Box}>
+                                    <div className={classes.Front_Box_Hading}>
+                                        Select Mimo Mode:-
+                                    </div>
+                                    <Box sx={{ p: 1.5, maxWidth: "400px" }}>
+                                        <FormControl size="small" fullWidth>
+                                            <InputLabel id="mimo-mode-label">
+                                                Mimo Mode
+                                            </InputLabel>
+
+                                            <Select
+                                                labelId="mimo-mode-label"
+                                                id="mimo-mode"
+                                                value={mimo}
+                                                label="Mimo Mode"
+                                                onChange={(e) => setMimo(e.target.value)}
+                                            >
+                                                <MenuItem value="">
+                                                    <em>Select Mimo Mode</em>
+                                                </MenuItem>
+
+                                                {Mimo_Mode.map((option) => (
+                                                    <MenuItem key={option} value={option}>
+                                                        {option}
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                    </Box>
+                                </Box> */}
 
                                 {/* ✅ EXCEL FILE CARD (Second) - Optional */}
                                 <Box className={classes.Front_Box}>
@@ -558,7 +606,7 @@ const UPE_Scripting = () => {
                                         color="success"
                                         onClick={handleSubmit}
                                         endIcon={<UploadIcon />}
-                                        disabled={isProcessing || !bandwidth}
+                                        disabled={isProcessing}
                                         sx={{ minWidth: "120px" }}
                                     >
                                         {isProcessing ? (
@@ -598,4 +646,4 @@ const UPE_Scripting = () => {
     );
 };
 
-export default UPE_Scripting;
+export default HRY_Scripting;
