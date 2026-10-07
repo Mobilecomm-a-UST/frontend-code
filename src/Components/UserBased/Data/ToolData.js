@@ -56,9 +56,26 @@ const ToolData = [
 
     {
         id: 1,
-        name: 'Q-360',
+        name: (
+            <div
+                style={{
+                    width: '140px',
+                    textAlign: 'center',
+                    fontSize: '16px',
+                    fontWeight: '700',
+                    lineHeight: '18px',
+                    color: '#2b2c2c',
+                    whiteSpace: 'normal',
+                    margin: '0 auto'
+                }}
+            >
+                Q-360-Track
+                <br aria-hidden="true" />
+                Analyze Improve
+            </div>
+        ),
         title: 'Quality Team System',
- 
+
         icons: () => (
             <img
                 src="/assets/pending-pr.png"
@@ -141,14 +158,14 @@ const ToolData = [
     //     groupBy: ['soft_at_team', 'admin', 'soft_at']
     // },
 
-        {
+    {
         id: 4,
         name: 'SOFT AT',
         title: 'This is a SOFT AT tool',
         icons: PcIcon,
         link: '/tools/soft_at_tools',
         fullname: 'Soft AT Tool',
-        groupBy: ['soft_at_team', 'admin', 'soft_at','soft_at_airtel','soft_at_vi']
+        groupBy: ['soft_at_team', 'admin', 'soft_at', 'soft_at_airtel', 'soft_at_vi']
     },
 
     {
@@ -221,7 +238,7 @@ const ToolData = [
         icons: DocPassIcon,
         fullname: 'Integration Tools',
         link: '/tools/ix_tools',
-        groupBy: ['admin', 'IX', 'VI_IX', 'VI_IX_reader', 'soft_at_team', 'IX_SA', 'IX_ER', 'quality', 'IX_reader', 'quality-s','IX_TS','IX_ZTE','IX_T_VI','IX_VI_SCRPT']
+        groupBy: ['admin', 'IX', 'VI_IX', 'VI_IX_reader', 'soft_at_team', 'IX_SA', 'IX_ER', 'quality', 'IX_reader', 'quality-s', 'IX_TS', 'IX_ZTE', 'IX_T_VI', 'IX_VI_SCRPT']
     },
     // {
     //     id: 12,
@@ -341,7 +358,7 @@ const ToolData = [
         icons: ModelIcon,
         fullname: 'Mobile Network Integration Tool',
         link: '/tools/mobile_network_integration',
-        groupBy: ['admin', 'MNIT']
+        groupBy: ['admin', 'MNIT', 'MNITBK']
     }
     ,
     {
@@ -407,7 +424,7 @@ const ToolData = [
         icons: StopOutlineIcon,
         fullname: 'Microwave Soft-At Tool',
         link: '/tools/microwave_soft_at',
-        groupBy: ['admin','admin_microwave', 'microwave']
+        groupBy: ['admin', 'admin_microwave', 'microwave']
     },
     {
         id: 34,
@@ -495,7 +512,7 @@ const ToolData = [
         icons: DateTaskIcon,
         fullname: 'Resource Management',
         link: '/tools/resource_management',
-        groupBy: ['RM_Admin',"RM_CDH"]
+        groupBy: ['RM_Admin', "RM_CDH"]
     },
 
     {
@@ -505,17 +522,17 @@ const ToolData = [
         icons: GpsFixedIcon,
         fullname: 'Field Resource Tracking',
         link: '/tools/field_resource_tracking',
-        groupBy: ['admin',"frt"]
+        groupBy: ['admin', "frt"]
     },
 
-     {
+    {
         id: 42,
         name: 'WCC Generate',
         title: 'WCC Generate System',
         icons: DeblurOutlinedIcon,
         fullname: 'WCC Generate',
         link: '/tools/wcc_generate',
-        groupBy: ['admin',"wcg"]
+        groupBy: ['admin', "wcg"]
     },
 
     {
@@ -525,17 +542,17 @@ const ToolData = [
         icons: LogIcon,
         fullname: 'Logs',
         link: '/tools/log_s',
-        groupBy: ['admin',"log"]
+        groupBy: ['admin', "log"]
     },
 
-     {
+    {
         id: 44,
         name: 'Baseband Reqrmt',
         title: 'Baseband Requirement System',
         icons: DraftRoundIcon,
         fullname: 'Baseband Requirement',
         link: '/tools/baseband_requirement',
-        groupBy: ['admin','BR_Admin',"BR"]
+        groupBy: ['admin', 'BR_Admin', "BR"]
     },
 
     //  {
@@ -548,7 +565,7 @@ const ToolData = [
     //     groupBy: ['admin','TS_Admin']
     // },
 
-    
+
 
     //  {
     //     id: 46,
@@ -561,7 +578,7 @@ const ToolData = [
     // },
 
 
-    
+
 ]
 
 export default ToolData

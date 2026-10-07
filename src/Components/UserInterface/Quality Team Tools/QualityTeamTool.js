@@ -24,7 +24,7 @@
 //     const chackToken = getDecreyptedData("tokenKey")
 //     const userTypes = (getDecreyptedData('user_type')?.split(","))
 //     // const allowedAirtelRoles = ['Admin', 'IX'];
-   
+
 //     const allowedAlarmLogRoles = ['Admin', 'QT_AL']
 //     const allowedTrendRoles = ['Admin','quality','quality-s', 'trend_tool'];
 //     const allowedPerformanceRoles = ['Admin','PAT','PAT_Admin'];
@@ -33,7 +33,7 @@
 
 //     const linker = window.location.pathname;
 
-   
+
 
 //      const handleTrends = () => {
 //         if (chackToken === null) {
@@ -130,8 +130,8 @@
 //                                 justifyContent="flex-start"
 //                             >
 
-                               
-                                          
+
+
 //                                             {userTypes?.some(role => allowedTrendRoles.map(r => r.toLowerCase()).includes(role?.toLowerCase())) && (
 //                                     <Grid item xs={12} sm={6} md={3}>
 //                                         <Box sx={backgroundStyle} className={classes.des} onClick={handleTrends}>
@@ -224,7 +224,7 @@ import { FileScriptIcon } from "@hugeicons/core-free-icons";
 import { DashboardCircleEditIcon } from "@hugeicons/core-free-icons";
 import TrafficOutlinedIcon from "@mui/icons-material/TrafficOutlined";
 import PendingActionsOutlinedIcon from "@mui/icons-material/PendingActionsOutlined";
- 
+
 const QualityTeamTool = () => {
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -232,7 +232,7 @@ const QualityTeamTool = () => {
   const chackToken = getDecreyptedData("tokenKey");
   const userTypes = getDecreyptedData("user_type")?.split(",");
   // const allowedAirtelRoles = ['Admin', 'IX'];
- 
+
   const allowedAlarmLogRoles = ["Admin", "QT_AL"];
   const allowedTrendRoles = ["Admin", "quality", "quality-s", "trend_tool"];
   const allowedPerformanceRoles = ["Admin", "PAT", "PAT_Admin"];
@@ -243,9 +243,9 @@ const QualityTeamTool = () => {
     "QT_AR",
     "QT_DUS",
   ];
- 
+
   const linker = window.location.pathname;
- 
+
   const handleTrends = () => {
     if (chackToken === null) {
       navigate("/login");
@@ -254,7 +254,7 @@ const QualityTeamTool = () => {
       navigate("/tools/quality_team/trends");
     }
   };
- 
+
   const handlePerformance = () => {
     if (chackToken === null) {
       navigate("/login");
@@ -263,7 +263,7 @@ const QualityTeamTool = () => {
       navigate("/tools/quality_team/performance_at_tat");
     }
   };
- 
+
   const handleTraffic = () => {
     if (chackToken === null) {
       navigate("/login");
@@ -272,7 +272,7 @@ const QualityTeamTool = () => {
       navigate("/tools/quality_team/payload_traffic");
     }
   };
- 
+
   const handleAlarmLogs = () => {
     if (chackToken === null) {
       navigate("/login");
@@ -281,7 +281,7 @@ const QualityTeamTool = () => {
       navigate("/tools/quality_team/alarm_logs");
     }
   };
- 
+
   const handlePendingPerformanceRemark = () => {
     if (chackToken === null) {
       navigate("/login");
@@ -290,7 +290,7 @@ const QualityTeamTool = () => {
       navigate("/tools/quality_team/pending_performance_re");
     }
   };
- 
+
   const backgroundStyle = {
     height: "auto",
     width: "300px",
@@ -302,11 +302,11 @@ const QualityTeamTool = () => {
     textShadow: "2px 2px 4px #ffffff",
     color: "#292525",
   };
- 
+
   useEffect(() => {
     document.title = `${window.location.pathname.slice(1).replaceAll("_", " ").replaceAll("/", " | ").toUpperCase()}`;
   }, []);
- 
+
   return (
     <div style={{ backgroundColor: " " }}>
       <Box style={{ padding: "15px", marginTop: "60px" }}>
@@ -328,7 +328,7 @@ const QualityTeamTool = () => {
             Quality Team Tools
           </Box>
         </Box>
- 
+
         <Zoom in="true" timeout={500}>
           <Box
             sx={{
@@ -350,122 +350,134 @@ const QualityTeamTool = () => {
                     .map((r) => r.toLowerCase())
                     .includes(role?.toLowerCase()),
                 ) && (
-                  <Grid item xs={12} sm={6} md={3}>
-                    <Box
-                      sx={backgroundStyle}
-                      className={classes.des}
-                      onClick={handleTrends}
-                    >
-                      <div className={classes.centerIcon}>
-                        <TrendIcon
-                          alt="Trends"
-                          style={{ width: "40px", height: "40px" }}
-                        />
-                      </div>
-                      <div>
-                        <div className={classes.center}>Trends</div>
-                      </div>
-                    </Box>
-                  </Grid>
-                )}
- 
+                    <Grid item xs={12} sm={6} md={3}>
+                      <Box
+                        sx={backgroundStyle}
+                        className={classes.des}
+                        onClick={handleTrends}
+                      >
+                        <div className={classes.centerIcon}>
+                          <TrendIcon
+                            alt="Trends"
+                            style={{ width: "40px", height: "40px" }}
+                          />
+                        </div>
+                        <div>
+                          <div className={classes.center}>Trends</div>
+                        </div>
+                      </Box>
+                    </Grid>
+                  )}
+
                 {userTypes?.some((role) =>
                   allowedPerformanceRoles
                     .map((r) => r.toLowerCase())
                     .includes(role?.toLowerCase()),
                 ) && (
-                  <Grid item xs={12} sm={6} md={3}>
-                    <Box
-                      sx={backgroundStyle}
-                      className={classes.des}
-                      onClick={handlePerformance}
-                    >
-                      <div className={classes.centerIcon}>
-                        <HugeiconsIcon
-                          icon={DashboardCircleEditIcon}
-                          alt="Performance"
-                          style={{ width: "40px", height: "40px" }}
-                        />
-                      </div>
-                      <div>
-                        <div className={classes.center}>Performance At</div>
-                      </div>
-                    </Box>
-                  </Grid>
-                )}
- 
+                    <Grid item xs={12} sm={6} md={3}>
+                      <Box
+                        sx={backgroundStyle}
+                        className={classes.des}
+                        onClick={handlePerformance}
+                      >
+                        <div className={classes.centerIcon}>
+                          <HugeiconsIcon
+                            icon={DashboardCircleEditIcon}
+                            alt="Performance"
+                            style={{ width: "40px", height: "40px" }}
+                          />
+                        </div>
+                        <div>
+                          <div className={classes.center}>Performance At</div>
+                        </div>
+                      </Box>
+                    </Grid>
+                  )}
+
                 {userTypes?.some((role) =>
                   allowedTrafficRoles
                     .map((r) => r.toLowerCase())
                     .includes(role?.toLowerCase()),
                 ) && (
-                  <Grid item xs={12} sm={6} md={3}>
-                    <Box
-                      sx={backgroundStyle}
-                      className={classes.des}
-                      onClick={handleTraffic}
-                    >
-                      <div className={classes.centerIcon}>
-                        <TrafficOutlinedIcon
-                          alt="Traffic"
-                          style={{ width: "40px", height: "40px" }}
-                        />
-                      </div>
-                      <div>
-                        <div className={classes.center}>Payload Traffic</div>
-                      </div>
-                    </Box>
-                  </Grid>
-                )}
+                    <Grid item xs={12} sm={6} md={3}>
+                      <Box
+                        sx={backgroundStyle}
+                        className={classes.des}
+                        onClick={handleTraffic}
+                      >
+                        <div className={classes.centerIcon}>
+                          <TrafficOutlinedIcon
+                            alt="Traffic"
+                            style={{ width: "40px", height: "40px" }}
+                          />
+                        </div>
+                        <div>
+                          <div className={classes.center}>Payload Traffic</div>
+                        </div>
+                      </Box>
+                    </Grid>
+                  )}
                 {userTypes?.some((role) =>
                   allowedAlarmLogRoles
                     .map((r) => r.toLowerCase())
                     .includes(role?.toLowerCase()),
                 ) && (
-                  <Grid item xs={12} sm={6} md={3}>
-                    <Box
-                      sx={backgroundStyle}
-                      className={classes.des}
-                      onClick={handleAlarmLogs}
-                    >
-                      <div className={classes.centerIcon}>
-                        <AlarmIcon
-                          alt="Alarm"
-                          style={{ width: "40px", height: "40px" }}
-                        />
-                      </div>
-                      <div>
-                        <div className={classes.center}>Alarm Logs</div>
-                      </div>
-                    </Box>
-                  </Grid>
-                )}
- 
+                    <Grid item xs={12} sm={6} md={3}>
+                      <Box
+                        sx={backgroundStyle}
+                        className={classes.des}
+                        onClick={handleAlarmLogs}
+                      >
+                        <div className={classes.centerIcon}>
+                          <AlarmIcon
+                            alt="Alarm"
+                            style={{ width: "40px", height: "40px" }}
+                          />
+                        </div>
+                        <div>
+                          <div className={classes.center}>Alarm Logs</div>
+                        </div>
+                      </Box>
+                    </Grid>
+                  )}
+
                 {userTypes?.some((role) =>
                   allowedPendingPerformanceRemark
                     .map((r) => r.toLowerCase())
                     .includes(role?.toLowerCase()),
                 ) && (
-                  <Grid item xs={12} sm={6} md={3}>
-                    <Box
-                      sx={backgroundStyle}
-                      className={classes.des}
-                      onClick={handlePendingPerformanceRemark}
-                    >
-                      <div className={classes.centerIcon}>
-                        <img
-                           src="/assets/qt-tool.png"
-                          
-                          alt="Pending PR"
-                          style={{ width: "80px", height: "80px", borderRadius: "15px" }}
-                        />
-                      </div>
-                      <div>
-                        <div className={classes.center}>Q-Pulse</div>
-                      </div>
-                    </Box>
-                  </Grid>
-                )}
+                    <Grid item xs={12} sm={6} md={3}>
+                      <Box
+                        sx={backgroundStyle}
+                        className={classes.des}
+                        onClick={handlePendingPerformanceRemark}
+                      >
+                        <div className={classes.centerIcon}>
+                          <img
+                            src="/assets/qt-tool.png"
+
+                            alt="Pending PR"
+                            style={{ width: "80px", height: "80px", borderRadius: "15px" }}
+                          />
+                        </div>
+                        <div
+                          className={classes.center}
+                          style={{
+                            width: "160px",
+                            margin: "0 auto",
+                            textAlign: "center",
+                            fontSize: "18px",
+                            fontWeight: "700",
+                            lineHeight: "18px",
+                            whiteSpace: "normal",
+                          }}
+                        >
+                          Daily RAN Quality Monitoring &
+                          Governance
+                        </div>
+                      </Box>
+                    </Grid>
+                  )}
               </Grid>
             </Box>
           </Box>
@@ -474,7 +486,6 @@ const QualityTeamTool = () => {
     </div>
   );
 };
- 
+
 export default QualityTeamTool;
- 
- 
+

@@ -241,7 +241,7 @@ const PendingPerformanceRemarks = () => {
                                 <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#006e74", marginTop: 8, borderRadius: 10 }}>
                                     <Sidenav.Body>
                                         <Nav activeKey={activeKey} onSelect={setActiveKey} >
-                                            <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>Pending Performance Remark</Nav>
+                                            <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>Daily RAN Quality Monitoring & Governance</Nav>
                                             <Divider component="li" sx={{ backgroundColor: 'white' }} />
 
                                             {/* QT_PPR SEES ALL 6 TABS */}
