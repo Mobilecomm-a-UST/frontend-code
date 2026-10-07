@@ -1,10 +1,9 @@
-
 import React, { useMemo, useState, useEffect } from 'react';
 import {
-  Box, Container, Stack, Grid, Paper, Typography, TextField, MenuItem, Button,
-  IconButton, Tooltip, Chip, Table, TableHead, TableBody, TableRow, TableCell,
-  TableContainer, Dialog, DialogTitle, DialogContent, DialogActions, Divider,
-  Snackbar, Alert, Menu, ListItemIcon, ListItemText, CircularProgress,
+    Box, Container, Stack, Grid, Paper, Typography, TextField, MenuItem, Button,
+    IconButton, Tooltip, Chip, Table, TableHead, TableBody, TableRow, TableCell,
+    TableContainer, Dialog, DialogTitle, DialogContent, DialogActions, Divider,
+    Snackbar, Alert, Menu, ListItemIcon, ListItemText, CircularProgress,
 } from '@mui/material';
 
 import RefreshRoundedIcon from '@mui/icons-material/RefreshRounded';
@@ -27,19 +26,11 @@ import ScienceRoundedIcon from '@mui/icons-material/ScienceRounded';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import ReportProblemRoundedIcon from '@mui/icons-material/ReportProblemRounded';
 import DonutLargeRoundedIcon from '@mui/icons-material/DonutLargeRounded';
+import RestartAltRoundedIcon from '@mui/icons-material/RestartAltRounded';
 
 import {
-  PieChart,
-  Pie,
-  Cell,
-  ResponsiveContainer,
-  Tooltip as ChartTooltip,
-  Legend,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
+    PieChart, Pie, Cell, ResponsiveContainer, Tooltip as ChartTooltip, Legend,
+    BarChart, Bar, XAxis, YAxis, CartesianGrid,
 } from 'recharts';
 
 import dayjs from 'dayjs';
@@ -47,5443 +38,1184 @@ import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import { getDecreyptedData } from "../../../utils/localstorage";
 
-
 /* ============================== CONSTANTS ============================== */
 
-const API_BASE_URL =
-  'https://commtoolapi.mcpspmis.com/task_tracking/tasks/';
+const API_BASE_URL = 'https://commtoolapi.mcpspmis.com/task_tracking/tasks/';
 
-// ADMIN USERS - SAME AS BACKEND
-const ADMIN_USERS = [
-  "abhinav@ust.com",
-  "mohit@ust.com"
-];
+const ADMIN_USERS = ["abhinav@ust.com", "mohit@ust.com"];
 
-const STATUS_OPTIONS = [
-  'Not Started',
-  'In Progress',
-  'In Review',
-  'Testing',
-  'Completed',
-  'Delayed',
-  'On Hold',
-];
+const STATUS_OPTIONS = ['Not Started', 'In Progress', 'In Review', 'Testing', 'Completed', 'Delayed', 'On Hold'];
 
-const PRIORITY_OPTIONS = [
-  'High',
-  'Medium',
-  'Low'
-];
+const PRIORITY_OPTIONS = ['High', 'Medium', 'Low'];
 
-const REASON_OPTIONS = [
-  'None',
-  'Resource Constraint',
-  'Dependency Delay',
-  'Scope Change',
-  'Client Delay',
-  'Technical Issue',
-  'Requirement Change',
-  'Other',
-];
+const REASON_OPTIONS = ['None', 'Resource Constraint', 'Dependency Delay', 'Scope Change', 'Client Delay', 'Technical Issue', 'Requirement Change', 'Other'];
 
-
-// Status color tokens
 const STATUS_COLORS = {
-  'Not Started': {
-    main: '#64748B',
-    bg: '#F1F5F9'
-  },
-
-  'In Progress': {
-    main: '#2563EB',
-    bg: '#EAF1FE'
-  },
-
-  'In Review': {
-    main: '#D97706',
-    bg: '#FEF3E2'
-  },
-
-  'Testing': {
-    main: '#7C3AED',
-    bg: '#F3ECFE'
-  },
-
-  'Completed': {
-    main: '#0E9F6E',
-    bg: '#E7F9F1'
-  },
-
-  'Delayed': {
-    main: '#DC2626',
-    bg: '#FDECEC'
-  },
-
-  'On Hold': {
-    main: '#475569',
-    bg: '#EEF1F4'
-  },
+    'Not Started': { main: '#64748B', bg: '#F1F5F9' },
+    'In Progress': { main: '#2563EB', bg: '#EAF1FE' },
+    'In Review': { main: '#D97706', bg: '#FEF3E2' },
+    'Testing': { main: '#7C3AED', bg: '#F3ECFE' },
+    'Completed': { main: '#0E9F6E', bg: '#E7F9F1' },
+    'Delayed': { main: '#DC2626', bg: '#FDECEC' },
+    'On Hold': { main: '#475569', bg: '#EEF1F4' },
 };
-
 
 const PRIORITY_COLORS = {
-  High: {
-    main: '#DC2626',
-    bg: '#FDECEC'
-  },
-
-  Medium: {
-    main: '#D97706',
-    bg: '#FEF3E2'
-  },
-
-  Low: {
-    main: '#0E9F6E',
-    bg: '#E7F9F1'
-  },
+    High: { main: '#DC2626', bg: '#FDECEC' },
+    Medium: { main: '#D97706', bg: '#FEF3E2' },
+    Low: { main: '#0E9F6E', bg: '#E7F9F1' },
 };
-
 
 const KPI_ICONS = {
-  'Total Tasks': AssignmentRoundedIcon,
-  'Not Started': HourglassEmptyRoundedIcon,
-  'In Progress': TrendingUpRoundedIcon,
-  'In Review': RateReviewRoundedIcon,
-  'Testing': ScienceRoundedIcon,
-  'Completed': CheckCircleRoundedIcon,
-  'Delayed': ReportProblemRoundedIcon,
-  'Completion %': DonutLargeRoundedIcon,
+    'Total Tasks': AssignmentRoundedIcon,
+    'Not Started': HourglassEmptyRoundedIcon,
+    'In Progress': TrendingUpRoundedIcon,
+    'In Review': RateReviewRoundedIcon,
+    'Testing': ScienceRoundedIcon,
+    'Completed': CheckCircleRoundedIcon,
+    'Delayed': ReportProblemRoundedIcon,
+    'Completion %': DonutLargeRoundedIcon,
 };
 
-
-const REASON_PALETTE = [
-  '#0E7C7B',
-  '#D97706',
-  '#DC2626',
-  '#2563EB',
-  '#7C3AED',
-  '#0EA5E9',
-  '#64748B',
-  '#B45309'
-];
-
+const REASON_PALETTE = ['#0E7C7B', '#D97706', '#DC2626', '#2563EB', '#7C3AED', '#0EA5E9', '#64748B', '#B45309'];
 
 const PRIMARY = '#0E7C7B';
 const PRIMARY_DARK = '#0A5D5C';
 
-
 /* ============================== HELPERS ============================== */
 
-
-// GET CURRENT USERNAME
 const getCurrentUsername = () => {
-
-  const username =
-    getDecreyptedData('userID') ||
-    getDecreyptedData('username') ||
-    'anonymous';
-
-  console.log(
-    'Current username:',
-    username
-  );
-
-  return username;
+    const username = getDecreyptedData('userID') || getDecreyptedData('username') || 'anonymous';
+    console.log('Current username:', username);
+    return username;
 };
 
+const isUserAdmin = () => ADMIN_USERS.includes(getCurrentUsername());
 
-// CHECK IF USER IS ADMIN
-const isUserAdmin = () => {
-
-  const username = getCurrentUsername();
-
-  return ADMIN_USERS.includes(username);
-};
-
-
-// EMPTY FORM
-// CHANGED: Date defaults to today's local date
 const getEmptyForm = () => ({
-
-  date: dayjs().format('YYYY-MM-DD'),
-
-  username: getCurrentUsername(),
-
-  assigned_by: '',
-
-  project_name: '',
-
-  start_date: '',
-
-  expacted_date: '',
-
-  completed_date: '',
-
-  status: 'Not Started',
-
-  priority: 'Medium',
-
-  reason_for_delay: 'None',
-
-  remarks: '',
+    date: dayjs().format('YYYY-MM-DD'),
+    username: getCurrentUsername(),
+    assigned_by: '',
+    project_name: '',
+    start_date: '',
+    expacted_date: '',
+    completed_date: '',
+    status: 'Not Started',
+    priority: 'Medium',
+    reason_for_delay: 'None',
+    remarks: '',
+    is_restarted: false,
+    restarted_from_id: null,
 });
 
-
-// function getTotalTime(task) {
-
-//   if (!task.start_date) {
-//     return '—';
-//   }
-
-//   const start = dayjs(
-//     task.start_date
-//   );
-
-//   if (task.completed_date) {
-
-//     const days =
-//       dayjs(task.completed_date)
-//         .diff(start, 'day');
-
-//     return `${days} day${days === 1 ? '' : 's'}`;
-//   }
-
-//   const days =
-//     dayjs().diff(
-//       start,
-//       'day'
-//     );
-
-//   return `${days} day${days === 1 ? '' : 's'} (ongoing)`;
-// }
-
+const getRestartForm = (completedTask) => ({
+    date: dayjs().format('YYYY-MM-DD'),
+    username: completedTask.username || getCurrentUsername(),
+    assigned_by: completedTask.assigned_by || '',
+    project_name: completedTask.project_name || '',
+    start_date: dayjs().format('YYYY-MM-DD'),
+    expacted_date: '',
+    completed_date: '',
+    status: 'Not Started',
+    priority: completedTask.priority || 'Medium',
+    reason_for_delay: 'None',
+    remarks: `RESTARTED: New changes required. Previous completion: ${dayjs(completedTask.completed_date).format('DD MMM YYYY')}`,
+    is_restarted: true,
+    restarted_from_id: completedTask.id,
+});
 
 function getTotalTime(task) {
-  if (!task.start_date) return '—';
+    if (!task.start_date) return '—';
 
-  const start = dayjs(task.start_date).startOf('day');
+    const start = dayjs(task.start_date).startOf('day');
+    const end = task.completed_date ? dayjs(task.completed_date).startOf('day') : dayjs().startOf('day');
 
-  const end = task.completed_date
-    ? dayjs(task.completed_date).startOf('day')
-    : dayjs().startOf('day');
+    if (end.isBefore(start, 'day')) return '—';
 
-  if (end.isBefore(start, 'day')) {
-    return '—';
-  }
+    let workingDays = 0;
+    let currentDate = start;
 
-  let workingDays = 0;
-  let currentDate = start;
-
-  // Include both start date and end date
-  while (
-    currentDate.isBefore(end, 'day') ||
-    currentDate.isSame(end, 'day')
-  ) {
-    const dayOfWeek = currentDate.day();
-
-    // Sunday = 0
-    // Saturday = 6
-    if (dayOfWeek !== 0 && dayOfWeek !== 6) {
-      workingDays++;
+    while (currentDate.isBefore(end, 'day') || currentDate.isSame(end, 'day')) {
+        const dayOfWeek = currentDate.day();
+        if (dayOfWeek !== 0 && dayOfWeek !== 6) workingDays++;
+        currentDate = currentDate.add(1, 'day');
     }
 
-    currentDate = currentDate.add(1, 'day');
-  }
-
-  if (task.completed_date) {
-    return `${workingDays} working day${workingDays === 1 ? '' : 's'}`;
-  }
-
-  return `${workingDays} working day${workingDays === 1 ? '' : 's'} (ongoing)`;
-
+    if (task.completed_date) {
+        return `${workingDays} working day${workingDays === 1 ? '' : 's'}`;
+    }
+    return `${workingDays} working day${workingDays === 1 ? '' : 's'} (ongoing)`;
 }
 
+function filterTasks(tasks, { dateFilterType, singleDate, fromDate, toDate, status, priority, search, username }) {
+    return tasks.filter((t) => {
+        if (dateFilterType === 'single' && singleDate && t.date !== singleDate) return false;
 
-/*
- * FILTER TASKS
- *
- * CHANGED:
- * Search filters ONLY by username.
- */
-function filterTasks(
-  tasks,
-  {
-    dateFilterType,
-    singleDate,
-    fromDate,
-    toDate,
-    status,
-    priority,
-    search,
-    username
-  }
-) {
+        if (dateFilterType === 'range' && fromDate && toDate) {
+            if (!t.start_date) return false;
+            const taskDate = dayjs(t.start_date);
+            const from = dayjs(fromDate);
+            const to = dayjs(toDate);
+            if (taskDate.isBefore(from, 'day') || taskDate.isAfter(to, 'day')) return false;
+        }
 
-  return tasks.filter((t) => {
+        if (status && status !== 'All' && t.status !== status) return false;
+        if (priority && priority !== 'All' && t.priority !== priority) return false;
+        if (username && username !== 'All' && t.username !== username) return false;
 
-    /*
-     * All Dates:
-     * dateFilterType === single
-     * singleDate is empty
-     *
-     * Therefore no date filtering happens.
-     */
-    if (
-      dateFilterType === 'single' &&
-      singleDate &&
-      t.date !== singleDate
-    ) {
-      return false;
-    }
+        if (search) {
+            const q = search.trim().toLowerCase();
+            const taskUsername = (t.username || '').toLowerCase();
+            if (!taskUsername.includes(q)) return false;
+        }
 
-
-    // Date Range
-    if (
-      dateFilterType === 'range' &&
-      fromDate &&
-      toDate
-    ) {
-
-      if (!t.start_date) {
-        return false;
-      }
-
-      const taskDate =
-        dayjs(t.start_date);
-
-      const from =
-        dayjs(fromDate);
-
-      const to =
-        dayjs(toDate);
-
-      if (
-        taskDate.isBefore(from, 'day') ||
-        taskDate.isAfter(to, 'day')
-      ) {
-        return false;
-      }
-    }
-
-
-    // Status filter
-    if (
-      status &&
-      status !== 'All' &&
-      t.status !== status
-    ) {
-      return false;
-    }
-
-
-    // Priority filter
-    if (
-      priority &&
-      priority !== 'All' &&
-      t.priority !== priority
-    ) {
-      return false;
-    }
-
-
-    // Admin username dropdown filter
-    if (
-      username &&
-      username !== 'All' &&
-      t.username !== username
-    ) {
-      return false;
-    }
-
-
-    /*
-     * CHANGED:
-     * Search input filters ONLY by task username.
-     */
-    if (search) {
-
-      const q =
-        search
-          .trim()
-          .toLowerCase();
-
-      const taskUsername =
-        (t.username || '')
-          .toLowerCase();
-
-      if (
-        !taskUsername.includes(q)
-      ) {
-        return false;
-      }
-    }
-
-
-    return true;
-  });
+        return true;
+    });
 }
-
 
 function computeKpis(tasks) {
-
-  const total =
-    tasks.length;
-
-  const counts = {};
-
-  tasks.forEach((t) => {
-
-    counts[t.status] =
-      (counts[t.status] || 0) + 1;
-  });
-
-  const completed =
-    counts['Completed'] || 0;
-
-  const completionPct =
-    total
-      ? Math.round(
-        (completed / total) * 100
-      )
-      : 0;
-
-  return {
-    total,
-    counts,
-    completed,
-    completionPct
-  };
+    const total = tasks.length;
+    const counts = {};
+    tasks.forEach((t) => { counts[t.status] = (counts[t.status] || 0) + 1; });
+    const completed = counts['Completed'] || 0;
+    const completionPct = total ? Math.round((completed / total) * 100) : 0;
+    return { total, counts, completed, completionPct };
 }
-
 
 function computeStatusBreakdown(tasks) {
-
-  return STATUS_OPTIONS
-    .map((s) => ({
-      name: s,
-
-      value:
-        tasks.filter(
-          (t) => t.status === s
-        ).length
-    }))
-    .filter(
-      (d) => d.value > 0
-    );
+    return STATUS_OPTIONS.map((s) => ({
+        name: s,
+        value: tasks.filter((t) => t.status === s).length
+    })).filter((d) => d.value > 0);
 }
-
 
 function computeReasonBreakdown(tasks) {
-
-  const counts = {};
-
-  tasks.forEach((t) => {
-
-    if (
-      t.reason_for_delay &&
-      t.reason_for_delay !== 'None'
-    ) {
-
-      counts[t.reason_for_delay] =
-        (counts[t.reason_for_delay] || 0) + 1;
-    }
-  });
-
-
-  return Object
-    .entries(counts)
-    .map(
-      ([name, value]) => ({
-        name,
-        value
-      })
-    );
+    const counts = {};
+    tasks.forEach((t) => {
+        if (t.reason_for_delay && t.reason_for_delay !== 'None') {
+            counts[t.reason_for_delay] = (counts[t.reason_for_delay] || 0) + 1;
+        }
+    });
+    return Object.entries(counts).map(([name, value]) => ({ name, value }));
 }
-
 
 function computePriorityBreakdown(tasks) {
-
-  return PRIORITY_OPTIONS.map(
-    (p) => ({
-      name: p,
-
-      value:
-        tasks.filter(
-          (t) => t.priority === p
-        ).length
-    })
-  );
+    return PRIORITY_OPTIONS.map((p) => ({
+        name: p,
+        value: tasks.filter((t) => t.priority === p).length
+    }));
 }
 
+const fmt = (d) => d ? dayjs(d).format('DD MMM YYYY') : '—';
 
-function fmt(d) {
-
-  return d
-    ? dayjs(d).format('DD MMM YYYY')
-    : '—';
+function getShortRemarks(remarks, wordLimit = 4) {
+    if (!remarks) return '—';
+    const words = remarks.trim().split(/\s+/);
+    if (words.length <= wordLimit) return remarks;
+    return `${words.slice(0, wordLimit).join(' ')}...`;
 }
-
-
-/*
- * CHANGED:
- * Shows maximum first four words.
- */
-function getShortRemarks(
-  remarks,
-  wordLimit = 4
-) {
-
-  if (!remarks) {
-    return '—';
-  }
-
-  const words =
-    remarks
-      .trim()
-      .split(/\s+/);
-
-  if (
-    words.length <= wordLimit
-  ) {
-    return remarks;
-  }
-
-  return `${words
-    .slice(0, wordLimit)
-    .join(' ')}...`;
-}
-
 
 /* ========================= API FUNCTIONS ========================= */
 
-
 async function fetchTasks() {
-
-  try {
-
-    const username =
-      getCurrentUsername();
-
-    console.log(
-      'Fetching tasks for user:',
-      username
-    );
-
-
-    const response =
-      await fetch(
-        `${API_BASE_URL}?username=${encodeURIComponent(username)}`
-      );
-
-
-    if (!response.ok) {
-
-      console.error(
-        'Fetch error:',
-        response.status
-      );
-
-      throw new Error(
-        'Failed to fetch tasks'
-      );
+    try {
+        const username = getCurrentUsername();
+        const response = await fetch(`${API_BASE_URL}?username=${encodeURIComponent(username)}`);
+        if (!response.ok) throw new Error('Failed to fetch tasks');
+        const data = await response.json();
+        return Array.isArray(data) ? data : data.results || [];
+    } catch (error) {
+        console.error('Error fetching tasks:', error);
+        return [];
     }
-
-
-    const data =
-      await response.json();
-
-
-    console.log(
-      'Fetched tasks:',
-      data
-    );
-
-
-    return Array.isArray(data)
-      ? data
-      : data.results || [];
-
-  } catch (error) {
-
-    console.error(
-      'Error fetching tasks:',
-      error
-    );
-
-    return [];
-  }
 }
 
-
-// CREATE TASK
 async function createTask(taskData) {
+    try {
+        const username = getCurrentUsername();
+        const payload = {
+            date: taskData.date,
+            username: taskData.username || username,
+            assigned_by: taskData.assigned_by,
+            project_name: taskData.project_name,
+            start_date: taskData.start_date,
+            expacted_date: taskData.expacted_date || null,
+            completed_date: taskData.completed_date || null,
+            status: taskData.status,
+            priority: taskData.priority,
+            reason_for_delay: taskData.reason_for_delay,
+            remarks: taskData.remarks,
+            is_restarted: taskData.is_restarted || false,
+            restarted_from_id: taskData.restarted_from_id || null,
+        };
 
-  try {
+        const response = await fetch(API_BASE_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
 
-    const username =
-      getCurrentUsername();
-
-
-    const payload = {
-
-      date:
-        taskData.date,
-
-      username:
-        taskData.username ||
-        username,
-
-      assigned_by:
-        taskData.assigned_by,
-
-      project_name:
-        taskData.project_name,
-
-      start_date:
-        taskData.start_date,
-
-      expacted_date:
-        taskData.expacted_date ||
-        null,
-
-      completed_date:
-        taskData.completed_date ||
-        null,
-
-      status:
-        taskData.status,
-
-      priority:
-        taskData.priority,
-
-      reason_for_delay:
-        taskData.reason_for_delay,
-
-      remarks:
-        taskData.remarks,
-    };
-
-
-    console.log(
-      'Creating task with payload:',
-      payload
-    );
-
-
-    const response =
-      await fetch(
-        API_BASE_URL,
-        {
-          method: 'POST',
-
-          headers: {
-            'Content-Type':
-              'application/json'
-          },
-
-          body:
-            JSON.stringify(payload)
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(JSON.stringify(errorData));
         }
-      );
 
-
-    if (!response.ok) {
-
-      const errorData =
-        await response.json();
-
-      console.error(
-        'Create error:',
-        errorData
-      );
-
-      throw new Error(
-        JSON.stringify(errorData)
-      );
+        return await response.json();
+    } catch (error) {
+        console.error('Error creating task:', error);
+        throw error;
     }
-
-
-    const responseData =
-      await response.json();
-
-
-    console.log(
-      'Task created:',
-      responseData
-    );
-
-
-    return responseData;
-
-  } catch (error) {
-
-    console.error(
-      'Error creating task:',
-      error
-    );
-
-    throw error;
-  }
 }
 
+async function updateTask(taskId, taskData) {
+    try {
+        const username = getCurrentUsername();
+        const payload = {
+            date: taskData.date,
+            username: taskData.username || username,
+            assigned_by: taskData.assigned_by,
+            project_name: taskData.project_name,
+            start_date: taskData.start_date,
+            expacted_date: taskData.expacted_date || null,
+            completed_date: taskData.completed_date || null,
+            status: taskData.status,
+            priority: taskData.priority,
+            reason_for_delay: taskData.reason_for_delay,
+            remarks: taskData.remarks,
+        };
 
-// UPDATE TASK
-async function updateTask(
-  taskId,
-  taskData
-) {
+        const response = await fetch(`${API_BASE_URL}${taskId}/?username=${encodeURIComponent(username)}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
 
-  try {
-
-    const username =
-      getCurrentUsername();
-
-
-    const payload = {
-
-      date:
-        taskData.date,
-
-      username:
-        taskData.username ||
-        username,
-
-      assigned_by:
-        taskData.assigned_by,
-
-      project_name:
-        taskData.project_name,
-
-      start_date:
-        taskData.start_date,
-
-      expacted_date:
-        taskData.expacted_date ||
-        null,
-
-      completed_date:
-        taskData.completed_date ||
-        null,
-
-      status:
-        taskData.status,
-
-      priority:
-        taskData.priority,
-
-      reason_for_delay:
-        taskData.reason_for_delay,
-
-      remarks:
-        taskData.remarks,
-    };
-
-
-    console.log(
-      'Updating task with payload:',
-      payload
-    );
-
-
-    const response =
-      await fetch(
-        `${API_BASE_URL}${taskId}/?username=${encodeURIComponent(username)}`,
-        {
-          method: 'PUT',
-
-          headers: {
-            'Content-Type':
-              'application/json'
-          },
-
-          body:
-            JSON.stringify(payload)
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(JSON.stringify(errorData));
         }
-      );
 
-
-    if (!response.ok) {
-
-      const errorData =
-        await response.json();
-
-      console.error(
-        'Update error:',
-        errorData
-      );
-
-      throw new Error(
-        JSON.stringify(errorData)
-      );
+        return await response.json();
+    } catch (error) {
+        console.error('Error updating task:', error);
+        throw error;
     }
-
-
-    const responseData =
-      await response.json();
-
-
-    console.log(
-      'Task updated:',
-      responseData
-    );
-
-
-    return responseData;
-
-  } catch (error) {
-
-    console.error(
-      'Error updating task:',
-      error
-    );
-
-    throw error;
-  }
 }
 
-
-// DELETE TASK
 async function deleteTask(taskId) {
+    try {
+        const username = getCurrentUsername();
+        const response = await fetch(`${API_BASE_URL}${taskId}/?username=${encodeURIComponent(username)}`, {
+            method: 'DELETE'
+        });
 
-  try {
-
-    const username =
-      getCurrentUsername();
-
-
-    console.log(
-      'Deleting task:',
-      taskId,
-      'for user:',
-      username
-    );
-
-
-    const response =
-      await fetch(
-        `${API_BASE_URL}${taskId}/?username=${encodeURIComponent(username)}`,
-        {
-          method: 'DELETE'
-        }
-      );
-
-
-    if (!response.ok) {
-
-      console.error(
-        'Delete error:',
-        response.status
-      );
-
-      throw new Error(
-        'Failed to delete task'
-      );
+        if (!response.ok) throw new Error('Failed to delete task');
+        console.log('Task deleted successfully');
+    } catch (error) {
+        console.error('Error deleting task:', error);
+        throw error;
     }
-
-
-    console.log(
-      'Task deleted successfully'
-    );
-
-  } catch (error) {
-
-    console.error(
-      'Error deleting task:',
-      error
-    );
-
-    throw error;
-  }
 }
 
+/* ========================= EXCEL EXPORT ========================= */
 
-/* ========================= COLORFUL EXCEL EXPORT ========================= */
+async function exportTasksToExcel(tasks, filename) {
+    const STATUS_FILL = {
+        'Not Started': { fg: 'FFD9D9D9', font: 'FF595959' },
+        'In Progress': { fg: 'FFBDD7EE', font: 'FF1F4E78' },
+        'In Review': { fg: 'FFFFE9B3', font: 'FF7F6000' },
+        'Testing': { fg: 'FFE3D2FB', font: 'FF5A2D9C' },
+        'Completed': { fg: 'FFC6EFCE', font: 'FF006100' },
+        'Delayed': { fg: 'FFFFC7CE', font: 'FF9C0006' },
+        'On Hold': { fg: 'FFE4DFEC', font: 'FF5F497A' },
+    };
 
+    const PRIORITY_FILL = {
+        High: { fg: 'FFFFC7CE', font: 'FF9C0006' },
+        Medium: { fg: 'FFFFE9B3', font: 'FF7F6000' },
+        Low: { fg: 'FFC6EFCE', font: 'FF006100' },
+    };
 
-async function exportTasksToExcel(
-  tasks,
-  filename
-) {
+    const NAVY = 'FF1F4E78';
+    const WHITE = 'FFFFFFFF';
 
-  const STATUS_FILL = {
+    const border = {
+        top: { style: 'thin', color: { argb: 'FFB7B7B7' } },
+        left: { style: 'thin', color: { argb: 'FFB7B7B7' } },
+        bottom: { style: 'thin', color: { argb: 'FFB7B7B7' } },
+        right: { style: 'thin', color: { argb: 'FFB7B7B7' } },
+    };
 
-    'Not Started': {
-      fg: 'FFD9D9D9',
-      font: 'FF595959'
-    },
+    const wb = new ExcelJS.Workbook();
+    wb.creator = 'Task Tracker';
+    wb.created = new Date();
 
-    'In Progress': {
-      fg: 'FFBDD7EE',
-      font: 'FF1F4E78'
-    },
+    const summary = wb.addWorksheet('Dashboard', { views: [{ showGridLines: false }] });
+    summary.columns = [{ width: 4 }, { width: 26 }, { width: 16 }, { width: 4 }, { width: 26 }, { width: 16 }];
 
-    'In Review': {
-      fg: 'FFFFE9B3',
-      font: 'FF7F6000'
-    },
+    summary.mergeCells('B2:F2');
+    summary.getCell('B2').value = 'Task Tracker — Summary Report';
+    summary.getCell('B2').font = { name: 'Arial', size: 18, bold: true, color: { argb: NAVY } };
 
-    'Testing': {
-      fg: 'FFE3D2FB',
-      font: 'FF5A2D9C'
-    },
+    summary.mergeCells('B3:F3');
+    summary.getCell('B3').value = `Generated ${dayjs().format('DD MMM YYYY, HH:mm')} · ${tasks.length} tasks`;
+    summary.getCell('B3').font = { name: 'Arial', size: 10, italic: true, color: { argb: '5B6B75' } };
 
-    'Completed': {
-      fg: 'FFC6EFCE',
-      font: 'FF006100'
-    },
+    const kpis = computeKpis(tasks);
+    let r = 5;
 
-    'Delayed': {
-      fg: 'FFFFC7CE',
-      font: 'FF9C0006'
-    },
+    summary.getCell(`B${r}`).value = 'Key Metrics';
+    summary.getCell(`B${r}`).font = { name: 'Arial', size: 12, bold: true, color: { argb: NAVY } };
+    r += 1;
 
-    'On Hold': {
-      fg: 'FFE4DFEC',
-      font: 'FF5F497A'
-    },
-  };
-
-
-  const PRIORITY_FILL = {
-
-    High: {
-      fg: 'FFFFC7CE',
-      font: 'FF9C0006'
-    },
-
-    Medium: {
-      fg: 'FFFFE9B3',
-      font: 'FF7F6000'
-    },
-
-    Low: {
-      fg: 'FFC6EFCE',
-      font: 'FF006100'
-    },
-  };
-
-
-  const NAVY =
-    'FF1F4E78';
-
-  const WHITE =
-    'FFFFFFFF';
-
-
-  const border = {
-
-    top: {
-      style: 'thin',
-      color: {
-        argb: 'FFB7B7B7'
-      }
-    },
-
-    left: {
-      style: 'thin',
-      color: {
-        argb: 'FFB7B7B7'
-      }
-    },
-
-    bottom: {
-      style: 'thin',
-      color: {
-        argb: 'FFB7B7B7'
-      }
-    },
-
-    right: {
-      style: 'thin',
-      color: {
-        argb: 'FFB7B7B7'
-      }
-    },
-  };
-
-
-  const wb =
-    new ExcelJS.Workbook();
-
-
-  wb.creator =
-    'Task Tracker';
-
-  wb.created =
-    new Date();
-
-
-  const summary =
-    wb.addWorksheet(
-      'Dashboard',
-      {
-        views: [
-          {
-            showGridLines: false
-          }
-        ]
-      }
+    [['Total Tasks', kpis.total], ['Completed', kpis.completed], ['Completion %', `${kpis.completionPct}%`]].forEach(
+        ([label, value]) => {
+            summary.getCell(`B${r}`).value = label;
+            summary.getCell(`B${r}`).font = { name: 'Arial', size: 10 };
+            summary.getCell(`C${r}`).value = value;
+            summary.getCell(`C${r}`).font = { name: 'Arial', size: 12, bold: true, color: { argb: NAVY } };
+            r += 1;
+        }
     );
 
+    let statusRow = 5;
+    summary.getCell(`E${statusRow}`).value = 'Status Breakdown';
+    summary.getCell(`E${statusRow}`).font = { name: 'Arial', size: 12, bold: true, color: { argb: NAVY } };
+    statusRow += 1;
 
-  summary.columns = [
-    { width: 4 },
-    { width: 26 },
-    { width: 16 },
-    { width: 4 },
-    { width: 26 },
-    { width: 16 }
-  ];
-
-
-  summary.mergeCells(
-    'B2:F2'
-  );
-
-
-  summary.getCell('B2').value =
-    'Task Tracker — Summary Report';
-
-
-  summary.getCell('B2').font = {
-    name: 'Arial',
-    size: 18,
-    bold: true,
-    color: {
-      argb: NAVY
-    }
-  };
-
-
-  summary.mergeCells(
-    'B3:F3'
-  );
-
-
-  summary.getCell('B3').value =
-    `Generated ${dayjs().format('DD MMM YYYY, HH:mm')} · ${tasks.length} tasks`;
-
-
-  summary.getCell('B3').font = {
-    name: 'Arial',
-    size: 10,
-    italic: true,
-    color: {
-      argb: '5B6B75'
-    }
-  };
-
-
-  const kpis =
-    computeKpis(tasks);
-
-
-  let r = 5;
-
-
-  summary.getCell(`B${r}`).value =
-    'Key Metrics';
-
-
-  summary.getCell(`B${r}`).font = {
-    name: 'Arial',
-    size: 12,
-    bold: true,
-    color: {
-      argb: NAVY
-    }
-  };
-
-
-  r += 1;
-
-
-  [
-    [
-      'Total Tasks',
-      kpis.total
-    ],
-
-    [
-      'Completed',
-      kpis.completed
-    ],
-
-    [
-      'Completion %',
-      `${kpis.completionPct}%`
-    ]
-
-  ].forEach(
-    ([label, value]) => {
-
-      summary.getCell(`B${r}`).value =
-        label;
-
-      summary.getCell(`B${r}`).font = {
-        name: 'Arial',
-        size: 10
-      };
-
-
-      summary.getCell(`C${r}`).value =
-        value;
-
-      summary.getCell(`C${r}`).font = {
-        name: 'Arial',
-        size: 12,
-        bold: true,
-        color: {
-          argb: NAVY
-        }
-      };
-
-
-      r += 1;
-    }
-  );
-
-
-  let statusRow = 5;
-
-
-  summary.getCell(
-    `E${statusRow}`
-  ).value =
-    'Status Breakdown';
-
-
-  summary.getCell(
-    `E${statusRow}`
-  ).font = {
-    name: 'Arial',
-    size: 12,
-    bold: true,
-    color: {
-      argb: NAVY
-    }
-  };
-
-
-  statusRow += 1;
-
-
-  ['Status', 'Count']
-    .forEach(
-      (h, i) => {
-
-        const cell =
-          summary.getCell(
-            statusRow,
-            5 + i
-          );
-
-
+    ['Status', 'Count'].forEach((h, i) => {
+        const cell = summary.getCell(statusRow, 5 + i);
         cell.value = h;
+        cell.font = { name: 'Arial', size: 10, bold: true, color: { argb: WHITE } };
+        cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: NAVY } };
+        cell.border = border;
+    });
 
+    statusRow += 1;
 
-        cell.font = {
-          name: 'Arial',
-          size: 10,
-          bold: true,
-          color: {
-            argb: WHITE
-          }
-        };
+    computeStatusBreakdown(tasks).forEach(({ name, value }) => {
+        const fill = STATUS_FILL[name] || { fg: 'FFEFEFEF', font: 'FF333333' };
+        const nameCell = summary.getCell(`E${statusRow}`);
+        nameCell.value = name;
+        nameCell.font = { name: 'Arial', size: 10, bold: true, color: { argb: fill.font } };
+        nameCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: fill.fg } };
+        nameCell.border = border;
 
-
-        cell.fill = {
-          type: 'pattern',
-          pattern: 'solid',
-          fgColor: {
-            argb: NAVY
-          }
-        };
-
-
-        cell.border =
-          border;
-      }
-    );
-
-
-  statusRow += 1;
-
-
-  computeStatusBreakdown(tasks)
-    .forEach(
-      ({
-        name,
-        value
-      }) => {
-
-        const fill =
-          STATUS_FILL[name] || {
-            fg: 'FFEFEFEF',
-            font: 'FF333333'
-          };
-
-
-        const nameCell =
-          summary.getCell(
-            `E${statusRow}`
-          );
-
-
-        nameCell.value =
-          name;
-
-
-        nameCell.font = {
-          name: 'Arial',
-          size: 10,
-          bold: true,
-          color: {
-            argb: fill.font
-          }
-        };
-
-
-        nameCell.fill = {
-          type: 'pattern',
-          pattern: 'solid',
-          fgColor: {
-            argb: fill.fg
-          }
-        };
-
-
-        nameCell.border =
-          border;
-
-
-        const countCell =
-          summary.getCell(
-            `F${statusRow}`
-          );
-
-
-        countCell.value =
-          value;
-
-
-        countCell.alignment = {
-          horizontal: 'center'
-        };
-
-
-        countCell.border =
-          border;
-
-
+        const countCell = summary.getCell(`F${statusRow}`);
+        countCell.value = value;
+        countCell.alignment = { horizontal: 'center' };
+        countCell.border = border;
         statusRow += 1;
-      }
-    );
+    });
 
+    const ws = wb.addWorksheet('Task Data', { views: [{ state: 'frozen', ySplit: 1, showGridLines: false }] });
 
-  // Task Data Sheet
-  const ws =
-    wb.addWorksheet(
-      'Task Data',
-      {
-        views: [
-          {
-            state: 'frozen',
-            ySplit: 1,
-            showGridLines: false
-          }
-        ]
-      }
-    );
+    const headers = ['SR No', 'Date', 'User', 'Assigned By', 'Project', 'Start Date', 'Expected Date', 'Completed Date', 'Status', 'Priority', 'Reason for Delay', 'Remarks'];
+    ws.columns = [
+        { width: 7 }, { width: 12 }, { width: 18 }, { width: 18 }, { width: 28 }, { width: 14 },
+        { width: 14 }, { width: 14 }, { width: 14 }, { width: 12 }, { width: 20 }, { width: 30 }
+    ];
 
+    const headerRow = ws.getRow(1);
+    headers.forEach((h, i) => {
+        const cell = headerRow.getCell(i + 1);
+        cell.value = h;
+        cell.font = { name: 'Arial', size: 11, bold: true, color: { argb: WHITE } };
+        cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: NAVY } };
+        cell.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+        cell.border = border;
+    });
+    headerRow.height = 24;
 
-  const headers = [
-    'SR No',
-    'Date',
-    'User',
-    'Assigned By',
-    'Project',
-    'Start Date',
-    'Expected Date',
-    'Completed Date',
-    'Status',
-    'Priority',
-    'Reason for Delay',
-    'Remarks'
-  ];
+    const STATUS_COL = 9;
+    const PRIORITY_COL = 10;
 
+    tasks.forEach((t, idx) => {
+        const row = ws.getRow(idx + 2);
+        const values = [idx + 1, t.date ? dayjs(t.date).format('DD-MMM-YYYY') : '', t.username || '', t.assigned_by || '', t.project_name || '',
+            t.start_date ? dayjs(t.start_date).format('DD-MMM-YYYY') : '', t.expacted_date ? dayjs(t.expacted_date).format('DD-MMM-YYYY') : '',
+            t.completed_date ? dayjs(t.completed_date).format('DD-MMM-YYYY') : '', t.status || '', t.priority || '', t.reason_for_delay || '', t.remarks || ''];
 
-  ws.columns = [
-    { width: 7 },
-    { width: 12 },
-    { width: 18 },
-    { width: 18 },
-    { width: 28 },
-    { width: 14 },
-    { width: 14 },
-    { width: 14 },
-    { width: 14 },
-    { width: 12 },
-    { width: 20 },
-    { width: 30 }
-  ];
+        values.forEach((v, i) => {
+            const cell = row.getCell(i + 1);
+            cell.value = v;
+            cell.font = { name: 'Arial', size: 10 };
+            cell.border = border;
+            cell.alignment = { vertical: 'middle', wrapText: i === 11, horizontal: [0, 8, 9].includes(i) ? 'center' : 'left' };
+        });
 
-
-  const headerRow =
-    ws.getRow(1);
-
-
-  headers.forEach(
-    (h, i) => {
-
-      const cell =
-        headerRow.getCell(
-          i + 1
-        );
-
-
-      cell.value =
-        h;
-
-
-      cell.font = {
-        name: 'Arial',
-        size: 11,
-        bold: true,
-        color: {
-          argb: WHITE
+        if (idx % 2 === 1) {
+            for (let c = 1; c <= headers.length; c++) {
+                const cell = row.getCell(c);
+                if (!cell.fill) cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF6F8F9' } };
+            }
         }
-      };
 
-
-      cell.fill = {
-        type: 'pattern',
-        pattern: 'solid',
-        fgColor: {
-          argb: NAVY
-        }
-      };
-
-
-      cell.alignment = {
-        horizontal: 'center',
-        vertical: 'middle',
-        wrapText: true
-      };
-
-
-      cell.border =
-        border;
-    }
-  );
-
-
-  headerRow.height =
-    24;
-
-
-  const STATUS_COL = 9;
-  const PRIORITY_COL = 10;
-
-
-  tasks.forEach(
-    (t, idx) => {
-
-      const row =
-        ws.getRow(
-          idx + 2
-        );
-
-
-      const values = [
-
-        idx + 1,
-
-        t.date
-          ? dayjs(t.date)
-            .format('DD-MMM-YYYY')
-          : '',
-
-        t.username || '',
-
-        t.assigned_by || '',
-
-        t.project_name || '',
-
-        t.start_date
-          ? dayjs(t.start_date)
-            .format('DD-MMM-YYYY')
-          : '',
-
-        t.expacted_date
-          ? dayjs(t.expacted_date)
-            .format('DD-MMM-YYYY')
-          : '',
-
-        t.completed_date
-          ? dayjs(t.completed_date)
-            .format('DD-MMM-YYYY')
-          : '',
-
-        t.status || '',
-
-        t.priority || '',
-
-        t.reason_for_delay || '',
-
-        t.remarks || '',
-      ];
-
-
-      values.forEach(
-        (v, i) => {
-
-          const cell =
-            row.getCell(
-              i + 1
-            );
-
-
-          cell.value =
-            v;
-
-
-          cell.font = {
-            name: 'Arial',
-            size: 10
-          };
-
-
-          cell.border =
-            border;
-
-
-          cell.alignment = {
-            vertical: 'middle',
-            wrapText: i === 11,
-
-            horizontal:
-              [0, 8, 9].includes(i)
-                ? 'center'
-                : 'left'
-          };
-        }
-      );
-
-
-      if (
-        idx % 2 === 1
-      ) {
-
-        for (
-          let c = 1;
-          c <= headers.length;
-          c++
-        ) {
-
-          const cell =
-            row.getCell(c);
-
-
-          if (!cell.fill) {
-
-            cell.fill = {
-              type: 'pattern',
-              pattern: 'solid',
-              fgColor: {
-                argb: 'FFF6F8F9'
-              }
-            };
-          }
-        }
-      }
-
-
-      const statusFill =
-        STATUS_FILL[t.status] || {
-          fg: 'FFEFEFEF',
-          font: 'FF333333'
-        };
-
-
-      const statusCell =
-        row.getCell(
-          STATUS_COL
-        );
-
-
-      statusCell.fill = {
-        type: 'pattern',
-        pattern: 'solid',
-        fgColor: {
-          argb: statusFill.fg
-        }
-      };
-
-
-      statusCell.font = {
-        name: 'Arial',
-        size: 10,
-        bold: true,
-        color: {
-          argb: statusFill.font
-        }
-      };
-
-
-      statusCell.alignment = {
-        horizontal: 'center'
-      };
-
-
-      const priorityFill =
-        PRIORITY_FILL[t.priority] || {
-          fg: 'FFEFEFEF',
-          font: 'FF333333'
-        };
-
-
-      const priorityCell =
-        row.getCell(
-          PRIORITY_COL
-        );
-
-
-      priorityCell.fill = {
-        type: 'pattern',
-        pattern: 'solid',
-        fgColor: {
-          argb: priorityFill.fg
-        }
-      };
-
-
-      priorityCell.font = {
-        name: 'Arial',
-        size: 10,
-        bold: true,
-        color: {
-          argb: priorityFill.font
-        }
-      };
-
-
-      priorityCell.alignment = {
-        horizontal: 'center'
-      };
-    }
-  );
-
-
-  ws.autoFilter = {
-    from: 'A1',
-    to: `L${tasks.length + 1}`
-  };
-
-
-  const buffer =
-    await wb.xlsx.writeBuffer();
-
-
-  saveAs(
-    new Blob(
-      [buffer],
-      {
-        type:
-          'application/octet-stream'
-      }
-    ),
-    filename
-  );
+        const statusFill = STATUS_FILL[t.status] || { fg: 'FFEFEFEF', font: 'FF333333' };
+        const statusCell = row.getCell(STATUS_COL);
+        statusCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: statusFill.fg } };
+        statusCell.font = { name: 'Arial', size: 10, bold: true, color: { argb: statusFill.font } };
+        statusCell.alignment = { horizontal: 'center' };
+
+        const priorityFill = PRIORITY_FILL[t.priority] || { fg: 'FFEFEFEF', font: 'FF333333' };
+        const priorityCell = row.getCell(PRIORITY_COL);
+        priorityCell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: priorityFill.fg } };
+        priorityCell.font = { name: 'Arial', size: 10, bold: true, color: { argb: priorityFill.font } };
+        priorityCell.alignment = { horizontal: 'center' };
+    });
+
+    ws.autoFilter = { from: 'A1', to: `L${tasks.length + 1}` };
+    const buffer = await wb.xlsx.writeBuffer();
+    saveAs(new Blob([buffer], { type: 'application/octet-stream' }), filename);
 }
-
 
 /* ============================== SUBCOMPONENTS ============================== */
 
-
-function KpiCard({
-  label,
-  value,
-  color
-}) {
-
-  const Icon =
-    KPI_ICONS[label] ||
-    AssignmentRoundedIcon;
-
-
-  return (
-
-    <Paper
-      elevation={0}
-      sx={{
-
-        p: 2.25,
-
-        height: '100%',
-
-        borderRadius: 3,
-
-        border:
-          '1px solid #E9EDEF',
-
-        background:
-          'linear-gradient(180deg, #FFFFFF 0%, #FBFDFD 100%)',
-
-        boxShadow:
-          '0 1px 2px rgba(16,24,40,0.04)',
-
-        transition:
-          'transform .15s ease, box-shadow .15s ease',
-
-        '&:hover': {
-
-          transform:
-            'translateY(-2px)',
-
-          boxShadow:
-            '0 8px 20px rgba(16,24,40,0.08)'
-        },
-      }}
-    >
-
-      <Stack
-        direction="row"
-        justifyContent="space-between"
-        alignItems="flex-start"
-      >
-
-        <Typography
-          variant="subtitle2"
-          sx={{
-            fontWeight: 600,
-            color: 'text.secondary'
-          }}
-        >
-          {label}
-        </Typography>
-
-
-        <Box
-          sx={{
-            width: 34,
-            height: 34,
-            borderRadius: '10px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            bgcolor: `${color}1A`,
-          }}
-        >
-
-          <Icon
-            sx={{
-              fontSize: 18,
-              color
-            }}
-          />
-
-        </Box>
-
-      </Stack>
-
-
-      <Typography
-        variant="h4"
-        sx={{
-          mt: 1.5,
-          mb: 1,
-          fontWeight: 800
-        }}
-      >
-        {value}
-      </Typography>
-
-
-      <Box
-        sx={{
-          height: 4,
-          borderRadius: 2,
-          bgcolor: color,
-          width: '55%'
-        }}
-      />
-
-    </Paper>
-  );
+function KpiCard({ label, value, color }) {
+    const Icon = KPI_ICONS[label] || AssignmentRoundedIcon;
+    return (
+        <Paper elevation={0} sx={{
+            p: 2.25, height: '100%', borderRadius: 3, border: '1px solid #E9EDEF',
+            background: 'linear-gradient(180deg, #FFFFFF 0%, #FBFDFD 100%)',
+            boxShadow: '0 1px 2px rgba(16,24,40,0.04)',
+            transition: 'transform .15s ease, box-shadow .15s ease',
+            '&:hover': { transform: 'translateY(-2px)', boxShadow: '0 8px 20px rgba(16,24,40,0.08)' },
+        }}>
+            <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
+                <Typography variant="subtitle2" sx={{ fontWeight: 600, color: 'text.secondary' }}>{label}</Typography>
+                <Box sx={{ width: 34, height: 34, borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: `${color}1A` }}>
+                    <Icon sx={{ fontSize: 18, color }} />
+                </Box>
+            </Stack>
+            <Typography variant="h4" sx={{ mt: 1.5, mb: 1, fontWeight: 800 }}>{value}</Typography>
+            <Box sx={{ height: 4, borderRadius: 2, bgcolor: color, width: '55%' }} />
+        </Paper>
+    );
 }
 
+/* ========================== TASK FORM DIALOG ========================== */
 
-/* ========================== TASK FORM ========================== */
+function TaskFormDialog({ open, onClose, onSave, initialTask, currentUsername, isRestartMode }) {
+    const [form, setForm] = useState(getEmptyForm());
+    const [errors, setErrors] = useState({});
+    const [loading, setLoading] = useState(false);
 
-
-function TaskFormDialog({
-  open,
-  onClose,
-  onSave,
-  initialTask,
-  currentUsername
-}) {
-
-  const [form, setForm] =
-    useState(
-      getEmptyForm()
-    );
-
-
-  const [errors, setErrors] =
-    useState({});
-
-
-  const [loading, setLoading] =
-    useState(false);
-
-
-  useEffect(() => {
-
-    if (open) {
-
-      if (initialTask) {
-
-        setForm({
-
-          date:
-            initialTask.date ||
-            dayjs().format('YYYY-MM-DD'),
-
-          username:
-            initialTask.username ||
-            currentUsername,
-
-          assigned_by:
-            initialTask.assigned_by ||
-            '',
-
-          project_name:
-            initialTask.project_name ||
-            '',
-
-          start_date:
-            initialTask.start_date ||
-            '',
-
-          expacted_date:
-            initialTask.expacted_date ||
-            '',
-
-          completed_date:
-            initialTask.completed_date ||
-            '',
-
-          status:
-            initialTask.status ||
-            'Not Started',
-
-          priority:
-            initialTask.priority ||
-            'Medium',
-
-          reason_for_delay:
-            initialTask.reason_for_delay ||
-            'None',
-
-          remarks:
-            initialTask.remarks ||
-            '',
-        });
-
-      } else {
-
-        setForm(
-          getEmptyForm()
-        );
-      }
-
-
-      setErrors({});
-    }
-
-  }, [
-    open,
-    initialTask,
-    currentUsername
-  ]);
-
-
-  const handleChange =
-    (field) =>
-      (e) => {
-
-        setForm(
-          (f) => ({
-            ...f,
-
-            [field]:
-              e.target.value
-          })
-        );
-      };
-
-
-  const validate = () => {
-
-    const e = {};
-
-
-    if (
-      !form.assigned_by.trim()
-    ) {
-
-      e.assigned_by =
-        'Required';
-    }
-
-
-    if (
-      !form.project_name.trim()
-    ) {
-
-      e.project_name =
-        'Required';
-    }
-
-
-    if (
-      !form.start_date
-    ) {
-
-      e.start_date =
-        'Required';
-    }
-
-
-    if (
-      form.expacted_date &&
-      form.start_date &&
-      form.expacted_date <
-      form.start_date
-    ) {
-
-      e.expacted_date =
-        'Cannot be before start date';
-    }
-
-
-    if (
-      form.completed_date &&
-      form.start_date &&
-      form.completed_date <
-      form.start_date
-    ) {
-
-      e.completed_date =
-        'Cannot be before start date';
-    }
-
-
-    setErrors(e);
-
-
-    return (
-      Object.keys(e).length === 0
-    );
-  };
-
-
-  const handleSubmit =
-    async () => {
-
-      if (validate()) {
-
-        setLoading(true);
-
-        try {
-
-          await onSave(form);
-
-        } finally {
-
-          setLoading(false);
+    useEffect(() => {
+        if (open) {
+            if (isRestartMode && initialTask) {
+                setForm(getRestartForm(initialTask));
+            } else if (initialTask) {
+                setForm({
+                    date: initialTask.date || dayjs().format('YYYY-MM-DD'),
+                    username: initialTask.username || currentUsername,
+                    assigned_by: initialTask.assigned_by || '',
+                    project_name: initialTask.project_name || '',
+                    start_date: initialTask.start_date || '',
+                    expacted_date: initialTask.expacted_date || '',
+                    completed_date: initialTask.completed_date || '',
+                    status: initialTask.status || 'Not Started',
+                    priority: initialTask.priority || 'Medium',
+                    reason_for_delay: initialTask.reason_for_delay || 'None',
+                    remarks: initialTask.remarks || '',
+                });
+            } else {
+                setForm(getEmptyForm());
+            }
+            setErrors({});
         }
-      }
+    }, [open, initialTask, currentUsername, isRestartMode]);
+
+    const handleChange = (field) => (e) => {
+        setForm((f) => ({ ...f, [field]: e.target.value }));
     };
 
-
-  return (
-
-    <Dialog
-      open={open}
-      onClose={onClose}
-      maxWidth="sm"
-      fullWidth
-      PaperProps={{
-        sx: {
-          borderRadius: 3
+    const validate = () => {
+        const e = {};
+        if (!form.assigned_by.trim()) e.assigned_by = 'Required';
+        if (!form.project_name.trim()) e.project_name = 'Required';
+        if (!form.start_date) e.start_date = 'Required';
+        if (form.expacted_date && form.start_date && form.expacted_date < form.start_date) {
+            e.expacted_date = 'Cannot be before start date';
         }
-      }}
-    >
-
-      <DialogTitle
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between'
-        }}
-      >
-
-        <Typography
-          variant="h6"
-          sx={{
-            fontWeight: 800
-          }}
-        >
-
-          {initialTask
-            ? 'Edit Task'
-            : 'Add Task'}
-
-        </Typography>
-
-
-        <IconButton
-          size="small"
-          onClick={onClose}
-          disabled={loading}
-        >
-
-          <CloseRoundedIcon />
-
-        </IconButton>
-
-      </DialogTitle>
-
-
-      <Divider />
-
-
-      <DialogContent
-        sx={{
-          pt: 3
-        }}
-      >
-
-        <Grid
-          container
-          spacing={2}
-        >
-
-          {/* ============================================
-              CHANGED:
-              Add Task allows ONLY current date.
-              Edit mode keeps its existing date.
-          ============================================ */}
-
-          <Grid
-            item
-            xs={12}
-            sm={6}
-          >
-
-            <TextField
-              label="Date"
-              type="date"
-              fullWidth
-              size="small"
-
-              InputLabelProps={{
-                shrink: true
-              }}
-
-              inputProps={
-                !initialTask
-                  ? {
-                    min:
-                      dayjs().format(
-                        'YYYY-MM-DD'
-                      ),
-
-                    max:
-                      dayjs().format(
-                        'YYYY-MM-DD'
-                      )
-                  }
-                  : {}
-              }
-
-              value={form.date}
-
-              onChange={
-                handleChange('date')
-              }
-
-              disabled={loading}
-            />
-
-          </Grid>
-
-
-          <Grid
-            item
-            xs={12}
-            sm={6}
-          >
-
-            <TextField
-              label="Username"
-              fullWidth
-              size="small"
-              value={form.username}
-              disabled
-              helperText="Auto from login"
-              FormHelperTextProps={{
-                sx: {
-                  fontSize: '0.7rem'
-                }
-              }}
-            />
-
-          </Grid>
-
-
-          <Grid
-            item
-            xs={12}
-            sm={6}
-          >
-
-            <TextField
-              label="Assigned By"
-              fullWidth
-              size="small"
-              value={form.assigned_by}
-              onChange={
-                handleChange('assigned_by')
-              }
-              error={
-                !!errors.assigned_by
-              }
-              helperText={
-                errors.assigned_by
-              }
-              disabled={loading}
-            />
-
-          </Grid>
-
-
-          <Grid
-            item
-            xs={12}
-            sm={6}
-          >
-
-            <TextField
-              label="Project Name"
-              fullWidth
-              size="small"
-              value={form.project_name}
-              onChange={
-                handleChange('project_name')
-              }
-              error={
-                !!errors.project_name
-              }
-              helperText={
-                errors.project_name
-              }
-              disabled={loading}
-            />
-
-          </Grid>
-
-
-          <Grid
-            item
-            xs={12}
-            sm={6}
-          >
-
-            <TextField
-              label="Project Start Date"
-              type="date"
-              fullWidth
-              size="small"
-              InputLabelProps={{
-                shrink: true
-              }}
-              value={form.start_date}
-              onChange={
-                handleChange('start_date')
-              }
-              error={
-                !!errors.start_date
-              }
-              helperText={
-                errors.start_date
-              }
-              disabled={loading}
-            />
-
-          </Grid>
-
-
-          <Grid
-            item
-            xs={12}
-            sm={6}
-          >
-
-            <TextField
-              label="Expected Completion"
-              type="date"
-              fullWidth
-              size="small"
-              InputLabelProps={{
-                shrink: true
-              }}
-              value={
-                form.expacted_date
-              }
-              onChange={
-                handleChange(
-                  'expacted_date'
-                )
-              }
-              error={
-                !!errors.expacted_date
-              }
-              helperText={
-                errors.expacted_date
-              }
-              disabled={loading}
-            />
-
-          </Grid>
-
-
-          <Grid
-            item
-            xs={12}
-            sm={6}
-          >
-
-            <TextField
-              label="Project Completed By"
-              type="date"
-              fullWidth
-              size="small"
-              InputLabelProps={{
-                shrink: true
-              }}
-              value={
-                form.completed_date
-              }
-              onChange={
-                handleChange(
-                  'completed_date'
-                )
-              }
-              error={
-                !!errors.completed_date
-              }
-              helperText={
-                errors.completed_date
-              }
-              disabled={loading}
-            />
-
-          </Grid>
-
-
-          <Grid
-            item
-            xs={12}
-            sm={4}
-          >
-
-            <TextField
-              select
-              label="Status"
-              fullWidth
-              size="small"
-              value={form.status}
-              onChange={
-                handleChange('status')
-              }
-              disabled={loading}
-            >
-
-              {STATUS_OPTIONS.map(
-                (s) => (
-
-                  <MenuItem
-                    key={s}
-                    value={s}
-                  >
-                    {s}
-                  </MenuItem>
-
-                )
-              )}
-
-            </TextField>
-
-          </Grid>
-
-
-          <Grid
-            item
-            xs={12}
-            sm={4}
-          >
-
-            <TextField
-              select
-              label="Priority"
-              fullWidth
-              size="small"
-              value={form.priority}
-              onChange={
-                handleChange('priority')
-              }
-              disabled={loading}
-            >
-
-              {PRIORITY_OPTIONS.map(
-                (p) => (
-
-                  <MenuItem
-                    key={p}
-                    value={p}
-                  >
-
-                    <Stack
-                      direction="row"
-                      spacing={1}
-                      alignItems="center"
-                    >
-
-                      <Box
-                        sx={{
-                          width: 9,
-                          height: 9,
-                          borderRadius: '50%',
-                          bgcolor:
-                            PRIORITY_COLORS[p]
-                              .main
-                        }}
-                      />
-
-                      <span>
-                        {p}
-                      </span>
-
-                    </Stack>
-
-                  </MenuItem>
-
-                )
-              )}
-
-            </TextField>
-
-          </Grid>
-
-
-          <Grid
-            item
-            xs={12}
-            sm={4}
-          >
-
-            <TextField
-              select
-              label="Reason for Delay"
-              fullWidth
-              size="small"
-              value={
-                form.reason_for_delay
-              }
-              onChange={
-                handleChange(
-                  'reason_for_delay'
-                )
-              }
-              disabled={loading}
-            >
-
-              {REASON_OPTIONS.map(
-                (s) => (
-
-                  <MenuItem
-                    key={s}
-                    value={s}
-                  >
-                    {s}
-                  </MenuItem>
-
-                )
-              )}
-
-            </TextField>
-
-          </Grid>
-
-
-          <Grid
-            item
-            xs={12}
-          >
-
-            <TextField
-              label="Remarks"
-              fullWidth
-              multiline
-              minRows={2}
-              size="small"
-              value={form.remarks}
-              onChange={
-                handleChange('remarks')
-              }
-              disabled={loading}
-            />
-
-          </Grid>
-
-        </Grid>
-
-      </DialogContent>
-
-
-      <Divider />
-
-
-      <DialogActions
-        sx={{
-          p: 2
-        }}
-      >
-
-        <Button
-          onClick={onClose}
-          color="inherit"
-          disabled={loading}
-        >
-          Cancel
-        </Button>
-
-
-        <Button
-          onClick={handleSubmit}
-          variant="contained"
-          disabled={loading}
-          sx={{
-            bgcolor: PRIMARY,
-
-            '&:hover': {
-              bgcolor:
-                PRIMARY_DARK
+        if (form.completed_date && form.start_date && form.completed_date < form.start_date) {
+            e.completed_date = 'Cannot be before start date';
+        }
+        setErrors(e);
+        return Object.keys(e).length === 0;
+    };
+
+    const handleSubmit = async () => {
+        if (validate()) {
+            setLoading(true);
+            try {
+                await onSave(form);
+            } finally {
+                setLoading(false);
             }
-          }}
-        >
+        }
+    };
 
-          {loading
-            ? (
-              <CircularProgress
-                size={20}
-                sx={{
-                  mr: 1
-                }}
-              />
-            )
-            : null
-          }
-
-
-          {initialTask
-            ? 'Save changes'
-            : 'Add task'}
-
-        </Button>
-
-      </DialogActions>
-
-    </Dialog>
-  );
+    return (
+        <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth PaperProps={{ sx: { borderRadius: 3 } }}>
+            <DialogTitle sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Typography variant="h6" sx={{ fontWeight: 800 }}>
+                    {isRestartMode ? 'Restart Project' : initialTask ? 'Edit Task' : 'Add Task'}
+                </Typography>
+                <IconButton size="small" onClick={onClose} disabled={loading}><CloseRoundedIcon /></IconButton>
+            </DialogTitle>
+            <Divider />
+            <DialogContent sx={{ pt: 3 }}>
+                <Grid container spacing={2}>
+                    <Grid item xs={12} sm={6}>
+                        <TextField label="Date" type="date" fullWidth size="small" InputLabelProps={{ shrink: true }}
+                            inputProps={!initialTask ? { min: dayjs().format('YYYY-MM-DD'), max: dayjs().format('YYYY-MM-DD') } : {}}
+                            value={form.date} onChange={handleChange('date')} disabled={loading} />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <TextField label="Username" fullWidth size="small" value={form.username} disabled
+                            helperText="Auto from login" FormHelperTextProps={{ sx: { fontSize: '0.7rem' } }} />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <TextField label="Assigned By" fullWidth size="small" value={form.assigned_by}
+                            onChange={handleChange('assigned_by')} error={!!errors.assigned_by}
+                            helperText={errors.assigned_by} disabled={loading} />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <TextField label="Project Name" fullWidth size="small" value={form.project_name}
+                            onChange={handleChange('project_name')} error={!!errors.project_name}
+                            helperText={errors.project_name} disabled={loading} />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <TextField label="Project Start Date" type="date" fullWidth size="small" InputLabelProps={{ shrink: true }}
+                            value={form.start_date} onChange={handleChange('start_date')}
+                            error={!!errors.start_date} helperText={errors.start_date} disabled={loading} />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <TextField label="Expected Completion" type="date" fullWidth size="small" InputLabelProps={{ shrink: true }}
+                            value={form.expacted_date} onChange={handleChange('expacted_date')}
+                            error={!!errors.expacted_date} helperText={errors.expacted_date} disabled={loading} />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <TextField label="Project Completed By" type="date" fullWidth size="small" InputLabelProps={{ shrink: true }}
+                            value={form.completed_date} onChange={handleChange('completed_date')}
+                            error={!!errors.completed_date} helperText={errors.completed_date} disabled={loading} />
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                        <TextField select label="Status" fullWidth size="small" value={form.status}
+                            onChange={handleChange('status')} disabled={loading}>
+                            {STATUS_OPTIONS.map((s) => <MenuItem key={s} value={s}>{s}</MenuItem>)}
+                        </TextField>
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                        <TextField select label="Priority" fullWidth size="small" value={form.priority}
+                            onChange={handleChange('priority')} disabled={loading}>
+                            {PRIORITY_OPTIONS.map((p) => (
+                                <MenuItem key={p} value={p}>
+                                    <Stack direction="row" spacing={1} alignItems="center">
+                                        <Box sx={{ width: 9, height: 9, borderRadius: '50%', bgcolor: PRIORITY_COLORS[p].main }} />
+                                        <span>{p}</span>
+                                    </Stack>
+                                </MenuItem>
+                            ))}
+                        </TextField>
+                    </Grid>
+                    <Grid item xs={12} sm={4}>
+                        <TextField select label="Reason for Delay" fullWidth size="small" value={form.reason_for_delay}
+                            onChange={handleChange('reason_for_delay')} disabled={loading}>
+                            {REASON_OPTIONS.map((s) => <MenuItem key={s} value={s}>{s}</MenuItem>)}
+                        </TextField>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <TextField label="Remarks" fullWidth multiline minRows={2} size="small" value={form.remarks}
+                            onChange={handleChange('remarks')} disabled={loading} />
+                    </Grid>
+                </Grid>
+            </DialogContent>
+            <Divider />
+            <DialogActions sx={{ p: 2 }}>
+                <Button onClick={onClose} color="inherit" disabled={loading}>Cancel</Button>
+                <Button onClick={handleSubmit} variant="contained" disabled={loading}
+                    sx={{ bgcolor: PRIMARY, '&:hover': { bgcolor: PRIMARY_DARK } }}>
+                    {loading && <CircularProgress size={20} sx={{ mr: 1 }} />}
+                    {isRestartMode ? 'Start New Work' : initialTask ? 'Save changes' : 'Add task'}
+                </Button>
+            </DialogActions>
+        </Dialog>
+    );
 }
-
 
 /* ============================== MAIN COMPONENT ============================== */
 
-
 export default function TaskTracker() {
+    const currentUsername = useMemo(() => getCurrentUsername(), []);
+    const isAdmin = useMemo(() => isUserAdmin(), []);
 
-
-  const currentUsername =
-    useMemo(
-      () => getCurrentUsername(),
-      []
-    );
-
-
-  const isAdmin =
-    useMemo(
-      () => isUserAdmin(),
-      []
-    );
-
-
-  const [tasks, setTasks] =
-    useState([]);
-
-
-  const [loading, setLoading] =
-    useState(true);
-
-
-  /*
-   * CHANGED:
-   * All Dates is selected by default.
-   */
-  const [filters, setFilters] =
-    useState({
-
-      dateFilterType:
-        'single',
-
-      singleDate:
-        '',
-
-      fromDate:
-        dayjs()
-          .startOf('month')
-          .format('YYYY-MM-DD'),
-
-      toDate:
-        dayjs()
-          .format('YYYY-MM-DD'),
-
-      status:
-        'All',
-
-      priority:
-        'All',
-
-      search:
-        '',
-
-      username:
-        'All',
+    const [tasks, setTasks] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [filters, setFilters] = useState({
+        dateFilterType: 'single',
+        singleDate: '',
+        fromDate: dayjs().startOf('month').format('YYYY-MM-DD'),
+        toDate: dayjs().format('YYYY-MM-DD'),
+        status: 'All',
+        priority: 'All',
+        search: '',
+        username: 'All',
     });
 
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [editingTask, setEditingTask] = useState(null);
+    const [isRestartMode, setIsRestartMode] = useState(false);
+    const [snack, setSnack] = useState(null);
+    const [exportAnchorEl, setExportAnchorEl] = useState(null);
+    const [rangeDialogOpen, setRangeDialogOpen] = useState(false);
+    const [customRange, setCustomRange] = useState({ from: '', to: '' });
 
-  const [dialogOpen, setDialogOpen] =
-    useState(false);
+    const today = dayjs().format('YYYY-MM-DD');
+    const monthStart = dayjs().startOf('month').format('YYYY-MM-DD');
 
+    useEffect(() => { loadTasks(); }, []);
 
-  const [editingTask, setEditingTask] =
-    useState(null);
-
-
-  const [snack, setSnack] =
-    useState(null);
-
-
-  const [
-    exportAnchorEl,
-    setExportAnchorEl
-  ] =
-    useState(null);
-
-
-  const [
-    rangeDialogOpen,
-    setRangeDialogOpen
-  ] =
-    useState(false);
-
-
-  const [
-    customRange,
-    setCustomRange
-  ] =
-    useState({
-      from: '',
-      to: ''
-    });
-
-
-  const today =
-    dayjs()
-      .format('YYYY-MM-DD');
-
-
-  const monthStart =
-    dayjs()
-      .startOf('month')
-      .format('YYYY-MM-DD');
-
-
-  useEffect(() => {
-
-    loadTasks();
-
-  }, []);
-
-
-  const loadTasks =
-    async () => {
-
-      setLoading(true);
-
-      const data =
-        await fetchTasks();
-
-      setTasks(data);
-
-      setLoading(false);
+    const loadTasks = async () => {
+        setLoading(true);
+        const data = await fetchTasks();
+        setTasks(data);
+        setLoading(false);
     };
 
+    const filtered = useMemo(() => filterTasks(tasks, filters), [tasks, filters]);
+    const kpis = useMemo(() => computeKpis(filtered), [filtered]);
+    const statusBreakdown = useMemo(() => computeStatusBreakdown(filtered), [filtered]);
+    const reasonBreakdown = useMemo(() => computeReasonBreakdown(filtered), [filtered]);
+    const priorityBreakdown = useMemo(() => computePriorityBreakdown(filtered), [filtered]);
 
-  const filtered =
-    useMemo(
-      () =>
-        filterTasks(
-          tasks,
-          filters
-        ),
-
-      [
-        tasks,
-        filters
-      ]
-    );
-
-
-  const kpis =
-    useMemo(
-      () =>
-        computeKpis(
-          filtered
-        ),
-
-      [filtered]
-    );
-
-
-  const statusBreakdown =
-    useMemo(
-      () =>
-        computeStatusBreakdown(
-          filtered
-        ),
-
-      [filtered]
-    );
-
-
-  const reasonBreakdown =
-    useMemo(
-      () =>
-        computeReasonBreakdown(
-          filtered
-        ),
-
-      [filtered]
-    );
-
-
-  const priorityBreakdown =
-    useMemo(
-      () =>
-        computePriorityBreakdown(
-          filtered
-        ),
-
-      [filtered]
-    );
-
-
-  // UNIQUE USERNAMES FOR ADMIN FILTER
-  const uniqueUsernames =
-    useMemo(
-      () => {
-
-        const names = [
-          ...new Set(
-            tasks
-              .map(
-                (t) => t.username
-              )
-              .filter(Boolean)
-          )
-        ];
-
+    const uniqueUsernames = useMemo(() => {
+        const names = [...new Set(tasks.map((t) => t.username).filter(Boolean))];
         return names.sort();
+    }, [tasks]);
 
-      },
+    const openAdd = () => {
+        setEditingTask(null);
+        setIsRestartMode(false);
+        setDialogOpen(true);
+    };
 
-      [tasks]
-    );
+    const openEdit = (t) => {
+        setEditingTask(t);
+        setIsRestartMode(false);
+        setDialogOpen(true);
+    };
 
+    const openRestart = (t) => {
+        setEditingTask(t);
+        setIsRestartMode(true);
+        setDialogOpen(true);
+    };
 
-  const openAdd = () => {
+    const handleSave = async (form) => {
+        try {
+            if (editingTask && !isRestartMode) {
+                await updateTask(editingTask.id, form);
+                setTasks((prev) =>
+                    prev.map((t) =>
+                        t.id === editingTask.id ? { ...editingTask, ...form } : t
+                    )
+                );
+                setSnack({ severity: 'success', message: 'Task updated.' });
+            } else {
+                await createTask(form);
+                setSnack({
+                    severity: 'success',
+                    message: isRestartMode ? 'Project restarted successfully.' : 'Task added.'
+                });
+                await loadTasks();
+            }
+            setDialogOpen(false);
+        } catch (error) {
+            setSnack({ severity: 'error', message: `Error: ${error.message}` });
+        }
+    };
 
-    setEditingTask(null);
+    const handleDelete = async (id) => {
+        try {
+            await deleteTask(id);
+            setTasks((prev) => prev.filter((t) => t.id !== id));
+            setSnack({ severity: 'info', message: 'Task deleted.' });
+        } catch (error) {
+            setSnack({ severity: 'error', message: `Error: ${error.message}` });
+        }
+    };
 
-    setDialogOpen(true);
-  };
+    const doExport = async (data, label) => {
+        if (!data.length) {
+            setSnack({ severity: 'warning', message: `No tasks found for "${label}".` });
+            return;
+        }
+        const filename = `Task_Tracker_${label.replace(/\s+/g, '_')}_${dayjs().format('YYYY-MM-DD')}.xlsx`;
+        await exportTasksToExcel(data, filename);
+        setSnack({ severity: 'success', message: `Exported ${data.length} task(s) — ${label}.` });
+    };
 
+    const tasksInRange = (from, to) =>
+        tasks.filter((t) => {
+            if (!t.start_date) return false;
+            if (from && dayjs(t.start_date).isBefore(dayjs(from), 'day')) return false;
+            if (to && dayjs(t.start_date).isAfter(dayjs(to), 'day')) return false;
+            return true;
+        });
 
-  const openEdit = (t) => {
+    const handleExportPreset = async (type) => {
+        setExportAnchorEl(null);
+        const now = dayjs();
 
-    setEditingTask(t);
-
-    setDialogOpen(true);
-  };
-
-
-  const handleSave =
-    async (form) => {
-
-      try {
-
-        if (editingTask) {
-
-          await updateTask(
-            editingTask.id,
-            form
-          );
-
-
-          setTasks(
-            (prev) =>
-              prev.map(
-                (t) =>
-                  t.id === editingTask.id
-                    ? {
-                      ...editingTask,
-                      ...form
-                    }
-                    : t
-              )
-          );
-
-
-          setSnack({
-            severity: 'success',
-            message:
-              'Task updated.'
-          });
-
-        } else {
-
-          await createTask(form);
-
-
-          setSnack({
-            severity: 'success',
-            message:
-              'Task added.'
-          });
-
-
-          await loadTasks();
+        if (type === 'current') {
+            await doExport(filtered, 'Current View');
+            return;
         }
 
-
-        setDialogOpen(false);
-
-      } catch (error) {
-
-        setSnack({
-          severity: 'error',
-          message:
-            `Error: ${error.message}`
-        });
-      }
-    };
-
-
-  const handleDelete =
-    async (id) => {
-
-      try {
-
-        await deleteTask(id);
-
-
-        setTasks(
-          (prev) =>
-            prev.filter(
-              (t) => t.id !== id
-            )
-        );
-
-
-        setSnack({
-          severity: 'info',
-          message:
-            'Task deleted.'
-        });
-
-      } catch (error) {
-
-        setSnack({
-          severity: 'error',
-          message:
-            `Error: ${error.message}`
-        });
-      }
-    };
-
-
-  const doExport =
-    async (
-      data,
-      label
-    ) => {
-
-      if (!data.length) {
-
-        setSnack({
-          severity: 'warning',
-
-          message:
-            `No tasks found for "${label}".`
-        });
-
-        return;
-      }
-
-
-      const filename =
-        `Task_Tracker_${label.replace(/\s+/g, '_')}_${dayjs().format('YYYY-MM-DD')}.xlsx`;
-
-
-      await exportTasksToExcel(
-        data,
-        filename
-      );
-
-
-      setSnack({
-        severity: 'success',
-
-        message:
-          `Exported ${data.length} task(s) — ${label}.`
-      });
-    };
-
-
-  const tasksInRange =
-    (from, to) =>
-      tasks.filter(
-        (t) => {
-
-          if (!t.start_date) {
-            return false;
-          }
-
-
-          if (
-            from &&
-            dayjs(t.start_date)
-              .isBefore(
-                dayjs(from),
-                'day'
-              )
-          ) {
-
-            return false;
-          }
-
-
-          if (
-            to &&
-            dayjs(t.start_date)
-              .isAfter(
-                dayjs(to),
-                'day'
-              )
-          ) {
-
-            return false;
-          }
-
-
-          return true;
+        if (type === 'today') {
+            await doExport(tasks.filter((t) => t.date === today), `Today (${dayjs(today).format('DD MMM YYYY')})`);
+            return;
         }
-      );
 
+        if (type === 'custom') {
+            setCustomRange({ from: monthStart, to: today });
+            setRangeDialogOpen(true);
+            return;
+        }
 
-  const handleExportPreset =
-    async (type) => {
+        let from, to, label;
+        if (type === 'week') {
+            from = now.startOf('week');
+            to = now.endOf('week');
+            label = `Weekly (${from.format('DD MMM')} - ${to.format('DD MMM YYYY')})`;
+        } else if (type === 'month') {
+            from = now.startOf('month');
+            to = now.endOf('month');
+            label = `Monthly (${now.format('MMM YYYY')})`;
+        } else if (type === 'year') {
+            from = now.startOf('year');
+            to = now.endOf('year');
+            label = `Yearly (${now.format('YYYY')})`;
+        }
 
-      setExportAnchorEl(null);
-
-
-      const now = dayjs();
-
-
-      if (
-        type === 'current'
-      ) {
-
-        await doExport(
-          filtered,
-          'Current View'
-        );
-
-        return;
-      }
-
-
-      if (
-        type === 'today'
-      ) {
-
-        const data =
-          tasks.filter(
-            (t) =>
-              t.date === today
-          );
-
-
-        await doExport(
-          data,
-
-          `Today (${dayjs(today).format('DD MMM YYYY')})`
-        );
-
-
-        return;
-      }
-
-
-      if (
-        type === 'custom'
-      ) {
-
-        setCustomRange({
-          from: monthStart,
-          to: today
-        });
-
-
-        setRangeDialogOpen(true);
-
-        return;
-      }
-
-
-      let from;
-      let to;
-      let label;
-
-
-      if (
-        type === 'week'
-      ) {
-
-        from =
-          now.startOf('week');
-
-        to =
-          now.endOf('week');
-
-        label =
-          `Weekly (${from.format('DD MMM')} - ${to.format('DD MMM YYYY')})`;
-
-      } else if (
-        type === 'month'
-      ) {
-
-        from =
-          now.startOf('month');
-
-        to =
-          now.endOf('month');
-
-        label =
-          `Monthly (${now.format('MMM YYYY')})`;
-
-      } else if (
-        type === 'year'
-      ) {
-
-        from =
-          now.startOf('year');
-
-        to =
-          now.endOf('year');
-
-        label =
-          `Yearly (${now.format('YYYY')})`;
-      }
-
-
-      const data =
-        tasksInRange(
-          from.format(
-            'YYYY-MM-DD'
-          ),
-
-          to.format(
-            'YYYY-MM-DD'
-          )
-        );
-
-
-      await doExport(
-        data,
-        label
-      );
+        await doExport(tasksInRange(from.format('YYYY-MM-DD'), to.format('YYYY-MM-DD')), label);
     };
 
-
-  const handleCustomRangeExport =
-    async () => {
-
-      if (
-        !customRange.from ||
-        !customRange.to
-      ) {
-
-        setSnack({
-          severity:
-            'warning',
-
-          message:
-            'Please select both From and To dates.'
-        });
-
-        return;
-      }
-
-
-      const data =
-        tasksInRange(
-          customRange.from,
-          customRange.to
-        );
-
-
-      setRangeDialogOpen(false);
-
-
-      await doExport(
-        data,
-
-        `${dayjs(customRange.from).format('DD MMM YYYY')} to ${dayjs(customRange.to).format('DD MMM YYYY')}`
-      );
+    const handleCustomRangeExport = async () => {
+        if (!customRange.from || !customRange.to) {
+            setSnack({ severity: 'warning', message: 'Please select both From and To dates.' });
+            return;
+        }
+        const data = tasksInRange(customRange.from, customRange.to);
+        setRangeDialogOpen(false);
+        await doExport(data, `${dayjs(customRange.from).format('DD MMM YYYY')} to ${dayjs(customRange.to).format('DD MMM YYYY')}`);
     };
 
+    const kpiCards = [
+        { label: 'Total Tasks', value: kpis.total, color: '#1B2A4A' },
+        { label: 'Not Started', value: kpis.counts['Not Started'] || 0, color: STATUS_COLORS['Not Started'].main },
+        { label: 'In Progress', value: kpis.counts['In Progress'] || 0, color: STATUS_COLORS['In Progress'].main },
+        { label: 'In Review', value: kpis.counts['In Review'] || 0, color: STATUS_COLORS['In Review'].main },
+        { label: 'Testing', value: kpis.counts['Testing'] || 0, color: STATUS_COLORS['Testing'].main },
+        { label: 'Completed', value: kpis.counts['Completed'] || 0, color: STATUS_COLORS['Completed'].main },
+        { label: 'Delayed', value: kpis.counts['Delayed'] || 0, color: STATUS_COLORS['Delayed'].main },
+        { label: 'Completion %', value: `${kpis.completionPct}%`, color: PRIMARY },
+    ];
 
-  const kpiCards = [
-
-    {
-      label:
-        'Total Tasks',
-
-      value:
-        kpis.total,
-
-      color:
-        '#1B2A4A'
-    },
-
-    {
-      label:
-        'Not Started',
-
-      value:
-        kpis.counts[
-        'Not Started'
-        ] || 0,
-
-      color:
-        STATUS_COLORS[
-          'Not Started'
-        ].main
-    },
-
-    {
-      label:
-        'In Progress',
-
-      value:
-        kpis.counts[
-        'In Progress'
-        ] || 0,
-
-      color:
-        STATUS_COLORS[
-          'In Progress'
-        ].main
-    },
-
-    {
-      label:
-        'In Review',
-
-      value:
-        kpis.counts[
-        'In Review'
-        ] || 0,
-
-      color:
-        STATUS_COLORS[
-          'In Review'
-        ].main
-    },
-
-    {
-      label:
-        'Testing',
-
-      value:
-        kpis.counts[
-        'Testing'
-        ] || 0,
-
-      color:
-        STATUS_COLORS[
-          'Testing'
-        ].main
-    },
-
-    {
-      label:
-        'Completed',
-
-      value:
-        kpis.counts[
-        'Completed'
-        ] || 0,
-
-      color:
-        STATUS_COLORS[
-          'Completed'
-        ].main
-    },
-
-    {
-      label:
-        'Delayed',
-
-      value:
-        kpis.counts[
-        'Delayed'
-        ] || 0,
-
-      color:
-        STATUS_COLORS[
-          'Delayed'
-        ].main
-    },
-
-    {
-      label:
-        'Completion %',
-
-      value:
-        `${kpis.completionPct}%`,
-
-      color:
-        PRIMARY
-    },
-  ];
-
-
-  if (loading) {
+    if (loading) {
+        return (
+            <Box sx={{ minHeight: '100vh', bgcolor: '#F3F6F7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Stack alignItems="center" spacing={2}>
+                    <CircularProgress size={50} sx={{ color: PRIMARY }} />
+                    <Typography color="text.secondary">Loading tasks...</Typography>
+                </Stack>
+            </Box>
+        );
+    }
 
     return (
-
-      <Box
-        sx={{
-          minHeight:
-            '100vh',
-
-          bgcolor:
-            '#F3F6F7',
-
-          display:
-            'flex',
-
-          alignItems:
-            'center',
-
-          justifyContent:
-            'center'
-        }}
-      >
-
-        <Stack
-          alignItems="center"
-          spacing={2}
-        >
-
-          <CircularProgress
-            size={50}
-            sx={{
-              color: PRIMARY
-            }}
-          />
-
-          <Typography
-            color="text.secondary"
-          >
-            Loading tasks...
-          </Typography>
-
-        </Stack>
-
-      </Box>
-    );
-  }
-
-
-  return (
-
-    <Box
-      sx={{
-        minHeight:
-          '100vh',
-
-        bgcolor:
-          '#F3F6F7',
-
-        py: {
-          xs: 2,
-          md: 4
-        }
-      }}
-    >
-
-      <Container
-        maxWidth="xl"
-      >
-
-
-        {/* ================= HEADER ================= */}
-
-        <Paper
-          elevation={0}
-          sx={{
-            p:
-              '12px 24px',
-
-            mb: 3,
-
-            borderRadius: 3,
-
-            border:
-              '1px solid #E9EDEF',
-
-            background:
-              `linear-gradient(120deg, ${PRIMARY} 0%, #12A39A 55%, #1AC2A4 100%)`,
-
-            color:
-              '#fff',
-
-            boxShadow:
-              '0 10px 24px rgba(14,124,123,0.18)'
-          }}
-        >
-
-          <Stack
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
-            spacing={2}
-          >
-
-
-            {/* LEFT DATE */}
-
-            <Box
-              sx={{
-                minWidth:
-                  '180px'
-              }}
-            >
-
-              <Typography
-                variant="caption"
-                sx={{
-                  opacity: 0.85,
-
-                  display:
-                    'flex',
-
-                  alignItems:
-                    'center',
-
-                  gap: 0.5,
-
-                  fontWeight: 600
-                }}
-              >
-
-                <TodayRoundedIcon
-                  sx={{
-                    fontSize: 16
-                  }}
-                />
-
-                {dayjs(today).format(
-                  'DD MMM YYYY'
-                )}
-
-              </Typography>
-
-            </Box>
-
-
-            {/* CENTER */}
-
-            <Box
-              sx={{
-                flex: 1,
-
-                textAlign:
-                  'center'
-              }}
-            >
-
-              <Stack
-                direction="row"
-                alignItems="center"
-                justifyContent="center"
-                spacing={1}
-                sx={{
-                  mb: 0.5
-                }}
-              >
-
-                <Box
-                  sx={{
-                    width: 32,
-                    height: 32,
-                    borderRadius:
-                      '8px',
-
-                    bgcolor:
-                      'rgba(255,255,255,0.2)',
-
-                    display:
-                      'flex',
-
-                    alignItems:
-                      'center',
-
-                    justifyContent:
-                      'center',
-
-                    border:
-                      '2px solid rgba(255,255,255,0.3)'
-                  }}
-                >
-
-                  <AssignmentRoundedIcon
-                    sx={{
-                      fontSize: 18,
-                      color: '#fff'
-                    }}
-                  />
-
-                </Box>
-
-
-                <Typography
-                  variant="h6"
-                  sx={{
-                    fontWeight: 800,
-
-                    letterSpacing:
-                      '0.5px'
-                  }}
-                >
-                  Task Tracker
-                </Typography>
-
-              </Stack>
-
-
-              <Typography
-                variant="caption"
-                sx={{
-                  opacity: 0.85,
-
-                  fontSize:
-                    '12px'
-                }}
-              >
-
-                Team work status & analytics
-
-              </Typography>
-
-            </Box>
-
-
-            {/* RIGHT LOGIN */}
-
-            <Box
-              sx={{
-                minWidth:
-                  '220px',
-
-                textAlign:
-                  'right'
-              }}
-            >
-
-              <Typography
-                variant="caption"
-                sx={{
-                  opacity: 0.85,
-
-                  display:
-                    'flex',
-
-                  alignItems:
-                    'center',
-
-                  justifyContent:
-                    'flex-end',
-
-                  gap: 0.5,
-
-                  fontWeight: 600
-                }}
-              >
-
-                👤 {currentUsername}
-
-              </Typography>
-
-
-              {isAdmin && (
-
-                <Chip
-                  label="ADMIN"
-                  size="small"
-                  variant="filled"
-                  sx={{
-                    bgcolor:
-                      'rgba(255,255,255,0.25)',
-
-                    color:
-                      '#fff',
-
-                    fontWeight:
-                      700,
-
-                    mt: 0.5,
-
-                    border:
-                      '1px solid rgba(255,255,255,0.4)'
-                  }}
-                />
-
-              )}
-
-            </Box>
-
-          </Stack>
-
-        </Paper>
-
-
-        {/* ================= FILTERS ================= */}
-
-        <Paper
-          elevation={0}
-          sx={{
-            p: 2,
-
-            mb: 3,
-
-            borderRadius: 3,
-
-            border:
-              '1px solid #E9EDEF',
-
-            bgcolor:
-              '#fff'
-          }}
-        >
-
-          <Stack
-            direction={{
-              xs: 'column',
-              md: 'row'
-            }}
-            spacing={1.5}
-            alignItems="center"
-            flexWrap="wrap"
-            justifyContent="space-between"
-          >
-
-
-            <Stack
-              direction={{
-                xs: 'column',
-                sm: 'row'
-              }}
-              spacing={1.5}
-              alignItems="center"
-              flex={1}
-              minWidth={0}
-            >
-
-
-              {/* DATE FILTER */}
-
-              <TextField
-                select
-                label="Date Filter"
-                size="small"
-
-                value={
-                  filters.dateFilterType
-                }
-
-                onChange={
-                  (e) =>
-                    setFilters(
-                      (f) => ({
-                        ...f,
-
-                        dateFilterType:
-                          e.target.value,
-
-                        singleDate:
-                          e.target.value ===
-                            'single'
-                            ? ''
-                            : f.singleDate
-                      })
-                    )
-                }
-
-                sx={{
-                  minWidth: 120,
-
-                  bgcolor:
-                    '#f5f5f5',
-
-                  borderRadius: 1
-                }}
-              >
-
-                {/* CHANGED: All Dates first/default */}
-
-                <MenuItem
-                  value="single"
-                >
-                  All Dates
-                </MenuItem>
-
-                <MenuItem
-                  value="range"
-                >
-                  Date Range
-                </MenuItem>
-
-              </TextField>
-
-
-              {/* Date controls only appear for Date Range */}
-
-              {filters.dateFilterType ===
-                'range' && (
-
-                  <>
-
-                    <TextField
-                      label="From"
-                      type="date"
-                      size="small"
-
-                      InputLabelProps={{
-                        shrink: true
-                      }}
-
-                      value={
-                        filters.fromDate
-                      }
-
-                      onChange={
-                        (e) =>
-                          setFilters(
-                            (f) => ({
-                              ...f,
-
-                              fromDate:
-                                e.target.value
-                            })
-                          )
-                      }
-
-                      sx={{
-                        minWidth: 120,
-
-                        bgcolor:
-                          '#f5f5f5',
-
-                        borderRadius: 1
-                      }}
-                    />
-
-
-                    <TextField
-                      label="To"
-                      type="date"
-                      size="small"
-
-                      InputLabelProps={{
-                        shrink: true
-                      }}
-
-                      value={
-                        filters.toDate
-                      }
-
-                      onChange={
-                        (e) =>
-                          setFilters(
-                            (f) => ({
-                              ...f,
-
-                              toDate:
-                                e.target.value
-                            })
-                          )
-                      }
-
-                      sx={{
-                        minWidth: 120,
-
-                        bgcolor:
-                          '#f5f5f5',
-
-                        borderRadius: 1
-                      }}
-                    />
-
-                  </>
-
-                )}
-
-
-              {/* STATUS */}
-
-              <TextField
-                select
-                label="Status"
-                size="small"
-
-                value={
-                  filters.status
-                }
-
-                onChange={
-                  (e) =>
-                    setFilters(
-                      (f) => ({
-                        ...f,
-
-                        status:
-                          e.target.value
-                      })
-                    )
-                }
-
-                sx={{
-                  minWidth: 110,
-
-                  bgcolor:
-                    '#f5f5f5',
-
-                  borderRadius: 1
-                }}
-              >
-
-                <MenuItem
-                  value="All"
-                >
-                  All Status
-                </MenuItem>
-
-
-                {STATUS_OPTIONS.map(
-                  (s) => (
-
-                    <MenuItem
-                      key={s}
-                      value={s}
-                    >
-                      {s}
-                    </MenuItem>
-
-                  )
-                )}
-
-              </TextField>
-
-
-              {/* PRIORITY */}
-
-              <TextField
-                select
-                label="Priority"
-                size="small"
-
-                value={
-                  filters.priority
-                }
-
-                onChange={
-                  (e) =>
-                    setFilters(
-                      (f) => ({
-                        ...f,
-
-                        priority:
-                          e.target.value
-                      })
-                    )
-                }
-
-                sx={{
-                  minWidth: 100,
-
-                  bgcolor:
-                    '#f5f5f5',
-
-                  borderRadius: 1
-                }}
-              >
-
-                <MenuItem
-                  value="All"
-                >
-                  All Priorities
-                </MenuItem>
-
-
-                {PRIORITY_OPTIONS.map(
-                  (p) => (
-
-                    <MenuItem
-                      key={p}
-                      value={p}
-                    >
-                      {p}
-                    </MenuItem>
-
-                  )
-                )}
-
-              </TextField>
-
-            </Stack>
-
-
-            {/* RIGHT FILTERS/ACTIONS */}
-
-            <Stack
-              direction={{
-                xs: 'column',
-                sm: 'row'
-              }}
-              spacing={1.5}
-              alignItems="center"
-              flex={1}
-              minWidth={0}
-              justifyContent="flex-end"
-            >
-
-
-              {/* ADMIN USER DROPDOWN */}
-
-              {isAdmin && (
-
-                <TextField
-                  select
-
-                  label="User"
-
-                  size="small"
-
-                  value={
-                    filters.username
-                  }
-
-                  onChange={
-                    (e) =>
-                      setFilters(
-                        (f) => ({
-                          ...f,
-
-                          username:
-                            e.target.value
-                        })
-                      )
-                  }
-
-                  sx={{
-                    minWidth: 120,
-
-                    bgcolor:
-                      '#f5f5f5',
-
-                    borderRadius: 1
-                  }}
-                >
-
-                  <MenuItem
-                    value="All"
-                  >
-                    All users
-                  </MenuItem>
-
-
-                  {uniqueUsernames.map(
-                    (u) => (
-
-                      <MenuItem
-                        key={u}
-                        value={u}
-                      >
-                        {u}
-                      </MenuItem>
-
-                    )
-                  )}
-
-                </TextField>
-
-              )}
-
-
-              {/* ====================================
-                  CHANGED:
-                  Search shown for EVERYONE.
-                  Search filters by USERNAME.
-              ==================================== */}
-
-              <TextField
-                label="Search User"
-
-                size="small"
-
-                placeholder="Search by user..."
-
-                value={
-                  filters.search
-                }
-
-                onChange={
-                  (e) =>
-                    setFilters(
-                      (f) => ({
-                        ...f,
-
-                        search:
-                          e.target.value
-                      })
-                    )
-                }
-
-                sx={{
-                  minWidth: 180,
-
-                  bgcolor:
-                    '#f5f5f5',
-
-                  borderRadius: 1
-                }}
-              />
-
-
-              {/* RESET */}
-
-              <Tooltip
-                title="Reset filters"
-              >
-
-                <IconButton
-                  onClick={
-                    () =>
-                      setFilters({
-
-                        dateFilterType:
-                          'single',
-
-                        singleDate:
-                          '',
-
-                        fromDate:
-                          monthStart,
-
-                        toDate:
-                          today,
-
-                        status:
-                          'All',
-
-                        priority:
-                          'All',
-
-                        search:
-                          '',
-
-                        username:
-                          'All'
-                      })
-                  }
-
-                  sx={{
-                    border:
-                      '1px solid #E4E9EC',
-
-                    bgcolor:
-                      '#f5f5f5',
-
-                    borderRadius: 1
-                  }}
-                >
-
-                  <RefreshRoundedIcon
-                    fontSize="small"
-                  />
-
-                </IconButton>
-
-              </Tooltip>
-
-
-              {/* ADD */}
-
-              <Button
-                variant="contained"
-
-                startIcon={
-                  <AddRoundedIcon />
-                }
-
-                onClick={openAdd}
-
-                sx={{
-                  bgcolor:
-                    PRIMARY,
-
-                  whiteSpace:
-                    'nowrap',
-
-                  '&:hover': {
-                    bgcolor:
-                      PRIMARY_DARK
-                  }
-                }}
-              >
-
-                Add Task
-
-              </Button>
-
-
-              {/* EXPORT */}
-
-              <Button
-                variant="outlined"
-
-                startIcon={
-                  <FileDownloadRoundedIcon />
-                }
-
-                endIcon={
-                  <ArrowDropDownRoundedIcon />
-                }
-
-                onClick={
-                  (e) =>
-                    setExportAnchorEl(
-                      e.currentTarget
-                    )
-                }
-
-                sx={{
-                  borderColor:
-                    PRIMARY,
-
-                  color:
-                    PRIMARY,
-
-                  whiteSpace:
-                    'nowrap'
-                }}
-              >
-
-                Export
-
-              </Button>
-
-            </Stack>
-
-          </Stack>
-
-        </Paper>
-
-
-        {/* ================= EXPORT MENU ================= */}
-
-        <Menu
-          anchorEl={
-            exportAnchorEl
-          }
-
-          open={
-            !!exportAnchorEl
-          }
-
-          onClose={
-            () =>
-              setExportAnchorEl(
-                null
-              )
-          }
-
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right'
-          }}
-
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'right'
-          }}
-        >
-
-          <MenuItem
-            onClick={
-              () =>
-                handleExportPreset(
-                  'today'
-                )
-            }
-          >
-
-            <ListItemIcon>
-
-              <TodayRoundedIcon
-                fontSize="small"
-                sx={{
-                  color: PRIMARY
-                }}
-              />
-
-            </ListItemIcon>
-
-            <ListItemText
-              primary="Today Only"
-              secondary={
-                dayjs(today).format(
-                  'DD MMM YYYY'
-                )
-              }
-            />
-
-          </MenuItem>
-
-
-          <Divider />
-
-
-          <MenuItem
-            onClick={
-              () =>
-                handleExportPreset(
-                  'week'
-                )
-            }
-          >
-
-            <ListItemIcon>
-
-              <CalendarViewWeekRoundedIcon
-                fontSize="small"
-                sx={{
-                  color: PRIMARY
-                }}
-              />
-
-            </ListItemIcon>
-
-            <ListItemText
-              primary="This Week"
-              secondary="Monday – Sunday"
-            />
-
-          </MenuItem>
-
-
-          <MenuItem
-            onClick={
-              () =>
-                handleExportPreset(
-                  'month'
-                )
-            }
-          >
-
-            <ListItemIcon>
-
-              <CalendarMonthRoundedIcon
-                fontSize="small"
-                sx={{
-                  color: PRIMARY
-                }}
-              />
-
-            </ListItemIcon>
-
-            <ListItemText
-              primary="This Month"
-            />
-
-          </MenuItem>
-
-
-          <MenuItem
-            onClick={
-              () =>
-                handleExportPreset(
-                  'year'
-                )
-            }
-          >
-
-            <ListItemIcon>
-
-              <EventRepeatRoundedIcon
-                fontSize="small"
-                sx={{
-                  color: PRIMARY
-                }}
-              />
-
-            </ListItemIcon>
-
-            <ListItemText
-              primary="This Year"
-            />
-
-          </MenuItem>
-
-
-          <Divider />
-
-
-          <MenuItem
-            onClick={
-              () =>
-                handleExportPreset(
-                  'custom'
-                )
-            }
-          >
-
-            <ListItemIcon>
-
-              <DateRangeRoundedIcon
-                fontSize="small"
-                sx={{
-                  color: PRIMARY
-                }}
-              />
-
-            </ListItemIcon>
-
-            <ListItemText
-              primary="Custom Range…"
-              secondary="Pick any From – To dates"
-            />
-
-          </MenuItem>
-
-
-          <MenuItem
-            onClick={
-              () =>
-                handleExportPreset(
-                  'current'
-                )
-            }
-          >
-
-            <ListItemIcon>
-
-              <FileDownloadRoundedIcon
-                fontSize="small"
-                sx={{
-                  color: PRIMARY
-                }}
-              />
-
-            </ListItemIcon>
-
-            <ListItemText
-              primary="Current Filtered View"
-            />
-
-          </MenuItem>
-
-        </Menu>
-
-
-        {/* ================= CUSTOM RANGE ================= */}
-
-        <Dialog
-          open={
-            rangeDialogOpen
-          }
-
-          onClose={
-            () =>
-              setRangeDialogOpen(
-                false
-              )
-          }
-
-          maxWidth="xs"
-
-          fullWidth
-
-          PaperProps={{
-            sx: {
-              borderRadius: 3
-            }
-          }}
-        >
-
-          <DialogTitle
-            sx={{
-              fontWeight: 800
-            }}
-          >
-            Custom Export Range
-          </DialogTitle>
-
-
-          <Divider />
-
-
-          <DialogContent
-            sx={{
-              pt: 3
-            }}
-          >
-
-            <Stack
-              spacing={2}
-            >
-
-              <TextField
-                label="From"
-                type="date"
-                size="small"
-                fullWidth
-
-                InputLabelProps={{
-                  shrink: true
-                }}
-
-                value={
-                  customRange.from
-                }
-
-                onChange={
-                  (e) =>
-                    setCustomRange(
-                      (r) => ({
-                        ...r,
-
-                        from:
-                          e.target.value
-                      })
-                    )
-                }
-              />
-
-
-              <TextField
-                label="To"
-                type="date"
-                size="small"
-                fullWidth
-
-                InputLabelProps={{
-                  shrink: true
-                }}
-
-                value={
-                  customRange.to
-                }
-
-                onChange={
-                  (e) =>
-                    setCustomRange(
-                      (r) => ({
-                        ...r,
-
-                        to:
-                          e.target.value
-                      })
-                    )
-                }
-              />
-
-            </Stack>
-
-          </DialogContent>
-
-
-          <Divider />
-
-
-          <DialogActions
-            sx={{
-              p: 2
-            }}
-          >
-
-            <Button
-              onClick={
-                () =>
-                  setRangeDialogOpen(
-                    false
-                  )
-              }
-
-              color="inherit"
-            >
-              Cancel
-            </Button>
-
-
-            <Button
-              onClick={
-                handleCustomRangeExport
-              }
-
-              variant="contained"
-
-              sx={{
-                bgcolor:
-                  PRIMARY,
-
-                '&:hover': {
-                  bgcolor:
-                    PRIMARY_DARK
-                }
-              }}
-            >
-              Download
-            </Button>
-
-          </DialogActions>
-
-        </Dialog>
-
-
-        {/* ================= DASHBOARD ================= */}
-
-        <Stack
-          spacing={3}
-        >
-
-
-          {/* KPI CARDS */}
-
-          <Grid
-            container
-            spacing={2}
-          >
-
-            {kpiCards.map(
-              (c) => (
-
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={3}
-                  lg={1.5}
-                  key={c.label}
-                  sx={{
-                    flexGrow: 1
-                  }}
-                >
-
-                  <KpiCard
-                    {...c}
-                  />
-
-                </Grid>
-
-              )
-            )}
-
-          </Grid>
-
-
-          {/* ================= CHARTS ================= */}
-
-          <Stack
-            direction={{
-              xs: 'column',
-              md: 'row'
-            }}
-            spacing={3}
-            alignItems="stretch"
-          >
-
-
-            {/* STATUS */}
-
-            <Paper
-              elevation={0}
-              sx={{
-                p: 2.5,
-
-                flex: 1.2,
-
-                minWidth: 0,
-
-                borderRadius: 3,
-
-                border:
-                  '1px solid #E9EDEF',
-
-                boxShadow:
-                  '0 1px 2px rgba(16,24,40,0.04)'
-              }}
-            >
-
-              <Typography
-                variant="h6"
-                sx={{
-                  mb: 1,
-                  fontWeight: 700
-                }}
-              >
-                Task status breakdown
-              </Typography>
-
-
-              {statusBreakdown.length === 0
-                ? (
-
-                  <Box
-                    sx={{
-                      py: 6,
-
-                      textAlign:
-                        'center'
-                    }}
-                  >
-
-                    <Typography
-                      color="text.secondary"
-                    >
-                      No tasks match the current filters.
-                    </Typography>
-
-                  </Box>
-
-                )
-                : (
-
-                  <Box
-                    sx={{
-                      position:
-                        'relative',
-
-                      height:
-                        300
-                    }}
-                  >
-
-                    <ResponsiveContainer
-                      width="100%"
-                      height="100%"
-                    >
-
-                      <PieChart>
-
-                        <Pie
-                          data={
-                            statusBreakdown
-                          }
-
-                          dataKey="value"
-
-                          nameKey="name"
-
-                          innerRadius={
-                            70
-                          }
-
-                          outerRadius={
-                            105
-                          }
-
-                          paddingAngle={
-                            2
-                          }
-
-                          strokeWidth={
-                            0
-                          }
-                        >
-
-                          {statusBreakdown.map(
-                            (entry) => (
-
-                              <Cell
-                                key={
-                                  entry.name
-                                }
-
-                                fill={
-                                  STATUS_COLORS[
-                                    entry.name
-                                  ]?.main ||
-                                  '#94A3B8'
-                                }
-                              />
-
-                            )
-                          )}
-
-                        </Pie>
-
-
-                        <ChartTooltip
-                          formatter={
-                            (
-                              value,
-                              name
-                            ) => [
-
-                                `${value} task${value === 1 ? '' : 's'}`,
-
-                                name
-                              ]
-                          }
-                        />
-
-
-                        <Legend
-                          verticalAlign="bottom"
-                          height={36}
-                          iconType="circle"
-                        />
-
-                      </PieChart>
-
-                    </ResponsiveContainer>
-
-
-                    <Stack
-                      sx={{
-                        position:
-                          'absolute',
-
-                        top:
-                          '42%',
-
-                        left:
-                          '50%',
-
-                        transform:
-                          'translate(-50%, -50%)',
-
-                        pointerEvents:
-                          'none',
-
-                        alignItems:
-                          'center'
-                      }}
-                    >
-
-                      <Typography
-                        variant="h4"
-                        sx={{
-                          fontWeight: 800
-                        }}
-                      >
-                        {kpis.total}
-                      </Typography>
-
-
-                      <Typography
-                        variant="caption"
-                        color="text.secondary"
-                      >
-                        total
-                      </Typography>
-
-                    </Stack>
-
-                  </Box>
-
-                )
-              }
-
-            </Paper>
-
-
-            {/* DELAY */}
-
-            <Paper
-              elevation={0}
-              sx={{
-                p: 2.5,
-
-                flex: 1.2,
-
-                minWidth: 0,
-
-                borderRadius: 3,
-
-                border:
-                  '1px solid #E9EDEF',
-
-                boxShadow:
-                  '0 1px 2px rgba(16,24,40,0.04)'
-              }}
-            >
-
-              <Typography
-                variant="h6"
-                sx={{
-                  mb: 1,
-                  fontWeight: 700
-                }}
-              >
-                Delay reasons this period
-              </Typography>
-
-
-              {reasonBreakdown.length === 0
-                ? (
-
-                  <Box
-                    sx={{
-                      py: 6,
-                      textAlign:
-                        'center'
-                    }}
-                  >
-
-                    <Typography
-                      color="text.secondary"
-                    >
-                      No delays recorded. 🎉
-                    </Typography>
-
-                  </Box>
-
-                )
-                : (
-
-                  <Box
-                    sx={{
-                      height: 300
-                    }}
-                  >
-
-                    <ResponsiveContainer
-                      width="100%"
-                      height="100%"
-                    >
-
-                      <BarChart
-                        data={
-                          reasonBreakdown
-                        }
-
-                        margin={{
-                          top: 8,
-                          right: 8,
-                          left: -12,
-                          bottom: 8
-                        }}
-                      >
-
-                        <CartesianGrid
-                          strokeDasharray="3 3"
-                          vertical={false}
-                          stroke="#E4E9EC"
-                        />
-
-
-                        <XAxis
-                          dataKey="name"
-                          tick={{
-                            fontSize: 11
-                          }}
-                          interval={0}
-                          angle={-15}
-                          textAnchor="end"
-                          height={60}
-                        />
-
-
-                        <YAxis
-                          allowDecimals={false}
-                          tick={{
-                            fontSize: 11
-                          }}
-                        />
-
-
-                        <ChartTooltip
-                          formatter={
-                            (value) => [
-                              `${value} task${value === 1 ? '' : 's'}`,
-                              'Count'
-                            ]
-                          }
-                        />
-
-
-                        <Bar
-                          dataKey="value"
-                          radius={[
-                            6,
-                            6,
-                            0,
-                            0
-                          ]}
-                        >
-
-                          {reasonBreakdown.map(
-                            (
-                              entry,
-                              i
-                            ) => (
-
-                              <Cell
-                                key={
-                                  entry.name
-                                }
-
-                                fill={
-                                  REASON_PALETTE[
-                                  i %
-                                  REASON_PALETTE.length
-                                  ]
-                                }
-                              />
-
-                            )
-                          )}
-
-                        </Bar>
-
-                      </BarChart>
-
-                    </ResponsiveContainer>
-
-                  </Box>
-
-                )
-              }
-
-            </Paper>
-
-
-            {/* PRIORITY */}
-
-            <Paper
-              elevation={0}
-              sx={{
-                p: 2.5,
-
-                flex: 0.8,
-
-                minWidth: 220,
-
-                borderRadius: 3,
-
-                border:
-                  '1px solid #E9EDEF',
-
-                boxShadow:
-                  '0 1px 2px rgba(16,24,40,0.04)'
-              }}
-            >
-
-              <Typography
-                variant="h6"
-                sx={{
-                  mb: 2,
-                  fontWeight: 700
-                }}
-              >
-                Priority mix
-              </Typography>
-
-
-              <Stack
-                spacing={2.5}
-              >
-
-                {priorityBreakdown.map(
-                  ({
-                    name,
-                    value
-                  }) => {
-
-                    const pct =
-                      kpis.total
-                        ? Math.round(
-                          (
-                            value /
-                            kpis.total
-                          ) * 100
-                        )
-                        : 0;
-
-
-                    return (
-
-                      <Box
-                        key={name}
-                      >
-
-                        <Stack
-                          direction="row"
-                          justifyContent="space-between"
-                          sx={{
-                            mb: 0.5
-                          }}
-                        >
-
-                          <Stack
-                            direction="row"
-                            spacing={1}
-                            alignItems="center"
-                          >
-
-                            <Box
-                              sx={{
-                                width: 9,
-                                height: 9,
-                                borderRadius:
-                                  '50%',
-
-                                bgcolor:
-                                  PRIORITY_COLORS[
-                                    name
-                                  ].main
-                              }}
-                            />
-
-
-                            <Typography
-                              variant="body2"
-                              sx={{
-                                fontWeight:
-                                  600
-                              }}
-                            >
-                              {name}
+        <Box sx={{ minHeight: '100vh', bgcolor: '#F3F6F7', py: { xs: 2, md: 4 } }}>
+            <Container maxWidth="xl">
+                {/* HEADER */}
+                <Paper elevation={0} sx={{
+                    p: '12px 24px', mb: 3, borderRadius: 3, border: '1px solid #E9EDEF',
+                    background: `linear-gradient(120deg, ${PRIMARY} 0%, #12A39A 55%, #1AC2A4 100%)`,
+                    color: '#fff', boxShadow: '0 10px 24px rgba(14,124,123,0.18)'
+                }}>
+                    <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2}>
+                        <Box sx={{ minWidth: '180px' }}>
+                            <Typography variant="caption" sx={{ opacity: 0.85, display: 'flex', alignItems: 'center', gap: 0.5, fontWeight: 600 }}>
+                                <TodayRoundedIcon sx={{ fontSize: 16 }} /> {dayjs(today).format('DD MMM YYYY')}
                             </Typography>
+                        </Box>
+                        <Box sx={{ flex: 1, textAlign: 'center' }}>
+                            <Stack direction="row" alignItems="center" justifyContent="center" spacing={1} sx={{ mb: 0.5 }}>
+                                <Box sx={{ width: 32, height: 32, borderRadius: '8px', bgcolor: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid rgba(255,255,255,0.3)' }}>
+                                    <AssignmentRoundedIcon sx={{ fontSize: 18, color: '#fff' }} />
+                                </Box>
+                                <Typography variant="h6" sx={{ fontWeight: 800, letterSpacing: '0.5px' }}>Task Tracker</Typography>
+                            </Stack>
+                            <Typography variant="caption" sx={{ opacity: 0.85, fontSize: '12px' }}>Team work status & analytics</Typography>
+                        </Box>
+                        <Box sx={{ minWidth: '220px', textAlign: 'right' }}>
+                            <Typography variant="caption" sx={{ opacity: 0.85, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 0.5, fontWeight: 600 }}>
+                                👤 {currentUsername}
+                            </Typography>
+                            {isAdmin && <Chip label="ADMIN" size="small" variant="filled" sx={{ bgcolor: 'rgba(255,255,255,0.25)', color: '#fff', fontWeight: 700, mt: 0.5, border: '1px solid rgba(255,255,255,0.4)' }} />}
+                        </Box>
+                    </Stack>
+                </Paper>
 
-                          </Stack>
+                {/* FILTERS */}
+                <Paper elevation={0} sx={{ p: 2, mb: 3, borderRadius: 3, border: '1px solid #E9EDEF', bgcolor: '#fff' }}>
+                    <Stack direction={{ xs: 'column', md: 'row' }} spacing={1.5} alignItems="center" flexWrap="wrap" justifyContent="space-between">
+                        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} alignItems="center" flex={1} minWidth={0}>
+                            <TextField select label="Date Filter" size="small" value={filters.dateFilterType}
+                                onChange={(e) => setFilters((f) => ({ ...f, dateFilterType: e.target.value, singleDate: e.target.value === 'single' ? '' : f.singleDate }))}
+                                sx={{ minWidth: 120, bgcolor: '#f5f5f5', borderRadius: 1 }}>
+                                <MenuItem value="single">All Dates</MenuItem>
+                                <MenuItem value="range">Date Range</MenuItem>
+                            </TextField>
 
+                            {filters.dateFilterType === 'range' && (
+                                <>
+                                    <TextField label="From" type="date" size="small" InputLabelProps={{ shrink: true }} value={filters.fromDate}
+                                        onChange={(e) => setFilters((f) => ({ ...f, fromDate: e.target.value }))}
+                                        sx={{ minWidth: 120, bgcolor: '#f5f5f5', borderRadius: 1 }} />
+                                    <TextField label="To" type="date" size="small" InputLabelProps={{ shrink: true }} value={filters.toDate}
+                                        onChange={(e) => setFilters((f) => ({ ...f, toDate: e.target.value }))}
+                                        sx={{ minWidth: 120, bgcolor: '#f5f5f5', borderRadius: 1 }} />
+                                </>
+                            )}
 
-                          <Typography
-                            variant="body2"
-                            color="text.secondary"
-                          >
-                            {value}
-                          </Typography>
+                            <TextField select label="Status" size="small" value={filters.status}
+                                onChange={(e) => setFilters((f) => ({ ...f, status: e.target.value }))}
+                                sx={{ minWidth: 110, bgcolor: '#f5f5f5', borderRadius: 1 }}>
+                                <MenuItem value="All">All Status</MenuItem>
+                                {STATUS_OPTIONS.map((s) => <MenuItem key={s} value={s}>{s}</MenuItem>)}
+                            </TextField>
 
+                            <TextField select label="Priority" size="small" value={filters.priority}
+                                onChange={(e) => setFilters((f) => ({ ...f, priority: e.target.value }))}
+                                sx={{ minWidth: 100, bgcolor: '#f5f5f5', borderRadius: 1 }}>
+                                <MenuItem value="All">All Priorities</MenuItem>
+                                {PRIORITY_OPTIONS.map((p) => <MenuItem key={p} value={p}>{p}</MenuItem>)}
+                            </TextField>
                         </Stack>
 
+                        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} alignItems="center" flex={1} minWidth={0} justifyContent="flex-end">
+                            {isAdmin && (
+                                <TextField select label="User" size="small" value={filters.username}
+                                    onChange={(e) => setFilters((f) => ({ ...f, username: e.target.value }))}
+                                    sx={{ minWidth: 120, bgcolor: '#f5f5f5', borderRadius: 1 }}>
+                                    <MenuItem value="All">All users</MenuItem>
+                                    {uniqueUsernames.map((u) => <MenuItem key={u} value={u}>{u}</MenuItem>)}
+                                </TextField>
+                            )}
 
-                        <Box
-                          sx={{
-                            height: 8,
+                            <TextField label="Search User" size="small" placeholder="Search by user..." value={filters.search}
+                                onChange={(e) => setFilters((f) => ({ ...f, search: e.target.value }))}
+                                sx={{ minWidth: 180, bgcolor: '#f5f5f5', borderRadius: 1 }} />
 
-                            borderRadius:
-                              4,
+                            <Tooltip title="Reset filters">
+                                <IconButton onClick={() => setFilters({ dateFilterType: 'single', singleDate: '', fromDate: monthStart, toDate: today, status: 'All', priority: 'All', search: '', username: 'All' })}
+                                    sx={{ border: '1px solid #E4E9EC', bgcolor: '#f5f5f5', borderRadius: 1 }}>
+                                    <RefreshRoundedIcon fontSize="small" />
+                                </IconButton>
+                            </Tooltip>
 
-                            bgcolor:
-                              '#EEF1F2',
+                            <Button variant="contained" startIcon={<AddRoundedIcon />} onClick={openAdd}
+                                sx={{ bgcolor: PRIMARY, whiteSpace: 'nowrap', '&:hover': { bgcolor: PRIMARY_DARK } }}>Add Task</Button>
 
-                            overflow:
-                              'hidden'
-                          }}
-                        >
+                            <Button variant="outlined" startIcon={<FileDownloadRoundedIcon />} endIcon={<ArrowDropDownRoundedIcon />}
+                                onClick={(e) => setExportAnchorEl(e.currentTarget)}
+                                sx={{ borderColor: PRIMARY, color: PRIMARY, whiteSpace: 'nowrap' }}>Export</Button>
+                        </Stack>
+                    </Stack>
+                </Paper>
 
-                          <Box
-                            sx={{
-                              height:
-                                '100%',
+                {/* EXPORT MENU */}
+                <Menu anchorEl={exportAnchorEl} open={!!exportAnchorEl} onClose={() => setExportAnchorEl(null)}
+                    anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }} transformOrigin={{ vertical: 'top', horizontal: 'right' }}>
+                    <MenuItem onClick={() => handleExportPreset('today')}>
+                        <ListItemIcon><TodayRoundedIcon fontSize="small" sx={{ color: PRIMARY }} /></ListItemIcon>
+                        <ListItemText primary="Today Only" secondary={dayjs(today).format('DD MMM YYYY')} />
+                    </MenuItem>
+                    <Divider />
+                    <MenuItem onClick={() => handleExportPreset('week')}>
+                        <ListItemIcon><CalendarViewWeekRoundedIcon fontSize="small" sx={{ color: PRIMARY }} /></ListItemIcon>
+                        <ListItemText primary="This Week" secondary="Monday – Sunday" />
+                    </MenuItem>
+                    <MenuItem onClick={() => handleExportPreset('month')}>
+                        <ListItemIcon><CalendarMonthRoundedIcon fontSize="small" sx={{ color: PRIMARY }} /></ListItemIcon>
+                        <ListItemText primary="This Month" />
+                    </MenuItem>
+                    <MenuItem onClick={() => handleExportPreset('year')}>
+                        <ListItemIcon><EventRepeatRoundedIcon fontSize="small" sx={{ color: PRIMARY }} /></ListItemIcon>
+                        <ListItemText primary="This Year" />
+                    </MenuItem>
+                    <Divider />
+                    <MenuItem onClick={() => handleExportPreset('custom')}>
+                        <ListItemIcon><DateRangeRoundedIcon fontSize="small" sx={{ color: PRIMARY }} /></ListItemIcon>
+                        <ListItemText primary="Custom Range…" secondary="Pick any From – To dates" />
+                    </MenuItem>
+                    <MenuItem onClick={() => handleExportPreset('current')}>
+                        <ListItemIcon><FileDownloadRoundedIcon fontSize="small" sx={{ color: PRIMARY }} /></ListItemIcon>
+                        <ListItemText primary="Current Filtered View" />
+                    </MenuItem>
+                </Menu>
 
-                              width:
-                                `${pct}%`,
+                {/* CUSTOM RANGE DIALOG */}
+                <Dialog open={rangeDialogOpen} onClose={() => setRangeDialogOpen(false)} maxWidth="xs" fullWidth PaperProps={{ sx: { borderRadius: 3 } }}>
+                    <DialogTitle sx={{ fontWeight: 800 }}>Custom Export Range</DialogTitle>
+                    <Divider />
+                    <DialogContent sx={{ pt: 3 }}>
+                        <Stack spacing={2}>
+                            <TextField label="From" type="date" size="small" fullWidth InputLabelProps={{ shrink: true }} value={customRange.from}
+                                onChange={(e) => setCustomRange((r) => ({ ...r, from: e.target.value }))} />
+                            <TextField label="To" type="date" size="small" fullWidth InputLabelProps={{ shrink: true }} value={customRange.to}
+                                onChange={(e) => setCustomRange((r) => ({ ...r, to: e.target.value }))} />
+                        </Stack>
+                    </DialogContent>
+                    <Divider />
+                    <DialogActions sx={{ p: 2 }}>
+                        <Button onClick={() => setRangeDialogOpen(false)} color="inherit">Cancel</Button>
+                        <Button onClick={handleCustomRangeExport} variant="contained" sx={{ bgcolor: PRIMARY, '&:hover': { bgcolor: PRIMARY_DARK } }}>Download</Button>
+                    </DialogActions>
+                </Dialog>
 
-                              bgcolor:
-                                PRIORITY_COLORS[
-                                  name
-                                ].main,
+                {/* DASHBOARD */}
+                <Stack spacing={3}>
+                    {/* KPI CARDS */}
+                    <Grid container spacing={2}>
+                        {kpiCards.map((c) => (
+                            <Grid item xs={12} sm={6} md={3} lg={1.5} key={c.label} sx={{ flexGrow: 1 }}>
+                                <KpiCard {...c} />
+                            </Grid>
+                        ))}
+                    </Grid>
 
-                              borderRadius:
-                                4,
+                    {/* CHARTS */}
+                    <Stack direction={{ xs: 'column', md: 'row' }} spacing={3} alignItems="stretch">
+                        {/* STATUS */}
+                        <Paper elevation={0} sx={{ p: 2.5, flex: 1.2, minWidth: 0, borderRadius: 3, border: '1px solid #E9EDEF', boxShadow: '0 1px 2px rgba(16,24,40,0.04)' }}>
+                            <Typography variant="h6" sx={{ mb: 1, fontWeight: 700 }}>Task status breakdown</Typography>
+                            {statusBreakdown.length === 0 ? (
+                                <Box sx={{ py: 6, textAlign: 'center' }}><Typography color="text.secondary">No tasks match the current filters.</Typography></Box>
+                            ) : (
+                                <Box sx={{ position: 'relative', height: 300 }}>
+                                    <ResponsiveContainer width="100%" height="100%">
+                                        <PieChart>
+                                            <Pie data={statusBreakdown} dataKey="value" nameKey="name" innerRadius={70} outerRadius={105} paddingAngle={2} strokeWidth={0}>
+                                                {statusBreakdown.map((entry) => (
+                                                    <Cell key={entry.name} fill={STATUS_COLORS[entry.name]?.main || '#94A3B8'} />
+                                                ))}
+                                            </Pie>
+                                            <ChartTooltip formatter={(value, name) => [`${value} task${value === 1 ? '' : 's'}`, name]} />
+                                            <Legend verticalAlign="bottom" height={36} iconType="circle" />
+                                        </PieChart>
+                                    </ResponsiveContainer>
+                                    <Stack sx={{ position: 'absolute', top: '42%', left: '50%', transform: 'translate(-50%, -50%)', pointerEvents: 'none', alignItems: 'center' }}>
+                                        <Typography variant="h4" sx={{ fontWeight: 800 }}>{kpis.total}</Typography>
+                                        <Typography variant="caption" color="text.secondary">total</Typography>
+                                    </Stack>
+                                </Box>
+                            )}
+                        </Paper>
 
-                              transition:
-                                'width .3s ease'
-                            }}
-                          />
+                        {/* DELAY */}
+                        <Paper elevation={0} sx={{ p: 2.5, flex: 1.2, minWidth: 0, borderRadius: 3, border: '1px solid #E9EDEF', boxShadow: '0 1px 2px rgba(16,24,40,0.04)' }}>
+                            <Typography variant="h6" sx={{ mb: 1, fontWeight: 700 }}>Delay reasons this period</Typography>
+                            {reasonBreakdown.length === 0 ? (
+                                <Box sx={{ py: 6, textAlign: 'center' }}><Typography color="text.secondary">No delays recorded. 🎉</Typography></Box>
+                            ) : (
+                                <Box sx={{ height: 300 }}>
+                                    <ResponsiveContainer width="100%" height="100%">
+                                        <BarChart data={reasonBreakdown} margin={{ top: 8, right: 8, left: -12, bottom: 8 }}>
+                                            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E4E9EC" />
+                                            <XAxis dataKey="name" tick={{ fontSize: 11 }} interval={0} angle={-15} textAnchor="end" height={60} />
+                                            <YAxis allowDecimals={false} tick={{ fontSize: 11 }} />
+                                            <ChartTooltip formatter={(value) => [`${value} task${value === 1 ? '' : 's'}`, 'Count']} />
+                                            <Bar dataKey="value" radius={[6, 6, 0, 0]}>
+                                                {reasonBreakdown.map((entry, i) => (
+                                                    <Cell key={entry.name} fill={REASON_PALETTE[i % REASON_PALETTE.length]} />
+                                                ))}
+                                            </Bar>
+                                        </BarChart>
+                                    </ResponsiveContainer>
+                                </Box>
+                            )}
+                        </Paper>
 
+                        {/* PRIORITY */}
+                        <Paper elevation={0} sx={{ p: 2.5, flex: 0.8, minWidth: 220, borderRadius: 3, border: '1px solid #E9EDEF', boxShadow: '0 1px 2px rgba(16,24,40,0.04)' }}>
+                            <Typography variant="h6" sx={{ mb: 2, fontWeight: 700 }}>Priority mix</Typography>
+                            <Stack spacing={2.5}>
+                                {priorityBreakdown.map(({ name, value }) => {
+                                    const pct = kpis.total ? Math.round((value / kpis.total) * 100) : 0;
+                                    return (
+                                        <Box key={name}>
+                                            <Stack direction="row" justifyContent="space-between" sx={{ mb: 0.5 }}>
+                                                <Stack direction="row" spacing={1} alignItems="center">
+                                                    <Box sx={{ width: 9, height: 9, borderRadius: '50%', bgcolor: PRIORITY_COLORS[name].main }} />
+                                                    <Typography variant="body2" sx={{ fontWeight: 600 }}>{name}</Typography>
+                                                </Stack>
+                                                <Typography variant="body2" color="text.secondary">{value}</Typography>
+                                            </Stack>
+                                            <Box sx={{ height: 8, borderRadius: 4, bgcolor: '#EEF1F2', overflow: 'hidden' }}>
+                                                <Box sx={{ height: '100%', width: `${pct}%`, bgcolor: PRIORITY_COLORS[name].main, borderRadius: 4, transition: 'width .3s ease' }} />
+                                            </Box>
+                                        </Box>
+                                    );
+                                })}
+                                {kpis.total === 0 && <Typography variant="body2" color="text.secondary">No tasks match the current filters.</Typography>}
+                            </Stack>
+                        </Paper>
+                    </Stack>
+
+                    {/* TASK TABLE */}
+                    <Paper elevation={0} sx={{ overflow: 'hidden', borderRadius: 3, border: '1px solid #E9EDEF', boxShadow: '0 1px 2px rgba(16,24,40,0.04)' }}>
+                        <Box sx={{ p: 2, pb: 1 }}>
+                            <Typography variant="h6" sx={{ fontWeight: 700 }}>All tasks ({filtered.length})</Typography>
                         </Box>
-
-                      </Box>
-                    );
-                  }
-                )}
-
-
-                {kpis.total === 0 && (
-
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                  >
-                    No tasks match the current filters.
-                  </Typography>
-
-                )}
-
-              </Stack>
-
-            </Paper>
-
-          </Stack>
-
-
-          {/* ================= TASK TABLE ================= */}
-
-          <Paper
-            elevation={0}
-            sx={{
-              overflow:
-                'hidden',
-
-              borderRadius:
-                3,
-
-              border:
-                '1px solid #E9EDEF',
-
-              boxShadow:
-                '0 1px 2px rgba(16,24,40,0.04)'
-            }}
-          >
-
-            <Box
-              sx={{
-                p: 2,
-                pb: 1
-              }}
-            >
-
-              <Typography
-                variant="h6"
-                sx={{
-                  fontWeight: 700
-                }}
-              >
-
-                All tasks ({filtered.length})
-
-              </Typography>
-
-            </Box>
-
-
-            <TableContainer
-              sx={{
-                maxHeight: 560
-              }}
-            >
-
-              <Table
-                stickyHeader
-                size="small"
-              >
-
-                <TableHead>
-
-                  <TableRow>
-
-                    {[
-                      'SR',
-                      'User',
-                      'Assigned By',
-                      'Project',
-                      'Start',
-                      'Expected',
-                      'Completed',
-                      'Status',
-                      'Priority',
-                      'Time Taken',
-                      'Reason',
-                      'Remarks',
-                      'Actions'
-                    ].map(
-                      (h) => (
-
-                        <TableCell
-                          key={h}
-
-                          align={
-                            h ===
-                              'Actions'
-                              ? 'center'
-                              : 'left'
-                          }
-
-                          sx={{
-                            fontWeight:
-                              700,
-
-                            color:
-                              'text.secondary',
-
-                            fontSize:
-                              '0.72rem',
-
-                            textTransform:
-                              'uppercase',
-
-                            letterSpacing:
-                              '0.04em'
-                          }}
-                        >
-                          {h}
-                        </TableCell>
-
-                      )
-                    )}
-
-                  </TableRow>
-
-                </TableHead>
-
-
-                <TableBody>
-
-
-                  {filtered.length === 0 && (
-
-                    <TableRow>
-
-                      <TableCell
-                        colSpan={13}
-                      >
-
-                        <Box
-                          sx={{
-                            py: 6,
-
-                            textAlign:
-                              'center'
-                          }}
-                        >
-
-                          <Typography
-                            color="text.secondary"
-                          >
-                            No tasks yet — click &ldquo;Add Task&rdquo; to create the first one.
-                          </Typography>
-
-                        </Box>
-
-                      </TableCell>
-
-                    </TableRow>
-
-                  )}
-
-
-                  {filtered.map(
-                    (
-                      t,
-                      idx
-                    ) => {
-
-
-                      const statusColors =
-                        STATUS_COLORS[
-                        t.status
-                        ] || {
-                          main:
-                            '#94A3B8',
-
-                          bg:
-                            '#F1F5F9'
-                        };
-
-
-                      const priorityColors =
-                        PRIORITY_COLORS[
-                        t.priority
-                        ] || {
-                          main:
-                            '#94A3B8',
-
-                          bg:
-                            '#F1F5F9'
-                        };
-
-
-                      const isCompleted =
-                        t.status ===
-                        'Completed';
-
-
-                      return (
-
-                        <TableRow
-                          key={t.id}
-
-                          hover
-
-                          sx={{
-                            bgcolor:
-                              idx % 2
-                                ? '#FAFBFC'
-                                : 'transparent'
-                          }}
-                        >
-
-
-                          <TableCell>
-                            {idx + 1}
-                          </TableCell>
-
-
-                          <TableCell
-                            sx={{
-                              fontSize:
-                                '0.8rem'
-                            }}
-                          >
-                            {t.username || '—'}
-                          </TableCell>
-
-
-                          <TableCell>
-                            {t.assigned_by || '—'}
-                          </TableCell>
-
-
-                          <TableCell
-                            sx={{
-                              maxWidth: 200
-                            }}
-                          >
-                            {t.project_name}
-                          </TableCell>
-
-
-                          <TableCell>
-                            {fmt(t.start_date)}
-                          </TableCell>
-
-
-                          <TableCell>
-                            {fmt(t.expacted_date)}
-                          </TableCell>
-
-
-                          <TableCell>
-                            {fmt(t.completed_date)}
-                          </TableCell>
-
-
-                          <TableCell>
-
-                            <Chip
-                              label={t.status}
-
-                              size="small"
-
-                              sx={{
-                                bgcolor:
-                                  statusColors.bg,
-
-                                color:
-                                  statusColors.main,
-
-                                fontWeight:
-                                  700
-                              }}
-                            />
-
-                          </TableCell>
-
-
-                          <TableCell>
-
-                            <Chip
-                              label={t.priority}
-
-                              size="small"
-
-                              sx={{
-                                bgcolor:
-                                  priorityColors.bg,
-
-                                color:
-                                  priorityColors.main,
-
-                                fontWeight:
-                                  700
-                              }}
-                            />
-
-                          </TableCell>
-
-
-                          <TableCell
-                            sx={{
-                              whiteSpace:
-                                'nowrap'
-                            }}
-                          >
-                            {getTotalTime(t)}
-                          </TableCell>
-
-
-                          <TableCell>
-
-                            {t.reason_for_delay &&
-                              t.reason_for_delay !==
-                              'None'
-
-                              ? (
-
-                                <Chip
-                                  label={
-                                    t.reason_for_delay
-                                  }
-                                  size="small"
-                                  variant="outlined"
-                                />
-
-                              )
-
-                              : '—'
-                            }
-
-                          </TableCell>
-
-
-                          {/* ========================================
-                              CHANGED:
-                              First 4 words only.
-                              Full remarks shown on hover.
-                          ======================================== */}
-
-                          <TableCell
-                            sx={{
-                              maxWidth: 180,
-                              width: 180
-                            }}
-                          >
-
-                            {t.remarks
-                              ? (
-
-                                <Tooltip
-                                  title={t.remarks}
-                                  arrow
-                                  placement="top"
-                                >
-
-                                  <Typography
-                                    variant="body2"
-
-                                    color="text.secondary"
-
-                                    noWrap
-
-                                    sx={{
-                                      maxWidth: 180,
-
-                                      overflow:
-                                        'hidden',
-
-                                      textOverflow:
-                                        'ellipsis',
-
-                                      whiteSpace:
-                                        'nowrap',
-
-                                      cursor:
-                                        'pointer'
-                                    }}
-                                  >
-
-                                    {getShortRemarks(
-                                      t.remarks,
-                                      4
+                        <TableContainer sx={{ maxHeight: 560 }}>
+                            <Table stickyHeader size="small">
+                                <TableHead>
+                                    <TableRow>
+                                        {['SR', 'User', 'Assigned By', 'Project', 'Start', 'Expected', 'Completed', 'Status', 'Priority', 'Time Taken', 'Reason', 'Remarks', 'Actions'].map((h) => (
+                                            <TableCell key={h} align={h === 'Actions' ? 'center' : 'left'}
+                                                sx={{ fontWeight: 700, color: 'text.secondary', fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                                                {h}
+                                            </TableCell>
+                                        ))}
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {filtered.length === 0 && (
+                                        <TableRow>
+                                            <TableCell colSpan={13}>
+                                                <Box sx={{ py: 6, textAlign: 'center' }}>
+                                                    <Typography color="text.secondary">No tasks yet — click "Add Task" to create the first one.</Typography>
+                                                </Box>
+                                            </TableCell>
+                                        </TableRow>
                                     )}
+                                    {filtered.map((t, idx) => {
+                                        const statusColors = STATUS_COLORS[t.status] || { main: '#94A3B8', bg: '#F1F5F9' };
+                                        const priorityColors = PRIORITY_COLORS[t.priority] || { main: '#94A3B8', bg: '#F1F5F9' };
+                                        const isCompleted = t.status === 'Completed';
+                                        const isRestarted = t.is_restarted || false;
 
-                                  </Typography>
+                                        return (
+                                            <TableRow key={t.id} hover sx={{
+                                                bgcolor: isRestarted ? '#FFF7E6' : idx % 2 ? '#FAFBFC' : 'transparent',
+                                                borderLeft: isRestarted ? '5px solid #FF9800' : 'none'
+                                            }}>
+                                                <TableCell>{idx + 1}</TableCell>
+                                                <TableCell sx={{ fontSize: '0.8rem' }}>{t.username || '—'}</TableCell>
+                                                <TableCell>{t.assigned_by || '—'}</TableCell>
+                                                <TableCell sx={{ maxWidth: 240 }}>
+                                                    <Stack spacing={0.5}>
+                                                        <Typography variant="body2">{t.project_name}</Typography>
+                                                        {isRestarted && (
+                                                            <Chip label={`Restarted (${t.restart_count || 1})`} size="small"
+                                                                sx={{ width: 'fit-content', bgcolor: '#FFF3CD', color: '#B26A00', fontWeight: 700 }} />
+                                                        )}
+                                                    </Stack>
+                                                </TableCell>
+                                                <TableCell>{fmt(t.start_date)}</TableCell>
+                                                <TableCell>{fmt(t.expacted_date)}</TableCell>
+                                                <TableCell>{fmt(t.completed_date)}</TableCell>
+                                                <TableCell>
+                                                    <Chip label={t.status} size="small" sx={{ bgcolor: statusColors.bg, color: statusColors.main, fontWeight: 700 }} />
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Chip label={t.priority} size="small" sx={{ bgcolor: priorityColors.bg, color: priorityColors.main, fontWeight: 700 }} />
+                                                </TableCell>
+                                                <TableCell sx={{ whiteSpace: 'nowrap' }}>{getTotalTime(t)}</TableCell>
+                                                <TableCell>
+                                                    {t.reason_for_delay && t.reason_for_delay !== 'None' ? (
+                                                        <Chip label={t.reason_for_delay} size="small" variant="outlined" />
+                                                    ) : '—'}
+                                                </TableCell>
+                                                <TableCell sx={{ maxWidth: 180, width: 180 }}>
+                                                    {t.remarks ? (
+                                                        <Tooltip title={t.remarks} arrow placement="top">
+                                                            <Typography variant="body2" color="text.secondary" noWrap
+                                                                sx={{ maxWidth: 180, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', cursor: 'pointer' }}>
+                                                                {getShortRemarks(t.remarks, 4)}
+                                                            </Typography>
+                                                        </Tooltip>
+                                                    ) : (
+                                                        <Typography variant="body2" color="text.secondary">—</Typography>
+                                                    )}
+                                                </TableCell>
+                                                <TableCell align="center">
+                                                    <Stack direction="row" spacing={0.5} justifyContent="center">
+                                                        {/* EDIT */}
+                                                        <Tooltip title={isCompleted ? 'Cannot edit completed tasks' : 'Edit task'}>
+                                                            <span>
+                                                                <IconButton size="small" onClick={() => openEdit(t)} disabled={isCompleted}>
+                                                                    <EditRoundedIcon fontSize="small" />
+                                                                </IconButton>
+                                                            </span>
+                                                        </Tooltip>
 
-                                </Tooltip>
+                                                        {/* RESTART - Only visible for completed tasks */}
+                                                        {isCompleted && (
+                                                            <Tooltip title="Restart project with new changes">
+                                                                <IconButton size="small" onClick={() => openRestart(t)} sx={{ color: '#FF9800' }}>
+                                                                    <RestartAltRoundedIcon fontSize="small" />
+                                                                </IconButton>
+                                                            </Tooltip>
+                                                        )}
 
-                              )
-                              : (
+                                                        {/* DELETE */}
+                                                        <Tooltip title={isCompleted ? 'Cannot delete completed tasks' : 'Delete task'}>
+                                                            <span>
+                                                                <IconButton size="small" onClick={() => handleDelete(t.id)} disabled={isCompleted}>
+                                                                    <DeleteRoundedIcon fontSize="small" color={isCompleted ? 'disabled' : 'error'} />
+                                                                </IconButton>
+                                                            </span>
+                                                        </Tooltip>
+                                                    </Stack>
+                                                </TableCell>
+                                            </TableRow>
+                                        );
+                                    })}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Paper>
+                </Stack>
+            </Container>
 
-                                <Typography
-                                  variant="body2"
-                                  color="text.secondary"
-                                >
-                                  —
-                                </Typography>
+            {/* DIALOGS */}
+            <TaskFormDialog open={dialogOpen} onClose={() => setDialogOpen(false)} onSave={handleSave}
+                initialTask={editingTask} currentUsername={currentUsername} isRestartMode={isRestartMode} />
 
-                              )
-                            }
-
-                          </TableCell>
-
-
-                          {/* ACTIONS */}
-
-                          {/* <TableCell
-                            align="center"
-                          >
-
-                            <Stack
-                              direction="row"
-                              spacing={0.5}
-                              justifyContent="center"
-                            >
-
-                              <Tooltip
-                                title={
-                                  isCompleted
-                                    ? "Cannot edit completed tasks"
-                                    : "Edit task"
-                                }
-                              >
-
-                                <span>
-
-                                  <IconButton
-                                    size="small"
-
-                                    onClick={
-                                      () =>
-                                        openEdit(t)
-                                    }
-
-                                    disabled={
-                                      isCompleted
-                                    }
-                                  >
-
-                                    <EditRoundedIcon
-                                      fontSize="small"
-                                    />
-
-                                  </IconButton>
-
-                                </span>
-
-                              </Tooltip>
-
-
-                              <IconButton
-                                size="small"
-
-                                onClick={
-                                  () =>
-                                    handleDelete(
-                                      t.id
-                                    )
-                                }
-                              >
-
-                                <DeleteRoundedIcon
-                                  fontSize="small"
-                                  color="error"
-                                />
-
-                              </IconButton>
-
-                            </Stack>
-
-                          </TableCell> */}
-                          <TableCell align="center">
-                            <Stack
-                              direction="row"
-                              spacing={0.5}
-                              justifyContent="center"
-                            >
-                              {/* EDIT */}
-                              <Tooltip
-                                title={
-                                  isCompleted
-                                    ? "Cannot edit completed tasks"
-                                    : "Edit task"
-                                }
-                              >
-                                <span>
-                                  <IconButton
-                                    size="small"
-                                    onClick={() => openEdit(t)}
-                                    disabled={isCompleted}
-                                  >
-                                    <EditRoundedIcon fontSize="small" />
-                                  </IconButton>
-                                </span>
-                              </Tooltip>
-
-                              {/* DELETE */}
-                              <Tooltip
-                                title={
-                                  isCompleted
-                                    ? "Cannot delete completed tasks"
-                                    : "Delete task"
-                                }
-                              >
-                                <span>
-                                  <IconButton
-                                    size="small"
-                                    onClick={() => handleDelete(t.id)}
-                                    disabled={isCompleted}
-                                  >
-                                    <DeleteRoundedIcon
-                                      fontSize="small"
-                                      color={isCompleted ? "disabled" : "error"}
-                                    />
-                                  </IconButton>
-                                </span>
-                              </Tooltip>
-                            </Stack>
-                          </TableCell>
-
-                        </TableRow>
-                      );
-                    }
-                  )}
-
-                </TableBody>
-
-              </Table>
-
-            </TableContainer>
-
-          </Paper>
-
-        </Stack>
-
-      </Container>
-
-
-      {/* ================= ADD / EDIT DIALOG ================= */}
-
-      <TaskFormDialog
-        open={dialogOpen}
-
-        onClose={
-          () =>
-            setDialogOpen(
-              false
-            )
-        }
-
-        onSave={
-          handleSave
-        }
-
-        initialTask={
-          editingTask
-        }
-
-        currentUsername={
-          currentUsername
-        }
-      />
-
-
-      {/* ================= SNACKBAR ================= */}
-
-      <Snackbar
-        open={
-          !!snack
-        }
-
-        autoHideDuration={
-          3000
-        }
-
-        onClose={
-          () =>
-            setSnack(null)
-        }
-
-        anchorOrigin={{
-          vertical:
-            'bottom',
-
-          horizontal:
-            'right'
-        }}
-      >
-
-        {snack && (
-
-          <Alert
-            severity={
-              snack.severity
-            }
-
-            variant="filled"
-
-            onClose={
-              () =>
-                setSnack(null)
-            }
-          >
-
-            {snack.message}
-
-          </Alert>
-
-        )}
-
-      </Snackbar>
-
-    </Box>
-  );
+            {/* SNACKBAR */}
+            <Snackbar open={!!snack} autoHideDuration={3000} onClose={() => setSnack(null)}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
+                {snack && (
+                    <Alert severity={snack.severity} variant="filled" onClose={() => setSnack(null)}>
+                        {snack.message}
+                    </Alert>
+                )}
+            </Snackbar>
+        </Box>
+    );
 }
+
+
+
+
+
+
+
+
+
 
 // import React, { useMemo, useState, useEffect } from 'react';
 // import {
@@ -5513,7 +1245,6 @@ export default function TaskTracker() {
 // import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 // import ReportProblemRoundedIcon from '@mui/icons-material/ReportProblemRounded';
 // import DonutLargeRoundedIcon from '@mui/icons-material/DonutLargeRounded';
-// import RestartAltRoundedIcon from '@mui/icons-material/RestartAltRounded';
 
 // import {
 //   PieChart,
@@ -5534,21 +1265,13 @@ export default function TaskTracker() {
 // import { saveAs } from 'file-saver';
 // import { getDecreyptedData } from "../../../utils/localstorage";
 
-// // === KEY CHANGES SUMMARY ===
-// // 1. Added RestartAltRoundedIcon import
-// // 2. Added is_restarted & restarted_from_id fields to form
-// // 3. Added getRestartForm() helper to pre-fill restart dialog
-// // 4. Added openRestart() function
-// // 5. Added isRestartMode state
-// // 6. Added "Restart Project" button (ONLY for completed tasks)
-// // 7. Highlighted restarted rows with orange border & background
-// // 8. Added "RESTARTED" badge next to project name
-// // 9. No other changes to existing functionality
-// // ===========================
+
+// /* ============================== CONSTANTS ============================== */
 
 // const API_BASE_URL =
 //   'https://commtoolapi.mcpspmis.com/task_tracking/tasks/';
 
+// // ADMIN USERS - SAME AS BACKEND
 // const ADMIN_USERS = [
 //   "abhinav@ust.com",
 //   "mohit@ust.com"
@@ -5581,51 +1304,63 @@ export default function TaskTracker() {
 //   'Other',
 // ];
 
+
+// // Status color tokens
 // const STATUS_COLORS = {
 //   'Not Started': {
 //     main: '#64748B',
 //     bg: '#F1F5F9'
 //   },
+
 //   'In Progress': {
 //     main: '#2563EB',
 //     bg: '#EAF1FE'
 //   },
+
 //   'In Review': {
 //     main: '#D97706',
 //     bg: '#FEF3E2'
 //   },
+
 //   'Testing': {
 //     main: '#7C3AED',
 //     bg: '#F3ECFE'
 //   },
+
 //   'Completed': {
 //     main: '#0E9F6E',
 //     bg: '#E7F9F1'
 //   },
+
 //   'Delayed': {
 //     main: '#DC2626',
 //     bg: '#FDECEC'
 //   },
+
 //   'On Hold': {
 //     main: '#475569',
 //     bg: '#EEF1F4'
 //   },
 // };
 
+
 // const PRIORITY_COLORS = {
 //   High: {
 //     main: '#DC2626',
 //     bg: '#FDECEC'
 //   },
+
 //   Medium: {
 //     main: '#D97706',
 //     bg: '#FEF3E2'
 //   },
+
 //   Low: {
 //     main: '#0E9F6E',
 //     bg: '#E7F9F1'
 //   },
 // };
+
 
 // const KPI_ICONS = {
 //   'Total Tasks': AssignmentRoundedIcon,
@@ -5638,6 +1373,7 @@ export default function TaskTracker() {
 //   'Completion %': DonutLargeRoundedIcon,
 // };
 
+
 // const REASON_PALETTE = [
 //   '#0E7C7B',
 //   '#D97706',
@@ -5649,64 +1385,102 @@ export default function TaskTracker() {
 //   '#B45309'
 // ];
 
+
 // const PRIMARY = '#0E7C7B';
 // const PRIMARY_DARK = '#0A5D5C';
 
+
 // /* ============================== HELPERS ============================== */
 
+
+// // GET CURRENT USERNAME
 // const getCurrentUsername = () => {
+
 //   const username =
 //     getDecreyptedData('userID') ||
 //     getDecreyptedData('username') ||
 //     'anonymous';
 
-//   console.log('Current username:', username);
+//   console.log(
+//     'Current username:',
+//     username
+//   );
+
 //   return username;
 // };
 
+
+// // CHECK IF USER IS ADMIN
 // const isUserAdmin = () => {
+
 //   const username = getCurrentUsername();
+
 //   return ADMIN_USERS.includes(username);
 // };
 
-// // EMPTY FORM - UPDATED with new fields
+
+// // EMPTY FORM
+// // CHANGED: Date defaults to today's local date
 // const getEmptyForm = () => ({
+
 //   date: dayjs().format('YYYY-MM-DD'),
+
 //   username: getCurrentUsername(),
+
 //   assigned_by: '',
+
 //   project_name: '',
+
 //   start_date: '',
+
 //   expacted_date: '',
+
 //   completed_date: '',
+
 //   status: 'Not Started',
+
 //   priority: 'Medium',
+
 //   reason_for_delay: 'None',
+
 //   remarks: '',
-//   is_restarted: false,
-//   restarted_from_id: null,
 // });
 
-// // NEW: RESTART FORM - Pre-fill from completed task
-// const getRestartForm = (completedTask) => ({
-//   date: dayjs().format('YYYY-MM-DD'),
-//   username: completedTask.username || getCurrentUsername(),
-//   assigned_by: completedTask.assigned_by || '',
-//   project_name: completedTask.project_name || '',
-//   start_date: dayjs().format('YYYY-MM-DD'),
-//   expacted_date: '',
-//   completed_date: '',
-//   status: 'Not Started',
-//   priority: completedTask.priority || 'Medium',
-//   reason_for_delay: 'None',
-//   remarks: `RESTARTED: New changes required. Previous completion: ${dayjs(completedTask.completed_date).format('DD MMM YYYY')}`,
-//   is_restarted: true,
-//   restarted_from_id: completedTask.id,
-// });
+
+// // function getTotalTime(task) {
+
+// //   if (!task.start_date) {
+// //     return '—';
+// //   }
+
+// //   const start = dayjs(
+// //     task.start_date
+// //   );
+
+// //   if (task.completed_date) {
+
+// //     const days =
+// //       dayjs(task.completed_date)
+// //         .diff(start, 'day');
+
+// //     return `${days} day${days === 1 ? '' : 's'}`;
+// //   }
+
+// //   const days =
+// //     dayjs().diff(
+// //       start,
+// //       'day'
+// //     );
+
+// //   return `${days} day${days === 1 ? '' : 's'} (ongoing)`;
+// // }
+
 
 // function getTotalTime(task) {
 //   if (!task.start_date) return '—';
 
 //   const start = dayjs(task.start_date).startOf('day');
+
 //   const end = task.completed_date
 //     ? dayjs(task.completed_date).startOf('day')
 //     : dayjs().startOf('day');
@@ -5718,14 +1492,19 @@ export default function TaskTracker() {
 //   let workingDays = 0;
 //   let currentDate = start;
 
+//   // Include both start date and end date
 //   while (
 //     currentDate.isBefore(end, 'day') ||
 //     currentDate.isSame(end, 'day')
 //   ) {
 //     const dayOfWeek = currentDate.day();
+
+//     // Sunday = 0
+//     // Saturday = 6
 //     if (dayOfWeek !== 0 && dayOfWeek !== 6) {
 //       workingDays++;
 //     }
+
 //     currentDate = currentDate.add(1, 'day');
 //   }
 
@@ -5734,8 +1513,16 @@ export default function TaskTracker() {
 //   }
 
 //   return `${workingDays} working day${workingDays === 1 ? '' : 's'} (ongoing)`;
+
 // }
 
+
+// /*
+//  * FILTER TASKS
+//  *
+//  * CHANGED:
+//  * Search filters ONLY by username.
+//  */
 // function filterTasks(
 //   tasks,
 //   {
@@ -5752,6 +1539,13 @@ export default function TaskTracker() {
 
 //   return tasks.filter((t) => {
 
+//     /*
+//      * All Dates:
+//      * dateFilterType === single
+//      * singleDate is empty
+//      *
+//      * Therefore no date filtering happens.
+//      */
 //     if (
 //       dateFilterType === 'single' &&
 //       singleDate &&
@@ -5760,6 +1554,8 @@ export default function TaskTracker() {
 //       return false;
 //     }
 
+
+//     // Date Range
 //     if (
 //       dateFilterType === 'range' &&
 //       fromDate &&
@@ -5770,9 +1566,14 @@ export default function TaskTracker() {
 //         return false;
 //       }
 
-//       const taskDate = dayjs(t.start_date);
-//       const from = dayjs(fromDate);
-//       const to = dayjs(toDate);
+//       const taskDate =
+//         dayjs(t.start_date);
+
+//       const from =
+//         dayjs(fromDate);
+
+//       const to =
+//         dayjs(toDate);
 
 //       if (
 //         taskDate.isBefore(from, 'day') ||
@@ -5782,6 +1583,8 @@ export default function TaskTracker() {
 //       }
 //     }
 
+
+//     // Status filter
 //     if (
 //       status &&
 //       status !== 'All' &&
@@ -5790,6 +1593,8 @@ export default function TaskTracker() {
 //       return false;
 //     }
 
+
+//     // Priority filter
 //     if (
 //       priority &&
 //       priority !== 'All' &&
@@ -5798,6 +1603,8 @@ export default function TaskTracker() {
 //       return false;
 //     }
 
+
+//     // Admin username dropdown filter
 //     if (
 //       username &&
 //       username !== 'All' &&
@@ -5806,6 +1613,11 @@ export default function TaskTracker() {
 //       return false;
 //     }
 
+
+//     /*
+//      * CHANGED:
+//      * Search input filters ONLY by task username.
+//      */
 //     if (search) {
 
 //       const q =
@@ -5824,9 +1636,11 @@ export default function TaskTracker() {
 //       }
 //     }
 
+
 //     return true;
 //   });
 // }
+
 
 // function computeKpis(tasks) {
 
@@ -5859,6 +1673,7 @@ export default function TaskTracker() {
 //   };
 // }
 
+
 // function computeStatusBreakdown(tasks) {
 
 //   return STATUS_OPTIONS
@@ -5874,6 +1689,7 @@ export default function TaskTracker() {
 //       (d) => d.value > 0
 //     );
 // }
+
 
 // function computeReasonBreakdown(tasks) {
 
@@ -5891,6 +1707,7 @@ export default function TaskTracker() {
 //     }
 //   });
 
+
 //   return Object
 //     .entries(counts)
 //     .map(
@@ -5900,6 +1717,7 @@ export default function TaskTracker() {
 //       })
 //     );
 // }
+
 
 // function computePriorityBreakdown(tasks) {
 
@@ -5915,6 +1733,7 @@ export default function TaskTracker() {
 //   );
 // }
 
+
 // function fmt(d) {
 
 //   return d
@@ -5922,6 +1741,11 @@ export default function TaskTracker() {
 //     : '—';
 // }
 
+
+// /*
+//  * CHANGED:
+//  * Shows maximum first four words.
+//  */
 // function getShortRemarks(
 //   remarks,
 //   wordLimit = 4
@@ -5947,7 +1771,9 @@ export default function TaskTracker() {
 //     .join(' ')}...`;
 // }
 
+
 // /* ========================= API FUNCTIONS ========================= */
+
 
 // async function fetchTasks() {
 
@@ -5961,10 +1787,12 @@ export default function TaskTracker() {
 //       username
 //     );
 
+
 //     const response =
 //       await fetch(
 //         `${API_BASE_URL}?username=${encodeURIComponent(username)}`
 //       );
+
 
 //     if (!response.ok) {
 
@@ -5978,13 +1806,16 @@ export default function TaskTracker() {
 //       );
 //     }
 
+
 //     const data =
 //       await response.json();
+
 
 //     console.log(
 //       'Fetched tasks:',
 //       data
 //     );
+
 
 //     return Array.isArray(data)
 //       ? data
@@ -6001,12 +1832,15 @@ export default function TaskTracker() {
 //   }
 // }
 
+
+// // CREATE TASK
 // async function createTask(taskData) {
 
 //   try {
 
 //     const username =
 //       getCurrentUsername();
+
 
 //     const payload = {
 
@@ -6045,18 +1879,14 @@ export default function TaskTracker() {
 
 //       remarks:
 //         taskData.remarks,
-
-//       is_restarted:
-//         taskData.is_restarted || false,
-
-//       restarted_from_id:
-//         taskData.restarted_from_id || null,
 //     };
+
 
 //     console.log(
 //       'Creating task with payload:',
 //       payload
 //     );
+
 
 //     const response =
 //       await fetch(
@@ -6074,6 +1904,7 @@ export default function TaskTracker() {
 //         }
 //       );
 
+
 //     if (!response.ok) {
 
 //       const errorData =
@@ -6089,13 +1920,16 @@ export default function TaskTracker() {
 //       );
 //     }
 
+
 //     const responseData =
 //       await response.json();
+
 
 //     console.log(
 //       'Task created:',
 //       responseData
 //     );
+
 
 //     return responseData;
 
@@ -6110,6 +1944,8 @@ export default function TaskTracker() {
 //   }
 // }
 
+
+// // UPDATE TASK
 // async function updateTask(
 //   taskId,
 //   taskData
@@ -6119,6 +1955,7 @@ export default function TaskTracker() {
 
 //     const username =
 //       getCurrentUsername();
+
 
 //     const payload = {
 
@@ -6159,10 +1996,12 @@ export default function TaskTracker() {
 //         taskData.remarks,
 //     };
 
+
 //     console.log(
 //       'Updating task with payload:',
 //       payload
 //     );
+
 
 //     const response =
 //       await fetch(
@@ -6180,6 +2019,7 @@ export default function TaskTracker() {
 //         }
 //       );
 
+
 //     if (!response.ok) {
 
 //       const errorData =
@@ -6195,13 +2035,16 @@ export default function TaskTracker() {
 //       );
 //     }
 
+
 //     const responseData =
 //       await response.json();
+
 
 //     console.log(
 //       'Task updated:',
 //       responseData
 //     );
+
 
 //     return responseData;
 
@@ -6216,12 +2059,15 @@ export default function TaskTracker() {
 //   }
 // }
 
+
+// // DELETE TASK
 // async function deleteTask(taskId) {
 
 //   try {
 
 //     const username =
 //       getCurrentUsername();
+
 
 //     console.log(
 //       'Deleting task:',
@@ -6230,6 +2076,7 @@ export default function TaskTracker() {
 //       username
 //     );
 
+
 //     const response =
 //       await fetch(
 //         `${API_BASE_URL}${taskId}/?username=${encodeURIComponent(username)}`,
@@ -6237,6 +2084,7 @@ export default function TaskTracker() {
 //           method: 'DELETE'
 //         }
 //       );
+
 
 //     if (!response.ok) {
 
@@ -6249,6 +2097,7 @@ export default function TaskTracker() {
 //         'Failed to delete task'
 //       );
 //     }
+
 
 //     console.log(
 //       'Task deleted successfully'
@@ -6265,7 +2114,9 @@ export default function TaskTracker() {
 //   }
 // }
 
-// /* ========================= EXCEL EXPORT ========================= */
+
+// /* ========================= COLORFUL EXCEL EXPORT ========================= */
+
 
 // async function exportTasksToExcel(
 //   tasks,
@@ -6273,73 +2124,93 @@ export default function TaskTracker() {
 // ) {
 
 //   const STATUS_FILL = {
+
 //     'Not Started': {
 //       fg: 'FFD9D9D9',
 //       font: 'FF595959'
 //     },
+
 //     'In Progress': {
 //       fg: 'FFBDD7EE',
 //       font: 'FF1F4E78'
 //     },
+
 //     'In Review': {
 //       fg: 'FFFFE9B3',
 //       font: 'FF7F6000'
 //     },
+
 //     'Testing': {
 //       fg: 'FFE3D2FB',
 //       font: 'FF5A2D9C'
 //     },
+
 //     'Completed': {
 //       fg: 'FFC6EFCE',
 //       font: 'FF006100'
 //     },
+
 //     'Delayed': {
 //       fg: 'FFFFC7CE',
 //       font: 'FF9C0006'
 //     },
+
 //     'On Hold': {
 //       fg: 'FFE4DFEC',
 //       font: 'FF5F497A'
 //     },
 //   };
 
+
 //   const PRIORITY_FILL = {
+
 //     High: {
 //       fg: 'FFFFC7CE',
 //       font: 'FF9C0006'
 //     },
+
 //     Medium: {
 //       fg: 'FFFFE9B3',
 //       font: 'FF7F6000'
 //     },
+
 //     Low: {
 //       fg: 'FFC6EFCE',
 //       font: 'FF006100'
 //     },
 //   };
 
-//   const NAVY = 'FF1F4E78';
-//   const WHITE = 'FFFFFFFF';
+
+//   const NAVY =
+//     'FF1F4E78';
+
+//   const WHITE =
+//     'FFFFFFFF';
+
 
 //   const border = {
+
 //     top: {
 //       style: 'thin',
 //       color: {
 //         argb: 'FFB7B7B7'
 //       }
 //     },
+
 //     left: {
 //       style: 'thin',
 //       color: {
 //         argb: 'FFB7B7B7'
 //       }
 //     },
+
 //     bottom: {
 //       style: 'thin',
 //       color: {
 //         argb: 'FFB7B7B7'
 //       }
 //     },
+
 //     right: {
 //       style: 'thin',
 //       color: {
@@ -6348,21 +2219,30 @@ export default function TaskTracker() {
 //     },
 //   };
 
-//   const wb = new ExcelJS.Workbook();
 
-//   wb.creator = 'Task Tracker';
-//   wb.created = new Date();
+//   const wb =
+//     new ExcelJS.Workbook();
 
-//   const summary = wb.addWorksheet(
-//     'Dashboard',
-//     {
-//       views: [
-//         {
-//           showGridLines: false
-//         }
-//       ]
-//     }
-//   );
+
+//   wb.creator =
+//     'Task Tracker';
+
+//   wb.created =
+//     new Date();
+
+
+//   const summary =
+//     wb.addWorksheet(
+//       'Dashboard',
+//       {
+//         views: [
+//           {
+//             showGridLines: false
+//           }
+//         ]
+//       }
+//     );
+
 
 //   summary.columns = [
 //     { width: 4 },
@@ -6373,8 +2253,16 @@ export default function TaskTracker() {
 //     { width: 16 }
 //   ];
 
-//   summary.mergeCells('B2:F2');
-//   summary.getCell('B2').value = 'Task Tracker — Summary Report';
+
+//   summary.mergeCells(
+//     'B2:F2'
+//   );
+
+
+//   summary.getCell('B2').value =
+//     'Task Tracker — Summary Report';
+
+
 //   summary.getCell('B2').font = {
 //     name: 'Arial',
 //     size: 18,
@@ -6384,8 +2272,16 @@ export default function TaskTracker() {
 //     }
 //   };
 
-//   summary.mergeCells('B3:F3');
-//   summary.getCell('B3').value = `Generated ${dayjs().format('DD MMM YYYY, HH:mm')} · ${tasks.length} tasks`;
+
+//   summary.mergeCells(
+//     'B3:F3'
+//   );
+
+
+//   summary.getCell('B3').value =
+//     `Generated ${dayjs().format('DD MMM YYYY, HH:mm')} · ${tasks.length} tasks`;
+
+
 //   summary.getCell('B3').font = {
 //     name: 'Arial',
 //     size: 10,
@@ -6395,11 +2291,18 @@ export default function TaskTracker() {
 //     }
 //   };
 
-//   const kpis = computeKpis(tasks);
+
+//   const kpis =
+//     computeKpis(tasks);
+
 
 //   let r = 5;
 
-//   summary.getCell(`B${r}`).value = 'Key Metrics';
+
+//   summary.getCell(`B${r}`).value =
+//     'Key Metrics';
+
+
 //   summary.getCell(`B${r}`).font = {
 //     name: 'Arial',
 //     size: 12,
@@ -6409,21 +2312,41 @@ export default function TaskTracker() {
 //     }
 //   };
 
+
 //   r += 1;
 
+
 //   [
-//     ['Total Tasks', kpis.total],
-//     ['Completed', kpis.completed],
-//     ['Completion %', `${kpis.completionPct}%`]
+//     [
+//       'Total Tasks',
+//       kpis.total
+//     ],
+
+//     [
+//       'Completed',
+//       kpis.completed
+//     ],
+
+//     [
+//       'Completion %',
+//       `${kpis.completionPct}%`
+//     ]
+
 //   ].forEach(
 //     ([label, value]) => {
-//       summary.getCell(`B${r}`).value = label;
+
+//       summary.getCell(`B${r}`).value =
+//         label;
+
 //       summary.getCell(`B${r}`).font = {
 //         name: 'Arial',
 //         size: 10
 //       };
 
-//       summary.getCell(`C${r}`).value = value;
+
+//       summary.getCell(`C${r}`).value =
+//         value;
+
 //       summary.getCell(`C${r}`).font = {
 //         name: 'Arial',
 //         size: 12,
@@ -6433,14 +2356,24 @@ export default function TaskTracker() {
 //         }
 //       };
 
+
 //       r += 1;
 //     }
 //   );
 
+
 //   let statusRow = 5;
 
-//   summary.getCell(`E${statusRow}`).value = 'Status Breakdown';
-//   summary.getCell(`E${statusRow}`).font = {
+
+//   summary.getCell(
+//     `E${statusRow}`
+//   ).value =
+//     'Status Breakdown';
+
+
+//   summary.getCell(
+//     `E${statusRow}`
+//   ).font = {
 //     name: 'Arial',
 //     size: 12,
 //     bold: true,
@@ -6449,13 +2382,24 @@ export default function TaskTracker() {
 //     }
 //   };
 
+
 //   statusRow += 1;
+
 
 //   ['Status', 'Count']
 //     .forEach(
 //       (h, i) => {
-//         const cell = summary.getCell(statusRow, 5 + i);
+
+//         const cell =
+//           summary.getCell(
+//             statusRow,
+//             5 + i
+//           );
+
+
 //         cell.value = h;
+
+
 //         cell.font = {
 //           name: 'Arial',
 //           size: 10,
@@ -6464,6 +2408,8 @@ export default function TaskTracker() {
 //             argb: WHITE
 //           }
 //         };
+
+
 //         cell.fill = {
 //           type: 'pattern',
 //           pattern: 'solid',
@@ -6471,22 +2417,41 @@ export default function TaskTracker() {
 //             argb: NAVY
 //           }
 //         };
-//         cell.border = border;
+
+
+//         cell.border =
+//           border;
 //       }
 //     );
 
+
 //   statusRow += 1;
+
 
 //   computeStatusBreakdown(tasks)
 //     .forEach(
-//       ({ name, value }) => {
-//         const fill = STATUS_FILL[name] || {
-//           fg: 'FFEFEFEF',
-//           font: 'FF333333'
-//         };
+//       ({
+//         name,
+//         value
+//       }) => {
 
-//         const nameCell = summary.getCell(`E${statusRow}`);
-//         nameCell.value = name;
+//         const fill =
+//           STATUS_FILL[name] || {
+//             fg: 'FFEFEFEF',
+//             font: 'FF333333'
+//           };
+
+
+//         const nameCell =
+//           summary.getCell(
+//             `E${statusRow}`
+//           );
+
+
+//         nameCell.value =
+//           name;
+
+
 //         nameCell.font = {
 //           name: 'Arial',
 //           size: 10,
@@ -6495,6 +2460,8 @@ export default function TaskTracker() {
 //             argb: fill.font
 //           }
 //         };
+
+
 //         nameCell.fill = {
 //           type: 'pattern',
 //           pattern: 'solid',
@@ -6502,31 +2469,51 @@ export default function TaskTracker() {
 //             argb: fill.fg
 //           }
 //         };
-//         nameCell.border = border;
 
-//         const countCell = summary.getCell(`F${statusRow}`);
-//         countCell.value = value;
+
+//         nameCell.border =
+//           border;
+
+
+//         const countCell =
+//           summary.getCell(
+//             `F${statusRow}`
+//           );
+
+
+//         countCell.value =
+//           value;
+
+
 //         countCell.alignment = {
 //           horizontal: 'center'
 //         };
-//         countCell.border = border;
+
+
+//         countCell.border =
+//           border;
+
 
 //         statusRow += 1;
 //       }
 //     );
 
-//   const ws = wb.addWorksheet(
-//     'Task Data',
-//     {
-//       views: [
-//         {
-//           state: 'frozen',
-//           ySplit: 1,
-//           showGridLines: false
-//         }
-//       ]
-//     }
-//   );
+
+//   // Task Data Sheet
+//   const ws =
+//     wb.addWorksheet(
+//       'Task Data',
+//       {
+//         views: [
+//           {
+//             state: 'frozen',
+//             ySplit: 1,
+//             showGridLines: false
+//           }
+//         ]
+//       }
+//     );
+
 
 //   const headers = [
 //     'SR No',
@@ -6543,6 +2530,7 @@ export default function TaskTracker() {
 //     'Remarks'
 //   ];
 
+
 //   ws.columns = [
 //     { width: 7 },
 //     { width: 12 },
@@ -6558,12 +2546,24 @@ export default function TaskTracker() {
 //     { width: 30 }
 //   ];
 
-//   const headerRow = ws.getRow(1);
+
+//   const headerRow =
+//     ws.getRow(1);
+
 
 //   headers.forEach(
 //     (h, i) => {
-//       const cell = headerRow.getCell(i + 1);
-//       cell.value = h;
+
+//       const cell =
+//         headerRow.getCell(
+//           i + 1
+//         );
+
+
+//       cell.value =
+//         h;
+
+
 //       cell.font = {
 //         name: 'Arial',
 //         size: 11,
@@ -6572,6 +2572,8 @@ export default function TaskTracker() {
 //           argb: WHITE
 //         }
 //       };
+
+
 //       cell.fill = {
 //         type: 'pattern',
 //         pattern: 'solid',
@@ -6579,63 +2581,105 @@ export default function TaskTracker() {
 //           argb: NAVY
 //         }
 //       };
+
+
 //       cell.alignment = {
 //         horizontal: 'center',
 //         vertical: 'middle',
 //         wrapText: true
 //       };
-//       cell.border = border;
+
+
+//       cell.border =
+//         border;
 //     }
 //   );
 
-//   headerRow.height = 24;
+
+//   headerRow.height =
+//     24;
+
 
 //   const STATUS_COL = 9;
 //   const PRIORITY_COL = 10;
 
+
 //   tasks.forEach(
 //     (t, idx) => {
-//       const row = ws.getRow(idx + 2);
+
+//       const row =
+//         ws.getRow(
+//           idx + 2
+//         );
+
 
 //       const values = [
+
 //         idx + 1,
+
 //         t.date
 //           ? dayjs(t.date)
 //             .format('DD-MMM-YYYY')
 //           : '',
+
 //         t.username || '',
+
 //         t.assigned_by || '',
+
 //         t.project_name || '',
+
 //         t.start_date
 //           ? dayjs(t.start_date)
 //             .format('DD-MMM-YYYY')
 //           : '',
+
 //         t.expacted_date
 //           ? dayjs(t.expacted_date)
 //             .format('DD-MMM-YYYY')
 //           : '',
+
 //         t.completed_date
 //           ? dayjs(t.completed_date)
 //             .format('DD-MMM-YYYY')
 //           : '',
+
 //         t.status || '',
+
 //         t.priority || '',
+
 //         t.reason_for_delay || '',
+
 //         t.remarks || '',
 //       ];
 
+
 //       values.forEach(
 //         (v, i) => {
-//           const cell = row.getCell(i + 1);
-//           cell.value = v;
+
+//           const cell =
+//             row.getCell(
+//               i + 1
+//             );
+
+
+//           cell.value =
+//             v;
+
+
 //           cell.font = {
 //             name: 'Arial',
 //             size: 10
 //           };
-//           cell.border = border;
+
+
+//           cell.border =
+//             border;
+
+
 //           cell.alignment = {
 //             vertical: 'middle',
 //             wrapText: i === 11,
+
 //             horizontal:
 //               [0, 8, 9].includes(i)
 //                 ? 'center'
@@ -6644,14 +2688,23 @@ export default function TaskTracker() {
 //         }
 //       );
 
-//       if (idx % 2 === 1) {
+
+//       if (
+//         idx % 2 === 1
+//       ) {
+
 //         for (
 //           let c = 1;
 //           c <= headers.length;
 //           c++
 //         ) {
-//           const cell = row.getCell(c);
+
+//           const cell =
+//             row.getCell(c);
+
+
 //           if (!cell.fill) {
+
 //             cell.fill = {
 //               type: 'pattern',
 //               pattern: 'solid',
@@ -6663,13 +2716,20 @@ export default function TaskTracker() {
 //         }
 //       }
 
+
 //       const statusFill =
 //         STATUS_FILL[t.status] || {
 //           fg: 'FFEFEFEF',
 //           font: 'FF333333'
 //         };
 
-//       const statusCell = row.getCell(STATUS_COL);
+
+//       const statusCell =
+//         row.getCell(
+//           STATUS_COL
+//         );
+
+
 //       statusCell.fill = {
 //         type: 'pattern',
 //         pattern: 'solid',
@@ -6677,6 +2737,8 @@ export default function TaskTracker() {
 //           argb: statusFill.fg
 //         }
 //       };
+
+
 //       statusCell.font = {
 //         name: 'Arial',
 //         size: 10,
@@ -6685,9 +2747,12 @@ export default function TaskTracker() {
 //           argb: statusFill.font
 //         }
 //       };
+
+
 //       statusCell.alignment = {
 //         horizontal: 'center'
 //       };
+
 
 //       const priorityFill =
 //         PRIORITY_FILL[t.priority] || {
@@ -6695,7 +2760,13 @@ export default function TaskTracker() {
 //           font: 'FF333333'
 //         };
 
-//       const priorityCell = row.getCell(PRIORITY_COL);
+
+//       const priorityCell =
+//         row.getCell(
+//           PRIORITY_COL
+//         );
+
+
 //       priorityCell.fill = {
 //         type: 'pattern',
 //         pattern: 'solid',
@@ -6703,6 +2774,8 @@ export default function TaskTracker() {
 //           argb: priorityFill.fg
 //         }
 //       };
+
+
 //       priorityCell.font = {
 //         name: 'Arial',
 //         size: 10,
@@ -6711,18 +2784,24 @@ export default function TaskTracker() {
 //           argb: priorityFill.font
 //         }
 //       };
+
+
 //       priorityCell.alignment = {
 //         horizontal: 'center'
 //       };
 //     }
 //   );
 
+
 //   ws.autoFilter = {
 //     from: 'A1',
 //     to: `L${tasks.length + 1}`
 //   };
 
-//   const buffer = await wb.xlsx.writeBuffer();
+
+//   const buffer =
+//     await wb.xlsx.writeBuffer();
+
 
 //   saveAs(
 //     new Blob(
@@ -6736,13 +2815,20 @@ export default function TaskTracker() {
 //   );
 // }
 
+
 // /* ============================== SUBCOMPONENTS ============================== */
 
-// function KpiCard({ label, value, color }) {
+
+// function KpiCard({
+//   label,
+//   value,
+//   color
+// }) {
 
 //   const Icon =
 //     KPI_ICONS[label] ||
 //     AssignmentRoundedIcon;
+
 
 //   return (
 
@@ -6845,15 +2931,16 @@ export default function TaskTracker() {
 //   );
 // }
 
-// /* ========================== TASK FORM DIALOG ========================== */
+
+// /* ========================== TASK FORM ========================== */
+
 
 // function TaskFormDialog({
 //   open,
 //   onClose,
 //   onSave,
 //   initialTask,
-//   currentUsername,
-//   isRestartMode
+//   currentUsername
 // }) {
 
 //   const [form, setForm] =
@@ -6861,21 +2948,20 @@ export default function TaskTracker() {
 //       getEmptyForm()
 //     );
 
+
 //   const [errors, setErrors] =
 //     useState({});
 
+
 //   const [loading, setLoading] =
 //     useState(false);
+
 
 //   useEffect(() => {
 
 //     if (open) {
 
-//       if (isRestartMode && initialTask) {
-
-//         setForm(getRestartForm(initialTask));
-
-//       } else if (initialTask) {
+//       if (initialTask) {
 
 //         setForm({
 
@@ -6931,15 +3017,16 @@ export default function TaskTracker() {
 //         );
 //       }
 
+
 //       setErrors({});
 //     }
 
 //   }, [
 //     open,
 //     initialTask,
-//     currentUsername,
-//     isRestartMode
+//     currentUsername
 //   ]);
+
 
 //   const handleChange =
 //     (field) =>
@@ -6955,9 +3042,11 @@ export default function TaskTracker() {
 //         );
 //       };
 
+
 //   const validate = () => {
 
 //     const e = {};
+
 
 //     if (
 //       !form.assigned_by.trim()
@@ -6967,6 +3056,7 @@ export default function TaskTracker() {
 //         'Required';
 //     }
 
+
 //     if (
 //       !form.project_name.trim()
 //     ) {
@@ -6975,6 +3065,7 @@ export default function TaskTracker() {
 //         'Required';
 //     }
 
+
 //     if (
 //       !form.start_date
 //     ) {
@@ -6982,6 +3073,7 @@ export default function TaskTracker() {
 //       e.start_date =
 //         'Required';
 //     }
+
 
 //     if (
 //       form.expacted_date &&
@@ -6994,6 +3086,7 @@ export default function TaskTracker() {
 //         'Cannot be before start date';
 //     }
 
+
 //     if (
 //       form.completed_date &&
 //       form.start_date &&
@@ -7005,12 +3098,15 @@ export default function TaskTracker() {
 //         'Cannot be before start date';
 //     }
 
+
 //     setErrors(e);
+
 
 //     return (
 //       Object.keys(e).length === 0
 //     );
 //   };
+
 
 //   const handleSubmit =
 //     async () => {
@@ -7029,6 +3125,7 @@ export default function TaskTracker() {
 //         }
 //       }
 //     };
+
 
 //   return (
 
@@ -7059,13 +3156,12 @@ export default function TaskTracker() {
 //           }}
 //         >
 
-//           {isRestartMode
-//             ? 'Restart Project'
-//             : initialTask
-//               ? 'Edit Task'
-//               : 'Add Task'}
+//           {initialTask
+//             ? 'Edit Task'
+//             : 'Add Task'}
 
 //         </Typography>
+
 
 //         <IconButton
 //           size="small"
@@ -7079,7 +3175,9 @@ export default function TaskTracker() {
 
 //       </DialogTitle>
 
+
 //       <Divider />
+
 
 //       <DialogContent
 //         sx={{
@@ -7091,6 +3189,12 @@ export default function TaskTracker() {
 //           container
 //           spacing={2}
 //         >
+
+//           {/* ============================================
+//               CHANGED:
+//               Add Task allows ONLY current date.
+//               Edit mode keeps its existing date.
+//           ============================================ */}
 
 //           <Grid
 //             item
@@ -7135,6 +3239,7 @@ export default function TaskTracker() {
 
 //           </Grid>
 
+
 //           <Grid
 //             item
 //             xs={12}
@@ -7156,6 +3261,7 @@ export default function TaskTracker() {
 //             />
 
 //           </Grid>
+
 
 //           <Grid
 //             item
@@ -7182,6 +3288,7 @@ export default function TaskTracker() {
 
 //           </Grid>
 
+
 //           <Grid
 //             item
 //             xs={12}
@@ -7206,6 +3313,7 @@ export default function TaskTracker() {
 //             />
 
 //           </Grid>
+
 
 //           <Grid
 //             item
@@ -7235,6 +3343,7 @@ export default function TaskTracker() {
 //             />
 
 //           </Grid>
+
 
 //           <Grid
 //             item
@@ -7269,6 +3378,7 @@ export default function TaskTracker() {
 
 //           </Grid>
 
+
 //           <Grid
 //             item
 //             xs={12}
@@ -7301,6 +3411,7 @@ export default function TaskTracker() {
 //             />
 
 //           </Grid>
+
 
 //           <Grid
 //             item
@@ -7336,6 +3447,7 @@ export default function TaskTracker() {
 //             </TextField>
 
 //           </Grid>
+
 
 //           <Grid
 //             item
@@ -7395,6 +3507,7 @@ export default function TaskTracker() {
 
 //           </Grid>
 
+
 //           <Grid
 //             item
 //             xs={12}
@@ -7434,6 +3547,7 @@ export default function TaskTracker() {
 
 //           </Grid>
 
+
 //           <Grid
 //             item
 //             xs={12}
@@ -7458,7 +3572,9 @@ export default function TaskTracker() {
 
 //       </DialogContent>
 
+
 //       <Divider />
+
 
 //       <DialogActions
 //         sx={{
@@ -7473,6 +3589,7 @@ export default function TaskTracker() {
 //         >
 //           Cancel
 //         </Button>
+
 
 //         <Button
 //           onClick={handleSubmit}
@@ -7500,11 +3617,10 @@ export default function TaskTracker() {
 //             : null
 //           }
 
-//           {isRestartMode
-//             ? 'Start New Work'
-//             : initialTask
-//               ? 'Save changes'
-//               : 'Add task'}
+
+//           {initialTask
+//             ? 'Save changes'
+//             : 'Add task'}
 
 //         </Button>
 
@@ -7514,9 +3630,12 @@ export default function TaskTracker() {
 //   );
 // }
 
+
 // /* ============================== MAIN COMPONENT ============================== */
 
+
 // export default function TaskTracker() {
+
 
 //   const currentUsername =
 //     useMemo(
@@ -7524,18 +3643,26 @@ export default function TaskTracker() {
 //       []
 //     );
 
+
 //   const isAdmin =
 //     useMemo(
 //       () => isUserAdmin(),
 //       []
 //     );
 
+
 //   const [tasks, setTasks] =
 //     useState([]);
+
 
 //   const [loading, setLoading] =
 //     useState(true);
 
+
+//   /*
+//    * CHANGED:
+//    * All Dates is selected by default.
+//    */
 //   const [filters, setFilters] =
 //     useState({
 
@@ -7567,17 +3694,18 @@ export default function TaskTracker() {
 //         'All',
 //     });
 
+
 //   const [dialogOpen, setDialogOpen] =
 //     useState(false);
+
 
 //   const [editingTask, setEditingTask] =
 //     useState(null);
 
-//   const [isRestartMode, setIsRestartMode] =
-//     useState(false);
 
 //   const [snack, setSnack] =
 //     useState(null);
+
 
 //   const [
 //     exportAnchorEl,
@@ -7585,11 +3713,13 @@ export default function TaskTracker() {
 //   ] =
 //     useState(null);
 
+
 //   const [
 //     rangeDialogOpen,
 //     setRangeDialogOpen
 //   ] =
 //     useState(false);
+
 
 //   const [
 //     customRange,
@@ -7600,20 +3730,24 @@ export default function TaskTracker() {
 //       to: ''
 //     });
 
+
 //   const today =
 //     dayjs()
 //       .format('YYYY-MM-DD');
+
 
 //   const monthStart =
 //     dayjs()
 //       .startOf('month')
 //       .format('YYYY-MM-DD');
 
+
 //   useEffect(() => {
 
 //     loadTasks();
 
 //   }, []);
+
 
 //   const loadTasks =
 //     async () => {
@@ -7627,6 +3761,7 @@ export default function TaskTracker() {
 
 //       setLoading(false);
 //     };
+
 
 //   const filtered =
 //     useMemo(
@@ -7642,6 +3777,7 @@ export default function TaskTracker() {
 //       ]
 //     );
 
+
 //   const kpis =
 //     useMemo(
 //       () =>
@@ -7651,6 +3787,7 @@ export default function TaskTracker() {
 
 //       [filtered]
 //     );
+
 
 //   const statusBreakdown =
 //     useMemo(
@@ -7662,6 +3799,7 @@ export default function TaskTracker() {
 //       [filtered]
 //     );
 
+
 //   const reasonBreakdown =
 //     useMemo(
 //       () =>
@@ -7671,6 +3809,7 @@ export default function TaskTracker() {
 
 //       [filtered]
 //     );
+
 
 //   const priorityBreakdown =
 //     useMemo(
@@ -7682,6 +3821,8 @@ export default function TaskTracker() {
 //       [filtered]
 //     );
 
+
+//   // UNIQUE USERNAMES FOR ADMIN FILTER
 //   const uniqueUsernames =
 //     useMemo(
 //       () => {
@@ -7703,45 +3844,35 @@ export default function TaskTracker() {
 //       [tasks]
 //     );
 
+
 //   const openAdd = () => {
 
 //     setEditingTask(null);
 
-//     setIsRestartMode(false);
-
 //     setDialogOpen(true);
 //   };
+
 
 //   const openEdit = (t) => {
 
 //     setEditingTask(t);
 
-//     setIsRestartMode(false);
-
 //     setDialogOpen(true);
 //   };
 
-//   // NEW: Open restart dialog
-//   const openRestart = (t) => {
-
-//     setEditingTask(t);
-
-//     setIsRestartMode(true);
-
-//     setDialogOpen(true);
-//   };
 
 //   const handleSave =
 //     async (form) => {
 
 //       try {
 
-//         if (editingTask && !isRestartMode) {
+//         if (editingTask) {
 
 //           await updateTask(
 //             editingTask.id,
 //             form
 //           );
+
 
 //           setTasks(
 //             (prev) =>
@@ -7756,6 +3887,7 @@ export default function TaskTracker() {
 //               )
 //           );
 
+
 //           setSnack({
 //             severity: 'success',
 //             message:
@@ -7766,16 +3898,17 @@ export default function TaskTracker() {
 
 //           await createTask(form);
 
+
 //           setSnack({
 //             severity: 'success',
 //             message:
-//               isRestartMode
-//                 ? 'Project restarted successfully.'
-//                 : 'Task added.'
+//               'Task added.'
 //           });
+
 
 //           await loadTasks();
 //         }
+
 
 //         setDialogOpen(false);
 
@@ -7789,6 +3922,7 @@ export default function TaskTracker() {
 //       }
 //     };
 
+
 //   const handleDelete =
 //     async (id) => {
 
@@ -7796,12 +3930,14 @@ export default function TaskTracker() {
 
 //         await deleteTask(id);
 
+
 //         setTasks(
 //           (prev) =>
 //             prev.filter(
 //               (t) => t.id !== id
 //             )
 //         );
+
 
 //         setSnack({
 //           severity: 'info',
@@ -7818,6 +3954,7 @@ export default function TaskTracker() {
 //         });
 //       }
 //     };
+
 
 //   const doExport =
 //     async (
@@ -7837,13 +3974,16 @@ export default function TaskTracker() {
 //         return;
 //       }
 
+
 //       const filename =
 //         `Task_Tracker_${label.replace(/\s+/g, '_')}_${dayjs().format('YYYY-MM-DD')}.xlsx`;
+
 
 //       await exportTasksToExcel(
 //         data,
 //         filename
 //       );
+
 
 //       setSnack({
 //         severity: 'success',
@@ -7853,6 +3993,7 @@ export default function TaskTracker() {
 //       });
 //     };
 
+
 //   const tasksInRange =
 //     (from, to) =>
 //       tasks.filter(
@@ -7861,6 +4002,7 @@ export default function TaskTracker() {
 //           if (!t.start_date) {
 //             return false;
 //           }
+
 
 //           if (
 //             from &&
@@ -7874,6 +4016,7 @@ export default function TaskTracker() {
 //             return false;
 //           }
 
+
 //           if (
 //             to &&
 //             dayjs(t.start_date)
@@ -7886,16 +4029,20 @@ export default function TaskTracker() {
 //             return false;
 //           }
 
+
 //           return true;
 //         }
 //       );
+
 
 //   const handleExportPreset =
 //     async (type) => {
 
 //       setExportAnchorEl(null);
 
+
 //       const now = dayjs();
+
 
 //       if (
 //         type === 'current'
@@ -7909,6 +4056,7 @@ export default function TaskTracker() {
 //         return;
 //       }
 
+
 //       if (
 //         type === 'today'
 //       ) {
@@ -7919,14 +4067,17 @@ export default function TaskTracker() {
 //               t.date === today
 //           );
 
+
 //         await doExport(
 //           data,
 
 //           `Today (${dayjs(today).format('DD MMM YYYY')})`
 //         );
 
+
 //         return;
 //       }
+
 
 //       if (
 //         type === 'custom'
@@ -7937,14 +4088,17 @@ export default function TaskTracker() {
 //           to: today
 //         });
 
+
 //         setRangeDialogOpen(true);
 
 //         return;
 //       }
 
+
 //       let from;
 //       let to;
 //       let label;
+
 
 //       if (
 //         type === 'week'
@@ -7986,6 +4140,7 @@ export default function TaskTracker() {
 //           `Yearly (${now.format('YYYY')})`;
 //       }
 
+
 //       const data =
 //         tasksInRange(
 //           from.format(
@@ -7997,11 +4152,13 @@ export default function TaskTracker() {
 //           )
 //         );
 
+
 //       await doExport(
 //         data,
 //         label
 //       );
 //     };
+
 
 //   const handleCustomRangeExport =
 //     async () => {
@@ -8022,13 +4179,16 @@ export default function TaskTracker() {
 //         return;
 //       }
 
+
 //       const data =
 //         tasksInRange(
 //           customRange.from,
 //           customRange.to
 //         );
 
+
 //       setRangeDialogOpen(false);
+
 
 //       await doExport(
 //         data,
@@ -8036,6 +4196,7 @@ export default function TaskTracker() {
 //         `${dayjs(customRange.from).format('DD MMM YYYY')} to ${dayjs(customRange.to).format('DD MMM YYYY')}`
 //       );
 //     };
+
 
 //   const kpiCards = [
 
@@ -8152,6 +4313,7 @@ export default function TaskTracker() {
 //     },
 //   ];
 
+
 //   if (loading) {
 
 //     return (
@@ -8199,7 +4361,7 @@ export default function TaskTracker() {
 //     );
 //   }
 
-//   // TABLE RENDERING (abbreviated for space)
+
 //   return (
 
 //     <Box
@@ -8221,47 +4383,2290 @@ export default function TaskTracker() {
 //         maxWidth="xl"
 //       >
 
-//         {/* HEADER + FILTERS + CHARTS + TABLE: All original code remains the same */}
-//         {/* Only the table Actions column is different - see below */}
 
-//         {/* The table actions and row styling are handled by the main task table markup. */}
+//         {/* ================= HEADER ================= */}
+
+//         <Paper
+//           elevation={0}
+//           sx={{
+//             p:
+//               '12px 24px',
+
+//             mb: 3,
+
+//             borderRadius: 3,
+
+//             border:
+//               '1px solid #E9EDEF',
+
+//             background:
+//               `linear-gradient(120deg, ${PRIMARY} 0%, #12A39A 55%, #1AC2A4 100%)`,
+
+//             color:
+//               '#fff',
+
+//             boxShadow:
+//               '0 10px 24px rgba(14,124,123,0.18)'
+//           }}
+//         >
+
+//           <Stack
+//             direction="row"
+//             justifyContent="space-between"
+//             alignItems="center"
+//             spacing={2}
+//           >
+
+
+//             {/* LEFT DATE */}
+
+//             <Box
+//               sx={{
+//                 minWidth:
+//                   '180px'
+//               }}
+//             >
+
+//               <Typography
+//                 variant="caption"
+//                 sx={{
+//                   opacity: 0.85,
+
+//                   display:
+//                     'flex',
+
+//                   alignItems:
+//                     'center',
+
+//                   gap: 0.5,
+
+//                   fontWeight: 600
+//                 }}
+//               >
+
+//                 <TodayRoundedIcon
+//                   sx={{
+//                     fontSize: 16
+//                   }}
+//                 />
+
+//                 {dayjs(today).format(
+//                   'DD MMM YYYY'
+//                 )}
+
+//               </Typography>
+
+//             </Box>
+
+
+//             {/* CENTER */}
+
+//             <Box
+//               sx={{
+//                 flex: 1,
+
+//                 textAlign:
+//                   'center'
+//               }}
+//             >
+
+//               <Stack
+//                 direction="row"
+//                 alignItems="center"
+//                 justifyContent="center"
+//                 spacing={1}
+//                 sx={{
+//                   mb: 0.5
+//                 }}
+//               >
+
+//                 <Box
+//                   sx={{
+//                     width: 32,
+//                     height: 32,
+//                     borderRadius:
+//                       '8px',
+
+//                     bgcolor:
+//                       'rgba(255,255,255,0.2)',
+
+//                     display:
+//                       'flex',
+
+//                     alignItems:
+//                       'center',
+
+//                     justifyContent:
+//                       'center',
+
+//                     border:
+//                       '2px solid rgba(255,255,255,0.3)'
+//                   }}
+//                 >
+
+//                   <AssignmentRoundedIcon
+//                     sx={{
+//                       fontSize: 18,
+//                       color: '#fff'
+//                     }}
+//                   />
+
+//                 </Box>
+
+
+//                 <Typography
+//                   variant="h6"
+//                   sx={{
+//                     fontWeight: 800,
+
+//                     letterSpacing:
+//                       '0.5px'
+//                   }}
+//                 >
+//                   Task Tracker
+//                 </Typography>
+
+//               </Stack>
+
+
+//               <Typography
+//                 variant="caption"
+//                 sx={{
+//                   opacity: 0.85,
+
+//                   fontSize:
+//                     '12px'
+//                 }}
+//               >
+
+//                 Team work status & analytics
+
+//               </Typography>
+
+//             </Box>
+
+
+//             {/* RIGHT LOGIN */}
+
+//             <Box
+//               sx={{
+//                 minWidth:
+//                   '220px',
+
+//                 textAlign:
+//                   'right'
+//               }}
+//             >
+
+//               <Typography
+//                 variant="caption"
+//                 sx={{
+//                   opacity: 0.85,
+
+//                   display:
+//                     'flex',
+
+//                   alignItems:
+//                     'center',
+
+//                   justifyContent:
+//                     'flex-end',
+
+//                   gap: 0.5,
+
+//                   fontWeight: 600
+//                 }}
+//               >
+
+//                 👤 {currentUsername}
+
+//               </Typography>
+
+
+//               {isAdmin && (
+
+//                 <Chip
+//                   label="ADMIN"
+//                   size="small"
+//                   variant="filled"
+//                   sx={{
+//                     bgcolor:
+//                       'rgba(255,255,255,0.25)',
+
+//                     color:
+//                       '#fff',
+
+//                     fontWeight:
+//                       700,
+
+//                     mt: 0.5,
+
+//                     border:
+//                       '1px solid rgba(255,255,255,0.4)'
+//                   }}
+//                 />
+
+//               )}
+
+//             </Box>
+
+//           </Stack>
+
+//         </Paper>
+
+
+//         {/* ================= FILTERS ================= */}
+
+//         <Paper
+//           elevation={0}
+//           sx={{
+//             p: 2,
+
+//             mb: 3,
+
+//             borderRadius: 3,
+
+//             border:
+//               '1px solid #E9EDEF',
+
+//             bgcolor:
+//               '#fff'
+//           }}
+//         >
+
+//           <Stack
+//             direction={{
+//               xs: 'column',
+//               md: 'row'
+//             }}
+//             spacing={1.5}
+//             alignItems="center"
+//             flexWrap="wrap"
+//             justifyContent="space-between"
+//           >
+
+
+//             <Stack
+//               direction={{
+//                 xs: 'column',
+//                 sm: 'row'
+//               }}
+//               spacing={1.5}
+//               alignItems="center"
+//               flex={1}
+//               minWidth={0}
+//             >
+
+
+//               {/* DATE FILTER */}
+
+//               <TextField
+//                 select
+//                 label="Date Filter"
+//                 size="small"
+
+//                 value={
+//                   filters.dateFilterType
+//                 }
+
+//                 onChange={
+//                   (e) =>
+//                     setFilters(
+//                       (f) => ({
+//                         ...f,
+
+//                         dateFilterType:
+//                           e.target.value,
+
+//                         singleDate:
+//                           e.target.value ===
+//                             'single'
+//                             ? ''
+//                             : f.singleDate
+//                       })
+//                     )
+//                 }
+
+//                 sx={{
+//                   minWidth: 120,
+
+//                   bgcolor:
+//                     '#f5f5f5',
+
+//                   borderRadius: 1
+//                 }}
+//               >
+
+//                 {/* CHANGED: All Dates first/default */}
+
+//                 <MenuItem
+//                   value="single"
+//                 >
+//                   All Dates
+//                 </MenuItem>
+
+//                 <MenuItem
+//                   value="range"
+//                 >
+//                   Date Range
+//                 </MenuItem>
+
+//               </TextField>
+
+
+//               {/* Date controls only appear for Date Range */}
+
+//               {filters.dateFilterType ===
+//                 'range' && (
+
+//                   <>
+
+//                     <TextField
+//                       label="From"
+//                       type="date"
+//                       size="small"
+
+//                       InputLabelProps={{
+//                         shrink: true
+//                       }}
+
+//                       value={
+//                         filters.fromDate
+//                       }
+
+//                       onChange={
+//                         (e) =>
+//                           setFilters(
+//                             (f) => ({
+//                               ...f,
+
+//                               fromDate:
+//                                 e.target.value
+//                             })
+//                           )
+//                       }
+
+//                       sx={{
+//                         minWidth: 120,
+
+//                         bgcolor:
+//                           '#f5f5f5',
+
+//                         borderRadius: 1
+//                       }}
+//                     />
+
+
+//                     <TextField
+//                       label="To"
+//                       type="date"
+//                       size="small"
+
+//                       InputLabelProps={{
+//                         shrink: true
+//                       }}
+
+//                       value={
+//                         filters.toDate
+//                       }
+
+//                       onChange={
+//                         (e) =>
+//                           setFilters(
+//                             (f) => ({
+//                               ...f,
+
+//                               toDate:
+//                                 e.target.value
+//                             })
+//                           )
+//                       }
+
+//                       sx={{
+//                         minWidth: 120,
+
+//                         bgcolor:
+//                           '#f5f5f5',
+
+//                         borderRadius: 1
+//                       }}
+//                     />
+
+//                   </>
+
+//                 )}
+
+
+//               {/* STATUS */}
+
+//               <TextField
+//                 select
+//                 label="Status"
+//                 size="small"
+
+//                 value={
+//                   filters.status
+//                 }
+
+//                 onChange={
+//                   (e) =>
+//                     setFilters(
+//                       (f) => ({
+//                         ...f,
+
+//                         status:
+//                           e.target.value
+//                       })
+//                     )
+//                 }
+
+//                 sx={{
+//                   minWidth: 110,
+
+//                   bgcolor:
+//                     '#f5f5f5',
+
+//                   borderRadius: 1
+//                 }}
+//               >
+
+//                 <MenuItem
+//                   value="All"
+//                 >
+//                   All Status
+//                 </MenuItem>
+
+
+//                 {STATUS_OPTIONS.map(
+//                   (s) => (
+
+//                     <MenuItem
+//                       key={s}
+//                       value={s}
+//                     >
+//                       {s}
+//                     </MenuItem>
+
+//                   )
+//                 )}
+
+//               </TextField>
+
+
+//               {/* PRIORITY */}
+
+//               <TextField
+//                 select
+//                 label="Priority"
+//                 size="small"
+
+//                 value={
+//                   filters.priority
+//                 }
+
+//                 onChange={
+//                   (e) =>
+//                     setFilters(
+//                       (f) => ({
+//                         ...f,
+
+//                         priority:
+//                           e.target.value
+//                       })
+//                     )
+//                 }
+
+//                 sx={{
+//                   minWidth: 100,
+
+//                   bgcolor:
+//                     '#f5f5f5',
+
+//                   borderRadius: 1
+//                 }}
+//               >
+
+//                 <MenuItem
+//                   value="All"
+//                 >
+//                   All Priorities
+//                 </MenuItem>
+
+
+//                 {PRIORITY_OPTIONS.map(
+//                   (p) => (
+
+//                     <MenuItem
+//                       key={p}
+//                       value={p}
+//                     >
+//                       {p}
+//                     </MenuItem>
+
+//                   )
+//                 )}
+
+//               </TextField>
+
+//             </Stack>
+
+
+//             {/* RIGHT FILTERS/ACTIONS */}
+
+//             <Stack
+//               direction={{
+//                 xs: 'column',
+//                 sm: 'row'
+//               }}
+//               spacing={1.5}
+//               alignItems="center"
+//               flex={1}
+//               minWidth={0}
+//               justifyContent="flex-end"
+//             >
+
+
+//               {/* ADMIN USER DROPDOWN */}
+
+//               {isAdmin && (
+
+//                 <TextField
+//                   select
+
+//                   label="User"
+
+//                   size="small"
+
+//                   value={
+//                     filters.username
+//                   }
+
+//                   onChange={
+//                     (e) =>
+//                       setFilters(
+//                         (f) => ({
+//                           ...f,
+
+//                           username:
+//                             e.target.value
+//                         })
+//                       )
+//                   }
+
+//                   sx={{
+//                     minWidth: 120,
+
+//                     bgcolor:
+//                       '#f5f5f5',
+
+//                     borderRadius: 1
+//                   }}
+//                 >
+
+//                   <MenuItem
+//                     value="All"
+//                   >
+//                     All users
+//                   </MenuItem>
+
+
+//                   {uniqueUsernames.map(
+//                     (u) => (
+
+//                       <MenuItem
+//                         key={u}
+//                         value={u}
+//                       >
+//                         {u}
+//                       </MenuItem>
+
+//                     )
+//                   )}
+
+//                 </TextField>
+
+//               )}
+
+
+//               {/* ====================================
+//                   CHANGED:
+//                   Search shown for EVERYONE.
+//                   Search filters by USERNAME.
+//               ==================================== */}
+
+//               <TextField
+//                 label="Search User"
+
+//                 size="small"
+
+//                 placeholder="Search by user..."
+
+//                 value={
+//                   filters.search
+//                 }
+
+//                 onChange={
+//                   (e) =>
+//                     setFilters(
+//                       (f) => ({
+//                         ...f,
+
+//                         search:
+//                           e.target.value
+//                       })
+//                     )
+//                 }
+
+//                 sx={{
+//                   minWidth: 180,
+
+//                   bgcolor:
+//                     '#f5f5f5',
+
+//                   borderRadius: 1
+//                 }}
+//               />
+
+
+//               {/* RESET */}
+
+//               <Tooltip
+//                 title="Reset filters"
+//               >
+
+//                 <IconButton
+//                   onClick={
+//                     () =>
+//                       setFilters({
+
+//                         dateFilterType:
+//                           'single',
+
+//                         singleDate:
+//                           '',
+
+//                         fromDate:
+//                           monthStart,
+
+//                         toDate:
+//                           today,
+
+//                         status:
+//                           'All',
+
+//                         priority:
+//                           'All',
+
+//                         search:
+//                           '',
+
+//                         username:
+//                           'All'
+//                       })
+//                   }
+
+//                   sx={{
+//                     border:
+//                       '1px solid #E4E9EC',
+
+//                     bgcolor:
+//                       '#f5f5f5',
+
+//                     borderRadius: 1
+//                   }}
+//                 >
+
+//                   <RefreshRoundedIcon
+//                     fontSize="small"
+//                   />
+
+//                 </IconButton>
+
+//               </Tooltip>
+
+
+//               {/* ADD */}
+
+//               <Button
+//                 variant="contained"
+
+//                 startIcon={
+//                   <AddRoundedIcon />
+//                 }
+
+//                 onClick={openAdd}
+
+//                 sx={{
+//                   bgcolor:
+//                     PRIMARY,
+
+//                   whiteSpace:
+//                     'nowrap',
+
+//                   '&:hover': {
+//                     bgcolor:
+//                       PRIMARY_DARK
+//                   }
+//                 }}
+//               >
+
+//                 Add Task
+
+//               </Button>
+
+
+//               {/* EXPORT */}
+
+//               <Button
+//                 variant="outlined"
+
+//                 startIcon={
+//                   <FileDownloadRoundedIcon />
+//                 }
+
+//                 endIcon={
+//                   <ArrowDropDownRoundedIcon />
+//                 }
+
+//                 onClick={
+//                   (e) =>
+//                     setExportAnchorEl(
+//                       e.currentTarget
+//                     )
+//                 }
+
+//                 sx={{
+//                   borderColor:
+//                     PRIMARY,
+
+//                   color:
+//                     PRIMARY,
+
+//                   whiteSpace:
+//                     'nowrap'
+//                 }}
+//               >
+
+//                 Export
+
+//               </Button>
+
+//             </Stack>
+
+//           </Stack>
+
+//         </Paper>
+
+
+//         {/* ================= EXPORT MENU ================= */}
+
+//         <Menu
+//           anchorEl={
+//             exportAnchorEl
+//           }
+
+//           open={
+//             !!exportAnchorEl
+//           }
+
+//           onClose={
+//             () =>
+//               setExportAnchorEl(
+//                 null
+//               )
+//           }
+
+//           anchorOrigin={{
+//             vertical: 'bottom',
+//             horizontal: 'right'
+//           }}
+
+//           transformOrigin={{
+//             vertical: 'top',
+//             horizontal: 'right'
+//           }}
+//         >
+
+//           <MenuItem
+//             onClick={
+//               () =>
+//                 handleExportPreset(
+//                   'today'
+//                 )
+//             }
+//           >
+
+//             <ListItemIcon>
+
+//               <TodayRoundedIcon
+//                 fontSize="small"
+//                 sx={{
+//                   color: PRIMARY
+//                 }}
+//               />
+
+//             </ListItemIcon>
+
+//             <ListItemText
+//               primary="Today Only"
+//               secondary={
+//                 dayjs(today).format(
+//                   'DD MMM YYYY'
+//                 )
+//               }
+//             />
+
+//           </MenuItem>
+
+
+//           <Divider />
+
+
+//           <MenuItem
+//             onClick={
+//               () =>
+//                 handleExportPreset(
+//                   'week'
+//                 )
+//             }
+//           >
+
+//             <ListItemIcon>
+
+//               <CalendarViewWeekRoundedIcon
+//                 fontSize="small"
+//                 sx={{
+//                   color: PRIMARY
+//                 }}
+//               />
+
+//             </ListItemIcon>
+
+//             <ListItemText
+//               primary="This Week"
+//               secondary="Monday – Sunday"
+//             />
+
+//           </MenuItem>
+
+
+//           <MenuItem
+//             onClick={
+//               () =>
+//                 handleExportPreset(
+//                   'month'
+//                 )
+//             }
+//           >
+
+//             <ListItemIcon>
+
+//               <CalendarMonthRoundedIcon
+//                 fontSize="small"
+//                 sx={{
+//                   color: PRIMARY
+//                 }}
+//               />
+
+//             </ListItemIcon>
+
+//             <ListItemText
+//               primary="This Month"
+//             />
+
+//           </MenuItem>
+
+
+//           <MenuItem
+//             onClick={
+//               () =>
+//                 handleExportPreset(
+//                   'year'
+//                 )
+//             }
+//           >
+
+//             <ListItemIcon>
+
+//               <EventRepeatRoundedIcon
+//                 fontSize="small"
+//                 sx={{
+//                   color: PRIMARY
+//                 }}
+//               />
+
+//             </ListItemIcon>
+
+//             <ListItemText
+//               primary="This Year"
+//             />
+
+//           </MenuItem>
+
+
+//           <Divider />
+
+
+//           <MenuItem
+//             onClick={
+//               () =>
+//                 handleExportPreset(
+//                   'custom'
+//                 )
+//             }
+//           >
+
+//             <ListItemIcon>
+
+//               <DateRangeRoundedIcon
+//                 fontSize="small"
+//                 sx={{
+//                   color: PRIMARY
+//                 }}
+//               />
+
+//             </ListItemIcon>
+
+//             <ListItemText
+//               primary="Custom Range…"
+//               secondary="Pick any From – To dates"
+//             />
+
+//           </MenuItem>
+
+
+//           <MenuItem
+//             onClick={
+//               () =>
+//                 handleExportPreset(
+//                   'current'
+//                 )
+//             }
+//           >
+
+//             <ListItemIcon>
+
+//               <FileDownloadRoundedIcon
+//                 fontSize="small"
+//                 sx={{
+//                   color: PRIMARY
+//                 }}
+//               />
+
+//             </ListItemIcon>
+
+//             <ListItemText
+//               primary="Current Filtered View"
+//             />
+
+//           </MenuItem>
+
+//         </Menu>
+
+
+//         {/* ================= CUSTOM RANGE ================= */}
+
+//         <Dialog
+//           open={
+//             rangeDialogOpen
+//           }
+
+//           onClose={
+//             () =>
+//               setRangeDialogOpen(
+//                 false
+//               )
+//           }
+
+//           maxWidth="xs"
+
+//           fullWidth
+
+//           PaperProps={{
+//             sx: {
+//               borderRadius: 3
+//             }
+//           }}
+//         >
+
+//           <DialogTitle
+//             sx={{
+//               fontWeight: 800
+//             }}
+//           >
+//             Custom Export Range
+//           </DialogTitle>
+
+
+//           <Divider />
+
+
+//           <DialogContent
+//             sx={{
+//               pt: 3
+//             }}
+//           >
+
+//             <Stack
+//               spacing={2}
+//             >
+
+//               <TextField
+//                 label="From"
+//                 type="date"
+//                 size="small"
+//                 fullWidth
+
+//                 InputLabelProps={{
+//                   shrink: true
+//                 }}
+
+//                 value={
+//                   customRange.from
+//                 }
+
+//                 onChange={
+//                   (e) =>
+//                     setCustomRange(
+//                       (r) => ({
+//                         ...r,
+
+//                         from:
+//                           e.target.value
+//                       })
+//                     )
+//                 }
+//               />
+
+
+//               <TextField
+//                 label="To"
+//                 type="date"
+//                 size="small"
+//                 fullWidth
+
+//                 InputLabelProps={{
+//                   shrink: true
+//                 }}
+
+//                 value={
+//                   customRange.to
+//                 }
+
+//                 onChange={
+//                   (e) =>
+//                     setCustomRange(
+//                       (r) => ({
+//                         ...r,
+
+//                         to:
+//                           e.target.value
+//                       })
+//                     )
+//                 }
+//               />
+
+//             </Stack>
+
+//           </DialogContent>
+
+
+//           <Divider />
+
+
+//           <DialogActions
+//             sx={{
+//               p: 2
+//             }}
+//           >
+
+//             <Button
+//               onClick={
+//                 () =>
+//                   setRangeDialogOpen(
+//                     false
+//                   )
+//               }
+
+//               color="inherit"
+//             >
+//               Cancel
+//             </Button>
+
+
+//             <Button
+//               onClick={
+//                 handleCustomRangeExport
+//               }
+
+//               variant="contained"
+
+//               sx={{
+//                 bgcolor:
+//                   PRIMARY,
+
+//                 '&:hover': {
+//                   bgcolor:
+//                     PRIMARY_DARK
+//                 }
+//               }}
+//             >
+//               Download
+//             </Button>
+
+//           </DialogActions>
+
+//         </Dialog>
+
+
+//         {/* ================= DASHBOARD ================= */}
+
+//         <Stack
+//           spacing={3}
+//         >
+
+
+//           {/* KPI CARDS */}
+
+//           <Grid
+//             container
+//             spacing={2}
+//           >
+
+//             {kpiCards.map(
+//               (c) => (
+
+//                 <Grid
+//                   item
+//                   xs={12}
+//                   sm={6}
+//                   md={3}
+//                   lg={1.5}
+//                   key={c.label}
+//                   sx={{
+//                     flexGrow: 1
+//                   }}
+//                 >
+
+//                   <KpiCard
+//                     {...c}
+//                   />
+
+//                 </Grid>
+
+//               )
+//             )}
+
+//           </Grid>
+
+
+//           {/* ================= CHARTS ================= */}
+
+//           <Stack
+//             direction={{
+//               xs: 'column',
+//               md: 'row'
+//             }}
+//             spacing={3}
+//             alignItems="stretch"
+//           >
+
+
+//             {/* STATUS */}
+
+//             <Paper
+//               elevation={0}
+//               sx={{
+//                 p: 2.5,
+
+//                 flex: 1.2,
+
+//                 minWidth: 0,
+
+//                 borderRadius: 3,
+
+//                 border:
+//                   '1px solid #E9EDEF',
+
+//                 boxShadow:
+//                   '0 1px 2px rgba(16,24,40,0.04)'
+//               }}
+//             >
+
+//               <Typography
+//                 variant="h6"
+//                 sx={{
+//                   mb: 1,
+//                   fontWeight: 700
+//                 }}
+//               >
+//                 Task status breakdown
+//               </Typography>
+
+
+//               {statusBreakdown.length === 0
+//                 ? (
+
+//                   <Box
+//                     sx={{
+//                       py: 6,
+
+//                       textAlign:
+//                         'center'
+//                     }}
+//                   >
+
+//                     <Typography
+//                       color="text.secondary"
+//                     >
+//                       No tasks match the current filters.
+//                     </Typography>
+
+//                   </Box>
+
+//                 )
+//                 : (
+
+//                   <Box
+//                     sx={{
+//                       position:
+//                         'relative',
+
+//                       height:
+//                         300
+//                     }}
+//                   >
+
+//                     <ResponsiveContainer
+//                       width="100%"
+//                       height="100%"
+//                     >
+
+//                       <PieChart>
+
+//                         <Pie
+//                           data={
+//                             statusBreakdown
+//                           }
+
+//                           dataKey="value"
+
+//                           nameKey="name"
+
+//                           innerRadius={
+//                             70
+//                           }
+
+//                           outerRadius={
+//                             105
+//                           }
+
+//                           paddingAngle={
+//                             2
+//                           }
+
+//                           strokeWidth={
+//                             0
+//                           }
+//                         >
+
+//                           {statusBreakdown.map(
+//                             (entry) => (
+
+//                               <Cell
+//                                 key={
+//                                   entry.name
+//                                 }
+
+//                                 fill={
+//                                   STATUS_COLORS[
+//                                     entry.name
+//                                   ]?.main ||
+//                                   '#94A3B8'
+//                                 }
+//                               />
+
+//                             )
+//                           )}
+
+//                         </Pie>
+
+
+//                         <ChartTooltip
+//                           formatter={
+//                             (
+//                               value,
+//                               name
+//                             ) => [
+
+//                                 `${value} task${value === 1 ? '' : 's'}`,
+
+//                                 name
+//                               ]
+//                           }
+//                         />
+
+
+//                         <Legend
+//                           verticalAlign="bottom"
+//                           height={36}
+//                           iconType="circle"
+//                         />
+
+//                       </PieChart>
+
+//                     </ResponsiveContainer>
+
+
+//                     <Stack
+//                       sx={{
+//                         position:
+//                           'absolute',
+
+//                         top:
+//                           '42%',
+
+//                         left:
+//                           '50%',
+
+//                         transform:
+//                           'translate(-50%, -50%)',
+
+//                         pointerEvents:
+//                           'none',
+
+//                         alignItems:
+//                           'center'
+//                       }}
+//                     >
+
+//                       <Typography
+//                         variant="h4"
+//                         sx={{
+//                           fontWeight: 800
+//                         }}
+//                       >
+//                         {kpis.total}
+//                       </Typography>
+
+
+//                       <Typography
+//                         variant="caption"
+//                         color="text.secondary"
+//                       >
+//                         total
+//                       </Typography>
+
+//                     </Stack>
+
+//                   </Box>
+
+//                 )
+//               }
+
+//             </Paper>
+
+
+//             {/* DELAY */}
+
+//             <Paper
+//               elevation={0}
+//               sx={{
+//                 p: 2.5,
+
+//                 flex: 1.2,
+
+//                 minWidth: 0,
+
+//                 borderRadius: 3,
+
+//                 border:
+//                   '1px solid #E9EDEF',
+
+//                 boxShadow:
+//                   '0 1px 2px rgba(16,24,40,0.04)'
+//               }}
+//             >
+
+//               <Typography
+//                 variant="h6"
+//                 sx={{
+//                   mb: 1,
+//                   fontWeight: 700
+//                 }}
+//               >
+//                 Delay reasons this period
+//               </Typography>
+
+
+//               {reasonBreakdown.length === 0
+//                 ? (
+
+//                   <Box
+//                     sx={{
+//                       py: 6,
+//                       textAlign:
+//                         'center'
+//                     }}
+//                   >
+
+//                     <Typography
+//                       color="text.secondary"
+//                     >
+//                       No delays recorded. 🎉
+//                     </Typography>
+
+//                   </Box>
+
+//                 )
+//                 : (
+
+//                   <Box
+//                     sx={{
+//                       height: 300
+//                     }}
+//                   >
+
+//                     <ResponsiveContainer
+//                       width="100%"
+//                       height="100%"
+//                     >
+
+//                       <BarChart
+//                         data={
+//                           reasonBreakdown
+//                         }
+
+//                         margin={{
+//                           top: 8,
+//                           right: 8,
+//                           left: -12,
+//                           bottom: 8
+//                         }}
+//                       >
+
+//                         <CartesianGrid
+//                           strokeDasharray="3 3"
+//                           vertical={false}
+//                           stroke="#E4E9EC"
+//                         />
+
+
+//                         <XAxis
+//                           dataKey="name"
+//                           tick={{
+//                             fontSize: 11
+//                           }}
+//                           interval={0}
+//                           angle={-15}
+//                           textAnchor="end"
+//                           height={60}
+//                         />
+
+
+//                         <YAxis
+//                           allowDecimals={false}
+//                           tick={{
+//                             fontSize: 11
+//                           }}
+//                         />
+
+
+//                         <ChartTooltip
+//                           formatter={
+//                             (value) => [
+//                               `${value} task${value === 1 ? '' : 's'}`,
+//                               'Count'
+//                             ]
+//                           }
+//                         />
+
+
+//                         <Bar
+//                           dataKey="value"
+//                           radius={[
+//                             6,
+//                             6,
+//                             0,
+//                             0
+//                           ]}
+//                         >
+
+//                           {reasonBreakdown.map(
+//                             (
+//                               entry,
+//                               i
+//                             ) => (
+
+//                               <Cell
+//                                 key={
+//                                   entry.name
+//                                 }
+
+//                                 fill={
+//                                   REASON_PALETTE[
+//                                   i %
+//                                   REASON_PALETTE.length
+//                                   ]
+//                                 }
+//                               />
+
+//                             )
+//                           )}
+
+//                         </Bar>
+
+//                       </BarChart>
+
+//                     </ResponsiveContainer>
+
+//                   </Box>
+
+//                 )
+//               }
+
+//             </Paper>
+
+
+//             {/* PRIORITY */}
+
+//             <Paper
+//               elevation={0}
+//               sx={{
+//                 p: 2.5,
+
+//                 flex: 0.8,
+
+//                 minWidth: 220,
+
+//                 borderRadius: 3,
+
+//                 border:
+//                   '1px solid #E9EDEF',
+
+//                 boxShadow:
+//                   '0 1px 2px rgba(16,24,40,0.04)'
+//               }}
+//             >
+
+//               <Typography
+//                 variant="h6"
+//                 sx={{
+//                   mb: 2,
+//                   fontWeight: 700
+//                 }}
+//               >
+//                 Priority mix
+//               </Typography>
+
+
+//               <Stack
+//                 spacing={2.5}
+//               >
+
+//                 {priorityBreakdown.map(
+//                   ({
+//                     name,
+//                     value
+//                   }) => {
+
+//                     const pct =
+//                       kpis.total
+//                         ? Math.round(
+//                           (
+//                             value /
+//                             kpis.total
+//                           ) * 100
+//                         )
+//                         : 0;
+
+
+//                     return (
+
+//                       <Box
+//                         key={name}
+//                       >
+
+//                         <Stack
+//                           direction="row"
+//                           justifyContent="space-between"
+//                           sx={{
+//                             mb: 0.5
+//                           }}
+//                         >
+
+//                           <Stack
+//                             direction="row"
+//                             spacing={1}
+//                             alignItems="center"
+//                           >
+
+//                             <Box
+//                               sx={{
+//                                 width: 9,
+//                                 height: 9,
+//                                 borderRadius:
+//                                   '50%',
+
+//                                 bgcolor:
+//                                   PRIORITY_COLORS[
+//                                     name
+//                                   ].main
+//                               }}
+//                             />
+
+
+//                             <Typography
+//                               variant="body2"
+//                               sx={{
+//                                 fontWeight:
+//                                   600
+//                               }}
+//                             >
+//                               {name}
+//                             </Typography>
+
+//                           </Stack>
+
+
+//                           <Typography
+//                             variant="body2"
+//                             color="text.secondary"
+//                           >
+//                             {value}
+//                           </Typography>
+
+//                         </Stack>
+
+
+//                         <Box
+//                           sx={{
+//                             height: 8,
+
+//                             borderRadius:
+//                               4,
+
+//                             bgcolor:
+//                               '#EEF1F2',
+
+//                             overflow:
+//                               'hidden'
+//                           }}
+//                         >
+
+//                           <Box
+//                             sx={{
+//                               height:
+//                                 '100%',
+
+//                               width:
+//                                 `${pct}%`,
+
+//                               bgcolor:
+//                                 PRIORITY_COLORS[
+//                                   name
+//                                 ].main,
+
+//                               borderRadius:
+//                                 4,
+
+//                               transition:
+//                                 'width .3s ease'
+//                             }}
+//                           />
+
+//                         </Box>
+
+//                       </Box>
+//                     );
+//                   }
+//                 )}
+
+
+//                 {kpis.total === 0 && (
+
+//                   <Typography
+//                     variant="body2"
+//                     color="text.secondary"
+//                   >
+//                     No tasks match the current filters.
+//                   </Typography>
+
+//                 )}
+
+//               </Stack>
+
+//             </Paper>
+
+//           </Stack>
+
+
+//           {/* ================= TASK TABLE ================= */}
+
+//           <Paper
+//             elevation={0}
+//             sx={{
+//               overflow:
+//                 'hidden',
+
+//               borderRadius:
+//                 3,
+
+//               border:
+//                 '1px solid #E9EDEF',
+
+//               boxShadow:
+//                 '0 1px 2px rgba(16,24,40,0.04)'
+//             }}
+//           >
+
+//             <Box
+//               sx={{
+//                 p: 2,
+//                 pb: 1
+//               }}
+//             >
+
+//               <Typography
+//                 variant="h6"
+//                 sx={{
+//                   fontWeight: 700
+//                 }}
+//               >
+
+//                 All tasks ({filtered.length})
+
+//               </Typography>
+
+//             </Box>
+
+
+//             <TableContainer
+//               sx={{
+//                 maxHeight: 560
+//               }}
+//             >
+
+//               <Table
+//                 stickyHeader
+//                 size="small"
+//               >
+
+//                 <TableHead>
+
+//                   <TableRow>
+
+//                     {[
+//                       'SR',
+//                       'User',
+//                       'Assigned By',
+//                       'Project',
+//                       'Start',
+//                       'Expected',
+//                       'Completed',
+//                       'Status',
+//                       'Priority',
+//                       'Time Taken',
+//                       'Reason',
+//                       'Remarks',
+//                       'Actions'
+//                     ].map(
+//                       (h) => (
+
+//                         <TableCell
+//                           key={h}
+
+//                           align={
+//                             h ===
+//                               'Actions'
+//                               ? 'center'
+//                               : 'left'
+//                           }
+
+//                           sx={{
+//                             fontWeight:
+//                               700,
+
+//                             color:
+//                               'text.secondary',
+
+//                             fontSize:
+//                               '0.72rem',
+
+//                             textTransform:
+//                               'uppercase',
+
+//                             letterSpacing:
+//                               '0.04em'
+//                           }}
+//                         >
+//                           {h}
+//                         </TableCell>
+
+//                       )
+//                     )}
+
+//                   </TableRow>
+
+//                 </TableHead>
+
+
+//                 <TableBody>
+
+
+//                   {filtered.length === 0 && (
+
+//                     <TableRow>
+
+//                       <TableCell
+//                         colSpan={13}
+//                       >
+
+//                         <Box
+//                           sx={{
+//                             py: 6,
+
+//                             textAlign:
+//                               'center'
+//                           }}
+//                         >
+
+//                           <Typography
+//                             color="text.secondary"
+//                           >
+//                             No tasks yet — click &ldquo;Add Task&rdquo; to create the first one.
+//                           </Typography>
+
+//                         </Box>
+
+//                       </TableCell>
+
+//                     </TableRow>
+
+//                   )}
+
+
+//                   {filtered.map(
+//                     (
+//                       t,
+//                       idx
+//                     ) => {
+
+
+//                       const statusColors =
+//                         STATUS_COLORS[
+//                         t.status
+//                         ] || {
+//                           main:
+//                             '#94A3B8',
+
+//                           bg:
+//                             '#F1F5F9'
+//                         };
+
+
+//                       const priorityColors =
+//                         PRIORITY_COLORS[
+//                         t.priority
+//                         ] || {
+//                           main:
+//                             '#94A3B8',
+
+//                           bg:
+//                             '#F1F5F9'
+//                         };
+
+
+//                       const isCompleted =
+//                         t.status ===
+//                         'Completed';
+
+
+//                       return (
+
+//                         <TableRow
+//                           key={t.id}
+
+//                           hover
+
+//                           sx={{
+//                             bgcolor:
+//                               idx % 2
+//                                 ? '#FAFBFC'
+//                                 : 'transparent'
+//                           }}
+//                         >
+
+
+//                           <TableCell>
+//                             {idx + 1}
+//                           </TableCell>
+
+
+//                           <TableCell
+//                             sx={{
+//                               fontSize:
+//                                 '0.8rem'
+//                             }}
+//                           >
+//                             {t.username || '—'}
+//                           </TableCell>
+
+
+//                           <TableCell>
+//                             {t.assigned_by || '—'}
+//                           </TableCell>
+
+
+//                           <TableCell
+//                             sx={{
+//                               maxWidth: 200
+//                             }}
+//                           >
+//                             {t.project_name}
+//                           </TableCell>
+
+
+//                           <TableCell>
+//                             {fmt(t.start_date)}
+//                           </TableCell>
+
+
+//                           <TableCell>
+//                             {fmt(t.expacted_date)}
+//                           </TableCell>
+
+
+//                           <TableCell>
+//                             {fmt(t.completed_date)}
+//                           </TableCell>
+
+
+//                           <TableCell>
+
+//                             <Chip
+//                               label={t.status}
+
+//                               size="small"
+
+//                               sx={{
+//                                 bgcolor:
+//                                   statusColors.bg,
+
+//                                 color:
+//                                   statusColors.main,
+
+//                                 fontWeight:
+//                                   700
+//                               }}
+//                             />
+
+//                           </TableCell>
+
+
+//                           <TableCell>
+
+//                             <Chip
+//                               label={t.priority}
+
+//                               size="small"
+
+//                               sx={{
+//                                 bgcolor:
+//                                   priorityColors.bg,
+
+//                                 color:
+//                                   priorityColors.main,
+
+//                                 fontWeight:
+//                                   700
+//                               }}
+//                             />
+
+//                           </TableCell>
+
+
+//                           <TableCell
+//                             sx={{
+//                               whiteSpace:
+//                                 'nowrap'
+//                             }}
+//                           >
+//                             {getTotalTime(t)}
+//                           </TableCell>
+
+
+//                           <TableCell>
+
+//                             {t.reason_for_delay &&
+//                               t.reason_for_delay !==
+//                               'None'
+
+//                               ? (
+
+//                                 <Chip
+//                                   label={
+//                                     t.reason_for_delay
+//                                   }
+//                                   size="small"
+//                                   variant="outlined"
+//                                 />
+
+//                               )
+
+//                               : '—'
+//                             }
+
+//                           </TableCell>
+
+
+//                           {/* ========================================
+//                               CHANGED:
+//                               First 4 words only.
+//                               Full remarks shown on hover.
+//                           ======================================== */}
+
+//                           <TableCell
+//                             sx={{
+//                               maxWidth: 180,
+//                               width: 180
+//                             }}
+//                           >
+
+//                             {t.remarks
+//                               ? (
+
+//                                 <Tooltip
+//                                   title={t.remarks}
+//                                   arrow
+//                                   placement="top"
+//                                 >
+
+//                                   <Typography
+//                                     variant="body2"
+
+//                                     color="text.secondary"
+
+//                                     noWrap
+
+//                                     sx={{
+//                                       maxWidth: 180,
+
+//                                       overflow:
+//                                         'hidden',
+
+//                                       textOverflow:
+//                                         'ellipsis',
+
+//                                       whiteSpace:
+//                                         'nowrap',
+
+//                                       cursor:
+//                                         'pointer'
+//                                     }}
+//                                   >
+
+//                                     {getShortRemarks(
+//                                       t.remarks,
+//                                       4
+//                                     )}
+
+//                                   </Typography>
+
+//                                 </Tooltip>
+
+//                               )
+//                               : (
+
+//                                 <Typography
+//                                   variant="body2"
+//                                   color="text.secondary"
+//                                 >
+//                                   —
+//                                 </Typography>
+
+//                               )
+//                             }
+
+//                           </TableCell>
+
+
+//                           {/* ACTIONS */}
+
+//                           {/* <TableCell
+//                             align="center"
+//                           >
+
+//                             <Stack
+//                               direction="row"
+//                               spacing={0.5}
+//                               justifyContent="center"
+//                             >
+
+//                               <Tooltip
+//                                 title={
+//                                   isCompleted
+//                                     ? "Cannot edit completed tasks"
+//                                     : "Edit task"
+//                                 }
+//                               >
+
+//                                 <span>
+
+//                                   <IconButton
+//                                     size="small"
+
+//                                     onClick={
+//                                       () =>
+//                                         openEdit(t)
+//                                     }
+
+//                                     disabled={
+//                                       isCompleted
+//                                     }
+//                                   >
+
+//                                     <EditRoundedIcon
+//                                       fontSize="small"
+//                                     />
+
+//                                   </IconButton>
+
+//                                 </span>
+
+//                               </Tooltip>
+
+
+//                               <IconButton
+//                                 size="small"
+
+//                                 onClick={
+//                                   () =>
+//                                     handleDelete(
+//                                       t.id
+//                                     )
+//                                 }
+//                               >
+
+//                                 <DeleteRoundedIcon
+//                                   fontSize="small"
+//                                   color="error"
+//                                 />
+
+//                               </IconButton>
+
+//                             </Stack>
+
+//                           </TableCell> */}
+//                           <TableCell align="center">
+//                             <Stack
+//                               direction="row"
+//                               spacing={0.5}
+//                               justifyContent="center"
+//                             >
+//                               {/* EDIT */}
+//                               <Tooltip
+//                                 title={
+//                                   isCompleted
+//                                     ? "Cannot edit completed tasks"
+//                                     : "Edit task"
+//                                 }
+//                               >
+//                                 <span>
+//                                   <IconButton
+//                                     size="small"
+//                                     onClick={() => openEdit(t)}
+//                                     disabled={isCompleted}
+//                                   >
+//                                     <EditRoundedIcon fontSize="small" />
+//                                   </IconButton>
+//                                 </span>
+//                               </Tooltip>
+
+//                               {/* DELETE */}
+//                               <Tooltip
+//                                 title={
+//                                   isCompleted
+//                                     ? "Cannot delete completed tasks"
+//                                     : "Delete task"
+//                                 }
+//                               >
+//                                 <span>
+//                                   <IconButton
+//                                     size="small"
+//                                     onClick={() => handleDelete(t.id)}
+//                                     disabled={isCompleted}
+//                                   >
+//                                     <DeleteRoundedIcon
+//                                       fontSize="small"
+//                                       color={isCompleted ? "disabled" : "error"}
+//                                     />
+//                                   </IconButton>
+//                                 </span>
+//                               </Tooltip>
+//                             </Stack>
+//                           </TableCell>
+
+//                         </TableRow>
+//                       );
+//                     }
+//                   )}
+
+//                 </TableBody>
+
+//               </Table>
+
+//             </TableContainer>
+
+//           </Paper>
+
+//         </Stack>
 
 //       </Container>
 
-//       {/* DIALOGS */}
+
+//       {/* ================= ADD / EDIT DIALOG ================= */}
+
 //       <TaskFormDialog
 //         open={dialogOpen}
+
 //         onClose={
 //           () =>
 //             setDialogOpen(
 //               false
 //             )
 //         }
+
 //         onSave={
 //           handleSave
 //         }
+
 //         initialTask={
 //           editingTask
 //         }
+
 //         currentUsername={
 //           currentUsername
 //         }
-//         isRestartMode={
-//           isRestartMode
-//         }
 //       />
+
+
+//       {/* ================= SNACKBAR ================= */}
 
 //       <Snackbar
 //         open={
 //           !!snack
 //         }
+
 //         autoHideDuration={
 //           3000
 //         }
+
 //         onClose={
 //           () =>
 //             setSnack(null)
 //         }
+
 //         anchorOrigin={{
 //           vertical:
 //             'bottom',
@@ -8297,3 +6702,4 @@ export default function TaskTracker() {
 //     </Box>
 //   );
 // }
+

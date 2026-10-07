@@ -115,7 +115,6 @@ const IX_VI_Scripting = () => {
                             <Routes>
                                 <Route path="/" element={<IX_VI_ScriptingTool />} />
 
-                                
                                 <Route path="/UPE_NT" element={<UPE_NT />} />
                                 <Route path="/UPE_HPSC" element={<UPE_HPSC />} />
 
