@@ -26,7 +26,7 @@ import UploadIcon from "@mui/icons-material/Upload";
 import DoDisturbIcon from "@mui/icons-material/DoDisturb";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import Swal from "sweetalert2";
-import { postData } from "../../../../services/FetchNodeServices";
+import { postData, postDataa } from "../../../../services/FetchNodeServices";
 import OverAllCss from "../../../../csss/OverAllCss";
 import { useLoadingDialog } from "../../../../Hooks/LoadingDialog";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -395,7 +395,7 @@ const HRY_Scripting = () => {
             }
 
             // ✅ Updated API endpoint
-            const response = await postData("hrscscrpting/hr_hpsc/", formData);
+            const response = await postDataa("ntscrpting_hry/hr_hpsc/", formData);
 
             if (response && response.status) {
                 setUploadSuccess(true);
