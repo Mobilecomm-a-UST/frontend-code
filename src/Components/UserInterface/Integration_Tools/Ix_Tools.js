@@ -218,7 +218,7 @@ const Ix_Tools = () => {
     const allowedAirtelRoles = ['Admin', 'IX'];
     const allowedAirtelReader = ['quality', 'IX_reader', 'quality-s']
     const allowedViRoles = ['Admin', 'VI_IX', 'VI_IX_reader','IX_ZTE','IX_T_VI'];
-    const allowedSaRoles = ['Admin', 'IX_SA','5G_SCR']
+    const allowedSaRoles = ['Admin', 'IX_SA','5G_SCR','MACRO']
     const allowedErRoles = ['Admin', 'IX_ER']
     const allowedTsRoles = ['Admin', 'IX_TS']
     const allowedIxViScriptingRoles = ['Admin', 'IX_VI_SCRPT']
