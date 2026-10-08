@@ -35,13 +35,13 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import Slide from "@mui/material/Slide";
 import { useNavigate } from "react-router-dom";
-
+import { ServerURL } from "../../../services/FetchNodeServices";
 /* ------------------------------------------------------------------ */
 /*  Config — same pattern as the Daily Task Review dashboard:          */
-/*  plain fetch, BASE_URL (trailing slash) + path (no leading slash)   */
+/*  plain fetch, ServerURL (trailing slash) + path (no leading slash)   */
 /* ------------------------------------------------------------------ */
-const BASE_URL = "https://commtoolapi.mcpspmis.com/";
-const API_PATH = "ix_tracker_vi/HOTO_dashboard/";
+// const ServerURL = "https://commtoolapi.mcpspmis.com/";
+const API_PATH = "/ix_tracker_vi/HOTO_dashboard/";
 
 /* ------------------------------------------------------------------ */
 /*  Colors — teal theme, matching the sidebar (#006e74) with gradient  */
@@ -315,7 +315,7 @@ function Vi_Hoto() {
             }
             // If viewMode is "overall", don't append month/year (sends empty params)
 
-            const res = await fetch(`${BASE_URL}${API_PATH}?${params.toString()}`);
+            const res = await fetch(`${ServerURL}${API_PATH}?${params.toString()}`);
             const json = await res.json();
 
             if (!json || !json.dashboard) {
@@ -674,9 +674,9 @@ export default Vi_Hoto;
 
 // /* ------------------------------------------------------------------ */
 // /*  Config — same pattern as the Daily Task Review dashboard:          */
-// /*  plain fetch, BASE_URL (trailing slash) + path (no leading slash)   */
+// /*  plain fetch, ServerURL (trailing slash) + path (no leading slash)   */
 // /* ------------------------------------------------------------------ */
-// const BASE_URL = "https://commtoolapi.mcpspmis.com/";
+// const ServerURL = "https://commtoolapi.mcpspmis.com/";
 // const API_PATH = "ix_tracker_vi/HOTO_dashboard/";
 
 // /* ------------------------------------------------------------------ */
@@ -943,7 +943,7 @@ export default Vi_Hoto;
 //                 year: selectedYear,
 //             });
 
-//             const res = await fetch(`${BASE_URL}${API_PATH}?${params.toString()}`);
+//             const res = await fetch(`${ServerURL}${API_PATH}?${params.toString()}`);
 //             const json = await res.json();
 
 //             if (!json || !json.dashboard) {
@@ -1256,9 +1256,9 @@ export default Vi_Hoto;
 
 // /* ------------------------------------------------------------------ */
 // /*  Config — same pattern as the Daily Task Review dashboard:          */
-// /*  plain fetch, BASE_URL (trailing slash) + path (no leading slash)   */
+// /*  plain fetch, ServerURL (trailing slash) + path (no leading slash)   */
 // /* ------------------------------------------------------------------ */
-// const BASE_URL = "https://commtoolapi.mcpspmis.com/";
+// const ServerURL = "https://commtoolapi.mcpspmis.com/";
 // // const API_PATH = "ix_tracker_vi/HOTO_dashboard/";
 // const API_PATH = "ix_tracker_vi/HOTO_dashboard/";
 
@@ -1616,7 +1616,7 @@ export default Vi_Hoto;
 //             console.log("DATA PERIOD:", data_contains_period);
 
 //             const params = new URLSearchParams({ from_date, till_date, data_contains_period });
-//             const res = await fetch(`${BASE_URL}${API_PATH}?${params.toString()}`);
+//             const res = await fetch(`${ServerURL}${API_PATH}?${params.toString()}`);
 //             const json = await res.json();
 
 //             if (!json || !json.dashboard) {
