@@ -91,9 +91,9 @@ const Dma = () => {
                                                 </Nav.Item>
                                             </Nav.Menu>
 
-                                             <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/dma/oemwise_alarm'); show(); setMenuButton(true) }}>
+                                             {/* <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/dma/oemwise_alarm'); show(); setMenuButton(true) }}>
                                                 Oem Wise Alarm
-                                            </Nav.Item>
+                                            </Nav.Item> */}
                                             <Nav.Item eventKey="3" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/dma/make_4g'); show(); setMenuButton(true) }}>
                                                 Make 4G Alarm
                                             </Nav.Item>
