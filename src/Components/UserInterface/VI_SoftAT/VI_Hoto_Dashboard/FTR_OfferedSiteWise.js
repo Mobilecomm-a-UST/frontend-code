@@ -40,9 +40,9 @@
 
 // /* ------------------------------------------------------------------ */
 // /*  Config — same pattern as the Daily Task Review dashboard:          */
-// /*  plain fetch, BASE_URL (trailing slash) + path (no leading slash)   */
+// /*  plain fetch, ServerURL (trailing slash) + path (no leading slash)   */
 // /* ------------------------------------------------------------------ */
-// const BASE_URL = "https://commtoolapi.mcpspmis.com/";
+// const ServerURL = "https://commtoolapi.mcpspmis.com/";
 // const API_PATH = "ix_tracker_vi/HOTO_dashboard/";
 
 // /* ------------------------------------------------------------------ */
@@ -579,7 +579,7 @@
 //             if (month) params.append("month", month); // numeric, e.g. 7 for July
 //             if (year) params.append("year", year);
 
-//             const url = `${BASE_URL}${API_PATH}${params.toString() ? `?${params.toString()}` : ""}`;
+//             const url = `${ServerURL}${API_PATH}${params.toString() ? `?${params.toString()}` : ""}`;
 //             const res = await fetch(url, { signal: controller.signal });
 //             const json = await res.json();
 
@@ -801,9 +801,9 @@
 
 // /* ------------------------------------------------------------------ */
 // /*  Config — same pattern as the Daily Task Review dashboard:          */
-// /*  plain fetch, BASE_URL (trailing slash) + path (no leading slash)   */
+// /*  plain fetch, ServerURL (trailing slash) + path (no leading slash)   */
 // /* ------------------------------------------------------------------ */
-// const BASE_URL = "https://commtoolapi.mcpspmis.com/";
+// const ServerURL = "https://commtoolapi.mcpspmis.com/";
 // const API_PATH = "ix_tracker_vi/HOTO_dashboard/";
 
 // /* ------------------------------------------------------------------ */
@@ -1344,7 +1344,7 @@
 //             if (month) params.append("month", month); // numeric, e.g. 7 for July
 //             if (year) params.append("year", year);
 
-//             const url = `${BASE_URL}${API_PATH}${params.toString() ? `?${params.toString()}` : ""}`;
+//             const url = `${ServerURL}${API_PATH}${params.toString() ? `?${params.toString()}` : ""}`;
 //             const res = await fetch(url, { signal: controller.signal });
 //             const json = await res.json();
 
@@ -1584,13 +1584,13 @@ import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import Slide from "@mui/material/Slide";
 import { useNavigate } from "react-router-dom";
 import VI_FTR_Dashboard from "../VI_Checklist/VI_FTR_Dashboard/VI_FTR_Dashboard";
-
+import { ServerURL } from "../../../services/FetchNodeServices";
 /* ------------------------------------------------------------------ */
 /*  Config — same pattern as the Daily Task Review dashboard:          */
-/*  plain fetch, BASE_URL (trailing slash) + path (no leading slash)   */
+/*  plain fetch, ServerURL (trailing slash) + path (no leading slash)   */
 /* ------------------------------------------------------------------ */
-const BASE_URL = "https://commtoolapi.mcpspmis.com/";
-const API_PATH = "ix_tracker_vi/HOTO_dashboard/";
+// const ServerURL = "https://commtoolapi.mcpspmis.com/";
+const API_PATH = "/ix_tracker_vi/HOTO_dashboard/";
 
 /* ------------------------------------------------------------------ */
 /*  Colors — teal theme, matching the sidebar (#006e74) with gradient  */
@@ -2136,7 +2136,7 @@ function FTR_OfferedSiteWise() {
             }
             // If viewMode is "overall", don't append month/year (sends empty params)
 
-            const url = `${BASE_URL}${API_PATH}${params.toString() ? `?${params.toString()}` : ""}`;
+            const url = `${ServerURL}${API_PATH}${params.toString() ? `?${params.toString()}` : ""}`;
             const res = await fetch(url, { signal: controller.signal });
             const json = await res.json();
 
