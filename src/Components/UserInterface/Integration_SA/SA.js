@@ -173,7 +173,7 @@ const ProtectedRoute = ({ children, hasAccess }) => {
         return (
             <Box sx={{ p: 3, mt: 3 }}>
                 <Alert severity="error">
-                    Access Denied: You don't have permission to access this section. 
+                    Access Denied: You don't have permission to access this section.
                     Please contact your administrator if you believe this is an error.
                 </Alert>
             </Box>
@@ -187,11 +187,11 @@ const SA = () => {
     const [activeKey, setActiveKey] = useState();
     const [states, setStates] = useState([])
     const navigate = useNavigate()
-    
+
     // ======== GET USER TYPES ========
     const userTypeString = getDecreyptedData('user_type');
     const userTypes = userTypeString ? userTypeString.split(",") : [];
-    
+
     // ======== CHECK USER PERMISSIONS ========
     const has5GScripting = userTypes.includes('5G_SCR') || userTypes.includes('Admin');
 
@@ -212,6 +212,8 @@ const SA = () => {
                                         <Nav style={{ fontWeight: 550, color: 'white', textAlign: 'center', fontSize: 19 }}>5G GPL Tool</Nav>
 
                                         {/* ====== GPL MACRO SECTION ====== */}
+
+
                                         <Nav.Menu eventKey="1" placement="rightStart" icon={<ConversionIcon />} className="menu-title-custom" title="GPL MACRO" >
 
                                             <Nav.Item eventKey="1-1" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/sa_upload_xml')}>
@@ -238,19 +240,26 @@ const SA = () => {
 
                                         </Nav.Menu>
 
-                                        {/* ====== GPL ULS SECTION ====== */}
-                                        <Nav.Menu eventKey="2" placement="rightStart" icon={<ConversionIcon />} className="menu-title-custom" title="GPL ULS" >
-                                            <Nav.Item eventKey="2-1" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/UPE_GPL_ULS')}>
-                                                UPE GPL ULS
-                                            </Nav.Item>
 
-                                            <Nav.Item eventKey="2-2" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/BIH_gpl_uls')}>
-                                                BIH GPL ULS
-                                            </Nav.Item>
-                                            <Nav.Item eventKey="2-3" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/WB_gpl_uls')}>
-                                                WB GPL ULS
-                                            </Nav.Item>
-                                        </Nav.Menu>
+
+                                        {/* ====== GPL ULS SECTION ====== */}
+
+                                        {!userTypes?.includes('MACRO') &&
+                                            <>
+                                                <Nav.Menu eventKey="2" placement="rightStart" icon={<ConversionIcon />} className="menu-title-custom" title="GPL ULS" >
+                                                    <Nav.Item eventKey="2-1" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/UPE_GPL_ULS')}>
+                                                        UPE GPL ULS
+                                                    </Nav.Item>
+
+                                                    <Nav.Item eventKey="2-2" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/BIH_gpl_uls')}>
+                                                        BIH GPL ULS
+                                                    </Nav.Item>
+                                                    <Nav.Item eventKey="2-3" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/WB_gpl_uls')}>
+                                                        WB GPL ULS
+                                                    </Nav.Item>
+                                                </Nav.Menu>
+
+                                            </>}
 
                                         {/* ====== 5G SCRIPTING SECTION - RESTRICTED ====== */}
                                         {has5GScripting && (
@@ -273,25 +282,34 @@ const SA = () => {
                             <Routes>
                                 {/* ====== PUBLIC ROUTES ====== */}
                                 <Route element={<SA_tool />} path="/" />
+
+                                {!userTypes?.includes('MACRO') &&
+                                    <>
+
+                                        <Route element={<UPE_GPL_ULS />} path='/UPE_GPL_ULS' />
+                                        <Route element={<WB_gpl_uls />} path='/WB_gpl_uls' />
+                                        <Route element={<BIH_gpl_uls />} path='/BIH_gpl_uls' />
+                                    </>}
+
+
                                 <Route element={<SA_upload />} path='/sa_upload_xml' />
-                                <Route element={<UPE_GPL_ULS />} path='/UPE_GPL_ULS' />
                                 <Route element={<ORI_gpl_macro />} path='/ORI_gpl_macro' />
-                                <Route element={<BIH_gpl_uls />} path='/BIH_gpl_uls' />
                                 <Route element={<BIH_gpl_macro />} path='/BIH_gpl_macro' />
                                 <Route element={<MP_gpl_macro />} path='/MP_gpl_macro' />
                                 <Route element={<MUM_gpl_macro />} path='/MUM_gpl_macro' />
                                 <Route element={<WB_gpl_macro />} path='/WB_gpl_macro' />
                                 <Route element={<MAH_gpl_macro />} path='/MAH_gpl_macro' />
-                                <Route element={<WB_gpl_uls />} path='/WB_gpl_uls' />
+
+
 
                                 {/* ====== PROTECTED ROUTES - 5G SCRIPTING ====== */}
-                                <Route 
+                                <Route
                                     element={
                                         <ProtectedRoute hasAccess={has5GScripting}>
                                             <UploadOr />
                                         </ProtectedRoute>
-                                    } 
-                                    path='/upload_or' 
+                                    }
+                                    path='/upload_or'
                                 />
 
                             </Routes>

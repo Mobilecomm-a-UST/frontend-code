@@ -18,6 +18,7 @@ import CheckOutlineIcon from '@rsuite/icons/CheckOutline';
 import ChangeListIcon from '@rsuite/icons/ChangeList';
 import Loader from '../../Skeleton/Loader'
 import './../../../App.css'
+import { getDecreyptedData } from '../../utils/localstorage'
 
 
 const GplTool = lazy(() => import('./GplTool'));
@@ -40,6 +41,7 @@ const GPL = () => {
     const [scrollTop, setScrollTop] = useState(0);
 
     const navigate = useNavigate()
+    const userTypes = (getDecreyptedData('user_type')?.split(","))
 
 
 
@@ -69,30 +71,7 @@ const GPL = () => {
                             <Collapse in={checked} orientation="horizontal" timeout={'auto'}>
                                 <Box sx={{ width: 240, minHeight: "670px", height: "100hv", backgroundColor: "#223354", borderRadius: 5, position: 'fixed', zIndex: 10 }}>
                                     <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle">
-                                        {/* <Sidenav.Body>
-                                            <Nav activeKey={activeKey} onSelect={setActiveKey} style={{ width: 'auto', minHeight: "670px", height: "100hv", backgroundColor: "#223354", marginTop: 8, borderRadius: 10 }}>
-                                                <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>MNIT</Nav>
-                                                <Nav.Item eventKey="2" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobile_network_integration/gpl_audit_parse'); show(); setMenuButton(true) }}>
-                                                    GPL Audit (Parse)
-                                                </Nav.Item>
-                                                <Nav.Item eventKey="3" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobile_network_integration/gpl_pre_post_audit'); show(); setMenuButton(true) }}>
-                                                    GPL Pre Post Audit
-                                                </Nav.Item>
-                                                <Nav.Item eventKey="4" placement="rightStart" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/mobile_network_integration/script_generator'); show(); setMenuButton(true) }}>
-                                                    Scripte Generater
-                                                </Nav.Item>
-                                                <Nav.Menu eventKey="3" placement="rightStart" title="NOM Audit" icon={<DocPassIcon />}>
-                                                    <Nav.Item eventKey="3-1" placement="rightStart" onClick={() => { navigate('/tools/nomenclature_scriptor/nom_audit_dashboard'); show(); setMenuButton(true) }}>
-                                                        Dashboard
-                                                    </Nav.Item>
-                                                    <Nav.Item eventKey="3-2" placement="rightStart" onClick={() => { navigate('/tools/nomenclature_scriptor/nom_audit'); show(); setMenuButton(true) }}>
-                                                        Pre-Post Audit
-                                                    </Nav.Item>
-                                                </Nav.Menu>
 
-
-                                            </Nav>
-                                        </Sidenav.Body> */}
 
                                     </Sidenav>
                                 </Box>
@@ -106,15 +85,22 @@ const GPL = () => {
                                     <Sidenav.Body>
                                         <Nav activeKey={activeKey} onSelect={setActiveKey} style={{ width: 'auto', minHeight: "670px", height: "100hv", backgroundColor: "#006e74", marginTop: 8, borderRadius: 10 }}>
                                             <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>MNIT</Nav>
-                                            <Nav.Item eventKey="1" placement="rightStart" icon={<ChangeListIcon />} className="single-item-custom" onClick={() => { navigate('/tools/mobile_network_integration/gpl_audit_parse'); show(); setMenuButton(true) }}>
-                                                GPL Audit
-                                            </Nav.Item>
-                                            <Nav.Item eventKey="2" placement="rightStart" icon={<ChangeListIcon />} className="single-item-custom" onClick={() => { navigate('/tools/mobile_network_integration/gpl_pre_post_audit'); show(); setMenuButton(true) }}>
-                                                GPL Audit Pre-Post
-                                            </Nav.Item>
-                                            <Nav.Item eventKey="3" placement="rightStart" icon={<ChangeListIcon />} className="single-item-custom" onClick={() => { navigate('/tools/mobile_network_integration/script_generator'); show(); setMenuButton(true) }}>
-                                                Script Generator
-                                            </Nav.Item>
+
+                                            {!userTypes?.includes('MNITBK') &&
+                                                <>
+                                                    <Nav.Item eventKey="1" placement="rightStart" icon={<ChangeListIcon />} className="single-item-custom" onClick={() => { navigate('/tools/mobile_network_integration/gpl_audit_parse'); show(); setMenuButton(true) }}>
+                                                        GPL Audit
+                                                    </Nav.Item>
+                                                    <Nav.Item eventKey="2" placement="rightStart" icon={<ChangeListIcon />} className="single-item-custom" onClick={() => { navigate('/tools/mobile_network_integration/gpl_pre_post_audit'); show(); setMenuButton(true) }}>
+                                                        GPL Audit Pre-Post
+                                                    </Nav.Item>
+                                                    <Nav.Item eventKey="3" placement="rightStart" icon={<ChangeListIcon />} className="single-item-custom" onClick={() => { navigate('/tools/mobile_network_integration/script_generator'); show(); setMenuButton(true) }}>
+                                                        Script Generator
+                                                    </Nav.Item>
+                                                    <Nav.Item eventKey="6" placement="rightStart" className="single-item-custom" icon={<DocPassIcon />} onClick={() => { navigate('/tools/mobile_network_integration/Convertor'); show(); setMenuButton(true) }}>
+                                                        Convertor
+                                                    </Nav.Item>
+                                                </>}
 
 
                                             <Nav.Item eventKey="4" placement="rightStart" icon={<ChangeListIcon />} className="single-item-custom" onClick={() => { navigate('/tools/mobile_network_integration/bharti_gpl_audit'); show(); setMenuButton(true) }}>
@@ -130,11 +116,6 @@ const GPL = () => {
                                                 </Nav.Item>
                                             </Nav.Menu>
 
-
-
-                                            <Nav.Item eventKey="6" placement="rightStart" className="single-item-custom" icon={<DocPassIcon />} onClick={() => { navigate('/tools/mobile_network_integration/Convertor'); show(); setMenuButton(true) }}>
-                                                Convertor
-                                            </Nav.Item>
                                         </Nav>
                                     </Sidenav.Body>
 
@@ -148,9 +129,15 @@ const GPL = () => {
                         <Suspense fallback={<Loader />}>
                             <Routes>
                                 <Route element={<GplTool />} path="/" />
-                                <Route element={<Gplauditparse />} path="/gpl_audit_parse" />
-                                <Route element={<GplPrePostAudit />} path="/gpl_pre_post_audit" />
-                                <Route element={<ScriptGenerator />} path="/script_generator" />
+
+                                {!userTypes?.includes('MNITBK') &&
+                                    <>
+                                        <Route element={<Gplauditparse />} path="/gpl_audit_parse" />
+                                        <Route element={<GplPrePostAudit />} path="/gpl_pre_post_audit" />
+                                        <Route element={<ScriptGenerator />} path="/script_generator" />
+                                        <Route element={<Convertor />} path='/Convertor' />
+                                    </>
+                                }
 
 
                                 <Route element={<Step1Comparsion />} path="/step1_comparsion" />
@@ -158,7 +145,8 @@ const GPL = () => {
                                 <Route element={<BhartiGPLAudit />} path="/bharti_gpl_audit" />
 
 
-                                <Route element={<Convertor />} path='/Convertor' />
+
+
 
 
                                 {/* <Route element={<TestingGpl />} path="/testing_gpl" /> */}
