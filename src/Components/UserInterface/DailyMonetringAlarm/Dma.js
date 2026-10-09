@@ -23,7 +23,12 @@ const Alarm5G = lazy(() => import('./OldvsNew/Alarm5G'))
 const Alarm4G = lazy(() => import('./OldvsNew/Alarm4G'))
 const Twamp2 = lazy(() => import('./Twamp2/TwampStatus'))
 const Snmp = lazy(() => import('./SNMP/SNMP'))
-const Oemwisealarm = lazy(() => import('./OEM Wise Alarm/Oemwisealarm'))
+const AllAlarm = lazy(() => import('./OEM Wise Alarm/AllAlarm'))
+const ZteAlarm = lazy(() => import('./OEM Wise Alarm/ZteAlarm'))
+const HuaweiAlarm = lazy(() => import('./OEM Wise Alarm/Huawei'))
+const SamsungAlarm = lazy(() => import('./OEM Wise Alarm/Samsung'))
+const NokiaAlarm = lazy(() => import('./OEM Wise Alarm/Nokia'))
+
 
 const Dma = () => {
     const [expanded, setExpanded] = useState(true);
@@ -91,7 +96,7 @@ const Dma = () => {
                                                 </Nav.Item>
                                             </Nav.Menu>
 
-                                             {/* <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/dma/oemwise_alarm'); show(); setMenuButton(true) }}>
+                                            {/* <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/dma/all_alarm'); show(); setMenuButton(true) }}>
                                                 Oem Wise Alarm
                                             </Nav.Item> */}
                                             <Nav.Item eventKey="3" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/dma/make_4g'); show(); setMenuButton(true) }}>
@@ -152,7 +157,11 @@ const Dma = () => {
                                 <Route element={<Alarm4G />} path="/old_vs_new_4g" />
                                 <Route element={<Alarm5G />} path="/old_vs_new_5g" />
                                 <Route element={<Snmp />} path="/snmp" />
-                                <Route element={<Oemwisealarm />} path="/oemwise_alarm" />
+                                <Route element={<ZteAlarm />} path="/zte_alarm" />
+                                <Route element={<AllAlarm />} path="/all_alarm" />
+                                <Route element={<HuaweiAlarm />} path="/huawei_alarm" />
+                                <Route element={<SamsungAlarm />} path="/samsung_alarm" />
+                                <Route element={<NokiaAlarm />} path="/nokia_alarm" />
 
                             </Routes>
                         </Suspense>
