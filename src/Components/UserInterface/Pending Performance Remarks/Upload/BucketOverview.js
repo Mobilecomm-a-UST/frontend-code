@@ -1333,6 +1333,7 @@ const BucketOverviewDashboard = () => {
                                             value={project}
                                             onChange={(e) => setProject(e.target.value)}
                                         >
+                                             <MenuItem value="">All Projects</MenuItem>
                                             {projectArray.map((p) => <MenuItem key={p} value={p}>{p}</MenuItem>)}
                                         </Select>
                                     </FormControl>

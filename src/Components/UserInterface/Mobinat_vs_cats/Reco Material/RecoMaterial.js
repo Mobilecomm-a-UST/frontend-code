@@ -579,6 +579,7 @@ const downloadAllFiles = () => {
 
       link.href = file.url;
       link.download = file.name;
+      link.target = "_blank";
 
       document.body.appendChild(link);
       link.click();

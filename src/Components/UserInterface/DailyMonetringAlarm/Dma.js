@@ -87,24 +87,24 @@ const Dma = () => {
                                     <Sidenav.Body>
                                         <Nav activeKey={activeKey} onSelect={setActiveKey} >
                                             <Nav style={{ fontWeight: 500, color: 'white', textAlign: 'center', fontSize: 20 }}>DSA TOOL</Nav>
-                                            <Nav.Menu eventKey="1" placement="rightStart" title="Old Vs New" icon={<CombinationIcon size="3em" />}>
+                                            {/* <Nav.Menu eventKey="1" placement="rightStart" title="Old Vs New" icon={<CombinationIcon size="3em" />}>
                                                 <Nav.Item eventKey="1-1" onClick={() => { navigate('/tools/dma/old_vs_new_4g'); show(); setMenuButton(true) }}>
                                                     4G Alarm
                                                 </Nav.Item>
                                                 <Nav.Item eventKey="1-2" onClick={() => { navigate('/tools/dma/old_vs_new_5g'); show(); setMenuButton(true) }}>
                                                     5G Alarm
                                                 </Nav.Item>
-                                            </Nav.Menu>
+                                            </Nav.Menu> */}
 
-                                            {/* <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/dma/all_alarm'); show(); setMenuButton(true) }}>
+                                            <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/dma/all_alarm'); show(); setMenuButton(true) }}>
                                                 Oem Wise Alarm
-                                            </Nav.Item> */}
-                                            <Nav.Item eventKey="3" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/dma/make_4g'); show(); setMenuButton(true) }}>
+                                            </Nav.Item>
+                                            {/* <Nav.Item eventKey="3" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/dma/make_4g'); show(); setMenuButton(true) }}>
                                                 Make 4G Alarm
                                             </Nav.Item>
                                             <Nav.Item eventKey="4" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/dma/make_5g'); show(); setMenuButton(true) }}>
                                                 Make 5G Alarm
-                                            </Nav.Item>
+                                            </Nav.Item> */}
                                             <Nav.Item eventKey="5" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/dma/RRU_status'); show(); setMenuButton(true) }}>
                                                 RRU Status
                                             </Nav.Item>
