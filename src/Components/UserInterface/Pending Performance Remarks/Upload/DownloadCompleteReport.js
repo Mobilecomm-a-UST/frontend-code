@@ -204,7 +204,7 @@ const DataTable = ({ data }) => {
         { label: "Month", key: "month" },
         { label: "Project", key: "project" },
         { label: "Activity", key: "activity" },
-        { label: "Status", key: "performance_status" },
+        { label: "Performance Status", key: "performance_status" },
         { label: "SCFT Status", key: "scft_status" },
         { label: "Additional Remarks", key: "additional_remarks" },
         { label: "Tag", key: "tag" },

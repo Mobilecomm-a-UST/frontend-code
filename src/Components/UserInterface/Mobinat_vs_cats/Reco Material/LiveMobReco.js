@@ -860,7 +860,7 @@ const LiveMobReco = () => {
 
             if (response.status) {
 
-                const files = [
+                let files = [
                     {
                         url: response.download_url,
                         name: "Live_in_mob_Report.xlsx",
@@ -920,6 +920,7 @@ const LiveMobReco = () => {
 
                 link.href = file.url;
                 link.download = file.name;
+                link.target = "_blank";
 
                 document.body.appendChild(link);
                 link.click();
