@@ -165,7 +165,13 @@ const WB_gpl_macro = lazy(() => import('./Upload/WB_gpl_macro'))
 const MAH_gpl_macro = lazy(() => import('./Upload/MAH_gpl_macro'))
 const WB_gpl_uls = lazy(() => import('./Upload/WB_gpl_uls'))
 const UploadOr = lazy(() => import('./5G Scripting/UploadOr'))
-
+const BIH_params = lazy(() => import('./GPL_Params_Tables/BIH_params'))
+const MAH_params = lazy(() => import('./GPL_Params_Tables/MAH_params'))
+const MUM_params = lazy(() => import('./GPL_Params_Tables/MUM_params'))
+const MP_params = lazy(() => import('./GPL_Params_Tables/MP_params'))
+const ORI_params = lazy(() => import('./GPL_Params_Tables/ORI_params'))
+const UPE_params = lazy(() => import('./GPL_Params_Tables/UPE_params'))
+const WB_params = lazy(() => import('./GPL_Params_Tables/WB_params'))
 
 // ======== PROTECTED ROUTE COMPONENT ========
 const ProtectedRoute = ({ children, hasAccess }) => {
@@ -261,6 +267,33 @@ const SA = () => {
 
                                             </>}
 
+
+{/* 
+                                        <Nav.Menu eventKey="4" placement="rightStart" icon={<ConversionIcon />} className="menu-title-custom" title="GPL Params" >
+                                            <Nav.Item eventKey="4-1" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/upe_params')}>
+                                                UPE Params
+                                            </Nav.Item>
+                                            <Nav.Item eventKey="4-2" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/ori_params')}>
+                                                ORI Params
+                                            </Nav.Item>
+                                            <Nav.Item eventKey="4-3" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/bih_params')}>
+                                                BIH Params
+                                            </Nav.Item>
+                                            <Nav.Item eventKey="4-4" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/mp_params')}>
+                                                MP Params
+                                            </Nav.Item>
+                                            <Nav.Item eventKey="4-5" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/mum_params')}>
+                                                MUM Params
+                                            </Nav.Item>
+                                            <Nav.Item eventKey="4-6" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/wb_params')}>
+                                                WB Params
+                                            </Nav.Item>
+                                            <Nav.Item eventKey="4-7" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/mah_params')}>
+                                                MAH Params
+                                            </Nav.Item>
+                                        </Nav.Menu> */}
+
+
                                         {/* ====== 5G SCRIPTING SECTION - RESTRICTED ====== */}
                                         {has5GScripting && (
                                             <Nav.Menu eventKey="3" placement="rightStart" icon={<ConversionIcon />} className="menu-title-custom" title="5G Scripting" >
@@ -299,6 +332,15 @@ const SA = () => {
                                 <Route element={<MUM_gpl_macro />} path='/MUM_gpl_macro' />
                                 <Route element={<WB_gpl_macro />} path='/WB_gpl_macro' />
                                 <Route element={<MAH_gpl_macro />} path='/MAH_gpl_macro' />
+
+
+                                {/* <Route element={<UPE_params />} path='/upe_params' />
+                                <Route element={<ORI_params />} path='/ori_params' />
+                                <Route element={<BIH_params />} path='/bih_params' />
+                                <Route element={<MAH_params />} path='/mah_params' />
+                                <Route element={<MUM_params />} path='/mum_params' />
+                                <Route element={<MP_params />} path='/mp_params' />
+                                <Route element={<WB_params />} path='/wb_params' /> */}
 
 
 
