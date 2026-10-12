@@ -10,7 +10,7 @@ import {
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import SettingsInputAntennaIcon from "@mui/icons-material/SettingsInputAntenna";
 import { useNavigate } from "react-router-dom";
-import { MemoZteAlarm } from "./Ztealarm";
+import { MemoZteAlarm } from "./ZteAlarm";
 import { MemoHuawei } from "./Huawei";
 import { MemoSamsung } from "./Samsung";
 import { MemoNokia } from "./Nokia";
