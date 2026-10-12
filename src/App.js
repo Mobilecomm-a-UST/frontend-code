@@ -1,3 +1,533 @@
+// import React, { Suspense, lazy, useEffect, useState } from "react";
+// import { BrowserRouter as Router, Routes, Route, Outlet } from "react-router-dom";
+// import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+// import { useNavigate, Navigate } from 'react-router-dom';
+// import { Box } from '@mui/material'
+// import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+// import Home from "./Components/UserInterface/Home";
+// import HomePage from "./Components/UserInterface/HomePage";
+// import LoginPage from "./Components/UserInterface/LoginPage";
+// import Tools from "./Components/UserInterface/Tools";
+// import { getDecreyptedData } from "./Components/utils/localstorage";
+
+
+
+
+// const ViewSite = lazy(() => import('./Components/UserInterface/DPR/ViewSite'));
+// const Dpr = lazy(() => import('./Components/UserInterface/DPR/Dpr'))
+// const Vendor = lazy(() => import('./Components/UserInterface/VANDOR_MANAGMENT/Vendor'))
+// const Trends = lazy(() => import('./Components/UserInterface/Trend/Trends'));
+// const SoftAT = lazy(() => import('./Components/UserInterface/SOFT AT/SoftAT'));
+// const Physical_At = lazy(() => import('./Components/UserInterface/PHYSICAL AT/Physical_At'));
+// const Performance_At = lazy(() => import('./Components/UserInterface/PERFORMANE AT/Performance_At'));
+// const Wpr = lazy(() => import('./Components/UserInterface/WPR/Wpr'));
+// const Degrow = lazy(() => import('./Components/UserInterface/DEGROW/Degrow'));
+// const File_Merge = lazy(() => import('./Components/UserInterface/FileMerge/File_Merge'));
+// const Schedular = lazy(() => import('./Components/UserInterface/Schedular/Schedular'));
+// const Mdp = lazy(() => import('./Components/UserInterface/MDP/RAN/Mdp'));
+// const MdpUBR = lazy(() => import('./Components/UserInterface/MDP/UBR/Ubr'));
+// const Others = lazy(() => import('./Components/UserInterface/OTHERS/Others'));
+// const Inventory = lazy(() => import('./Components/UserInterface/Inventory/Inventory'));
+// const MDPTool = lazy(() => import('./Components/UserInterface/MDP/MDPTool'));
+// const Mcomms = lazy(() => import('./Components/UserInterface/Mcomm-scripting/Mcomms'));
+// const Soft_at_Rejection = lazy(() => import('./Components/UserInterface/Soft_AT_Rejection/Soft_AT_Rejection'));
+// const Profile = lazy(() => import('./Components/UserInterface/Profile/Profile'));
+// const ProfileSetting = lazy(() => import('./Components/UserInterface/profileSetting/ProfileSetting'));
+// const Ubr_Soft_at_Rejection = lazy(() => import('./Components/UserInterface/UBR_Soft_At_Rejection/Ubr_Soft_AT_Rejection'));
+// const Zero_rna = lazy(() => import('./Components/UserInterface/Zero_RNA_Payload/Zero_rna'));
+// const Error = lazy(() => import('./Components/csss/Error'));
+// const CatsTracker = lazy(() => import('./Components/UserInterface/Cats Tracker/CatsTracker'));
+// const Audit = lazy(() => import('./Components/UserInterface/Audit Tool/Audit'));
+// const FDD = lazy(() => import('./Components/UserInterface/Audit Tool/FDD/FDD'));
+// const TDD = lazy(() => import('./Components/UserInterface/Audit Tool/TDD/TDD'));
+// const CircleInputs = lazy(() => import('./Components/UserInterface/Employee_skills/CircleInputs'));
+// const Integration = lazy(() => import('./Components/UserInterface/Integration_Tool/Integration'));
+// const Rca = lazy(() => import('./Components/UserInterface/RCA Tool/Rca'));
+// const G2Audit = lazy(() => import('./Components/UserInterface/Audit Tool/G2Audit/G2Audit'));
+// const IntegrationRead = lazy(() => import('./Components/UserInterface/Integration_Read/IntegrationRead'));
+// const SoftAtTem = lazy(() => import('./Components/UserInterface/SoftAt Temp/SoftAT'));
+// const McomePhycical = lazy(() => import('./Components/UserInterface/McomPhysicalAt/McomePhycical'))
+// const Nscripter = lazy(() => import('./Components/UserInterface/Nomenclature Scripter/Nscripter'));
+// const Dma = lazy(() => import('./Components/UserInterface/DailyMonetringAlarm/Dma'));
+// const Gpl = lazy(() => import('./Components/UserInterface/GPL_Audit/GPL'));
+// const LKFStatus = lazy(() => import('./Components/UserInterface/LKF Status/LKF'))
+// const MobinateVsCate = lazy(() => import('./Components/UserInterface/Mobinat_vs_cats/MobinateVsCats'))
+// const DegrowDismantle = lazy(() => import('./Components/UserInterface/DegrowDismantle/DegrowDismantle'))
+// const KPImatrix = lazy(() => import('./Components/UserInterface/KPI Matrix/KPImatrix'))
+// const RelocationPayload = lazy(() => import('./Components/UserInterface/RelocationPayload/Relocation'))
+// const ProjectTracking = lazy(() => import('./Components/UserInterface/ProjectTracking/PTracking'))
+// const IxTools = lazy(() => import('./Components/UserInterface/Integration_Tools/Ix_Tools'))
+// const Vi_Integration = lazy(() => import('./Components/UserInterface/Vi_Integration_tool/Vi_Integration'))
+// const SA_Slicing = lazy(() => import('./Components/UserInterface/Integration_SA/SA'))
+// const MicrowaveSoftAt = lazy(() => import('./Components/UserInterface/Microwave/Microwave'))
+// const NTDTool = lazy(() => import('./Components/UserInterface/NewTowerDeployment/NTD'))
+// const UpgradeDeployment = lazy(() => import('./Components/UserInterface/UpgradeDeployment/UD'))
+// const payloadTraffic = lazy(() => import('./Components/UserInterface/Payload Traffic/Payload'))
+// const G2Scripting = lazy(() => import('./Components/UserInterface/2G Scripting/2GScripting'))
+// const PerformanceTAT = lazy(() => import('./Components/UserInterface/Performance AT TAT/PerformanceAt'))
+// const DailyTaskReview = lazy(() => import('./Components/UserInterface/DailyTaskReview/DailyTaskReview'))
+// const PerformaceATPendingAging = lazy(() => import('./Components/UserInterface/Performance AT Pending Aging/PerformancePending'))
+// const Soft_AT_Tool = lazy(() => import('./Components/UserInterface/Soft_AT_Tool/Soft_AT_Tool'))
+// const VI_SoftAT = lazy(() => import('./Components/UserInterface/VI_SoftAT/VI_SoftAT'))
+// const IX_Ericsson = lazy(()=> import('./Components/UserInterface/IX Audit Ericsson/Audit_Ericsson'))
+// const ResourceManagement = lazy(() => import('./Components/UserInterface/ResourceManagement/Resource_management'));
+// const FieldResourceTracking = lazy(() => import('./Components/UserInterface/Field Resource Tracking/FieldResourceTracking'))
+// const WccGenerate = lazy(()=> import('./Components/UserInterface/WCC Generate/Wcc_generate'))
+// // const PerformanceNew = lazy(()=> import('./Components/UserInterface/Performance New/PerformanceAt'))
+// const Logs = lazy(()=>import('./Components/UserInterface/Logs/Logs'))
+// const LogsTool = lazy(()=>import('./Components/UserInterface/Logs Tools/LogsTool'))
+// const BasebandRequirement = lazy(()=>import('./Components/UserInterface/Baseband Requirement/BasebandRequirement'))
+// const QualityTeamTool = lazy(()=>import('./Components/UserInterface/Quality Team Tools/QualityTeamTool'))
+// const AlarmLogs = lazy(()=>import('./Components/UserInterface/Alarm Logs Tool/AlarmLogs'))
+// const Tstracker = lazy(()=>import('./Components/UserInterface/TS Tracker/TS_Tracker'))
+// const PendingPerformanceRemark = lazy(()=> import('./Components/UserInterface/Pending Performance Remarks/PendingPerformanceRemarks'))
+// const IX_VI_Scripting = lazy(()=>import('./Components/UserInterface/IX VI Scripting/IX_VI_Scripting'))
+
+
+// const queryClient = new QueryClient()
+
+// // const userType = (JSON.parse(localStorage.getItem('user_type'))?.split(","))
+
+
+// function App() {
+
+//   const [userType, setUserType] = useState()
+
+
+
+//   // const chackToken = localStorage.getItem("tokenKey")
+
+//   // console.log('usertype', userType)
+
+
+//   const ProtectedRoute = ({ element: Component, allowedUserTypes, userType, ...rest }) => {
+//     // console.log(allowedUserTypes, userType,allowedUserTypes.includes(userType))
+//     const userTypes = (getDecreyptedData('user_type')?.split(","))
+//     return userTypes?.some(type => allowedUserTypes?.some(group => group.toLowerCase() === type.toLowerCase())) ? (
+//       <Component {...rest} />
+//     ) : <Navigate to="/error" />
+//   };
+
+
+//   useEffect(() => {
+//     setUserType(getDecreyptedData('user_type')?.split(","))
+//   }, [])
+
+
+//   return (
+//     <QueryClientProvider client={queryClient}>
+//       <div >
+//         <Router>
+//           <Box style={{ position: 'static' }}><Home /></Box>
+
+//           <Routes>
+//             <Route path="/login" element={<LoginPage />} />
+//             <Route path="/tools/*" element={<Tools />} />
+//             <Route path="/" element={<HomePage />} />
+//             <Route path="/:id" element={<Error />} />
+//             <Route path="/profile/*" element={<Profile />} />
+//             <Route path="/view_site" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={ViewSite} allowedUserTypes={['Admin']} userType={userType} />
+//               </Suspense>
+//             } />
+//             <Route path="/dpr/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={Dpr} allowedUserTypes={['central', 'admin']} userType={userType} />
+//               </Suspense>
+//             } />
+           
+//             <Route path="/tools/vendor/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={Vendor} allowedUserTypes={['central', 'admin']} userType={userType} />
+//               </Suspense>
+//             } />
+
+//             <Route path="/tools/physical_at/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={Physical_At} allowedUserTypes={['central', 'admin']} userType={userType} />
+//               </Suspense>
+//             } />
+//             <Route path="/tools/performance_at/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={Performance_At} allowedUserTypes={['quality', 'admin', 'quality-s']} userType={userType} />
+//               </Suspense>
+//             } />
+//             <Route path="/tools/wpr/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={Wpr} allowedUserTypes={['quality', 'admin', 'quality-s']} userType={userType} />
+//               </Suspense>
+//             } />
+//             <Route path="/tools/de-grow/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={Degrow} allowedUserTypes={['Admin']} userType={userType} />
+//               </Suspense>
+//             } />
+//             <Route path="/tools/file_merge" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={File_Merge} allowedUserTypes={['admin', 'quality', 'quality-s', 'ran']} userType={userType} />
+//               </Suspense>
+//             } />
+//             <Route path="/tools/schedular/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={Schedular} allowedUserTypes={['admin']} userType={userType} />
+//               </Suspense>
+//             } />
+//             <Route path="/tools/others/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={Others} allowedUserTypes={['Admin']} userType={userType} />
+//               </Suspense>
+//             } />
+//             <Route path="/tools/others/degrow/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={Degrow} allowedUserTypes={['Admin']} userType={userType} />
+//               </Suspense>
+//             } />
+//             <Route path="/tools/circle_inputs/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={CircleInputs} allowedUserTypes={['Admin']} userType={userType} />
+//               </Suspense>
+//             } />
+//             <Route path="/tools/cats_tracker/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={CatsTracker} allowedUserTypes={['quality', 'admin', 'quality-s']} userType={userType} />
+//               </Suspense>
+//             } />
+//             <Route path="/tools/inventory/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={Inventory} allowedUserTypes={['central', 'circle', 'admin']} userType={userType} />
+//               </Suspense>
+//             } />
+//             <Route path="/tools/zero_RNA_payload/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={Zero_rna} allowedUserTypes={['quality', 'admin', 'quality-s']} userType={userType} />
+//               </Suspense>
+//             } />
+//             <Route path="/tools/audit/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={Audit} allowedUserTypes={['quality', 'admin', 'quality-s']} userType={userType} />
+//               </Suspense>
+//             } />
+//             <Route path="/tools/audit/FDD/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={FDD} allowedUserTypes={['quality', 'admin', 'quality-s']} userType={userType} />
+//               </Suspense>
+//             } />
+//             <Route path="/tools/audit/TDD/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={TDD} allowedUserTypes={['quality', 'admin', 'quality-s']} userType={userType} />
+//               </Suspense>
+//             } />
+//             <Route path="/tools/audit/2G_audit/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={G2Audit} allowedUserTypes={['quality', 'admin', 'quality-s']} userType={userType} />
+//               </Suspense>
+//             } />
+//             <Route path="/tools/mdp/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={MDPTool} allowedUserTypes={['central', 'circle', 'admin']} userType={userType} />
+//               </Suspense>
+//             } />
+//             <Route path="/tools/mdp/ran/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={Mdp} allowedUserTypes={['central', 'circle', 'admin']} userType={userType} />
+//               </Suspense>
+//             } />
+//             <Route path="/tools/mdp/ubr/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={MdpUBR} allowedUserTypes={['central', 'circle', 'admin']} userType={userType} />
+//               </Suspense>
+//             } />
+//             <Route path="/tools/mcom-scripting/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={Mcomms} allowedUserTypes={['central', 'circle', 'admin']} userType={userType} />
+//               </Suspense>
+//             } />
+//             <Route path="/tools/soft_at_rejection/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={Soft_at_Rejection} allowedUserTypes={['soft_at_team', 'admin']} userType={userType} />
+//               </Suspense>
+//             } />
+//             <Route path="/profileSetting/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={ProfileSetting} allowedUserTypes={['Admin']} userType={userType} />
+//               </Suspense>
+//             } />
+//             <Route path="/tools/UBR_soft_at_Tracker/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={Ubr_Soft_at_Rejection} allowedUserTypes={['admin']} userType={userType} />
+//               </Suspense>
+//             } />
+//             <Route path="/tools/Integration/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={Integration} allowedUserTypes={['soft_at_team', 'admin', 'IX']} userType={userType} />
+//               </Suspense>
+//             } />
+//             <Route path="/tools/IX_Tracker/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={IntegrationRead} allowedUserTypes={['quality', 'IX_reader', 'quality-s']} userType={userType} />
+//               </Suspense>
+//             } />
+//             <Route path="/tools/rca/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={Rca} allowedUserTypes={['quality', 'admin', 'quality-s']} userType={userType} />
+//               </Suspense>
+//             } />
+//             <Route path="/tools/softAt/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={SoftAtTem} allowedUserTypes={['soft_at_team', 'admin']} userType={userType} />
+//               </Suspense>
+//             } />
+//             <Route path="/tools/mcom_physical_at/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={McomePhycical} allowedUserTypes={['soft_at_team', 'admin']} userType={userType} />
+//               </Suspense>
+//             } />
+//             <Route path="/tools/nomenclature_scriptor/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={Nscripter} allowedUserTypes={['soft_at_team', 'admin']} userType={userType} />
+//               </Suspense>
+//             } />
+//             <Route path="/tools/dma/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={Dma} allowedUserTypes={['soft_at_team', 'admin']} userType={userType} />
+//               </Suspense>
+//             } />
+//             <Route path="/tools/mobile_network_integration/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={Gpl} allowedUserTypes={['admin', 'MNIT','MNITBK']} userType={userType} />
+//               </Suspense>
+//             } />
+
+//             <Route path="/tools/lkf_status/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={LKFStatus} allowedUserTypes={['admin']} userType={userType} />
+//               </Suspense>
+//             } />
+
+//             <Route path="/tools/material_management/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={MobinateVsCate} allowedUserTypes={['admin', 'ran']} userType={userType} />
+//               </Suspense>
+//             } />
+
+//             <Route path="/tools/full_site_dismantle/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={DegrowDismantle} allowedUserTypes={['admin', 'ran', 'ran_admin']} userType={userType} />
+//               </Suspense>
+//             } />
+
+//             {/* <Route path="/tools/kpi_matrix/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={KPImatrix} allowedUserTypes={['admin']} userType={userType} />
+//               </Suspense>
+//             } /> */}
+
+//             <Route path="/tools/relocation_payload_tracker/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={RelocationPayload} allowedUserTypes={['admin', 'quality-s', 'quality']} userType={userType} />
+//               </Suspense>
+//             } />
+
+//             <Route path="/tools/relocation_tracking/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={ProjectTracking} allowedUserTypes={['admin', 'RLT', 'RLT_reader']} userType={userType} />
+//               </Suspense>
+//             } />
+
+//             <Route path="/tools/ix_tools/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={IxTools} allowedUserTypes={['admin', 'IX', 'VI_IX', 'VI_IX_reader', 'soft_at_team', "IX_SA", "IX_ER",'quality', 'IX_reader', 'quality-s','IX_TS','IX_ZTE','IX_T_VI','5G_SCR','IX_VI_SCRPT','MACRO']} userType={userType} />
+//               </Suspense>
+//             } />
+
+//             <Route path="/tools/ix_tools/vi_integration/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={Vi_Integration} allowedUserTypes={['admin', 'VI_IX', 'VI_IX_reader','IX_ZTE','IX_T_VI']} userType={userType} />
+//               </Suspense>
+//             } />
+
+//             <Route path="/tools/ix_tools/sa_slicing/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={SA_Slicing} allowedUserTypes={['admin', 'IX_SA','5G_SCR','MACRO']} userType={userType} />
+//               </Suspense>
+//             } />
+
+//             <Route path="/tools/ix_tools/ix_ericsson/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={IX_Ericsson} allowedUserTypes={['admin', 'IX_ER']} userType={userType} />
+//               </Suspense>
+//             } />
+
+//             <Route path="/tools/ix_tools/ix_tstracker/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={Tstracker} allowedUserTypes={['admin', 'IX_TS']} userType={userType} />
+//               </Suspense>
+//             } />
+
+//               <Route path="/tools/ix_tools/ix_vi_scripting/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={IX_VI_Scripting} allowedUserTypes={['admin', 'IX_VI_SCRPT']} userType={userType} />
+//               </Suspense>
+//             } />
+
+
+//             <Route path="/tools/microwave_soft_at/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={MicrowaveSoftAt} allowedUserTypes={['admin', 'microwave','admin_microwave']} userType={userType} />
+//               </Suspense>
+//             } />
+
+//             <Route path="/tools/ntd/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={NTDTool} allowedUserTypes={['admin', 'NTD']} userType={userType} />
+//               </Suspense>
+//             } />
+
+//             <Route path="/tools/upgrade_deployment/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={UpgradeDeployment} allowedUserTypes={['admin', 'UDT', 'UDT_reader']} userType={userType} />
+//               </Suspense>
+//             } />
+         
+//             <Route path="/tools/2g_scripting/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={G2Scripting} allowedUserTypes={['admin', '2G_Script']} userType={userType} />
+//               </Suspense>
+//             } />
+
+            
+
+//             <Route path="/tools/daily_task_review/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={DailyTaskReview} allowedUserTypes={['admin', 'DTR']} userType={userType} />
+//               </Suspense>
+//             } />
+
+//             <Route path="/tools/performance_at_pending_aging/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={PerformaceATPendingAging} allowedUserTypes={['admin','PAP']} userType={userType} />
+//               </Suspense>
+//             } />
+
+//             <Route path="/tools/soft_at_tools/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={Soft_AT_Tool} allowedUserTypes={['soft_at_team', 'admin', 'soft_at','soft_at_vi','soft_at_airtel']} userType={userType} />
+//               </Suspense>
+//             } />
+
+//             <Route path="/tools/soft_at_tools/vi_soft_at/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={VI_SoftAT} allowedUserTypes={['soft_at_team', 'admin','soft_at_vi']} userType={userType} />
+//               </Suspense>
+//             } />
+
+//             <Route path="/tools/soft_at_tools/airtel_soft_at/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={SoftAT} allowedUserTypes={['soft_at_team', 'admin', 'soft_at','soft_at_airtel']} userType={userType} />
+//               </Suspense>
+//             } />
+
+//             <Route path="/tools/resource_management/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={ResourceManagement} allowedUserTypes={['RM_Admin',"RM_CDH"]} userType={userType} />
+//               </Suspense>
+//             } />
+
+//              <Route path="/tools/field_resource_tracking/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={FieldResourceTracking} allowedUserTypes={['admin',"frt"]} userType={userType} />
+//               </Suspense>
+//             } /> 
+
+//              <Route path="/tools/wcc_generate/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={WccGenerate} allowedUserTypes={['admin',"frt"]} userType={userType} />
+//               </Suspense>
+//             } /> 
+//             <Route path="/tools/log_s/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={Logs} allowedUserTypes={['admin',"log"]} userType={userType} />
+//               </Suspense>
+//             } /> 
+
+//               <Route path="/tools/logs_tools/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={LogsTool} allowedUserTypes={['admin','card1','card2','card3','card4','card5','card6','card7','card8']} userType={userType} />
+//               </Suspense>
+//             } />
+
+//              {/* <Route path="/tools/performance_new/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={PerformanceNew} allowedUserTypes={['admin', 'PN','PN_Admin']} userType={userType} />
+//               </Suspense>
+//             } /> */}
+
+//              <Route path="/tools/baseband_requirement/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={BasebandRequirement} allowedUserTypes={['admin', 'BR_Admin','BR']} userType={userType} />
+//               </Suspense>
+//             } />
+
+//             <Route path="/tools/quality_team/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={QualityTeamTool} allowedUserTypes={['admin','QT_AL','PAT','PAT_Admin','PTS', 'PTS_Admin','quality','quality-s', 'trend_tool','QT_PPR','QT_AR','QT_DUS']} userType={userType} />
+//               </Suspense>
+//             } />
+
+//              <Route path="/tools/quality_team/trends/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={Trends} allowedUserTypes={['quality','admin', 'quality-s', 'trend_tool']} userType={userType} />
+//               </Suspense>
+//             } />
+
+//             <Route path="/tools/quality_team/performance_at_tat/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={PerformanceTAT} allowedUserTypes={['admin', 'PAT','PAT_Admin']} userType={userType} />
+//               </Suspense>
+//             } />
+
+//                <Route path="/tools/quality_team/payload_traffic/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={payloadTraffic} allowedUserTypes={['admin', 'PTS', 'PTS_Admin']} userType={userType} />
+//               </Suspense>
+//             } />
+
+//              <Route path="/tools/quality_team/alarm_logs/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={AlarmLogs} allowedUserTypes={['admin', 'QT_AL']} userType={userType} />
+//               </Suspense>
+//             } />
+
+//               <Route path="/tools/quality_team/pending_performance_re/*" element={
+//               <Suspense fallback={<div>Loading...</div>}>
+//                 <ProtectedRoute element={PendingPerformanceRemark} allowedUserTypes={['admin', 'QT_PPR','QT_AR','QT_DUS']} userType={userType} />
+//               </Suspense>
+//             } />
+            
+
+
+//           </Routes>
+
+
+
+//         </Router>
+//         {/* <Box sx={{ position: 'fixed',
+//            bottom: 0, 
+//            left: 0,
+//             zIndex: 100, 
+//             // '&:hover': { display: 'none' } 
+//           }}
+//             >
+//           <img src="/assets/happy-new-year-2026.png" alt="Happy New Year 2026" style={{ width: "220px", height: "140px" }} />
+//         </Box> */}
+
+//       </div>
+//     </QueryClientProvider>
+//   );
+// }
+// export default App;
+
 import React, { Suspense, lazy, useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Outlet } from "react-router-dom";
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -17,7 +547,8 @@ const ViewSite = lazy(() => import('./Components/UserInterface/DPR/ViewSite'));
 const Dpr = lazy(() => import('./Components/UserInterface/DPR/Dpr'))
 const Vendor = lazy(() => import('./Components/UserInterface/VANDOR_MANAGMENT/Vendor'))
 const Trends = lazy(() => import('./Components/UserInterface/Trend/Trends'));
-const SoftAT = lazy(() => import('./Components/UserInterface/SOFT AT/SoftAT'));
+const NokiaSoftAT = lazy(() => import('./Components/UserInterface/SOFT AT/NokiaSoftAT'));
+const EricssonSoftAT = lazy(() => import('./Components/UserInterface/SOFT AT/EricssonSoftAT'));
 const Physical_At = lazy(() => import('./Components/UserInterface/PHYSICAL AT/Physical_At'));
 const Performance_At = lazy(() => import('./Components/UserInterface/PERFORMANE AT/Performance_At'));
 const Wpr = lazy(() => import('./Components/UserInterface/WPR/Wpr'));
@@ -295,7 +826,7 @@ function App() {
             } />
             <Route path="/tools/mobile_network_integration/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={Gpl} allowedUserTypes={['admin', 'MNIT','MNITBK']} userType={userType} />
+                <ProtectedRoute element={Gpl} allowedUserTypes={['admin', 'MNIT']} userType={userType} />
               </Suspense>
             } />
 
@@ -337,7 +868,7 @@ function App() {
 
             <Route path="/tools/ix_tools/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={IxTools} allowedUserTypes={['admin', 'IX', 'VI_IX', 'VI_IX_reader', 'soft_at_team', "IX_SA", "IX_ER",'quality', 'IX_reader', 'quality-s','IX_TS','IX_ZTE','IX_T_VI','5G_SCR','IX_VI_SCRPT','MACRO']} userType={userType} />
+                <ProtectedRoute element={IxTools} allowedUserTypes={['admin', 'IX', 'VI_IX', 'VI_IX_reader', 'soft_at_team', "IX_SA", "IX_ER",'quality', 'IX_reader', 'quality-s','IX_TS','IX_ZTE','IX_T_VI','5G_SCR','IX_VI_SCRPT','5G_PARAMS']} userType={userType} />
               </Suspense>
             } />
 
@@ -349,7 +880,7 @@ function App() {
 
             <Route path="/tools/ix_tools/sa_slicing/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={SA_Slicing} allowedUserTypes={['admin', 'IX_SA','5G_SCR','MACRO']} userType={userType} />
+                <ProtectedRoute element={SA_Slicing} allowedUserTypes={['admin', 'IX_SA','5G_SCR','5G_PARAMS']} userType={userType} />
               </Suspense>
             } />
 
@@ -412,7 +943,7 @@ function App() {
 
             <Route path="/tools/soft_at_tools/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={Soft_AT_Tool} allowedUserTypes={['soft_at_team', 'admin', 'soft_at','soft_at_vi','soft_at_airtel']} userType={userType} />
+                <ProtectedRoute element={Soft_AT_Tool} allowedUserTypes={['soft_at_team', 'admin', 'soft_at','soft_at_vi','soft_at_nokia']} userType={userType} />
               </Suspense>
             } />
 
@@ -422,9 +953,15 @@ function App() {
               </Suspense>
             } />
 
-            <Route path="/tools/soft_at_tools/airtel_soft_at/*" element={
+            <Route path="/tools/soft_at_tools/nokia_soft_at/*" element={
               <Suspense fallback={<div>Loading...</div>}>
-                <ProtectedRoute element={SoftAT} allowedUserTypes={['soft_at_team', 'admin', 'soft_at','soft_at_airtel']} userType={userType} />
+                <ProtectedRoute element={NokiaSoftAT} allowedUserTypes={['soft_at_team', 'admin', 'soft_at','soft_at_nokia']} userType={userType} />
+              </Suspense>
+            } />
+
+            <Route path="/tools/soft_at_tools/ericsson_soft_at/*" element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProtectedRoute element={EricssonSoftAT} allowedUserTypes={['soft_at_team', 'admin', 'soft_at','soft_at_nokia']} userType={userType} />
               </Suspense>
             } />
 
@@ -527,3 +1064,4 @@ function App() {
   );
 }
 export default App;
+

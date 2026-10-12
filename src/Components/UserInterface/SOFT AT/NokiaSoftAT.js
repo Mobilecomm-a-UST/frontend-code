@@ -13,7 +13,7 @@ import DashboardIcon from '@rsuite/icons/legacy/Dashboard';
 import FileUploadIcon from '@rsuite/icons/FileUpload';
 import { useNavigate } from 'react-router-dom'
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import SoftAtTool from './SoftAtTool'
+import NokiaSoftAtTool from './NokiaSoftAtTool'
 import CheckOutlineIcon from '@rsuite/icons/CheckOutline';
 import Upload_Soft_AT from './Upload_Soft_AT/Upload_Soft_AT'
 import Upload_Soft_AT_Status from './Upload_Soft_AT/Upload_Soft_AT_Status'
@@ -36,8 +36,8 @@ const SoftAtStatusTemplate = lazy(() => import('./DownloadTemp/SoftAtStatus'));
 const SIVATemplate = lazy(() => import('./DownloadTemp/SiwaTemp'));
 const SoftAtOffering = lazy(() => import('./DownloadTemp/SoftAtOffering'));
 const CircleWiseStatus = lazy(() => import('./Dashboard/CircleWiseStatus'));
-const EricssonChecklist = lazy(() => import('./EricssonStatus/Checklist'))
-const EricssonSummary = lazy(() => import('./EricssonStatus/Summary'))
+// const EricssonChecklist = lazy(() => import('./EricssonStatus/Checklist'))
+// const EricssonSummary = lazy(() => import('./EricssonStatus/Summary'))
 const NokiaChecklist = lazy(() => import('./NokiaStatus/Checklist'))
 const NokiaSummary = lazy(() => import('./NokiaStatus/Summary'))
 const NokiaChecklistTable = lazy(() => import('./NokiaStatus/ChecklistEditor'))
@@ -96,38 +96,38 @@ const SoftAT = () => {
                   <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle">
                     <Sidenav.Body>
                       <Nav activeKey={activeKey} onSelect={setActiveKey} style={{ width: 'auto', minHeight: "670px", height: "100hv", backgroundColor: "#006e74", marginTop: 8, borderRadius: 10 }}>
-                        <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>Airtel Soft AT</Nav>
-                        <Nav.Menu eventKey="1" placement="rightStart" className="menu-title-custom" title="Dashboard" icon={<DashboardIcon size="3em" />}>
-                          <Nav.Item eventKey="1-1" className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/airtel_soft_at/master_dashboard'); show(); setMenuButton(true) }} >
+                        <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>Ericsson Soft AT</Nav>
+                        {/* <Nav.Menu eventKey="1" placement="rightStart" className="menu-title-custom" title="Dashboard" icon={<DashboardIcon size="3em" />}>
+                          <Nav.Item eventKey="1-1" className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/nokia_soft_at/master_dashboard'); show(); setMenuButton(true) }} >
                             Master Dashboard
                           </Nav.Item>
-                          <Nav.Item eventKey="1-2" className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/airtel_soft_at/circle_wise'); show(); setMenuButton(true) }}>
+                          <Nav.Item eventKey="1-2" className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/nokia_soft_at/circle_wise'); show(); setMenuButton(true) }}>
                             Circle Wise
                           </Nav.Item>
-                          <Nav.Item eventKey="1-6" className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/airtel_soft_at/weekly_comparison'); show(); setMenuButton(true) }}>
+                          <Nav.Item eventKey="1-6" className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/nokia_soft_at/weekly_comparison'); show(); setMenuButton(true) }}>
                             Weekly Comparison
                           </Nav.Item>
                         </Nav.Menu>
-                        <Nav.Item eventKey="2" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/airtel_soft_at/upload_soft_at'); show(); setMenuButton(true) }}>
+                        <Nav.Item eventKey="2" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/nokia_soft_at/upload_soft_at'); show(); setMenuButton(true) }}>
                           Upload Soft AT
                         </Nav.Item>
-                        <Nav.Item eventKey="3" placement="rightStart" icon={<PageIcon />} className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/airtel_soft_at/view_report'); show(); setMenuButton(true) }}>
+                        <Nav.Item eventKey="3" placement="rightStart" icon={<PageIcon />} className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/nokia_soft_at/view_report'); show(); setMenuButton(true) }}>
                           View Report
                         </Nav.Item>
                         <Nav.Menu eventKey="4" className="menu-title-custom" title="Download Template" placement="rightStart" icon={<FileDownloadIcon />} >
-                          <Nav.Item eventKey="4-1" className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/airtel_soft_at/download_soft_at_status_template'); show(); setMenuButton(true) }}>Soft-AT Status</Nav.Item>
-                          <Nav.Item eventKey="4-2" className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/airtel_soft_at/download_siwa_template'); show(); setMenuButton(true) }}>SIWA Template</Nav.Item>
-                          <Nav.Item eventKey="4-3" className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/airtel_soft_at/download_soft_at_offering_template'); show(); setMenuButton(true) }}>Soft-AT Offering</Nav.Item>
-                        </Nav.Menu>
+                          <Nav.Item eventKey="4-1" className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/nokia_soft_at/download_soft_at_status_template'); show(); setMenuButton(true) }}>Soft-AT Status</Nav.Item>
+                          <Nav.Item eventKey="4-2" className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/nokia_soft_at/download_siwa_template'); show(); setMenuButton(true) }}>SIWA Template</Nav.Item>
+                          <Nav.Item eventKey="4-3" className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/nokia_soft_at/download_soft_at_offering_template'); show(); setMenuButton(true) }}>Soft-AT Offering</Nav.Item>
+                        </Nav.Menu> */}
                         <Nav.Menu eventKey="5" className="menu-title-custom" title="Ericsson Status" placement="rightStart" icon={<CheckOutlineIcon />} >
-                          <Nav.Item eventKey='5-1' className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/airtel_soft_at/ericsson_checklist'); show(); setMenuButton(true) }} >Checklist</Nav.Item>
-                          <Nav.Item eventKey='5-2' className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/airtel_soft_at/ericsson_summary'); show(); setMenuButton(true) }} >Summary</Nav.Item>
+                          <Nav.Item eventKey='5-1' className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/ericsson_soft_at/ericsson_checklist'); show(); setMenuButton(true) }} >Checklist</Nav.Item>
+                          <Nav.Item eventKey='5-2' className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/ericsson_soft_at/ericsson_summary'); show(); setMenuButton(true) }} >Summary</Nav.Item>
                         </Nav.Menu>
-                        <Nav.Menu eventKey="6" className="menu-title-custom" title="Nokia Status" placement="rightStart" icon={<CheckOutlineIcon />} >
-                          <Nav.Item eventKey='6-1' className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/airtel_soft_at/nokia_checklist'); show(); setMenuButton(true) }} >Checklist</Nav.Item>
-                          <Nav.Item eventKey='6-2' className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/airtel_soft_at/nokia_checklist_table'); show(); setMenuButton(true) }} >Checklist Table</Nav.Item>
-                          <Nav.Item eventKey='6-3' className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/airtel_soft_at/nokia_summary'); show(); setMenuButton(true) }} >Summary</Nav.Item>
-                        </Nav.Menu>
+                        {/* <Nav.Menu eventKey="6" className="menu-title-custom" title="Nokia Status" placement="rightStart" icon={<CheckOutlineIcon />} >
+                          <Nav.Item eventKey='6-1' className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/nokia_soft_at/nokia_checklist'); show(); setMenuButton(true) }} >Checklist</Nav.Item>
+                          <Nav.Item eventKey='6-2' className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/nokia_soft_at/nokia_checklist_table'); show(); setMenuButton(true) }} >Checklist Table</Nav.Item>
+                          <Nav.Item eventKey='6-3' className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/nokia_soft_at/nokia_summary'); show(); setMenuButton(true) }} >Summary</Nav.Item>
+                        </Nav.Menu> */}
                         {/* <Nav.Item eventKey="4" placement="rightStart" icon={<ViewsUnauthorizeIcon />} onClick={() => { navigate('/tools/soft_at/rejected_report'); show(); setMenuButton(true) }}>
                         Rejected Report
                       </Nav.Item> */}
@@ -145,57 +145,58 @@ const SoftAT = () => {
                 <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#006e74", marginTop: 8, borderRadius: 10,overflow: "scroll", scrollbarWidth: "1px" }}>
                   <Sidenav.Body>
                     <Nav activeKey={activeKey} onSelect={setActiveKey} >
-                      <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>Airtel Soft AT Tool</Nav>
-                      <Nav.Menu eventKey="1" placement="rightStart" className="menu-title-custom" title="Dashboard" icon={<DashboardIcon size="3em" />}>
-                        <Nav.Item eventKey="1-1" className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/airtel_soft_at/master_dashboard'); show(); setMenuButton(true) }} >
+                      <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>Nokia Soft AT Tool</Nav>
+                      {/* <Nav.Menu eventKey="1" placement="rightStart" className="menu-title-custom" title="Dashboard" icon={<DashboardIcon size="3em" />}>
+                        <Nav.Item eventKey="1-1" className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/nokia_soft_at/master_dashboard'); show(); setMenuButton(true) }} >
                           Master Dashboard
                         </Nav.Item>
-                        <Nav.Item eventKey="1-2" className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/airtel_soft_at/circle_wise'); show(); setMenuButton(true) }}>
+                        <Nav.Item eventKey="1-2" className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/nokia_soft_at/circle_wise'); show(); setMenuButton(true) }}>
                           Circle Wise
                         </Nav.Item>
-                        <Nav.Item eventKey="1-6" className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/airtel_soft_at/weekly_comparison'); show(); setMenuButton(true) }}>
+                        <Nav.Item eventKey="1-6" className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/nokia_soft_at/weekly_comparison'); show(); setMenuButton(true) }}>
                           Weekly Comparison
                         </Nav.Item>
-                      </Nav.Menu>
-                      <Nav.Item eventKey="2" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/airtel_soft_at/upload_soft_at'); show(); setMenuButton(true) }}>
+                      </Nav.Menu> */}
+                      {/* <Nav.Item eventKey="2" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/nokia_soft_at/upload_soft_at'); show(); setMenuButton(true) }}>
                         Upload Soft AT
                       </Nav.Item>
-                      <Nav.Item eventKey="3" placement="rightStart" icon={<PageIcon />} className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/airtel_soft_at/view_report'); show(); setMenuButton(true) }}>
+                      <Nav.Item eventKey="3" placement="rightStart" icon={<PageIcon />} className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/nokia_soft_at/view_report'); show(); setMenuButton(true) }}>
                         View Report
-                      </Nav.Item>
-                      <Nav.Menu eventKey="4" className="menu-title-custom" title="Download Template" placement="rightStart" icon={<FileDownloadIcon />} >
-                        <Nav.Item eventKey="4-1" className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/airtel_soft_at/download_soft_at_status_template'); show(); setMenuButton(true) }}>Soft-AT Status</Nav.Item>
-                        <Nav.Item eventKey="4-2" className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/airtel_soft_at/download_siwa_template'); show(); setMenuButton(true) }}>SIWA Template</Nav.Item>
-                        <Nav.Item eventKey="4-3" className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/airtel_soft_at/download_soft_at_offering_template'); show(); setMenuButton(true) }}>Soft-AT Offering</Nav.Item>
+                      </Nav.Item> */}
+                      {/* <Nav.Menu eventKey="4" className="menu-title-custom" title="Download Template" placement="rightStart" icon={<FileDownloadIcon />} >
+                        <Nav.Item eventKey="4-1" className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/nokia_soft_at/download_soft_at_status_template'); show(); setMenuButton(true) }}>Soft-AT Status</Nav.Item>
+                        <Nav.Item eventKey="4-2" className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/nokia_soft_at/download_siwa_template'); show(); setMenuButton(true) }}>SIWA Template</Nav.Item>
+                        <Nav.Item eventKey="4-3" className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/nokia_soft_at/download_soft_at_offering_template'); show(); setMenuButton(true) }}>Soft-AT Offering</Nav.Item>
+                      </Nav.Menu> */}
+                      
+                      {/* <Nav.Menu eventKey="5" className="menu-title-custom" title="4G Ericsson" placement="rightStart" icon={<CheckOutlineIcon />} >
+                        <Nav.Item eventKey='5-1' className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/ericsson_soft_at/ericsson_checklist'); show(); setMenuButton(true) }} >Checklist</Nav.Item>
+                        <Nav.Item eventKey='5-2' className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/ericsson_soft_at/ericsson_summary'); show(); setMenuButton(true) }} >Summary</Nav.Item>
                       </Nav.Menu>
-                      <Nav.Menu eventKey="5" className="menu-title-custom" title="4G Ericsson" placement="rightStart" icon={<CheckOutlineIcon />} >
-                        <Nav.Item eventKey='5-1' className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/airtel_soft_at/ericsson_checklist'); show(); setMenuButton(true) }} >Checklist</Nav.Item>
-                        <Nav.Item eventKey='5-2' className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/airtel_soft_at/ericsson_summary'); show(); setMenuButton(true) }} >Summary</Nav.Item>
-                      </Nav.Menu>
-                     
-                      <Nav.Menu eventKey="7" className="menu-title-custom" title="5G Ericsson" placement="rightStart" icon={<CheckOutlineIcon />} >
-                        <Nav.Item eventKey='7-1' className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/airtel_soft_at/softat_5g_checklist'); show(); setMenuButton(true) }} >Checklist</Nav.Item>
+                      */}
+                      {/* <Nav.Menu eventKey="7" className="menu-title-custom" title="5G Ericsson" placement="rightStart" icon={<CheckOutlineIcon />} >
+                        <Nav.Item eventKey='7-1' className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/ericsson_soft_at/softat_5g_checklist'); show(); setMenuButton(true) }} >Checklist</Nav.Item>
                         {/* <Nav.Item eventKey='6-2' className="single-item-custom" onClick={() => { navigate('/tools/soft_at/nokia_checklist_table'); show(); setMenuButton(true) }} >Checklist Table</Nav.Item> */}
-                        <Nav.Item eventKey='7-3' className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/airtel_soft_at/softat_5g_summary'); show(); setMenuButton(true) }} >Summary</Nav.Item>
+                        {/* <Nav.Item eventKey='7-3' className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/ericsson_soft_at/softat_5g_summary'); show(); setMenuButton(true) }} >Summary</Nav.Item> */}
                         {/* <Nav.Item eventKey='6-4' className="single-item-custom" onClick={() => { navigate('/tools/soft_at/nokia_summary_table'); show(); setMenuButton(true) }} >Summary Table</Nav.Item> */}
-                      </Nav.Menu>
+                      {/* </Nav.Menu>  */}
 
                        <Nav.Menu eventKey="6" className="menu-title-custom" title="Nokia Status" placement="rightStart" icon={<CheckOutlineIcon />} >
                           <Nav.Menu eventKey="6-1"  className="menu-title-custom" title="4G" placement="rightStart" >
-                            <Nav.Item eventKey='6-1-1' className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/airtel_soft_at/nokia_checklist'); show(); setMenuButton(true) }} >Checklist</Nav.Item>
-                            <Nav.Item eventKey='6-1-2' className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/airtel_soft_at/nokia_checklist_table'); show(); setMenuButton(true) }} >Checklist Table</Nav.Item>
-                            <Nav.Item eventKey='6-1-3' className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/airtel_soft_at/nokia_summary'); show(); setMenuButton(true) }} >Summary</Nav.Item>
-                            <Nav.Item eventKey='6-1-4' className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/airtel_soft_at/nokia_summary_table'); show(); setMenuButton(true) }} >Summary Table</Nav.Item>
+                            <Nav.Item eventKey='6-1-1' className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/nokia_soft_at/nokia_checklist'); show(); setMenuButton(true) }} >Checklist</Nav.Item>
+                            <Nav.Item eventKey='6-1-2' className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/nokia_soft_at/nokia_checklist_table'); show(); setMenuButton(true) }} >Checklist Table</Nav.Item>
+                            <Nav.Item eventKey='6-1-3' className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/nokia_soft_at/nokia_summary'); show(); setMenuButton(true) }} >Summary</Nav.Item>
+                            <Nav.Item eventKey='6-1-4' className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/nokia_soft_at/nokia_summary_table'); show(); setMenuButton(true) }} >Summary Table</Nav.Item>
                            
                             
-                        {userTypes?.includes('Admin') && <Nav.Item eventKey='6-5' className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/airtel_soft_at/nokia_user_count'); show(); setMenuButton(true) }} >User Counter</Nav.Item>}
+                        {userTypes?.includes('Admin') && <Nav.Item eventKey='6-5' className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/nokia_soft_at/nokia_user_count'); show(); setMenuButton(true) }} >User Counter</Nav.Item>}
 
                           </Nav.Menu>
                         <Nav.Menu eventKey="6-2" className="menu-title-custom" title="5G" placement="rightStart"  >
-                           <Nav.Item eventKey='6-1-5' className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/airtel_soft_at/nokia_5g_checklist'); show(); setMenuButton(true) }} >Checklist</Nav.Item>
+                           <Nav.Item eventKey='6-1-5' className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/nokia_soft_at/nokia_5g_checklist'); show(); setMenuButton(true) }} >Checklist</Nav.Item>
                           {/* <Nav.Item eventKey='6-2-1' className="single-item-custom" onClick={() => { navigate('/tools/soft_at/nokia_5g_checklist'); show(); setMenuButton(true) }} >Checklist</Nav.Item>
                           <Nav.Item eventKey='6-2-2' className="single-item-custom" onClick={() => { navigate('/tools/soft_at/nokia_5g_checklist_table'); show(); setMenuButton(true) }} >Checklist Table</Nav.Item> */}
-                          <Nav.Item eventKey='6-2-3' className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/airtel_soft_at/nokia_5g_summary'); show(); setMenuButton(true) }} >Summary</Nav.Item>
+                          <Nav.Item eventKey='6-2-3' className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/nokia_soft_at/nokia_5g_summary'); show(); setMenuButton(true) }} >Summary</Nav.Item>
                           {/* <Nav.Item eventKey='6-2-4' className="single-item-custom" onClick={() => { navigate('/tools/soft_at/nokia_5g_summary_table'); show(); setMenuButton(true) }} >Summary Table</Nav.Item> */}
                         </Nav.Menu>
                         {/* <Nav.Item eventKey='6-1' className="single-item-custom" onClick={() => { navigate('/tools/soft_at/nokia_checklist'); show(); setMenuButton(true) }} >Checklist</Nav.Item>
@@ -205,20 +206,20 @@ const SoftAT = () => {
                       </Nav.Menu>
 
                       <Nav.Menu eventKey="8" className="menu-title-custom" title="Nokia SA/NSA" placement="rightStart" icon={<CheckOutlineIcon />} >
-                          <Nav.Item eventKey='8-1' className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/airtel_soft_at/nokia_sa_nsa_table'); show(); setMenuButton(true) }} >SA/NSA Table</Nav.Item>
-                          <Nav.Item eventKey='8-2' className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/airtel_soft_at/nokia_upload_alarm'); show(); setMenuButton(true) }} >Upload Nokia Alarm</Nav.Item>
+                          <Nav.Item eventKey='8-1' className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/nokia_soft_at/nokia_sa_nsa_table'); show(); setMenuButton(true) }} >SA/NSA Table</Nav.Item>
+                          <Nav.Item eventKey='8-2' className="single-item-custom" onClick={() => { navigate('/tools/soft_at_tools/nokia_soft_at/nokia_upload_alarm'); show(); setMenuButton(true) }} >Upload Nokia Alarm</Nav.Item>
 
                       </Nav.Menu>
 
-                      <Nav.Item eventKey="8" className="single-item-custom" placement="rightStart" icon={<PageIcon />} onClick={() => { navigate('/tools/soft_at_tools/airtel_soft_at/5g_parser'); show(); setMenuButton(true) }}>
+                      <Nav.Item eventKey="8" className="single-item-custom" placement="rightStart" icon={<PageIcon />} onClick={() => { navigate('/tools/soft_at_tools/nokia_soft_at/5g_parser'); show(); setMenuButton(true) }}>
                         5G Parser
                       </Nav.Item>
-                      <Nav.Item eventKey="9" className="single-item-custom" placement="rightStart" icon={<PageIcon />} onClick={() => { navigate('/tools/soft_at_tools/airtel_soft_at/5g_nrrel_parser'); show(); setMenuButton(true) }}>
+                      <Nav.Item eventKey="9" className="single-item-custom" placement="rightStart" icon={<PageIcon />} onClick={() => { navigate('/tools/soft_at_tools/nokia_soft_at/5g_nrrel_parser'); show(); setMenuButton(true) }}>
                         5G NRREL Parser
                       </Nav.Item>
-                       <Nav.Item eventKey="10" className="single-item-custom" placement="rightStart" icon={<PageIcon />} onClick={() => { navigate('/tools/soft_at_tools/airtel_soft_at/huawei_checklist'); show(); setMenuButton(true) }}>
+                       {/* <Nav.Item eventKey="10" className="single-item-custom" placement="rightStart" icon={<PageIcon />} onClick={() => { navigate('/tools/soft_at_tools/nokia_soft_at/huawei_checklist'); show(); setMenuButton(true) }}>
                        Huawei Checklist
-                      </Nav.Item>
+                      </Nav.Item> */}
                        
 
                     </Nav>
@@ -233,7 +234,7 @@ const SoftAT = () => {
 
             <Suspense fallback={<Loader/>}>
               <Routes>
-                <Route element={<SoftAtTool />} path="/" />
+                <Route element={<NokiaSoftAtTool />} path="/" />
                 <Route element={<Circle_Wise />} path="/circle_wise/*" />
                 <Route element={<CircleWiseStatus />} path="/circle_wise/:name" />
                 <Route element={<Upload_Soft_AT />} path="/upload_soft_at/*" />
@@ -247,8 +248,8 @@ const SoftAT = () => {
                 <Route element={<SoftAtStatusTemplate />} path='/download_soft_at_status_template' />
                 <Route element={<SIVATemplate />} path='/download_siwa_template' />
                 <Route element={<SoftAtOffering />} path='/download_soft_at_offering_template' />
-                <Route element={<EricssonChecklist />} path='/ericsson_checklist' />
-                <Route element={<EricssonSummary />} path='/ericsson_summary' />
+                {/* <Route element={<EricssonChecklist />} path='/ericsson_checklist' />
+                <Route element={<EricssonSummary />} path='/ericsson_summary' /> */}
                 <Route element={<NokiaChecklist />} path='/nokia_checklist' />
                 <Route element={<NokiaSummary />} path='/nokia_summary' />
                 <Route element={<NokiaChecklistTable />} path='/nokia_checklist_table' />
