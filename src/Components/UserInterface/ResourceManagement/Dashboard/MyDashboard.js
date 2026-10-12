@@ -8,20 +8,10 @@ import { saveAs } from "file-saver";
 
 const USER_CONFIG = {
   'Vishal.Yadav@ust.com':{
-    // "circle":"MUM",
-    // "category":"C",
-    // "customer":"VI",
-    // "costCenter":"MCT0414"
-
     "circle":"HPHP",
     "category":"A",
     "customer":"Airtel",
     "costCenter":"MCT0384"
-    
-    // "circle":"UPE",
-    // "category":"A",
-    // "customer":"Airtel",
-    // "costCenter":"MCT0385"
   },
   'Anurag.Singh@ust.com':{
     "circle":"UPE",
