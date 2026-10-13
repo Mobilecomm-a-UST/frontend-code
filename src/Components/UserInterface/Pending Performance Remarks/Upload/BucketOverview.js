@@ -1,3 +1,4 @@
+
 // import React, { useState, useEffect } from "react";
 // import {
 //     Box, Button, Stack, Breadcrumbs, Link, Typography, Slide, Grid,
@@ -19,7 +20,7 @@
 
 // const circleArray = ['AP', 'DL', 'TNCH', 'NESA', 'RJ', 'JK', 'BR', 'MH', 'MP', 'MU', 'JRK', 'KK', 'UE', 'UW', 'HPHP', 'OR', 'WB/KOL'];
 // const bandArray = ['4G', '5G'];
-// const projectArray = ['Relocation', 'NT', 'Upgrade', 'ALL'];
+// const projectArray = ['Relocation', 'NT', 'Upgrade'];
 // const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 // const formatMonthToMMMYY = (monthInputValue) => {
@@ -287,7 +288,7 @@
 //                     {filters.band && (
 //                         <Chip label={`Band: ${filters.band}`} color="primary" variant="outlined" size="small" />
 //                     )}
-//                     {filters.project && filters.project !== "ALL" && (
+//                     {filters.project && (
 //                         <Chip label={`Project: ${filters.project}`} color="primary" variant="outlined" size="small" />
 //                     )}
 //                     {filters.monthRange && (
@@ -336,7 +337,7 @@
 //     const [startDate, setStartDate] = useState("");
 //     const [endDate, setEndDate] = useState("");
 //     const [circle, setCircle] = useState("");
-//     const [project, setProject] = useState("ALL");
+//     const [project, setProject] = useState("");
 //     const [band, setBand] = useState("");
 //     const [errors, setErrors] = useState({});
 //     const [dashboardResult, setDashboardResult] = useState(null);
@@ -421,7 +422,7 @@
 //         setStartDate("");
 //         setEndDate("");
 //         setCircle("");
-//         setProject("ALL");
+//         setProject("");
 //         setBand("");
 //         setErrors({});
 //         setDashboardResult(null);
@@ -638,6 +639,7 @@
 //                                             value={project}
 //                                             onChange={(e) => setProject(e.target.value)}
 //                                         >
+//                                              <MenuItem value="">All Projects</MenuItem>
 //                                             {projectArray.map((p) => <MenuItem key={p} value={p}>{p}</MenuItem>)}
 //                                         </Select>
 //                                     </FormControl>
@@ -692,6 +694,7 @@
 // };
 
 // export default BucketOverviewDashboard;
+
 
 import React, { useState, useEffect } from "react";
 import {
@@ -761,7 +764,7 @@ const DownloadButton = ({ url, label }) => {
     );
 };
 
-// ✅ Summary Table Component with Pagination
+// ✅ Summary Table Component with Pagination (Professional White Theme)
 const SummaryTable = ({ data }) => {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -787,84 +790,91 @@ const SummaryTable = ({ data }) => {
             <Typography sx={{
                 fontWeight: 700,
                 fontSize: "16px",
-                color: "#333",
+                color: "#1A202C",
                 mb: 2,
             }}>
                 📊 Complete Summary Table
             </Typography>
 
-            <TableContainer sx={{ border: "1px solid #E0E0E0", borderRadius: 2 }}>
+            <TableContainer component={Paper} elevation={0} sx={{ border: "1px solid #E2E8F0", borderRadius: 2, backgroundColor: "#FFFFFF" }}>
                 <Table size="small">
                     <TableHead>
-                        <TableRow sx={{ background: "#f5f5f5" }}>
-                            <TableCell sx={{ fontWeight: 700, fontSize: "12px" }}>Bucket Name</TableCell>
-                            <TableCell align="center" sx={{ fontWeight: 700, fontSize: "12px" }}>0-14 Days</TableCell>
-                            <TableCell align="center" sx={{ fontWeight: 700, fontSize: "12px" }}>14-21 Days</TableCell>
-                            <TableCell align="center" sx={{ fontWeight: 700, fontSize: "12px" }}>21-30 Days</TableCell>
-                            <TableCell align="center" sx={{ fontWeight: 700, fontSize: "12px" }}>&gt;30 Days</TableCell>
-                            <TableCell align="center" sx={{ fontWeight: 700, fontSize: "12px", background: "#006E7420" }}>Grand Total</TableCell>
+                        <TableRow sx={{ background: "#F8FAFC" }}>
+                            <TableCell sx={{ fontWeight: 700, fontSize: "12px", color: "#334155", borderBottom: "2px solid #E2E8F0" }}>Bucket Name</TableCell>
+                            <TableCell align="center" sx={{ fontWeight: 700, fontSize: "12px", color: "#334155", borderBottom: "2px solid #E2E8F0" }}>0-14 Days</TableCell>
+                            <TableCell align="center" sx={{ fontWeight: 700, fontSize: "12px", color: "#334155", borderBottom: "2px solid #E2E8F0" }}>14-21 Days</TableCell>
+                            <TableCell align="center" sx={{ fontWeight: 700, fontSize: "12px", color: "#334155", borderBottom: "2px solid #E2E8F0" }}>21-30 Days</TableCell>
+                            <TableCell align="center" sx={{ fontWeight: 700, fontSize: "12px", color: "#334155", borderBottom: "2px solid #E2E8F0" }}>&gt;30 Days</TableCell>
+                            <TableCell align="center" sx={{ fontWeight: 700, fontSize: "12px", color: "#0F172A", borderBottom: "2px solid #E2E8F0", backgroundColor: "#F1F5F9" }}>Grand Total</TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {displayedRows.length > 0 ? (
-                            displayedRows.map(([bucketName, bucketData], idx) => (
-                                <TableRow
-                                    key={bucketName}
-                                    sx={{
-                                        "&:nth-of-type(odd)": { background: "#fafafa" },
-                                        background: bucketName === "Grand Total" ? "#006E7415" : "inherit",
-                                        fontWeight: bucketName === "Grand Total" ? 700 : 400,
-                                    }}
-                                >
-                                    <TableCell sx={{
-                                        fontSize: "12px",
-                                        fontWeight: bucketName === "Grand Total" ? 700 : 600,
-                                        color: bucketName === "Grand Total" ? "#006E74" : "#333",
-                                    }}>
-                                        {bucketName}
-                                    </TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "12px", fontWeight: bucketName === "Grand Total" ? 700 : 500 }}>
-                                        {bucketData["0-14"] || 0}
-                                    </TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "12px", fontWeight: bucketName === "Grand Total" ? 700 : 500 }}>
-                                        {bucketData["14-21"] || 0}
-                                    </TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "12px", fontWeight: bucketName === "Grand Total" ? 700 : 500 }}>
-                                        {bucketData["21-30"] || 0}
-                                    </TableCell>
-                                    <TableCell align="center" sx={{ fontSize: "12px", fontWeight: bucketName === "Grand Total" ? 700 : 500 }}>
-                                        {bucketData[">30"] || 0}
-                                    </TableCell>
-                                    <TableCell
-                                        align="center"
+                            displayedRows.map(([bucketName, bucketData], idx) => {
+                                const isGrandTotal = bucketName === "Grand Total";
+                                return (
+                                    <TableRow
+                                        key={bucketName}
                                         sx={{
-                                            fontSize: "12px",
-                                            fontWeight: 700,
-                                            color: bucketName === "Grand Total" ? "#006E74" : "#333",
-                                            background: bucketName === "Grand Total" ? "#006E7430" : "transparent",
+                                            backgroundColor: isGrandTotal ? "#F8FAFC" : idx % 2 === 0 ? "#FFFFFF" : "#FAFAFA",
+                                            "&:hover": { backgroundColor: isGrandTotal ? "#F8FAFC" : "#F1F5F9" },
+                                            borderTop: isGrandTotal ? "2px solid #CBD5E1" : "none",
                                         }}
                                     >
-                                        {bucketData["Grand Total"] || 0}
-                                    </TableCell>
-                                </TableRow>
-                            ))
+                                        <TableCell sx={{
+                                            fontSize: "12px",
+                                            fontWeight: isGrandTotal ? 700 : 500,
+                                            color: isGrandTotal ? "#0F172A" : "#334155",
+                                            borderBottom: "1px solid #E2E8F0",
+                                        }}>
+                                            {bucketName}
+                                        </TableCell>
+                                        <TableCell align="center" sx={{ fontSize: "12px", fontWeight: isGrandTotal ? 700 : 400, color: "#475569", borderBottom: "1px solid #E2E8F0" }}>
+                                            {bucketData["0-14"] || 0}
+                                        </TableCell>
+                                        <TableCell align="center" sx={{ fontSize: "12px", fontWeight: isGrandTotal ? 700 : 400, color: "#475569", borderBottom: "1px solid #E2E8F0" }}>
+                                            {bucketData["14-21"] || 0}
+                                        </TableCell>
+                                        <TableCell align="center" sx={{ fontSize: "12px", fontWeight: isGrandTotal ? 700 : 400, color: "#475569", borderBottom: "1px solid #E2E8F0" }}>
+                                            {bucketData["21-30"] || 0}
+                                        </TableCell>
+                                        <TableCell align="center" sx={{ fontSize: "12px", fontWeight: isGrandTotal ? 700 : 400, color: "#475569", borderBottom: "1px solid #E2E8F0" }}>
+                                            {bucketData[">30"] || 0}
+                                        </TableCell>
+                                        <TableCell
+                                            align="center"
+                                            sx={{
+                                                fontSize: "12px",
+                                                fontWeight: 700,
+                                                color: "#0F172A",
+                                                backgroundColor: "#F8FAFC",
+                                                borderBottom: "1px solid #E2E8F0",
+                                                borderLeft: "1px solid #E2E8F0",
+                                                borderRight: "1px solid #E2E8F0",
+                                            }}
+                                        >
+                                            {bucketData["Grand Total"] || 0}
+                                        </TableCell>
+                                    </TableRow>
+                                );
+                            })
                         ) : null}
                     </TableBody>
                 </Table>
             </TableContainer>
 
             {/* Pagination */}
-            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mt: 2, p: 1.5, bgcolor: "#fafafa", borderRadius: 1 }}>
-                <Typography variant="caption" sx={{ color: "#666", fontSize: "12px" }}>
+            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mt: 2, p: 1.5, bgcolor: "#FFFFFF", border: "1px solid #E2E8F0", borderRadius: 1 }}>
+                <Typography variant="caption" sx={{ color: "#64748B", fontSize: "12px" }}>
                     Showing {page * rowsPerPage + 1} to {Math.min((page + 1) * rowsPerPage, dataEntries.length)} of {dataEntries.length} rows
                 </Typography>
                 <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-                    <Typography variant="caption" sx={{ color: "#666", fontSize: "12px" }}>Rows per page:</Typography>
+                    <Typography variant="caption" sx={{ color: "#64748B", fontSize: "12px" }}>Rows per page:</Typography>
                     <Select
                         size="small"
                         value={rowsPerPage}
                         onChange={handleChangeRowsPerPage}
-                        sx={{ minWidth: 70 }}
+                        sx={{ minWidth: 70, height: 32, fontSize: "12px", backgroundColor: "#FFFFFF" }}
                     >
                         <MenuItem value={5}>5</MenuItem>
                         <MenuItem value={10}>10</MenuItem>
@@ -872,16 +882,17 @@ const SummaryTable = ({ data }) => {
                         <MenuItem value={50}>50</MenuItem>
                     </Select>
                 </Box>
-                <Box sx={{ display: "flex", gap: 1 }}>
+                <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
                     <Button
                         size="small"
                         variant="outlined"
                         onClick={() => setPage(page - 1)}
                         disabled={page === 0}
+                        sx={{ fontSize: "11px", textTransform: "none", borderColor: "#CBD5E1", color: "#334155" }}
                     >
                         Previous
                     </Button>
-                    <Typography variant="caption" sx={{ color: "#666", fontSize: "12px", lineHeight: "2.5" }}>
+                    <Typography variant="caption" sx={{ color: "#64748B", fontSize: "12px", px: 1 }}>
                         Page {page + 1}
                     </Typography>
                     <Button
@@ -889,6 +900,7 @@ const SummaryTable = ({ data }) => {
                         variant="outlined"
                         onClick={() => setPage(page + 1)}
                         disabled={(page + 1) * rowsPerPage >= dataEntries.length}
+                        sx={{ fontSize: "11px", textTransform: "none", borderColor: "#CBD5E1", color: "#334155" }}
                     >
                         Next
                     </Button>
@@ -898,7 +910,7 @@ const SummaryTable = ({ data }) => {
     );
 };
 
-// ✅ Chart Component
+// ✅ Chart Component (Professional White Theme)
 const BucketChart = ({ data }) => {
     if (!data || Object.keys(data).length === 0) {
         return null;
@@ -920,30 +932,34 @@ const BucketChart = ({ data }) => {
             <Typography sx={{
                 fontWeight: 700,
                 fontSize: "16px",
-                color: "#333",
+                color: "#1A202C",
                 mb: 2,
             }}>
                 📈 TAT Distribution by Bucket
             </Typography>
 
-            <Card sx={{ p: 2, border: "1px solid #E0E0E0", borderRadius: 2 }}>
-                <ResponsiveContainer width="100%" height={300}>
-                    <BarChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 60 }}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="#E0E0E0" />
+            <Card elevation={0} sx={{ p: 2, border: "1px solid #E2E8F0", borderRadius: 2, backgroundColor: "#FFFFFF" }}>
+                <ResponsiveContainer width="100%" height={320}>
+                    <BarChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 70 }}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" vertical={false} />
                         <XAxis
                             dataKey="name"
-                            angle={-45}
+                            angle={-35}
                             textAnchor="end"
-                            height={100}
-                            tick={{ fontSize: 12 }}
+                            height={80}
+                            tick={{ fontSize: 11, fill: "#475569" }}
+                            stroke="#CBD5E1"
                         />
-                        <YAxis tick={{ fontSize: 12 }} />
-                        <ChartTooltip cursor={{ fill: "#00000010" }} />
-                        <Legend wrapperStyle={{ paddingTop: "20px", fontSize: "12px" }} />
-                        <Bar dataKey="0-14" stackId="a" fill="#4CAF50" name="0-14 Days" />
-                        <Bar dataKey="14-21" stackId="a" fill="#FF9800" name="14-21 Days" />
-                        <Bar dataKey="21-30" stackId="a" fill="#2196F3" name="21-30 Days" />
-                        <Bar dataKey=">30" stackId="a" fill="#F44336" name=">30 Days" />
+                        <YAxis tick={{ fontSize: 11, fill: "#475569" }} stroke="#CBD5E1" />
+                        <ChartTooltip 
+                            cursor={{ fill: "rgba(241, 245, 249, 0.6)" }} 
+                            contentStyle={{ backgroundColor: "#FFFFFF", borderColor: "#CBD5E1", borderRadius: "8px", boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)" }}
+                        />
+                        <Legend wrapperStyle={{ paddingTop: "15px", fontSize: "12px", color: "#334155" }} />
+                        <Bar dataKey="0-14" stackId="a" fill="#10B981" name="0-14 Days" radius={[0, 0, 0, 0]} />
+                        <Bar dataKey="14-21" stackId="a" fill="#F59E0B" name="14-21 Days" />
+                        <Bar dataKey="21-30" stackId="a" fill="#3B82F6" name="21-30 Days" />
+                        <Bar dataKey=">30" stackId="a" fill="#EF4444" name=">30 Days" radius={[4, 4, 0, 0]} />
                     </BarChart>
                 </ResponsiveContainer>
             </Card>
@@ -951,7 +967,7 @@ const BucketChart = ({ data }) => {
     );
 };
 
-// ✅ Dashboard Component
+// ✅ Dashboard Component (Professional White Theme)
 const Dashboard = ({ dashboardData, filters }) => {
     if (!dashboardData || !dashboardData.data) {
         return null;
@@ -960,16 +976,15 @@ const Dashboard = ({ dashboardData, filters }) => {
     const data = dashboardData.data;
 
     return (
-        <>
+        <Box sx={{ backgroundColor: "#FFFFFF", p: 3, borderRadius: 2, border: "1px solid #E2E8F0", mt: 3, boxShadow: "0 1px 3px 0 rgb(0 0 0 / 0.05)" }}>
             {/* Dashboard Title with Filters Info */}
-            <Box sx={{ mb: 3, bgcolor: "#fff", p: 2, borderRadius: 1.5, border: "1px solid #E0E0E0" }}>
+            <Box sx={{ mb: 3, pb: 2, borderBottom: "1px solid #E2E8F0" }}>
                 <Typography sx={{
-                    fontWeight: 800,
+                    fontWeight: 700,
                     fontSize: "18px",
-                    color: "#006E74",
+                    color: "#0F172A",
                     mb: 2,
-                    textTransform: "uppercase",
-                    letterSpacing: 0.5,
+                    letterSpacing: -0.2,
                 }}>
                     📊 Bucket Overview Dashboard
                 </Typography>
@@ -977,16 +992,16 @@ const Dashboard = ({ dashboardData, filters }) => {
                 {/* Filters Info */}
                 <Box sx={{ display: "flex", gap: 1.5, flexWrap: "wrap" }}>
                     {filters.circle && (
-                        <Chip label={`Circle: ${filters.circle}`} color="primary" variant="outlined" size="small" />
+                        <Chip label={`Circle: ${filters.circle}`} variant="outlined" size="small" sx={{ borderColor: "#CBD5E1", color: "#334155", backgroundColor: "#F8FAFC", fontWeight: 500 }} />
                     )}
                     {filters.band && (
-                        <Chip label={`Band: ${filters.band}`} color="primary" variant="outlined" size="small" />
+                        <Chip label={`Band: ${filters.band}`} variant="outlined" size="small" sx={{ borderColor: "#CBD5E1", color: "#334155", backgroundColor: "#F8FAFC", fontWeight: 500 }} />
                     )}
                     {filters.project && (
-                        <Chip label={`Project: ${filters.project}`} color="primary" variant="outlined" size="small" />
+                        <Chip label={`Project: ${filters.project}`} variant="outlined" size="small" sx={{ borderColor: "#CBD5E1", color: "#334155", backgroundColor: "#F8FAFC", fontWeight: 500 }} />
                     )}
                     {filters.monthRange && (
-                        <Chip label={filters.monthRange} color="primary" variant="outlined" size="small" />
+                        <Chip label={filters.monthRange} variant="outlined" size="small" sx={{ borderColor: "#CBD5E1", color: "#334155", backgroundColor: "#F8FAFC", fontWeight: 500 }} />
                     )}
                 </Box>
             </Box>
@@ -999,11 +1014,11 @@ const Dashboard = ({ dashboardData, filters }) => {
 
             {/* Download Button */}
             {dashboardData.download_url && (
-                <Box sx={{ mt: 4, mb: 3 }}>
+                <Box sx={{ mt: 4, pt: 2, borderTop: "1px solid #E2E8F0" }}>
                     <Typography sx={{
                         fontWeight: 700,
-                        fontSize: "16px",
-                        color: "#333",
+                        fontSize: "15px",
+                        color: "#1A202C",
                         mb: 2,
                     }}>
                         💾 Download Report
@@ -1014,7 +1029,7 @@ const Dashboard = ({ dashboardData, filters }) => {
                     />
                 </Box>
             )}
-        </>
+        </Box>
     );
 };
 
@@ -1365,7 +1380,6 @@ const BucketOverviewDashboard = () => {
                         {/* Dashboard Display Inside Same Card */}
                         {dashboardResult && (
                             <>
-                                <Divider sx={{ my: 3 }} />
                                 <Dashboard
                                     dashboardData={dashboardResult}
                                     filters={{
