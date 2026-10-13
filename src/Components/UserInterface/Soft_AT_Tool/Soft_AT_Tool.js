@@ -107,7 +107,7 @@ const Soft_AT_Tool = () => {
 
                                 {userTypes?.some(role => allowedNokiaRoles.map(r => r.toLowerCase()).includes(role?.toLowerCase())) && <Grid item xs={4}>
                                     <Box sx={backgroundStyle} className={classes.des} onClick={handleNokia}>
-                                        <div className={classes.centerIcon}>   <img src="/assets/NOKIA.png" alt="Nokia" style={{ width: "60px", height: "60px",borderRadius:"15px",padding:"5px" }} /></div>
+                                        <div className={classes.centerIcon}>   <img src="/assets/Nokia.png" alt="Nokia" style={{ width: "60px", height: "60px",borderRadius:"15px",padding:"5px" }} /></div>
                                         <div >
                                             <div className={classes.center} >Nokia Soft AT</div>
                                             {/* <div>This is a FDD tool</div> */}
