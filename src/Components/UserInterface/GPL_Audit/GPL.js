@@ -31,6 +31,7 @@ const Step1Comparsion = lazy(() => import('./Kget To GPL/Step1Comparsion'))
 const Step2Scripting = lazy(() => import('./Kget To GPL/Step2Scripting'))
 const BhartiGPLAudit = lazy(() => import('./Bharti GPL Audit/BhartiGPLAudit'))
 const Convertor = lazy(() => import('./Converter/Converter'))
+const ZTEGPL = lazy(() => import('./ZTE GPL/ZTE_GPL'))
 
 const GPL = () => {
     const [expanded, setExpanded] = useState(true);
@@ -97,8 +98,11 @@ const GPL = () => {
                                                     <Nav.Item eventKey="3" placement="rightStart" icon={<ChangeListIcon />} className="single-item-custom" onClick={() => { navigate('/tools/mobile_network_integration/script_generator'); show(); setMenuButton(true) }}>
                                                         Script Generator
                                                     </Nav.Item>
-                                                    <Nav.Item eventKey="6" placement="rightStart" className="single-item-custom" icon={<DocPassIcon />} onClick={() => { navigate('/tools/mobile_network_integration/Convertor'); show(); setMenuButton(true) }}>
+                                                    <Nav.Item eventKey="4" placement="rightStart" className="single-item-custom" icon={<DocPassIcon />} onClick={() => { navigate('/tools/mobile_network_integration/Convertor'); show(); setMenuButton(true) }}>
                                                         Convertor
+                                                    </Nav.Item>
+                                                    <Nav.Item eventKey="5" placement="rightStart" icon={<ChangeListIcon />} className="single-item-custom" onClick={() => { navigate('/tools/mobile_network_integration/zte_gpl'); show(); setMenuButton(true) }}>
+                                                        ZTE GPL
                                                     </Nav.Item>
                                                 </>}
 
@@ -115,6 +119,8 @@ const GPL = () => {
                                                     Step 2 - Scripting
                                                 </Nav.Item>
                                             </Nav.Menu>
+
+
 
                                         </Nav>
                                     </Sidenav.Body>
@@ -136,6 +142,7 @@ const GPL = () => {
                                         <Route element={<GplPrePostAudit />} path="/gpl_pre_post_audit" />
                                         <Route element={<ScriptGenerator />} path="/script_generator" />
                                         <Route element={<Convertor />} path='/Convertor' />
+                                        <Route element={<ZTEGPL />} path="/zte_gpl" />
                                     </>
                                 }
 
@@ -143,11 +150,6 @@ const GPL = () => {
                                 <Route element={<Step1Comparsion />} path="/step1_comparsion" />
                                 <Route element={<Step2Scripting />} path="/step2_scripting" />
                                 <Route element={<BhartiGPLAudit />} path="/bharti_gpl_audit" />
-
-
-
-
-
 
                                 {/* <Route element={<TestingGpl />} path="/testing_gpl" /> */}
 
