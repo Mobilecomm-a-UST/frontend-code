@@ -202,6 +202,7 @@ const DeleteDatabase = lazy(() => import('./Upload/DeleteDatabase'))
 const BucketOverview = lazy(()=> import('./Upload/BucketOverview'))
 const SkippedSites = lazy(()=> import('./Upload/SkippedSites'))
 const History = lazy(()=> import('./Upload/History'))
+const DeleteSkippedSites = lazy(()=> import('./Upload/DeleteSkippedSites'))
 
 const PendingPerformanceRemarks = () => {
     const [expanded, setExpanded] = useState(true);
@@ -370,6 +371,8 @@ const PendingPerformanceRemarks = () => {
 
                                              {/* TAB 6: DELETE DATABASE */}
                                                     {isQTAR && (
+                                                        <>
+                                                        
                                                     <Nav.Item
                                                         eventKey="6"
                                                         placement="rightStart"
@@ -383,7 +386,25 @@ const PendingPerformanceRemarks = () => {
                                                     >
                                                         Delete Database
                                                     </Nav.Item>
-                                                    )}
+
+
+                                                     <Nav.Item
+                                                        eventKey="7"
+                                                        placement="rightStart"
+                                                        className="single-item-custom"
+                                                        icon={<WarningRoundIcon />}
+                                                        onClick={() => {
+                                                            navigate('/tools/quality_team/pending_performance_re/DeleteSkippedSites');
+                                                            show();
+                                                            setMenuButton(true)
+                                                        }}
+                                                    >
+                                                        Delete Skipped Site
+                                                    </Nav.Item>
+
+                                                    </>
+
+                                                )}
 
                                             {/* QT_DUS SEES ONLY 3 TABS */}
                                             {isQTDUS && (
@@ -503,7 +524,10 @@ const PendingPerformanceRemarks = () => {
                                 )}
 
                                 {isQTAR && (
+                                    <>
                                      <Route path='/DeleteDatabase' element={<DeleteDatabase />} />
+                                     <Route path='/DeleteSkippedSites' element={<DeleteSkippedSites />} />
+                                     </>
 
                                 )}
 

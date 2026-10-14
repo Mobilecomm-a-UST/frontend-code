@@ -352,7 +352,7 @@ import React, { useState, useEffect } from "react";
 import {
     Box, Button, Stack, Breadcrumbs, Link, Typography, Slide, Grid,
     TextField, MenuItem, Select, InputLabel, FormControl, Divider,
-    Chip, List, ListItem, ListItemText, Paper,
+    Chip, List, ListItem, ListItemText, Paper, CircularProgress,
 } from "@mui/material";
 import {
     Upload as UploadIcon,
@@ -367,6 +367,8 @@ import { useNavigate } from "react-router-dom";
 import { postDataa, ServerURL } from "../../../services/FetchNodeServices";
 import OverAllCss from "../../../csss/OverAllCss";
 import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
+import axios from "axios";
+import { getDecreyptedData } from "../../../utils/localstorage";
 
 const circleArray = ['AP', 'CH', 'KK', 'DL', 'HR', 'RJ', 'JK', 'WB', 'OD', 'MU', 'TNCH', 'UE', 'BH', 'UW', 'MP', 'PB', 'KO', 'JH', 'UPW']
 const bandArray = ['4G', '5G', 'Accepted']
@@ -445,6 +447,7 @@ const PendingPerformanceAtRemarks = () => {
     const [uploadFile, setUploadFile] = useState(null);
     const [uploadFileError, setUploadFileError] = useState(false);
     const [uploadSummary, setUploadSummary] = useState(null);
+    const [downloadingInput, setDownloadingInput] = useState(false);
 
     const handleUploadFileChange = (e) => {
         const file = e.target.files[0];
@@ -478,6 +481,45 @@ const PendingPerformanceAtRemarks = () => {
         setUploadSummary(null);
     };
 
+    const handleDownloadInputFile = async () => {
+        setDownloadingInput(true);
+        try {
+            const response = await axios.get(`${ServerURL}/pending_performance_at_remarks/input/`, {
+                headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` },
+                responseType: 'blob',
+            });
+            const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+            const blobUrl = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = blobUrl;
+            link.download = 'Input_File.xlsx';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            setTimeout(() => window.URL.revokeObjectURL(blobUrl), 1000);
+        } catch (err) {
+            console.error('Error downloading input file:', err);
+            try {
+                const res = await postDataa("pending_performance_at_remarks/input/");
+                if (res && res.download_url) {
+                    const link = document.createElement('a');
+                    link.href = res.download_url;
+                    link.setAttribute('target', '_blank');
+                    link.setAttribute('rel', 'noopener noreferrer');
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                } else {
+                    Swal.fire({ icon: "error", title: "Error", text: "Failed to download input file." });
+                }
+            } catch (e) {
+                Swal.fire({ icon: "error", title: "Error", text: "Failed to download input file. Please try again." });
+            }
+        } finally {
+            setDownloadingInput(false);
+        }
+    };
+
     useEffect(() => {
         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`;
     }, []);
@@ -493,6 +535,28 @@ const PendingPerformanceAtRemarks = () => {
 
             <Slide direction="left" in timeout={1000}>
                 <Box>
+
+                    {/* Outer wrapper to place Download Input File button at top right outside the card */}
+                    <Box sx={{ width: { md: "75%", xs: "100%" }, mx: "auto", display: "flex", justifyContent: "flex-end", mb: 2, px: { xs: 2, md: 0 } }}>
+                        <Button
+                            variant="contained"
+                            size="medium"
+                            startIcon={downloadingInput ? <CircularProgress size={18} color="inherit" /> : <FileDownloadIcon />}
+                            onClick={handleDownloadInputFile}
+                            disabled={downloadingInput}
+                            sx={{
+                                bgcolor: '#008080',
+                                color: 'white',
+                                fontWeight: 600,
+                                textTransform: 'none',
+                                '&:hover': {
+                                    bgcolor: '#005555',
+                                },
+                            }}
+                        >
+                            {downloadingInput ? 'Downloading...' : 'Download Input File'}
+                        </Button>
+                    </Box>
 
                     {/* 1. Upload Site Data */}
                     <StyledCard title="Upload Site Data" classes={classes}>
