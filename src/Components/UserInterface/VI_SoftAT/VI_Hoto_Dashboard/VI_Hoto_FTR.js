@@ -132,7 +132,7 @@ const HEADER_GRADIENT_FROM = "#006e74";
 
 // ── Toggle options: which view to show ──
 const VIEW_TABS = [
-    { key: "dashboard", label: "MS1 Wise", icon: DashboardIcon },
+    { key: "dashboard", label: "IX Wise", icon: DashboardIcon },
      { key: "offered", label: "Offered Site Wise", icon: LocationOnIcon },
     { key: "hoto", label: "FTR Analysis", icon: InsightsIcon },
    

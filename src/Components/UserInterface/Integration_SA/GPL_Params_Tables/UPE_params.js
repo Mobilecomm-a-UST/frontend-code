@@ -594,7 +594,7 @@ const UPE_params = () => {
                       >
                         Parameters &amp; Values
                       </Typography>
-                      {rows.length > 0 && (
+                      {/* {rows.length > 0 && (
                         <Chip
                           label={`${filteredRows.length} entries`}
                           size="small"
@@ -606,7 +606,7 @@ const UPE_params = () => {
                             border: `1px solid ${TEAL_MID}`,
                           }}
                         />
-                      )}
+                      )} */}
                     </Box>
                     <Box display="flex" alignItems="center" gap={1}>
                       <TextField

@@ -1457,7 +1457,7 @@ function FTR_Dashboard() {
                                 </Avatar>
                                 <Box>
                                     <Typography variant="subtitle1" sx={{ color: "#fff", fontWeight: 700, letterSpacing: 0.3 }}>
-                                        FTR Dashboard-MS1 Wise
+                                        FTR Dashboard-IX Wise
 
                                         <Typography
                                             component="span"
@@ -1597,7 +1597,7 @@ function FTR_Dashboard() {
                                     {tab === 0 ? (
                                         <>
                                             <FtrDashboardTable
-                                                title="MS1 Wise"
+                                                title="IX Wise"
                                                 rows={ftrDashboardRows}
                                                 icon={<TrendingUpIcon sx={{ color: "#bfe9e9", fontSize: 18 }} />}
                                             />
