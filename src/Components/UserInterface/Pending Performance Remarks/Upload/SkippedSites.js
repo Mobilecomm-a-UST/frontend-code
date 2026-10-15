@@ -162,7 +162,7 @@ const Skipped = () => {
     setDownloading(true);
     setErrorMessage('');
     try {
-      const response = await axios.get(`${ServerURL}/${DOWNLOAD_SKIPPED_ENDPOINT}`, {
+      const response = await axios.post(`${ServerURL}/${DOWNLOAD_SKIPPED_ENDPOINT}`, {
         headers: { Authorization: `token ${getDecreyptedData("tokenKey")}` },
         responseType: 'blob',
       });
@@ -180,7 +180,7 @@ const Skipped = () => {
       console.error('Error downloading skipped sites report:', err);
       // Fallback: try opening standard URL if blob request fails or returns JSON download URL
       try {
-        const res = await getData(DOWNLOAD_SKIPPED_ENDPOINT);
+        const res = await postData(DOWNLOAD_SKIPPED_ENDPOINT);
         if (res && res.download_url) {
           const link = document.createElement('a');
           link.href = res.download_url;
