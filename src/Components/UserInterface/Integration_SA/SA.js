@@ -62,6 +62,7 @@ const SA = () => {
 
     // ======== CHECK USER PERMISSIONS ========
     const has5GScripting = userTypes.includes('5G_SCR') || userTypes.includes('Admin');
+    const isPARAM = userTypes?.includes('GPL_PARAM')
 
     useEffect(() => {
         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
@@ -80,9 +81,37 @@ const SA = () => {
                                         <Nav style={{ fontWeight: 550, color: 'white', textAlign: 'center', fontSize: 19 }}>5G GPL Tool</Nav>
 
                                         {/* ====== GPL MACRO SECTION ====== */}
+                                          {isPARAM && (
+                                                <>
+                                        <Nav.Menu eventKey="4" placement="rightStart" icon={<ConversionIcon />} className="menu-title-custom" title="Macro GPL Parameter" >
+                                            <Nav.Item eventKey="4-1" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/upe_params')}>
+                                                UPE Params
+                                            </Nav.Item>
+                                            <Nav.Item eventKey="4-2" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/ori_params')}>
+                                                ORI Params
+                                            </Nav.Item>
+                                            <Nav.Item eventKey="4-3" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/bih_params')}>
+                                                BIH Params
+                                            </Nav.Item>
+                                            <Nav.Item eventKey="4-4" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/mp_params')}>
+                                                MP Params
+                                            </Nav.Item>
+                                            <Nav.Item eventKey="4-5" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/mum_params')}>
+                                                MUM Params
+                                            </Nav.Item>
+                                            <Nav.Item eventKey="4-6" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/wb_params')}>
+                                                WB Params
+                                            </Nav.Item>
+                                            <Nav.Item eventKey="4-7" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/mah_params')}>
+                                                MAH Params
+                                            </Nav.Item>
+                                        </Nav.Menu> 
+                                        </>
+)}
+                                        
 
 
-                                        <Nav.Menu eventKey="1" placement="rightStart" icon={<ConversionIcon />} className="menu-title-custom" title="GPL MACRO" >
+                                        <Nav.Menu eventKey="1" placement="rightStart" icon={<ConversionIcon />} className="menu-title-custom" title="GPL Macro Audit" >
 
                                             <Nav.Item eventKey="1-1" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/sa_upload_xml')}>
                                                 UPE GPL Macro
@@ -114,7 +143,7 @@ const SA = () => {
 
                                         {!userTypes?.includes('MACRO') &&
                                             <>
-                                                <Nav.Menu eventKey="2" placement="rightStart" icon={<ConversionIcon />} className="menu-title-custom" title="GPL ULS" >
+                                                <Nav.Menu eventKey="2" placement="rightStart" icon={<ConversionIcon />} className="menu-title-custom" title="GPL ULS Audit" >
                                                     <Nav.Item eventKey="2-1" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/UPE_GPL_ULS')}>
                                                         UPE GPL ULS
                                                     </Nav.Item>
@@ -130,31 +159,7 @@ const SA = () => {
                                             </>}
 
 
-{/* 
-                                        <Nav.Menu eventKey="4" placement="rightStart" icon={<ConversionIcon />} className="menu-title-custom" title="GPL Params" >
-                                            <Nav.Item eventKey="4-1" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/upe_params')}>
-                                                UPE Params
-                                            </Nav.Item>
-                                            <Nav.Item eventKey="4-2" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/ori_params')}>
-                                                ORI Params
-                                            </Nav.Item>
-                                            <Nav.Item eventKey="4-3" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/bih_params')}>
-                                                BIH Params
-                                            </Nav.Item>
-                                            <Nav.Item eventKey="4-4" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/mp_params')}>
-                                                MP Params
-                                            </Nav.Item>
-                                            <Nav.Item eventKey="4-5" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/mum_params')}>
-                                                MUM Params
-                                            </Nav.Item>
-                                            <Nav.Item eventKey="4-6" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/wb_params')}>
-                                                WB Params
-                                            </Nav.Item>
-                                            <Nav.Item eventKey="4-7" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/sa_slicing/mah_params')}>
-                                                MAH Params
-                                            </Nav.Item>
-                                        </Nav.Menu> */}
-
+                                          
 
                                         {/* ====== 5G SCRIPTING SECTION - RESTRICTED ====== */}
                                         {has5GScripting && (
@@ -195,15 +200,16 @@ const SA = () => {
                                 <Route element={<WB_gpl_macro />} path='/WB_gpl_macro' />
                                 <Route element={<MAH_gpl_macro />} path='/MAH_gpl_macro' />
 
-
-                                {/* <Route element={<UPE_params />} path='/upe_params' />
+                               {isPARAM && (
+                                                <>
+                                <Route element={<UPE_params />} path='/upe_params' />
                                 <Route element={<ORI_params />} path='/ori_params' />
                                 <Route element={<BIH_params />} path='/bih_params' />
                                 <Route element={<MAH_params />} path='/mah_params' />
                                 <Route element={<MUM_params />} path='/mum_params' />
                                 <Route element={<MP_params />} path='/mp_params' />
-                                <Route element={<WB_params />} path='/wb_params' /> */}
-
+                                <Route element={<WB_params />} path='/wb_params' /> 
+</>)}
 
 
                                 {/* ====== PROTECTED ROUTES - 5G SCRIPTING ====== */}
