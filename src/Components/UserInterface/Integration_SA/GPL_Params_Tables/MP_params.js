@@ -413,10 +413,10 @@ const MP_params = () => {
                                         <Box display="flex" alignItems="center" gap={0.8}>
                                             <TuneIcon sx={{ fontSize: 17, color: TEAL }} />
                                             <Typography fontSize={13.5} fontWeight={700} color="#1a1a2e">Parameters &amp; Values</Typography>
-                                            {rows.length > 0 && (
+                                            {/* {rows.length > 0 && (
                                                 <Chip label={`${filteredRows.length} entries`} size="small"
                                                     sx={{ height: 20, fontSize: 10.5, bgcolor: TEAL_LIGHT, color: TEAL_DARK, border: `1px solid ${TEAL_MID}` }} />
-                                            )}
+                                            )} */}
                                         </Box>
                                         <Box display="flex" alignItems="center" gap={1}>
                                             <TextField
