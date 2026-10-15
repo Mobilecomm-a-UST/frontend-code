@@ -139,6 +139,12 @@ const USER_CONFIG = {
     "customer":"VI",
     "costCenter":"MCT0414"
   },
+  'Varun.Kumar@ust.com':{                                   
+    "circle":"UPE",
+    "category":"B",
+    "customer":"VI",
+    "costCenter":"MCT0394"
+  },
 }
 
 
