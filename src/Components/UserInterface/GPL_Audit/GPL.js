@@ -106,9 +106,9 @@ const GPL = () => {
                                                     <Nav.Item eventKey="5" placement="rightStart" icon={<ChangeListIcon />} className="single-item-custom" onClick={() => { navigate('/tools/mobile_network_integration/zte_gpl'); show(); setMenuButton(true) }}>
                                                         ZTE GPL
                                                     </Nav.Item>
-                                                     <Nav.Item eventKey="6" placement="rightStart" icon={<ChangeListIcon />} className="single-item-custom" onClick={() => { navigate('/tools/mobile_network_integration/zte_nbr'); show(); setMenuButton(true) }}>
+                                                     {/* <Nav.Item eventKey="6" placement="rightStart" icon={<ChangeListIcon />} className="single-item-custom" onClick={() => { navigate('/tools/mobile_network_integration/zte_nbr'); show(); setMenuButton(true) }}>
                                                         ZTE NBR
-                                                    </Nav.Item>
+                                                    </Nav.Item> */}
                                                 </>}
 
 
