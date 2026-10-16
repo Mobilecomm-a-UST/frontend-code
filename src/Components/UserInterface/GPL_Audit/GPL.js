@@ -32,6 +32,8 @@ const Step2Scripting = lazy(() => import('./Kget To GPL/Step2Scripting'))
 const BhartiGPLAudit = lazy(() => import('./Bharti GPL Audit/BhartiGPLAudit'))
 const Convertor = lazy(() => import('./Converter/Converter'))
 const ZTEGPL = lazy(() => import('./ZTE GPL/ZTE_GPL'))
+const ZTENBR = lazy(()=> import('./ZTE NBR/ZTE_NBR'))
+
 
 const GPL = () => {
     const [expanded, setExpanded] = useState(true);
@@ -104,6 +106,9 @@ const GPL = () => {
                                                     <Nav.Item eventKey="5" placement="rightStart" icon={<ChangeListIcon />} className="single-item-custom" onClick={() => { navigate('/tools/mobile_network_integration/zte_gpl'); show(); setMenuButton(true) }}>
                                                         ZTE GPL
                                                     </Nav.Item>
+                                                     <Nav.Item eventKey="6" placement="rightStart" icon={<ChangeListIcon />} className="single-item-custom" onClick={() => { navigate('/tools/mobile_network_integration/zte_nbr'); show(); setMenuButton(true) }}>
+                                                        ZTE NBR
+                                                    </Nav.Item>
                                                 </>}
 
 
@@ -119,7 +124,6 @@ const GPL = () => {
                                                     Step 2 - Scripting
                                                 </Nav.Item>
                                             </Nav.Menu>
-
 
 
                                         </Nav>
@@ -143,9 +147,9 @@ const GPL = () => {
                                         <Route element={<ScriptGenerator />} path="/script_generator" />
                                         <Route element={<Convertor />} path='/Convertor' />
                                         <Route element={<ZTEGPL />} path="/zte_gpl" />
+                                        <Route element ={<ZTENBR/>} path='/zte_nbr'/>
                                     </>
                                 }
-
 
                                 <Route element={<Step1Comparsion />} path="/step1_comparsion" />
                                 <Route element={<Step2Scripting />} path="/step2_scripting" />

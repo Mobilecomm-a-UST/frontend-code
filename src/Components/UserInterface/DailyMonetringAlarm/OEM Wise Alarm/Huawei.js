@@ -14,6 +14,14 @@
 //     Typography,
 //     IconButton,
 //     Tooltip,
+//     Table,
+//     TableBody,
+//     TableCell,
+//     TableContainer,
+//     TableHead,
+//     TableRow,
+//     Paper,
+//     TablePagination,
 // } from "@mui/material";
 // import UploadIcon from "@mui/icons-material/Upload";
 // import DoDisturbIcon from "@mui/icons-material/DoDisturb";
@@ -89,6 +97,10 @@
 //     const [existingSites, setExistingSites] = useState([]);
 //     const [loadingSites, setLoadingSites] = useState(false);
 
+//     // Table Pagination States
+//     const [page, setPage] = useState(0);
+//     const [rowsPerPage, setRowsPerPage] = useState(5);
+
 //     const { loading, action: setLoading } = useLoadingDialog();
 
 //     // Fetch existing site data on mount
@@ -100,10 +112,10 @@
 //         setLoadingSites(true);
 //         try {
 //             const res = await getData("oem_huawei/get_site/");
-//             if (res && Array.isArray(res)) {
-//                 setExistingSites(res);
-//             } else if (res && res.data && Array.isArray(res.data)) {
+//             if (res && Array.isArray(res.data)) {
 //                 setExistingSites(res.data);
+//             } else if (res && Array.isArray(res)) {
+//                 setExistingSites(res);
 //             } else {
 //                 setExistingSites([]);
 //             }
@@ -114,7 +126,7 @@
 //         }
 //     };
 
-//     const handleDeleteSite = async (siteIdOrName) => {
+//     const handleDeleteSite = async (siteId) => {
 //         const confirm = await Swal.fire({
 //             title: "Are you sure?",
 //             text: "This site file will be deleted from the server.",
@@ -128,7 +140,7 @@
 //         if (confirm.isConfirmed) {
 //             try {
 //                 const res = await deleteData("oem_huawei/delete_site/", {
-//                     data: { id: siteIdOrName, site: siteIdOrName },
+//                     data: { id: siteId, site: siteId },
 //                 });
 //                 if (res) {
 //                     Swal.fire("Deleted!", "Site has been deleted.", "success");
@@ -140,6 +152,15 @@
 //                 Swal.fire("Error", "Error deleting site file.", "error");
 //             }
 //         }
+//     };
+
+//     const handleChangePage = (event, newPage) => {
+//         setPage(newPage);
+//     };
+
+//     const handleChangeRowsPerPage = (event) => {
+//         setRowsPerPage(parseInt(event.target.value, 10));
+//         setPage(0);
 //     };
 
 //     const handleFileChange = (section, event) => {
@@ -461,10 +482,10 @@
 //                                         ))}
 //                                     </Stack>
 
-//                                     {/* Active Site Files listing for Old vs New section */}
+//                                     {/* Active Site Files listing Table for Old vs New section */}
 //                                     {section.key === "oldVsNew" && (
 //                                         <Box sx={{ mt: 2, pt: 1, borderTop: "1px dashed #ccc" }}>
-//                                             <Stack direction="row" alignItems="center" spacing={1}>
+//                                             <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 1 }}>
 //                                                 <Typography variant="subtitle2" sx={{ color: "#666" }}>
 //                                                     Active Site Files:
 //                                                 </Typography>
@@ -478,40 +499,53 @@
 //                                                     </IconButton>
 //                                                 </Tooltip>
 //                                             </Stack>
+
 //                                             {loadingSites ? (
 //                                                 <CircularProgress size={20} sx={{ mt: 1 }} />
 //                                             ) : existingSites.length > 0 ? (
-//                                                 <Stack
-//                                                     direction="row"
-//                                                     spacing={1}
-//                                                     sx={{ flexWrap: "wrap", gap: 1, mt: 1 }}
-//                                                 >
-//                                                     {existingSites.map((siteItem, idx) => {
-//                                                         const name =
-//                                                             typeof siteItem === "string"
-//                                                                 ? siteItem
-//                                                                 : siteItem.name ||
-//                                                                   siteItem.file_name ||
-//                                                                   `Site ${idx + 1}`;
-//                                                         const identifier =
-//                                                             typeof siteItem === "object"
-//                                                                 ? siteItem.id || name
-//                                                                 : siteItem;
-//                                                         return (
-//                                                             <Chip
-//                                                                 key={idx}
-//                                                                 label={name}
-//                                                                 size="small"
-//                                                                 color="primary"
-//                                                                 variant="outlined"
-//                                                                 onDelete={() =>
-//                                                                     handleDeleteSite(identifier)
-//                                                                 }
-//                                                                 deleteIcon={<DeleteIcon />}
-//                                                             />
-//                                                         );
-//                                                     })}
-//                                                 </Stack>
+//                                                 <Paper sx={{ width: "100%", overflow: "hidden", mt: 1 }}>
+//                                                     <TableContainer sx={{ maxHeight: 300 }}>
+//                                                         <Table stickyHeader size="small">
+//                                                             <TableHead>
+//                                                                 <TableRow>
+//                                                                     <TableCell sx={{ fontWeight: "bold", bgcolor: "#f5f5f5" }}>ID</TableCell>
+//                                                                     <TableCell sx={{ fontWeight: "bold", bgcolor: "#f5f5f5" }}>New Site</TableCell>
+//                                                                     <TableCell sx={{ fontWeight: "bold", bgcolor: "#f5f5f5" }}>Old Site</TableCell>
+//                                                                     <TableCell align="center" sx={{ fontWeight: "bold", bgcolor: "#f5f5f5" }}>Action</TableCell>
+//                                                                 </TableRow>
+//                                                             </TableHead>
+//                                                             <TableBody>
+//                                                                 {existingSites
+//                                                                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+//                                                                     .map((row) => (
+//                                                                         <TableRow hover key={row.id}>
+//                                                                             <TableCell>{row.id}</TableCell>
+//                                                                             <TableCell>{row.new_site || "-"}</TableCell>
+//                                                                             <TableCell>{row.old_site || "-"}</TableCell>
+//                                                                             <TableCell align="center">
+//                                                                                 <IconButton
+//                                                                                     size="small"
+//                                                                                     color="error"
+//                                                                                     onClick={() => handleDeleteSite(row.id)}
+//                                                                                 >
+//                                                                                     <DeleteIcon fontSize="small" />
+//                                                                                 </IconButton>
+//                                                                             </TableCell>
+//                                                                         </TableRow>
+//                                                                     ))}
+//                                                             </TableBody>
+//                                                         </Table>
+//                                                     </TableContainer>
+//                                                     <TablePagination
+//                                                         rowsPerPageOptions={[5, 10, 20, 40]}
+//                                                         component="div"
+//                                                         count={existingSites.length}
+//                                                         rowsPerPage={rowsPerPage}
+//                                                         page={page}
+//                                                         onPageChange={handleChangePage}
+//                                                         onRowsPerPageChange={handleChangeRowsPerPage}
+//                                                     />
+//                                                 </Paper>
 //                                             ) : (
 //                                                 <Typography variant="caption" color="text.secondary">
 //                                                     No site files uploaded on server.
@@ -653,7 +687,6 @@
 
 // export const MemoHuawei = React.memo(Huawei);
 // export default Huawei;
-
 
 import React, { useState, useEffect } from "react";
 import {
@@ -851,15 +884,10 @@ const Huawei = () => {
         event.target.value = "";
     };
 
-    const handleRemoveFile = (sectionKey, index) => {
+    const handleClearSectionFiles = (sectionKey) => {
         setFiles((prev) => {
-            const remaining = (prev[sectionKey] || []).filter((_, i) => i !== index);
             const updated = { ...prev };
-            if (remaining.length === 0) {
-                delete updated[sectionKey];
-            } else {
-                updated[sectionKey] = remaining;
-            }
+            delete updated[sectionKey];
             return updated;
         });
     };
@@ -1123,20 +1151,18 @@ const Huawei = () => {
                                             />
                                         </Button>
 
-                                        {selected.map((file, idx) => (
+                                        {selected.length > 0 && (
                                             <Chip
-                                                key={`${file.name}-${idx}`}
-                                                label={file.name}
+                                                label={`${selected.length} file${selected.length > 1 ? "s" : ""} selected`}
                                                 color="success"
                                                 size="small"
                                                 onDelete={
                                                     isSubmitting
                                                         ? undefined
-                                                        : () => handleRemoveFile(section.key, idx)
+                                                        : () => handleClearSectionFiles(section.key)
                                                 }
-                                                sx={{ maxWidth: "100%" }}
                                             />
-                                        ))}
+                                        )}
                                     </Stack>
 
                                     {/* Active Site Files listing Table for Old vs New section */}

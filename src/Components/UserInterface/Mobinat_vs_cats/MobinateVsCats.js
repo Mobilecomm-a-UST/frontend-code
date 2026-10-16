@@ -140,6 +140,9 @@ const MobinateVsCate = () => {
                                                 <Nav.Item eventKey="5-2" placement="rightStart" className="single-item-custom" icon={<ArrowRightIcon />} onClick={() => { navigate('/tools/material_management/LiveMobReco'); show(); setMenuButton(true) }}>
                                                     Step 2-Live Mob + Reco
                                                 </Nav.Item>
+                                                 <Nav.Item eventKey="5-3" placement="rightStart" className="single-item-custom" icon={<ArrowRightIcon />} onClick={() => { navigate('/tools/material_management/LiveMobReco'); show(); setMenuButton(true) }}>
+                                                    Step 3- Warehouse
+                                                </Nav.Item>
                                             </Nav.Menu>
                                             <Nav.Item eventKey="6" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/material_management/MicrowaveReconcilation'); show(); setMenuButton(true) }}>
                                                 Microwave Reconcilation
