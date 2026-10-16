@@ -3,7 +3,7 @@
 //     Box, Container, Stack, Grid, Paper, Typography, TextField, MenuItem, Button,
 //     IconButton, Tooltip, Chip, Table, TableHead, TableBody, TableRow, TableCell,
 //     TableContainer, Dialog, DialogTitle, DialogContent, DialogActions, Divider,
-//     Snackbar, Alert, Menu, ListItemIcon, ListItemText, CircularProgress,
+//     Snackbar, Alert, Menu, ListItemIcon, ListItemText, CircularProgress, Badge, Popover, List, ListItem
 // } from '@mui/material';
 
 // import RefreshRoundedIcon from '@mui/icons-material/RefreshRounded';
@@ -27,6 +27,7 @@
 // import ReportProblemRoundedIcon from '@mui/icons-material/ReportProblemRounded';
 // import DonutLargeRoundedIcon from '@mui/icons-material/DonutLargeRounded';
 // import RestartAltRoundedIcon from '@mui/icons-material/RestartAltRounded';
+// import NotificationsRoundedIcon from '@mui/icons-material/NotificationsRounded';
 
 // import {
 //     PieChart, Pie, Cell, ResponsiveContainer, Tooltip as ChartTooltip, Legend,
@@ -671,6 +672,9 @@
 //     const [rangeDialogOpen, setRangeDialogOpen] = useState(false);
 //     const [customRange, setCustomRange] = useState({ from: '', to: '' });
 
+//     // Notifications popover state
+//     const [notifAnchorEl, setNotifAnchorEl] = useState(null);
+
 //     const today = dayjs().format('YYYY-MM-DD');
 //     const monthStart = dayjs().startOf('month').format('YYYY-MM-DD');
 
@@ -688,6 +692,14 @@
 //     const statusBreakdown = useMemo(() => computeStatusBreakdown(filtered), [filtered]);
 //     const reasonBreakdown = useMemo(() => computeReasonBreakdown(filtered), [filtered]);
 //     const priorityBreakdown = useMemo(() => computePriorityBreakdown(filtered), [filtered]);
+
+//     // Overdue tasks calculation: Expected date is before today and status is not Completed
+//     const overdueTasks = useMemo(() => {
+//         return tasks.filter((t) => {
+//             if (!t.expacted_date || t.status === 'Completed') return false;
+//             return dayjs(t.expacted_date).isBefore(dayjs(), 'day');
+//         });
+//     }, [tasks]);
 
 //     const uniqueUsernames = useMemo(() => {
 //         const names = [...new Set(tasks.map((t) => t.username).filter(Boolean))];
@@ -914,6 +926,50 @@
 //                                 </TextField>
 //                             )}
 
+//                             {/* Overdue Notifications Icon Added Before Search User */}
+//                             <Tooltip title="Overdue Tasks Notifications">
+//                                 <IconButton
+//                                     onClick={(e) => setNotifAnchorEl(e.currentTarget)}
+//                                     sx={{ border: '1px solid #E4E9EC', bgcolor: '#f5f5f5', borderRadius: 1 }}
+//                                 >
+//                                     <Badge badgeContent={overdueTasks.length} color="error">
+//                                         <NotificationsRoundedIcon fontSize="small" color="action" />
+//                                     </Badge>
+//                                 </IconButton>
+//                             </Tooltip>
+
+//                             <Popover
+//                                 open={Boolean(notifAnchorEl)}
+//                                 anchorEl={notifAnchorEl}
+//                                 onClose={() => setNotifAnchorEl(null)}
+//                                 anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+//                                 transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+//                                 PaperProps={{ sx: { width: 320, maxHeight: 400, borderRadius: 2, p: 1 } }}
+//                             >
+//                                 <Typography variant="subtitle2" sx={{ fontWeight: 700, p: 1, borderBottom: '1px solid #E9EDEF' }}>
+//                                     Overdue Work Notifications ({overdueTasks.length})
+//                                 </Typography>
+//                                 {overdueTasks.length === 0 ? (
+//                                     <Typography variant="body2" color="text.secondary" sx={{ p: 2, textAlign: 'center' }}>
+//                                         No overdue tasks! 🎉
+//                                     </Typography>
+//                                 ) : (
+//                                     <List dense sx={{ overflow: 'auto', maxHeight: 320 }}>
+//                                         {overdueTasks.map((t) => (
+//                                             <ListItem key={t.id} divider sx={{ flexDirection: 'column', alignItems: 'flex-start', py: 1 }}>
+//                                                 <Typography variant="body2" sx={{ fontWeight: 600 }}>{t.project_name}</Typography>
+//                                                 <Stack direction="row" justifyContent="space-between" width="100%" sx={{ mt: 0.5 }}>
+//                                                     <Typography variant="caption" color="text.secondary">User: {t.username}</Typography>
+//                                                     <Typography variant="caption" color="error" sx={{ fontWeight: 700 }}>
+//                                                         Due: {dayjs(t.expacted_date).format('DD MMM YYYY')}
+//                                                     </Typography>
+//                                                 </Stack>
+//                                             </ListItem>
+//                                         ))}
+//                                     </List>
+//                                 )}
+//                             </Popover>
+
 //                             <TextField label="Search User" size="small" placeholder="Search by user..." value={filters.search}
 //                                 onChange={(e) => setFilters((f) => ({ ...f, search: e.target.value }))}
 //                                 sx={{ minWidth: 180, bgcolor: '#f5f5f5', borderRadius: 1 }} />
@@ -1107,10 +1163,13 @@
 //                                         const isCompleted = t.status === 'Completed';
 //                                         const isRestarted = t.is_restarted || false;
 
+//                                         // Overdue status check for row highlighting
+//                                         const isOverdue = t.expacted_date && !isCompleted && dayjs(t.expacted_date).isBefore(dayjs(), 'day');
+
 //                                         return (
 //                                             <TableRow key={t.id} hover sx={{
-//                                                 bgcolor: isRestarted ? '#FFF7E6' : idx % 2 ? '#FAFBFC' : 'transparent',
-//                                                 borderLeft: isRestarted ? '5px solid #FF9800' : 'none'
+//                                                 bgcolor: isOverdue ? '#FDEDEC' : isRestarted ? '#FFF7E6' : idx % 2 ? '#FAFBFC' : 'transparent',
+//                                                 borderLeft: isOverdue ? '5px solid #DC2626' : isRestarted ? '5px solid #FF9800' : 'none'
 //                                             }}>
 //                                                 <TableCell>{idx + 1}</TableCell>
 //                                                 <TableCell sx={{ fontSize: '0.8rem' }}>{t.username || '—'}</TableCell>
@@ -1125,7 +1184,11 @@
 //                                                     </Stack>
 //                                                 </TableCell>
 //                                                 <TableCell>{fmt(t.start_date)}</TableCell>
-//                                                 <TableCell>{fmt(t.expacted_date)}</TableCell>
+//                                                 <TableCell>
+//                                                     <span style={{ color: isOverdue ? '#DC2626' : 'inherit', fontWeight: isOverdue ? 700 : 400 }}>
+//                                                         {fmt(t.expacted_date)} {isOverdue && '(Overdue)'}
+//                                                     </span>
+//                                                 </TableCell>
 //                                                 <TableCell>{fmt(t.completed_date)}</TableCell>
 //                                                 <TableCell>
 //                                                     <Chip label={t.status} size="small" sx={{ bgcolor: statusColors.bg, color: statusColors.main, fontWeight: 700 }} />
@@ -1207,13 +1270,6 @@
 //         </Box>
 //     );
 // }
-
-
-
-
-
-
-
 
 
 import React, { useMemo, useState, useEffect } from 'react';
@@ -1378,7 +1434,16 @@ function filterTasks(tasks, { dateFilterType, singleDate, fromDate, toDate, stat
             if (taskDate.isBefore(from, 'day') || taskDate.isAfter(to, 'day')) return false;
         }
 
-        if (status && status !== 'All' && t.status !== status) return false;
+        if (status && status !== 'All') {
+            if (status === 'Delayed') {
+                // Include explicit Delayed status OR overdue tasks
+                const isOverdue = t.expacted_date && t.status !== 'Completed' && dayjs(t.expacted_date).isBefore(dayjs(), 'day');
+                if (t.status !== 'Delayed' && !isOverdue) return false;
+            } else if (t.status !== status) {
+                return false;
+            }
+        }
+
         if (priority && priority !== 'All' && t.priority !== priority) return false;
         if (username && username !== 'All' && t.username !== username) return false;
 
@@ -1395,10 +1460,20 @@ function filterTasks(tasks, { dateFilterType, singleDate, fromDate, toDate, stat
 function computeKpis(tasks) {
     const total = tasks.length;
     const counts = {};
-    tasks.forEach((t) => { counts[t.status] = (counts[t.status] || 0) + 1; });
+    let overdueCount = 0;
+
+    tasks.forEach((t) => {
+        counts[t.status] = (counts[t.status] || 0) + 1;
+        // Count as overdue/delayed if expected date passed and status is not Completed, OR status is explicitly Delayed
+        const isOverdue = t.expacted_date && t.status !== 'Completed' && dayjs(t.expacted_date).isBefore(dayjs(), 'day');
+        if (isOverdue || t.status === 'Delayed') {
+            overdueCount++;
+        }
+    });
+
     const completed = counts['Completed'] || 0;
     const completionPct = total ? Math.round((completed / total) * 100) : 0;
-    return { total, counts, completed, completionPct };
+    return { total, counts, completed, completionPct, overdueCount };
 }
 
 function computeStatusBreakdown(tasks) {
@@ -1745,7 +1820,14 @@ function TaskFormDialog({ open, onClose, onSave, initialTask, currentUsername, i
     }, [open, initialTask, currentUsername, isRestartMode]);
 
     const handleChange = (field) => (e) => {
-        setForm((f) => ({ ...f, [field]: e.target.value }));
+        const val = e.target.value;
+        setForm((f) => {
+            const updated = { ...f, [field]: val };
+            if (field === 'status' && val === 'Completed' && !updated.completed_date) {
+                updated.completed_date = dayjs().format('YYYY-MM-DD');
+            }
+            return updated;
+        });
     };
 
     const validate = () => {
@@ -1753,6 +1835,7 @@ function TaskFormDialog({ open, onClose, onSave, initialTask, currentUsername, i
         if (!form.assigned_by.trim()) e.assigned_by = 'Required';
         if (!form.project_name.trim()) e.project_name = 'Required';
         if (!form.start_date) e.start_date = 'Required';
+        if (!form.remarks.trim()) e.remarks = 'Remarks are compulsory';
         if (form.expacted_date && form.start_date && form.expacted_date < form.start_date) {
             e.expacted_date = 'Cannot be before start date';
         }
@@ -1845,8 +1928,9 @@ function TaskFormDialog({ open, onClose, onSave, initialTask, currentUsername, i
                         </TextField>
                     </Grid>
                     <Grid item xs={12}>
-                        <TextField label="Remarks" fullWidth multiline minRows={2} size="small" value={form.remarks}
-                            onChange={handleChange('remarks')} disabled={loading} />
+                        <TextField label="Remarks *" fullWidth multiline minRows={2} size="small" value={form.remarks}
+                            onChange={handleChange('remarks')} error={!!errors.remarks}
+                            helperText={errors.remarks || 'Remarks are compulsory'} disabled={loading} />
                     </Grid>
                 </Grid>
             </DialogContent>
@@ -2049,7 +2133,7 @@ export default function TaskTracker() {
         { label: 'In Review', value: kpis.counts['In Review'] || 0, color: STATUS_COLORS['In Review'].main },
         { label: 'Testing', value: kpis.counts['Testing'] || 0, color: STATUS_COLORS['Testing'].main },
         { label: 'Completed', value: kpis.counts['Completed'] || 0, color: STATUS_COLORS['Completed'].main },
-        { label: 'Delayed', value: kpis.counts['Delayed'] || 0, color: STATUS_COLORS['Delayed'].main },
+        { label: 'Delayed', value: kpis.overdueCount, color: STATUS_COLORS['Delayed'].main },
         { label: 'Completion %', value: `${kpis.completionPct}%`, color: PRIMARY },
     ];
 
@@ -2383,18 +2467,22 @@ export default function TaskTracker() {
 
                                         // Overdue status check for row highlighting
                                         const isOverdue = t.expacted_date && !isCompleted && dayjs(t.expacted_date).isBefore(dayjs(), 'day');
+                                        // Today's task check for highlighting added today in light blue
+                                        const isTodayAdded = t.date === dayjs().format('YYYY-MM-DD');
 
                                         return (
                                             <TableRow key={t.id} hover sx={{
-                                                bgcolor: isOverdue ? '#FDEDEC' : isRestarted ? '#FFF7E6' : idx % 2 ? '#FAFBFC' : 'transparent',
-                                                borderLeft: isOverdue ? '5px solid #DC2626' : isRestarted ? '5px solid #FF9800' : 'none'
+                                                bgcolor: isOverdue ? '#FDEDEC' : isTodayAdded ? '#E0F2FE' : isRestarted ? '#FFF7E6' : idx % 2 ? '#FAFBFC' : 'transparent',
+                                                borderLeft: isOverdue ? '5px solid #DC2626' : isTodayAdded ? '5px solid #2563EB' : isRestarted ? '5px solid #FF9800' : 'none'
                                             }}>
                                                 <TableCell>{idx + 1}</TableCell>
                                                 <TableCell sx={{ fontSize: '0.8rem' }}>{t.username || '—'}</TableCell>
                                                 <TableCell>{t.assigned_by || '—'}</TableCell>
                                                 <TableCell sx={{ maxWidth: 240 }}>
                                                     <Stack spacing={0.5}>
-                                                        <Typography variant="body2">{t.project_name}</Typography>
+                                                        <Typography variant="body2">
+                                                            {t.project_name} {isTodayAdded && <Chip label="New Today" size="small" sx={{ height: 18, fontSize: '0.65rem', bgcolor: '#BAE6FD', color: '#0369A1', fontWeight: 700, ml: 1 }} />}
+                                                        </Typography>
                                                         {isRestarted && (
                                                             <Chip label={`Restarted (${t.restart_count || 1})`} size="small"
                                                                 sx={{ width: 'fit-content', bgcolor: '#FFF3CD', color: '#B26A00', fontWeight: 700 }} />
