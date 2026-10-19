@@ -32,6 +32,7 @@ const DPRControl = lazy(() => import('./DPR Control/DPRControl'))
 const DPRDashboard = lazy(() => import('./Mobinet Dump Store/MobinetDumpStore'))
 const RecoReport = lazy(() => import('./Reco Report/RecoReport'))
 const Dashboard = lazy(() => import('./Dashboard/Dashboard'))
+const Warehouse = lazy(()=> import('./Reco Material/Dailysubmissionupdate'))
 
 
 
@@ -140,8 +141,8 @@ const MobinateVsCate = () => {
                                                 <Nav.Item eventKey="5-2" placement="rightStart" className="single-item-custom" icon={<ArrowRightIcon />} onClick={() => { navigate('/tools/material_management/LiveMobReco'); show(); setMenuButton(true) }}>
                                                     Step 2-Live Mob + Reco
                                                 </Nav.Item>
-                                                 <Nav.Item eventKey="5-3" placement="rightStart" className="single-item-custom" icon={<ArrowRightIcon />} onClick={() => { navigate('/tools/material_management/LiveMobReco'); show(); setMenuButton(true) }}>
-                                                    Step 3- Warehouse
+                                                 <Nav.Item eventKey="5-3" placement="rightStart" className="single-item-custom" icon={<ArrowRightIcon />} onClick={() => { navigate('/tools/material_management/warehouse'); show(); setMenuButton(true) }}>
+                                                    Step 3- Daily Submission Update
                                                 </Nav.Item>
                                             </Nav.Menu>
                                             <Nav.Item eventKey="6" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/material_management/MicrowaveReconcilation'); show(); setMenuButton(true) }}>
@@ -203,6 +204,7 @@ const MobinateVsCate = () => {
                                 <Route element={<DPRDashboard />} path='/DPRDashboard' />
                                 <Route element={<RecoReport />} path='/RecoReport' />
                                 <Route element={<Dashboard />} path='/dashboard' />
+                                <Route element={<Warehouse/>} path ='/warehouse'/>
 
                             </Routes>
                         </Suspense>

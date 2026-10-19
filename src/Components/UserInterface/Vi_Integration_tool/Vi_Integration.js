@@ -180,6 +180,7 @@ const TotalDataDashboard = lazy(() => import('./Dashboard/TotalDataDashboard'));
 const Ztesite = lazy(() => import('./Upload/Ztesite'));
 const Ztemo = lazy(() => import('./Upload/Ztemo'));
 const Ztenbr = lazy(()=> import('./Upload/ZTE_NBR'))
+const Ztegplvi = lazy(()=> import('./Upload/ZTE_GPL_VI'))
 
 const Vi_Integration = () => {
     const [expanded, setExpanded] = useState(true);
@@ -243,7 +244,10 @@ const Vi_Integration = () => {
                                                 <Nav.Item eventKey="5" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/vi_integration/zte_site_creation')}>
                                                     ZTE Site Creation
                                                 </Nav.Item>
-                                                 <Nav.Item eventKey="6" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/vi_integration/zte_nbr')}>
+                                                 <Nav.Item eventKey="6" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/vi_integration/ztegplvi')}>
+                                                    ZTE GPL VI
+                                                </Nav.Item>
+                                                 <Nav.Item eventKey="7" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/ix_tools/vi_integration/zte_nbr')}>
                                                     ZTE NBR
                                                 </Nav.Item>
                                             </>
@@ -276,6 +280,7 @@ const Vi_Integration = () => {
                                         <Route element={<Ztesite />} path="/zte_site_creation" />
                                         <Route element={<Ztemo />} path="/zte_mo_creation" />
                                         <Route element ={<Ztenbr/>} path='/zte_nbr'/>
+                                        <Route element = {<Ztegplvi/>} path='/ztegplvi'/>
                                     </>
                                 )}
 
