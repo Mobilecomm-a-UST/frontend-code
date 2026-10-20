@@ -70,7 +70,7 @@ const HEADER_GRADIENT =
 ========================================================= */
 
 const defaultMonth = () => {
-  return "";
+  return String(new Date().getMonth() + 1);
 };
 
 /* =========================================================
@@ -292,35 +292,21 @@ function CircleVsWeekChart({ rows }) {
   */
 
   const chartData = weekColumns.map((week) => {
-    const weekItem = {
-      week,
-    };
+    let totalOffered = 0;
+    let totalFTR = 0;
 
     rows.forEach((row) => {
-      const circle = row["Circle"];
+      const weekData = row?.[week] || {};
 
-      if (!circle) {
-        return;
-      }
-
-      const weekData = row[week] || {};
-
-      const offered = Number(weekData["Offered"]) || 0;
-
-      const ftrCount = Number(weekData["FTR Count"]) || 0;
-
-      /*
-        Calculate again instead of depending only
-        on backend "FTR %" string.
-      */
-
-      const ftrPercent =
-        offered > 0 ? Math.round((ftrCount / offered) * 100) : 0;
-
-      weekItem[circle] = ftrPercent;
+      totalOffered += Number(weekData["Offered"]) || 0;
+      totalFTR += Number(weekData["FTR Count"]) || 0;
     });
 
-    return weekItem;
+    return {
+      week,
+      percentage:
+        totalOffered > 0 ? Math.round((totalFTR / totalOffered) * 100) : 0,
+    };
   });
 
   console.log("Circle VS Week Line Chart Data:", chartData);
@@ -447,19 +433,19 @@ function CircleVsWeekChart({ rows }) {
         }}
       >
         <ResponsiveContainer width="100%" height="100%">
-          <LineChart
+          <BarChart
             data={chartData}
             margin={{
-              top: 20,
-              right: 30,
-              left: 10,
+              top: 30,
+              right: 20,
+              left: 20,
               bottom: 10,
             }}
           >
             <CartesianGrid
-              strokeDasharray="4 4"
               vertical={false}
-              stroke="#e7ecef"
+              strokeDasharray="3 3"
+              stroke="#e5e7eb"
             />
 
             <XAxis
@@ -467,72 +453,39 @@ function CircleVsWeekChart({ rows }) {
               axisLine={false}
               tickLine={false}
               tick={{
-                fill: C.corner,
                 fontSize: 12,
-                fontWeight: 700,
+                fill: "#555",
+                fontWeight: 600,
               }}
-              dy={8}
             />
 
             <YAxis
-              domain={[0, 100]}
+              domain={[0, 120]}
               axisLine={false}
               tickLine={false}
-              tick={{
-                fill: "#64748b",
-                fontSize: 12,
-              }}
               tickFormatter={(value) => `${value}%`}
             />
 
-            <RechartsTooltip
-              content={<CustomCircleTooltip />}
-              cursor={{
-                stroke: "#94a3b8",
-                strokeDasharray: "3 3",
-              }}
-            />
+            <RechartsTooltip formatter={(value) => [`${value}%`, "FTR %"]} />
 
-            <Legend
-              wrapperStyle={{
-                paddingTop: 15,
-              }}
-            />
-
-            {rows.map((row, index) => {
-              const circle = row["Circle"];
-
-              if (!circle) {
-                return null;
-              }
-
-              const color = colors[index % colors.length];
-
-              return (
-                <Line
-                  key={`${circle}-${index}`}
-                  type="monotone"
-                  dataKey={circle}
-                  name={circle}
-                  stroke={color}
-                  strokeWidth={3}
-                  connectNulls
-                  dot={{
-                    r: 5,
-                    fill: "#fff",
-                    stroke: color,
-                    strokeWidth: 3,
-                  }}
-                  activeDot={{
-                    r: 7,
-                    fill: color,
-                    stroke: "#fff",
-                    strokeWidth: 2,
-                  }}
-                />
-              );
-            })}
-          </LineChart>
+            <Bar
+              dataKey="percentage"
+              fill="#0B7C86"
+              radius={[0, 0, 0, 0]}
+              barSize={60}
+            >
+              <LabelList
+                dataKey="percentage"
+                position="top"
+                formatter={(value) => `${value}%`}
+                style={{
+                  fill: "#555",
+                  fontSize: 13,
+                  fontWeight: 700,
+                }}
+              />
+            </Bar>
+          </BarChart>
         </ResponsiveContainer>
       </Box>
     </Paper>
@@ -659,13 +612,12 @@ function CircleVsWeekTable({ rows }) {
               {weekColumns.map((week) => (
                 <TableCell
                   key={week}
-                  colSpan={3}
                   align="center"
                   sx={{
-                    bgcolor: C.corner,
+                    bgcolor: C.headerBg,
                     color: "#fff",
-                    fontWeight: 800,
-                    minWidth: 270,
+                    fontWeight: 700,
+                    minWidth: 100,
                   }}
                 >
                   {week}
@@ -675,7 +627,7 @@ function CircleVsWeekTable({ rows }) {
 
             {/* HEADER ROW 2 */}
 
-            <TableRow>
+            {/* <TableRow>
               {weekColumns.map((week) => (
                 <React.Fragment key={week}>
                   <TableCell
@@ -715,13 +667,12 @@ function CircleVsWeekTable({ rows }) {
                   </TableCell>
                 </React.Fragment>
               ))}
-            </TableRow>
+            </TableRow> */}
           </TableHead>
 
           <TableBody>
             {rows.map((row, rowIndex) => {
               const circle = row["Circle"];
-
               const labelBg = rowIndex % 2 === 0 ? C.labelOdd : C.labelEven;
 
               return (
@@ -748,78 +699,87 @@ function CircleVsWeekTable({ rows }) {
                   {weekColumns.map((week) => {
                     const weekData = row[week] || {};
 
-                    const offered = Number(weekData["Offered"]) || 0;
-
-                    const ftrCount = Number(weekData["FTR Count"]) || 0;
-
                     const ftrPercent = weekData["FTR %"] || "0%";
-
                     const percentage = parsePercent(ftrPercent);
 
                     return (
-                      <React.Fragment key={`${circle}-${week}`}>
-                        {/* OFFERED */}
-
-                        <TableCell
-                          align="center"
+                      <TableCell
+                        key={`${circle}-${week}`}
+                        align="center"
+                        sx={{
+                          bgcolor: "#fff",
+                        }}
+                      >
+                        <Chip
+                          label={ftrPercent}
+                          size="small"
                           sx={{
-                            bgcolor: "#fff",
-
-                            color: offered === 0 ? C.zeroText : C.valueText,
-
-                            fontWeight: offered === 0 ? 400 : 700,
-
-                            fontVariantNumeric: "tabular-nums",
+                            minWidth: 65,
+                            fontWeight: 800,
+                            bgcolor: percentage > 0 ? "#e4f6e8" : "#f1f5f9",
+                            color: percentage > 0 ? "#137333" : C.zeroText,
                           }}
-                        >
-                          {offered}
-                        </TableCell>
-
-                        {/* FTR COUNT */}
-
-                        <TableCell
-                          align="center"
-                          sx={{
-                            bgcolor: "#fff",
-
-                            color: ftrCount === 0 ? C.zeroText : C.green,
-
-                            fontWeight: ftrCount === 0 ? 400 : 700,
-
-                            fontVariantNumeric: "tabular-nums",
-                          }}
-                        >
-                          {ftrCount}
-                        </TableCell>
-
-                        {/* FTR % */}
-
-                        <TableCell
-                          align="center"
-                          sx={{
-                            bgcolor: labelBg,
-                          }}
-                        >
-                          <Chip
-                            label={ftrPercent}
-                            size="small"
-                            sx={{
-                              minWidth: 55,
-
-                              fontWeight: 800,
-
-                              bgcolor: percentage > 0 ? "#e4f6e8" : "#f1f5f9",
-
-                              color: percentage > 0 ? "#137333" : C.zeroText,
-                            }}
-                          />
-                        </TableCell>
-                      </React.Fragment>
+                        />
+                      </TableCell>
                     );
                   })}
                 </TableRow>
               );
             })}
+            <TableRow>
+              <TableCell
+                align="center"
+                sx={{
+                  position: "sticky",
+                  left: 0,
+                  zIndex: 3,
+                  bgcolor: "#c9f7d6",
+                  color: "#0b6b3a",
+                  fontWeight: 800,
+                }}
+              >
+                Grand Total
+              </TableCell>
+
+              {weekColumns.map((week) => {
+                let totalOffered = 0;
+                let totalFtr = 0;
+
+                rows.forEach((row) => {
+                  const weekData = row[week] || {};
+
+                  totalOffered += Number(weekData["Offered"]) || 0;
+
+                  totalFtr += Number(weekData["FTR Count"]) || 0;
+                });
+
+                const grandPercent =
+                  totalOffered > 0
+                    ? Math.round((totalFtr / totalOffered) * 100)
+                    : 0;
+
+                return (
+                  <TableCell
+                    key={`grand-${week}`}
+                    align="center"
+                    sx={{
+                      bgcolor: "#c9f7d6",
+                    }}
+                  >
+                    <Chip
+                      label={`${grandPercent}%`}
+                      size="small"
+                      sx={{
+                        minWidth: 70,
+                        fontWeight: 800,
+                        bgcolor: "#e6f7ea",
+                        color: "#0b6b3a",
+                      }}
+                    />
+                  </TableCell>
+                );
+              })}
+            </TableRow>
           </TableBody>
         </Table>
       </TableContainer>
@@ -832,7 +792,7 @@ function CircleVsWeekTable({ rows }) {
    WEEK WISE FTR CHART
 ========================================================= */
 
-function WeekWiseFTRChart({ rows }) {
+function WeekWiseFTRChart({ rows, month, year }) {
   const hasData = Array.isArray(rows) && rows.length > 0;
 
   if (!hasData) {
@@ -888,32 +848,75 @@ function WeekWiseFTRChart({ rows }) {
       percentage: 80
     }
   */
+  const displayWeekColumns = ["WK-01", "WK-02", "WK-03", "WK-04"];
 
-  const chartData = weekColumns.map((week) => {
+  const lastDay = new Date(Number(year), Number(month), 0).getDate();
+
+  const monthName = new Date(Number(year), Number(month) - 1, 1).toLocaleString(
+    "en-US",
+    {
+      month: "short",
+    },
+  );
+  const chartData = displayWeekColumns.map((week) => {
     let totalOffered = 0;
     let totalFTR = 0;
 
     rows.forEach((row) => {
-      const weekData = row?.[week] || {};
+      if (week === "WK-04") {
+        const wk4 = row["WK-04"] || {};
+        const wk5 = row["WK-05"] || {};
 
-      const offered = Number(weekData["Offered"]) || 0;
+        totalOffered +=
+          (Number(wk4["Offered"]) || 0) + (Number(wk5["Offered"]) || 0);
 
-      const ftr = Number(weekData["FTR Count"]) || 0;
+        totalFTR +=
+          (Number(wk4["FTR Count"]) || 0) + (Number(wk5["FTR Count"]) || 0);
+      } else {
+        const weekData = row[week] || {};
 
-      totalOffered += offered;
-      totalFTR += ftr;
+        totalOffered += Number(weekData["Offered"]) || 0;
+
+        totalFTR += Number(weekData["FTR Count"]) || 0;
+      }
     });
 
     const percentage =
       totalOffered > 0 ? Math.round((totalFTR / totalOffered) * 100) : 0;
 
     return {
-      week,
-      Offered: totalOffered,
-      FTR: totalFTR,
+      week:
+        week === "WK-04"
+          ? `WK-04 & WK-05 (Till ${lastDay} ${monthName} ${year})`
+          : week,
       percentage,
     };
   });
+  // const chartData = weekColumns.map((week) => {
+  //   let totalOffered = 0;
+  //   let totalFTR = 0;
+
+  //   rows.forEach((row) => {
+  //     const weekData = row?.[week] || {};
+
+  //     const offered = Number(weekData["Offered"]) || 0;
+
+  //     const ftr = Number(weekData["FTR Count"]) || 0;
+
+  //     totalOffered += offered;
+  //     totalFTR += ftr;
+  //   });
+
+  //   const percentage =
+  //     totalOffered > 0 ? Math.round((totalFTR / totalOffered) * 100) : 0;
+
+  //   return {
+  //     week,
+  //     Offered: totalOffered,
+  //     FTR: totalFTR,
+  //     percentage,
+  //   };
+  // });
 
   console.log("Week Wise FTR Chart Data:", chartData);
 
@@ -922,8 +925,6 @@ function WeekWiseFTRChart({ rows }) {
       return null;
     }
 
-    const data = payload[0]?.payload || {};
-
     return (
       <Paper
         elevation={5}
@@ -931,7 +932,7 @@ function WeekWiseFTRChart({ rows }) {
           p: 2,
           borderRadius: 2,
           border: `1px solid ${C.border}`,
-          minWidth: 170,
+          minWidth: 150,
         }}
       >
         <Typography
@@ -947,33 +948,11 @@ function WeekWiseFTRChart({ rows }) {
         <Typography
           variant="body2"
           sx={{
-            color: "#00838f",
-            fontWeight: 700,
-            mb: 0.5,
-          }}
-        >
-          Offered: {data.Offered ?? 0}
-        </Typography>
-
-        <Typography
-          variant="body2"
-          sx={{
-            color: C.green,
-            fontWeight: 700,
-            mb: 0.5,
-          }}
-        >
-          FTR Count: {data.FTR ?? 0}
-        </Typography>
-
-        <Typography
-          variant="body2"
-          sx={{
-            color: "#7b1fa2",
+            color: "#0B7C86",
             fontWeight: 800,
           }}
         >
-          FTR %: {data.percentage ?? 0}%
+          FTR % : {payload[0].value}%
         </Typography>
       </Paper>
     );
@@ -1030,7 +1009,7 @@ function WeekWiseFTRChart({ rows }) {
             fontWeight: 500,
           }}
         >
-          Offered VS FTR
+          Week Wise FTR % Trend
         </Typography>
       </Box>
 
@@ -1052,16 +1031,15 @@ function WeekWiseFTRChart({ rows }) {
             data={chartData}
             margin={{
               top: 30,
-              right: 30,
-              left: 5,
+              right: 20,
+              left: 20,
               bottom: 10,
             }}
-            barGap={8}
           >
             <CartesianGrid
-              strokeDasharray="4 4"
               vertical={false}
-              stroke="#e7ecef"
+              strokeDasharray="3 3"
+              stroke="#e5e7eb"
             />
 
             <XAxis
@@ -1069,71 +1047,35 @@ function WeekWiseFTRChart({ rows }) {
               axisLine={false}
               tickLine={false}
               tick={{
-                fill: C.corner,
                 fontSize: 12,
-                fontWeight: 700,
+                fill: "#555",
+                fontWeight: 600,
               }}
-              dy={8}
             />
 
             <YAxis
+              domain={[0, 100]}
               axisLine={false}
               tickLine={false}
-              allowDecimals={false}
-              tick={{
-                fill: "#64748b",
-                fontSize: 12,
-              }}
+              tickFormatter={(value) => `${value}%`}
             />
 
-            <RechartsTooltip
-              content={<CustomBarTooltip />}
-              cursor={{
-                fill: "rgba(0, 110, 116, 0.05)",
-              }}
-            />
-
-            <Legend
-              wrapperStyle={{
-                paddingTop: 15,
-              }}
-            />
-
-            {/* OFFERED BAR */}
+            <RechartsTooltip content={<CustomBarTooltip />} />
 
             <Bar
-              dataKey="Offered"
-              name="Offered"
-              fill="#00838f"
+              dataKey="percentage"
+              fill="#0B7C86"
               radius={[6, 6, 0, 0]}
-              maxBarSize={55}
+              barSize={60}
+              name="FTR %"
             >
               <LabelList
-                dataKey="Offered"
+                dataKey="percentage"
                 position="top"
+                formatter={(value) => `${value}%`}
                 style={{
-                  fill: "#00838f",
-                  fontSize: 11,
-                  fontWeight: 700,
-                }}
-              />
-            </Bar>
-
-            {/* FTR BAR */}
-
-            <Bar
-              dataKey="FTR"
-              name="FTR Count"
-              fill="#28a745"
-              radius={[6, 6, 0, 0]}
-              maxBarSize={55}
-            >
-              <LabelList
-                dataKey="FTR"
-                position="top"
-                style={{
-                  fill: "#137333",
-                  fontSize: 11,
+                  fill: "#555",
+                  fontSize: 13,
                   fontWeight: 700,
                 }}
               />
@@ -1144,7 +1086,7 @@ function WeekWiseFTRChart({ rows }) {
 
       {/* PERCENTAGE SUMMARY */}
 
-      <Box
+      {/* <Box
         sx={{
           display: "flex",
           justifyContent: "center",
@@ -1198,7 +1140,7 @@ function WeekWiseFTRChart({ rows }) {
             </Typography>
           </Paper>
         ))}
-      </Box>
+      </Box> */}
     </Paper>
   );
 }
@@ -1210,8 +1152,7 @@ function WeekWiseFTRChart({ rows }) {
    Week rows
    Circle columns
 ========================================================= */
-
-function WeekWiseFTRTable({ rows }) {
+function WeekWiseFTRTable({ rows, month, year }) {
   const hasData = Array.isArray(rows) && rows.length > 0;
 
   if (!hasData) {
@@ -1230,7 +1171,15 @@ function WeekWiseFTRTable({ rows }) {
   }
 
   const weekColumns = getWeekColumns(rows);
+  const displayWeekColumns = ["WK-01", "WK-02", "WK-03", "WK-04"];
 
+  const lastDay = new Date(Number(year), Number(month), 0).getDate();
+  const monthName = new Date(Number(year), Number(month) - 1, 1).toLocaleString(
+    "en-US",
+    {
+      month: "short",
+    },
+  );
   if (weekColumns.length === 0) {
     return (
       <Paper
@@ -1308,11 +1257,8 @@ function WeekWiseFTRTable({ rows }) {
           }}
         >
           <TableHead>
-            {/* FIRST HEADER */}
-
             <TableRow>
               <TableCell
-                rowSpan={2}
                 align="center"
                 sx={{
                   position: "sticky",
@@ -1322,82 +1268,38 @@ function WeekWiseFTRTable({ rows }) {
                   bgcolor: C.corner,
                   color: "#fff",
                   fontWeight: 800,
-                  minWidth: 100,
+                  minWidth: 110,
                 }}
               >
-                Week
+                Circle
               </TableCell>
 
-              {rows.map((row, index) => (
+              {displayWeekColumns.map((week) => (
                 <TableCell
-                  key={`${row["Circle"]}-${index}`}
-                  colSpan={3}
+                  key={week}
                   align="center"
                   sx={{
-                    bgcolor: C.corner,
+                    bgcolor: C.headerBg,
                     color: "#fff",
-                    fontWeight: 800,
-                    minWidth: 270,
+                    fontWeight: 700,
+                    minWidth: 100,
                   }}
                 >
-                  {row["Circle"]}
+                  {week === "WK-04"
+                    ? `WK-04 & WK-05 (Till ${lastDay} ${monthName} ${year})`
+                    : week}
                 </TableCell>
               ))}
             </TableRow>
-
-            {/* SECOND HEADER */}
-
-            <TableRow>
-              {rows.map((row, index) => (
-                <React.Fragment key={`${row["Circle"]}-${index}`}>
-                  <TableCell
-                    align="center"
-                    sx={{
-                      bgcolor: C.headerBg,
-                      color: "#fff",
-                      fontWeight: 700,
-                      minWidth: 90,
-                    }}
-                  >
-                    Offered
-                  </TableCell>
-
-                  <TableCell
-                    align="center"
-                    sx={{
-                      bgcolor: C.headerBg,
-                      color: "#fff",
-                      fontWeight: 700,
-                      minWidth: 90,
-                    }}
-                  >
-                    FTR Count
-                  </TableCell>
-
-                  <TableCell
-                    align="center"
-                    sx={{
-                      bgcolor: C.headerBg,
-                      color: "#fff",
-                      fontWeight: 700,
-                      minWidth: 90,
-                    }}
-                  >
-                    FTR %
-                  </TableCell>
-                </React.Fragment>
-              ))}
-            </TableRow>
           </TableHead>
-
           <TableBody>
-            {weekColumns.map((week, weekIndex) => {
-              const labelBg = weekIndex % 2 === 0 ? C.labelOdd : C.labelEven;
+            {rows.map((row, rowIndex) => {
+              const circle = row["Circle"];
+
+              const labelBg = rowIndex % 2 === 0 ? C.labelOdd : C.labelEven;
 
               return (
-                <TableRow key={week}>
-                  {/* WEEK */}
-
+                <TableRow key={`${circle}-${rowIndex}`}>
                   <TableCell
                     align="center"
                     sx={{
@@ -1410,88 +1312,155 @@ function WeekWiseFTRTable({ rows }) {
                       whiteSpace: "nowrap",
                     }}
                   >
-                    {week}
+                    {circle}
                   </TableCell>
 
-                  {/* EACH CIRCLE */}
+                  {displayWeekColumns.map((week) => {
+                    // const weekData = row[week] || {};
 
-                  {rows.map((row, rowIndex) => {
-                    const weekData = row[week] || {};
+                    // const ftrPercent = weekData["FTR %"] || "0%";
 
-                    const offered = Number(weekData["Offered"]) || 0;
+                    // const percentage = parsePercent(ftrPercent);
+                    let ftrPercent = "0%";
 
-                    const ftrCount = Number(weekData["FTR Count"]) || 0;
+                    if (week === "WK-04") {
+                      const wk4 = row["WK-04"] || {};
+                      const wk5 = row["WK-05"] || {};
 
-                    const ftrPercent = weekData["FTR %"] || "0%";
+                      const offered =
+                        (Number(wk4["Offered"]) || 0) +
+                        (Number(wk5["Offered"]) || 0);
+
+                      const ftr =
+                        (Number(wk4["FTR Count"]) || 0) +
+                        (Number(wk5["FTR Count"]) || 0);
+
+                      ftrPercent =
+                        offered > 0
+                          ? `${Math.round((ftr / offered) * 100)}%`
+                          : "0%";
+                    } else {
+                      const weekData = row[week] || {};
+                      ftrPercent = weekData["FTR %"] || "0%";
+                    }
 
                     const percentage = parsePercent(ftrPercent);
 
                     return (
-                      <React.Fragment
-                        key={`${week}-${row["Circle"]}-${rowIndex}`}
+                      <TableCell
+                        key={`${circle}-${week}`}
+                        align="center"
+                        sx={{
+                          bgcolor: "#fff",
+                        }}
                       >
-                        {/* OFFERED */}
-
-                        <TableCell
-                          align="center"
+                        <Chip
+                          label={ftrPercent}
+                          size="small"
                           sx={{
-                            bgcolor: "#fff",
-
-                            color: offered === 0 ? C.zeroText : C.valueText,
-
-                            fontWeight: offered === 0 ? 400 : 700,
-
-                            fontVariantNumeric: "tabular-nums",
+                            minWidth: 65,
+                            fontWeight: 800,
+                            bgcolor: percentage > 0 ? "#e4f6e8" : "#f1f5f9",
+                            color: percentage > 0 ? "#137333" : C.zeroText,
                           }}
-                        >
-                          {offered}
-                        </TableCell>
-
-                        {/* FTR COUNT */}
-
-                        <TableCell
-                          align="center"
-                          sx={{
-                            bgcolor: "#fff",
-
-                            color: ftrCount === 0 ? C.zeroText : C.green,
-
-                            fontWeight: ftrCount === 0 ? 400 : 700,
-
-                            fontVariantNumeric: "tabular-nums",
-                          }}
-                        >
-                          {ftrCount}
-                        </TableCell>
-
-                        {/* FTR % */}
-
-                        <TableCell
-                          align="center"
-                          sx={{
-                            bgcolor: labelBg,
-                          }}
-                        >
-                          <Chip
-                            label={ftrPercent}
-                            size="small"
-                            sx={{
-                              minWidth: 55,
-
-                              fontWeight: 800,
-
-                              bgcolor: percentage > 0 ? "#e4f6e8" : "#f1f5f9",
-
-                              color: percentage > 0 ? "#137333" : C.zeroText,
-                            }}
-                          />
-                        </TableCell>
-                      </React.Fragment>
+                        />
+                      </TableCell>
                     );
                   })}
+
+                  {/* <TableCell
+          align="center"
+          sx={{
+            bgcolor: "#c9f7d6",
+          }}
+        >
+          <Chip
+            label={`${grandPercent}%`}
+            size="small"
+            sx={{
+              minWidth: 75,
+              fontWeight: 800,
+              bgcolor: "#e6f7ea",
+              color: "#0b6b3a",
+            }}
+          />
+        </TableCell> */}
                 </TableRow>
               );
             })}
+            <TableRow>
+              <TableCell
+                align="center"
+                sx={{
+                  position: "sticky",
+                  left: 0,
+                  zIndex: 3,
+                  bgcolor: "#c9f7d6",
+                  color: "#0b6b3a",
+                  fontWeight: 800,
+                }}
+              >
+                Grand Total
+              </TableCell>
+
+              {displayWeekColumns.map((week) => {
+                let totalOffered = 0;
+                let totalFtr = 0;
+
+                // rows.forEach((row) => {
+                //   const weekData = row[week] || {};
+
+                //   totalOffered += Number(weekData["Offered"]) || 0;
+
+                //   totalFtr += Number(weekData["FTR Count"]) || 0;
+                // });
+                rows.forEach((row) => {
+                  if (week === "WK-04") {
+                    const wk4 = row["WK-04"] || {};
+                    const wk5 = row["WK-05"] || {};
+
+                    totalOffered +=
+                      (Number(wk4["Offered"]) || 0) +
+                      (Number(wk5["Offered"]) || 0);
+
+                    totalFtr +=
+                      (Number(wk4["FTR Count"]) || 0) +
+                      (Number(wk5["FTR Count"]) || 0);
+                  } else {
+                    const weekData = row[week] || {};
+
+                    totalOffered += Number(weekData["Offered"]) || 0;
+
+                    totalFtr += Number(weekData["FTR Count"]) || 0;
+                  }
+                });
+                const grandPercent =
+                  totalOffered > 0
+                    ? Math.round((totalFtr / totalOffered) * 100)
+                    : 0;
+
+                return (
+                  <TableCell
+                    key={`grand-${week}`}
+                    align="center"
+                    sx={{
+                      bgcolor: "#c9f7d6",
+                    }}
+                  >
+                    <Chip
+                      label={`${grandPercent}%`}
+                      size="small"
+                      sx={{
+                        minWidth: 70,
+                        fontWeight: 800,
+                        bgcolor: "#e6f7ea",
+                        color: "#0b6b3a",
+                      }}
+                    />
+                  </TableCell>
+                );
+              })}
+            </TableRow>
           </TableBody>
         </Table>
       </TableContainer>
@@ -1517,7 +1486,11 @@ function WeekWiseFTR() {
      FILTER STATE
   ======================================================= */
 
-  const [month, setMonth] = useState(defaultMonth());
+  // const [month, setMonth] = useState(defaultMonth());
+  const [circleMonth, setCircleMonth] = useState("");
+
+  // Week Wise FTR
+  const [weekMonth, setWeekMonth] = useState(String(new Date().getMonth() + 1));
 
   const [year, setYear] = useState(defaultYear());
 
@@ -1538,6 +1511,13 @@ function WeekWiseFTR() {
   const abortControllerRef = useRef(null);
 
   const requestIdRef = useRef(0);
+  const getLastDayOfMonth = (month, year) => {
+    return new Date(Number(year), Number(month), 0).getDate();
+  };
+  const selectedMonth =
+    tab === 0 ? circleMonth || new Date().getMonth() + 1 : weekMonth;
+
+  const lastDay = getLastDayOfMonth(selectedMonth, year);
 
   /* =======================================================
      API CALL
@@ -1570,20 +1550,28 @@ function WeekWiseFTR() {
 
       const params = new URLSearchParams();
 
-      if (month) {
-        params.append("month", month);
+      if (tab === 0) {
+        if (circleMonth) {
+          params.append("month", circleMonth);
+        }
+      } else {
+        if (weekMonth) {
+          params.append("month", weekMonth);
+        }
       }
 
-      if (year) {
-        params.append("year", year);
-      }
+      params.append("year", year);
 
       /* URL */
 
       const url = `${ServerURL}${API_PATH}?${params.toString()}`;
 
       console.log("Week Wise FTR API URL:", url);
-
+      console.log("TAB:", tab);
+      console.log("Circle Month:", circleMonth);
+      console.log("Week Month:", weekMonth);
+      console.log("Year:", year);
+      console.log("URL:", url);
       /* FETCH */
 
       const response = await fetch(url, {
@@ -1643,7 +1631,7 @@ function WeekWiseFTR() {
         setLoading(false);
       }
     }
-  }, [month, year]);
+  }, [tab, circleMonth, weekMonth, year]);
 
   /* =======================================================
      USE EFFECT
@@ -1860,7 +1848,7 @@ function WeekWiseFTR() {
                 fontSize: "12px",
               }}
             >
-              {getMonthName(month)} {year}
+              {getMonthName(tab === 0 ? circleMonth : weekMonth)} {year}
             </Typography>
           </Box>
         </Stack>
@@ -1880,8 +1868,12 @@ function WeekWiseFTR() {
             select
             size="small"
             label="Month"
-            value={month}
-            onChange={(e) => setMonth(e.target.value)}
+            value={tab === 0 ? circleMonth : weekMonth}
+            onChange={(e) =>
+              tab === 0
+                ? setCircleMonth(e.target.value)
+                : setWeekMonth(e.target.value)
+            }
             InputLabelProps={{
               shrink: true,
             }}
@@ -1940,7 +1932,7 @@ function WeekWiseFTR() {
               ...controlSx,
             }}
           >
-            <MenuItem value="">All Months</MenuItem>
+            {tab === 0 && <MenuItem value="">All Months</MenuItem>}
 
             <MenuItem value="1">January</MenuItem>
             <MenuItem value="2">February</MenuItem>
@@ -2084,7 +2076,7 @@ backgroundColor: "#ffffff",
         >
           <NoData
             label={`No Week Wise FTR data found for ${getMonthName(
-              month,
+              tab === 0 ? circleMonth : weekMonth,
             )} ${year}`}
           />
         </Paper>
@@ -2116,9 +2108,9 @@ backgroundColor: "#ffffff",
 
           {tab === 1 && (
             <Stack spacing={3}>
-              <WeekWiseFTRChart rows={rows} />
+              <WeekWiseFTRChart rows={rows} month={weekMonth} year={year} />
 
-              <WeekWiseFTRTable rows={rows} />
+              <WeekWiseFTRTable rows={rows} month={weekMonth} year={year} />
             </Stack>
           )}
         </>
