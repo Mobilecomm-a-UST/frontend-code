@@ -509,6 +509,27 @@ import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
 const circleArray = ['AP','DL','TNCH', 'NESA','RJ','JK','BR','MH', 'MP','MU','JRK','KK','UE','UW','HPHP','OR','WB/KOL'];
 const tagArray = ['Workable', 'Non Workable'];
 const bucketArray = [
+    // "KPI AT Accepted",
+    // "KPI AT Offered",
+    // "Ready to offer",
+    // "Waiting for 5 days KPI",
+    // "Under observation",
+    // "Optimization WIP",
+    // "Under exclusion",
+    // "Alarm/HW",
+    // "Media Issue",
+    // "Other AT",
+    // "Physical visit planned",
+    // "Site Down",
+    // "Soft/Physical opti done",
+    // "Field Visit required",
+    // "Old site working",
+    // "TWAMP Issue",
+    // "High Latency",
+    // "Power Issue/RNA Poor",
+    // "Access Issue",
+    // "Event site/Dismantled"
+
     "KPI AT Accepted",
     "KPI AT Offered",
     "Ready to offer",
@@ -519,16 +540,12 @@ const bucketArray = [
     "Alarm/HW",
     "Media Issue",
     "Other AT",
-    "Physical visit planned",
     "Site Down",
-    "Soft/Physical opti done",
     "Field Visit required",
-    "Old site working",
     "TWAMP Issue",
-    "High Latency",
     "Power Issue/RNA Poor",
     "Access Issue",
-    "Event site/Dismantled"
+    "Event site/Dismantled",
 ];
 
 const StyledCard = ({ title, classes, children }) => (

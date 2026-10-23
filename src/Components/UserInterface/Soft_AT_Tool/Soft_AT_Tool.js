@@ -7,6 +7,9 @@ import { useDispatch } from "react-redux";
 import Zoom from '@mui/material/Zoom';
 import CodeIcon from '@rsuite/icons/Code';
 import { getDecreyptedData } from '../../utils/localstorage'
+import AlipayMiniIcon from '@rsuite/icons/AlipayMini';
+import InfoRoundIcon from '@rsuite/icons/InfoRound';
+import VerifyRoundIcon from '@rsuite/icons/VerifyRound';
 
 const Soft_AT_Tool = () => {
     const dispatch = useDispatch()
@@ -14,9 +17,9 @@ const Soft_AT_Tool = () => {
     const navigate = useNavigate()
     const chackToken = getDecreyptedData("tokenKey")
     const userTypes = (getDecreyptedData('user_type')?.split(","))
-    const allowedEricssonRoles = ['soft_at_team', 'admin', 'soft_at','soft_at_ericsson'];
-     const allowedViRoles = ['soft_at_team', 'admin', 'soft_at_vi'];
-     const allowedNokiaRoles = ['soft_at_team', 'admin', 'soft_at','soft_at_nokia'];
+    const allowedEricssonRoles = ['soft_at_team', 'admin', 'soft_at', 'soft_at_ericsson'];
+    const allowedViRoles = ['soft_at_team', 'admin', 'soft_at_vi'];
+    const allowedNokiaRoles = ['soft_at_team', 'admin', 'soft_at', 'soft_at_nokia'];
     // const allowedAirtelReader = ['quality', 'IX_reader', 'quality-s']
 
 
@@ -107,7 +110,11 @@ const Soft_AT_Tool = () => {
 
                                 {userTypes?.some(role => allowedNokiaRoles.map(r => r.toLowerCase()).includes(role?.toLowerCase())) && <Grid item xs={4}>
                                     <Box sx={backgroundStyle} className={classes.des} onClick={handleNokia}>
-                                        <div className={classes.centerIcon}>   <img src="/assets/Nokia.png" alt="Nokia" style={{ width: "60px", height: "60px",borderRadius:"15px",padding:"5px" }} /></div>
+                                        {/* <div className={classes.centerIcon}>   <img src="/assets/Nokia.png" alt="Nokia" style={{ width: "60px", height: "60px",borderRadius:"15px",padding:"5px" }} /></div> */}
+                                        <div className={classes.centerIcon}>  <VerifyRoundIcon
+                                            alt="Traffic"
+                                            style={{ width: "40px", height: "40px" }}
+                                        />  </div>
                                         <div >
                                             <div className={classes.center} >Nokia Soft AT</div>
                                             {/* <div>This is a FDD tool</div> */}
@@ -118,7 +125,11 @@ const Soft_AT_Tool = () => {
 
                                 {userTypes?.some(role => allowedEricssonRoles.map(r => r.toLowerCase()).includes(role?.toLowerCase())) && <Grid item xs={4}>
                                     <Box sx={backgroundStyle} className={classes.des} onClick={handleEricsson}>
-                                        <div className={classes.centerIcon}>   <img src="/assets/Ericsson.jpg" alt="Ericsson" style={{ width: "60px", height: "60px",borderRadius:"15px",padding: "5px" }} /></div>
+                                        {/* <div className={classes.centerIcon}>   <img src="/assets/Ericsson.jpg" alt="Ericsson" style={{ width: "60px", height: "60px",borderRadius:"15px",padding: "5px" }} /></div> */}
+                                        <div className={classes.centerIcon}>  <AlipayMiniIcon
+                                            alt="Traffic"
+                                            style={{ width: "40px", height: "40px" }}
+                                        />  </div>
                                         <div >
                                             <div className={classes.center} >Ericsson Soft AT</div>
                                             {/* <div>This is a FDD tool</div> */}
@@ -130,7 +141,12 @@ const Soft_AT_Tool = () => {
 
                                 {userTypes?.some(role => allowedViRoles.map(r => r.toLowerCase()).includes(role?.toLowerCase())) && <Grid item xs={4}>
                                     <Box sx={backgroundStyle} className={classes.des} onClick={handleVI}>
-                                        <div className={classes.centerIcon}>   <img src="/assets/VI.webp" alt="VI   " style={{ width: "60px", height: "60px" }} /></div>
+                                        {/* <div className={classes.centerIcon}>   <img src="/assets/VI.webp" alt="VI   " style={{ width: "60px", height: "60px" }} /></div> */}
+                                        <div className={classes.centerIcon}>  <InfoRoundIcon
+                                            alt="Traffic"
+                                            style={{ width: "40px", height: "40px" }}
+                                        />  </div>
+
                                         <div >
                                             <div className={classes.center} >VIL Soft AT</div>
                                             {/* <div>This is a FDD tool</div> */}
