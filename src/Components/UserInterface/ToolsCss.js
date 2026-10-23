@@ -10,7 +10,7 @@ export const useStyles = makeStyles({
 
     },
     box: {
-        height: '20vw',
+        height: '40vw',
         width: '40vw',
         padding: 10,
         borderRadius: '20px',

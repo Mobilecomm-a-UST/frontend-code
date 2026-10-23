@@ -14,6 +14,7 @@ import Loader from "../../Skeleton/Loader";
 import NavMenu from "rsuite/esm/Nav/NavMenu";
 import "../../../App.css";
 
+
 const VI_SoftAT_Tool = lazy(() => import("./VI_SoftAT_Tool"));
 const Vi_Checklist = lazy(() => import("./VI_Checklist/Vi_checklist"));
 const UploadFile = lazy(() => import("./VI_Checklist/UploadFile"));
@@ -39,6 +40,10 @@ const WeeklyComparison = lazy(
   () => import("./VI_Hoto_Dashboard/WeeklyComparison"),
 );
 const WeekWiseFTR = lazy(() => import("./VI_Hoto_Dashboard/WeekWiseFTR"));
+const HuwaeiNT4G = lazy(() => import("./Huwaei NT4G/NT4G"))
+
+
+
 const VI_SoftAT = () => {
   const [expanded, setExpanded] = useState(true);
   const [activeKey, setActiveKey] = useState();
@@ -209,127 +214,127 @@ const VI_SoftAT = () => {
                       </Nav.Item>
                     </Nav.Menu>
 
-                    <Nav.Menu
-                      eventKey="4"
-                      placement="rightStart"
-                      className="menu-title-custom"
-                      title="VI GPL"
-                      icon={<DashboardIcon size="3em" />}
-                    >
-                      <Nav.Item
-                        eventKey="4-1"
-                        placement="rightStart"
-                        icon={<FileUploadIcon />}
-                        className="single-item-custom"
-                        onClick={() =>
-                          navigate("/tools/soft_at_tools/vi_soft_at/VI4G")
-                        }
-                      >
-                        4G
-                      </Nav.Item>
-                      <Nav.Item
-                        eventKey="4-2"
-                        placement="rightStart"
-                        icon={<FileUploadIcon />}
-                        className="single-item-custom"
-                        onClick={() =>
-                          navigate("/tools/soft_at_tools/vi_soft_at/VI5G")
-                        }
-                      >
-                        5G
-                      </Nav.Item>
-                    </Nav.Menu>
-                    <Nav.Menu
-                      eventKey="5"
-                      placement="rightStart"
-                      className="menu-title-custom"
-                      title="VIL ERICSSON"
-                      icon={<DashboardIcon size="3em" />}
-                    >
-                      <Nav.Item
-                        eventKey="5-1"
-                        placement="rightStart"
-                        icon={<FileUploadIcon />}
-                        className="single-item-custom"
-                        onClick={() =>
-                          navigate("/tools/soft_at_tools/vi_soft_at/UploadVil")
-                        }
-                      >
-                        VIL SRVCC
-                      </Nav.Item>
-                      <Nav.Item
-                        eventKey="5-2"
-                        placement="rightStart"
-                        icon={<FileUploadIcon />}
-                        className="single-item-custom"
-                        onClick={() =>
-                          navigate(
-                            "/tools/soft_at_tools/vi_soft_at/UploadLayered",
-                          )
-                        }
-                      >
-                        Layer Addition
-                      </Nav.Item>
-                      <Nav.Item
-                        eventKey="5-3"
-                        placement="rightStart"
-                        icon={<FileUploadIcon />}
-                        className="single-item-custom"
-                        onClick={() =>
-                          navigate("/tools/soft_at_tools/vi_soft_at/UploadAtnd")
-                        }
-                      >
-                        ATND
-                      </Nav.Item>
-                      {/* <Nav.Item eventKey="5-4" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/Upload4G_ER')}>
+                                        <Nav.Menu
+                                            eventKey="5"
+                                            placement="rightStart"
+                                            className="menu-title-custom"
+                                            title="VI GPL"
+                                            icon={<DashboardIcon size="3em" />}
+                                        >
+                                            <Nav.Item
+                                                eventKey="5-1"
+                                                placement="rightStart"
+                                                icon={<FileUploadIcon />}
+                                                className="single-item-custom"
+                                                onClick={() =>
+                                                    navigate("/tools/soft_at_tools/vi_soft_at/VI4G")
+                                                }
+                                            >
+                                                4G
+                                            </Nav.Item>
+                                            <Nav.Item
+                                                eventKey="5-2"
+                                                placement="rightStart"
+                                                icon={<FileUploadIcon />}
+                                                className="single-item-custom"
+                                                onClick={() =>
+                                                    navigate("/tools/soft_at_tools/vi_soft_at/VI5G")
+                                                }
+                                            >
+                                                5G
+                                            </Nav.Item>
+                                        </Nav.Menu>
+                                        <Nav.Menu
+                                            eventKey="6"
+                                            placement="rightStart"
+                                            className="menu-title-custom"
+                                            title="VIL ERICSSON"
+                                            icon={<DashboardIcon size="3em" />}
+                                        >
+                                            <Nav.Item
+                                                eventKey="6-1"
+                                                placement="rightStart"
+                                                icon={<FileUploadIcon />}
+                                                className="single-item-custom"
+                                                onClick={() =>
+                                                    navigate("/tools/soft_at_tools/vi_soft_at/UploadVil")
+                                                }
+                                            >
+                                                VIL SRVCC
+                                            </Nav.Item>
+                                            <Nav.Item
+                                                eventKey="6-2"
+                                                placement="rightStart"
+                                                icon={<FileUploadIcon />}
+                                                className="single-item-custom"
+                                                onClick={() =>
+                                                    navigate(
+                                                        "/tools/soft_at_tools/vi_soft_at/UploadLayered",
+                                                    )
+                                                }
+                                            >
+                                                Layer Addition
+                                            </Nav.Item>
+                                            <Nav.Item
+                                                eventKey="6-3"
+                                                placement="rightStart"
+                                                icon={<FileUploadIcon />}
+                                                className="single-item-custom"
+                                                onClick={() =>
+                                                    navigate("/tools/soft_at_tools/vi_soft_at/UploadAtnd")
+                                                }
+                                            >
+                                                ATND
+                                            </Nav.Item>
+                                            {/* <Nav.Item eventKey="5-4" placement="rightStart" icon={<FileUploadIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/Upload4G_ER')}>
                                           4G
                                         </Nav.Item> */}
-                    </Nav.Menu>
-                  </Nav>
-                </Sidenav.Body>
-              </Sidenav>
+                                        </Nav.Menu>
+                                    </Nav>
+                                </Sidenav.Body>
+                            </Sidenav>
+                        </Box>
+                    </Grid>
+                    <Grid item xs={12} md={10}>
+                        <Suspense fallback={<Loader />}>
+                            <Routes>
+                                <Route element={<VI_SoftAT_Tool />} path="/" />
+                                <Route element={<Vi_Checklist />} path="/vi_checklist" />
+                                <Route element={<UploadFile />} path="/upload_file" />
+                                <Route
+                                    element={<VI_FTR_Dashboard />}
+                                    path="/vi_ftr_dashboard"
+                                />
+                                <Route element={<FourG />} path="/FourG" />
+                                <Route element={<TwoG />} path="/TwoG" />
+                                <Route element={<FiveG />} path="/FiveG" />
+                                <Route element={<Vi_Hoto />} path="/vi_hoto" />
+                                <Route
+                                    element={<WeekWiseFTR />}
+                                    path="/VI_Hoto_FTR/week-wise-ftr"
+                                />
+                                <Route element={<UPLOADHOTO />} path="/UPLOADHOTO" />
+                                <Route element={<VIHotoFtr />} path="/VIHotoFtr" />
+                                <Route element={<FTR_Dashboard />} path="/FTR_Dashboard" />
+                                <Route element={<VI_Hoto_FTR />} path="/VI_Hoto_FTR" />
+                                <Route element={<UploadVil />} path="/UploadVil" />
+                                <Route element={<VI4G />} path="/VI4G" />
+                                <Route element={<VI5G />} path="/VI5G" />
+                                <Route element={<VIHuawei />} path="/VIHuawei" />
+                                <Route element={<UploadAtnd />} path="/UploadAtnd" />
+                                <Route element={<UploadLayered />} path="/UploadLayered" />
+                                <Route element={<Upload4G_ER />} path="/Upload4G_ER" />
+                                <Route
+                                    element={<WeeklyComparison />}
+                                    path="/WeeklyComparison"
+                                />
+                            </Routes>
+                        </Suspense>
+                    </Grid>
+                </Grid>
             </Box>
-          </Grid>
-          <Grid item xs={12} md={10}>
-            <Suspense fallback={<Loader />}>
-              <Routes>
-                <Route element={<VI_SoftAT_Tool />} path="/" />
-                <Route element={<Vi_Checklist />} path="/vi_checklist" />
-                <Route element={<UploadFile />} path="/upload_file" />
-                <Route
-                  element={<VI_FTR_Dashboard />}
-                  path="/vi_ftr_dashboard"
-                />
-                <Route element={<FourG />} path="/FourG" />
-                <Route element={<TwoG />} path="/TwoG" />
-                <Route element={<FiveG />} path="/FiveG" />
-                <Route element={<Vi_Hoto />} path="/vi_hoto" />
-                <Route
-                  element={<WeekWiseFTR />}
-                  path="/VI_Hoto_FTR/week-wise-ftr"
-                />
-                <Route element={<UPLOADHOTO />} path="/UPLOADHOTO" />
-                <Route element={<VIHotoFtr />} path="/VIHotoFtr" />
-                <Route element={<FTR_Dashboard />} path="/FTR_Dashboard" />
-                <Route element={<VI_Hoto_FTR />} path="/VI_Hoto_FTR" />
-                <Route element={<UploadVil />} path="/UploadVil" />
-                <Route element={<VI4G />} path="/VI4G" />
-                <Route element={<VI5G />} path="/VI5G" />
-                <Route element={<VIHuawei />} path="/VIHuawei" />
-                <Route element={<UploadAtnd />} path="/UploadAtnd" />
-                <Route element={<UploadLayered />} path="/UploadLayered" />
-                <Route element={<Upload4G_ER />} path="/Upload4G_ER" />
-                <Route
-                  element={<WeeklyComparison />}
-                  path="/WeeklyComparison"
-                />
-              </Routes>
-            </Suspense>
-          </Grid>
-        </Grid>
-      </Box>
-    </>
-  );
+        </>
+    );
 };
 
 export default VI_SoftAT;

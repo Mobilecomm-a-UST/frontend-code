@@ -208,6 +208,10 @@ import CodeIcon from '@rsuite/icons/Code';
 import { getDecreyptedData } from '../../utils/localstorage'
 import LocationSearchingRoundedIcon from '@mui/icons-material/LocationSearchingRounded';
 import PageIcon from '@rsuite/icons/Page';
+import BytedanceMicroappIcon from '@rsuite/icons/BytedanceMicroapp';
+import InfoRoundIcon from '@rsuite/icons/InfoRound';
+
+
 
 const Ix_Tools = () => {
     const dispatch = useDispatch()
@@ -217,8 +221,8 @@ const Ix_Tools = () => {
     const userTypes = (getDecreyptedData('user_type')?.split(","))
     const allowedAirtelRoles = ['Admin', 'IX'];
     const allowedAirtelReader = ['quality', 'IX_reader', 'quality-s']
-    const allowedViRoles = ['Admin', 'VI_IX', 'VI_IX_reader','IX_ZTE','IX_T_VI'];
-    const allowedSaRoles = ['Admin', 'IX_SA','5G_SCR','MACRO','GPL_PARAMS']
+    const allowedViRoles = ['Admin', 'VI_IX', 'VI_IX_reader', 'IX_ZTE', 'IX_T_VI'];
+    const allowedSaRoles = ['Admin', 'IX_SA', '5G_SCR', 'MACRO', 'GPL_PARAMS']
     const allowedErRoles = ['Admin', 'IX_ER']
     const allowedTsRoles = ['Admin', 'IX_TS']
     const allowedIxViScriptingRoles = ['Admin', 'IX_VI_SCRPT']
@@ -279,7 +283,7 @@ const Ix_Tools = () => {
         }
     }
 
-     const handleIX_VI_Scripting = () => {
+    const handleIX_VI_Scripting = () => {
         if (chackToken === null) {
             navigate('/login')
             dispatch({ type: 'LINK_PAGES', payload: { linker } })
@@ -304,7 +308,7 @@ const Ix_Tools = () => {
     }, [])
 
     return (
-        <div style={{ backgroundColor: " "}}>
+        <div style={{ backgroundColor: " " }}>
             <Box style={{ padding: "15px", marginTop: '60px' }}>
                 <Box sx={{ display: "flex", justifyContent: 'center' }}>
                     <Box
@@ -314,7 +318,7 @@ const Ix_Tools = () => {
                             fontFamily: "sans-serif",
                             fontSize: "24px",
                             fontWeight: 600,
-                             backgroundColor: "#006e74",
+                            backgroundColor: "#006e74",
                             color: "#ffffff",
                             borderRadius: "20px",
                             width: "90%",
@@ -341,9 +345,10 @@ const Ix_Tools = () => {
                                 {userTypes?.some(role => allowedAirtelRoles.map(r => r.toLowerCase()).includes(role?.toLowerCase())) && (
                                     <Grid item xs={12} sm={6} md={3}>
                                         <Box sx={backgroundStyle} className={classes.des} onClick={handleAirtel}>
-                                            <div className={classes.centerIcon}>
-                                                <img src="/assets/AIRTEL.webp" alt="Airtel" style={{ width: "60px", height: "60px" }} />
-                                            </div>
+                                            <div className={classes.centerIcon}>  <BytedanceMicroappIcon
+                                                alt="Traffic"
+                                                style={{ width: "40px", height: "30px" }}
+                                            />  </div>
                                             <div>
                                                 <div className={classes.center}>Airtel Tracker</div>
                                             </div>
@@ -355,9 +360,10 @@ const Ix_Tools = () => {
                                 {userTypes?.some(role => allowedAirtelReader.map(r => r.toLowerCase()).includes(role?.toLowerCase())) && (
                                     <Grid item xs={12} sm={6} md={3}>
                                         <Box sx={backgroundStyle} className={classes.des} onClick={handleAirtelReader}>
-                                            <div className={classes.centerIcon}>
-                                                <img src="/assets/AIRTEL.webp" alt="Airtel" style={{ width: "60px", height: "60px" }} />
-                                            </div>
+                                            <div className={classes.centerIcon}>  <BytedanceMicroappIcon
+                                                alt="Traffic"
+                                                style={{ width: "40px", height: "30px" }}
+                                            />  </div>
                                             <div>
                                                 <div className={classes.center}>Airtel Tracker</div>
                                             </div>
@@ -369,9 +375,10 @@ const Ix_Tools = () => {
                                 {userTypes?.some(role => allowedViRoles.map(r => r.toLowerCase()).includes(role?.toLowerCase())) && (
                                     <Grid item xs={12} sm={6} md={3}>
                                         <Box sx={backgroundStyle} className={classes.des} onClick={handleVi}>
-                                            <div className={classes.centerIcon}>
-                                                <img src="/assets/VI.webp" alt="VI" style={{ width: "60px", height: "60px" }} />
-                                            </div>
+                                            <div className={classes.centerIcon}>  <InfoRoundIcon
+                                                alt="Traffic"
+                                                style={{ width: "40px", height: "30px" }}
+                                            />  </div>
                                             <div>
                                                 <div className={classes.center}>VI Tracker</div>
                                             </div>
@@ -384,7 +391,7 @@ const Ix_Tools = () => {
                                     <Grid item xs={12} sm={6} md={3}>
                                         <Box sx={backgroundStyle} className={classes.des} onClick={handleSA}>
                                             <div className={classes.centerIcon}>
-                                                <CodeIcon alt="SA" style={{ width: "50px", height: "60px" }} />
+                                                <CodeIcon alt="SA" style={{ width: "40px", height: "30px" }} />
                                             </div>
                                             <div>
                                                 <div className={classes.center}>Airtel 5G NT</div>
@@ -398,21 +405,21 @@ const Ix_Tools = () => {
                                     <Grid item xs={12} sm={6} md={3}>
                                         <Box sx={backgroundStyle} className={classes.des} onClick={handleER}>
                                             <div className={classes.centerIcon}>
-                                                <CodeIcon alt="ER" style={{ width: "50px", height: "60px" }} />
+                                                <CodeIcon alt="ER" style={{ width: "40px", height: "30px" }} />
                                             </div>
                                             <div>
                                                 <div className={classes.center}>Slicing Audit</div>
                                             </div>
                                         </Box>
                                     </Grid>
-                                          )}
+                                )}
 
                                 {/* TS Tracker */}
                                 {userTypes?.some(role => allowedTsRoles.map(r => r.toLowerCase()).includes(role?.toLowerCase())) && (
                                     <Grid item xs={12} sm={6} md={3}>
                                         <Box sx={backgroundStyle} className={classes.des} onClick={handleTS}>
                                             <div className={classes.centerIcon}>
-                                                <LocationSearchingRoundedIcon alt="TS" style={{ width: "40px", height: "40px" }} />
+                                                <LocationSearchingRoundedIcon alt="TS" style={{ width: "40px", height: "30px" }} />
                                             </div>
                                             <div>
                                                 <div className={classes.center}>TS Tracker</div>
@@ -421,11 +428,11 @@ const Ix_Tools = () => {
                                     </Grid>
                                 )}
 
-                                 {userTypes?.some(role => allowedIxViScriptingRoles.map(r => r.toLowerCase()).includes(role?.toLowerCase())) && (
+                                {userTypes?.some(role => allowedIxViScriptingRoles.map(r => r.toLowerCase()).includes(role?.toLowerCase())) && (
                                     <Grid item xs={12} sm={6} md={3}>
                                         <Box sx={backgroundStyle} className={classes.des} onClick={handleIX_VI_Scripting}>
                                             <div className={classes.centerIcon}>
-                                                <PageIcon alt="IX_VI_Scripting" style={{ width: "40px", height: "40px" }} />
+                                                <PageIcon alt="IX_VI_Scripting" style={{ width: "40px", height: "30px" }} />
                                             </div>
                                             <div>
                                                 <div className={classes.center}>VI Scripting</div>

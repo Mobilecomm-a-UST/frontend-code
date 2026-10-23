@@ -582,371 +582,399 @@ const ToolData = [
 export default ToolData
 
 
-// import React from 'react'
-// import TrendIcon from '@rsuite/icons/Trend';
-// import PeopleBranchIcon from '@rsuite/icons/PeopleBranch';
-// import DetailIcon from '@rsuite/icons/Detail';
-// import CellTowerIcon from '@mui/icons-material/CellTower';
-// import FunnelStepsIcon from '@rsuite/icons/FunnelSteps';
-// import PcIcon from '@rsuite/icons/Pc';
-// import WavePointIcon from '@rsuite/icons/WavePoint';
-// import DocPassIcon from '@rsuite/icons/DocPass';
-// import CalendarIcon from '@rsuite/icons/Calendar';
-// import PageIcon from '@rsuite/icons/Page';
-// import ThreeColumnsIcon from '@rsuite/icons/ThreeColumns';
-// import RelatedMapIcon from '@rsuite/icons/RelatedMap';
-// import CombinationIcon from '@rsuite/icons/Combination';
-// import TimeIcon from '@rsuite/icons/Time';
-// import SingleSourceIcon from '@rsuite/icons/SingleSource';
-// import BlockIcon from '@rsuite/icons/Block';
-// import TreeIcon from '@rsuite/icons/Tree';
-// import ParagraphIcon from '@rsuite/icons/Paragraph';
-// import NoticeIcon from '@rsuite/icons/Notice';
-// import ModelIcon from '@rsuite/icons/Model';
-// import CharacterLockIcon from '@rsuite/icons/CharacterLock';
-// import IndirectIcon from '@rsuite/icons/Indirect';
-// import TableIcon from '@rsuite/icons/Table';
-// import AbTestIcon from '@rsuite/icons/AbTest';
-// import StopOutlineIcon from '@rsuite/icons/StopOutline';
-// import ProjectIcon from '@rsuite/icons/Project';
-// import FlowStopIcon from '@rsuite/icons/FlowStop';
-// import SortAscIcon from '@rsuite/icons/SortAsc';
-// import TrafficOutlinedIcon from '@mui/icons-material/TrafficOutlined';
-// import { HugeiconsIcon } from "@hugeicons/react";
-// import { DashboardCircleEditIcon } from "@hugeicons/core-free-icons";
-// import { FileScriptIcon } from "@hugeicons/core-free-icons";
-// import DateTaskIcon from '@rsuite/icons/DateTask';
-// import GpsFixedIcon from '@mui/icons-material/GpsFixed';
-// import BlurOnOutlinedIcon from '@mui/icons-material/BlurOnOutlined';
-// import DeblurOutlinedIcon from '@mui/icons-material/DeblurOutlined';
-// import LogIcon from '@rsuite/icons/Log';
-// import OperatePeopleIcon from '@rsuite/icons/OperatePeople';
-// import DraftRoundIcon from '@rsuite/icons/DraftRound';
-// import BytedanceIcon from '@rsuite/icons/Bytedance';
-// import WidgetsIcon from '@mui/icons-material/Widgets';
-// import LocationSearchingRoundedIcon from '@mui/icons-material/LocationSearchingRounded';
-// import { groupBy } from 'lodash';
 
-// // Global card style for height, width, and alignment control
-// const cardStyle = {
-//     width: '100%',
-//     height: '70px', // ↕️ Adjust card height here
-//     display: 'flex',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     textAlign: 'center',
-//     fontSize: '15px', // 🔤 Adjust text font size here
-//     fontWeight: '700',
-//     lineHeight: '18px',
-//     color: '#2b2c2c',
-//     whiteSpace: 'nowrap',
-//     overflow: 'hidden',
-//     textOverflow: 'ellipsis',
-//     margin: '0 auto',
-//     padding: '0 8px'
-// };
+
+// import React from "react";
+// import TrendIcon from "@rsuite/icons/Trend";
+// import PeopleBranchIcon from "@rsuite/icons/PeopleBranch";
+// import DetailIcon from "@rsuite/icons/Detail";
+// import CellTowerIcon from "@mui/icons-material/CellTower";
+// import FunnelStepsIcon from "@rsuite/icons/FunnelSteps";
+// import PcIcon from "@rsuite/icons/Pc";
+// import WavePointIcon from "@rsuite/icons/WavePoint";
+// import DocPassIcon from "@rsuite/icons/DocPass";
+// import CalendarIcon from "@rsuite/icons/Calendar";
+// import PageIcon from "@rsuite/icons/Page";
+// import ThreeColumnsIcon from "@rsuite/icons/ThreeColumns";
+// import RelatedMapIcon from "@rsuite/icons/RelatedMap";
+// import CombinationIcon from "@rsuite/icons/Combination";
+// import TimeIcon from "@rsuite/icons/Time";
+// import SingleSourceIcon from "@rsuite/icons/SingleSource";
+// import BlockIcon from "@rsuite/icons/Block";
+// import TreeIcon from "@rsuite/icons/Tree";
+// import ParagraphIcon from "@rsuite/icons/Paragraph";
+// import NoticeIcon from "@rsuite/icons/Notice";
+// import ModelIcon from "@rsuite/icons/Model";
+// import CharacterLockIcon from "@rsuite/icons/CharacterLock";
+// import IndirectIcon from "@rsuite/icons/Indirect";
+// import TableIcon from "@rsuite/icons/Table";
+// import AbTestIcon from "@rsuite/icons/AbTest";
+// import StopOutlineIcon from "@rsuite/icons/StopOutline";
+// import ProjectIcon from "@rsuite/icons/Project";
+// import FlowStopIcon from "@rsuite/icons/FlowStop";
+// import SortAscIcon from "@rsuite/icons/SortAsc";
+// import TrafficOutlinedIcon from "@mui/icons-material/TrafficOutlined";
+// import { HugeiconsIcon } from "@hugeicons/react";
+// import { FileScriptIcon } from "@hugeicons/core-free-icons";
+// import DateTaskIcon from "@rsuite/icons/DateTask";
+// import GpsFixedIcon from "@mui/icons-material/GpsFixed";
+// import DeblurOutlinedIcon from "@mui/icons-material/DeblurOutlined";
+// import LogIcon from "@rsuite/icons/Log";
+// import OperatePeopleIcon from "@rsuite/icons/OperatePeople";
+// import DraftRoundIcon from "@rsuite/icons/DraftRound";
 
 // const ToolData = [
-//     {
-//         id: 1,
-//         name: (
-//             <div style={cardStyle}>
-//                Q 360
-//             <br aria-hidden="true" />
-//              Track Analyze Improve
-//          </div>
-//         ),
-// title: 'Quality Team System',
+//   {
+//     id: 1,
+//     name: "Q 360",
+//     title: "Quality Team System",
 //     icons: () => (
-//         <img
-//             src="/assets/pending-pr.png"
-//             alt="Quality Team Logo"
-//             width={70}
-//             height={60}
-//             style={{ borderRadius: '15%' }}
-//         />
+//       <img
+//         src="/assets/pending-pr.png"
+//         alt="Quality Team Logo"
+//         width={48}
+//         height={48}
+//         style={{
+//           borderRadius: "12px",
+//           objectFit: "contain",
+//         }}
+//       />
 //     ),
-//         fullname: 'Quality Team',
-//             link: '/tools/quality_team',
-//                 groupBy: [
-//                     'admin',
-//                     'QT_AL',
-//                     'quality',
-//                     'quality-s',
-//                     'trend_tool',
-//                     'PAT',
-//                     'PAT_Admin',
-//                     'PTS',
-//                     'PTS_Admin',
-//                     'QT_PPR',
-//                     'QT_AR',
-//                     'QT_DUS'
-//                 ]
-//     },
-// {
+//     fullname: "Quality Team",
+//     link: "/tools/quality_team",
+//     groupBy: [
+//       "admin",
+//       "QT_AL",
+//       "quality",
+//       "quality-s",
+//       "trend_tool",
+//       "PAT",
+//       "PAT_Admin",
+//       "PTS",
+//       "PTS_Admin",
+//       "QT_PPR",
+//       "QT_AR",
+//       "QT_DUS",
+//     ],
+//   },
+//   {
 //     id: 4,
-//         name: <div style={cardStyle}>SOFT AT</div>,
-//             title: 'This is a SOFT AT tool',
-//                 icons: PcIcon,
-//                     link: '/tools/soft_at_tools',
-//                         fullname: 'Soft AT Tool',
-//                             groupBy: ['soft_at_team', 'admin', 'soft_at', 'soft_at_airtel', 'soft_at_vi']
-// },
-// {
+//     name: "SOFT AT",
+//     title: "SOFT AT Tool",
+//     icons: () => <PcIcon style={{ fontSize: "36px", color: "#00796b" }} />,
+//     link: "/tools/soft_at_tools",
+//     fullname: "Soft AT Tool",
+//     groupBy: [
+//       "soft_at_team",
+//       "admin",
+//       "soft_at",
+//       "soft_at_airtel",
+//       "soft_at_vi",
+//       "soft_at_nokia",
+//     ],
+//   },
+//   {
 //     id: 5,
-//         name: <div style={cardStyle}>SOFT AT Tracking</div>,
-//             title: 'This is a SOFT AT tool',
-//                 icons: PcIcon,
-//                     link: '/tools/soft_at_rejection',
-//                         fullname: 'Soft AT Tracking Tool',
-//                             groupBy: ['soft_at_team', 'admin']
-// },
-// {
+//     name: "SOFT AT Tracking",
+//     title: "SOFT AT Tracking Tool",
+//     icons: () => <PcIcon style={{ fontSize: "36px", color: "#00796b" }} />,
+//     link: "/tools/soft_at_rejection",
+//     fullname: "Soft AT Tracking Tool",
+//     groupBy: ["soft_at_team", "admin"],
+//   },
+//   {
 //     id: 8,
-//         name: <div style={cardStyle}>MDP</div>,
-//             title: 'This is a MDP tool',
-//                 icons: CalendarIcon,
-//                     link: '/tools/mdp',
-//                         fullname: 'MDP Tool',
-//                             groupBy: ['central', 'circle', 'admin']
-// },
-// {
+//     name: "MDP",
+//     title: "MDP Tool",
+//     icons: () => <CalendarIcon style={{ fontSize: "36px", color: "#00796b" }} />,
+//     link: "/tools/mdp",
+//     fullname: "MDP Tool",
+//     groupBy: ["central", "circle", "admin"],
+//   },
+//   {
 //     id: 10,
-//         name: <div style={cardStyle}>Mcom Scripting</div>,
-//             title: 'This is a Mcom Scripting tool',
-//                 icons: PageIcon,
-//                     fullname: 'Mcom Scripting Tool',
-//                         link: '/tools/mcom-scripting',
-//                             groupBy: ['central', 'circle', 'admin']
-// },
-// {
+//     name: "Mcom Scripting",
+//     title: "Mcom Scripting Tool",
+//     icons: () => <PageIcon style={{ fontSize: "36px", color: "#00796b" }} />,
+//     fullname: "Mcom Scripting Tool",
+//     link: "/tools/mcom-scripting",
+//     groupBy: ["central", "circle", "admin"],
+//   },
+//   {
 //     id: 11,
-//         name: <div style={cardStyle}>AUDIT</div>,
-//             title: 'This is a AUDIT tool',
-//                 icons: DocPassIcon,
-//                     fullname: 'Audit Tool',
-//                         link: '/tools/audit',
-//                             groupBy: ['quality', 'admin', 'quality-s']
-// },
-// {
+//     name: "AUDIT",
+//     title: "AUDIT Tool",
+//     icons: () => <DocPassIcon style={{ fontSize: "36px", color: "#00796b" }} />,
+//     fullname: "Audit Tool",
+//     link: "/tools/audit",
+//     groupBy: ["quality", "admin", "quality-s"],
+//   },
+//   {
 //     id: 33,
-//         name: <div style={cardStyle}>IX Trackers</div>,
-//             title: 'This is a Relocation Tracking Tool',
-//                 icons: DocPassIcon,
-//                     fullname: 'Integration Tools',
-//                         link: '/tools/ix_tools',
-//                             groupBy: ['admin', 'IX', 'VI_IX', 'VI_IX_reader', 'soft_at_team', 'IX_SA', 'IX_ER', 'quality', 'IX_reader', 'quality-s', 'IX_TS', 'IX_ZTE', 'IX_T_VI', 'IX_VI_SCRPT', 'MACRO']
-// },
-// {
+//     name: "IX Trackers",
+//     title: "Integration Tracking Tool",
+//     icons: () => <DocPassIcon style={{ fontSize: "36px", color: "#00796b" }} />,
+//     fullname: "Integration Tools",
+//     link: "/tools/ix_tools",
+//     groupBy: [
+//       "admin",
+//       "IX",
+//       "VI_IX",
+//       "VI_IX_reader",
+//       "soft_at_team",
+//       "IX_SA",
+//       "IX_ER",
+//       "quality",
+//       "IX_reader",
+//       "quality-s",
+//       "IX_TS",
+//       "IX_ZTE",
+//       "IX_T_VI",
+//       "IX_VI_SCRPT",
+//       "MACRO",
+//       "GPL_PARAM",
+//       "5G_SCR",
+//     ],
+//   },
+//   {
 //     id: 14,
-//         name: <div style={cardStyle}>FILE MERGE</div>,
-//             title: 'This is a file merge tool',
-//                 icons: SingleSourceIcon,
-//                     fullname: 'File Merge Tool',
-//                         link: '/tools/file_merge',
-//                             groupBy: ['admin', 'quality', 'quality-s', 'ran']
-// },
-// {
+//     name: "FILE MERGE",
+//     title: "File Merge Tool",
+//     icons: () => (
+//       <SingleSourceIcon style={{ fontSize: "36px", color: "#00796b" }} />
+//     ),
+//     fullname: "File Merge Tool",
+//     link: "/tools/file_merge",
+//     groupBy: ["admin", "quality", "quality-s", "ran"],
+//   },
+//   {
 //     id: 15,
-//         name: <div style={cardStyle}>SCHEDULER</div>,
-//             title: 'This is a SCHEDULER tool',
-//                 icons: TimeIcon,
-//                     fullname: 'Scheduler Tool',
-//                         link: '/tools/schedular',
-//                             groupBy: ['admin']
-// },
-// {
+//     name: "SCHEDULER",
+//     title: "Scheduler Tool",
+//     icons: () => <TimeIcon style={{ fontSize: "36px", color: "#00796b" }} />,
+//     fullname: "Scheduler Tool",
+//     link: "/tools/schedular",
+//     groupBy: ["admin"],
+//   },
+//   {
 //     id: 20,
-//         name: <div style={cardStyle}>CATS Tracker</div>,
-//             title: 'This is a CATS Tracker',
-//                 icons: RelatedMapIcon,
-//                     fullname: 'CATS Tracker Tool',
-//                         link: '/tools/cats_tracker',
-//                             groupBy: ['quality', 'admin', 'quality-s']
-// },
-// {
+//     name: "CATS Tracker",
+//     title: "CATS Tracker Tool",
+//     icons: () => (
+//       <RelatedMapIcon style={{ fontSize: "36px", color: "#00796b" }} />
+//     ),
+//     fullname: "CATS Tracker Tool",
+//     link: "/tools/cats_tracker",
+//     groupBy: ["quality", "admin", "quality-s"],
+//   },
+//   {
 //     id: 22,
-//         name: <div style={cardStyle}>RCA Genie</div>,
-//             title: 'This is a RCA Tool',
-//                 icons: TreeIcon,
-//                     fullname: 'RCA Genie Tool',
-//                         link: '/tools/rca',
-//                             groupBy: ['quality', 'admin', 'quality-s']
-// },
-// {
+//     name: "RCA Genie",
+//     title: "RCA Genie Tool",
+//     icons: () => <TreeIcon style={{ fontSize: "36px", color: "#00796b" }} />,
+//     fullname: "RCA Genie Tool",
+//     link: "/tools/rca",
+//     groupBy: ["quality", "admin", "quality-s"],
+//   },
+//   {
 //     id: 24,
-//         name: <div style={cardStyle}>Mcom Physical AT</div>,
-//             title: 'This is a IX Tracker Tool',
-//                 icons: CellTowerIcon,
-//                     fullname: 'Mcom Physical AT Tool',
-//                         link: '/tools/mcom_physical_at',
-//                             groupBy: ['soft_at_team', 'admin']
-// },
-// {
+//     name: "Mcom Physical AT",
+//     title: "Mcom Physical AT Tool",
+//     icons: () => (
+//       <CellTowerIcon style={{ fontSize: "36px", color: "#00796b" }} />
+//     ),
+//     fullname: "Mcom Physical AT Tool",
+//     link: "/tools/mcom_physical_at",
+//     groupBy: ["soft_at_team", "admin"],
+//   },
+//   {
 //     id: 25,
-//         name: <div style={cardStyle}>NOM Scriptor</div>,
-//             title: 'This is a IX Tracker Tool',
-//                 icons: ParagraphIcon,
-//                     fullname: 'Nomenclature Scriptor Tool',
-//                         link: '/tools/nomenclature_scriptor',
-//                             groupBy: ['soft_at_team', 'admin']
-// },
-// {
+//     name: "NOM Scriptor",
+//     title: "Nomenclature Scriptor",
+//     icons: () => (
+//       <ParagraphIcon style={{ fontSize: "36px", color: "#00796b" }} />
+//     ),
+//     fullname: "Nomenclature Scriptor Tool",
+//     link: "/tools/nomenclature_scriptor",
+//     groupBy: ["soft_at_team", "admin"],
+//   },
+//   {
 //     id: 26,
-//         name: <div style={cardStyle}>DSA</div>,
-//             title: 'This is a Daily Status Alarm Tool',
-//                 icons: NoticeIcon,
-//                     fullname: 'Daily Status Alarm Tool',
-//                         link: '/tools/dma',
-//                             groupBy: ['soft_at_team', 'admin']
-// },
-// {
+//     name: "DSA",
+//     title: "Daily Status Alarm Tool",
+//     icons: () => <NoticeIcon style={{ fontSize: "36px", color: "#00796b" }} />,
+//     fullname: "Daily Status Alarm Tool",
+//     link: "/tools/dma",
+//     groupBy: ["soft_at_team", "admin"],
+//   },
+//   {
 //     id: 27,
-//         name: <div style={cardStyle}>MNIT</div>,
-//             title: 'This is a MNI Tool',
-//                 icons: ModelIcon,
-//                     fullname: 'Mobile Network Integration Tool',
-//                         link: '/tools/mobile_network_integration',
-//                             groupBy: ['admin', 'MNIT', 'MNITBK']
-// },
-// {
-//     id: 27,
-//         name: <div style={cardStyle}>LKF/RCC Status</div>,
-//             title: 'This is a LKF Status Tool',
-//                 icons: CharacterLockIcon,
-//                     fullname: 'License Key File Status Tool',
-//                         link: '/tools/lkf_status',
-//                             groupBy: ['admin']
-// },
-// {
+//     name: "MNIT",
+//     title: "Mobile Network Integration",
+//     icons: () => <ModelIcon style={{ fontSize: "36px", color: "#00796b" }} />,
+//     fullname: "Mobile Network Integration Tool",
+//     link: "/tools/mobile_network_integration",
+//     groupBy: ["admin", "MNIT", "MNITBK"],
+//   },
+//   {
 //     id: 28,
-//         name: <div style={cardStyle}>Material Mgmt</div>,
-//             title: 'This is a Material Management Tool',
-//                 icons: FunnelStepsIcon,
-//                     fullname: 'Material Management Tool',
-//                         link: '/tools/material_management',
-//                             groupBy: ['admin', 'ran']
-// },
-// {
+//     name: "LKF/RCC Status",
+//     title: "License Key File Status Tool",
+//     icons: () => (
+//       <CharacterLockIcon style={{ fontSize: "36px", color: "#00796b" }} />
+//     ),
+//     fullname: "License Key File Status Tool",
+//     link: "/tools/lkf_status",
+//     groupBy: ["admin"],
+//   },
+//   {
 //     id: 29,
-//         name: <div style={cardStyle}>Full Site Dismantle</div>,
-//             title: 'This is a Full Site Dismantle Tool',
-//                 icons: IndirectIcon,
-//                     fullname: 'Full Site Dismantle Tool',
-//                         link: '/tools/full_site_dismantle',
-//                             groupBy: ['admin', 'ran', 'ran_admin']
-// },
-// {
+//     name: "Material Mgmt",
+//     title: "Material Management Tool",
+//     icons: () => (
+//       <FunnelStepsIcon style={{ fontSize: "36px", color: "#00796b" }} />
+//     ),
+//     fullname: "Material Management Tool",
+//     link: "/tools/material_management",
+//     groupBy: ["admin", "ran"],
+//   },
+//   {
+//     id: 30,
+//     name: "Full Site Dismantle",
+//     title: "Full Site Dismantle Tool",
+//     icons: () => (
+//       <IndirectIcon style={{ fontSize: "36px", color: "#00796b" }} />
+//     ),
+//     fullname: "Full Site Dismantle Tool",
+//     link: "/tools/full_site_dismantle",
+//     groupBy: ["admin", "ran", "ran_admin"],
+//   },
+//   {
 //     id: 31,
-//         name: <div style={cardStyle}>RPT</div>,
-//             title: 'This is a Relocation Payload Tracker Tool',
-//                 icons: AbTestIcon,
-//                     fullname: 'Relocation Payload Tracker Tool',
-//                         link: '/tools.link', // keep link
-//                             link: '/tools/relocation_payload_tracker',
-//                                 groupBy: ['admin', 'quality-s', 'quality']
-// },
-// {
+//     name: "RPT",
+//     title: "Relocation Payload Tracker",
+//     icons: () => <AbTestIcon style={{ fontSize: "36px", color: "#00796b" }} />,
+//     fullname: "Relocation Payload Tracker Tool",
+//     link: "/tools/relocation_payload_tracker",
+//     groupBy: ["admin", "quality-s", "quality"],
+//   },
+//   {
 //     id: 32,
-//         name: <div style={cardStyle}>Relocation Tracking</div>,
-//             title: 'This is a Relocation Tracking Tool',
-//                 icons: ProjectIcon,
-//                     fullname: 'Relocation Tracking Tool',
-//                         link: '/tools/relocation_tracking',
-//                             groupBy: ['admin', 'RLT', 'RLT_reader', 'RLT_Admin']
-// },
-// {
-//     id: 33,
-//         name: <div style={cardStyle}>Microwave Soft-At</div>,
-//             title: 'This is a Microwave Soft-At Tool',
-//                 icons: StopOutlineIcon,
-//                     fullname: 'Microwave Soft-At Tool',
-//                         link: '/tools/microwave_soft_at',
-//                             groupBy: ['admin', 'admin_microwave', 'microwave']
-// },
-// {
+//     name: "Relocation Tracking",
+//     title: "Relocation Tracking Tool",
+//     icons: () => (
+//       <ProjectIcon style={{ fontSize: "36px", color: "#00796b" }} />
+//     ),
+//     fullname: "Relocation Tracking Tool",
+//     link: "/tools/relocation_tracking",
+//     groupBy: ["admin", "RLT", "RLT_reader", "RLT_Admin"],
+//   },
+//   {
 //     id: 34,
-//         name: <div style={cardStyle}>NTD</div>,
-//             title: 'This is a New Tower Deployment Tool',
-//                 icons: FlowStopIcon,
-//                     fullname: 'New Tower Deployment Tool',
-//                         link: '/tools/ntd',
-//                             groupBy: ['admin', 'NTD']
-// },
-// {
+//     name: "Microwave Soft-At",
+//     title: "Microwave Soft-At Tool",
+//     icons: () => (
+//       <StopOutlineIcon style={{ fontSize: "36px", color: "#00796b" }} />
+//     ),
+//     fullname: "Microwave Soft-At Tool",
+//     link: "/tools/microwave_soft_at",
+//     groupBy: ["admin", "admin_microwave", "microwave"],
+//   },
+//   {
 //     id: 35,
-//         name: <div style={cardStyle}>UDT</div>,
-//             title: 'This is a Upgrade Deployment Tool',
-//                 icons: SortAscIcon,
-//                     fullname: 'Upgrade Deployment Tool',
-//                         link: '/tools/upgrade_deployment',
-//                             groupBy: ['admin', 'UDT', 'UDT_reader']
-// },
-// {
+//     name: "NTD",
+//     title: "New Tower Deployment",
+//     icons: () => (
+//       <FlowStopIcon style={{ fontSize: "36px", color: "#00796b" }} />
+//     ),
+//     fullname: "New Tower Deployment Tool",
+//     link: "/tools/ntd",
+//     groupBy: ["admin", "NTD"],
+//   },
+//   {
+//     id: 36,
+//     name: "UDT",
+//     title: "Upgrade Deployment Tool",
+//     icons: () => <SortAscIcon style={{ fontSize: "36px", color: "#00796b" }} />,
+//     fullname: "Upgrade Deployment Tool",
+//     link: "/tools/upgrade_deployment",
+//     groupBy: ["admin", "UDT", "UDT_reader"],
+//   },
+//   {
 //     id: 37,
-//         name: <div style={cardStyle}>2G Scripting</div>,
-//             title: 'This is 2G Scripting System',
-//                 icons: () => (
-//                     <HugeiconsIcon icon={FileScriptIcon} size={30} />
-//                 ),
-//                     fullname: '2G Scripting system',
-//                         link: '/tools/2g_scripting',
-//                             groupBy: ['admin', '2G_Script']
-// },
-// {
+//     name: "2G Scripting",
+//     title: "2G Scripting System",
+//     icons: () => (
+//       <HugeiconsIcon icon={FileScriptIcon} size={36} color="#00796b" />
+//     ),
+//     fullname: "2G Scripting System",
+//     link: "/tools/2g_scripting",
+//     groupBy: ["admin", "2G_Script"],
+//   },
+//   {
+//     id: 38,
+//     name: "Daily Task Review",
+//     title: "Daily Task Review System",
+//     icons: () => (
+//       <DateTaskIcon style={{ fontSize: "36px", color: "#00796b" }} />
+//     ),
+//     fullname: "Daily Task Review System",
+//     link: "/tools/daily_task_review",
+//     groupBy: ["admin", "DTR"],
+//   },
+//   {
 //     id: 39,
-//         name: <div style={cardStyle}>Daily Task Review</div>,
-//             title: 'This is Daily Task Review System',
-//                 icons: DateTaskIcon,
-//                     fullname: 'Daily Task Review system',
-//                         link: '/tools/daily_task_review',
-//                             groupBy: ['admin', 'DTR']
-// },
-// {
+//     name: "Resource Mgmt",
+//     title: "Resource Management",
+//     icons: () => (
+//       <DateTaskIcon style={{ fontSize: "36px", color: "#00796b" }} />
+//     ),
+//     fullname: "Resource Management",
+//     link: "/tools/resource_management",
+//     groupBy: ["RM_Admin", "RM_CDH"],
+//   },
+//   {
 //     id: 40,
-//         name: <div style={cardStyle}>Resource Mgmt</div>,
-//             title: 'Resource Management System',
-//                 icons: DateTaskIcon,
-//                     fullname: 'Resource Management',
-//                         link: '/tools/resource_management',
-//                             groupBy: ['RM_Admin', "RM_CDH"]
-// },
-// {
+//     name: "Field Resrc Tracking",
+//     title: "Field Resource Tracking",
+//     icons: () => (
+//       <GpsFixedIcon style={{ fontSize: "36px", color: "#00796b" }} />
+//     ),
+//     fullname: "Field Resource Tracking",
+//     link: "/tools/field_resource_tracking",
+//     groupBy: ["admin", "frt"],
+//   },
+//   {
 //     id: 41,
-//         name: <div style={cardStyle}>Field Resrc Tracking</div>,
-//             title: 'Field Resource Tracking System',
-//                 icons: GpsFixedIcon,
-//                     fullname: 'Field Resource Tracking',
-//                         link: '/tools/field_resource_tracking',
-//                             groupBy: ['admin', "frt"]
-// },
-// {
+//     name: "WCC Generate",
+//     title: "WCC Generate System",
+//     icons: () => (
+//       <DeblurOutlinedIcon style={{ fontSize: "36px", color: "#00796b" }} />
+//     ),
+//     fullname: "WCC Generate",
+//     link: "/tools/wcc_generate",
+//     groupBy: ["admin", "wcg"],
+//   },
+//   {
 //     id: 42,
-//         name: <div style={cardStyle}>WCC Generate</div>,
-//             title: 'WCC Generate System',
-//                 icons: DeblurOutlinedIcon,
-//                     fullname: 'WCC Generate',
-//                         link: '/tools/wcc_generate',
-//                             groupBy: ['admin', "wcg"]
-// },
-// {
+//     name: "Logs",
+//     title: "Logs System",
+//     icons: () => <LogIcon style={{ fontSize: "36px", color: "#00796b" }} />,
+//     fullname: "Logs",
+//     link: "/tools/log_s",
+//     groupBy: ["admin", "log"],
+//   },
+//   {
 //     id: 43,
-//         name: <div style={cardStyle}>Logs</div>,
-//             title: 'Logs System',
-//                 icons: LogIcon,
-//                     fullname: 'Logs',
-//                         link: '/tools/log_s',
-//                             groupBy: ['admin', "log"]
-// },
-// {
-//     id: 44,
-//         name: <div style={cardStyle}>Baseband Reqrmt</div>,
-//             title: 'Baseband Requirement System',
-//                 icons: DraftRoundIcon,
-//                     fullname: 'Baseband Requirement',
-//                         link: '/tools/baseband_requirement',
-//                             groupBy: ['admin', 'BR_Admin', "BR"]
-// },
+//     name: "Baseband Reqrmt",
+//     title: "Baseband Requirement",
+//     icons: () => (
+//       <DraftRoundIcon style={{ fontSize: "36px", color: "#00796b" }} />
+//     ),
+//     fullname: "Baseband Requirement",
+//     link: "/tools/baseband_requirement",
+//     groupBy: ["admin", "BR_Admin", "BR"],
+//   },
 // ];
 
 // export default ToolData;
