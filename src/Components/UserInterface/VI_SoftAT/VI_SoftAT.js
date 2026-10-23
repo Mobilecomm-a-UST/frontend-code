@@ -19,7 +19,7 @@ const VI_SoftAT_Tool = lazy(() => import("./VI_SoftAT_Tool"));
 const Vi_Checklist = lazy(() => import("./VI_Checklist/Vi_checklist"));
 const UploadFile = lazy(() => import("./VI_Checklist/UploadFile"));
 const VI_FTR_Dashboard = lazy(
-  () => import("./VI_Checklist/VI_FTR_Dashboard/VI_FTR_Dashboard"),
+    () => import("./VI_Checklist/VI_FTR_Dashboard/VI_FTR_Dashboard"),
 );
 const FourG = lazy(() => import("./VI_Summary/FourG"));
 const TwoG = lazy(() => import("./VI_Summary/TwoG"));
@@ -37,7 +37,7 @@ const UploadAtnd = lazy(() => import("./VIL SRVCC/UploadAtnd"));
 const UploadLayered = lazy(() => import("./VIL SRVCC/UploadLayered"));
 const Upload4G_ER = lazy(() => import("./VIL SRVCC/Upload4G_ER"));
 const WeeklyComparison = lazy(
-  () => import("./VI_Hoto_Dashboard/WeeklyComparison"),
+    () => import("./VI_Hoto_Dashboard/WeeklyComparison"),
 );
 const WeekWiseFTR = lazy(() => import("./VI_Hoto_Dashboard/WeekWiseFTR"));
 const HuwaeiNT4G = lazy(() => import("./Huwaei NT4G/NT4G"))
@@ -45,174 +45,174 @@ const HuwaeiNT4G = lazy(() => import("./Huwaei NT4G/NT4G"))
 
 
 const VI_SoftAT = () => {
-  const [expanded, setExpanded] = useState(true);
-  const [activeKey, setActiveKey] = useState();
-  const [states, setStates] = useState([]);
-  const userTypes = getDecreyptedData("user_type")?.split(",");
-  const navigate = useNavigate();
+    const [expanded, setExpanded] = useState(true);
+    const [activeKey, setActiveKey] = useState();
+    const [states, setStates] = useState([]);
+    const userTypes = getDecreyptedData("user_type")?.split(",");
+    const navigate = useNavigate();
 
-  useEffect(() => {
-    document.title = `${window.location.pathname.slice(1).replaceAll("_", " ").replaceAll("/", " | ").toUpperCase()}`;
-  }, []);
+    useEffect(() => {
+        document.title = `${window.location.pathname.slice(1).replaceAll("_", " ").replaceAll("/", " | ").toUpperCase()}`;
+    }, []);
 
-  // onClick={() => navigate('/tools/Integration/relocation')}
-  return (
-    <>
-      <Box style={{ marginTop: "60px" }}>
-        <Grid container spacing={2}>
-          <Grid item xs={0} md={2} sx={{}}>
-            <Box style={{ position: "fixed", width: "16.5%" }}>
-              <Sidenav
-                expanded={expanded}
-                defaultOpenKeys={[]}
-                appearance="subtle"
-                style={{
-                  minHeight: "670px",
-                  height: "100vh",
-                  backgroundColor: "#006e74",
-                  marginTop: 8,
-                  borderRadius: 10,
-                }}
-              >
-                <Sidenav.Body>
-                  <Nav activeKey={activeKey} onSelect={setActiveKey}>
-                    <Nav
-                      style={{
-                        fontWeight: 550,
-                        color: "white",
-                        textAlign: "center",
-                        fontSize: 19,
-                      }}
-                    >
-                      VI Soft AT Tool
-                    </Nav>
-                    {/* <Nav.Men eventKey="1" placement="rightStart" icon={<DashboardIcon />} title="Dashboard">
+    // onClick={() => navigate('/tools/Integration/relocation')}
+    return (
+        <>
+            <Box style={{ marginTop: "60px" }}>
+                <Grid container spacing={2}>
+                    <Grid item xs={0} md={2} sx={{}}>
+                        <Box style={{ position: "fixed", width: "16.5%" }}>
+                            <Sidenav
+                                expanded={expanded}
+                                defaultOpenKeys={[]}
+                                appearance="subtle"
+                                style={{
+                                    minHeight: "670px",
+                                    height: "100vh",
+                                    backgroundColor: "#006e74",
+                                    marginTop: 8,
+                                    borderRadius: 10,
+                                }}
+                            >
+                                <Sidenav.Body>
+                                    <Nav activeKey={activeKey} onSelect={setActiveKey}>
+                                        <Nav
+                                            style={{
+                                                fontWeight: 550,
+                                                color: "white",
+                                                textAlign: "center",
+                                                fontSize: 19,
+                                            }}
+                                        >
+                                            VI Soft AT Tool
+                                        </Nav>
+                                        {/* <Nav.Men eventKey="1" placement="rightStart" icon={<DashboardIcon />} title="Dashboard">
                                          <Nav.Item>dfdf</Nav.Item>
                                         </Nav.Men > */}
-                    <Nav.Item
-                      eventKey="1"
-                      placement="rightStart"
-                      icon={<AppSelectIcon />}
-                      className="single-item-custom"
-                      onClick={() =>
-                        navigate("/tools/soft_at_tools/vi_soft_at/Vi_checklist")
-                      }
-                    >
-                      VI Checklist
-                    </Nav.Item>
-                    <Nav.Menu
-                      eventKey="2"
-                      placement="rightStart"
-                      className="menu-title-custom"
-                      title="VI Summary"
-                      icon={<DashboardIcon size="3em" />}
-                    >
-                      <Nav.Item
-                        eventKey="2-1"
-                        placement="rightStart"
-                        className="single-item-custom"
-                        onClick={() =>
-                          navigate("/tools/soft_at_tools/vi_soft_at/TwoG")
-                        }
-                      >
-                        2G
-                      </Nav.Item>
-                      <Nav.Item
-                        eventKey="2-2"
-                        placement="rightStart"
-                        className="single-item-custom"
-                        onClick={() =>
-                          navigate("/tools/soft_at_tools/vi_soft_at/FourG")
-                        }
-                      >
-                        4G/5G
-                      </Nav.Item>
+                                        <Nav.Item
+                                            eventKey="1"
+                                            placement="rightStart"
+                                            icon={<AppSelectIcon />}
+                                            className="single-item-custom"
+                                            onClick={() =>
+                                                navigate("/tools/soft_at_tools/vi_soft_at/Vi_checklist")
+                                            }
+                                        >
+                                            VI Checklist
+                                        </Nav.Item>
+                                        <Nav.Menu
+                                            eventKey="2"
+                                            placement="rightStart"
+                                            className="menu-title-custom"
+                                            title="VI Summary"
+                                            icon={<DashboardIcon size="3em" />}
+                                        >
+                                            <Nav.Item
+                                                eventKey="2-1"
+                                                placement="rightStart"
+                                                className="single-item-custom"
+                                                onClick={() =>
+                                                    navigate("/tools/soft_at_tools/vi_soft_at/TwoG")
+                                                }
+                                            >
+                                                2G
+                                            </Nav.Item>
+                                            <Nav.Item
+                                                eventKey="2-2"
+                                                placement="rightStart"
+                                                className="single-item-custom"
+                                                onClick={() =>
+                                                    navigate("/tools/soft_at_tools/vi_soft_at/FourG")
+                                                }
+                                            >
+                                                4G/5G
+                                            </Nav.Item>
 
-                      {/* <Nav.Item eventKey="2-3" placement="rightStart"  className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/FiveG')}>
+                                            {/* <Nav.Item eventKey="2-3" placement="rightStart"  className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/FiveG')}>
                                             5G
                                         </Nav.Item> */}
-                    </Nav.Menu>
+                                        </Nav.Menu>
 
-                    <Nav.Menu
-                      eventKey="3"
-                      placement="rightStart"
-                      className="menu-title-custom"
-                      title="VI HOTO"
-                      icon={<DashboardIcon size="3em" />}
-                    >
-                      <Nav.Item
-                        eventKey="3-1"
-                        placement="rightStart"
-                        icon={<FileUploadIcon />}
-                        className="single-item-custom"
-                        onClick={() =>
-                          navigate("/tools/soft_at_tools/vi_soft_at/UPLOADHOTO")
-                        }
-                      >
-                        Upload HOTO File
-                      </Nav.Item>
+                                        <Nav.Menu
+                                            eventKey="3"
+                                            placement="rightStart"
+                                            className="menu-title-custom"
+                                            title="VI HOTO"
+                                            icon={<DashboardIcon size="3em" />}
+                                        >
+                                            <Nav.Item
+                                                eventKey="3-1"
+                                                placement="rightStart"
+                                                icon={<FileUploadIcon />}
+                                                className="single-item-custom"
+                                                onClick={() =>
+                                                    navigate("/tools/soft_at_tools/vi_soft_at/UPLOADHOTO")
+                                                }
+                                            >
+                                                Upload HOTO File
+                                            </Nav.Item>
 
-                      <Nav.Item
-                        eventKey="3-2"
-                        placement="rightStart"
-                        icon={<DashboardIcon />}
-                        className="single-item-custom"
-                        onClick={() =>
-                          navigate("/tools/soft_at_tools/vi_soft_at/Vi_Hoto")
-                        }
-                      >
-                        VI Hoto Dashboard
-                      </Nav.Item>
+                                            <Nav.Item
+                                                eventKey="3-2"
+                                                placement="rightStart"
+                                                icon={<DashboardIcon />}
+                                                className="single-item-custom"
+                                                onClick={() =>
+                                                    navigate("/tools/soft_at_tools/vi_soft_at/Vi_Hoto")
+                                                }
+                                            >
+                                                VI Hoto Dashboard
+                                            </Nav.Item>
 
-                      {/* <Nav.Item eventKey="3-3" placement="rightStart" icon={<DashboardIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/VIHotoFtr')}>
+                                            {/* <Nav.Item eventKey="3-3" placement="rightStart" icon={<DashboardIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/VIHotoFtr')}>
                                             FTR Analysis
                                         </Nav.Item>
                                          <Nav.Item eventKey="3-4" placement="rightStart" icon={<DashboardIcon />} className="single-item-custom" onClick={() => navigate('/tools/soft_at_tools/vi_soft_at/FTR_Dashboard')}>
                                             FTR Dasboard
                                         </Nav.Item>  */}
-                      <Nav.Menu
-                        eventKey="3-3"
-                        placement="rightStart"
-                        icon={<DashboardIcon />}
-                        title="VI Hoto FTR"
-                        className="single-item-custom"
-                      >
-                        <Nav.Item
-                          eventKey="3-3-1"
-                          onClick={() =>
-                            navigate(
-                              "/tools/soft_at_tools/vi_soft_at/VI_Hoto_FTR",
-                            )
-                          }
-                        >
-                          FTR Dashboard
-                        </Nav.Item>
+                                            <Nav.Menu
+                                                eventKey="3-3"
+                                                placement="rightStart"
+                                                icon={<DashboardIcon />}
+                                                title="VI Hoto FTR"
+                                                className="single-item-custom"
+                                            >
+                                                <Nav.Item
+                                                    eventKey="3-3-1"
+                                                    onClick={() =>
+                                                        navigate(
+                                                            "/tools/soft_at_tools/vi_soft_at/VI_Hoto_FTR",
+                                                        )
+                                                    }
+                                                >
+                                                    FTR Dashboard
+                                                </Nav.Item>
 
-                        <Nav.Item
-                          eventKey="3-3-2"
-                          onClick={() =>
-                            navigate(
-                              "/tools/soft_at_tools/vi_soft_at/VI_Hoto_FTR/week-wise-ftr",
-                            )
-                          }
-                        >
-                          Week Wise FTR
-                        </Nav.Item>
-                      </Nav.Menu>
-                      <Nav.Item
-                        eventKey="3-4"
-                        placement="rightStart"
-                        icon={<DashboardIcon />}
-                        className="single-item-custom"
-                        onClick={() =>
-                          navigate(
-                            "/tools/soft_at_tools/vi_soft_at/WeeklyComparison",
-                          )
-                        }
-                      >
-                        Weekly Comparison
-                      </Nav.Item>
-                    </Nav.Menu>
+                                                <Nav.Item
+                                                    eventKey="3-3-2"
+                                                    onClick={() =>
+                                                        navigate(
+                                                            "/tools/soft_at_tools/vi_soft_at/VI_Hoto_FTR/week-wise-ftr",
+                                                        )
+                                                    }
+                                                >
+                                                    Week Wise FTR
+                                                </Nav.Item>
+                                            </Nav.Menu>
+                                            <Nav.Item
+                                                eventKey="3-4"
+                                                placement="rightStart"
+                                                icon={<DashboardIcon />}
+                                                className="single-item-custom"
+                                                onClick={() =>
+                                                    navigate(
+                                                        "/tools/soft_at_tools/vi_soft_at/WeeklyComparison",
+                                                    )
+                                                }
+                                            >
+                                                Weekly Comparison
+                                            </Nav.Item>
+                                        </Nav.Menu>
 
                                         <Nav.Menu
                                             eventKey="5"
@@ -290,6 +290,25 @@ const VI_SoftAT = () => {
                                           4G
                                         </Nav.Item> */}
                                         </Nav.Menu>
+
+                                        <Nav.Menu
+                                            eventKey="7"
+                                            placement="rightStart"
+                                            icon={<DashboardIcon />}
+                                            title="VI Huwaei"
+                                            className="single-item-custom"
+                                        >
+                                            <Nav.Item
+                                                eventKey="7-1"
+                                                onClick={() =>
+                                                    navigate(
+                                                        "/tools/soft_at_tools/vi_soft_at/HuwaeiNT4G",
+                                                    )
+                                                }
+                                            >
+                                                NT 4G
+                                            </Nav.Item>
+                                        </Nav.Menu>
                                     </Nav>
                                 </Sidenav.Body>
                             </Sidenav>
@@ -328,6 +347,7 @@ const VI_SoftAT = () => {
                                     element={<WeeklyComparison />}
                                     path="/WeeklyComparison"
                                 />
+                                <Route element={<HuwaeiNT4G />} path="/HuwaeiNT4G" />
                             </Routes>
                         </Suspense>
                     </Grid>
