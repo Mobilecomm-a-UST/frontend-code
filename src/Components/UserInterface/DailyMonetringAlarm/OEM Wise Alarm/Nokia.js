@@ -696,6 +696,698 @@
 // export const MemoNokia = React.memo(Nokia);
 // export default Nokia;
 
+// import React, { useState, useEffect } from "react";
+// import {
+//     Box,
+//     Button,
+//     Stack,
+//     Chip,
+//     Dialog,
+//     DialogTitle,
+//     DialogContent,
+//     DialogActions,
+//     Alert,
+//     AlertTitle,
+//     CircularProgress,
+//     Typography,
+//     IconButton,
+//     Tooltip,
+//     Table,
+//     TableBody,
+//     TableCell,
+//     TableContainer,
+//     TableHead,
+//     TableRow,
+//     Paper,
+//     TablePagination,
+// } from "@mui/material";
+// import UploadIcon from "@mui/icons-material/Upload";
+// import DoDisturbIcon from "@mui/icons-material/DoDisturb";
+// import FileDownloadIcon from "@mui/icons-material/FileDownload";
+// import DeleteIcon from "@mui/icons-material/Delete";
+// import RefreshIcon from "@mui/icons-material/Refresh";
+// import Swal from "sweetalert2";
+// import { postDataa, getData, deleteData } from "../../../services/FetchNodeServices";
+// import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
+
+// /**
+//  * Nokia Section Definitions:
+//  * - Separate sections for Mapping Files and Nokia Alarm Files.
+//  * - Files selected in 'mapping' and 'nokia' will both be sent together to 'nokia/Nokia/' upon submission.
+//  */
+// const NOKIA_SECTIONS = [
+//     {
+//         key: "mapping",
+//         title: "Mapping File",
+//         label: "Select Mapping Files:-",
+//         buttonText: "Select Files",
+//         fieldKey: "mapping_file",
+//         accept: ".xlsx,.xls,.csv",
+//         multiple: true,
+//         endpoint: "nokia/Nokia/",
+//     },
+//     {
+//         key: "nokia",
+//         title: "Nokia Alarm Process",
+//         label: "Select Nokia Alarm Files:-",
+//         buttonText: "Select Files",
+//         fieldKey: "alarm_file",
+//         accept: ".log,.logs,.txt,.xlsx,.xls,.csv",
+//         multiple: true,
+//         endpoint: "nokia/Nokia/",
+//     },
+//     {
+//         key: "saNSA",
+//         title: "SA / NSA",
+//         label: "Select SA / NSA File:-",
+//         buttonText: "Select File",
+//         fieldKey: "file",
+//         accept: ".xlsx,.xls,.csv",
+//         multiple: true,
+//         endpoint: "nokia/SA_NSA/",
+//     },
+//     {
+//         key: "oldVsNew",
+//         title: "Old vs New (Site Upload)",
+//         label: "Select Old vs New (Site) File:-",
+//         buttonText: "Select File",
+//         fieldKey: "site_file",
+//         accept: ".xlsx,.xls,.csv",
+//         multiple: true,
+//         endpoint: "nokia/upload_site/",
+//     },
+// ];
+
+// const getMessage = (data, fallback) => {
+//     if (!data) return fallback;
+//     const msg = data.message || data.error || data.detail || data.errors;
+//     if (msg) return typeof msg === "string" ? msg : JSON.stringify(msg);
+//     return fallback;
+// };
+
+// const isSuccessResponse = (data) =>
+//     data.status === true || (data.status === undefined && !data.error);
+
+// const Nokia = () => {
+//     const [files, setFiles] = useState({});
+//     const [results, setResults] = useState(null);
+//     const [isSubmitting, setIsSubmitting] = useState(false);
+//     const [existingSites, setExistingSites] = useState([]);
+//     const [loadingSites, setLoadingSites] = useState(false);
+
+//     // Table Pagination States
+//     const [page, setPage] = useState(0);
+//     const [rowsPerPage, setRowsPerPage] = useState(5);
+
+//     const { loading, action: setLoading } = useLoadingDialog();
+
+//     // Fetch existing site data on mount
+//     useEffect(() => {
+//         fetchExistingSites();
+//     }, []);
+
+//     const fetchExistingSites = async () => {
+//         setLoadingSites(true);
+//         try {
+//             const res = await getData("nokia/get_site/");
+//             if (res && Array.isArray(res.data)) {
+//                 setExistingSites(res.data);
+//             } else if (res && Array.isArray(res)) {
+//                 setExistingSites(res);
+//             } else {
+//                 setExistingSites([]);
+//             }
+//         } catch (error) {
+//             console.error("Failed to fetch site data", error);
+//         } finally {
+//             setLoadingSites(false);
+//         }
+//     };
+
+//     const handleDeleteSite = async (siteId) => {
+//         const confirm = await Swal.fire({
+//             title: "Are you sure?",
+//             text: "This site file will be deleted from the server.",
+//             icon: "warning",
+//             showCancelButton: true,
+//             confirmButtonColor: "#d33",
+//             cancelButtonColor: "#3085d6",
+//             confirmButtonText: "Yes, delete it!",
+//         });
+
+//         if (confirm.isConfirmed) {
+//             try {
+//                 const res = await deleteData("nokia/delete_site/", {
+//                     data: { id: siteId, site: siteId },
+//                 });
+//                 if (res) {
+//                     Swal.fire("Deleted!", "Site has been deleted.", "success");
+//                     fetchExistingSites();
+//                 } else {
+//                     Swal.fire("Failed", "Unable to delete site file.", "error");
+//                 }
+//             } catch (err) {
+//                 Swal.fire("Error", "Error deleting site file.", "error");
+//             }
+//         }
+//     };
+
+//     const handleChangePage = (event, newPage) => {
+//         setPage(newPage);
+//     };
+
+//     const handleChangeRowsPerPage = (event) => {
+//         setRowsPerPage(parseInt(event.target.value, 10));
+//         setPage(0);
+//     };
+
+//     const handleFileChange = (section, event) => {
+//         const allowed = section.accept
+//             .split(",")
+//             .map((ext) => ext.trim().replace(".", "").toLowerCase());
+//         const selected = Array.from(event.target.files || []);
+//         const validFiles = [];
+
+//         selected.forEach((file) => {
+//             const extension = file.name.split(".").pop().toLowerCase();
+//             if (allowed.includes(extension)) {
+//                 validFiles.push(file);
+//             } else {
+//                 Swal.fire({
+//                     icon: "warning",
+//                     title: "Invalid File Type",
+//                     text: `File "${file.name}" has invalid extension. Allowed: ${section.accept}`,
+//                 });
+//             }
+//         });
+
+//         if (validFiles.length > 0) {
+//             setFiles((prev) => ({
+//                 ...prev,
+//                 [section.key]: section.multiple
+//                     ? [...(prev[section.key] || []), ...validFiles]
+//                     : validFiles,
+//             }));
+//         }
+//         event.target.value = "";
+//     };
+
+//     const handleClearSectionFiles = (sectionKey) => {
+//         setFiles((prev) => {
+//             const updated = { ...prev };
+//             delete updated[sectionKey];
+//             return updated;
+//         });
+//     };
+
+//     const handleSubmit = async () => {
+//         const hasMapping = (files.mapping || []).length > 0;
+//         const hasNokia = (files.nokia || []).length > 0;
+//         const hasSaNsa = (files.saNSA || []).length > 0;
+//         const hasOldVsNew = (files.oldVsNew || []).length > 0;
+
+//         if (!hasMapping && !hasNokia && !hasSaNsa && !hasOldVsNew) {
+//             Swal.fire({
+//                 icon: "error",
+//                 title: "Error",
+//                 text: "Please select at least one file to process.",
+//             });
+//             return;
+//         }
+
+//         setIsSubmitting(true);
+//         setLoading(true);
+
+//         const outcomes = [];
+
+//         // 1. Process Nokia Alarm Endpoint (combining mapping and alarm files if selected)
+//         if (hasMapping || hasNokia) {
+//             try {
+//                 const formData = new FormData();
+
+//                 if (hasMapping) {
+//                     files.mapping.forEach((file) => formData.append("mapping_file", file));
+//                 }
+//                 if (hasNokia) {
+//                     files.nokia.forEach((file) => formData.append("alarm_file", file));
+//                 }
+
+//                 const data = await postDataa("nokia/Nokia/", formData);
+
+//                 if (!data || typeof data !== "object") {
+//                     outcomes.push({
+//                         sectionKey: "nokia_combined",
+//                         title: "Nokia Alarm Process",
+//                         ok: false,
+//                         data: null,
+//                         message: "Unexpected response from server (nokia/Nokia/). Check backend logs.",
+//                     });
+//                 } else {
+//                     const ok = isSuccessResponse(data);
+//                     outcomes.push({
+//                         sectionKey: "nokia_combined",
+//                         title: "Nokia Alarm Process",
+//                         ok,
+//                         data,
+//                         message: getMessage(
+//                             data,
+//                             ok ? "Completed successfully" : "Failed to process"
+//                         ),
+//                     });
+//                 }
+//             } catch (error) {
+//                 outcomes.push({
+//                     sectionKey: "nokia_combined",
+//                     title: "Nokia Alarm Process",
+//                     ok: false,
+//                     data: null,
+//                     message: error.message || "Failed to process",
+//                 });
+//             }
+//         }
+
+//         // 2. Process SA / NSA Endpoint
+//         if (hasSaNsa) {
+//             const section = NOKIA_SECTIONS.find((s) => s.key === "saNSA");
+//             try {
+//                 const formData = new FormData();
+//                 files.saNSA.forEach((file) => formData.append(section.fieldKey, file));
+
+//                 const data = await postDataa(section.endpoint, formData);
+
+//                 if (!data || typeof data !== "object") {
+//                     outcomes.push({
+//                         sectionKey: section.key,
+//                         title: section.title,
+//                         ok: false,
+//                         data: null,
+//                         message: `Unexpected response from server (${section.endpoint}).`,
+//                     });
+//                 } else {
+//                     const ok = isSuccessResponse(data);
+//                     outcomes.push({
+//                         sectionKey: section.key,
+//                         title: section.title,
+//                         ok,
+//                         data,
+//                         message: getMessage(
+//                             data,
+//                             ok ? "Completed successfully" : "Failed to process"
+//                         ),
+//                     });
+//                 }
+//             } catch (error) {
+//                 outcomes.push({
+//                     sectionKey: section.key,
+//                     title: section.title,
+//                     ok: false,
+//                     data: null,
+//                     message: error.message || "Failed to process",
+//                 });
+//             }
+//         }
+
+//         // 3. Process Old vs New (Site Upload) Endpoint
+//         if (hasOldVsNew) {
+//             const section = NOKIA_SECTIONS.find((s) => s.key === "oldVsNew");
+//             try {
+//                 const formData = new FormData();
+//                 files.oldVsNew.forEach((file) => formData.append(section.fieldKey, file));
+
+//                 const data = await postDataa(section.endpoint, formData);
+
+//                 if (!data || typeof data !== "object") {
+//                     outcomes.push({
+//                         sectionKey: section.key,
+//                         title: section.title,
+//                         ok: false,
+//                         data: null,
+//                         message: `Unexpected response from server (${section.endpoint}).`,
+//                     });
+//                 } else {
+//                     const ok = isSuccessResponse(data);
+//                     outcomes.push({
+//                         sectionKey: section.key,
+//                         title: section.title,
+//                         ok,
+//                         data,
+//                         message: getMessage(
+//                             data,
+//                             ok ? "Completed successfully" : "Failed to process"
+//                         ),
+//                     });
+//                 }
+//             } catch (error) {
+//                 outcomes.push({
+//                     sectionKey: section.key,
+//                     title: section.title,
+//                     ok: false,
+//                     data: null,
+//                     message: error.message || "Failed to process",
+//                 });
+//             }
+//         }
+
+//         setLoading(false);
+//         setIsSubmitting(false);
+
+//         // Clear state of successfully submitted keys
+//         setFiles((prev) => {
+//             const updated = { ...prev };
+//             outcomes.forEach((o) => {
+//                 if (o.ok) {
+//                     if (o.sectionKey === "nokia_combined") {
+//                         delete updated.mapping;
+//                         delete updated.nokia;
+//                     } else {
+//                         delete updated[o.sectionKey];
+//                     }
+//                 }
+//             });
+//             return updated;
+//         });
+
+//         setResults(outcomes);
+//         fetchExistingSites();
+//     };
+
+//     const handleReset = () => {
+//         setFiles({});
+//         setResults(null);
+//     };
+
+//     const successCount = results ? results.filter((r) => r.ok).length : 0;
+
+//     return (
+//         <>
+//             <Box sx={{ px: 1.5, pb: 4 }}>
+//                 <Box sx={{ position: "relative", maxWidth: 1200, mx: "auto", mt: 5 }}>
+//                     {/* Header Banner */}
+//                     <Box
+//                         sx={{
+//                             position: "absolute",
+//                             top: -26,
+//                             left: "50%",
+//                             transform: "translateX(-50%)",
+//                             width: { xs: "90%", md: "70%" },
+//                             height: 54,
+//                             borderRadius: "30px",
+//                             bgcolor: "#006e74",
+//                             color: "#fff",
+//                             display: "flex",
+//                             alignItems: "center",
+//                             justifyContent: "center",
+//                             zIndex: 1,
+//                         }}
+//                     >
+//                         <Typography sx={{ fontWeight: 600, fontSize: 17 }}>
+//                             Nokia Alarm Processing
+//                         </Typography>
+//                     </Box>
+
+//                     {/* Gradient Panel Container */}
+//                     <Box
+//                         sx={{
+//                             background: "linear-gradient(135deg, #00696f 0%, #7ecbc3 100%)",
+//                             borderRadius: "8px",
+//                             pt: 7,
+//                             px: 2,
+//                             pb: 3,
+//                             boxShadow: "0 20px 30px rgba(60, 60, 120, 0.25)",
+//                         }}
+//                     >
+//                         {NOKIA_SECTIONS.map((section) => {
+//                             const selected = files[section.key] || [];
+//                             return (
+//                                 <Box
+//                                     key={section.key}
+//                                     sx={{
+//                                         bgcolor: "#fff",
+//                                         borderRadius: "10px",
+//                                         px: 1.3,
+//                                         py: 1.2,
+//                                         mb: 2,
+//                                         boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
+//                                     }}
+//                                 >
+//                                     <Typography
+//                                         sx={{ fontWeight: 600, fontSize: 18, color: "#555" }}
+//                                     >
+//                                         {section.label}
+//                                     </Typography>
+
+//                                     <Stack
+//                                         direction="row"
+//                                         spacing={1}
+//                                         alignItems="center"
+//                                         sx={{ flexWrap: "wrap", rowGap: 1, mt: 0.5 }}
+//                                     >
+//                                         <Button
+//                                             variant="contained"
+//                                             component="label"
+//                                             size="small"
+//                                             disabled={isSubmitting}
+//                                         >
+//                                             {section.buttonText}
+//                                             <input
+//                                                 hidden
+//                                                 type="file"
+//                                                 accept={section.accept}
+//                                                 multiple={section.multiple}
+//                                                 onChange={(e) => handleFileChange(section, e)}
+//                                                 disabled={isSubmitting}
+//                                             />
+//                                         </Button>
+
+//                                         {selected.length > 0 && (
+//                                             <Chip
+//                                                 label={`${selected.length} file${selected.length > 1 ? "s" : ""} selected`}
+//                                                 color="success"
+//                                                 size="small"
+//                                                 onDelete={
+//                                                     isSubmitting
+//                                                         ? undefined
+//                                                         : () => handleClearSectionFiles(section.key)
+//                                                 }
+//                                             />
+//                                         )}
+//                                     </Stack>
+
+//                                     {/* Active Site Files listing Table for Old vs New section */}
+//                                     {section.key === "oldVsNew" && (
+//                                         <Box sx={{ mt: 2, pt: 1, borderTop: "1px dashed #ccc" }}>
+//                                             <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 1 }}>
+//                                                 <Typography variant="subtitle2" sx={{ color: "#666" }}>
+//                                                     Active Site Files:
+//                                                 </Typography>
+//                                                 <Tooltip title="Refresh active sites">
+//                                                     <IconButton
+//                                                         size="small"
+//                                                         onClick={fetchExistingSites}
+//                                                         disabled={loadingSites}
+//                                                     >
+//                                                         <RefreshIcon fontSize="small" />
+//                                                     </IconButton>
+//                                                 </Tooltip>
+//                                             </Stack>
+
+//                                             {loadingSites ? (
+//                                                 <CircularProgress size={20} sx={{ mt: 1 }} />
+//                                             ) : existingSites.length > 0 ? (
+//                                                 <Paper sx={{ width: "100%", overflow: "hidden", mt: 1 }}>
+//                                                     <TableContainer sx={{ maxHeight: 300 }}>
+//                                                         <Table stickyHeader size="small">
+//                                                             <TableHead>
+//                                                                 <TableRow>
+//                                                                     <TableCell sx={{ fontWeight: "bold", bgcolor: "#f5f5f5" }}>ID</TableCell>
+//                                                                     <TableCell sx={{ fontWeight: "bold", bgcolor: "#f5f5f5" }}>New Site</TableCell>
+//                                                                     <TableCell sx={{ fontWeight: "bold", bgcolor: "#f5f5f5" }}>Old Site</TableCell>
+//                                                                     <TableCell sx={{ fontWeight: "bold", bgcolor: "#f5f5f5" }}>New 4G MRBTS</TableCell>
+//                                                                     <TableCell sx={{ fontWeight: "bold", bgcolor: "#f5f5f5" }}>Old 4G MRBTS</TableCell>
+//                                                                     <TableCell sx={{ fontWeight: "bold", bgcolor: "#f5f5f5" }}>New 5G NRBTS</TableCell>
+//                                                                     <TableCell sx={{ fontWeight: "bold", bgcolor: "#f5f5f5" }}>Old 5G NRBTS</TableCell>
+//                                                                     <TableCell align="center" sx={{ fontWeight: "bold", bgcolor: "#f5f5f5" }}>Action</TableCell>
+//                                                                 </TableRow>
+//                                                             </TableHead>
+//                                                             <TableBody>
+//                                                                 {existingSites
+//                                                                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+//                                                                     .map((row) => (
+//                                                                         <TableRow hover key={row.id}>
+//                                                                             <TableCell>{row.id}</TableCell>
+//                                                                             <TableCell>{row.new_site || "-"}</TableCell>
+//                                                                             <TableCell>{row.old_site || "-"}</TableCell>
+//                                                                             <TableCell>{row.new_4g_mrbts || "-"}</TableCell>
+//                                                                             <TableCell>{row.old_4g_mrbts || "-"}</TableCell>
+//                                                                             <TableCell>{row.new_5g_nrbts || "-"}</TableCell>
+//                                                                             <TableCell>{row.old_5g_nrbts || "-"}</TableCell>
+//                                                                             <TableCell align="center">
+//                                                                                 <IconButton
+//                                                                                     size="small"
+//                                                                                     color="error"
+//                                                                                     onClick={() => handleDeleteSite(row.id)}
+//                                                                                 >
+//                                                                                     <DeleteIcon fontSize="small" />
+//                                                                                 </IconButton>
+//                                                                             </TableCell>
+//                                                                         </TableRow>
+//                                                                     ))}
+//                                                             </TableBody>
+//                                                         </Table>
+//                                                     </TableContainer>
+//                                                     <TablePagination
+//                                                         rowsPerPageOptions={[5, 10, 20, 40]}
+//                                                         component="div"
+//                                                         count={existingSites.length}
+//                                                         rowsPerPage={rowsPerPage}
+//                                                         page={page}
+//                                                         onPageChange={handleChangePage}
+//                                                         onRowsPerPageChange={handleChangeRowsPerPage}
+//                                                     />
+//                                                 </Paper>
+//                                             ) : (
+//                                                 <Typography variant="caption" color="text.secondary">
+//                                                     No site files uploaded on server.
+//                                                 </Typography>
+//                                             )}
+//                                         </Box>
+//                                     )}
+//                                 </Box>
+//                             );
+//                         })}
+
+//                         {/* Submit & Reset Buttons */}
+//                         <Stack
+//                             direction="row"
+//                             justifyContent="space-around"
+//                             alignItems="center"
+//                             sx={{ mt: 1 }}
+//                         >
+//                             <Button
+//                                 variant="contained"
+//                                 color="success"
+//                                 onClick={handleSubmit}
+//                                 endIcon={
+//                                     isSubmitting ? (
+//                                         <CircularProgress size={18} color="inherit" />
+//                                     ) : (
+//                                         <UploadIcon />
+//                                     )
+//                                 }
+//                                 disabled={isSubmitting}
+//                             >
+//                                 {isSubmitting ? "Processing..." : "Submit"}
+//                             </Button>
+//                             <Button
+//                                 variant="contained"
+//                                 color="error"
+//                                 onClick={handleReset}
+//                                 endIcon={<DoDisturbIcon />}
+//                                 disabled={isSubmitting}
+//                                 sx={{ bgcolor: "#ff0000" }}
+//                             >
+//                                 Reset
+//                             </Button>
+//                         </Stack>
+//                     </Box>
+//                 </Box>
+//             </Box>
+
+//             {/* Results Modal */}
+//             <Dialog
+//                 open={Boolean(results)}
+//                 onClose={() => setResults(null)}
+//                 maxWidth="md"
+//                 fullWidth
+//             >
+//                 <DialogTitle sx={{ fontWeight: 600, color: "#00796b" }}>
+//                     📊 Nokia Results ({successCount} of {results ? results.length : 0}{" "}
+//                     succeeded)
+//                 </DialogTitle>
+//                 <DialogContent>
+//                     <Stack spacing={2} sx={{ mt: 1 }}>
+//                         {results &&
+//                             results.map((outcome, idx) => (
+//                                 <Alert
+//                                     key={idx}
+//                                     severity={outcome.ok ? "success" : "error"}
+//                                 >
+//                                     <AlertTitle>{outcome.title}</AlertTitle>
+//                                     {outcome.message}
+
+//                                     {outcome.data?.download_url && (
+//                                         <Box sx={{ mt: 1 }}>
+//                                             <Button
+//                                                 variant="contained"
+//                                                 color="success"
+//                                                 size="small"
+//                                                 startIcon={<FileDownloadIcon />}
+//                                                 href={outcome.data.download_url}
+//                                                 target="_blank"
+//                                                 rel="noopener noreferrer"
+//                                             >
+//                                                 Download Output
+//                                             </Button>
+//                                         </Box>
+//                                     )}
+
+//                                     {Array.isArray(outcome.data?.files) && (
+//                                         <Stack
+//                                             direction="row"
+//                                             spacing={1}
+//                                             sx={{ flexWrap: "wrap", rowGap: 1, mt: 1 }}
+//                                         >
+//                                             {outcome.data.files.map((name, fIdx) => (
+//                                                 <Chip
+//                                                     key={fIdx}
+//                                                     label={name}
+//                                                     size="small"
+//                                                     variant="outlined"
+//                                                 />
+//                                             ))}
+//                                         </Stack>
+//                                     )}
+
+//                                     {outcome.data && (
+//                                         <Box component="details" sx={{ mt: 1 }}>
+//                                             <summary style={{ cursor: "pointer" }}>
+//                                                 Raw response
+//                                             </summary>
+//                                             <Box
+//                                                 component="pre"
+//                                                 sx={{
+//                                                     p: 1.5,
+//                                                     mt: 1,
+//                                                     mb: 0,
+//                                                     bgcolor: "#f5f5f5",
+//                                                     borderRadius: 1,
+//                                                     maxHeight: 260,
+//                                                     overflow: "auto",
+//                                                     fontSize: 12,
+//                                                 }}
+//                                             >
+//                                                 {JSON.stringify(outcome.data, null, 2)}
+//                                             </Box>
+//                                         </Box>
+//                                     )}
+//                                 </Alert>
+//                             ))}
+//                     </Stack>
+//                 </DialogContent>
+//                 <DialogActions>
+//                     <Button onClick={() => setResults(null)}>Close</Button>
+//                 </DialogActions>
+//             </Dialog>
+
+//             {loading}
+//         </>
+//     );
+// };
+
+// export const MemoNokia = React.memo(Nokia);
+// export default Nokia;
+
+
 import React, { useState, useEffect } from "react";
 import {
     Box,
@@ -724,17 +1416,11 @@ import {
 import UploadIcon from "@mui/icons-material/Upload";
 import DoDisturbIcon from "@mui/icons-material/DoDisturb";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
-import DeleteIcon from "@mui/icons-material/Delete";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import Swal from "sweetalert2";
-import { postDataa, getData, deleteData } from "../../../services/FetchNodeServices";
+import { postDataa, getData } from "../../../services/FetchNodeServices";
 import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
 
-/**
- * Nokia Section Definitions:
- * - Separate sections for Mapping Files and Nokia Alarm Files.
- * - Files selected in 'mapping' and 'nokia' will both be sent together to 'nokia/Nokia/' upon submission.
- */
 const NOKIA_SECTIONS = [
     {
         key: "mapping",
@@ -792,18 +1478,27 @@ const Nokia = () => {
     const [files, setFiles] = useState({});
     const [results, setResults] = useState(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    
+    // Data states for tables
     const [existingSites, setExistingSites] = useState([]);
     const [loadingSites, setLoadingSites] = useState(false);
+    const [saNsaData, setSaNsaData] = useState([]);
+    const [loadingSaNsa, setLoadingSaNsa] = useState(false);
 
-    // Table Pagination States
+    // Table Pagination States for Old vs New
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
 
+    // Table Pagination States for SA / NSA
+    const [saNsaPage, setSaNsaPage] = useState(0);
+    const [saNsaRowsPerPage, setSaNsaRowsPerPage] = useState(5);
+
     const { loading, action: setLoading } = useLoadingDialog();
 
-    // Fetch existing site data on mount
+    // Fetch existing site data and SA/NSA data on mount
     useEffect(() => {
         fetchExistingSites();
+        fetchSaNsaData();
     }, []);
 
     const fetchExistingSites = async () => {
@@ -824,31 +1519,21 @@ const Nokia = () => {
         }
     };
 
-    const handleDeleteSite = async (siteId) => {
-        const confirm = await Swal.fire({
-            title: "Are you sure?",
-            text: "This site file will be deleted from the server.",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#d33",
-            cancelButtonColor: "#3085d6",
-            confirmButtonText: "Yes, delete it!",
-        });
-
-        if (confirm.isConfirmed) {
-            try {
-                const res = await deleteData("nokia/delete_site/", {
-                    data: { id: siteId, site: siteId },
-                });
-                if (res) {
-                    Swal.fire("Deleted!", "Site has been deleted.", "success");
-                    fetchExistingSites();
-                } else {
-                    Swal.fire("Failed", "Unable to delete site file.", "error");
-                }
-            } catch (err) {
-                Swal.fire("Error", "Error deleting site file.", "error");
+    const fetchSaNsaData = async () => {
+        setLoadingSaNsa(true);
+        try {
+            const res = await getData("nokia/SA_NSA/");
+            if (res && Array.isArray(res.data)) {
+                setSaNsaData(res.data);
+            } else if (res && Array.isArray(res)) {
+                setSaNsaData(res);
+            } else {
+                setSaNsaData([]);
             }
+        } catch (error) {
+            console.error("Failed to fetch SA/NSA data", error);
+        } finally {
+            setLoadingSaNsa(false);
         }
     };
 
@@ -1069,6 +1754,7 @@ const Nokia = () => {
 
         setResults(outcomes);
         fetchExistingSites();
+        fetchSaNsaData();
     };
 
     const handleReset = () => {
@@ -1173,6 +1859,77 @@ const Nokia = () => {
                                         )}
                                     </Stack>
 
+                                    {/* SA / NSA listing Table */}
+                                    {section.key === "saNSA" && (
+                                        <Box sx={{ mt: 2, pt: 1, borderTop: "1px dashed #ccc" }}>
+                                            <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 1 }}>
+                                                <Typography variant="subtitle2" sx={{ color: "#666" }}>
+                                                    SA / NSA Records:
+                                                </Typography>
+                                                <Tooltip title="Refresh SA/NSA records">
+                                                    <IconButton
+                                                        size="small"
+                                                        onClick={fetchSaNsaData}
+                                                        disabled={loadingSaNsa}
+                                                    >
+                                                        <RefreshIcon fontSize="small" />
+                                                    </IconButton>
+                                                </Tooltip>
+                                            </Stack>
+
+                                            {loadingSaNsa ? (
+                                                <CircularProgress size={20} sx={{ mt: 1 }} />
+                                            ) : saNsaData.length > 0 ? (
+                                                <Paper sx={{ width: "100%", overflow: "hidden", mt: 1 }}>
+                                                    <TableContainer sx={{ maxHeight: 300 }}>
+                                                        <Table stickyHeader size="small">
+                                                            <TableHead>
+                                                                <TableRow>
+                                                                    <TableCell sx={{ fontWeight: "bold", bgcolor: "#f5f5f5" }}>ID</TableCell>
+                                                                    <TableCell sx={{ fontWeight: "bold", bgcolor: "#f5f5f5" }}>Alarm Name</TableCell>
+                                                                    <TableCell sx={{ fontWeight: "bold", bgcolor: "#f5f5f5" }}>Alarm Status</TableCell>
+                                                                    <TableCell sx={{ fontWeight: "bold", bgcolor: "#f5f5f5" }}>SA/NSA</TableCell>
+                                                                    <TableCell sx={{ fontWeight: "bold", bgcolor: "#f5f5f5" }}>Alarm Bucket</TableCell>
+                                                                    <TableCell sx={{ fontWeight: "bold", bgcolor: "#f5f5f5" }}>Responsibility</TableCell>
+                                                                </TableRow>
+                                                            </TableHead>
+                                                            <TableBody>
+                                                                {saNsaData
+                                                                    .slice(saNsaPage * saNsaRowsPerPage, saNsaPage * saNsaRowsPerPage + saNsaRowsPerPage)
+                                                                    .map((row) => (
+                                                                        <TableRow hover key={row.id}>
+                                                                            <TableCell>{row.id}</TableCell>
+                                                                            <TableCell>{row.alarm_name || "-"}</TableCell>
+                                                                            <TableCell>{row.alarm_status || "-"}</TableCell>
+                                                                            <TableCell>{row.sa_nsa || "-"}</TableCell>
+                                                                            <TableCell>{row.alarm_bucket || "-"}</TableCell>
+                                                                            <TableCell>{row.responsibility || "-"}</TableCell>
+                                                                        </TableRow>
+                                                                    ))}
+                                                            </TableBody>
+                                                        </Table>
+                                                    </TableContainer>
+                                                    <TablePagination
+                                                        rowsPerPageOptions={[5, 10, 20, 40]}
+                                                        component="div"
+                                                        count={saNsaData.length}
+                                                        rowsPerPage={saNsaRowsPerPage}
+                                                        page={saNsaPage}
+                                                        onPageChange={(e, p) => setSaNsaPage(p)}
+                                                        onRowsPerPageChange={(e) => {
+                                                            setSaNsaRowsPerPage(parseInt(e.target.value, 10));
+                                                            setSaNsaPage(0);
+                                                        }}
+                                                    />
+                                                </Paper>
+                                            ) : (
+                                                <Typography variant="caption" color="text.secondary">
+                                                    No SA/NSA records found on server.
+                                                </Typography>
+                                            )}
+                                        </Box>
+                                    )}
+
                                     {/* Active Site Files listing Table for Old vs New section */}
                                     {section.key === "oldVsNew" && (
                                         <Box sx={{ mt: 2, pt: 1, borderTop: "1px dashed #ccc" }}>
@@ -1206,7 +1963,6 @@ const Nokia = () => {
                                                                     <TableCell sx={{ fontWeight: "bold", bgcolor: "#f5f5f5" }}>Old 4G MRBTS</TableCell>
                                                                     <TableCell sx={{ fontWeight: "bold", bgcolor: "#f5f5f5" }}>New 5G NRBTS</TableCell>
                                                                     <TableCell sx={{ fontWeight: "bold", bgcolor: "#f5f5f5" }}>Old 5G NRBTS</TableCell>
-                                                                    <TableCell align="center" sx={{ fontWeight: "bold", bgcolor: "#f5f5f5" }}>Action</TableCell>
                                                                 </TableRow>
                                                             </TableHead>
                                                             <TableBody>
@@ -1221,15 +1977,6 @@ const Nokia = () => {
                                                                             <TableCell>{row.old_4g_mrbts || "-"}</TableCell>
                                                                             <TableCell>{row.new_5g_nrbts || "-"}</TableCell>
                                                                             <TableCell>{row.old_5g_nrbts || "-"}</TableCell>
-                                                                            <TableCell align="center">
-                                                                                <IconButton
-                                                                                    size="small"
-                                                                                    color="error"
-                                                                                    onClick={() => handleDeleteSite(row.id)}
-                                                                                >
-                                                                                    <DeleteIcon fontSize="small" />
-                                                                                </IconButton>
-                                                                            </TableCell>
                                                                         </TableRow>
                                                                     ))}
                                                             </TableBody>

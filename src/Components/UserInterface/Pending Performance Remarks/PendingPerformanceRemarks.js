@@ -190,6 +190,7 @@ import WarningRoundIcon from '@rsuite/icons/WarningRound';
 import EyeRoundIcon from '@rsuite/icons/EyeRound';
 import SiteIcon from '@rsuite/icons/Site';
 import HistoryIcon from '@rsuite/icons/History';
+import TextImageIcon from '@rsuite/icons/TextImage';
 
 
 const PendingPerformanceTools = lazy(() => import('./PendingPerformanceRemarksTool'))
@@ -199,10 +200,12 @@ const Sitewiseremark = lazy(() => import('./Upload/Sitewiseremark'))
 const DownloadCompleteReport = lazy(() => import('./Upload/DownloadCompleteReport'))
 const DownloadTemplate = lazy(() => import('./Upload/DownloadTemplate'))
 const DeleteDatabase = lazy(() => import('./Upload/DeleteDatabase'))
-const BucketOverview = lazy(()=> import('./Upload/BucketOverview'))
-const SkippedSites = lazy(()=> import('./Upload/SkippedSites'))
-const History = lazy(()=> import('./Upload/History'))
-const DeleteSkippedSites = lazy(()=> import('./Upload/DeleteSkippedSites'))
+const BucketOverview = lazy(() => import('./Upload/BucketOverview'))
+const SkippedSites = lazy(() => import('./Upload/SkippedSites'))
+const History = lazy(() => import('./Upload/History'))
+const DeleteSkippedSites = lazy(() => import('./Upload/DeleteSkippedSites'))
+const DeletedSite = lazy(() => import('./Upload/DeletedSite'))
+const ManualRecord = lazy(() => import('./Upload/ManualRecord'))
 
 const PendingPerformanceRemarks = () => {
     const [expanded, setExpanded] = useState(true);
@@ -323,7 +326,7 @@ const PendingPerformanceRemarks = () => {
                                                         Download Complete Report
                                                     </Nav.Item>
 
-                                                       <Nav.Item
+                                                    <Nav.Item
                                                         eventKey="5"
                                                         placement="rightStart"
                                                         className="single-item-custom"
@@ -337,7 +340,7 @@ const PendingPerformanceRemarks = () => {
                                                         Bucket Overview
                                                     </Nav.Item>
 
-                                                     <Nav.Item
+                                                    <Nav.Item
                                                         eventKey="5"
                                                         placement="rightStart"
                                                         className="single-item-custom"
@@ -348,11 +351,25 @@ const PendingPerformanceRemarks = () => {
                                                             setMenuButton(true)
                                                         }}
                                                     >
-                                                        Skipped Sites
+                                                        Manual Accepted Sites
                                                     </Nav.Item>
 
-                                                     <Nav.Item
-                                                        eventKey="5"
+                                                    <Nav.Item
+                                                        eventKey="6"
+                                                        placement="rightStart"
+                                                        className="single-item-custom"
+                                                        icon={<TextImageIcon />}
+                                                        onClick={() => {
+                                                            navigate('/tools/quality_team/pending_performance_re/ManualRecord');
+                                                            show();
+                                                            setMenuButton(true)
+                                                        }}
+                                                    >
+                                                        Manual Record
+                                                    </Nav.Item>
+
+                                                    <Nav.Item
+                                                        eventKey="7"
                                                         placement="rightStart"
                                                         className="single-item-custom"
                                                         icon={<HistoryIcon />}
@@ -365,14 +382,28 @@ const PendingPerformanceRemarks = () => {
                                                         History
                                                     </Nav.Item>
 
-                                                    
+                                                    <Nav.Item
+                                                        eventKey="8"
+                                                        placement="rightStart"
+                                                        className="single-item-custom"
+                                                        icon={<WarningRoundIcon />}
+                                                        onClick={() => {
+                                                            navigate('/tools/quality_team/pending_performance_re/DeletedSite');
+                                                            show();
+                                                            setMenuButton(true)
+                                                        }}
+                                                    >
+                                                        Deleted Site
+                                                    </Nav.Item>
+
+
                                                 </>
                                             )}
 
-                                             {/* TAB 6: DELETE DATABASE */}
-                                                    {isQTAR && (
-                                                        <>
-                                                        
+                                            {/* TAB 6: DELETE DATABASE */}
+                                            {isQTAR && (
+                                                <>
+
                                                     <Nav.Item
                                                         eventKey="6"
                                                         placement="rightStart"
@@ -388,7 +419,7 @@ const PendingPerformanceRemarks = () => {
                                                     </Nav.Item>
 
 
-                                                     <Nav.Item
+                                                    <Nav.Item
                                                         eventKey="7"
                                                         placement="rightStart"
                                                         className="single-item-custom"
@@ -402,9 +433,9 @@ const PendingPerformanceRemarks = () => {
                                                         Delete Skipped Site
                                                     </Nav.Item>
 
-                                                    </>
+                                                </>
 
-                                                )}
+                                            )}
 
                                             {/* QT_DUS SEES ONLY 3 TABS */}
                                             {isQTDUS && (
@@ -482,7 +513,7 @@ const PendingPerformanceRemarks = () => {
                                                         Bucket Overview
                                                     </Nav.Item>
 
-                                                     <Nav.Item
+                                                    <Nav.Item
                                                         eventKey="5"
                                                         placement="rightStart"
                                                         className="single-item-custom"
@@ -517,17 +548,19 @@ const PendingPerformanceRemarks = () => {
                                         <Route path='/Uploadupdatedreport' element={<Uploadupdatedreport />} />
                                         <Route path='/Sitewiseremark' element={<Sitewiseremark />} />
                                         <Route path='/DownloadCompleteReport' element={<DownloadCompleteReport />} />
-                                        <Route path='/BucketOverview' element={<BucketOverview/>}/>
-                                        <Route path='/SkippedSites' element={<SkippedSites/>}/>
-                                        <Route path='/History' element={<History/>}/>
+                                        <Route path='/BucketOverview' element={<BucketOverview />} />
+                                        <Route path='/SkippedSites' element={<SkippedSites />} />
+                                        <Route path='/History' element={<History />} />
+                                        <Route path='/DeletedSite' element={<DeletedSite />} />
+                                        <Route path='/ManualRecord' element={<ManualRecord />} />
                                     </>
                                 )}
 
                                 {isQTAR && (
                                     <>
-                                     <Route path='/DeleteDatabase' element={<DeleteDatabase />} />
-                                     <Route path='/DeleteSkippedSites' element={<DeleteSkippedSites />} />
-                                     </>
+                                        <Route path='/DeleteDatabase' element={<DeleteDatabase />} />
+                                        <Route path='/DeleteSkippedSites' element={<DeleteSkippedSites />} />
+                                    </>
 
                                 )}
 
@@ -538,8 +571,8 @@ const PendingPerformanceRemarks = () => {
                                         <Route path='/Uploadupdatedreport' element={<Uploadupdatedreport />} />
                                         <Route path='/Sitewiseremark' element={<Sitewiseremark />} />
                                         <Route path='/DownloadCompleteReport' element={<DownloadCompleteReport />} />
-                                        <Route path='/BucketOverview' element={<BucketOverview/>}/>
-                                        <Route path='/History' element={<History/>}/>
+                                        <Route path='/BucketOverview' element={<BucketOverview />} />
+                                        <Route path='/History' element={<History />} />
                                     </>
                                 )}
                             </Routes>

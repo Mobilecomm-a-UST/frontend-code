@@ -1,3 +1,4 @@
+
 // import React, { useState, useEffect } from "react";
 // import {
 //     Box,
@@ -192,15 +193,10 @@
 //         event.target.value = "";
 //     };
 
-//     const handleRemoveFile = (sectionKey, index) => {
+//     const handleClearSectionFiles = (sectionKey) => {
 //         setFiles((prev) => {
-//             const remaining = (prev[sectionKey] || []).filter((_, i) => i !== index);
 //             const updated = { ...prev };
-//             if (remaining.length === 0) {
-//                 delete updated[sectionKey];
-//             } else {
-//                 updated[sectionKey] = remaining;
-//             }
+//             delete updated[sectionKey];
 //             return updated;
 //         });
 //     };
@@ -373,20 +369,18 @@
 //                                             />
 //                                         </Button>
 
-//                                         {selected.map((file, idx) => (
+//                                         {selected.length > 0 && (
 //                                             <Chip
-//                                                 key={`${file.name}-${idx}`}
-//                                                 label={file.name}
+//                                                 label={`${selected.length} file${selected.length > 1 ? "s" : ""} selected`}
 //                                                 color="success"
 //                                                 size="small"
 //                                                 onDelete={
 //                                                     isSubmitting
 //                                                         ? undefined
-//                                                         : () => handleRemoveFile(section.key, idx)
+//                                                         : () => handleClearSectionFiles(section.key)
 //                                                 }
-//                                                 sx={{ maxWidth: "100%" }}
 //                                             />
-//                                         ))}
+//                                         )}
 //                                     </Stack>
 
 //                                     {/* Active Site Files Table for Old vs New section */}
@@ -610,7 +604,6 @@
 // export const MemoZteAlarm = React.memo(ZteAlarm);
 // export default ZteAlarm;
 
-
 import React, { useState, useEffect } from "react";
 import {
     Box,
@@ -639,10 +632,9 @@ import {
 import UploadIcon from "@mui/icons-material/Upload";
 import DoDisturbIcon from "@mui/icons-material/DoDisturb";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
-import DeleteIcon from "@mui/icons-material/Delete";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import Swal from "sweetalert2";
-import { postDataa, getData, deleteData } from "../../../services/FetchNodeServices";
+import { postDataa, getData } from "../../../services/FetchNodeServices";
 import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
 
 /**
@@ -702,18 +694,29 @@ const ZteAlarm = () => {
     const [files, setFiles] = useState({});
     const [results, setResults] = useState(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    
+    // Data states for tables and lists
     const [existingSites, setExistingSites] = useState([]);
     const [loadingSites, setLoadingSites] = useState(false);
+    const [mappingFilesList, setMappingFilesList] = useState([]);
+    const [loadingMapping, setLoadingMapping] = useState(false);
+    const [saNsaData, setSaNsaData] = useState([]);
+    const [loadingSaNsa, setLoadingSaNsa] = useState(false);
 
     // Table Pagination States
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
 
+    const [saNsaPage, setSaNsaPage] = useState(0);
+    const [saNsaRowsPerPage, setSaNsaRowsPerPage] = useState(5);
+
     const { loading, action: setLoading } = useLoadingDialog();
 
-    // Fetch existing site data on mount
+    // Fetch table data on mount
     useEffect(() => {
         fetchExistingSites();
+        fetchMappingData();
+        fetchSaNsaData();
     }, []);
 
     const fetchExistingSites = async () => {
@@ -737,31 +740,48 @@ const ZteAlarm = () => {
         }
     };
 
-    const handleDeleteSite = async (siteId) => {
-        const confirm = await Swal.fire({
-            title: "Are you sure?",
-            text: "This site file will be deleted from the server.",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#d33",
-            cancelButtonColor: "#3085d6",
-            confirmButtonText: "Yes, delete it!",
-        });
-
-        if (confirm.isConfirmed) {
-            try {
-                const res = await deleteData("oem_zte/old_vs_new/", {
-                    data: { id: siteId, site: siteId },
-                });
-                if (res) {
-                    Swal.fire("Deleted!", "Site has been deleted.", "success");
-                    fetchExistingSites();
+    const fetchMappingData = async () => {
+        setLoadingMapping(true);
+        try {
+            const res = await getData("oem_zte/mapping_file/");
+            if (res) {
+                if (Array.isArray(res.files)) {
+                    setMappingFilesList(res.files);
+                } else if (Array.isArray(res.data)) {
+                    setMappingFilesList(res.data);
+                } else if (Array.isArray(res)) {
+                    setMappingFilesList(res);
                 } else {
-                    Swal.fire("Failed", "Unable to delete site file.", "error");
+                    setMappingFilesList([]);
                 }
-            } catch (err) {
-                Swal.fire("Error", "Error deleting site file.", "error");
+            } else {
+                setMappingFilesList([]);
             }
+        } catch (error) {
+            console.error("Failed to fetch mapping data", error);
+        } finally {
+            setLoadingMapping(false);
+        }
+    };
+
+    const fetchSaNsaData = async () => {
+        setLoadingSaNsa(true);
+        try {
+            const res = await getData("oem_zte/SA_NSA/");
+            if (res && Array.isArray(res.data)) {
+                setSaNsaData(res.data);
+            } else if (res && Array.isArray(res)) {
+                setSaNsaData(res);
+            } else if (res && typeof res === "object") {
+                const arrayKey = Object.keys(res).find((k) => Array.isArray(res[k]));
+                setSaNsaData(arrayKey ? res[arrayKey] : []);
+            } else {
+                setSaNsaData([]);
+            }
+        } catch (error) {
+            console.error("Failed to fetch SA/NSA data", error);
+        } finally {
+            setLoadingSaNsa(false);
         }
     };
 
@@ -886,6 +906,8 @@ const ZteAlarm = () => {
 
         setResults(outcomes);
         fetchExistingSites();
+        fetchMappingData();
+        fetchSaNsaData();
     };
 
     const handleReset = () => {
@@ -898,6 +920,11 @@ const ZteAlarm = () => {
     const tableColumns =
         existingSites.length > 0 && typeof existingSites[0] === "object"
             ? Object.keys(existingSites[0])
+            : [];
+
+    const saNsaColumns =
+        saNsaData.length > 0 && typeof saNsaData[0] === "object"
+            ? Object.keys(saNsaData[0])
             : [];
 
     return (
@@ -995,6 +1022,128 @@ const ZteAlarm = () => {
                                         )}
                                     </Stack>
 
+                                    {/* Mapping Files List (Chips) instead of Table */}
+                                    {section.key === "mapping" && (
+                                        <Box sx={{ mt: 2, pt: 1, borderTop: "1px dashed #ccc" }}>
+                                            <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 1 }}>
+                                                <Typography variant="subtitle2" sx={{ color: "#666" }}>
+                                                    Mapping Files:
+                                                </Typography>
+                                                <Tooltip title="Refresh mapping files">
+                                                    <IconButton
+                                                        size="small"
+                                                        onClick={fetchMappingData}
+                                                        disabled={loadingMapping}
+                                                    >
+                                                        <RefreshIcon fontSize="small" />
+                                                    </IconButton>
+                                                </Tooltip>
+                                            </Stack>
+
+                                            {loadingMapping ? (
+                                                <CircularProgress size={20} sx={{ mt: 1 }} />
+                                            ) : mappingFilesList.length > 0 ? (
+                                                <Stack
+                                                    direction="row"
+                                                    spacing={1}
+                                                    sx={{ flexWrap: "wrap", rowGap: 1, mt: 1 }}
+                                                >
+                                                    {mappingFilesList.map((fileName, idx) => (
+                                                        <Chip
+                                                            key={idx}
+                                                            label={typeof fileName === "string" ? fileName : fileName.name || JSON.stringify(fileName)}
+                                                            variant="outlined"
+                                                            color="primary"
+                                                            size="small"
+                                                        />
+                                                    ))}
+                                                </Stack>
+                                            ) : (
+                                                <Typography variant="caption" color="text.secondary">
+                                                    No mapping files found on server.
+                                                </Typography>
+                                            )}
+                                        </Box>
+                                    )}
+
+                                    {/* SA / NSA Data Table */}
+                                    {section.key === "saNSA" && (
+                                        <Box sx={{ mt: 2, pt: 1, borderTop: "1px dashed #ccc" }}>
+                                            <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 1 }}>
+                                                <Typography variant="subtitle2" sx={{ color: "#666" }}>
+                                                    SA / NSA Records:
+                                                </Typography>
+                                                <Tooltip title="Refresh SA/NSA records">
+                                                    <IconButton
+                                                        size="small"
+                                                        onClick={fetchSaNsaData}
+                                                        disabled={loadingSaNsa}
+                                                    >
+                                                        <RefreshIcon fontSize="small" />
+                                                    </IconButton>
+                                                </Tooltip>
+                                            </Stack>
+
+                                            {loadingSaNsa ? (
+                                                <CircularProgress size={20} sx={{ mt: 1 }} />
+                                            ) : saNsaData.length > 0 ? (
+                                                <Paper sx={{ width: "100%", overflow: "hidden", mt: 1 }}>
+                                                    <TableContainer sx={{ maxHeight: 300 }}>
+                                                        <Table stickyHeader size="small">
+                                                            <TableHead>
+                                                                <TableRow>
+                                                                    {saNsaColumns.map((colKey) => (
+                                                                        <TableCell
+                                                                            key={colKey}
+                                                                            sx={{
+                                                                                fontWeight: "bold",
+                                                                                bgcolor: "#f5f5f5",
+                                                                                textTransform: "capitalize",
+                                                                            }}
+                                                                        >
+                                                                            {colKey.replace(/_/g, " ")}
+                                                                        </TableCell>
+                                                                    ))}
+                                                                </TableRow>
+                                                            </TableHead>
+                                                            <TableBody>
+                                                                {saNsaData
+                                                                    .slice(saNsaPage * saNsaRowsPerPage, saNsaPage * saNsaRowsPerPage + saNsaRowsPerPage)
+                                                                    .map((row, rIdx) => (
+                                                                        <TableRow hover key={row.id || rIdx}>
+                                                                            {saNsaColumns.map((colKey) => (
+                                                                                <TableCell key={colKey}>
+                                                                                    {row[colKey] !== null && row[colKey] !== undefined
+                                                                                        ? String(row[colKey])
+                                                                                        : "-"}
+                                                                                </TableCell>
+                                                                            ))}
+                                                                        </TableRow>
+                                                                    ))}
+                                                            </TableBody>
+                                                        </Table>
+                                                    </TableContainer>
+                                                    <TablePagination
+                                                        rowsPerPageOptions={[5, 10, 20, 40]}
+                                                        component="div"
+                                                        count={saNsaData.length}
+                                                        rowsPerPage={saNsaRowsPerPage}
+                                                        page={saNsaPage}
+                                                        onPageChange={(e, p) => setSaNsaPage(p)}
+                                                        onRowsPerPageChange={(e) => {
+                                                            setSaNsaRowsPerPage(parseInt(e.target.value, 10));
+                                                            setSaNsaPage(0);
+                                                        }}
+                                                    />
+                                                </Paper>
+                                            ) : (
+                                                <Typography variant="caption" color="text.secondary">
+                                                    No SA/NSA records found on server.
+                                                </Typography>
+                                            )}
+                                        </Box>
+                                    )}
+
                                     {/* Active Site Files Table for Old vs New section */}
                                     {section.key === "oldVsNew" && (
                                         <Box sx={{ mt: 2, pt: 1, borderTop: "1px dashed #ccc" }}>
@@ -1033,9 +1182,6 @@ const ZteAlarm = () => {
                                                                             {colKey.replace(/_/g, " ")}
                                                                         </TableCell>
                                                                     ))}
-                                                                    <TableCell align="center" sx={{ fontWeight: "bold", bgcolor: "#f5f5f5" }}>
-                                                                        Action
-                                                                    </TableCell>
                                                                 </TableRow>
                                                             </TableHead>
                                                             <TableBody>
@@ -1050,15 +1196,6 @@ const ZteAlarm = () => {
                                                                                         : "-"}
                                                                                 </TableCell>
                                                                             ))}
-                                                                            <TableCell align="center">
-                                                                                <IconButton
-                                                                                    size="small"
-                                                                                    color="error"
-                                                                                    onClick={() => handleDeleteSite(row.id || row.site || rIdx)}
-                                                                                >
-                                                                                    <DeleteIcon fontSize="small" />
-                                                                                </IconButton>
-                                                                            </TableCell>
                                                                         </TableRow>
                                                                     ))}
                                                             </TableBody>
