@@ -1,255 +1,16 @@
-// import React, { useState, useEffect } from "react";
-// import {
-//     Box, Button, Stack, Breadcrumbs, Link, Typography, Slide,
-//     TextField,
-// } from "@mui/material";
-// import {
-//     Send as SendIcon,
-//     DoDisturb as DoDisturbIcon,
-//     KeyboardArrowRight as KeyboardArrowRightIcon,
-//     CloudDownload as CloudDownloadIcon,
-// } from "@mui/icons-material";
-// import Swal from "sweetalert2";
-// import { useNavigate } from "react-router-dom";
-// import { postData } from "../../../services/FetchNodeServices";
-// import OverAllCss from "../../../csss/OverAllCss";
-// import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
-
-// const DeletedSites = () => {
-//     const { loading, action } = useLoadingDialog();
-//     const navigate = useNavigate();
-//     const classes = OverAllCss();
-
-//     // ======== STATE MANAGEMENT ========
-//     const [siteIds, setSiteIds] = useState("");
-//     const [atRefNos, setAtRefNos] = useState("");
-//     const [reason, setReason] = useState("");
-//     const [downloadUrl, setDownloadUrl] = useState("");
-//     const [canDownload, setCanDownload] = useState(false);
-
-//     // ======== HANDLE SUBMIT ========
-//     const handleSubmit = async (e) => {
-//         if (e) e.preventDefault();
-
-//         if (!siteIds.trim() && !atRefNos.trim()) {
-//             Swal.fire({
-//                 icon: "warning",
-//                 title: "No Data Entered",
-//                 text: "Please enter at least one Site ID or AT Reference No.",
-//                 confirmButtonColor: "#ffc107",
-//             });
-//             return;
-//         }
-
-//         if (!reason.trim()) {
-//             Swal.fire({
-//                 icon: "warning",
-//                 title: "Reason Required",
-//                 text: "Please enter a reason.",
-//                 confirmButtonColor: "#ffc107",
-//             });
-//             return;
-//         }
-
-//         action(true);
-
-//         try {
-//             const requestData = {
-//                 site_id: siteIds.trim(),
-//                 at_ref_no: atRefNos.trim(),
-//                 reason: reason.trim(),
-//             };
-
-//             const response = await postData("pending_performance_at_remarks/deleted-site/", requestData);
-
-//             action(false);
-
-//             if (response && response.status) {
-//                 let successText = response.message || "Submitted successfully!";
-//                 Swal.fire({
-//                     icon: "success",
-//                     title: "Success",
-//                     text: successText,
-//                     confirmButtonColor: "#008080",
-//                 });
-
-//                 // Check if download_url is provided
-//                 const val = response.download_url;
-//                 const isDownloadAllowed = 
-//                     val === true || 
-//                     val === 1 || 
-//                     (typeof val === 'string' && ['true', 'yes', '1'].includes(val.toLowerCase().trim()) || val.startsWith('http'));
-
-//                 if (isDownloadAllowed) {
-//                     setCanDownload(true);
-//                     if (typeof val === 'string' && val.startsWith('http')) {
-//                         setDownloadUrl(val);
-//                     }
-//                 }
-
-//                 setSiteIds("");
-//                 setAtRefNos("");
-//                 setReason("");
-//             } else {
-//                 Swal.fire({
-//                     icon: "error",
-//                     title: "Error",
-//                     text: response?.error || response?.message || "Something went wrong.",
-//                     confirmButtonColor: "#d32f2f",
-//                 });
-//             }
-
-//         } catch (error) {
-//             action(false);
-//             Swal.fire({
-//                 icon: "error",
-//                 title: "Error",
-//                 text: error?.message || "Unable to process request.",
-//                 confirmButtonColor: "#d32f2f",
-//             });
-//         }
-//     };
-
-//     // ======== HANDLE DOWNLOAD ========
-//     const handleDownloadClick = async () => {
-//         try {
-//             if (downloadUrl) {
-//                 window.open(downloadUrl, '_blank');
-//             } else {
-//                 window.open("pending_performance_at_remarks/deleted-site/", '_blank');
-//             }
-//         } catch (e) {
-//             console.error('Error downloading report:', e);
-//         }
-//     };
-
-//     // ======== HANDLE CANCEL ========
-//     const handleCancel = () => {
-//         setSiteIds("");
-//         setAtRefNos("");
-//         setReason("");
-//         setCanDownload(false);
-//         setDownloadUrl("");
-//     };
-
-//     useEffect(() => {
-//         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`;
-//     }, []);
-
-//     return (
-//         <>
-//             <Box m={1} ml={2}>
-//                 <Breadcrumbs separator={<KeyboardArrowRightIcon fontSize="small" />}>
-//                     <Link underline="hover" onClick={() => navigate("/tools")}>Tools</Link>
-//                     <Typography color="text.primary">Deleted Sites</Typography>
-//                 </Breadcrumbs>
-//             </Box>
-
-//             <Slide direction="left" in timeout={1000}>
-//                 <Box>
-//                     <Box className={classes.main_Box}>
-//                         <Box className={classes.Back_Box} sx={{ width: { md: "75%", xs: "100%" } }}>
-//                             <Box className={classes.Box_Hading} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-//                                 <span>Deleted Sites</span>
-//                                 {canDownload && (
-//                                     <Button
-//                                         variant="contained"
-//                                         size="small"
-//                                         startIcon={<CloudDownloadIcon />}
-//                                         onClick={handleDownloadClick}
-//                                         sx={{ bgcolor: '#fff', color: '#006e74', '&:hover': { bgcolor: '#f0f0f0' } }}
-//                                     >
-//                                         Download Report
-//                                     </Button>
-//                                 )}
-//                             </Box>
-
-//                             <Stack spacing={2} sx={{ mt: "-40px" }}>
-
-//                                 <Box className={classes.Front_Box}>
-//                                     <div className={classes.Front_Box_Hading}>Enter AT Reference No(s):</div>
-//                                     <div className={classes.Front_Box_Select_Button}>
-//                                         <TextField
-//                                             multiline
-//                                             rows={2}
-//                                             placeholder="Enter AT reference numbers separated by commas or new lines (e.g., AT-01, AT-02)"
-//                                             value={atRefNos}
-//                                             onChange={(e) => setAtRefNos(e.target.value)}
-//                                             sx={{ width: "100%", bgcolor: "#fff" }}
-//                                         />
-//                                     </div>
-//                                 </Box>
-
-//                                 {/* ====== SITE ID SECTION ====== */}
-//                                 <Box className={classes.Front_Box}>
-//                                     <div className={classes.Front_Box_Hading}>Enter Site ID(s):</div>
-//                                     <div className={classes.Front_Box_Select_Button}>
-//                                         <TextField
-//                                             multiline
-//                                             rows={2}
-//                                             placeholder="Enter site IDs separated by commas or new lines (e.g., SITE01, SITE02)"
-//                                             value={siteIds}
-//                                             onChange={(e) => setSiteIds(e.target.value)}
-//                                             sx={{ width: "100%", bgcolor: "#fff" }}
-//                                         />
-//                                     </div>
-//                                 </Box>
-
-//                                 {/* ====== REASON SECTION ====== */}
-//                                 <Box className={classes.Front_Box}>
-//                                     <div className={classes.Front_Box_Hading}>Reason:</div>
-//                                     <div className={classes.Front_Box_Select_Button}>
-//                                         <TextField
-//                                             multiline
-//                                             rows={2}
-//                                             placeholder="Enter reason..."
-//                                             value={reason}
-//                                             onChange={(e) => setReason(e.target.value)}
-//                                             sx={{ width: "100%", bgcolor: "#fff" }}
-//                                         />
-//                                     </div>
-//                                 </Box>
-
-//                                 {/* ====== ACTION BUTTONS ====== */}
-//                                 <Stack direction={{ xs: "column", md: "row" }} spacing={2} sx={{ ml: { md: 2, xs: 0 } }}>
-//                                     <Button
-//                                         variant="contained"
-//                                         color="success"
-//                                         onClick={handleSubmit}
-//                                         endIcon={<SendIcon />}
-//                                     >
-//                                         Submit
-//                                     </Button>
-//                                 </Stack>
-//                             </Stack>
-
-//                             {/* ====== CANCEL BUTTON ====== */}
-//                             <Stack direction={{ xs: "column", md: "row" }} spacing={2} justifyContent="center" mt={3}>
-//                                 <Button
-//                                     variant="contained"
-//                                     onClick={handleCancel}
-//                                     sx={{ backgroundColor: "grey.500", color: "white" }}
-//                                     endIcon={<DoDisturbIcon />}
-//                                 >
-//                                     Cancel
-//                                 </Button>
-//                             </Stack>
-//                         </Box>
-//                     </Box>
-//                 </Box>
-//             </Slide>
-
-//             {loading}
-//         </>
-//     );
-// };
-
-// export default DeletedSites;
-
 import React, { useState, useEffect } from "react";
 import {
-    Box, Button, Stack, Breadcrumbs, Link, Typography, Slide,
+    Box,
+    Button,
+    Stack,
+    Breadcrumbs,
+    Link,
+    Typography,
+    Slide,
     TextField,
+    Alert,
+    CircularProgress,
+    Paper,
 } from "@mui/material";
 import {
     Send as SendIcon,
@@ -259,7 +20,7 @@ import {
 } from "@mui/icons-material";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-import { postData } from "../../../services/FetchNodeServices";
+import { postData, ServerURL } from "../../../services/FetchNodeServices";
 import OverAllCss from "../../../csss/OverAllCss";
 import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
 
@@ -268,18 +29,26 @@ const DeletedSites = () => {
     const navigate = useNavigate();
     const classes = OverAllCss();
 
+    // ======== COLORS ========
+    const TEAL_PRIMARY = '#008080';
+    const TEAL_DARK = '#006e74';
+
     // ======== STATE MANAGEMENT ========
     const [siteIds, setSiteIds] = useState("");
     const [atRefNos, setAtRefNos] = useState("");
-    const [reason, setReason] = useState("");
     const [statusField, setStatusField] = useState("");
+    const [reason, setReason] = useState("");
     const [downloadUrl, setDownloadUrl] = useState("");
-    const [canDownload, setCanDownload] = useState(false);
+    const [submitting, setSubmitting] = useState(false);
+    const [downloading, setDownloading] = useState(false);
+    const [successMessage, setSuccessMessage] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
 
     // ======== HANDLE SUBMIT ========
     const handleSubmit = async (e) => {
         if (e) e.preventDefault();
 
+        // Validation
         if (!siteIds.trim() && !atRefNos.trim()) {
             Swal.fire({
                 icon: "warning",
@@ -310,7 +79,11 @@ const DeletedSites = () => {
             return;
         }
 
+        setSubmitting(true);
         action(true);
+        setErrorMessage("");
+        setSuccessMessage("");
+        setDownloadUrl("");
 
         try {
             const requestData = {
@@ -318,54 +91,93 @@ const DeletedSites = () => {
                 at_ref_no: atRefNos.trim(),
                 status: statusField.trim(),
                 reason: reason.trim(),
+                download_url: "true",
             };
+
+            console.log('Request Data:', requestData);
 
             const response = await postData("pending_performance_at_remarks/deleted-site/", requestData);
 
+            console.log('Response:', response);
+
+            setSubmitting(false);
             action(false);
 
+            // Check for backend error (status: false)
+            if (response?.status === false && response?.message) {
+                setErrorMessage(response.message);
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: response.message,
+                    confirmButtonColor: "#d32f2f",
+                });
+                return;
+            }
+
+            // Check for error key
+            if (response?.error) {
+                setErrorMessage(response.error);
+                Swal.fire({
+                    icon: "error",
+                    title: "Error",
+                    text: response.error,
+                    confirmButtonColor: "#d32f2f",
+                });
+                return;
+            }
+
+            // Check if response was successful (status: true)
             if (response && response.status) {
                 let successText = response.message || "Submitted successfully!";
+                
+                setSuccessMessage(successText);
+
+                // Extract download URL from response
+                if (response.download_url) {
+                    setDownloadUrl(response.download_url);
+                    console.log('Download URL:', response.download_url);
+                }
+
+                // Show success message
                 Swal.fire({
                     icon: "success",
                     title: "Success",
-                    text: successText,
+                    html: successText + (response.download_url ? '<br/><br/><b>Click Download Report to get your file</b>' : ''),
                     confirmButtonColor: "#008080",
                 });
 
-                // Check if download_url is provided
-                const val = response.download_url;
-                const isDownloadAllowed = 
-                    val === true || 
-                    val === 1 || 
-                    (typeof val === 'string' && ['true', 'yes', '1'].includes(val.toLowerCase().trim()) || val.startsWith('http'));
-
-                if (isDownloadAllowed) {
-                    setCanDownload(true);
-                    if (typeof val === 'string' && val.startsWith('http')) {
-                        setDownloadUrl(val);
-                    }
-                }
-
+                // Clear form
                 setSiteIds("");
                 setAtRefNos("");
                 setStatusField("");
                 setReason("");
+
+                // Auto dismiss success message after 5 seconds
+                setTimeout(() => {
+                    setSuccessMessage("");
+                }, 5000);
             } else {
+                const errorMsg = response?.message || response?.error || "Something went wrong.";
+                setErrorMessage(errorMsg);
                 Swal.fire({
                     icon: "error",
                     title: "Error",
-                    text: response?.error || response?.message || "Something went wrong.",
+                    text: errorMsg,
                     confirmButtonColor: "#d32f2f",
                 });
             }
-
         } catch (error) {
+            console.error('Error:', error);
+            setSubmitting(false);
             action(false);
+
+            const errorMsg = error?.message || "Unable to process request.";
+            setErrorMessage(errorMsg);
             Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: error?.message || "Unable to process request.",
+                text: errorMsg,
                 confirmButtonColor: "#d32f2f",
             });
         }
@@ -373,14 +185,62 @@ const DeletedSites = () => {
 
     // ======== HANDLE DOWNLOAD ========
     const handleDownloadClick = async () => {
-        try {
-            if (downloadUrl) {
-                window.open(downloadUrl, '_blank');
-            } else {
-                window.open("pending_performance_at_remarks/deleted-site/", '_blank');
+        if (downloadUrl) {
+            try {
+                // Handle both absolute and relative URLs
+                const url = downloadUrl.startsWith('http') 
+                    ? downloadUrl 
+                    : `${ServerURL}${downloadUrl}`;
+                
+                window.open(url, '_blank');
+            } catch (e) {
+                console.error('Error opening download:', e);
+                setErrorMessage('Failed to download report. Please try again.');
             }
-        } catch (e) {
-            console.error('Error downloading report:', e);
+        } else {
+            setErrorMessage('No download URL available. Please submit the form first.');
+        }
+    };
+
+    // ======== HANDLE DOWNLOAD REPORT BUTTON (Without Submit) ========
+    const handleDownloadReportButton = async () => {
+        setDownloading(true);
+        try {
+            const response = await postData("pending_performance_at_remarks/deleted-site/", {
+                download_url: "true",
+            });
+
+            console.log('Download response:', response);
+
+            if (response?.status === false && response?.message) {
+                setErrorMessage(response.message);
+                return;
+            }
+
+            if (response?.error) {
+                setErrorMessage(response.error);
+                return;
+            }
+
+            if (response?.download_url) {
+                const url = response.download_url.startsWith('http') 
+                    ? response.download_url 
+                    : `${ServerURL}${response.download_url}`;
+                
+                window.open(url, '_blank');
+                setSuccessMessage('Download started successfully!');
+                
+                setTimeout(() => {
+                    setSuccessMessage("");
+                }, 3000);
+            } else {
+                setErrorMessage(response?.message || 'No download URL available');
+            }
+        } catch (error) {
+            console.error('Error downloading:', error);
+            setErrorMessage(error?.message || 'Failed to download report. Please try again.');
+        } finally {
+            setDownloading(false);
         }
     };
 
@@ -390,128 +250,385 @@ const DeletedSites = () => {
         setAtRefNos("");
         setStatusField("");
         setReason("");
-        setCanDownload(false);
         setDownloadUrl("");
+        setSuccessMessage("");
+        setErrorMessage("");
     };
 
     useEffect(() => {
-        document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`;
+        document.title = `${window.location.pathname
+            .slice(1)
+            .replaceAll('_', ' ')
+            .replaceAll('/', ' | ')
+            .toUpperCase()}`;
     }, []);
 
     return (
         <>
             <Box m={1} ml={2}>
                 <Breadcrumbs separator={<KeyboardArrowRightIcon fontSize="small" />}>
-                    <Link underline="hover" onClick={() => navigate("/tools")}>Tools</Link>
+                    <Link underline="hover" onClick={() => navigate("/tools")}>
+                        Tools
+                    </Link>
                     <Typography color="text.primary">Deleted Sites</Typography>
                 </Breadcrumbs>
             </Box>
 
             <Slide direction="left" in timeout={1000}>
-                <Box>
-                    <Box className={classes.main_Box}>
-                        <Box className={classes.Back_Box} sx={{ width: { md: "75%", xs: "100%" } }}>
-                            <Box className={classes.Box_Hading} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <span>Deleted Sites</span>
-                                {canDownload && (
-                                    <Button
-                                        variant="contained"
-                                        size="small"
-                                        startIcon={<CloudDownloadIcon />}
-                                        onClick={handleDownloadClick}
-                                        sx={{ bgcolor: '#fff', color: '#006e74', '&:hover': { bgcolor: '#f0f0f0' } }}
-                                    >
-                                        Download Report
-                                    </Button>
-                                )}
-                            </Box>
+                <Box sx={{ py: 4, display: 'flex', justifyContent: 'center', width: '100%' }}>
+                    <Box sx={{ width: { xs: '95%', sm: '85%', md: '70%' } }}>
+                        {/* Header with Title & Download Button */}
+                        <Paper
+                            elevation={3}
+                            sx={{
+                                background: `linear-gradient(135deg, ${TEAL_PRIMARY} 0%, ${TEAL_DARK} 100%)`,
+                                p: 3,
+                                mb: 3,
+                                borderRadius: 2,
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                                flexWrap: 'wrap',
+                                gap: 2,
+                                boxShadow: '0 8px 24px rgba(0, 128, 128, 0.2)',
+                            }}
+                        >
+                            <Typography
+                                variant="h5"
+                                sx={{
+                                    fontWeight: 700,
+                                    color: 'white',
+                                    letterSpacing: '0.5px',
+                                }}
+                            >
+                                Deleted Sites
+                            </Typography>
+                            <Button
+                                variant="contained"
+                                size="medium"
+                                startIcon={downloading ? <CircularProgress size={18} color="inherit" /> : <CloudDownloadIcon />}
+                                onClick={handleDownloadReportButton}
+                                disabled={downloading}
+                                sx={{
+                                    bgcolor: 'white',
+                                    color: TEAL_PRIMARY,
+                                    fontWeight: 700,
+                                    fontSize: '12px',
+                                    textTransform: 'uppercase',
+                                    letterSpacing: '0.5px',
+                                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+                                    transition: 'all 0.3s ease',
+                                    '&:hover': {
+                                        bgcolor: '#f0f0f0',
+                                        boxShadow: '0 6px 20px rgba(0, 0, 0, 0.2)',
+                                        transform: 'translateY(-2px)',
+                                    },
+                                    '&:disabled': {
+                                        bgcolor: '#e0e0e0',
+                                        color: '#9e9e9e',
+                                    },
+                                }}
+                            >
+                                {downloading ? 'Downloading...' : 'Download Report'}
+                            </Button>
+                        </Paper>
 
-                            <Stack spacing={2} sx={{ mt: "-40px" }}>
+                        {/* Alert Messages */}
+                        {successMessage && (
+                            <Alert
+                                severity="success"
+                                onClose={() => setSuccessMessage('')}
+                                action={
+                                    downloadUrl && (
+                                        <Button
+                                            color="inherit"
+                                            size="small"
+                                            onClick={handleDownloadClick}
+                                            sx={{ fontWeight: 600 }}
+                                        >
+                                            Download Now
+                                        </Button>
+                                    )
+                                }
+                                sx={{
+                                    mb: 3,
+                                    backgroundColor: '#e8f5e9',
+                                    color: '#2e7d32',
+                                    '& .MuiAlert-icon': {
+                                        color: '#4caf50',
+                                    },
+                                }}
+                            >
+                                {successMessage}
+                            </Alert>
+                        )}
 
-                                <Box className={classes.Front_Box}>
-                                    <div className={classes.Front_Box_Hading}>Enter AT Reference No(s):</div>
-                                    <div className={classes.Front_Box_Select_Button}>
+                        {errorMessage && (
+                            <Alert
+                                severity="error"
+                                onClose={() => setErrorMessage('')}
+                                sx={{
+                                    mb: 3,
+                                    backgroundColor: '#ffebee',
+                                    color: '#c62828',
+                                    '& .MuiAlert-icon': {
+                                        color: '#f44336',
+                                    },
+                                }}
+                            >
+                                {errorMessage}
+                            </Alert>
+                        )}
+
+                        {/* Form Card */}
+                        <Paper
+                            elevation={2}
+                            sx={{
+                                p: 4,
+                                borderRadius: 2,
+                                borderTop: `4px solid ${TEAL_PRIMARY}`,
+                                boxShadow: '0 4px 16px rgba(0, 128, 128, 0.1)',
+                                transition: 'all 0.3s ease',
+                                '&:hover': {
+                                    boxShadow: '0 6px 24px rgba(0, 128, 128, 0.15)',
+                                },
+                            }}
+                        >
+                            <Typography
+                                variant="h6"
+                                sx={{
+                                    fontWeight: 700,
+                                    color: TEAL_DARK,
+                                    mb: 1,
+                                    letterSpacing: '0.5px',
+                                }}
+                            >
+                                Deleted Sites Entry
+                            </Typography>
+                            <Typography
+                                variant="body2"
+                                sx={{
+                                    color: '#999',
+                                    mb: 3,
+                                }}
+                            >
+                                Add deleted sites information
+                            </Typography>
+
+                            <Box component="form" onSubmit={handleSubmit}>
+                                <Stack spacing={2.5}>
+                                    {/* AT Reference No Section */}
+                                    <Box>
+                                        <Typography
+                                            variant="subtitle2"
+                                            sx={{
+                                                fontWeight: 600,
+                                                color: TEAL_DARK,
+                                                mb: 1,
+                                                letterSpacing: '0.3px',
+                                            }}
+                                        >
+                                            Enter AT Reference No(s):
+                                        </Typography>
                                         <TextField
+                                            fullWidth
                                             multiline
                                             rows={2}
                                             placeholder="Enter AT reference numbers separated by commas or new lines (e.g., AT-01, AT-02)"
                                             value={atRefNos}
                                             onChange={(e) => setAtRefNos(e.target.value)}
-                                            sx={{ width: "100%", bgcolor: "#fff" }}
+                                            disabled={submitting}
+                                            variant="outlined"
+                                            sx={{
+                                                '& .MuiOutlinedInput-root': {
+                                                    '&:hover fieldset': {
+                                                        borderColor: TEAL_PRIMARY,
+                                                    },
+                                                    '&.Mui-focused fieldset': {
+                                                        borderColor: TEAL_PRIMARY,
+                                                        borderWidth: '2px',
+                                                    },
+                                                },
+                                            }}
                                         />
-                                    </div>
-                                </Box>
+                                    </Box>
 
-                                {/* ====== SITE ID SECTION ====== */}
-                                <Box className={classes.Front_Box}>
-                                    <div className={classes.Front_Box_Hading}>Enter Site ID(s):</div>
-                                    <div className={classes.Front_Box_Select_Button}>
+                                    {/* Site ID Section */}
+                                    <Box>
+                                        <Typography
+                                            variant="subtitle2"
+                                            sx={{
+                                                fontWeight: 600,
+                                                color: TEAL_DARK,
+                                                mb: 1,
+                                                letterSpacing: '0.3px',
+                                            }}
+                                        >
+                                            Enter Site ID(s):
+                                        </Typography>
                                         <TextField
+                                            fullWidth
                                             multiline
                                             rows={2}
                                             placeholder="Enter site IDs separated by commas or new lines (e.g., SITE01, SITE02)"
                                             value={siteIds}
                                             onChange={(e) => setSiteIds(e.target.value)}
-                                            sx={{ width: "100%", bgcolor: "#fff" }}
+                                            disabled={submitting}
+                                            variant="outlined"
+                                            sx={{
+                                                '& .MuiOutlinedInput-root': {
+                                                    '&:hover fieldset': {
+                                                        borderColor: TEAL_PRIMARY,
+                                                    },
+                                                    '&.Mui-focused fieldset': {
+                                                        borderColor: TEAL_PRIMARY,
+                                                        borderWidth: '2px',
+                                                    },
+                                                },
+                                            }}
                                         />
-                                    </div>
-                                </Box>
+                                    </Box>
 
-                                {/* ====== STATUS SECTION ====== */}
-                                <Box className={classes.Front_Box}>
-                                    <div className={classes.Front_Box_Hading}>Status:</div>
-                                    <div className={classes.Front_Box_Select_Button}>
+                                    {/* Status Section */}
+                                    <Box>
+                                        <Typography
+                                            variant="subtitle2"
+                                            sx={{
+                                                fontWeight: 600,
+                                                color: TEAL_DARK,
+                                                mb: 1,
+                                                letterSpacing: '0.3px',
+                                            }}
+                                        >
+                                            Status:
+                                        </Typography>
                                         <TextField
+                                            fullWidth
                                             multiline
                                             rows={2}
                                             placeholder="Enter status..."
                                             value={statusField}
                                             onChange={(e) => setStatusField(e.target.value)}
-                                            sx={{ width: "100%", bgcolor: "#fff" }}
+                                            disabled={submitting}
+                                            variant="outlined"
+                                            sx={{
+                                                '& .MuiOutlinedInput-root': {
+                                                    '&:hover fieldset': {
+                                                        borderColor: TEAL_PRIMARY,
+                                                    },
+                                                    '&.Mui-focused fieldset': {
+                                                        borderColor: TEAL_PRIMARY,
+                                                        borderWidth: '2px',
+                                                    },
+                                                },
+                                            }}
                                         />
-                                    </div>
-                                </Box>
+                                    </Box>
 
-                                {/* ====== REASON SECTION ====== */}
-                                <Box className={classes.Front_Box}>
-                                    <div className={classes.Front_Box_Hading}>Reason:</div>
-                                    <div className={classes.Front_Box_Select_Button}>
+                                    {/* Reason Section */}
+                                    <Box>
+                                        <Typography
+                                            variant="subtitle2"
+                                            sx={{
+                                                fontWeight: 600,
+                                                color: TEAL_DARK,
+                                                mb: 1,
+                                                letterSpacing: '0.3px',
+                                            }}
+                                        >
+                                            Reason:
+                                        </Typography>
                                         <TextField
+                                            fullWidth
                                             multiline
                                             rows={2}
                                             placeholder="Enter reason..."
                                             value={reason}
                                             onChange={(e) => setReason(e.target.value)}
-                                            sx={{ width: "100%", bgcolor: "#fff" }}
+                                            disabled={submitting}
+                                            variant="outlined"
+                                            sx={{
+                                                '& .MuiOutlinedInput-root': {
+                                                    '&:hover fieldset': {
+                                                        borderColor: TEAL_PRIMARY,
+                                                    },
+                                                    '&.Mui-focused fieldset': {
+                                                        borderColor: TEAL_PRIMARY,
+                                                        borderWidth: '2px',
+                                                    },
+                                                },
+                                            }}
                                         />
-                                    </div>
-                                </Box>
+                                    </Box>
 
-                                {/* ====== ACTION BUTTONS ====== */}
-                                <Stack direction={{ xs: "column", md: "row" }} spacing={2} sx={{ ml: { md: 2, xs: 0 } }}>
-                                    <Button
-                                        variant="contained"
-                                        color="success"
-                                        onClick={handleSubmit}
-                                        endIcon={<SendIcon />}
+                                    {/* Action Buttons */}
+                                    <Stack
+                                        direction={{ xs: 'column', sm: 'row' }}
+                                        spacing={2}
+                                        sx={{ mt: 3 }}
+                                        justifyContent="center"
                                     >
-                                        Submit
-                                    </Button>
-                                </Stack>
-                            </Stack>
+                                        <Button
+                                            variant="contained"
+                                            type="submit"
+                                            size="large"
+                                            startIcon={submitting ? <CircularProgress size={20} color="inherit" /> : <SendIcon />}
+                                            disabled={submitting}
+                                            sx={{
+                                                minWidth: '140px',
+                                                bgcolor: TEAL_PRIMARY,
+                                                color: 'white',
+                                                fontWeight: 700,
+                                                fontSize: '14px',
+                                                textTransform: 'uppercase',
+                                                letterSpacing: '0.5px',
+                                                boxShadow: '0 4px 12px rgba(0, 128, 128, 0.3)',
+                                                transition: 'all 0.3s ease',
+                                                '&:hover': {
+                                                    bgcolor: TEAL_DARK,
+                                                    boxShadow: '0 6px 20px rgba(0, 128, 128, 0.4)',
+                                                    transform: 'translateY(-2px)',
+                                                },
+                                                '&:disabled': {
+                                                    bgcolor: '#e0e0e0',
+                                                    color: '#9e9e9e',
+                                                },
+                                            }}
+                                        >
+                                            {submitting ? 'Submitting...' : 'Submit'}
+                                        </Button>
 
-                            {/* ====== CANCEL BUTTON ====== */}
-                            <Stack direction={{ xs: "column", md: "row" }} spacing={2} justifyContent="center" mt={3}>
-                                <Button
-                                    variant="contained"
-                                    onClick={handleCancel}
-                                    sx={{ backgroundColor: "grey.500", color: "white" }}
-                                    endIcon={<DoDisturbIcon />}
-                                >
-                                    Cancel
-                                </Button>
-                            </Stack>
-                        </Box>
+                                        <Button
+                                            variant="outlined"
+                                            size="large"
+                                            onClick={handleCancel}
+                                            startIcon={<DoDisturbIcon />}
+                                            disabled={submitting}
+                                            sx={{
+                                                minWidth: '140px',
+                                                color: '#999',
+                                                borderColor: '#e0e0e0',
+                                                fontWeight: 700,
+                                                fontSize: '14px',
+                                                textTransform: 'uppercase',
+                                                letterSpacing: '0.5px',
+                                                transition: 'all 0.3s ease',
+                                                '&:hover': {
+                                                    borderColor: '#999',
+                                                    backgroundColor: '#f5f5f5',
+                                                },
+                                                '&:disabled': {
+                                                    color: '#ccc',
+                                                    borderColor: '#e0e0e0',
+                                                },
+                                            }}
+                                        >
+                                            Cancel
+                                        </Button>
+                                    </Stack>
+                                </Stack>
+                            </Box>
+                        </Paper>
                     </Box>
                 </Box>
             </Slide>

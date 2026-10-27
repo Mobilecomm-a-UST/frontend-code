@@ -26,6 +26,7 @@ const IX_VI_ScriptingTool = lazy(() => import("./IX_VI_ScriptingTool"));
 
 const UPE_NT = lazy(() => import("./Circle Scripting/UPE Scripting/UPE_NT"))
 const UPE_HPSC = lazy(() => import("./Circle Scripting/UPE Scripting/UPE_HPSC"))
+const NT_ACOC = lazy(()=> import('./Circle Scripting/UPE Scripting/NT_ACOC'))
 
 const HR_NT = lazy(() => import("./Circle Scripting/HRY Scripting/HR_NT"))
 const HR_HPSC = lazy(() => import("./Circle Scripting/HRY Scripting/HR_HPSC"))
@@ -74,10 +75,14 @@ const IX_VI_Scripting = () => {
 
                                             <Nav.Menu eventKey="1" title="UPE Scripting" icon={<ListIcon />} placement="rightStart" className="menu-title-custom">
                                                 <Nav.Item eventKey="1-1" placement="rightStart" className="single-item-custom" icon={< FileUploadIcon style={{}} />} onClick={() => { navigate('/tools/ix_tools/ix_vi_scripting/UPE_NT'); show(); setMenuButton(true) }}>
-                                                    NT
+                                                    NT ASOG
                                                 </Nav.Item>
                                                 <Nav.Item eventKey="1-2" placement="rightStart" className="single-item-custom" icon={< FileUploadIcon style={{}} />} onClick={() => { navigate('/tools/ix_tools/ix_vi_scripting/UPE_HPSC'); show(); setMenuButton(true) }}>
                                                     HPSC
+                                                </Nav.Item>
+
+                                                 <Nav.Item eventKey="1-3" placement="rightStart" className="single-item-custom" icon={< FileUploadIcon style={{}} />} onClick={() => { navigate('/tools/ix_tools/ix_vi_scripting/NT_ACOC'); show(); setMenuButton(true) }}>
+                                                    NT ACOC
                                                 </Nav.Item>
                                             </Nav.Menu>
 
@@ -117,6 +122,7 @@ const IX_VI_Scripting = () => {
 
                                 <Route path="/UPE_NT" element={<UPE_NT />} />
                                 <Route path="/UPE_HPSC" element={<UPE_HPSC />} />
+                                <Route path='/NT_ACOC' element={<NT_ACOC/>}/>
 
 
                                 <Route path='/HR_NT' element={<HR_NT />} />

@@ -26,31 +26,31 @@ import { Alarm } from '@mui/icons-material';
 const AlarmLogsTool = lazy(() => import("./AlarmLogsTool"));
 const AlarmLogUpload = lazy(() => import("./AlarmLog/AlarmLogUpload"));
 const Dashboard = lazy(() => import("./AlarmLog/Dashboard"));
-
+const Degrow = lazy(() => import('./AlarmLog/Degrow'))
 
 const AlarmLogs = () => {
     const [expanded, setExpanded] = useState(true);
-        const [activeKey, setActiveKey] = useState();
-        const [states, setStates] = useState(60)
-        const [checked, setChecked] = useState(true)
-        const navigate = useNavigate()
-        const [menuButton, setMenuButton] = useState(false)
-        const userTypes = (getDecreyptedData('user_type')?.split(","))
-        //  const classes = useStyles();
-        const show = () => {
-            setChecked(!checked)
-            if (checked === true) {
-                setMenuButton(false)
-            }
+    const [activeKey, setActiveKey] = useState();
+    const [states, setStates] = useState(60)
+    const [checked, setChecked] = useState(true)
+    const navigate = useNavigate()
+    const [menuButton, setMenuButton] = useState(false)
+    const userTypes = (getDecreyptedData('user_type')?.split(","))
+    //  const classes = useStyles();
+    const show = () => {
+        setChecked(!checked)
+        if (checked === true) {
+            setMenuButton(false)
         }
-    
-    
-        useEffect(() => {
-            document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
-    
-        }, [])
-  return (
-     <>
+    }
+
+
+    useEffect(() => {
+        document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
+
+    }, [])
+    return (
+        <>
 
             <Box style={{ marginTop: states, transition: 'all 1s ease' }} >
 
@@ -64,11 +64,14 @@ const AlarmLogs = () => {
                                         <Nav activeKey={activeKey} onSelect={setActiveKey} >
                                             <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>Alarm Logs</Nav>
                                             <Divider component="li" sx={{ backgroundColor: 'white' }} />
-        
 
-                                              <Nav.Item eventKey="1" placement="rightStart" className="single-item-custom" icon={< FileUploadIcon style={{}} />} onClick={() => { navigate('/tools/quality_team/alarm_logs/AlarmLogUpload'); show(); setMenuButton(true) }}>
-                                                        Upload File
-                                            </Nav.Item> 
+
+                                            <Nav.Item eventKey="1" placement="rightStart" className="single-item-custom" icon={< FileUploadIcon style={{}} />} onClick={() => { navigate('/tools/quality_team/alarm_logs/AlarmLogUpload'); show(); setMenuButton(true) }}>
+                                                Upload File
+                                            </Nav.Item>
+                                            <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={< FileUploadIcon style={{}} />} onClick={() => { navigate('/tools/quality_team/alarm_logs/Degrow'); show(); setMenuButton(true) }}>
+                                                De-Grow
+                                            </Nav.Item>
 
                                             {/* <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={<SendToDashboardIcon style={{}} />} onClick={() => { navigate('/tools/quality_team/alarm_logs/Dashboard'); show(); setMenuButton(true) }}>
                                                 Dashboard
@@ -83,19 +86,20 @@ const AlarmLogs = () => {
                     <Grid item xs={12} md={10}>
 
 
-                        <Suspense fallback={<Loader/>}>
+                        <Suspense fallback={<Loader />}>
                             <Routes>
-                               <Route path="/" element={<AlarmLogsTool />} />
-                               <Route path="/AlarmLogUpload" element={<AlarmLogUpload />} />
-                               <Route path="/Dashboard" element={<Dashboard />} />
+                                <Route path="/" element={<AlarmLogsTool />} />
+                                <Route path="/AlarmLogUpload" element={<AlarmLogUpload />} />
+                                <Route path="/Dashboard" element={<Dashboard />} />
+                                <Route path='/Degrow' element={<Degrow />} />
 
 
 
                                 {/* <Route path="/uploadfile" element={<UploadFile />} />
                                 <Route path="/dashboard" element={<Dashboard />} /> */}
-                                
 
-                              {/* {userTypes?.includes('ran_admin') && 
+
+                                {/* {userTypes?.includes('ran_admin') && 
                                 <Route element={<FinalMailPage />} path="/email_dashboard" />
                                 }
                                 
