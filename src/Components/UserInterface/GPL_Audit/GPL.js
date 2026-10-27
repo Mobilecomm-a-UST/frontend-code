@@ -19,6 +19,8 @@ import ChangeListIcon from '@rsuite/icons/ChangeList';
 import Loader from '../../Skeleton/Loader'
 import './../../../App.css'
 import { getDecreyptedData } from '../../utils/localstorage'
+import TreeIcon from '@rsuite/icons/Tree';
+import DataAuthorizeIcon from '@rsuite/icons/DataAuthorize';
 
 
 const GplTool = lazy(() => import('./GplTool'));
@@ -31,8 +33,10 @@ const Step1Comparsion = lazy(() => import('./Kget To GPL/Step1Comparsion'))
 const Step2Scripting = lazy(() => import('./Kget To GPL/Step2Scripting'))
 const BhartiGPLAudit = lazy(() => import('./Bharti GPL Audit/BhartiGPLAudit'))
 const Convertor = lazy(() => import('./Converter/Converter'))
+const IntegrationTracker = lazy(()=> import('./Converter/IntegrationTracker'))
+
 const ZTEGPL = lazy(() => import('./ZTE GPL/ZTE_GPL'))
-const ZTENBR = lazy(()=> import('./ZTE NBR/ZTE_NBR'))
+const ZTENBR = lazy(() => import('./ZTE NBR/ZTE_NBR'))
 
 
 const GPL = () => {
@@ -100,13 +104,19 @@ const GPL = () => {
                                                     <Nav.Item eventKey="3" placement="rightStart" icon={<ChangeListIcon />} className="single-item-custom" onClick={() => { navigate('/tools/mobile_network_integration/script_generator'); show(); setMenuButton(true) }}>
                                                         Script Generator
                                                     </Nav.Item>
-                                                    <Nav.Item eventKey="4" placement="rightStart" className="single-item-custom" icon={<DocPassIcon />} onClick={() => { navigate('/tools/mobile_network_integration/Convertor'); show(); setMenuButton(true) }}>
-                                                        Convertor
-                                                    </Nav.Item>
+                                                    <Nav.Menu eventKey="4" placement="rightStart" className="menu-title-custom" title="Convertor" icon={<DocPassIcon />}>
+                                                        <Nav.Item eventKey="4-1" placement="rightStart" className="single-item-custom" icon={<DataAuthorizeIcon />} onClick={() => { navigate('/tools/mobile_network_integration/Convertor'); show(); setMenuButton(true) }}>
+                                                            RF Data
+                                                        </Nav.Item>
+                                                        <Nav.Item eventKey="4-2" placement="rightStart" className="single-item-custom" icon={<TreeIcon />} onClick={() => { navigate('/tools/mobile_network_integration/IntegrationTracker'); show(); setMenuButton(true) }}>
+                                                            Integration Tracker
+                                                        </Nav.Item>
+
+                                                    </Nav.Menu>
                                                     {/* <Nav.Item eventKey="5" placement="rightStart" icon={<ChangeListIcon />} className="single-item-custom" onClick={() => { navigate('/tools/mobile_network_integration/zte_gpl'); show(); setMenuButton(true) }}>
                                                         ZTE GPL
                                                     </Nav.Item> */}
-                                                     {/* <Nav.Item eventKey="6" placement="rightStart" icon={<ChangeListIcon />} className="single-item-custom" onClick={() => { navigate('/tools/mobile_network_integration/zte_nbr'); show(); setMenuButton(true) }}>
+                                                    {/* <Nav.Item eventKey="6" placement="rightStart" icon={<ChangeListIcon />} className="single-item-custom" onClick={() => { navigate('/tools/mobile_network_integration/zte_nbr'); show(); setMenuButton(true) }}>
                                                         ZTE NBR
                                                     </Nav.Item> */}
                                                 </>}
@@ -146,8 +156,9 @@ const GPL = () => {
                                         <Route element={<GplPrePostAudit />} path="/gpl_pre_post_audit" />
                                         <Route element={<ScriptGenerator />} path="/script_generator" />
                                         <Route element={<Convertor />} path='/Convertor' />
+                                        <Route element={<IntegrationTracker />} path="/IntegrationTracker" />
                                         <Route element={<ZTEGPL />} path="/zte_gpl" />
-                                        <Route element ={<ZTENBR/>} path='/zte_nbr'/>
+                                        <Route element={<ZTENBR />} path='/zte_nbr' />
                                     </>
                                 }
 

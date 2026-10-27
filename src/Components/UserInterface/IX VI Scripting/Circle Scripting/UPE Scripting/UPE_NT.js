@@ -472,7 +472,7 @@ const UPE_Scripting = () => {
                 <Box>
                     <Box className={classes.main_Box}>
                         <Box className={classes.Back_Box} sx={{ width: { md: "75%", xs: "100%" } }}>
-                            <Box className={classes.Box_Hading}>NT Scripting</Box>
+                            <Box className={classes.Box_Hading}>NT ASOG</Box>
 
                             <Stack spacing={2.5} sx={{ marginTop: "10px" }} direction="column">
                                 {/* ✅ BANDWIDTH DROPDOWN (First) */}

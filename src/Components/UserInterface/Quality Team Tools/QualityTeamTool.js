@@ -422,7 +422,7 @@ const QualityTeamTool = () => {
                     .map((r) => r.toLowerCase())
                     .includes(role?.toLowerCase()),
                 ) && (
-                    <Grid item xs={12} sm={6} md={3}>
+                    <Grid item xs={20} sm={6} md={3}>
                       <Box
                         sx={backgroundStyle}
                         className={classes.des}
@@ -434,8 +434,19 @@ const QualityTeamTool = () => {
                             style={{ width: "40px", height: "40px" }}
                           />
                         </div>
-                        <div>
-                          <div className={classes.center}>Alarm Logs</div>
+                         <div
+                          className={classes.center}
+                          style={{
+                            width: "160px",
+                            margin: "0 auto",
+                            textAlign: "center",
+                            fontSize: "18px",
+                            fontWeight: "700",
+                            lineHeight: "18px",
+                            whiteSpace: "normal",
+                          }}
+                        >
+                         De-Grow and Alarm Logs
                         </div>
                       </Box>
                     </Grid>

@@ -190,10 +190,10 @@
 // }
 
 // const UploadLayered = () => {
+//     // Map stores arrays of files per key: { [key]: File[] }
 //     const [selectedFilesMap, setSelectedFilesMap] = useState({});
 //     const [showError, setShowError] = useState(false);
     
-//     // Fixed key names matching backend response: download_url1, download_url2, download_url3, download_url4
 //     const [downloadUrls, setDownloadUrls] = useState({
 //         url1: null,
 //         url2: null,
@@ -211,25 +211,32 @@
 //         { key: "site_ip", label: "1. Site IP Plan File" },
 //         { key: "config_data", label: "2. Configuration File" },
 //         { key: "lte_rep", label: "3. LTE Cell Report File" },
-//         { key: "nte_rep", label: "4. NT Report File (nte_report)" }
+//         { key: "nte_rep", label: "4. NE Report File" }
 //     ];
 
-//     const handleSingleFileSelection = (key, event) => {
-//         const file = event.target.files[0];
-//         if (!file) return;
+//     // Handles multiple file selections per section key
+//     const handleFileSelection = (key, event) => {
+//         const newFiles = Array.from(event.target.files || []);
+//         if (!newFiles.length) return;
 
 //         setSelectedFilesMap(prev => ({
 //             ...prev,
-//             [key]: file
+//             [key]: [...(prev[key] || []), ...newFiles]
 //         }));
 //         setShowError(false);
 //         event.target.value = "";
 //     };
 
-//     const handleRemoveFile = (keyToRemove) => {
+//     // Removes an individual file by index from a section array
+//     const handleRemoveFileIndex = (key, indexToRemove) => {
 //         setSelectedFilesMap(prev => {
+//             const updatedList = (prev[key] || []).filter((_, idx) => idx !== indexToRemove);
 //             const updated = { ...prev };
-//             delete updated[keyToRemove];
+//             if (updatedList.length > 0) {
+//                 updated[key] = updatedList;
+//             } else {
+//                 delete updated[key];
+//             }
 //             return updated;
 //         });
 //     };
@@ -247,7 +254,7 @@
 //         try {
 //             const link = document.createElement('a');
 //             link.href = url;
-//             link.target = "_blank"; // Opens download directly
+//             link.target = "_blank";
 //             document.body.appendChild(link);
 //             link.click();
 //             document.body.removeChild(link);
@@ -269,14 +276,14 @@
 //     };
 
 //     const handleSubmit = async () => {
-//         const assignedKeysCount = Object.keys(selectedFilesMap).length;
+//         const categoriesWithFilesCount = Object.keys(selectedFilesMap).length;
         
-//         if (assignedKeysCount < 4) {
+//         if (categoriesWithFilesCount < 4) {
 //             setShowError(true);
 //             Swal.fire({
 //                 icon: "warning",
 //                 title: "Missing Files",
-//                 text: "Please upload all 4 required files into their respective sections.",
+//                 text: "Please upload files into all 4 required categories before submitting.",
 //             });
 //             return;
 //         }
@@ -284,8 +291,11 @@
 //         action(true);
 //         var formData = new FormData();
         
+//         // Append all files in each category array
 //         Object.keys(selectedFilesMap).forEach((key) => {
-//             formData.append(key, selectedFilesMap[key]);
+//             selectedFilesMap[key].forEach((file) => {
+//                 formData.append(key, file);
+//             });
 //         });
 
 //         try {
@@ -295,7 +305,6 @@
 //                 action(false);
 //                 setShowDownloads(true);
                 
-//                 // ✅ FIXED: Extracted using exact backend key names 'download_url1', 'download_url2', etc.
 //                 setDownloadUrls({
 //                     url1: response.download_url1 || response.download_ulr1,
 //                     url2: response.download_url2 || response.download_ulr2,
@@ -340,7 +349,9 @@
 //         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`;
 //     }, []);
 
-//     const filesCount = Object.keys(selectedFilesMap).length;
+//     // Total files selected across all categories
+//     const totalSelectedFilesCount = Object.values(selectedFilesMap).reduce((acc, curr) => acc + (curr ? curr.length : 0), 0);
+//     const categoriesFilledCount = Object.keys(selectedFilesMap).length;
 
 //     return (
 //         <>
@@ -366,12 +377,13 @@
 
 //                                 <Box className={classes.Front_Box} sx={{ p: 3 }}>
 //                                     <div className={classes.Front_Box_Hading} style={{ marginBottom: '15px' }}>
-//                                         Upload Required Files by Category:
+//                                         Upload Required Files by Category (Multiple Allowed):
 //                                     </div>
 
 //                                     <Stack spacing={2}>
 //                                         {FILE_SECTIONS.map((section, idx) => {
-//                                             const fileObj = selectedFilesMap[section.key];
+//                                             const fileArray = selectedFilesMap[section.key] || [];
+//                                             const hasFiles = fileArray.length > 0;
 //                                             return (
 //                                                 <Box key={section.key} sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
 //                                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
@@ -383,39 +395,43 @@
 //                                                             variant="contained" 
 //                                                             component="label" 
 //                                                             size="small"
-//                                                             color={fileObj ? "success" : "primary"}
+//                                                             color={hasFiles ? "success" : "primary"}
 //                                                         >
-//                                                             {fileObj ? "Change File" : "Browse File"}
+//                                                             {hasFiles ? "Add More Files" : "Browse Files"}
 //                                                             <input
 //                                                                 hidden
-                                                               
 //                                                                 accept=".xlsx,.xls,.xlsb,.csv"
 //                                                                 type="file"
-//                                                                 onChange={(e) => handleSingleFileSelection(section.key, e)}
+//                                                                 multiple={true}
+//                                                                 onChange={(e) => handleFileSelection(section.key, e)}
 //                                                             />
 //                                                         </Button>
 //                                                     </div>
 
-//                                                     {fileObj ? (
-//                                                         <Chip
-//                                                             label={`File: ${fileObj.name}`}
-//                                                             onDelete={() => handleRemoveFile(section.key)}
-//                                                             deleteIcon={<CancelIcon />}
-//                                                             sx={{
-//                                                                 alignSelf: 'flex-start',
-//                                                                 bgcolor: C.labelOdd,
-//                                                                 color: C.tealDark,
-//                                                                 fontWeight: 600,
-//                                                                 border: `1px solid ${C.border}`,
-//                                                                 '& .MuiChip-deleteIcon': {
-//                                                                     color: C.teal,
-//                                                                     '&:hover': { color: C.cross }
-//                                                                 }
-//                                                             }}
-//                                                         />
+//                                                     {hasFiles ? (
+//                                                         <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap sx={{ mt: 0.5 }}>
+//                                                             {fileArray.map((f, fIdx) => (
+//                                                                 <Chip
+//                                                                     key={fIdx}
+//                                                                     label={f.name}
+//                                                                     onDelete={() => handleRemoveFileIndex(section.key, fIdx)}
+//                                                                     deleteIcon={<CancelIcon />}
+//                                                                     sx={{
+//                                                                         bgcolor: C.labelOdd,
+//                                                                         color: C.tealDark,
+//                                                                         fontWeight: 600,
+//                                                                         border: `1px solid ${C.border}`,
+//                                                                         '& .MuiChip-deleteIcon': {
+//                                                                             color: C.teal,
+//                                                                             '&:hover': { color: C.cross }
+//                                                                         }
+//                                                                     }}
+//                                                                 />
+//                                                             ))}
+//                                                         </Stack>
 //                                                     ) : (
 //                                                         <Typography variant="caption" sx={{ color: 'gray', fontStyle: 'italic' }}>
-//                                                             No file chosen for this category yet.
+//                                                             No files chosen for this category yet.
 //                                                         </Typography>
 //                                                     )}
 
@@ -426,14 +442,14 @@
 //                                     </Stack>
 
 //                                     <Box sx={{ mt: 2 }}>
-//                                         <span style={{ color: filesCount === 4 ? 'green' : '#006e74', fontSize: '15px', fontWeight: 600 }}>
-//                                             Total Ready: {filesCount} / 4 Files Uploaded
+//                                         <span style={{ color: categoriesFilledCount === 4 ? 'green' : '#006e74', fontSize: '15px', fontWeight: 600 }}>
+//                                             Total Categories Ready: {categoriesFilledCount} / 4 ({totalSelectedFilesCount} total files chosen)
 //                                         </span>
 //                                     </Box>
 
 //                                     <div>
-//                                         <span style={{ display: showError ? 'inherit' : 'none', color: 'red', fontSize: '15px', fontWeight: 600, marginTop: '8px', display: 'block' }}>
-//                                             Error: Please ensure all 4 specific files are selected before submitting!
+//                                         <span style={{ display: showError ? 'block' : 'none', color: 'red', fontSize: '15px', fontWeight: 600, marginTop: '8px' }}>
+//                                             Error: Please ensure files are selected for all 4 categories before submitting!
 //                                         </span>
 //                                     </div>
 //                                 </Box>
@@ -497,7 +513,7 @@
 
 
 import React, { useState, useEffect } from "react";
-import { Box, Button, Stack, Chip, Divider } from "@mui/material";
+import { Box, Button, Stack, Chip, Divider, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import { Breadcrumbs, Link, Typography } from "@mui/material";
 import {
     Paper,
@@ -539,6 +555,8 @@ const C = {
 
 const HEADER_GRADIENT = "linear-gradient(90deg, #004d52 0%, #006e74 55%, #4fa3a8 100%)";
 const PINNED_KEY = "Site ID";
+
+const CIRCLE_OPTIONS = ['AP', 'CH', 'KK', 'KA', 'DL', 'HR', 'RJ', 'JK', 'WB', 'OD', 'MU', 'TNCH', 'UE', 'BH', 'UW', 'MP', 'PB', 'KO', 'JH'];
 
 const buildColumns = (rows) => {
     if (!rows || !rows.length) return [];
@@ -691,6 +709,7 @@ const UploadLayered = () => {
     // Map stores arrays of files per key: { [key]: File[] }
     const [selectedFilesMap, setSelectedFilesMap] = useState({});
     const [showError, setShowError] = useState(false);
+    const [selectedCircle, setSelectedCircle] = useState("");
     
     const [downloadUrls, setDownloadUrls] = useState({
         url1: null,
@@ -774,6 +793,16 @@ const UploadLayered = () => {
     };
 
     const handleSubmit = async () => {
+        // Validate circle selection
+        if (!selectedCircle) {
+            Swal.fire({
+                icon: "warning",
+                title: "Missing Circle",
+                text: "Please select a circle before submitting.",
+            });
+            return;
+        }
+
         const categoriesWithFilesCount = Object.keys(selectedFilesMap).length;
         
         if (categoriesWithFilesCount < 4) {
@@ -788,6 +817,9 @@ const UploadLayered = () => {
 
         action(true);
         var formData = new FormData();
+        
+        // Append circle
+        formData.append('circle', selectedCircle);
         
         // Append all files in each category array
         Object.keys(selectedFilesMap).forEach((key) => {
@@ -837,6 +869,7 @@ const UploadLayered = () => {
 
     const handleCancel = () => {
         setSelectedFilesMap({});
+        setSelectedCircle("");
         setShowError(false);
         setShowDownloads(false);
         setDownloadUrls({ url1: null, url2: null, url3: null, url4: null });
@@ -873,6 +906,65 @@ const UploadLayered = () => {
                             </Box>
                             <Stack spacing={3} sx={{ marginTop: "-20px" }} direction={'column'}>
 
+                                {/* CIRCLE DROPDOWN SECTION */}
+                                <Box className={classes.Front_Box} sx={{ p: 3 }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '15px', marginBottom: '15px' }}>
+                                        <Typography variant="subtitle2" sx={{ fontWeight: 700, color: C.tealDark }}>
+                                            Select Circle:
+                                        </Typography>
+                                        
+                                        <FormControl sx={{ minWidth: 200 }}>
+                                            <InputLabel id="circle-select-label" sx={{ color: C.teal }}>
+                                                Select Circle
+                                            </InputLabel>
+                                            <Select
+                                                labelId="circle-select-label"
+                                                id="circle-select"
+                                                value={selectedCircle}
+                                                label="Select Circle"
+                                                onChange={(e) => {
+                                                    setSelectedCircle(e.target.value);
+                                                }}
+                                                sx={{
+                                                    backgroundColor: '#fff',
+                                                    color: C.tealDark,
+                                                    fontWeight: 600,
+                                                    '& .MuiOutlinedInput-notchedOutline': {
+                                                        borderColor: C.border,
+                                                    },
+                                                    '&:hover .MuiOutlinedInput-notchedOutline': {
+                                                        borderColor: C.teal,
+                                                    },
+                                                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                                        borderColor: C.teal,
+                                                        borderWidth: '2px',
+                                                    },
+                                                }}
+                                            >
+                                                <MenuItem value="">
+                                                    <em>None</em>
+                                                </MenuItem>
+                                                {CIRCLE_OPTIONS.map((circle) => (
+                                                    <MenuItem key={circle} value={circle}>
+                                                        {circle}
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                    </div>
+
+                                    {selectedCircle && (
+                                        <Box sx={{ mt: 1.5, p: 1.5, bgcolor: C.labelOdd, borderRadius: 1, border: `1px solid ${C.border}` }}>
+                                            <Typography variant="caption" sx={{ color: C.tealDark, fontWeight: 700 }}>
+                                                ✓ Selected Circle: <span style={{ fontWeight: 700, fontSize: '14px' }}>{selectedCircle}</span>
+                                            </Typography>
+                                        </Box>
+                                    )}
+
+                                    <Divider sx={{ mt: 2, mb: 2 }} />
+                                </Box>
+
+                                {/* FILE UPLOAD SECTION */}
                                 <Box className={classes.Front_Box} sx={{ p: 3 }}>
                                     <div className={classes.Front_Box_Hading} style={{ marginBottom: '15px' }}>
                                         Upload Required Files by Category (Multiple Allowed):

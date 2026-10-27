@@ -1,3 +1,4 @@
+
 // import React, { useEffect, Suspense, lazy } from 'react'
 // import { useState } from 'react'
 // import { Box, Button } from '@mui/material'
@@ -24,12 +25,12 @@
 // import ConversionIcon from '@rsuite/icons/Conversion';
 // import FolderVerifyIcon from '@rsuite/icons/FolderVerify';
 // import WarningRoundIcon from '@rsuite/icons/WarningRound';
+// import EyeRoundIcon from '@rsuite/icons/EyeRound';
+// import SiteIcon from '@rsuite/icons/Site';
+// import HistoryIcon from '@rsuite/icons/History';
+// import TextImageIcon from '@rsuite/icons/TextImage';
 
 
-
-// // const BasebandTool = lazy(() => import("./BasebandTool"));
-// // const UploadFile = lazy(() => import("./BasebandUpload"));
-// // const Dashboard = lazy(() => import("./Dashboard"));
 // const PendingPerformanceTools = lazy(() => import('./PendingPerformanceRemarksTool'))
 // const UploadFile = lazy(() => import('./Upload/UploadFile'))
 // const Uploadupdatedreport = lazy(() => import('./Upload/Uploadupdatedreport'))
@@ -37,9 +38,12 @@
 // const DownloadCompleteReport = lazy(() => import('./Upload/DownloadCompleteReport'))
 // const DownloadTemplate = lazy(() => import('./Upload/DownloadTemplate'))
 // const DeleteDatabase = lazy(() => import('./Upload/DeleteDatabase'))
-
-
-
+// const BucketOverview = lazy(() => import('./Upload/BucketOverview'))
+// const SkippedSites = lazy(() => import('./Upload/SkippedSites'))
+// const History = lazy(() => import('./Upload/History'))
+// const DeleteSkippedSites = lazy(() => import('./Upload/DeleteSkippedSites'))
+// const DeletedSite = lazy(() => import('./Upload/DeletedSite'))
+// const ManualRecord = lazy(() => import('./Upload/ManualRecord'))
 
 // const PendingPerformanceRemarks = () => {
 //     const [expanded, setExpanded] = useState(true);
@@ -48,8 +52,15 @@
 //     const [checked, setChecked] = useState(true)
 //     const navigate = useNavigate()
 //     const [menuButton, setMenuButton] = useState(false)
+
+//     // Get user types from local storage
 //     const userTypes = getDecreyptedData('user_type')?.split(",").map((t) => t.trim())
-//     //  const classes = useStyles();
+
+//     // Check if user is QT_PPR or QT_DUS
+//     const isQTPPR = userTypes?.includes('QT_PPR')
+//     const isQTDUS = userTypes?.includes('QT_DUS')
+//     const isQTAR = userTypes?.includes('QT_AR')
+
 //     const show = () => {
 //         setChecked(!checked)
 //         if (checked === true) {
@@ -57,16 +68,13 @@
 //         }
 //     }
 
-
 //     useEffect(() => {
 //         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
-
 //     }, [])
+
 //     return (
 //         <>
-
 //             <Box style={{ marginTop: states, transition: 'all 1s ease' }} >
-
 //                 <Grid container spacing={2}>
 //                     <Grid item xs={0} md={2} sx={{}}>
 //                         {/* THIS VIEW FOR PC  */}
@@ -75,80 +83,336 @@
 //                                 <Sidenav expanded={expanded} defaultOpenKeys={[]} appearance="subtle" style={{ minHeight: "670px", height: "100vh", backgroundColor: "#006e74", marginTop: 8, borderRadius: 10 }}>
 //                                     <Sidenav.Body>
 //                                         <Nav activeKey={activeKey} onSelect={setActiveKey} >
-//                                             <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>Pending Performance Remark</Nav>
+//                                             <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>Daily RAN Quality Monitoring & Governance</Nav>
 //                                             <Divider component="li" sx={{ backgroundColor: 'white' }} />
 
-
-//                                             <Nav.Item eventKey="1" placement="rightStart" className="single-item-custom" icon={< FolderVerifyIcon style={{}} />} onClick={() => { navigate('/tools/quality_team/pending_performance_re/UploadFile'); show(); setMenuButton(true) }}>
-//                                                 Input File
-//                                             </Nav.Item>
-
-//                                             {userTypes?.includes('QT_DUS') &&
+//                                             {/* QT_PPR SEES ALL 6 TABS */}
+//                                             {isQTPPR && (
 //                                                 <>
-//                                                     <Nav.Item eventKey="4" placement="rightStart" className="single-item-custom" icon={< FileDownloadIcon style={{}} />} onClick={() => { navigate('/tools/quality_team/pending_performance_re/DownloadTemplate'); show(); setMenuButton(true) }}>
+//                                                     {/* TAB 1: INPUT FILE */}
+//                                                     <Nav.Item
+//                                                         eventKey="1"
+//                                                         placement="rightStart"
+//                                                         className="single-item-custom"
+//                                                         icon={<FolderVerifyIcon />}
+//                                                         onClick={() => {
+//                                                             navigate('/tools/quality_team/pending_performance_re/UploadFile');
+//                                                             show();
+//                                                             setMenuButton(true)
+//                                                         }}
+//                                                     >
+//                                                         Input File
+//                                                     </Nav.Item>
+
+//                                                     {/* TAB 2: DOWNLOAD TEMPLATE */}
+//                                                     <Nav.Item
+//                                                         eventKey="2"
+//                                                         placement="rightStart"
+//                                                         className="single-item-custom"
+//                                                         icon={<FileDownloadIcon />}
+//                                                         onClick={() => {
+//                                                             navigate('/tools/quality_team/pending_performance_re/DownloadTemplate');
+//                                                             show();
+//                                                             setMenuButton(true)
+//                                                         }}
+//                                                     >
 //                                                         Download Template
 //                                                     </Nav.Item>
-//                                                     <Nav.Item eventKey="5" placement="rightStart" className="single-item-custom" icon={< FileUploadIcon style={{}} />} onClick={() => { navigate('/tools/quality_team/pending_performance_re/Uploadupdatedreport'); show(); setMenuButton(true) }}>
+
+//                                                     {/* TAB 3: UPLOAD UPDATED REPORT */}
+//                                                     <Nav.Item
+//                                                         eventKey="3"
+//                                                         placement="rightStart"
+//                                                         className="single-item-custom"
+//                                                         icon={<FileUploadIcon />}
+//                                                         onClick={() => {
+//                                                             navigate('/tools/quality_team/pending_performance_re/Uploadupdatedreport');
+//                                                             show();
+//                                                             setMenuButton(true)
+//                                                         }}
+//                                                     >
 //                                                         Upload Updated Report
 //                                                     </Nav.Item>
-//                                                     <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={< ConversionIcon style={{}} />} onClick={() => { navigate('/tools/quality_team/pending_performance_re/Sitewiseremark'); show(); setMenuButton(true) }}>
+
+//                                                     {/* TAB 4: SITE-WISE REMARKS */}
+//                                                     <Nav.Item
+//                                                         eventKey="4"
+//                                                         placement="rightStart"
+//                                                         className="single-item-custom"
+//                                                         icon={<ConversionIcon />}
+//                                                         onClick={() => {
+//                                                             navigate('/tools/quality_team/pending_performance_re/Sitewiseremark');
+//                                                             show();
+//                                                             setMenuButton(true)
+//                                                         }}
+//                                                     >
 //                                                         Site-Wise Remarks
 //                                                     </Nav.Item>
+
+//                                                     {/* TAB 5: DOWNLOAD COMPLETE REPORT */}
+//                                                     <Nav.Item
+//                                                         eventKey="5"
+//                                                         placement="rightStart"
+//                                                         className="single-item-custom"
+//                                                         icon={<FileDownloadIcon />}
+//                                                         onClick={() => {
+//                                                             navigate('/tools/quality_team/pending_performance_re/DownloadCompleteReport');
+//                                                             show();
+//                                                             setMenuButton(true)
+//                                                         }}
+//                                                     >
+//                                                         Download Complete Report
+//                                                     </Nav.Item>
+
+//                                                     <Nav.Item
+//                                                         eventKey="5"
+//                                                         placement="rightStart"
+//                                                         className="single-item-custom"
+//                                                         icon={<EyeRoundIcon />}
+//                                                         onClick={() => {
+//                                                             navigate('/tools/quality_team/pending_performance_re/BucketOverview');
+//                                                             show();
+//                                                             setMenuButton(true)
+//                                                         }}
+//                                                     >
+//                                                         Bucket Overview
+//                                                     </Nav.Item>
+
+//                                                     <Nav.Item
+//                                                         eventKey="5"
+//                                                         placement="rightStart"
+//                                                         className="single-item-custom"
+//                                                         icon={<SiteIcon />}
+//                                                         onClick={() => {
+//                                                             navigate('/tools/quality_team/pending_performance_re/SkippedSites');
+//                                                             show();
+//                                                             setMenuButton(true)
+//                                                         }}
+//                                                     >
+//                                                         Manual Accepted Sites
+//                                                     </Nav.Item>
+
+//                                                     <Nav.Item
+//                                                         eventKey="6"
+//                                                         placement="rightStart"
+//                                                         className="single-item-custom"
+//                                                         icon={<TextImageIcon />}
+//                                                         onClick={() => {
+//                                                             navigate('/tools/quality_team/pending_performance_re/ManualRecord');
+//                                                             show();
+//                                                             setMenuButton(true)
+//                                                         }}
+//                                                     >
+//                                                         Manual Record
+//                                                     </Nav.Item>
+
+//                                                     <Nav.Item
+//                                                         eventKey="7"
+//                                                         placement="rightStart"
+//                                                         className="single-item-custom"
+//                                                         icon={<HistoryIcon />}
+//                                                         onClick={() => {
+//                                                             navigate('/tools/quality_team/pending_performance_re/History');
+//                                                             show();
+//                                                             setMenuButton(true)
+//                                                         }}
+//                                                     >
+//                                                         History
+//                                                     </Nav.Item>
+
+//                                                     <Nav.Item
+//                                                         eventKey="8"
+//                                                         placement="rightStart"
+//                                                         className="single-item-custom"
+//                                                         icon={<WarningRoundIcon />}
+//                                                         onClick={() => {
+//                                                             navigate('/tools/quality_team/pending_performance_re/DeletedSite');
+//                                                             show();
+//                                                             setMenuButton(true)
+//                                                         }}
+//                                                     >
+//                                                         Deleted Site
+//                                                     </Nav.Item>
+
+
 //                                                 </>
-//                                             }
+//                                             )}
+
+//                                             {/* TAB 6: DELETE DATABASE */}
+//                                             {isQTAR && (
+//                                                 <>
+
+//                                                     <Nav.Item
+//                                                         eventKey="6"
+//                                                         placement="rightStart"
+//                                                         className="single-item-custom"
+//                                                         icon={<WarningRoundIcon />}
+//                                                         onClick={() => {
+//                                                             navigate('/tools/quality_team/pending_performance_re/DeleteDatabase');
+//                                                             show();
+//                                                             setMenuButton(true)
+//                                                         }}
+//                                                     >
+//                                                         Delete Database
+//                                                     </Nav.Item>
 
 
+//                                                     <Nav.Item
+//                                                         eventKey="7"
+//                                                         placement="rightStart"
+//                                                         className="single-item-custom"
+//                                                         icon={<WarningRoundIcon />}
+//                                                         onClick={() => {
+//                                                             navigate('/tools/quality_team/pending_performance_re/DeleteSkippedSites');
+//                                                             show();
+//                                                             setMenuButton(true)
+//                                                         }}
+//                                                     >
+//                                                         Delete Skipped Site
+//                                                     </Nav.Item>
 
-//                                             <Nav.Item eventKey="3" placement="rightStart" className="single-item-custom" icon={< FileDownloadIcon style={{}} />} onClick={() => { navigate('/tools/quality_team/pending_performance_re/DownloadCompleteReport'); show(); setMenuButton(true) }}>
-//                                                 Download Complete Report
-//                                             </Nav.Item>
+//                                                 </>
 
-//                                             <Nav.Item eventKey="6" placement="rightStart" className="single-item-custom" icon={< WarningRoundIcon style={{}} />} onClick={() => { navigate('/tools/quality_team/pending_performance_re/DeleteDatabase'); show(); setMenuButton(true) }}>
-//                                                 Delete Database
-//                                             </Nav.Item>
+//                                             )}
 
+//                                             {/* QT_DUS SEES ONLY 3 TABS */}
+//                                             {isQTDUS && (
+//                                                 <>
+//                                                     {/* TAB 1: DOWNLOAD TEMPLATE */}
+//                                                     <Nav.Item
+//                                                         eventKey="1"
+//                                                         placement="rightStart"
+//                                                         className="single-item-custom"
+//                                                         icon={<FileDownloadIcon />}
+//                                                         onClick={() => {
+//                                                             navigate('/tools/quality_team/pending_performance_re/DownloadTemplate');
+//                                                             show();
+//                                                             setMenuButton(true)
+//                                                         }}
+//                                                     >
+//                                                         Download Template
+//                                                     </Nav.Item>
 
-//                                             {/* <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={<SendToDashboardIcon style={{}} />} onClick={() => { navigate('/tools/baseband_requirement/Dashboard'); show(); setMenuButton(true) }}>
-//                                                 Dashboard
-//                                             </Nav.Item> */}
+//                                                     {/* TAB 2: UPLOAD UPDATED REPORT */}
+//                                                     <Nav.Item
+//                                                         eventKey="2"
+//                                                         placement="rightStart"
+//                                                         className="single-item-custom"
+//                                                         icon={<FileUploadIcon />}
+//                                                         onClick={() => {
+//                                                             navigate('/tools/quality_team/pending_performance_re/Uploadupdatedreport');
+//                                                             show();
+//                                                             setMenuButton(true)
+//                                                         }}
+//                                                     >
+//                                                         Upload Updated Report
+//                                                     </Nav.Item>
 
+//                                                     {/* TAB 3: SITE-WISE REMARKS */}
+//                                                     <Nav.Item
+//                                                         eventKey="3"
+//                                                         placement="rightStart"
+//                                                         className="single-item-custom"
+//                                                         icon={<ConversionIcon />}
+//                                                         onClick={() => {
+//                                                             navigate('/tools/quality_team/pending_performance_re/Sitewiseremark');
+//                                                             show();
+//                                                             setMenuButton(true)
+//                                                         }}
+//                                                     >
+//                                                         Site-Wise Remarks
+//                                                     </Nav.Item>
+
+//                                                     <Nav.Item
+//                                                         eventKey="4"
+//                                                         placement="rightStart"
+//                                                         className="single-item-custom"
+//                                                         icon={<FileDownloadIcon />}
+//                                                         onClick={() => {
+//                                                             navigate('/tools/quality_team/pending_performance_re/DownloadCompleteReport');
+//                                                             show();
+//                                                             setMenuButton(true)
+//                                                         }}
+//                                                     >
+//                                                         Download Complete Report
+//                                                     </Nav.Item>
+
+//                                                     <Nav.Item
+//                                                         eventKey="5"
+//                                                         placement="rightStart"
+//                                                         className="single-item-custom"
+//                                                         icon={<EyeRoundIcon />}
+//                                                         onClick={() => {
+//                                                             navigate('/tools/quality_team/pending_performance_re/BucketOverview');
+//                                                             show();
+//                                                             setMenuButton(true)
+//                                                         }}
+//                                                     >
+//                                                         Bucket Overview
+//                                                     </Nav.Item>
+
+//                                                     <Nav.Item
+//                                                         eventKey="5"
+//                                                         placement="rightStart"
+//                                                         className="single-item-custom"
+//                                                         icon={<HistoryIcon />}
+//                                                         onClick={() => {
+//                                                             navigate('/tools/quality_team/pending_performance_re/History');
+//                                                             show();
+//                                                             setMenuButton(true)
+//                                                         }}
+//                                                     >
+//                                                         History
+//                                                     </Nav.Item>
+//                                                 </>
+//                                             )}
 //                                         </Nav>
 //                                     </Sidenav.Body>
 //                                 </Sidenav>
 //                             </Box>
 //                         </Box>
 //                     </Grid>
+
 //                     <Grid item xs={12} md={10}>
-
-
 //                         <Suspense fallback={<Loader />}>
 //                             <Routes>
 //                                 <Route path="/" element={<PendingPerformanceTools />} />
 
-//                                 <Route path="/UploadFile" element={<UploadFile />} />
+//                                 {/* ALL ROUTES AVAILABLE FOR QT_PPR */}
+//                                 {isQTPPR && (
+//                                     <>
+//                                         <Route path="/UploadFile" element={<UploadFile />} />
+//                                         <Route path='/DownloadTemplate' element={<DownloadTemplate />} />
+//                                         <Route path='/Uploadupdatedreport' element={<Uploadupdatedreport />} />
+//                                         <Route path='/Sitewiseremark' element={<Sitewiseremark />} />
+//                                         <Route path='/DownloadCompleteReport' element={<DownloadCompleteReport />} />
+//                                         <Route path='/BucketOverview' element={<BucketOverview />} />
+//                                         <Route path='/SkippedSites' element={<SkippedSites />} />
+//                                         <Route path='/History' element={<History />} />
+//                                         <Route path='/DeletedSite' element={<DeletedSite />} />
+//                                         <Route path='/ManualRecord' element={<ManualRecord />} />
+//                                     </>
+//                                 )}
 
-//                                 {userTypes?.includes('QT_DUS') &&
+//                                 {isQTAR && (
+//                                     <>
+//                                         <Route path='/DeleteDatabase' element={<DeleteDatabase />} />
+//                                         <Route path='/DeleteSkippedSites' element={<DeleteSkippedSites />} />
+//                                     </>
+
+//                                 )}
+
+//                                 {/* ONLY 3 ROUTES AVAILABLE FOR QT_DUS */}
+//                                 {isQTDUS && (
 //                                     <>
 //                                         <Route path='/DownloadTemplate' element={<DownloadTemplate />} />
 //                                         <Route path='/Uploadupdatedreport' element={<Uploadupdatedreport />} />
 //                                         <Route path='/Sitewiseremark' element={<Sitewiseremark />} />
-
-//                                     </>}
-
-//                                 <Route path='/DownloadCompleteReport' element={<DownloadCompleteReport />} />
-//                                 <Route path='/DeleteDatabase' element={<DeleteDatabase />} />
-
-//                                 {/* <Route path="/dashboard" element={<Dashboard />} /> */}
-
-
-//                                 {/* {userTypes?.includes('ran_admin') && 
-//                                 <Route element={<FinalMailPage />} path="/email_dashboard" />
-//                                 }
-
-//                                 {userTypes?.includes('ran_admin') &&
-//                                 <Route element={<Module />} path="/module" />
-//                                 }  */}
-
+//                                         <Route path='/DownloadCompleteReport' element={<DownloadCompleteReport />} />
+//                                         <Route path='/BucketOverview' element={<BucketOverview />} />
+//                                         <Route path='/History' element={<History />} />
+//                                     </>
+//                                 )}
 //                             </Routes>
 //                         </Suspense>
 //                     </Grid>
@@ -159,6 +423,7 @@
 // }
 
 // export default PendingPerformanceRemarks
+
 
 
 import React, { useEffect, Suspense, lazy } from 'react'
@@ -207,6 +472,24 @@ const DeleteSkippedSites = lazy(() => import('./Upload/DeleteSkippedSites'))
 const DeletedSite = lazy(() => import('./Upload/DeletedSite'))
 const ManualRecord = lazy(() => import('./Upload/ManualRecord'))
 
+// ======== SLIDE ANIMATION STYLES ========
+const slideInStyles = `
+  @keyframes slideInFromLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-50px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
+  .slide-in-content {
+    animation: slideInFromLeft 0.5s ease-out forwards;
+  }
+`
+
 const PendingPerformanceRemarks = () => {
     const [expanded, setExpanded] = useState(true);
     const [activeKey, setActiveKey] = useState();
@@ -214,6 +497,7 @@ const PendingPerformanceRemarks = () => {
     const [checked, setChecked] = useState(true)
     const navigate = useNavigate()
     const [menuButton, setMenuButton] = useState(false)
+    const [animationKey, setAnimationKey] = useState(0);
 
     // Get user types from local storage
     const userTypes = getDecreyptedData('user_type')?.split(",").map((t) => t.trim())
@@ -230,12 +514,23 @@ const PendingPerformanceRemarks = () => {
         }
     }
 
+    // Trigger animation on navigation
+    const handleNavigation = (path) => {
+        setAnimationKey(prev => prev + 1);
+        navigate(path);
+        show();
+        setMenuButton(true);
+    }
+
     useEffect(() => {
         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
     }, [])
 
     return (
         <>
+            {/* Inject animation styles */}
+            <style>{slideInStyles}</style>
+
             <Box style={{ marginTop: states, transition: 'all 1s ease' }} >
                 <Grid container spacing={2}>
                     <Grid item xs={0} md={2} sx={{}}>
@@ -248,7 +543,7 @@ const PendingPerformanceRemarks = () => {
                                             <Nav style={{ fontWeight: 600, color: 'white', textAlign: 'center', fontSize: 20 }}>Daily RAN Quality Monitoring & Governance</Nav>
                                             <Divider component="li" sx={{ backgroundColor: 'white' }} />
 
-                                            {/* QT_PPR SEES ALL 6 TABS */}
+                                            {/* QT_PPR SEES ALL TABS */}
                                             {isQTPPR && (
                                                 <>
                                                     {/* TAB 1: INPUT FILE */}
@@ -258,9 +553,7 @@ const PendingPerformanceRemarks = () => {
                                                         className="single-item-custom"
                                                         icon={<FolderVerifyIcon />}
                                                         onClick={() => {
-                                                            navigate('/tools/quality_team/pending_performance_re/UploadFile');
-                                                            show();
-                                                            setMenuButton(true)
+                                                            handleNavigation('/tools/quality_team/pending_performance_re/UploadFile');
                                                         }}
                                                     >
                                                         Input File
@@ -273,9 +566,7 @@ const PendingPerformanceRemarks = () => {
                                                         className="single-item-custom"
                                                         icon={<FileDownloadIcon />}
                                                         onClick={() => {
-                                                            navigate('/tools/quality_team/pending_performance_re/DownloadTemplate');
-                                                            show();
-                                                            setMenuButton(true)
+                                                            handleNavigation('/tools/quality_team/pending_performance_re/DownloadTemplate');
                                                         }}
                                                     >
                                                         Download Template
@@ -288,9 +579,7 @@ const PendingPerformanceRemarks = () => {
                                                         className="single-item-custom"
                                                         icon={<FileUploadIcon />}
                                                         onClick={() => {
-                                                            navigate('/tools/quality_team/pending_performance_re/Uploadupdatedreport');
-                                                            show();
-                                                            setMenuButton(true)
+                                                            handleNavigation('/tools/quality_team/pending_performance_re/Uploadupdatedreport');
                                                         }}
                                                     >
                                                         Upload Updated Report
@@ -303,9 +592,7 @@ const PendingPerformanceRemarks = () => {
                                                         className="single-item-custom"
                                                         icon={<ConversionIcon />}
                                                         onClick={() => {
-                                                            navigate('/tools/quality_team/pending_performance_re/Sitewiseremark');
-                                                            show();
-                                                            setMenuButton(true)
+                                                            handleNavigation('/tools/quality_team/pending_performance_re/Sitewiseremark');
                                                         }}
                                                     >
                                                         Site-Wise Remarks
@@ -318,123 +605,101 @@ const PendingPerformanceRemarks = () => {
                                                         className="single-item-custom"
                                                         icon={<FileDownloadIcon />}
                                                         onClick={() => {
-                                                            navigate('/tools/quality_team/pending_performance_re/DownloadCompleteReport');
-                                                            show();
-                                                            setMenuButton(true)
+                                                            handleNavigation('/tools/quality_team/pending_performance_re/DownloadCompleteReport');
                                                         }}
                                                     >
                                                         Download Complete Report
                                                     </Nav.Item>
 
                                                     <Nav.Item
-                                                        eventKey="5"
+                                                        eventKey="6"
                                                         placement="rightStart"
                                                         className="single-item-custom"
                                                         icon={<EyeRoundIcon />}
                                                         onClick={() => {
-                                                            navigate('/tools/quality_team/pending_performance_re/BucketOverview');
-                                                            show();
-                                                            setMenuButton(true)
+                                                            handleNavigation('/tools/quality_team/pending_performance_re/BucketOverview');
                                                         }}
                                                     >
                                                         Bucket Overview
                                                     </Nav.Item>
 
                                                     <Nav.Item
-                                                        eventKey="5"
+                                                        eventKey="7"
                                                         placement="rightStart"
                                                         className="single-item-custom"
                                                         icon={<SiteIcon />}
                                                         onClick={() => {
-                                                            navigate('/tools/quality_team/pending_performance_re/SkippedSites');
-                                                            show();
-                                                            setMenuButton(true)
+                                                            handleNavigation('/tools/quality_team/pending_performance_re/SkippedSites');
                                                         }}
                                                     >
                                                         Manual Accepted Sites
                                                     </Nav.Item>
 
                                                     <Nav.Item
-                                                        eventKey="6"
+                                                        eventKey="8"
                                                         placement="rightStart"
                                                         className="single-item-custom"
                                                         icon={<TextImageIcon />}
                                                         onClick={() => {
-                                                            navigate('/tools/quality_team/pending_performance_re/ManualRecord');
-                                                            show();
-                                                            setMenuButton(true)
+                                                            handleNavigation('/tools/quality_team/pending_performance_re/ManualRecord');
                                                         }}
                                                     >
                                                         Manual Record
                                                     </Nav.Item>
 
                                                     <Nav.Item
-                                                        eventKey="7"
+                                                        eventKey="9"
                                                         placement="rightStart"
                                                         className="single-item-custom"
                                                         icon={<HistoryIcon />}
                                                         onClick={() => {
-                                                            navigate('/tools/quality_team/pending_performance_re/History');
-                                                            show();
-                                                            setMenuButton(true)
+                                                            handleNavigation('/tools/quality_team/pending_performance_re/History');
                                                         }}
                                                     >
                                                         History
                                                     </Nav.Item>
 
                                                     <Nav.Item
-                                                        eventKey="8"
+                                                        eventKey="10"
                                                         placement="rightStart"
                                                         className="single-item-custom"
                                                         icon={<WarningRoundIcon />}
                                                         onClick={() => {
-                                                            navigate('/tools/quality_team/pending_performance_re/DeletedSite');
-                                                            show();
-                                                            setMenuButton(true)
+                                                            handleNavigation('/tools/quality_team/pending_performance_re/DeletedSite');
                                                         }}
                                                     >
                                                         Deleted Site
                                                     </Nav.Item>
-
-
                                                 </>
                                             )}
 
-                                            {/* TAB 6: DELETE DATABASE */}
+                                            {/* TAB - DELETE DATABASE */}
                                             {isQTAR && (
                                                 <>
-
                                                     <Nav.Item
-                                                        eventKey="6"
+                                                        eventKey="11"
                                                         placement="rightStart"
                                                         className="single-item-custom"
                                                         icon={<WarningRoundIcon />}
                                                         onClick={() => {
-                                                            navigate('/tools/quality_team/pending_performance_re/DeleteDatabase');
-                                                            show();
-                                                            setMenuButton(true)
+                                                            handleNavigation('/tools/quality_team/pending_performance_re/DeleteDatabase');
                                                         }}
                                                     >
                                                         Delete Database
                                                     </Nav.Item>
 
-
                                                     <Nav.Item
-                                                        eventKey="7"
+                                                        eventKey="12"
                                                         placement="rightStart"
                                                         className="single-item-custom"
                                                         icon={<WarningRoundIcon />}
                                                         onClick={() => {
-                                                            navigate('/tools/quality_team/pending_performance_re/DeleteSkippedSites');
-                                                            show();
-                                                            setMenuButton(true)
+                                                            handleNavigation('/tools/quality_team/pending_performance_re/DeleteSkippedSites');
                                                         }}
                                                     >
                                                         Delete Skipped Site
                                                     </Nav.Item>
-
                                                 </>
-
                                             )}
 
                                             {/* QT_DUS SEES ONLY 3 TABS */}
@@ -447,9 +712,7 @@ const PendingPerformanceRemarks = () => {
                                                         className="single-item-custom"
                                                         icon={<FileDownloadIcon />}
                                                         onClick={() => {
-                                                            navigate('/tools/quality_team/pending_performance_re/DownloadTemplate');
-                                                            show();
-                                                            setMenuButton(true)
+                                                            handleNavigation('/tools/quality_team/pending_performance_re/DownloadTemplate');
                                                         }}
                                                     >
                                                         Download Template
@@ -462,9 +725,7 @@ const PendingPerformanceRemarks = () => {
                                                         className="single-item-custom"
                                                         icon={<FileUploadIcon />}
                                                         onClick={() => {
-                                                            navigate('/tools/quality_team/pending_performance_re/Uploadupdatedreport');
-                                                            show();
-                                                            setMenuButton(true)
+                                                            handleNavigation('/tools/quality_team/pending_performance_re/Uploadupdatedreport');
                                                         }}
                                                     >
                                                         Upload Updated Report
@@ -477,9 +738,7 @@ const PendingPerformanceRemarks = () => {
                                                         className="single-item-custom"
                                                         icon={<ConversionIcon />}
                                                         onClick={() => {
-                                                            navigate('/tools/quality_team/pending_performance_re/Sitewiseremark');
-                                                            show();
-                                                            setMenuButton(true)
+                                                            handleNavigation('/tools/quality_team/pending_performance_re/Sitewiseremark');
                                                         }}
                                                     >
                                                         Site-Wise Remarks
@@ -491,9 +750,7 @@ const PendingPerformanceRemarks = () => {
                                                         className="single-item-custom"
                                                         icon={<FileDownloadIcon />}
                                                         onClick={() => {
-                                                            navigate('/tools/quality_team/pending_performance_re/DownloadCompleteReport');
-                                                            show();
-                                                            setMenuButton(true)
+                                                            handleNavigation('/tools/quality_team/pending_performance_re/DownloadCompleteReport');
                                                         }}
                                                     >
                                                         Download Complete Report
@@ -505,23 +762,19 @@ const PendingPerformanceRemarks = () => {
                                                         className="single-item-custom"
                                                         icon={<EyeRoundIcon />}
                                                         onClick={() => {
-                                                            navigate('/tools/quality_team/pending_performance_re/BucketOverview');
-                                                            show();
-                                                            setMenuButton(true)
+                                                            handleNavigation('/tools/quality_team/pending_performance_re/BucketOverview');
                                                         }}
                                                     >
                                                         Bucket Overview
                                                     </Nav.Item>
 
                                                     <Nav.Item
-                                                        eventKey="5"
+                                                        eventKey="6"
                                                         placement="rightStart"
                                                         className="single-item-custom"
                                                         icon={<HistoryIcon />}
                                                         onClick={() => {
-                                                            navigate('/tools/quality_team/pending_performance_re/History');
-                                                            show();
-                                                            setMenuButton(true)
+                                                            handleNavigation('/tools/quality_team/pending_performance_re/History');
                                                         }}
                                                     >
                                                         History
@@ -536,47 +789,49 @@ const PendingPerformanceRemarks = () => {
                     </Grid>
 
                     <Grid item xs={12} md={10}>
-                        <Suspense fallback={<Loader />}>
-                            <Routes>
-                                <Route path="/" element={<PendingPerformanceTools />} />
+                        {/* ======== ANIMATED CONTENT WRAPPER ======== */}
+                        <Box key={animationKey} className="slide-in-content">
+                            <Suspense fallback={<Loader />}>
+                                <Routes>
+                                    <Route path="/" element={<PendingPerformanceTools />} />
 
-                                {/* ALL ROUTES AVAILABLE FOR QT_PPR */}
-                                {isQTPPR && (
-                                    <>
-                                        <Route path="/UploadFile" element={<UploadFile />} />
-                                        <Route path='/DownloadTemplate' element={<DownloadTemplate />} />
-                                        <Route path='/Uploadupdatedreport' element={<Uploadupdatedreport />} />
-                                        <Route path='/Sitewiseremark' element={<Sitewiseremark />} />
-                                        <Route path='/DownloadCompleteReport' element={<DownloadCompleteReport />} />
-                                        <Route path='/BucketOverview' element={<BucketOverview />} />
-                                        <Route path='/SkippedSites' element={<SkippedSites />} />
-                                        <Route path='/History' element={<History />} />
-                                        <Route path='/DeletedSite' element={<DeletedSite />} />
-                                        <Route path='/ManualRecord' element={<ManualRecord />} />
-                                    </>
-                                )}
+                                    {/* ALL ROUTES AVAILABLE FOR QT_PPR */}
+                                    {isQTPPR && (
+                                        <>
+                                            <Route path="/UploadFile" element={<UploadFile />} />
+                                            <Route path='/DownloadTemplate' element={<DownloadTemplate />} />
+                                            <Route path='/Uploadupdatedreport' element={<Uploadupdatedreport />} />
+                                            <Route path='/Sitewiseremark' element={<Sitewiseremark />} />
+                                            <Route path='/DownloadCompleteReport' element={<DownloadCompleteReport />} />
+                                            <Route path='/BucketOverview' element={<BucketOverview />} />
+                                            <Route path='/SkippedSites' element={<SkippedSites />} />
+                                            <Route path='/History' element={<History />} />
+                                            <Route path='/DeletedSite' element={<DeletedSite />} />
+                                            <Route path='/ManualRecord' element={<ManualRecord />} />
+                                        </>
+                                    )}
 
-                                {isQTAR && (
-                                    <>
-                                        <Route path='/DeleteDatabase' element={<DeleteDatabase />} />
-                                        <Route path='/DeleteSkippedSites' element={<DeleteSkippedSites />} />
-                                    </>
+                                    {isQTAR && (
+                                        <>
+                                            <Route path='/DeleteDatabase' element={<DeleteDatabase />} />
+                                            <Route path='/DeleteSkippedSites' element={<DeleteSkippedSites />} />
+                                        </>
+                                    )}
 
-                                )}
-
-                                {/* ONLY 3 ROUTES AVAILABLE FOR QT_DUS */}
-                                {isQTDUS && (
-                                    <>
-                                        <Route path='/DownloadTemplate' element={<DownloadTemplate />} />
-                                        <Route path='/Uploadupdatedreport' element={<Uploadupdatedreport />} />
-                                        <Route path='/Sitewiseremark' element={<Sitewiseremark />} />
-                                        <Route path='/DownloadCompleteReport' element={<DownloadCompleteReport />} />
-                                        <Route path='/BucketOverview' element={<BucketOverview />} />
-                                        <Route path='/History' element={<History />} />
-                                    </>
-                                )}
-                            </Routes>
-                        </Suspense>
+                                    {/* ONLY 3 ROUTES AVAILABLE FOR QT_DUS */}
+                                    {isQTDUS && (
+                                        <>
+                                            <Route path='/DownloadTemplate' element={<DownloadTemplate />} />
+                                            <Route path='/Uploadupdatedreport' element={<Uploadupdatedreport />} />
+                                            <Route path='/Sitewiseremark' element={<Sitewiseremark />} />
+                                            <Route path='/DownloadCompleteReport' element={<DownloadCompleteReport />} />
+                                            <Route path='/BucketOverview' element={<BucketOverview />} />
+                                            <Route path='/History' element={<History />} />
+                                        </>
+                                    )}
+                                </Routes>
+                            </Suspense>
+                        </Box>
                     </Grid>
                 </Grid>
             </Box>
@@ -586,417 +841,3 @@ const PendingPerformanceRemarks = () => {
 
 export default PendingPerformanceRemarks
 
-// import React, { useEffect, Suspense, lazy } from 'react'
-// import { useState } from 'react'
-// import { Box, Button, Typography } from '@mui/material'
-// import { Grid } from '@mui/material'
-// import { Sidenav, Nav } from 'rsuite';
-// import { useNavigate } from 'react-router-dom'
-// import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-// import Divider from '@mui/material/Divider';
-// import { getDecreyptedData } from '../../../Components/utils/localstorage';
-// import './../../../App.css'
-// import Loader from '../../Skeleton/Loader';
-
-// // Modern high-end icons matching each item name precisely
-// import FolderVerifyIcon from '@rsuite/icons/FolderVerify';
-// import FileDownloadIcon from '@rsuite/icons/FileDownload';
-// import FileUploadIcon from '@rsuite/icons/FileUpload';
-// import ConversionIcon from '@rsuite/icons/Conversion';
-// import EyeRoundIcon from '@rsuite/icons/EyeRound';
-// import SiteIcon from '@rsuite/icons/Site';
-// import HistoryIcon from '@rsuite/icons/History';
-// import WarningRoundIcon from '@rsuite/icons/WarningRound';
-
-// const PendingPerformanceTools = lazy(() => import('./PendingPerformanceRemarksTool'))
-// const UploadFile = lazy(() => import('./Upload/UploadFile'))
-// const Uploadupdatedreport = lazy(() => import('./Upload/Uploadupdatedreport'))
-// const Sitewiseremark = lazy(() => import('./Upload/Sitewiseremark'))
-// const DownloadCompleteReport = lazy(() => import('./Upload/DownloadCompleteReport'))
-// const DownloadTemplate = lazy(() => import('./Upload/DownloadTemplate'))
-// const DeleteDatabase = lazy(() => import('./Upload/DeleteDatabase'))
-// const BucketOverview = lazy(()=> import('./Upload/BucketOverview'))
-// const SkippedSites = lazy(()=> import('./Upload/SkippedSites'))
-// const History = lazy(()=> import('./Upload/History'))
-// const DeleteSkippedSites = lazy(()=> import('./Upload/DeleteSkippedSites'))
-
-// const PendingPerformanceRemarks = () => {
-//     const [expanded, setExpanded] = useState(true);
-//     const [activeKey, setActiveKey] = useState();
-//     const [states, setStates] = useState(60)
-//     const [checked, setChecked] = useState(true)
-//     const navigate = useNavigate()
-//     const [menuButton, setMenuButton] = useState(false)
-
-//     // Get user types from local storage
-//     const userTypes = getDecreyptedData('user_type')?.split(",").map((t) => t.trim())
-
-//     // Check if user is QT_PPR or QT_DUS
-//     const isQTPPR = userTypes?.includes('QT_PPR')
-//     const isQTDUS = userTypes?.includes('QT_DUS')
-//     const isQTAR = userTypes?.includes('QT_AR')
-
-//     const show = () => {
-//         setChecked(!checked)
-//         if (checked === true) {
-//             setMenuButton(false)
-//         }
-//     }
-
-//     useEffect(() => {
-//         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`
-//     }, [])
-
-//     return (
-//         <>
-//             <Box style={{ marginTop: states, transition: 'all 1s ease' }} >
-//                 <Grid container spacing={2}>
-//                     <Grid item xs={0} md={2}>
-//                         {/* THIS VIEW FOR PC */}
-//                         <Box sx={{ display: { xs: 'none', md: 'inherit' } }} >
-//                             <Box sx={{
-//                                 position: 'fixed',
-//                                 width: '16.5%',
-//                                 p: 1.5,
-//                                 height: 'calc(100vh - 70px)',
-//                                 overflowY: 'auto'
-//                             }} >
-//                                 <Sidenav
-//                                     expanded={expanded}
-//                                     defaultOpenKeys={[]}
-//                                     appearance="subtle"
-//                                     style={{
-//                                         minHeight: "650px",
-//                                         height: "100%",
-//                                         background: 'linear-gradient(135deg, rgba(0, 110, 116, 0.85) 0%, rgba(10, 50, 60, 0.95) 100%)',
-//                                         backdropFilter: 'blur(20px)',
-//                                         WebkitBackdropFilter: 'blur(20px)',
-//                                         border: '1px solid rgba(255, 255, 255, 0.18)',
-//                                         boxShadow: '0 20px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(0, 0, 0, 0.4)',
-//                                         borderRadius: 24,
-//                                         marginTop: 4,
-//                                         overflow: 'hidden'
-//                                     }}
-//                                 >
-//                                     <Sidenav.Body>
-//                                         <Nav activeKey={activeKey} onSelect={setActiveKey} style={{ padding: '8px 12px' }}>
-//                                             <Box sx={{ py: 2, textAlign: 'center' }}>
-//                                                 <Typography variant="subtitle1" sx={{ fontWeight: 800, color: '#ffffff', letterSpacing: '0.3px', textShadow: '0 2px 4px rgba(0,0,0,0.3)', lineHeight: 1.3 }}>
-//                                                     Daily RAN Quality Monitoring & Governance
-//                                                 </Typography>
-//                                             </Box>
-//                                             <Divider component="li" sx={{ backgroundColor: 'rgba(255, 255, 255, 0.15)', mb: 2, mx: 1 }} />
-
-//                                             {/* QT_PPR SEES ALL 6 TABS */}
-//                                             {isQTPPR && (
-//                                                 <>
-//                                                     {/* TAB 1: INPUT FILE */}
-//                                                     <Nav.Item
-//                                                         eventKey="1"
-//                                                         placement="rightStart"
-//                                                         className="single-item-custom"
-//                                                         icon={<FolderVerifyIcon style={{ fontSize: 18, color: '#5eead4', marginRight: '12px' }} />}
-//                                                         onClick={() => {
-//                                                             navigate('/tools/quality_team/pending_performance_re/UploadFile');
-//                                                             show();
-//                                                             setMenuButton(true)
-//                                                         }}
-//                                                         style={{ margin: '6px 0', borderRadius: 12, color: 'white', display: 'flex', alignItems: 'center' }}
-//                                                     >
-//                                                         Input File
-//                                                     </Nav.Item>
-
-//                                                     {/* TAB 2: DOWNLOAD TEMPLATE */}
-//                                                     <Nav.Item
-//                                                         eventKey="2"
-//                                                         placement="rightStart"
-//                                                         className="single-item-custom"
-//                                                         icon={<FileDownloadIcon style={{ fontSize: 18, color: '#38bdf8', marginRight: '12px' }} />}
-//                                                         onClick={() => {
-//                                                             navigate('/tools/quality_team/pending_performance_re/DownloadTemplate');
-//                                                             show();
-//                                                             setMenuButton(true)
-//                                                         }}
-//                                                         style={{ margin: '6px 0', borderRadius: 12, color: 'white', display: 'flex', alignItems: 'center' }}
-//                                                     >
-//                                                         Download Template
-//                                                     </Nav.Item>
-
-//                                                     {/* TAB 3: UPLOAD UPDATED REPORT */}
-//                                                     <Nav.Item
-//                                                         eventKey="3"
-//                                                         placement="rightStart"
-//                                                         className="single-item-custom"
-//                                                         icon={<FileUploadIcon style={{ fontSize: 18, color: '#99f6e4', marginRight: '12px' }} />}
-//                                                         onClick={() => {
-//                                                             navigate('/tools/quality_team/pending_performance_re/Uploadupdatedreport');
-//                                                             show();
-//                                                             setMenuButton(true)
-//                                                         }}
-//                                                         style={{ margin: '6px 0', borderRadius: 12, color: 'white', display: 'flex', alignItems: 'center' }}
-//                                                     >
-//                                                         Upload Updated Report
-//                                                     </Nav.Item>
-
-//                                                     {/* TAB 4: SITE-WISE REMARKS */}
-//                                                     <Nav.Item
-//                                                         eventKey="4"
-//                                                         placement="rightStart"
-//                                                         className="single-item-custom"
-//                                                         icon={<ConversionIcon style={{ fontSize: 18, color: '#f43f5e', marginRight: '12px' }} />}
-//                                                         onClick={() => {
-//                                                             navigate('/tools/quality_team/pending_performance_re/Sitewiseremark');
-//                                                             show();
-//                                                             setMenuButton(true)
-//                                                         }}
-//                                                         style={{ margin: '6px 0', borderRadius: 12, color: 'white', display: 'flex', alignItems: 'center' }}
-//                                                     >
-//                                                         Site-Wise Remarks
-//                                                     </Nav.Item>
-
-//                                                     {/* TAB 5: DOWNLOAD COMPLETE REPORT */}
-//                                                     <Nav.Item
-//                                                         eventKey="5"
-//                                                         placement="rightStart"
-//                                                         className="single-item-custom"
-//                                                         icon={<FileDownloadIcon style={{ fontSize: 18, color: '#a855f7', marginRight: '12px' }} />}
-//                                                         onClick={() => {
-//                                                             navigate('/tools/quality_team/pending_performance_re/DownloadCompleteReport');
-//                                                             show();
-//                                                             setMenuButton(true)
-//                                                         }}
-//                                                         style={{ margin: '6px 0', borderRadius: 12, color: 'white', display: 'flex', alignItems: 'center' }}
-//                                                     >
-//                                                         Download Complete Report
-//                                                     </Nav.Item>
-
-//                                                     <Nav.Item
-//                                                         eventKey="6"
-//                                                         placement="rightStart"
-//                                                         className="single-item-custom"
-//                                                         icon={<EyeRoundIcon style={{ fontSize: 18, color: '#4ade80', marginRight: '12px' }} />}
-//                                                         onClick={() => {
-//                                                             navigate('/tools/quality_team/pending_performance_re/BucketOverview');
-//                                                             show();
-//                                                             setMenuButton(true)
-//                                                         }}
-//                                                         style={{ margin: '6px 0', borderRadius: 12, color: 'white', display: 'flex', alignItems: 'center' }}
-//                                                     >
-//                                                         Bucket Overview
-//                                                     </Nav.Item>
-
-//                                                     <Nav.Item
-//                                                         eventKey="7"
-//                                                         placement="rightStart"
-//                                                         className="single-item-custom"
-//                                                         icon={<SiteIcon style={{ fontSize: 18, color: '#facc15', marginRight: '12px' }} />}
-//                                                         onClick={() => {
-//                                                             navigate('/tools/quality_team/pending_performance_re/SkippedSites');
-//                                                             show();
-//                                                             setMenuButton(true)
-//                                                         }}
-//                                                         style={{ margin: '6px 0', borderRadius: 12, color: 'white', display: 'flex', alignItems: 'center' }}
-//                                                     >
-//                                                         Skipped Sites
-//                                                     </Nav.Item>
-
-//                                                     <Nav.Item
-//                                                         eventKey="8"
-//                                                         placement="rightStart"
-//                                                         className="single-item-custom"
-//                                                         icon={<HistoryIcon style={{ fontSize: 18, color: '#fb923c', marginRight: '12px' }} />}
-//                                                         onClick={() => {
-//                                                             navigate('/tools/quality_team/pending_performance_re/History');
-//                                                             show();
-//                                                             setMenuButton(true)
-//                                                         }}
-//                                                         style={{ margin: '6px 0', borderRadius: 12, color: 'white', display: 'flex', alignItems: 'center' }}
-//                                                     >
-//                                                         History
-//                                                     </Nav.Item>
-//                                                 </>
-//                                             )}
-
-//                                             {/* DELETE DATABASE SECTION */}
-//                                             {isQTAR && (
-//                                                 <>
-//                                                     <Nav.Item
-//                                                         eventKey="9"
-//                                                         placement="rightStart"
-//                                                         className="single-item-custom"
-//                                                         icon={<WarningRoundIcon style={{ fontSize: 18, color: '#f87171', marginRight: '12px' }} />}
-//                                                         onClick={() => {
-//                                                             navigate('/tools/quality_team/pending_performance_re/DeleteDatabase');
-//                                                             show();
-//                                                             setMenuButton(true)
-//                                                         }}
-//                                                         style={{ margin: '6px 0', borderRadius: 12, color: 'white', display: 'flex', alignItems: 'center' }}
-//                                                     >
-//                                                         Delete Database
-//                                                     </Nav.Item>
-
-//                                                     <Nav.Item
-//                                                         eventKey="10"
-//                                                         placement="rightStart"
-//                                                         className="single-item-custom"
-//                                                         icon={<WarningRoundIcon style={{ fontSize: 18, color: '#f87171', marginRight: '12px' }} />}
-//                                                         onClick={() => {
-//                                                             navigate('/tools/quality_team/pending_performance_re/DeleteSkippedSites');
-//                                                             show();
-//                                                             setMenuButton(true)
-//                                                         }}
-//                                                         style={{ margin: '6px 0', borderRadius: 12, color: 'white', display: 'flex', alignItems: 'center' }}
-//                                                     >
-//                                                         Delete Skipped Site
-//                                                     </Nav.Item>
-//                                                 </>
-//                                             )}
-
-//                                             {/* QT_DUS SEES SPECIFIC TABS */}
-//                                             {isQTDUS && (
-//                                                 <>
-//                                                     <Nav.Item
-//                                                         eventKey="11"
-//                                                         placement="rightStart"
-//                                                         className="single-item-custom"
-//                                                         icon={<FileDownloadIcon style={{ fontSize: 18, color: '#38bdf8', marginRight: '12px' }} />}
-//                                                         onClick={() => {
-//                                                             navigate('/tools/quality_team/pending_performance_re/DownloadTemplate');
-//                                                             show();
-//                                                             setMenuButton(true)
-//                                                         }}
-//                                                         style={{ margin: '6px 0', borderRadius: 12, color: 'white', display: 'flex', alignItems: 'center' }}
-//                                                     >
-//                                                         Download Template
-//                                                     </Nav.Item>
-
-//                                                     <Nav.Item
-//                                                         eventKey="12"
-//                                                         placement="rightStart"
-//                                                         className="single-item-custom"
-//                                                         icon={<FileUploadIcon style={{ fontSize: 18, color: '#99f6e4', marginRight: '12px' }} />}
-//                                                         onClick={() => {
-//                                                             navigate('/tools/quality_team/pending_performance_re/Uploadupdatedreport');
-//                                                             show();
-//                                                             setMenuButton(true)
-//                                                         }}
-//                                                         style={{ margin: '6px 0', borderRadius: 12, color: 'white', display: 'flex', alignItems: 'center' }}
-//                                                     >
-//                                                         Upload Updated Report
-//                                                     </Nav.Item>
-
-//                                                     <Nav.Item
-//                                                         eventKey="13"
-//                                                         placement="rightStart"
-//                                                         className="single-item-custom"
-//                                                         icon={<ConversionIcon style={{ fontSize: 18, color: '#f43f5e', marginRight: '12px' }} />}
-//                                                         onClick={() => {
-//                                                             navigate('/tools/quality_team/pending_performance_re/Sitewiseremark');
-//                                                             show();
-//                                                             setMenuButton(true)
-//                                                         }}
-//                                                         style={{ margin: '6px 0', borderRadius: 12, color: 'white', display: 'flex', alignItems: 'center' }}
-//                                                     >
-//                                                         Site-Wise Remarks
-//                                                     </Nav.Item>
-
-//                                                     <Nav.Item
-//                                                         eventKey="14"
-//                                                         placement="rightStart"
-//                                                         className="single-item-custom"
-//                                                         icon={<FileDownloadIcon style={{ fontSize: 18, color: '#a855f7', marginRight: '12px' }} />}
-//                                                         onClick={() => {
-//                                                             navigate('/tools/quality_team/pending_performance_re/DownloadCompleteReport');
-//                                                             show();
-//                                                             setMenuButton(true)
-//                                                         }}
-//                                                         style={{ margin: '6px 0', borderRadius: 12, color: 'white', display: 'flex', alignItems: 'center' }}
-//                                                     >
-//                                                         Download Complete Report
-//                                                     </Nav.Item>
-
-//                                                     <Nav.Item
-//                                                         eventKey="15"
-//                                                         placement="rightStart"
-//                                                         className="single-item-custom"
-//                                                         icon={<EyeRoundIcon style={{ fontSize: 18, color: '#4ade80', marginRight: '12px' }} />}
-//                                                         onClick={() => {
-//                                                             navigate('/tools/quality_team/pending_performance_re/BucketOverview');
-//                                                             show();
-//                                                             setMenuButton(true)
-//                                                         }}
-//                                                         style={{ margin: '6px 0', borderRadius: 12, color: 'white', display: 'flex', alignItems: 'center' }}
-//                                                     >
-//                                                         Bucket Overview
-//                                                     </Nav.Item>
-
-//                                                     <Nav.Item
-//                                                         eventKey="16"
-//                                                         placement="rightStart"
-//                                                         className="single-item-custom"
-//                                                         icon={<HistoryIcon style={{ fontSize: 18, color: '#fb923c', marginRight: '12px' }} />}
-//                                                         onClick={() => {
-//                                                             navigate('/tools/quality_team/pending_performance_re/History');
-//                                                             show();
-//                                                             setMenuButton(true)
-//                                                         }}
-//                                                         style={{ margin: '6px 0', borderRadius: 12, color: 'white', display: 'flex', alignItems: 'center' }}
-//                                                     >
-//                                                         History
-//                                                     </Nav.Item>
-//                                                 </>
-//                                             )}
-//                                         </Nav>
-//                                     </Sidenav.Body>
-//                                 </Sidenav>
-//                             </Box>
-//                         </Box>
-//                     </Grid>
-
-//                     <Grid item xs={12} md={10}>
-//                         <Suspense fallback={<Loader />}>
-//                             <Routes>
-//                                 <Route path="/" element={<PendingPerformanceTools />} />
-
-//                                 {/* ALL ROUTES AVAILABLE FOR QT_PPR */}
-//                                 {isQTPPR && (
-//                                     <>
-//                                         <Route path="/UploadFile" element={<UploadFile />} />
-//                                         <Route path='/DownloadTemplate' element={<DownloadTemplate />} />
-//                                         <Route path='/Uploadupdatedreport' element={<Uploadupdatedreport />} />
-//                                         <Route path='/Sitewiseremark' element={<Sitewiseremark />} />
-//                                         <Route path='/DownloadCompleteReport' element={<DownloadCompleteReport />} />
-//                                         <Route path='/BucketOverview' element={<BucketOverview/>}/>
-//                                         <Route path='/SkippedSites' element={<SkippedSites/>}/>
-//                                         <Route path='/History' element={<History/>}/>
-//                                     </>
-//                                 )}
-
-//                                 {isQTAR && (
-//                                     <>
-//                                        <Route path='/DeleteDatabase' element={<DeleteDatabase />} />
-//                                        <Route path='/DeleteSkippedSites' element={<DeleteSkippedSites />} />
-//                                     </>
-//                                 )}
-
-//                                 {/* ONLY ROUTES AVAILABLE FOR QT_DUS */}
-//                                 {isQTDUS && (
-//                                     <>
-//                                         <Route path='/DownloadTemplate' element={<DownloadTemplate />} />
-//                                         <Route path='/Uploadupdatedreport' element={<Uploadupdatedreport />} />
-//                                         <Route path='/Sitewiseremark' element={<Sitewiseremark />} />
-//                                         <Route path='/DownloadCompleteReport' element={<DownloadCompleteReport />} />
-//                                         <Route path='/BucketOverview' element={<BucketOverview/>}/>
-//                                         <Route path='/History' element={<History/>}/>
-//                                     </>
-//                                 )}
-//                             </Routes>
-//                         </Suspense>
-//                     </Grid>
-//                 </Grid>
-//             </Box>
-//         </>
-//     )
-// }
-
-// export default PendingPerformanceRemarks
