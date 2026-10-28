@@ -556,7 +556,7 @@ const C = {
 const HEADER_GRADIENT = "linear-gradient(90deg, #004d52 0%, #006e74 55%, #4fa3a8 100%)";
 const PINNED_KEY = "Site ID";
 
-const CIRCLE_OPTIONS = ['AP', 'CH', 'KK', 'KA', 'DL', 'HR', 'RJ', 'JK', 'WB', 'OD', 'MU', 'TNCH', 'UE', 'BH', 'UW', 'MP', 'PB', 'KO', 'JH'];
+const CIRCLE_OPTIONS = ['KAR','BIH'];
 
 const buildColumns = (rows) => {
     if (!rows || !rows.length) return [];
