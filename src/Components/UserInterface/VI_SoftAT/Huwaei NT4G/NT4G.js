@@ -1,5 +1,5 @@
 // import React, { useState, useEffect } from "react";
-// import { Box, Button, Stack, Chip, Divider } from "@mui/material";
+// import { Box, Button, Stack, Chip, Divider, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 // import { Breadcrumbs, Link, Typography } from "@mui/material";
 // import {
 //     Paper,
@@ -41,6 +41,8 @@
 
 // const HEADER_GRADIENT = "linear-gradient(90deg, #004d52 0%, #006e74 55%, #4fa3a8 100%)";
 // const PINNED_KEY = "Site ID";
+
+// const CIRCLE_OPTIONS = ['KAR','BIH'];
 
 // const buildColumns = (rows) => {
 //     if (!rows || !rows.length) return [];
@@ -189,10 +191,11 @@
 //     );
 // }
 
-// const UploadLayered = () => {
+// const NT4G = () => {
 //     // Map stores arrays of files per key: { [key]: File[] }
 //     const [selectedFilesMap, setSelectedFilesMap] = useState({});
 //     const [showError, setShowError] = useState(false);
+//     const [selectedCircle, setSelectedCircle] = useState("");
     
 //     const [downloadUrls, setDownloadUrls] = useState({
 //         url1: null,
@@ -276,6 +279,16 @@
 //     };
 
 //     const handleSubmit = async () => {
+//         // Validate circle selection
+//         if (!selectedCircle) {
+//             Swal.fire({
+//                 icon: "warning",
+//                 title: "Missing Circle",
+//                 text: "Please select a circle before submitting.",
+//             });
+//             return;
+//         }
+
 //         const categoriesWithFilesCount = Object.keys(selectedFilesMap).length;
         
 //         if (categoriesWithFilesCount < 4) {
@@ -290,6 +303,9 @@
 
 //         action(true);
 //         var formData = new FormData();
+        
+//         // Append circle
+//         formData.append('circle', selectedCircle);
         
 //         // Append all files in each category array
 //         Object.keys(selectedFilesMap).forEach((key) => {
@@ -339,6 +355,7 @@
 
 //     const handleCancel = () => {
 //         setSelectedFilesMap({});
+//         setSelectedCircle("");
 //         setShowError(false);
 //         setShowDownloads(false);
 //         setDownloadUrls({ url1: null, url2: null, url3: null, url4: null });
@@ -375,6 +392,65 @@
 //                             </Box>
 //                             <Stack spacing={3} sx={{ marginTop: "-20px" }} direction={'column'}>
 
+//                                 {/* CIRCLE DROPDOWN SECTION */}
+//                                 <Box className={classes.Front_Box} sx={{ p: 3 }}>
+//                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '15px', marginBottom: '15px' }}>
+//                                         <Typography variant="subtitle2" sx={{ fontWeight: 700, color: C.tealDark }}>
+//                                             Select Circle:
+//                                         </Typography>
+                                        
+//                                         <FormControl sx={{ minWidth: 200 }}>
+//                                             <InputLabel id="circle-select-label" sx={{ color: C.teal }}>
+//                                                 Select Circle
+//                                             </InputLabel>
+//                                             <Select
+//                                                 labelId="circle-select-label"
+//                                                 id="circle-select"
+//                                                 value={selectedCircle}
+//                                                 label="Select Circle"
+//                                                 onChange={(e) => {
+//                                                     setSelectedCircle(e.target.value);
+//                                                 }}
+//                                                 sx={{
+//                                                     backgroundColor: '#fff',
+//                                                     color: C.tealDark,
+//                                                     fontWeight: 600,
+//                                                     '& .MuiOutlinedInput-notchedOutline': {
+//                                                         borderColor: C.border,
+//                                                     },
+//                                                     '&:hover .MuiOutlinedInput-notchedOutline': {
+//                                                         borderColor: C.teal,
+//                                                     },
+//                                                     '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+//                                                         borderColor: C.teal,
+//                                                         borderWidth: '2px',
+//                                                     },
+//                                                 }}
+//                                             >
+//                                                 <MenuItem value="">
+//                                                     <em>None</em>
+//                                                 </MenuItem>
+//                                                 {CIRCLE_OPTIONS.map((circle) => (
+//                                                     <MenuItem key={circle} value={circle}>
+//                                                         {circle}
+//                                                     </MenuItem>
+//                                                 ))}
+//                                             </Select>
+//                                         </FormControl>
+//                                     </div>
+
+//                                     {selectedCircle && (
+//                                         <Box sx={{ mt: 1.5, p: 1.5, bgcolor: C.labelOdd, borderRadius: 1, border: `1px solid ${C.border}` }}>
+//                                             <Typography variant="caption" sx={{ color: C.tealDark, fontWeight: 700 }}>
+//                                                 ✓ Selected Circle: <span style={{ fontWeight: 700, fontSize: '14px' }}>{selectedCircle}</span>
+//                                             </Typography>
+//                                         </Box>
+//                                     )}
+
+//                                     <Divider sx={{ mt: 2, mb: 2 }} />
+//                                 </Box>
+
+//                                 {/* FILE UPLOAD SECTION */}
 //                                 <Box className={classes.Front_Box} sx={{ p: 3 }}>
 //                                     <div className={classes.Front_Box_Hading} style={{ marginBottom: '15px' }}>
 //                                         Upload Required Files by Category (Multiple Allowed):
@@ -508,14 +584,21 @@
 //     );
 // };
 
-// export default UploadLayered;
+// export default NT4G;
 
 
-
-import React, { useState, useEffect } from "react";
-import { Box, Button, Stack, Chip, Divider, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
-import { Breadcrumbs, Link, Typography } from "@mui/material";
+import React, { useState } from "react";
 import {
+    Box,
+    Button,
+    Stack,
+    Chip,
+    Divider,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
+    Typography,
     Paper,
     Table,
     TableBody,
@@ -524,28 +607,25 @@ import {
     TableHead,
     TableRow,
 } from "@mui/material";
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import { useNavigate } from "react-router-dom";
-import Slide from '@mui/material/Slide';
 import UploadIcon from '@mui/icons-material/Upload';
 import DoDisturbIcon from '@mui/icons-material/DoDisturb';
 import CancelIcon from '@mui/icons-material/Cancel';
-import Swal from "sweetalert2";
-import { postData } from "../../../services/FetchNodeServices";
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import DnsIcon from '@mui/icons-material/Dns';
+import Swal from "sweetalert2";
+import { postData } from "../../../services/FetchNodeServices";
 import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
 import OverAllCss from "../../../csss/OverAllCss";
 
 /* ------------------------------------------------------------------ */
-/*  Theme — matched to the teal "Baseband Requirement" screens        */
+/*  Theme                                                              */
 /* ------------------------------------------------------------------ */
 const C = {
     teal: "#006e74",
     tealDark: "#00494d",
     headerBg: "#004d52",
     labelOdd: "#e3f2f2",
-    labelEven: "#f2fafa",
+    labelEdd: "#f2fafa",
     border: "#c9dcdc",
     valueText: "#0d3a3c",
     zeroText: "#a7bcbc",
@@ -555,8 +635,7 @@ const C = {
 
 const HEADER_GRADIENT = "linear-gradient(90deg, #004d52 0%, #006e74 55%, #4fa3a8 100%)";
 const PINNED_KEY = "Site ID";
-
-const CIRCLE_OPTIONS = ['KAR','BIH'];
+const CIRCLE_OPTIONS = ['KAR', 'BIH'];
 
 const buildColumns = (rows) => {
     if (!rows || !rows.length) return [];
@@ -581,9 +660,9 @@ const cellColor = (val) => {
 };
 
 /* ------------------------------------------------------------------ */
-/*  Results table shown below the download buttons                    */
+/*  Results table                                                      */
 /* ------------------------------------------------------------------ */
-function BasebandResultTable({ rows }) {
+function ResultTable({ rows }) {
     const columns = buildColumns(rows);
     const hasData = Array.isArray(rows) && rows.length > 0;
 
@@ -607,7 +686,7 @@ function BasebandResultTable({ rows }) {
                         variant="subtitle2"
                         sx={{ color: "#fff", fontWeight: 700, letterSpacing: 0.4, textTransform: "uppercase" }}
                     >
-                        Baseband Site-wise Data
+                        4G Site-wise Data
                     </Typography>
                 </Box>
 
@@ -659,7 +738,7 @@ function BasebandResultTable({ rows }) {
 
                         <TableBody>
                             {rows.map((row, i) => {
-                                const labelBg = i % 2 === 0 ? C.labelOdd : C.labelEven;
+                                const labelBg = i % 2 === 0 ? C.labelOdd : "#f2fafa";
                                 return (
                                     <TableRow key={row[PINNED_KEY] ?? i}>
                                         <TableCell
@@ -705,23 +784,18 @@ function BasebandResultTable({ rows }) {
     );
 }
 
-const UploadLayered = () => {
-    // Map stores arrays of files per key: { [key]: File[] }
+/* ================================================================ */
+/*  NT4G Component                                                   */
+/* ================================================================ */
+const NT4G = () => {
     const [selectedFilesMap, setSelectedFilesMap] = useState({});
     const [showError, setShowError] = useState(false);
     const [selectedCircle, setSelectedCircle] = useState("");
-    
-    const [downloadUrls, setDownloadUrls] = useState({
-        url1: null,
-        url2: null,
-        url3: null,
-        url4: null,
-    });
+    const [downloadUrls, setDownloadUrls] = useState({ url1: null, url2: null, url3: null, url4: null });
     const [showDownloads, setShowDownloads] = useState(false);
     const [resultData, setResultData] = useState([]);
-    
+
     const { loading, action } = useLoadingDialog();
-    const navigate = useNavigate();
     const classes = OverAllCss();
 
     const FILE_SECTIONS = [
@@ -731,7 +805,6 @@ const UploadLayered = () => {
         { key: "nte_rep", label: "4. NE Report File" }
     ];
 
-    // Handles multiple file selections per section key
     const handleFileSelection = (key, event) => {
         const newFiles = Array.from(event.target.files || []);
         if (!newFiles.length) return;
@@ -744,7 +817,6 @@ const UploadLayered = () => {
         event.target.value = "";
     };
 
-    // Removes an individual file by index from a section array
     const handleRemoveFileIndex = (key, indexToRemove) => {
         setSelectedFilesMap(prev => {
             const updatedList = (prev[key] || []).filter((_, idx) => idx !== indexToRemove);
@@ -760,11 +832,7 @@ const UploadLayered = () => {
 
     const handleSingleDownload = (url) => {
         if (!url) {
-            Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: "Download link is not available.",
-            });
+            Swal.fire({ icon: "error", title: "Error", text: "Download link is not available." });
             return;
         }
 
@@ -776,52 +844,31 @@ const UploadLayered = () => {
             link.click();
             document.body.removeChild(link);
 
-            Swal.fire({
-                icon: "success",
-                title: "Download Started",
-                text: "Your file download has started.",
-                timer: 1500
-            });
+            Swal.fire({ icon: "success", title: "Download Started", text: "Your file download has started.", timer: 1500 });
         } catch (error) {
             console.error('Download error:', error);
-            Swal.fire({
-                icon: "error",
-                title: "Download Failed",
-                text: "Failed to download the file. Please try again.",
-            });
+            Swal.fire({ icon: "error", title: "Download Failed", text: "Failed to download the file." });
         }
     };
 
     const handleSubmit = async () => {
-        // Validate circle selection
         if (!selectedCircle) {
-            Swal.fire({
-                icon: "warning",
-                title: "Missing Circle",
-                text: "Please select a circle before submitting.",
-            });
+            Swal.fire({ icon: "warning", title: "Missing Circle", text: "Please select a circle before submitting." });
             return;
         }
 
         const categoriesWithFilesCount = Object.keys(selectedFilesMap).length;
-        
+
         if (categoriesWithFilesCount < 4) {
             setShowError(true);
-            Swal.fire({
-                icon: "warning",
-                title: "Missing Files",
-                text: "Please upload files into all 4 required categories before submitting.",
-            });
+            Swal.fire({ icon: "warning", title: "Missing Files", text: "Please upload files into all 4 required categories." });
             return;
         }
 
         action(true);
-        var formData = new FormData();
-        
-        // Append circle
+        const formData = new FormData();
         formData.append('circle', selectedCircle);
-        
-        // Append all files in each category array
+
         Object.keys(selectedFilesMap).forEach((key) => {
             selectedFilesMap[key].forEach((file) => {
                 formData.append(key, file);
@@ -834,36 +881,22 @@ const UploadLayered = () => {
             if (response.status === true) {
                 action(false);
                 setShowDownloads(true);
-                
                 setDownloadUrls({
                     url1: response.download_url1 || response.download_ulr1,
                     url2: response.download_url2 || response.download_ulr2,
                     url3: response.download_url3 || response.download_ulr3,
                     url4: response.download_url4 || response.download_ulr4,
                 });
-                
                 setResultData(Array.isArray(response.data) ? response.data : []);
 
-                Swal.fire({
-                    icon: "success",
-                    title: "Done",
-                    text: `${response.message}`,
-                });
+                Swal.fire({ icon: "success", title: "Done", text: response.message });
             } else {
                 action(false);
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: `${response.message}`,
-                });
+                Swal.fire({ icon: "error", title: "Oops...", text: response.message });
             }
         } catch (err) {
             action(false);
-            Swal.fire({
-                icon: "error",
-                title: "Server Error",
-                text: "An error occurred while uploading files.",
-            });
+            Swal.fire({ icon: "error", title: "Server Error", text: "An error occurred while uploading files." });
         }
     };
 
@@ -876,226 +909,212 @@ const UploadLayered = () => {
         setResultData([]);
     };
 
-    useEffect(() => {
-        document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`;
-    }, []);
-
-    // Total files selected across all categories
     const totalSelectedFilesCount = Object.values(selectedFilesMap).reduce((acc, curr) => acc + (curr ? curr.length : 0), 0);
     const categoriesFilledCount = Object.keys(selectedFilesMap).length;
 
     return (
-        <>
-            <div style={{ margin: 5, marginLeft: 10 }}>
-                <Breadcrumbs aria-label="breadcrumb" itemsBeforeCollapse={2} maxItems={3} separator={<KeyboardArrowRightIcon fontSize="small" />}>
-                    <Link underline="hover" onClick={() => { navigate('/tools') }}>Tools</Link>
-                    <Link underline="hover" onClick={() => { navigate('/tools/soft_at_tools') }}>VI Soft-AT Tool</Link>
-                    <Typography color='text.primary'>NT 4G</Typography>
-                </Breadcrumbs>
-            </div>
-            <Slide
-                direction='left'
-                in={true}
-                timeout={1000}
-            >
-                <Box>
-                    <Box className={classes.main_Box}>
-                        <Box className={classes.Back_Box} sx={{ width: { md: '80%', xs: '100%' } }}>
-                            <Box className={classes.Box_Hading} >
-                                NT 4G
-                            </Box>
-                            <Stack spacing={3} sx={{ marginTop: "-20px" }} direction={'column'}>
+        <Box className={classes.Front_Box} sx={{ p: 3 }}>
+            <Stack spacing={3} direction={'column'}>
 
-                                {/* CIRCLE DROPDOWN SECTION */}
-                                <Box className={classes.Front_Box} sx={{ p: 3 }}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '15px', marginBottom: '15px' }}>
-                                        <Typography variant="subtitle2" sx={{ fontWeight: 700, color: C.tealDark }}>
-                                            Select Circle:
-                                        </Typography>
-                                        
-                                        <FormControl sx={{ minWidth: 200 }}>
-                                            <InputLabel id="circle-select-label" sx={{ color: C.teal }}>
-                                                Select Circle
-                                            </InputLabel>
-                                            <Select
-                                                labelId="circle-select-label"
-                                                id="circle-select"
-                                                value={selectedCircle}
-                                                label="Select Circle"
-                                                onChange={(e) => {
-                                                    setSelectedCircle(e.target.value);
-                                                }}
-                                                sx={{
-                                                    backgroundColor: '#fff',
-                                                    color: C.tealDark,
-                                                    fontWeight: 600,
-                                                    '& .MuiOutlinedInput-notchedOutline': {
-                                                        borderColor: C.border,
-                                                    },
-                                                    '&:hover .MuiOutlinedInput-notchedOutline': {
-                                                        borderColor: C.teal,
-                                                    },
-                                                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                                                        borderColor: C.teal,
-                                                        borderWidth: '2px',
-                                                    },
-                                                }}
-                                            >
-                                                <MenuItem value="">
-                                                    <em>None</em>
-                                                </MenuItem>
-                                                {CIRCLE_OPTIONS.map((circle) => (
-                                                    <MenuItem key={circle} value={circle}>
-                                                        {circle}
-                                                    </MenuItem>
-                                                ))}
-                                            </Select>
-                                        </FormControl>
-                                    </div>
-
-                                    {selectedCircle && (
-                                        <Box sx={{ mt: 1.5, p: 1.5, bgcolor: C.labelOdd, borderRadius: 1, border: `1px solid ${C.border}` }}>
-                                            <Typography variant="caption" sx={{ color: C.tealDark, fontWeight: 700 }}>
-                                                ✓ Selected Circle: <span style={{ fontWeight: 700, fontSize: '14px' }}>{selectedCircle}</span>
-                                            </Typography>
-                                        </Box>
-                                    )}
-
-                                    <Divider sx={{ mt: 2, mb: 2 }} />
-                                </Box>
-
-                                {/* FILE UPLOAD SECTION */}
-                                <Box className={classes.Front_Box} sx={{ p: 3 }}>
-                                    <div className={classes.Front_Box_Hading} style={{ marginBottom: '15px' }}>
-                                        Upload Required Files by Category (Multiple Allowed):
-                                    </div>
-
-                                    <Stack spacing={2}>
-                                        {FILE_SECTIONS.map((section, idx) => {
-                                            const fileArray = selectedFilesMap[section.key] || [];
-                                            const hasFiles = fileArray.length > 0;
-                                            return (
-                                                <Box key={section.key} sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
-                                                        <Typography variant="subtitle2" sx={{ fontWeight: 700, color: C.tealDark }}>
-                                                            {section.label}
-                                                        </Typography>
-
-                                                        <Button 
-                                                            variant="contained" 
-                                                            component="label" 
-                                                            size="small"
-                                                            color={hasFiles ? "success" : "primary"}
-                                                        >
-                                                            {hasFiles ? "Add More Files" : "Browse Files"}
-                                                            <input
-                                                                hidden
-                                                                accept=".xlsx,.xls,.xlsb,.csv"
-                                                                type="file"
-                                                                multiple={true}
-                                                                onChange={(e) => handleFileSelection(section.key, e)}
-                                                            />
-                                                        </Button>
-                                                    </div>
-
-                                                    {hasFiles ? (
-                                                        <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap sx={{ mt: 0.5 }}>
-                                                            {fileArray.map((f, fIdx) => (
-                                                                <Chip
-                                                                    key={fIdx}
-                                                                    label={f.name}
-                                                                    onDelete={() => handleRemoveFileIndex(section.key, fIdx)}
-                                                                    deleteIcon={<CancelIcon />}
-                                                                    sx={{
-                                                                        bgcolor: C.labelOdd,
-                                                                        color: C.tealDark,
-                                                                        fontWeight: 600,
-                                                                        border: `1px solid ${C.border}`,
-                                                                        '& .MuiChip-deleteIcon': {
-                                                                            color: C.teal,
-                                                                            '&:hover': { color: C.cross }
-                                                                        }
-                                                                    }}
-                                                                />
-                                                            ))}
-                                                        </Stack>
-                                                    ) : (
-                                                        <Typography variant="caption" sx={{ color: 'gray', fontStyle: 'italic' }}>
-                                                            No files chosen for this category yet.
-                                                        </Typography>
-                                                    )}
-
-                                                    {idx < FILE_SECTIONS.length - 1 && <Divider sx={{ mt: 1 }} />}
-                                                </Box>
-                                            );
-                                        })}
-                                    </Stack>
-
-                                    <Box sx={{ mt: 2 }}>
-                                        <span style={{ color: categoriesFilledCount === 4 ? 'green' : '#006e74', fontSize: '15px', fontWeight: 600 }}>
-                                            Total Categories Ready: {categoriesFilledCount} / 4 ({totalSelectedFilesCount} total files chosen)
-                                        </span>
-                                    </Box>
-
-                                    <div>
-                                        <span style={{ display: showError ? 'block' : 'none', color: 'red', fontSize: '15px', fontWeight: 600, marginTop: '8px' }}>
-                                            Error: Please ensure files are selected for all 4 categories before submitting!
-                                        </span>
-                                    </div>
-                                </Box>
-                            </Stack>
-
-                            <Stack direction={{ xs: "column", sm: "column", md: "row" }} spacing={2} style={{ display: 'flex', justifyContent: "space-around", marginTop: "20px" }}>
-                                <Button variant="contained" color="success" onClick={handleSubmit} endIcon={<UploadIcon />}>Submit nt4g</Button>
-                                <Button variant="contained" onClick={handleCancel} style={{ backgroundColor: "red", color: 'white' }} endIcon={<DoDisturbIcon />} >Cancel</Button>
-                            </Stack>
-                        </Box>
-                    </Box>
-
-                    {/* 4 Separate Download Buttons section */}
-                    <Box sx={{ display: showDownloads ? 'block' : 'none', textAlign: 'center', mt: 4 }}>
-                        <Typography variant="h6" sx={{ fontWeight: 700, color: C.tealDark, mb: 2 }}>
-                            Download Generated Output Files
+                {/* CIRCLE DROPDOWN SECTION */}
+                <Box sx={{ p: 2.5, bgcolor: '#f9f9f9', borderRadius: 2, border: `1px solid ${C.border}` }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '15px', marginBottom: '15px' }}>
+                        <Typography variant="subtitle2" sx={{ fontWeight: 700, color: C.tealDark }}>
+                            📍 Select Circle:
                         </Typography>
-                        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} justifyContent="center" flexWrap="wrap">
-                            <Button
-                                variant="outlined"
-                                onClick={() => handleSingleDownload(downloadUrls.url1)}
-                                startIcon={<FileDownloadIcon sx={{ color: "green" }} />}
+
+                        <FormControl sx={{ minWidth: 220 }}>
+                            <InputLabel id="circle-select-label-4g" sx={{ color: C.teal }}>
+                                Select Circle
+                            </InputLabel>
+                            <Select
+                                labelId="circle-select-label-4g"
+                                id="circle-select-4g"
+                                value={selectedCircle}
+                                label="Select Circle"
+                                onChange={(e) => setSelectedCircle(e.target.value)}
+                                sx={{
+                                    backgroundColor: '#fff',
+                                    color: C.tealDark,
+                                    fontWeight: 600,
+                                    borderRadius: 1.5,
+                                    '& .MuiOutlinedInput-notchedOutline': { borderColor: C.border },
+                                    '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: C.teal },
+                                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: C.teal, borderWidth: '2px' },
+                                }}
                             >
-                                Download Reference Data Huawei
-                            </Button>
-                            <Button
-                                variant="outlined"
-                                onClick={() => handleSingleDownload(downloadUrls.url2)}
-                                startIcon={<FileDownloadIcon sx={{ color: "green" }} />}
-                            >
-                                Download Checklist Huwaei RAN UIM eNodeB
-                            </Button>
-                            <Button
-                                variant="outlined"
-                                onClick={() => handleSingleDownload(downloadUrls.url3)}
-                                startIcon={<FileDownloadIcon sx={{ color: "green" }} />}
-                            >
-                                Download INVENTORY SHEET 4G
-                            </Button>
-                            <Button
-                                variant="outlined"
-                                onClick={() => handleSingleDownload(downloadUrls.url4)}
-                                startIcon={<FileDownloadIcon sx={{ color: "green" }} />}
-                            >
-                                Download Accedian Data
-                            </Button>
-                        </Stack>
+                                <MenuItem value=""><em>Select a circle...</em></MenuItem>
+                                {CIRCLE_OPTIONS.map((circle) => (
+                                    <MenuItem key={circle} value={circle}>{circle}</MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </div>
+
+                    {selectedCircle && (
+                        <Box sx={{ mt: 1.5, p: 1.5, bgcolor: C.labelOdd, borderRadius: 1, border: `1px solid ${C.border}` }}>
+                            <Typography variant="caption" sx={{ color: C.tealDark, fontWeight: 700 }}>
+                                ✓ Selected Circle: <span style={{ fontWeight: 700, fontSize: '14px', color: C.teal }}>{selectedCircle}</span>
+                            </Typography>
+                        </Box>
+                    )}
+                </Box>
+
+                <Divider />
+
+                {/* FILE UPLOAD SECTION */}
+                <Box>
+                    <Typography variant="h6" sx={{ fontWeight: 700, color: C.tealDark, mb: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
+                        📁 Upload Required Files (4 Categories)
+                    </Typography>
+
+                    <Stack spacing={2.5}>
+                        {FILE_SECTIONS.map((section, idx) => {
+                            const fileArray = selectedFilesMap[section.key] || [];
+                            const hasFiles = fileArray.length > 0;
+                            return (
+                                <Box key={section.key} sx={{ p: 2, bgcolor: '#f9f9f9', borderRadius: 2, border: `1px solid ${C.border}` }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px', marginBottom: '12px' }}>
+                                        <Typography variant="body2" sx={{ fontWeight: 700, color: C.tealDark }}>
+                                            {section.label}
+                                        </Typography>
+
+                                        <Button
+                                            variant="contained"
+                                            component="label"
+                                            size="small"
+                                            color={hasFiles ? "success" : "primary"}
+                                            sx={{ fontWeight: 700 }}
+                                        >
+                                            {hasFiles ? `+ Add More` : "Browse Files"}
+                                            <input
+                                                hidden
+                                                accept=".xlsx,.xls,.xlsb,.csv"
+                                                type="file"
+                                                multiple={true}
+                                                onChange={(e) => handleFileSelection(section.key, e)}
+                                            />
+                                        </Button>
+                                    </div>
+
+                                    {hasFiles ? (
+                                        <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+                                            {fileArray.map((f, fIdx) => (
+                                                <Chip
+                                                    key={fIdx}
+                                                    label={f.name}
+                                                    onDelete={() => handleRemoveFileIndex(section.key, fIdx)}
+                                                    deleteIcon={<CancelIcon />}
+                                                    size="small"
+                                                    sx={{
+                                                        bgcolor: C.labelOdd,
+                                                        color: C.tealDark,
+                                                        fontWeight: 600,
+                                                        border: `1px solid ${C.border}`,
+                                                        '& .MuiChip-deleteIcon': {
+                                                            color: C.teal,
+                                                            '&:hover': { color: C.cross }
+                                                        }
+                                                    }}
+                                                />
+                                            ))}
+                                        </Stack>
+                                    ) : (
+                                        <Typography variant="caption" sx={{ color: 'gray', fontStyle: 'italic' }}>
+                                            No files selected for this category
+                                        </Typography>
+                                    )}
+                                </Box>
+                            );
+                        })}
+                    </Stack>
+
+                    <Box sx={{ mt: 2, p: 2, bgcolor: categoriesFilledCount === 4 ? '#e8f5e9' : '#fff3e0', borderRadius: 1.5, border: `1px solid ${categoriesFilledCount === 4 ? '#4caf50' : '#ff9800'}` }}>
+                        <Typography variant="body2" sx={{ fontWeight: 700, color: categoriesFilledCount === 4 ? '#2e7d32' : '#e65100' }}>
+                            {categoriesFilledCount === 4 ? '✓' : '⚠'} Categories Ready: <span style={{ fontSize: '16px' }}>{categoriesFilledCount} / 4</span> ({totalSelectedFilesCount} files)
+                        </Typography>
                     </Box>
 
-                    {/* Results table */}
-                    <BasebandResultTable rows={resultData} />
+                    {showError && (
+                        <Box sx={{ mt: 2, p: 2, bgcolor: '#ffebee', borderRadius: 1.5, border: '1px solid #f44336' }}>
+                            <Typography variant="body2" sx={{ fontWeight: 700, color: '#c62828' }}>
+                                ❌ Please ensure files are selected for all 4 categories!
+                            </Typography>
+                        </Box>
+                    )}
                 </Box>
-            </Slide>
+            </Stack>
+
+            {/* Buttons */}
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={2} sx={{ mt: 3, justifyContent: "center" }}>
+                <Button
+                    variant="contained"
+                    color="success"
+                    onClick={handleSubmit}
+                    endIcon={<UploadIcon />}
+                    sx={{ fontWeight: 700, px: 4 }}
+                >
+                    Submit NT 4G
+                </Button>
+                <Button
+                    variant="contained"
+                    onClick={handleCancel}
+                    sx={{ backgroundColor: "#ef5350", color: 'white', fontWeight: 700, px: 4 }}
+                    endIcon={<DoDisturbIcon />}
+                >
+                    Reset
+                </Button>
+            </Stack>
+
+            {/* Downloads Section */}
+            {showDownloads && (
+                <Box sx={{ mt: 4, p: 3, bgcolor: '#f0f4f5', borderRadius: 2, border: `2px solid ${C.teal}` }}>
+                    <Typography variant="h6" sx={{ fontWeight: 700, color: C.tealDark, mb: 2.5, display: 'flex', alignItems: 'center', gap: 1 }}>
+                        📥 Download Generated Files
+                    </Typography>
+                    <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} flexWrap="wrap" useFlexGap>
+                        <Button
+                            variant="contained"
+                            onClick={() => handleSingleDownload(downloadUrls.url1)}
+                            startIcon={<FileDownloadIcon />}
+                            sx={{ flex: 1, minWidth: 200, fontWeight: 700 }}
+                        >
+                            Reference Data Huawei
+                        </Button>
+                        <Button
+                            variant="contained"
+                            onClick={() => handleSingleDownload(downloadUrls.url2)}
+                            startIcon={<FileDownloadIcon />}
+                            sx={{ flex: 1, minWidth: 200, fontWeight: 700 }}
+                        >
+                            Checklist Huawei RAN UIM
+                        </Button>
+                        <Button
+                            variant="contained"
+                            onClick={() => handleSingleDownload(downloadUrls.url3)}
+                            startIcon={<FileDownloadIcon />}
+                            sx={{ flex: 1, minWidth: 200, fontWeight: 700 }}
+                        >
+                            Inventory Sheet 4G
+                        </Button>
+                        <Button
+                            variant="contained"
+                            onClick={() => handleSingleDownload(downloadUrls.url4)}
+                            startIcon={<FileDownloadIcon />}
+                            sx={{ flex: 1, minWidth: 200, fontWeight: 700 }}
+                        >
+                            Accedian Data
+                        </Button>
+                    </Stack>
+                </Box>
+            )}
+
+            {/* Results Table */}
+            <ResultTable rows={resultData} />
+
             {loading}
-        </>
+        </Box>
     );
 };
 
-export default UploadLayered;
+export default NT4G;

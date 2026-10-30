@@ -226,6 +226,8 @@ const Ix_Tools = () => {
     const allowedErRoles = ['Admin', 'IX_ER']
     const allowedTsRoles = ['Admin', 'IX_TS']
     const allowedIxViScriptingRoles = ['Admin', 'IX_VI_SCRPT']
+    const allowedIxBhartiScriptingRoles = ['Admin', 'IX_Bharti_SCRPT']
+    
 
     const linker = window.location.pathname;
 
@@ -289,6 +291,15 @@ const Ix_Tools = () => {
             dispatch({ type: 'LINK_PAGES', payload: { linker } })
         } else {
             navigate('/tools/ix_tools/ix_vi_scripting')
+        }
+    }
+
+     const handleIX_Bharti_Scripting = () => {
+        if (chackToken === null) {
+            navigate('/login')
+            dispatch({ type: 'LINK_PAGES', payload: { linker } })
+        } else {
+            navigate('/tools/ix_tools/ix_Bharti_scripting')
         }
     }
 
@@ -436,6 +447,20 @@ const Ix_Tools = () => {
                                             </div>
                                             <div>
                                                 <div className={classes.center}>VI Scripting</div>
+                                            </div>
+                                        </Box>
+                                    </Grid>
+                                )}
+
+
+                                 {userTypes?.some(role => allowedIxBhartiScriptingRoles.map(r => r.toLowerCase()).includes(role?.toLowerCase())) && (
+                                    <Grid item xs={12} sm={6} md={3}>
+                                        <Box sx={backgroundStyle} className={classes.des} onClick={handleIX_Bharti_Scripting}>
+                                            <div className={classes.centerIcon}>
+                                                <PageIcon alt="IX_Bharti_Scripting" style={{ width: "40px", height: "30px" }} />
+                                            </div>
+                                            <div>
+                                                <div className={classes.center}>Bharti Scripting</div>
                                             </div>
                                         </Box>
                                     </Grid>

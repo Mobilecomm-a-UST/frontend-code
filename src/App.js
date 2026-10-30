@@ -613,6 +613,7 @@ const AlarmLogs = lazy(()=>import('./Components/UserInterface/Alarm Logs Tool/Al
 const Tstracker = lazy(()=>import('./Components/UserInterface/TS Tracker/TS_Tracker'))
 const PendingPerformanceRemark = lazy(()=> import('./Components/UserInterface/Pending Performance Remarks/PendingPerformanceRemarks'))
 const IX_VI_Scripting = lazy(()=>import('./Components/UserInterface/IX VI Scripting/IX_VI_Scripting'))
+const IX_Bharti_Scripting = lazy(()=> import('./Components/UserInterface/IX Bharti Scripting/IXBharti'))
 
 
 const queryClient = new QueryClient()
@@ -899,6 +900,12 @@ function App() {
               <Route path="/tools/ix_tools/ix_vi_scripting/*" element={
               <Suspense fallback={<div>Loading...</div>}>
                 <ProtectedRoute element={IX_VI_Scripting} allowedUserTypes={['admin', 'IX_VI_SCRPT']} userType={userType} />
+              </Suspense>
+            } />
+
+             <Route path="/tools/ix_tools/ix_Bharti_scripting/*" element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <ProtectedRoute element={IX_Bharti_Scripting} allowedUserTypes={['admin', 'IX_Bharti_SCRPT']} userType={userType} />
               </Suspense>
             } />
 
