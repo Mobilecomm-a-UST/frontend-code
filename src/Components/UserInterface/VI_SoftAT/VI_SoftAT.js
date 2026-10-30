@@ -41,6 +41,8 @@ const WeeklyComparison = lazy(
 );
 const WeekWiseFTR = lazy(() => import("./VI_Hoto_Dashboard/WeekWiseFTR"));
 const HuwaeiNT4G = lazy(() => import("./Huwaei NT4G/NT4G"))
+const AllNT = lazy(() => import('./Huwaei NT4G/AllNT'))
+const NT2G = lazy(()=> import('./Huwaei NT4G/NT2G'))
 
 
 
@@ -302,7 +304,7 @@ const VI_SoftAT = () => {
                                                 eventKey="7-1"
                                                 onClick={() =>
                                                     navigate(
-                                                        "/tools/soft_at_tools/vi_soft_at/HuwaeiNT4G",
+                                                        "/tools/soft_at_tools/vi_soft_at/AllNT",
                                                     )
                                                 }
                                             >
@@ -348,6 +350,11 @@ const VI_SoftAT = () => {
                                     path="/WeeklyComparison"
                                 />
                                 <Route element={<HuwaeiNT4G />} path="/HuwaeiNT4G" />
+                                <Route element={<AllNT />} path="/AllNT" />
+                                <Route element={<NT2G />} path="/NT2G" />
+
+
+
                             </Routes>
                         </Suspense>
                     </Grid>

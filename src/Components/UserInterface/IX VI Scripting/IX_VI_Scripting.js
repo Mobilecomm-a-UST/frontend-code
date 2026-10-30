@@ -33,6 +33,7 @@ const HR_HPSC = lazy(() => import("./Circle Scripting/HRY Scripting/HR_HPSC"))
 
 const MUM_Hpscfdd = lazy(() => import("./Circle Scripting/MUM Scripting/MUM_Hpscfdd"))
 const MUM_Hpsctdd = lazy(() => import("./Circle Scripting/MUM Scripting/MUM_Hpsctdd"))
+const MUM_NT = lazy(()=> import('./Circle Scripting/MUM Scripting/NT'))
 
 
 
@@ -97,10 +98,13 @@ const IX_VI_Scripting = () => {
                                             </Nav.Menu>
 
                                             <Nav.Menu eventKey="3" title="MUM Scripting" icon={<ListIcon />} placement="rightStart" className="menu-title-custom">
-                                                <Nav.Item eventKey="3-1" placement="rightStart" className="single-item-custom" icon={<FileUploadIcon style={{}} />} onClick={() => { navigate('/tools/ix_tools/ix_vi_scripting/MUM_Hpscfdd'); show(); setMenuButton(true) }}>
+                                             <Nav.Item eventKey="3-1" placement="rightStart" className="single-item-custom" icon={< FileUploadIcon style={{}} />} onClick={() => { navigate('/tools/ix_tools/ix_vi_scripting/MUM_NT'); show(); setMenuButton(true) }}>
+                                                    NT
+                                                </Nav.Item>
+                                                <Nav.Item eventKey="3-2" placement="rightStart" className="single-item-custom" icon={<FileUploadIcon style={{}} />} onClick={() => { navigate('/tools/ix_tools/ix_vi_scripting/MUM_Hpscfdd'); show(); setMenuButton(true) }}>
                                                     HPSC FDD
                                                 </Nav.Item>
-                                                <Nav.Item eventKey="3-2" placement="rightStart" className="single-item-custom" icon={<FileUploadIcon style={{}} />} onClick={() => { navigate('/tools/ix_tools/ix_vi_scripting/MUM_Hpsctdd'); show(); setMenuButton(true) }}>
+                                                <Nav.Item eventKey="3-3" placement="rightStart" className="single-item-custom" icon={<FileUploadIcon style={{}} />} onClick={() => { navigate('/tools/ix_tools/ix_vi_scripting/MUM_Hpsctdd'); show(); setMenuButton(true) }}>
                                                     HPSC TDD
                                                 </Nav.Item>
                                             </Nav.Menu>
@@ -131,6 +135,7 @@ const IX_VI_Scripting = () => {
 
                                 <Route path='/MUM_Hpscfdd' element={<MUM_Hpscfdd />} />
                                 <Route path='/MUM_Hpsctdd' element={<MUM_Hpsctdd />} />
+                                 <Route path='/MUM_NT' element={<MUM_NT />} />
                               
 
                             </Routes>

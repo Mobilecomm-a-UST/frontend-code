@@ -67,7 +67,7 @@ const AlarmLogs = () => {
 
 
                                             <Nav.Item eventKey="1" placement="rightStart" className="single-item-custom" icon={< FileUploadIcon style={{}} />} onClick={() => { navigate('/tools/quality_team/alarm_logs/AlarmLogUpload'); show(); setMenuButton(true) }}>
-                                                Upload File
+                                             Alarm Upload File
                                             </Nav.Item>
                                             <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={< FileUploadIcon style={{}} />} onClick={() => { navigate('/tools/quality_team/alarm_logs/Degrow'); show(); setMenuButton(true) }}>
                                                 De-Grow

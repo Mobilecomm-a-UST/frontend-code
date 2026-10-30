@@ -1,700 +1,644 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
+    Grid,
     Box,
-    Button,
-    Stack,
+    Dialog,
+    DialogContent,
+    DialogTitle,
+    IconButton,
+    Slide,
     Breadcrumbs,
     Link,
     Typography,
-    Slide,
+    Button,
+    Tabs,
+    Tab,
+    TextField,
     Alert,
-    CircularProgress,
-    Paper,
+    Divider,
     Card,
     CardContent,
-    Grid,
-    Chip,
-} from "@mui/material";
+} from '@mui/material';
 import {
     Upload as UploadIcon,
-    DoDisturb as DoDisturbIcon,
-    FileDownload as FileDownloadIcon,
     KeyboardArrowRight as KeyboardArrowRightIcon,
+    GetApp as GetAppIcon,
     CheckCircle as CheckCircleIcon,
-    Storage as StorageIcon,
 } from "@mui/icons-material";
+import FolderIcon from '@mui/icons-material/Folder';
+import CloseIcon from '@mui/icons-material/Close';
+import DeleteIcon from '@mui/icons-material/Delete';
+import TopicIcon from '@mui/icons-material/Topic';
+import { useNavigate } from 'react-router-dom';
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
-import { postData, ServerURL } from "../../../services/FetchNodeServices";
 import OverAllCss from "../../../csss/OverAllCss";
+import { postData, getData, deleteData } from "../../../services/FetchNodeServices";
 import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
 
-const DeGrow = () => {
-    // ======== STATE MANAGEMENT ========
-    const [csvFile, setCsvFile] = useState(null);
-    const [uploadError, setUploadError] = useState(false);
-    const [uploadResult, setUploadResult] = useState(null);
-    const [processResult, setProcessResult] = useState(null);
-    const [isUploading, setIsUploading] = useState(false);
-    const [isProcessing, setIsProcessing] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
-    const [successMessage, setSuccessMessage] = useState("");
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return (
+        <Slide
+            direction="down"
+            timeout={2500}
+            style={{ transformOrigin: '0 0 0' }}
+            mountOnEnter
+            unmountOnExit
+            ref={ref}
+            {...props}
+        />
+    );
+});
 
-    // ======== HOOKS ========
-    const { loading, action } = useLoadingDialog();
+const Degrow = () => {
+    const [openDialog, setOpenDialog] = useState(false);
+    const [activeTab, setActiveTab] = useState(0);
     const navigate = useNavigate();
-    const classes = OverAllCss();
+    const { loading, action } = useLoadingDialog();
+    const [showFiles, setShowFiles] = useState([]);
+    const [selectFiles, setSelectFiles] = useState([]);
+    const [showError, setShowError] = useState({ selectfile: false });
+    const [selectedDate, setSelectedDate] = useState('');
+    const [dateError, setDateError] = useState(false);
+    const [reportData, setReportData] = useState(null);
+    const [processMessage, setProcessMessage] = useState('');
 
-    // ======== COLORS ========
-    const TEAL_PRIMARY = '#008080';
-    const TEAL_DARK = '#006e74';
+    const API_ENDPOINT = "degrow/upload";
+    const PROCESS_ENDPOINT = "degrow/process_file";
+    const BACK_FOLDER = "degrow_data";
 
-    // ======== HANDLE FILE SELECTION ========
-    const handleFileSelection = (event) => {
-        const file = event.target.files?.[0];
-        if (file) {
-            // Validate file type
-            if (!file.name.toLowerCase().endsWith('.csv')) {
-                setUploadError(true);
-                Swal.fire({
-                    icon: "warning",
-                    title: "Invalid File Type",
-                    text: "Please select a CSV file.",
-                    confirmButtonColor: "#ffc107",
-                });
-                return;
-            }
-            setCsvFile(file);
-            setUploadError(false);
-            setErrorMessage("");
-        }
-    };
-
-    // ======== HANDLE UPLOAD ========
-    const handleUpload = async () => {
-        if (!csvFile) {
-            setUploadError(true);
-            Swal.fire({
-                icon: "warning",
-                title: "No File Selected",
-                text: "Please select a CSV file to upload.",
-                confirmButtonColor: "#ffc107",
-            });
-            return;
-        }
-
-        setIsUploading(true);
-        setErrorMessage("");
-        setSuccessMessage("");
+    // Fetch uploaded files function
+    const fetchApiData = async () => {
         action(true);
-
         try {
-            const formData = new FormData();
-            formData.append('file', csvFile);
-
-            console.log('Uploading CSV file:', csvFile.name);
-
-            // Call upload API
-            const response = await postData('degrow/upload/', formData);
-
-            console.log('Upload Response:', response);
-
-            action(false);
-            setIsUploading(false);
-
-            // Check for success (status: true)
-            if (response?.status === true) {
-                // Success handling
-                setUploadResult(response);
-                setSuccessMessage(response.message || "File uploaded successfully!");
-
-                Swal.fire({
-                    icon: "success",
-                    title: "Upload Successful ✓",
-                    html: `
-                        <b>Filename:</b> ${response.filename}<br/>
-                        <b>Rows Read:</b> ${response.rows_read}
-                    `,
-                    confirmButtonColor: TEAL_PRIMARY,
-                });
+            const response = await getData(`${API_ENDPOINT}/`);
+            if (response?.status) {
+                const filename = response?.input_file?.filename;
+                setShowFiles(filename ? [filename] : []);
             } else {
-                // Error handling
-                const errorMsg = response?.message || "Failed to upload file.";
-                setErrorMessage(errorMsg);
-                setUploadResult(null);
-
-                Swal.fire({
-                    icon: "error",
-                    title: "Upload Failed",
-                    text: errorMsg,
-                    confirmButtonColor: "#d32f2f",
-                });
+                setShowFiles([]);
             }
         } catch (error) {
-            console.error('Upload Error:', error);
+            console.error("Error fetching files:", error);
+            setShowFiles([]);
+        } finally {
             action(false);
-            setIsUploading(false);
-
-            const errorMsg = error?.message || "Unable to upload file. Please try again.";
-            setErrorMessage(errorMsg);
-            setUploadResult(null);
-
-            Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: errorMsg,
-                confirmButtonColor: "#d32f2f",
-            });
         }
     };
 
-    // ======== HANDLE PROCESS/GENERATE REPORT ========
-    const handleGenerateReport = async () => {
-        if (!uploadResult) {
-            Swal.fire({
-                icon: "warning",
-                title: "Upload First",
-                text: "Please upload a CSV file before generating the report.",
-                confirmButtonColor: "#ffc107",
-            });
-            return;
-        }
-
-        setIsProcessing(true);
-        setErrorMessage("");
-        setSuccessMessage("");
-        action(true);
-
-        try {
-            console.log('Processing file with filename:', uploadResult.filename);
-
-            // Call process API with filename
-            const response = await postData('degrow/process_file/', {
-                filename: uploadResult.filename,
-            });
-
-            console.log('Process Response:', response);
-
-            action(false);
-            setIsProcessing(false);
-
-            // Check for success (status: true)
-            if (response?.status === true) {
-                // Success handling
-                setProcessResult(response);
-                setSuccessMessage(response.message || "Report generated successfully!");
-
-                Swal.fire({
-                    icon: "success",
-                    title: "Report Generated ✓",
-                    html: `
-                        <b>De-grow Date:</b> ${response.de_grow_date}<br/>
-                        <b>Post Date:</b> ${response.post_date}<br/>
-                        <b>Rows Processed:</b> ${response.rows_processed}<br/>
-                        <b>Output File:</b> ${response.filename}
-                    `,
-                    confirmButtonColor: TEAL_PRIMARY,
-                });
-            } else {
-                // Error handling
-                const errorMsg = response?.message || "Failed to process file.";
-                setErrorMessage(errorMsg);
-                setProcessResult(null);
-
-                Swal.fire({
-                    icon: "error",
-                    title: "Processing Failed",
-                    text: errorMsg,
-                    confirmButtonColor: "#d32f2f",
-                });
-            }
-        } catch (error) {
-            console.error('Process Error:', error);
-            action(false);
-            setIsProcessing(false);
-
-            const errorMsg = error?.message || "Unable to process file. Please try again.";
-            setErrorMessage(errorMsg);
-            setProcessResult(null);
-
-            Swal.fire({
-                icon: "error",
-                title: "Error",
-                text: errorMsg,
-                confirmButtonColor: "#d32f2f",
-            });
-        }
-    };
-
-    // ======== HANDLE DOWNLOAD ========
-    const handleDownload = () => {
-        if (processResult?.download_url) {
-            try {
-                const url = processResult.download_url.startsWith('http')
-                    ? processResult.download_url
-                    : `${ServerURL}${processResult.download_url}`;
-
-                window.open(url, '_blank');
-                console.log('Download started:', url);
-            } catch (e) {
-                console.error('Download Error:', e);
-                setErrorMessage('Failed to download file. Please try again.');
-            }
-        }
-    };
-
-    // ======== HANDLE CANCEL ========
-    const handleCancel = () => {
-        setCsvFile(null);
-        setUploadError(false);
-        setUploadResult(null);
-        setProcessResult(null);
-        setErrorMessage("");
-        setSuccessMessage("");
-    };
-
-    // ======== SET PAGE TITLE ========
+    // Automatically fetch files when the dialog is opened
     useEffect(() => {
-        document.title = "De-Grow Report Generator";
+        if (openDialog) {
+            fetchApiData();
+        }
+    }, [openDialog]);
+
+    const handleOpen = () => {
+        setOpenDialog(true);
+    };
+
+    const handleClose = () => {
+        setOpenDialog(false);
+        setActiveTab(0);
+        setShowFiles([]);
+        setShowError({ selectfile: false });
+        setSelectFiles([]);
+        setSelectedDate('');
+        setDateError(false);
+        setReportData(null);
+        setProcessMessage('');
+    };
+
+    // Handle Tab Change
+    const handleTabChange = (event, newValue) => {
+        setActiveTab(newValue);
+        setDateError(false);
+        setProcessMessage('');
+        setReportData(null);
+    };
+
+    // Handle Upload File(s)
+    const handleSubmit = async () => {
+        if (selectFiles.length === 0) {
+            setShowError({ selectfile: true });
+            return;
+        }
+
+        action(true);
+        const formData = new FormData();
+        Array.from(selectFiles).forEach((file) => {
+            formData.append("file", file);
+        });
+
+        try {
+            const response = await postData(`${API_ENDPOINT}/`, formData);
+            action(false);
+
+            if (response?.status && !response?.error) {
+                fetchApiData();
+                setShowError({ selectfile: false });
+                setSelectFiles([]);
+                Swal.fire({ 
+                    icon: "success", 
+                    title: "Done", 
+                    text: response.message || "Uploaded successfully" 
+                });
+            } else {
+                Swal.fire({ 
+                    icon: "error", 
+                    title: "Upload Failed", 
+                    text: response?.error || response?.message || "No files uploaded or processing error." 
+                });
+            }
+        } catch (error) {
+            action(false);
+            Swal.fire({ 
+                icon: "error", 
+                title: "Error", 
+                text: error?.message || "Unable to process upload request." 
+            });
+        }
+    };
+
+    // Handle Generate Report
+    const handleGenerateReport = async () => {
+        if (!selectedDate) {
+            setDateError(true);
+            setProcessMessage('Please select a date');
+            return;
+        }
+
+        action(true);
+        setProcessMessage('');
+        setReportData(null);
+
+        try {
+            // API expects date in YYYY-MM-DD format (keep as-is from date picker)
+            // Key can be De_Grow_Date or de_grow_date
+            const payload = {
+                De_Grow_Date: selectedDate
+            };
+
+            console.log('Sending payload:', payload);
+
+            const response = await postData(`${PROCESS_ENDPOINT}/`, payload);
+            action(false);
+
+            console.log('API Response:', response);
+
+            if (response?.status && !response?.error) {
+                setReportData(response);
+                setProcessMessage('✓ Report generated successfully');
+                
+                // If download_url exists, auto-download
+                if (response?.download_url) {
+                    const downloadUrl = response.download_url.startsWith('http') 
+                        ? response.download_url 
+                        : `https://commtoolapi.mcpspmis.com${response.download_url}`;
+                    
+                    window.open(downloadUrl, '_blank');
+                }
+
+                Swal.fire({ 
+                    icon: "success", 
+                    title: "Done", 
+                    text: response.message || "Report generated successfully" 
+                });
+            } else {
+                const errorMsg = response?.error || response?.message || 'Failed to generate report';
+                setProcessMessage(`✗ ${errorMsg}`);
+                Swal.fire({ 
+                    icon: "error", 
+                    title: "Generation Failed", 
+                    text: errorMsg
+                });
+            }
+        } catch (error) {
+            action(false);
+            const errorMsg = error?.message || 'Error generating report';
+            setProcessMessage(`✗ ${errorMsg}`);
+            Swal.fire({ 
+                icon: "error", 
+                title: "Error", 
+                text: errorMsg
+            });
+        }
+    };
+
+    // Handle Delete All
+    const handleDelete = async () => {
+        const confirmResult = await Swal.fire({
+            title: "Are you sure?",
+            text: "This action cannot be undone!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Yes, delete it!",
+        });
+
+        if (confirmResult.isConfirmed) {
+            action(true);
+            const response = await deleteData(`${API_ENDPOINT}/`);
+            action(false);
+
+            if (response?.status) {
+                setShowFiles([]);
+                Swal.fire({ icon: "success", title: "Deleted!", text: response.message });
+            } else {
+                Swal.fire({ icon: "error", title: "Oops...", text: response?.message || "Failed to delete" });
+            }
+        }
+    };
+
+    // Handle Single File Delete
+    const OneFileDelete = async (fileName) => {
+        const confirmResult = await Swal.fire({
+            title: "Are you sure?",
+            text: `Want to delete ${fileName} file!`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Yes, delete it!",
+        });
+
+        if (confirmResult.isConfirmed) {
+            action(true);
+            const body = { filename: `${fileName}`, foldername: `${BACK_FOLDER}` };
+            const response = await deleteData(`${API_ENDPOINT}/`, { data: body });
+            action(false);
+
+            if (response?.status) {
+                fetchApiData();
+                Swal.fire({ icon: "success", title: "Deleted!", text: response.message });
+            } else {
+                Swal.fire({ icon: "error", title: "Oops...", text: response?.message || "Failed to delete" });
+            }
+        }
+    };
+
+    useEffect(() => {
+        document.title = "TOOLS | DEGROW";
     }, []);
 
     return (
         <>
-            {/* BREADCRUMB NAVIGATION */}
-            <Box sx={{ margin: 1, marginLeft: 2, marginTop: 2 }}>
-                <Breadcrumbs
-                    aria-label="breadcrumb"
-                    itemsBeforeCollapse={2}
-                    maxItems={3}
-                    separator={<KeyboardArrowRightIcon fontSize="small" />}
-                >
-                    <Link underline="hover" onClick={() => navigate('/tools')} sx={{ cursor: 'pointer' }}>
-                        Tools
-                    </Link>
-                    <Link underline="hover" onClick={() => navigate('/tools/pending_performance_at_remarks')} sx={{ cursor: 'pointer' }}>
-                        Pending Performance AT
-                    </Link>
-                    <Typography color="text.primary">De-Grow Report</Typography>
+            <Box m={1} ml={2}>
+                <Breadcrumbs separator={<KeyboardArrowRightIcon fontSize="small" />}>
+                    <Link underline="hover" onClick={() => navigate("/tools")}>Tools</Link>
+                    <Typography color="text.primary">Degrow</Typography>
                 </Breadcrumbs>
             </Box>
 
-            {/* SLIDE ANIMATION */}
-            <Slide direction="left" in timeout={1000}>
-                <Box>
-                    <Box className={classes.main_Box}>
+            <Box sx={{ margin: '20px' }}>
+                <Grid container rowSpacing={2} columnSpacing={3} direction={{ xs: "column", sm: "column", md: "row" }}>
+                    <Grid item xs={12} md={4}>
                         <Box
-                            className={classes.Back_Box}
+                            onClick={handleOpen}
                             sx={{
-                                width: { md: '75%', xs: '100%' }
+                                border: '1px solid black',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                gap: '10px',
+                                padding: 1.5,
+                                alignItems: 'center',
+                                borderRadius: '8px',
+                                boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px',
+                                background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)',
+                                color: 'white',
+                                transition: 'all 0.3s ease',
+                                '&:hover': { 
+                                    backgroundColor: '#223354', 
+                                    color: 'white',
+                                    transform: 'translateY(-4px)',
+                                    boxShadow: 'rgba(0, 0, 0, 0.5) 0px 8px 20px'
+                                },
                             }}
                         >
-                            {/* HEADER BAR */}
-                            <Box
-                                sx={{
-                                    background: `linear-gradient(135deg, ${TEAL_PRIMARY} 0%, ${TEAL_DARK} 100%)`,
-                                    color: 'white',
-                                    p: 2.5,
-                                    borderRadius: '20px',
-                                    textAlign: 'center',
-                                    fontWeight: 700,
-                                    fontSize: '20px',
-                                    boxShadow: '0 4px 15px rgba(0, 128, 128, 0.3)',
-                                    mb: 0,
-                                    letterSpacing: '0.5px',
-                                    marginTop: '20px',
-                                }}
-                                className={classes.Box_Hading}
-                            >
-                                De-Grow Report Generator
-                            </Box>
-
-                            {/* ALERTS */}
-                            {successMessage && (
-                                <Alert
-                                    severity="success"
-                                    onClose={() => setSuccessMessage('')}
-                                    sx={{
-                                        mt: 2,
-                                        backgroundColor: '#e8f5e9',
-                                        color: '#2e7d32',
-                                        '& .MuiAlert-icon': {
-                                            color: '#4caf50',
-                                        },
-                                    }}
-                                >
-                                    {successMessage}
-                                </Alert>
-                            )}
-
-                            {errorMessage && (
-                                <Alert
-                                    severity="error"
-                                    onClose={() => setErrorMessage('')}
-                                    sx={{
-                                        mt: 2,
-                                        backgroundColor: '#ffebee',
-                                        color: '#c62828',
-                                        '& .MuiAlert-icon': {
-                                            color: '#f44336',
-                                        },
-                                    }}
-                                >
-                                    {errorMessage}
-                                </Alert>
-                            )}
-
-                            {/* CONTENT SECTION */}
-                            <Stack spacing={3} sx={{ marginTop: "20px" }} direction={'column'}>
-                                {/* STEP 1: FILE SELECTION & UPLOAD */}
-                                <Paper
-                                    sx={{
-                                        p: 3,
-                                        border: `2px solid ${TEAL_PRIMARY}`,
-                                        borderRadius: 2,
-                                        backgroundColor: '#f0fffe',
-                                        transition: 'all 0.3s ease',
-                                        '&:hover': {
-                                            backgroundColor: '#e8fffe',
-                                            borderColor: TEAL_DARK,
-                                        },
-                                    }}
-                                >
-                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
-                                        <Box
-                                            sx={{
-                                                bgcolor: TEAL_PRIMARY,
-                                                color: 'white',
-                                                borderRadius: '50%',
-                                                width: 32,
-                                                height: 32,
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                fontWeight: 700,
-                                            }}
-                                        >
-                                            1
-                                        </Box>
-                                        <Typography variant="h6" sx={{ fontWeight: 700, color: TEAL_DARK }}>
-                                            Upload CSV File
-                                        </Typography>
-                                    </Box>
-
-                                    <Box className={classes.Front_Box}>
-                                        <div className={classes.Front_Box_Hading}>
-                                            Select CSV File:-
-                                            <span style={{ fontFamily: 'Poppins', color: "gray", marginLeft: 20 }}>
-                                                {csvFile && <span style={{ color: 'green', fontWeight: 600 }}>✓ {csvFile.name}</span>}
-                                            </span>
-                                        </div>
-                                        <div className={classes.Front_Box_Select_Button}>
-                                            <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
-                                                <Button
-                                                    variant="contained"
-                                                    component="label"
-                                                    color={csvFile ? "warning" : "primary"}
-                                                    startIcon={<UploadIcon />}
-                                                    sx={{
-                                                        transition: 'all 0.3s ease',
-                                                        '&:hover': {
-                                                            transform: 'translateY(-2px)',
-                                                        }
-                                                    }}
-                                                >
-                                                    SELECT FILE
-                                                    <input
-                                                        hidden
-                                                        accept=".csv"
-                                                        type="file"
-                                                        onChange={(e) => handleFileSelection(e)}
-                                                    />
-                                                </Button>
-
-                                                {uploadError && csvFile === null && (
-                                                    <span style={{ color: 'red', fontSize: '16px', fontWeight: 600 }}>
-                                                        ✗ This Field Is Required!
-                                                    </span>
-                                                )}
-                                            </Box>
-                                        </div>
-                                    </Box>
-                                </Paper>
-
-                                {/* STEP 2: UPLOAD RESULT */}
-                                {uploadResult && (
-                                    <Paper
-                                        sx={{
-                                            p: 3,
-                                            border: `2px solid #4caf50`,
-                                            borderRadius: 2,
-                                            backgroundColor: '#f1f8e9',
-                                        }}
-                                    >
-                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
-                                            <CheckCircleIcon sx={{ color: '#4caf50', fontSize: 28 }} />
-                                            <Typography variant="h6" sx={{ fontWeight: 700, color: '#2e7d32' }}>
-                                                File Uploaded Successfully
-                                            </Typography>
-                                        </Box>
-
-                                        <Grid container spacing={2}>
-                                            <Grid item xs={12} sm={6}>
-                                                <Card sx={{ bgcolor: '#fff' }}>
-                                                    <CardContent>
-                                                        <Typography variant="caption" sx={{ color: '#666', fontWeight: 600 }}>
-                                                            Filename
-                                                        </Typography>
-                                                        <Typography variant="body2" sx={{ fontWeight: 700, mt: 1, color: TEAL_DARK }}>
-                                                            {uploadResult.filename}
-                                                        </Typography>
-                                                    </CardContent>
-                                                </Card>
-                                            </Grid>
-                                            <Grid item xs={12} sm={6}>
-                                                <Card sx={{ bgcolor: '#fff' }}>
-                                                    <CardContent>
-                                                        <Typography variant="caption" sx={{ color: '#666', fontWeight: 600 }}>
-                                                            Rows Read
-                                                        </Typography>
-                                                        <Typography variant="body2" sx={{ fontWeight: 700, mt: 1, color: TEAL_DARK }}>
-                                                            {uploadResult.rows_read?.toLocaleString()}
-                                                        </Typography>
-                                                    </CardContent>
-                                                </Card>
-                                            </Grid>
-                                        </Grid>
-                                    </Paper>
-                                )}
-
-                                {/* STEP 3: GENERATE REPORT */}
-                                {uploadResult && !processResult && (
-                                    <Paper
-                                        sx={{
-                                            p: 3,
-                                            border: `2px solid ${TEAL_PRIMARY}`,
-                                            borderRadius: 2,
-                                            backgroundColor: '#f0fffe',
-                                        }}
-                                    >
-                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
-                                            <Box
-                                                sx={{
-                                                    bgcolor: TEAL_PRIMARY,
-                                                    color: 'white',
-                                                    borderRadius: '50%',
-                                                    width: 32,
-                                                    height: 32,
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    fontWeight: 700,
-                                                }}
-                                            >
-                                                2
-                                            </Box>
-                                            <Typography variant="h6" sx={{ fontWeight: 700, color: TEAL_DARK }}>
-                                                Generate Report
-                                            </Typography>
-                                        </Box>
-
-                                        <Typography variant="body2" sx={{ color: '#666', mb: 2 }}>
-                                            Process the uploaded file to generate the De-Grow report in Excel format.
-                                        </Typography>
-
-                                        <Button
-                                            variant="contained"
-                                            onClick={handleGenerateReport}
-                                            disabled={isProcessing}
-                                            startIcon={isProcessing ? <CircularProgress size={20} color="inherit" /> : <StorageIcon />}
-                                            sx={{
-                                                bgcolor: TEAL_PRIMARY,
-                                                color: 'white',
-                                                fontWeight: 700,
-                                                textTransform: 'uppercase',
-                                                px: 3,
-                                                boxShadow: '0 4px 12px rgba(0, 128, 128, 0.3)',
-                                                transition: 'all 0.3s ease',
-                                                '&:hover': {
-                                                    bgcolor: TEAL_DARK,
-                                                    boxShadow: '0 6px 20px rgba(0, 128, 128, 0.4)',
-                                                    transform: 'translateY(-2px)',
-                                                },
-                                                '&:disabled': {
-                                                    bgcolor: '#e0e0e0',
-                                                    color: '#9e9e9e',
-                                                }
-                                            }}
-                                        >
-                                            {isProcessing ? 'Processing...' : 'Generate Report'}
-                                        </Button>
-                                    </Paper>
-                                )}
-
-                                {/* STEP 4: PROCESS RESULT & DOWNLOAD */}
-                                {processResult && (
-                                    <Paper
-                                        sx={{
-                                            p: 3,
-                                            border: `2px solid #4caf50`,
-                                            borderRadius: 2,
-                                            backgroundColor: '#f1f8e9',
-                                        }}
-                                    >
-                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
-                                            <CheckCircleIcon sx={{ color: '#4caf50', fontSize: 28 }} />
-                                            <Typography variant="h6" sx={{ fontWeight: 700, color: '#2e7d32' }}>
-                                                Report Generated Successfully
-                                            </Typography>
-                                        </Box>
-
-                                        <Grid container spacing={2} sx={{ mb: 2 }}>
-                                            <Grid item xs={12} sm={6}>
-                                                <Card sx={{ bgcolor: '#fff' }}>
-                                                    <CardContent>
-                                                        <Typography variant="caption" sx={{ color: '#666', fontWeight: 600 }}>
-                                                            De-Grow Date
-                                                        </Typography>
-                                                        <Typography variant="body2" sx={{ fontWeight: 700, mt: 1, color: TEAL_DARK }}>
-                                                            {processResult.de_grow_date}
-                                                        </Typography>
-                                                    </CardContent>
-                                                </Card>
-                                            </Grid>
-                                            <Grid item xs={12} sm={6}>
-                                                <Card sx={{ bgcolor: '#fff' }}>
-                                                    <CardContent>
-                                                        <Typography variant="caption" sx={{ color: '#666', fontWeight: 600 }}>
-                                                            Post Date
-                                                        </Typography>
-                                                        <Typography variant="body2" sx={{ fontWeight: 700, mt: 1, color: TEAL_DARK }}>
-                                                            {processResult.post_date}
-                                                        </Typography>
-                                                    </CardContent>
-                                                </Card>
-                                            </Grid>
-                                            <Grid item xs={12} sm={6}>
-                                                <Card sx={{ bgcolor: '#fff' }}>
-                                                    <CardContent>
-                                                        <Typography variant="caption" sx={{ color: '#666', fontWeight: 600 }}>
-                                                            Rows Processed
-                                                        </Typography>
-                                                        <Typography variant="body2" sx={{ fontWeight: 700, mt: 1, color: TEAL_DARK }}>
-                                                            {processResult.rows_processed?.toLocaleString()}
-                                                        </Typography>
-                                                    </CardContent>
-                                                </Card>
-                                            </Grid>
-                                            <Grid item xs={12} sm={6}>
-                                                <Card sx={{ bgcolor: '#fff' }}>
-                                                    <CardContent>
-                                                        <Typography variant="caption" sx={{ color: '#666', fontWeight: 600 }}>
-                                                            Output File
-                                                        </Typography>
-                                                        <Typography variant="body2" sx={{ fontWeight: 700, mt: 1, color: TEAL_DARK, wordBreak: 'break-all' }}>
-                                                            {processResult.filename}
-                                                        </Typography>
-                                                    </CardContent>
-                                                </Card>
-                                            </Grid>
-                                        </Grid>
-
-                                        <Button
-                                            variant="contained"
-                                            onClick={handleDownload}
-                                            startIcon={<FileDownloadIcon />}
-                                            sx={{
-                                                bgcolor: TEAL_PRIMARY,
-                                                color: 'white',
-                                                fontWeight: 700,
-                                                textTransform: 'uppercase',
-                                                px: 3,
-                                                boxShadow: '0 4px 12px rgba(0, 128, 128, 0.3)',
-                                                transition: 'all 0.3s ease',
-                                                '&:hover': {
-                                                    bgcolor: TEAL_DARK,
-                                                    boxShadow: '0 6px 20px rgba(0, 128, 128, 0.4)',
-                                                    transform: 'translateY(-2px)',
-                                                }
-                                            }}
-                                        >
-                                            Download Excel Report
-                                        </Button>
-                                    </Paper>
-                                )}
-                            </Stack>
-
-                            {/* ACTION BUTTONS */}
-                            <Stack
-                                direction={{ xs: "column", sm: "column", md: "row" }}
-                                spacing={2}
-                                sx={{
-                                    display: 'flex',
-                                    justifyContent: "space-around",
-                                    marginTop: "30px",
-                                    flexWrap: 'wrap',
-                                    gap: '20px'
-                                }}
-                            >
-                                <Button
-                                    variant="contained"
-                                    color="success"
-                                    onClick={handleUpload}
-                                    disabled={!csvFile || isUploading}
-                                    startIcon={isUploading ? <CircularProgress size={20} color="inherit" /> : <UploadIcon />}
-                                    sx={{
-                                        fontWeight: 700,
-                                        fontSize: '16px',
-                                        textTransform: 'uppercase',
-                                        letterSpacing: '0.5px',
-                                        px: 3,
-                                        boxShadow: '0 4px 12px rgba(0, 128, 128, 0.3)',
-                                        transition: 'all 0.3s ease',
-                                        '&:hover': {
-                                            boxShadow: '0 6px 20px rgba(0, 128, 128, 0.4)',
-                                            transform: 'translateY(-2px)',
-                                        },
-                                        '&:disabled': {
-                                            bgcolor: '#e0e0e0',
-                                            color: '#9e9e9e',
-                                        }
-                                    }}
-                                >
-                                    {isUploading ? 'Uploading...' : 'Upload'}
-                                </Button>
-
-                                <Button
-                                    variant="contained"
-                                    onClick={handleCancel}
-                                    sx={{
-                                        backgroundColor: "#d32f2f",
-                                        color: 'white',
-                                        fontWeight: 700,
-                                        fontSize: '16px',
-                                        textTransform: 'uppercase',
-                                        letterSpacing: '0.5px',
-                                        px: 3,
-                                        boxShadow: '0 4px 12px rgba(211, 47, 47, 0.3)',
-                                        transition: 'all 0.3s ease',
-                                        '&:hover': {
-                                            backgroundColor: "#b71c1c",
-                                            boxShadow: '0 6px 20px rgba(211, 47, 47, 0.4)',
-                                            transform: 'translateY(-2px)',
-                                        }
-                                    }}
-                                    endIcon={<DoDisturbIcon />}
-                                >
-                                    Reset
-                                </Button>
-                            </Stack>
+                            <FolderIcon sx={{ color: '#FEA405', fontSize: 35 }} />
+                            <Box sx={{ fontSize: 20, fontWeight: 'bold' }}>Degrow Upload</Box>
                         </Box>
-                    </Box>
-                </Box>
-            </Slide>
+                    </Grid>
+                </Grid>
+            </Box>
 
-            {/* LOADING DIALOG */}
+            {/* Upload Dialog with Tabs */}
+            {openDialog && (
+                <Dialog
+                    fullWidth
+                    maxWidth="lg"
+                    TransitionComponent={Transition}
+                    open={openDialog}
+                    onClose={handleClose}
+                    sx={{ zIndex: 2 }}
+                >
+                    <DialogTitle>
+                        <span style={{ float: 'left' }}>
+                            <h2>Degrow Management</h2>
+                        </span>
+                        <span style={{ float: 'right' }}>
+                            <IconButton size="large" onClick={handleClose}>
+                                <CloseIcon />
+                            </IconButton>
+                        </span>
+                    </DialogTitle>
+
+                    {/* Tabs */}
+                    <Tabs 
+                        value={activeTab} 
+                        onChange={handleTabChange}
+                        sx={{
+                            borderBottom: '1px solid #e0e0e0',
+                            '& .MuiTab-root': {
+                                fontWeight: 600,
+                                fontSize: '15px',
+                                textTransform: 'none',
+                                color: '#666',
+                                '&.Mui-selected': {
+                                    color: '#1976d2',
+                                    fontWeight: 700,
+                                }
+                            }
+                        }}
+                    >
+                        <Tab label="📤 Upload Files" />
+                        <Tab label="📊 Generate Report" />
+                    </Tabs>
+
+                    <DialogContent>
+                        {/* TAB 1: UPLOAD FILES */}
+                        {activeTab === 0 && (
+                            <>
+                                <Box sx={{ border: "2px solid #e0e0e0", borderRadius: '8px', padding: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2 }}>
+                                    <Box sx={{ flex: 1 }}>
+                                        <UploadSection
+                                            color={selectFiles.length > 0 ? "warning" : "primary"}
+                                            multiple
+                                            onChange={(e) => {
+                                                setSelectFiles(Array.from(e.target.files));
+                                                setShowError((prev) => ({ ...prev, selectfile: false }));
+                                            }}
+                                            error={showError?.selectfile}
+                                            selectedText={selectFiles?.length > 0 ? `Selected File(s): ${selectFiles?.length}` : ""}
+                                        />
+                                    </Box>
+                                    <Box sx={{ ml: 2 }}>
+                                        <Button 
+                                            variant="contained" 
+                                            color="success" 
+                                            onClick={handleSubmit} 
+                                            endIcon={<UploadIcon />}
+                                            sx={{ fontWeight: 700, py: 1.5, px: 3 }}
+                                        >
+                                            Upload
+                                        </Button>
+                                    </Box>
+                                </Box>
+
+                                {showFiles?.length > 0 && (
+                                    <Box sx={{ border: "2px solid #e0e0e0", borderRadius: '8px', padding: 2, marginTop: 2 }}>
+                                        <Typography variant="h6" sx={{ fontWeight: 700, mb: 2 }}>📁 Uploaded Files</Typography>
+                                        <Grid container rowSpacing={2} columnSpacing={2} direction={{ xs: "column", sm: "column", md: "row" }}>
+                                            {showFiles.map((item, index) => (
+                                                <Grid item xs={12} sm={6} md={4} key={index}>
+                                                    <Box
+                                                        sx={{
+                                                            display: "flex",
+                                                            justifyContent: 'flex-start',
+                                                            alignItems: 'center',
+                                                            cursor: 'pointer',
+                                                            borderRadius: '6px',
+                                                            padding: 1.5,
+                                                            background: '#e9e9e9',
+                                                            transition: 'all 0.3s ease',
+                                                            '&:hover': { 
+                                                                backgroundColor: '#dc3545', 
+                                                                color: 'white',
+                                                                transform: 'scale(1.02)'
+                                                            }
+                                                        }}
+                                                        onClick={() => OneFileDelete(item)}
+                                                    >
+                                                        <TopicIcon sx={{ color: '#FEA405', mr: 1, fontSize: 28 }} />
+                                                        <Typography sx={{ fontWeight: 600, fontSize: '14px' }}>{item}</Typography>
+                                                    </Box>
+                                                </Grid>
+                                            ))}
+                                        </Grid>
+                                        <Box sx={{ textAlign: 'center', marginTop: 3 }}>
+                                            <Button 
+                                                onClick={handleDelete} 
+                                                variant="contained" 
+                                                fullWidth 
+                                                color="error" 
+                                                endIcon={<DeleteIcon />}
+                                                sx={{ fontWeight: 700, py: 1.5 }}
+                                            >
+                                                Delete All Files
+                                            </Button>
+                                        </Box>
+                                    </Box>
+                                )}
+                            </>
+                        )}
+
+                        {/* TAB 2: GENERATE REPORT */}
+                        {activeTab === 1 && (
+                            <Box sx={{ mt: 3 }}>
+                                <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>📊 Generate DeGrow Report</Typography>
+                                <Typography variant="body2" color="textSecondary" sx={{ mb: 3 }}>
+                                    Select a date to generate the DeGrow report in YYYY-MM-DD format (e.g., 2026-10-08).
+                                </Typography>
+
+                                <Box sx={{ border: "2px solid #e0e0e0", borderRadius: '8px', padding: 3, display: 'flex', gap: 2, alignItems: 'flex-end', flexWrap: 'wrap' }}>
+                                    <Box sx={{ flex: 1, minWidth: 200 }}>
+                                        <TextField
+                                            label="DeGrow Date"
+                                            type="date"
+                                            value={selectedDate}
+                                            onChange={(e) => {
+                                                setSelectedDate(e.target.value);
+                                                setDateError(false);
+                                            }}
+                                            error={dateError}
+                                            helperText={dateError ? "Please select a date" : "Format: YYYY-MM-DD (e.g., 2026-10-08)"}
+                                            InputLabelProps={{ shrink: true }}
+                                            fullWidth
+                                            sx={{ 
+                                                '& .MuiOutlinedInput-root': {
+                                                    borderRadius: '6px'
+                                                }
+                                            }}
+                                        />
+                                    </Box>
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={handleGenerateReport}
+                                        endIcon={<GetAppIcon />}
+                                        sx={{ fontWeight: 700, py: 2, px: 3, minWidth: 150 }}
+                                    >
+                                        Generate Report
+                                    </Button>
+                                </Box>
+
+                                {processMessage && (
+                                    <Alert 
+                                        severity={processMessage.startsWith('✓') ? "success" : "error"}
+                                        sx={{ mt: 2, fontWeight: 600 }}
+                                    >
+                                        {processMessage}
+                                    </Alert>
+                                )}
+
+                                {reportData && (
+                                    <Card sx={{ mt: 3, bgcolor: '#f9f9f9', border: '2px solid #4caf50' }}>
+                                        <CardContent>
+                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
+                                                <CheckCircleIcon sx={{ color: '#4caf50', fontSize: 28 }} />
+                                                <Typography variant="h6" sx={{ fontWeight: 700, color: '#2e7d32' }}>
+                                                    Report Generated Successfully
+                                                </Typography>
+                                            </Box>
+
+                                            <Divider sx={{ my: 2 }} />
+
+                                            <Grid container spacing={2}>
+                                                {/* De Grow Date */}
+                                                <Grid item xs={12} sm={6}>
+                                                    <Card sx={{ p: 2, bgcolor: '#fff', border: '1px solid #e0e0e0' }}>
+                                                        <Typography variant="caption" sx={{ fontWeight: 700, color: '#666', textTransform: 'uppercase', fontSize: '0.75rem', letterSpacing: '0.05em' }}>
+                                                            📅 De Grow Date
+                                                        </Typography>
+                                                        <Typography variant="h6" sx={{ fontWeight: 700, mt: 0.75, color: '#0E7C7B' }}>
+                                                            {reportData?.de_grow_date || selectedDate}
+                                                        </Typography>
+                                                    </Card>
+                                                </Grid>
+
+                                                {/* Rows Processed */}
+                                                <Grid item xs={12} sm={6}>
+                                                    <Card sx={{ p: 2, bgcolor: '#e3f2fd', border: '1px solid #2196f3' }}>
+                                                        <Typography variant="caption" sx={{ fontWeight: 700, color: '#01579b', textTransform: 'uppercase', fontSize: '0.75rem', letterSpacing: '0.05em' }}>
+                                                            ✓ Rows Processed
+                                                        </Typography>
+                                                        <Typography variant="h6" sx={{ fontWeight: 700, mt: 0.75, color: '#01579b' }}>
+                                                            {reportData?.rows_processed || 0}
+                                                        </Typography>
+                                                    </Card>
+                                                </Grid>
+
+                                                {/* Post Date */}
+                                                {reportData?.post_date && (
+                                                    <Grid item xs={12} sm={6}>
+                                                        <Card sx={{ p: 2, bgcolor: '#fff3e0', border: '1px solid #ff9800' }}>
+                                                            <Typography variant="caption" sx={{ fontWeight: 700, color: '#e65100', textTransform: 'uppercase', fontSize: '0.75rem', letterSpacing: '0.05em' }}>
+                                                                📆 Post Date Range
+                                                            </Typography>
+                                                            <Typography variant="body2" sx={{ fontWeight: 700, mt: 0.75, color: '#e65100' }}>
+                                                                {reportData.post_date}
+                                                            </Typography>
+                                                        </Card>
+                                                    </Grid>
+                                                )}
+
+                                                {/* Filename */}
+                                                <Grid item xs={12} sm={6}>
+                                                    <Card sx={{ p: 2, bgcolor: '#f3e5f5', border: '1px solid #9c27b0' }}>
+                                                        <Typography variant="caption" sx={{ fontWeight: 700, color: '#4a148c', textTransform: 'uppercase', fontSize: '0.75rem', letterSpacing: '0.05em' }}>
+                                                            📄 File Name
+                                                        </Typography>
+                                                        <Typography variant="body2" sx={{ fontWeight: 600, mt: 0.75, color: '#4a148c', wordBreak: 'break-word' }}>
+                                                            {reportData?.filename}
+                                                        </Typography>
+                                                    </Card>
+                                                </Grid>
+
+                                                {/* Site Dates (if available) */}
+                                                {reportData?.site_dates && Object.keys(reportData.site_dates).length > 0 && (
+                                                    <Grid item xs={12}>
+                                                        <Card sx={{ p: 2, bgcolor: '#ede7f6', border: '1px solid #673ab7' }}>
+                                                            <Typography variant="caption" sx={{ fontWeight: 700, color: '#512da8', textTransform: 'uppercase', fontSize: '0.75rem', letterSpacing: '0.05em' }}>
+                                                                🔗 Site Dates
+                                                            </Typography>
+                                                            <Box sx={{ mt: 1 }}>
+                                                                <pre style={{ fontSize: '12px', maxHeight: '150px', overflow: 'auto', padding: '8px', bgcolor: '#fff', borderRadius: '4px', border: '1px solid #ddd' }}>
+                                                                    {JSON.stringify(reportData.site_dates, null, 2)}
+                                                                </pre>
+                                                            </Box>
+                                                        </Card>
+                                                    </Grid>
+                                                )}
+
+                                                {/* Download Button */}
+                                                {reportData?.download_url && (
+                                                    <Grid item xs={12}>
+                                                        <Button
+                                                            variant="contained"
+                                                            color="success"
+                                                            fullWidth
+                                                            endIcon={<GetAppIcon />}
+                                                            onClick={() => {
+                                                                const downloadUrl = reportData.download_url.startsWith('http') 
+                                                                    ? reportData.download_url 
+                                                                    : `https://commtoolapi.mcpspmis.com${reportData.download_url}`;
+                                                                window.open(downloadUrl, '_blank');
+                                                            }}
+                                                            sx={{ fontWeight: 700, py: 1.5 }}
+                                                        >
+                                                            📥 Download Report (.xlsx)
+                                                        </Button>
+                                                    </Grid>
+                                                )}
+                                            </Grid>
+                                        </CardContent>
+                                    </Card>
+                                )}
+                            </Box>
+                        )}
+                    </DialogContent>
+                </Dialog>
+            )}
+
             {loading}
         </>
     );
 };
 
-export default DeGrow;
+const UploadSection = ({ label, color, onChange, error, multiple = false, selectedText }) => {
+    return (
+        <Box>
+            <div className={OverAllCss().Front_Box_Hading}>{label || 'Select Files'}</div>
+            <div className={OverAllCss().Front_Box_Select_Button}>
+                <Button 
+                    variant="contained" 
+                    component="label" 
+                    color={color}
+                    sx={{ fontWeight: 700 }}
+                >
+                    Select File
+                    <input
+                        hidden
+                        required
+                        type="file"
+                        accept=".csv, .xls, .xlsx, .xlsb"
+                        multiple={multiple}
+                        onChange={onChange}
+                    />
+                </Button>
+                {selectedText && (
+                    <span style={{ color: "green", fontSize: 16, fontWeight: 700, marginLeft: 15 }}>
+                        ✓ {selectedText}
+                    </span>
+                )}
+                {error && (
+                    <div>
+                        <span style={{ color: "red", fontSize: 16, fontWeight: 700 }}>⚠ This Field Is Required!</span>
+                    </div>
+                )}
+            </div>
+        </Box>
+    );
+};
+
+export default Degrow;
