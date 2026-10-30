@@ -453,18 +453,20 @@ const ToolData = [
     //     groupBy: ['admin', 'PTS', 'PTS_Admin']
     // },
 
-    {
-        id: 37,
-        name: '2G Scripting',
-        title: 'This is 2G Scripting System',
-        icons: () => (
-            <HugeiconsIcon icon={FileScriptIcon} size={30} />
-        ),
-        fullname: '2G Scripting system',
-        link: '/tools/2g_scripting',
-        groupBy: ['admin', '2G_Script']
+    // {
+    //     id: 37,
+    //     name: '2G Scripting',
+    //     title: 'This is 2G Scripting System',
+    //     icons: () => (
+    //         <HugeiconsIcon icon={FileScriptIcon} size={30} />
+    //     ),
+    //     fullname: '2G Scripting system',
+    //     link: '/tools/2g_scripting',
+    //     groupBy: ['admin', '2G_Script']
 
-    },
+    // },
+
+    
     // {
     //     id: 38,
     //     name: 'Performance AT TAT',
