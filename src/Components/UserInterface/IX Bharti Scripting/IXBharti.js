@@ -64,9 +64,9 @@ const IX_Bharti_Scripting = () => {
                                             <Divider component="li" sx={{ backgroundColor: 'white' }} />
 
                                             <Nav.Menu eventKey="1" title="UPE NT" icon={<ListIcon />} placement="rightStart" className="menu-title-custom">
-                                                {/* <Nav.Item eventKey="1-1" placement="rightStart" className="single-item-custom" icon={< FileUploadIcon style={{}} />} onClick={() => { navigate('/tools/ix_tools/ix_bharti_scripting/ASIM'); show(); setMenuButton(true) }}>
+                                                <Nav.Item eventKey="1-1" placement="rightStart" className="single-item-custom" icon={< FileUploadIcon style={{}} />} onClick={() => { navigate('/tools/ix_tools/ix_bharti_scripting/ASIM'); show(); setMenuButton(true) }}>
                                                     ASIM
-                                                </Nav.Item> */}
+                                                </Nav.Item>
 
                                             </Nav.Menu>
 
