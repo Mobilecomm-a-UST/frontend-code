@@ -20,7 +20,7 @@ import { Query } from '@tanstack/react-query';
 import { getDecreyptedData } from '../../utils/localstorage';
 import Loader from '../../Skeleton/Loader'
 import './../../../App.css'
-
+import LocationIcon from '@rsuite/icons/Location';
 
 const PayloadTool = lazy(() => import('./PayloadTool'))
 const Upload_4G_Payload = lazy(() => import('./Upload Payload/Upload_4G_Payload'))
@@ -28,6 +28,7 @@ const Upload_5G_Payload = lazy(() => import('./Upload Payload/Upload_5G_Payload'
 const Query_Traffic = lazy(() => import('./Upload Payload/QueryTraffic'))
 const UploadHistory = lazy(() => import('./Upload Payload/UploadHistory'))
 const ExcelQueryTraffic = lazy(()=> import('./Upload Payload/ExcelQueryTraffic'))
+const Relocation = lazy(() => import('./Upload Payload/Relocation'))
 
 
 
@@ -95,6 +96,9 @@ const Payload = () => {
                                                 <Nav.Item eventKey="4" placement="rightStart" icon={<HistoryIcon />} className="single-item-custom" onClick={() => { navigate('Upload_History'); show(); setMenuButton(true) }}>
                                                     Upload History
                                                 </Nav.Item>
+                                                 <Nav.Item eventKey="5" placement="rightStart" icon={<LocationIcon />} className="single-item-custom" onClick={() => { navigate('Relocation'); show(); setMenuButton(true) }}>
+                                                    Relocation
+                                                </Nav.Item>
                                             </Nav>}
 
                                         {userType?.includes('pts') &&
@@ -122,6 +126,7 @@ const Payload = () => {
                                 <Route element={<Query_Traffic />} path="/Query_Traffic" />
                                 <Route element={<UploadHistory />} path="/Upload_History" />
                                  <Route element={<ExcelQueryTraffic />} path="/ExcelQueryTraffic" />
+                                <Route element={<Relocation />} path="/Relocation" />
 
                             </Routes>
                         </Suspense>
