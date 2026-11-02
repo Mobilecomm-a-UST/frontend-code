@@ -1,3 +1,4 @@
+
 // import React, { useState, useEffect } from "react";
 // import {
 //     Box,
@@ -28,7 +29,7 @@
 // import DoDisturbIcon from "@mui/icons-material/DoDisturb";
 // import FileDownloadIcon from "@mui/icons-material/FileDownload";
 // import Swal from "sweetalert2";
-// import { postData } from "../../../services/FetchNodeServices";
+// import { postData, postDataa } from "../../../services/FetchNodeServices";
 // import OverAllCss from "../../../csss/OverAllCss";
 // import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
 // import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -448,12 +449,22 @@
 
 //     // ======== SUBMIT HANDLER ========
 //     const handleSubmit = async () => {
-//         // VALIDATION
+//         // VALIDATION - BTS Type is mandatory
 //         if (!btsType) {
 //             Swal.fire({
 //                 icon: "warning",
 //                 title: "Required",
 //                 text: "Please select BTS Type",
+//             });
+//             return;
+//         }
+
+//         // VALIDATION - 4GIPV6+2GIPV6 configuration is mandatory for now
+//         if (!ipConfigs.ipv6_2gipv6) {
+//             Swal.fire({
+//                 icon: "warning",
+//                 title: "Required",
+//                 text: "Please select Mode for 4GIPV6 + 2GIPV6 configuration",
 //             });
 //             return;
 //         }
@@ -464,11 +475,11 @@
 
 //             const formData = new FormData();
 
-//             // Append BTS Type
+//             // Append BTS Type with key "bts_type"
 //             formData.append("bts_type", btsType);
 
-//             // Append IP configurations
-//             formData.append("ip_configs", JSON.stringify(ipConfigs));
+//             // Append MIMO (for 4GIPV6+2GIPV6) with key "mimo"
+//             formData.append("mimo", ipConfigs.ipv6_2gipv6);
 
 //             // Append Excel files if they exist
 //             if (excelFiles.length > 0) {
@@ -477,8 +488,8 @@
 //                 });
 //             }
 
-//             // Submit to API
-//             const response = await postData("ntscrpting_mum/nt/", formData);
+//             // Submit to API for 4GIPV6+2GIPV6
+//             const response = await postData("bharti_scripting_upe/asim4g_2gipv6/", formData);
 
 //             if (response && response.status) {
 //                 setUploadSuccess(true);
@@ -490,6 +501,7 @@
 //                     text: response.message || "Configuration created successfully",
 //                 });
 
+//                 // Reset form
 //                 setBtsType("");
 //                 setExcelFiles([]);
 //                 setIpConfigs({
@@ -637,48 +649,120 @@
 //                                     </div>
 //                                     <Box sx={{ p: 2 }}>
 //                                         <Grid container spacing={2}>
-//                                             {/* ALL IPV4 */}
-//                                             <Grid item xs={12} sm={6}>
-//                                                 <IPConfigCard
-//                                                     title="ALL IPV4"
-//                                                     icon={PublicIcon}
-//                                                     color="#2196f3"
-//                                                     dropdown1={ipConfigs.allIPV4}
-//                                                     onChange={(dropdownName, value) => handleIPConfigChange("allIPV4", dropdownName, value)}
-//                                                 />
+//                                             {/* ALL IPV4 - OPTIONAL (Future) */}
+//                                             <Grid item xs={12} sm={6} sx={{ opacity: 0.5, pointerEvents: "none" }}>
+//                                                 <Box sx={{ position: "relative" }}>
+//                                                     <IPConfigCard
+//                                                         title="ALL IPV4"
+//                                                         icon={PublicIcon}
+//                                                         color="#2196f3"
+//                                                         dropdown1={ipConfigs.allIPV4}
+//                                                         onChange={(dropdownName, value) => handleIPConfigChange("allIPV4", dropdownName, value)}
+//                                                     />
+//                                                     <Box
+//                                                         sx={{
+//                                                             position: "absolute",
+//                                                             top: 8,
+//                                                             right: 8,
+//                                                             bgcolor: "#ffc107",
+//                                                             color: "#333",
+//                                                             px: 1,
+//                                                             py: 0.5,
+//                                                             borderRadius: 1,
+//                                                             fontSize: "10px",
+//                                                             fontWeight: 700,
+//                                                         }}
+//                                                     >
+//                                                         Coming Soon
+//                                                     </Box>
+//                                                 </Box>
 //                                             </Grid>
 
-//                                             {/* 4GIPV4+2GIPV6 */}
-//                                             <Grid item xs={12} sm={6}>
-//                                                 <IPConfigCard
-//                                                     title="4GIPV4 + 2GIPV6"
-//                                                     icon={NetworkCellIcon}
-//                                                     color="#ff9800"
-//                                                     dropdown1={ipConfigs.ipv4_2gipv6}
-//                                                     onChange={(dropdownName, value) => handleIPConfigChange("ipv4_2gipv6", dropdownName, value)}
-//                                                 />
+//                                             {/* 4GIPV4+2GIPV6 - OPTIONAL (Future) */}
+//                                             <Grid item xs={12} sm={6} sx={{ opacity: 0.5, pointerEvents: "none" }}>
+//                                                 <Box sx={{ position: "relative" }}>
+//                                                     <IPConfigCard
+//                                                         title="4GIPV4 + 2GIPV6"
+//                                                         icon={NetworkCellIcon}
+//                                                         color="#ff9800"
+//                                                         dropdown1={ipConfigs.ipv4_2gipv6}
+//                                                         onChange={(dropdownName, value) => handleIPConfigChange("ipv4_2gipv6", dropdownName, value)}
+//                                                     />
+//                                                     <Box
+//                                                         sx={{
+//                                                             position: "absolute",
+//                                                             top: 8,
+//                                                             right: 8,
+//                                                             bgcolor: "#ffc107",
+//                                                             color: "#333",
+//                                                             px: 1,
+//                                                             py: 0.5,
+//                                                             borderRadius: 1,
+//                                                             fontSize: "10px",
+//                                                             fontWeight: 700,
+//                                                         }}
+//                                                     >
+//                                                         Coming Soon
+//                                                     </Box>
+//                                                 </Box>
 //                                             </Grid>
 
-//                                             {/* 4GIPV6+2GIPV6 */}
+//                                             {/* 4GIPV6+2GIPV6 - ACTIVE NOW ⭐ */}
 //                                             <Grid item xs={12} sm={6}>
-//                                                 <IPConfigCard
-//                                                     title="4GIPV6 + 2GIPV6"
-//                                                     icon={StorageIcon}
-//                                                     color="#4caf50"
-//                                                     dropdown1={ipConfigs.ipv6_2gipv6}
-//                                                     onChange={(dropdownName, value) => handleIPConfigChange("ipv6_2gipv6", dropdownName, value)}
-//                                                 />
+//                                                 <Box sx={{ position: "relative" }}>
+//                                                     <IPConfigCard
+//                                                         title="4GIPV6 + 2GIPV6 ⭐ ACTIVE"
+//                                                         icon={StorageIcon}
+//                                                         color="#4caf50"
+//                                                         dropdown1={ipConfigs.ipv6_2gipv6}
+//                                                         onChange={(dropdownName, value) => handleIPConfigChange("ipv6_2gipv6", dropdownName, value)}
+//                                                     />
+//                                                     <Box
+//                                                         sx={{
+//                                                             position: "absolute",
+//                                                             top: 8,
+//                                                             right: 8,
+//                                                             bgcolor: "#28a745",
+//                                                             color: "#fff",
+//                                                             px: 1,
+//                                                             py: 0.5,
+//                                                             borderRadius: 1,
+//                                                             fontSize: "10px",
+//                                                             fontWeight: 700,
+//                                                         }}
+//                                                     >
+//                                                         Active Now
+//                                                     </Box>
+//                                                 </Box>
 //                                             </Grid>
 
-//                                             {/* 4GIPV6+2GIPV4 */}
-//                                             <Grid item xs={12} sm={6}>
-//                                                 <IPConfigCard
-//                                                     title="4GIPV6 + 2GIPV4"
-//                                                     icon={PublicIcon}
-//                                                     color="#f44336"
-//                                                     dropdown1={ipConfigs.ipv6_2gipv4}
-//                                                     onChange={(dropdownName, value) => handleIPConfigChange("ipv6_2gipv4", dropdownName, value)}
-//                                                 />
+//                                             {/* 4GIPV6+2GIPV4 - OPTIONAL (Future) */}
+//                                             <Grid item xs={12} sm={6} sx={{ opacity: 0.5, pointerEvents: "none" }}>
+//                                                 <Box sx={{ position: "relative" }}>
+//                                                     <IPConfigCard
+//                                                         title="4GIPV6 + 2GIPV4"
+//                                                         icon={PublicIcon}
+//                                                         color="#f44336"
+//                                                         dropdown1={ipConfigs.ipv6_2gipv4}
+//                                                         onChange={(dropdownName, value) => handleIPConfigChange("ipv6_2gipv4", dropdownName, value)}
+//                                                     />
+//                                                     <Box
+//                                                         sx={{
+//                                                             position: "absolute",
+//                                                             top: 8,
+//                                                             right: 8,
+//                                                             bgcolor: "#ffc107",
+//                                                             color: "#333",
+//                                                             px: 1,
+//                                                             py: 0.5,
+//                                                             borderRadius: 1,
+//                                                             fontSize: "10px",
+//                                                             fontWeight: 700,
+//                                                         }}
+//                                                     >
+//                                                         Coming Soon
+//                                                     </Box>
+//                                                 </Box>
 //                                             </Grid>
 //                                         </Grid>
 //                                     </Box>
@@ -740,7 +824,8 @@
 //                                         color="success"
 //                                         onClick={handleSubmit}
 //                                         endIcon={<UploadIcon />}
-//                                         disabled={isProcessing || !btsType}
+//                                         disabled={isProcessing || !btsType || !ipConfigs.ipv6_2gipv6}
+//                                         title={!btsType ? "Please select BTS Type" : !ipConfigs.ipv6_2gipv6 ? "Please select Mode for 4GIPV6 + 2GIPV6" : ""}
 //                                         sx={{
 //                                             minWidth: "140px",
 //                                             fontWeight: 700,
@@ -794,6 +879,7 @@
 
 // export default ASIM;
 
+
 import React, { useState, useEffect } from "react";
 import {
     Box,
@@ -824,7 +910,7 @@ import UploadIcon from "@mui/icons-material/Upload";
 import DoDisturbIcon from "@mui/icons-material/DoDisturb";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import Swal from "sweetalert2";
-import { postData } from "../../../services/FetchNodeServices";
+import { postData, postDataa } from "../../../services/FetchNodeServices";
 import OverAllCss from "../../../csss/OverAllCss";
 import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -921,7 +1007,7 @@ const ResultCard = ({ title, value, icon: Icon, color = COLORS.primary }) => {
 /* ================================================================ */
 /*  IP Configuration Type Card with 1 dropdown                      */
 /* ================================================================ */
-const IPConfigCard = ({ title, icon: Icon, dropdown1, onChange, color }) => {
+const IPConfigCard = ({ title, icon: Icon, dropdown1, onChange, color, hasApi = true }) => {
     return (
         <Card
             sx={{
@@ -931,6 +1017,7 @@ const IPConfigCard = ({ title, icon: Icon, dropdown1, onChange, color }) => {
                 boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
                 transition: "all 0.3s ease",
                 overflow: "hidden",
+                opacity: hasApi ? 1 : 0.7,
                 "&:hover": {
                     boxShadow: "0 8px 24px rgba(0,107,106,0.12)",
                     transform: "translateY(-2px)",
@@ -973,7 +1060,7 @@ const IPConfigCard = ({ title, icon: Icon, dropdown1, onChange, color }) => {
 
             {/* Dropdown */}
             <CardContent sx={{ p: 2 }}>
-                <FormControl size="small" fullWidth variant="outlined">
+                <FormControl size="small" fullWidth variant="outlined" disabled={!hasApi}>
                     <InputLabel>Select Mode</InputLabel>
                     <Select
                         label="Select Mode"
@@ -1207,12 +1294,28 @@ const ASIM = () => {
     const BTS_TYPE_OPTIONS = ["ACOC", "AMOE"];
     const SECTOR_OPTIONS = ['1-SECTOR-4TR', '2-SECTOR-4TR', '3-SECTOR-4TR'];
 
+    // API mapping for each configuration
+    const API_ENDPOINTS = {
+        allIPV4: "bharti_scripting_upe/asim_all_4g/",
+        ipv4_2gipv6: "", // Will be added in future
+        ipv6_2gipv6: "bharti_scripting_upe/asim4g_2gipv6/",
+        ipv6_2gipv4: "", // Will be added in future
+    };
+
     // ======== IP CONFIG CHANGE HANDLER ========
     const handleIPConfigChange = (configType, dropdownName, value) => {
         setIpConfigs(prev => ({
             ...prev,
             [configType]: value
         }));
+    };
+
+    // ======== GET SELECTED CONFIG ========
+    const getSelectedConfig = () => {
+        for (const [key, value] of Object.entries(ipConfigs)) {
+            if (value) return { key, value };
+        }
+        return null;
     };
 
     // ======== EXCEL FILE HANDLER ========
@@ -1254,12 +1357,26 @@ const ASIM = () => {
             return;
         }
 
-        // VALIDATION - 4GIPV6+2GIPV6 configuration is mandatory for now
-        if (!ipConfigs.ipv6_2gipv6) {
+        // VALIDATION - At least one IP config must be selected
+        const selectedConfig = getSelectedConfig();
+        if (!selectedConfig) {
             Swal.fire({
                 icon: "warning",
                 title: "Required",
-                text: "Please select Mode for 4GIPV6 + 2GIPV6 configuration",
+                text: "Please select at least one IP Configuration",
+            });
+            return;
+        }
+
+        // VALIDATION - Check if selected config has API available
+        const configKey = selectedConfig.key;
+        const apiEndpoint = API_ENDPOINTS[configKey];
+        
+        if (!apiEndpoint) {
+            Swal.fire({
+                icon: "info",
+                title: "Coming Soon",
+                text: `API for ${selectedConfig.key.replace(/_/g, ' ')} is not yet available`,
             });
             return;
         }
@@ -1273,8 +1390,8 @@ const ASIM = () => {
             // Append BTS Type with key "bts_type"
             formData.append("bts_type", btsType);
 
-            // Append MIMO (for 4GIPV6+2GIPV6) with key "mimo"
-            formData.append("mimo", ipConfigs.ipv6_2gipv6);
+            // Append MIMO (selected config dropdown value) with key "mimo"
+            formData.append("mimo", selectedConfig.value);
 
             // Append Excel files if they exist
             if (excelFiles.length > 0) {
@@ -1283,8 +1400,8 @@ const ASIM = () => {
                 });
             }
 
-            // Submit to API for 4GIPV6+2GIPV6
-            const response = await postData("bharti_scripting_upe/asim4g_2gipv6/", formData);
+            // Submit to API based on selected config
+            const response = await postData(apiEndpoint, formData);
 
             if (response && response.status) {
                 setUploadSuccess(true);
@@ -1437,15 +1554,15 @@ const ASIM = () => {
 
                                 <Divider sx={{ my: 1 }} />
 
-                                {/* ✅ IP CONFIGURATIONS SECTION */}
+                                {/* ✅ IP CONFIGURATIONS SECTION - ALL ENABLED */}
                                 <Box className={classes.Front_Box}>
                                     <div className={classes.Front_Box_Hading}>
-                                        🌐 IP Configuration Types
+                                        🌐 IP Configuration Types (Select One)
                                     </div>
                                     <Box sx={{ p: 2 }}>
                                         <Grid container spacing={2}>
-                                            {/* ALL IPV4 - OPTIONAL (Future) */}
-                                            <Grid item xs={12} sm={6} sx={{ opacity: 0.5, pointerEvents: "none" }}>
+                                            {/* ALL IPV4 - ENABLED WITH API */}
+                                            <Grid item xs={12} sm={6}>
                                                 <Box sx={{ position: "relative" }}>
                                                     <IPConfigCard
                                                         title="ALL IPV4"
@@ -1453,28 +1570,31 @@ const ASIM = () => {
                                                         color="#2196f3"
                                                         dropdown1={ipConfigs.allIPV4}
                                                         onChange={(dropdownName, value) => handleIPConfigChange("allIPV4", dropdownName, value)}
+                                                        hasApi={true}
                                                     />
-                                                    <Box
-                                                        sx={{
-                                                            position: "absolute",
-                                                            top: 8,
-                                                            right: 8,
-                                                            bgcolor: "#ffc107",
-                                                            color: "#333",
-                                                            px: 1,
-                                                            py: 0.5,
-                                                            borderRadius: 1,
-                                                            fontSize: "10px",
-                                                            fontWeight: 700,
-                                                        }}
-                                                    >
-                                                        Coming Soon
-                                                    </Box>
+                                                    {ipConfigs.allIPV4 && (
+                                                        <Box
+                                                            sx={{
+                                                                position: "absolute",
+                                                                top: 8,
+                                                                right: 8,
+                                                                bgcolor: "#28a745",
+                                                                color: "#fff",
+                                                                px: 1,
+                                                                py: 0.5,
+                                                                borderRadius: 1,
+                                                                fontSize: "10px",
+                                                                fontWeight: 700,
+                                                            }}
+                                                        >
+                                                            Selected
+                                                        </Box>
+                                                    )}
                                                 </Box>
                                             </Grid>
 
-                                            {/* 4GIPV4+2GIPV6 - OPTIONAL (Future) */}
-                                            <Grid item xs={12} sm={6} sx={{ opacity: 0.5, pointerEvents: "none" }}>
+                                            {/* 4GIPV4+2GIPV6 - ENABLED (API COMING) */}
+                                            <Grid item xs={12} sm={6}>
                                                 <Box sx={{ position: "relative" }}>
                                                     <IPConfigCard
                                                         title="4GIPV4 + 2GIPV6"
@@ -1482,6 +1602,7 @@ const ASIM = () => {
                                                         color="#ff9800"
                                                         dropdown1={ipConfigs.ipv4_2gipv6}
                                                         onChange={(dropdownName, value) => handleIPConfigChange("ipv4_2gipv6", dropdownName, value)}
+                                                        hasApi={false}
                                                     />
                                                     <Box
                                                         sx={{
@@ -1506,33 +1627,36 @@ const ASIM = () => {
                                             <Grid item xs={12} sm={6}>
                                                 <Box sx={{ position: "relative" }}>
                                                     <IPConfigCard
-                                                        title="4GIPV6 + 2GIPV6 ⭐ ACTIVE"
+                                                        title="4GIPV6 + 2GIPV6"
                                                         icon={StorageIcon}
                                                         color="#4caf50"
                                                         dropdown1={ipConfigs.ipv6_2gipv6}
                                                         onChange={(dropdownName, value) => handleIPConfigChange("ipv6_2gipv6", dropdownName, value)}
+                                                        hasApi={true}
                                                     />
-                                                    <Box
-                                                        sx={{
-                                                            position: "absolute",
-                                                            top: 8,
-                                                            right: 8,
-                                                            bgcolor: "#28a745",
-                                                            color: "#fff",
-                                                            px: 1,
-                                                            py: 0.5,
-                                                            borderRadius: 1,
-                                                            fontSize: "10px",
-                                                            fontWeight: 700,
-                                                        }}
-                                                    >
-                                                        Active Now
-                                                    </Box>
+                                                    {ipConfigs.ipv6_2gipv6 && (
+                                                        <Box
+                                                            sx={{
+                                                                position: "absolute",
+                                                                top: 8,
+                                                                right: 8,
+                                                                bgcolor: "#28a745",
+                                                                color: "#fff",
+                                                                px: 1,
+                                                                py: 0.5,
+                                                                borderRadius: 1,
+                                                                fontSize: "10px",
+                                                                fontWeight: 700,
+                                                            }}
+                                                        >
+                                                            Selected
+                                                        </Box>
+                                                    )}
                                                 </Box>
                                             </Grid>
 
-                                            {/* 4GIPV6+2GIPV4 - OPTIONAL (Future) */}
-                                            <Grid item xs={12} sm={6} sx={{ opacity: 0.5, pointerEvents: "none" }}>
+                                            {/* 4GIPV6+2GIPV4 - ENABLED (API COMING) */}
+                                            <Grid item xs={12} sm={6}>
                                                 <Box sx={{ position: "relative" }}>
                                                     <IPConfigCard
                                                         title="4GIPV6 + 2GIPV4"
@@ -1540,6 +1664,7 @@ const ASIM = () => {
                                                         color="#f44336"
                                                         dropdown1={ipConfigs.ipv6_2gipv4}
                                                         onChange={(dropdownName, value) => handleIPConfigChange("ipv6_2gipv4", dropdownName, value)}
+                                                        hasApi={false}
                                                     />
                                                     <Box
                                                         sx={{
@@ -1566,7 +1691,7 @@ const ASIM = () => {
                                 {/* ✅ EXCEL FILE UPLOAD */}
                                 <Box className={classes.Front_Box}>
                                     <div className={classes.Front_Box_Hading}>
-                                        📎 Select Excel File (Optional)
+                                        📎 Select Excel File:
                                     </div>
 
                                     <div className={classes.Front_Box_Select_Button}>
@@ -1619,8 +1744,8 @@ const ASIM = () => {
                                         color="success"
                                         onClick={handleSubmit}
                                         endIcon={<UploadIcon />}
-                                        disabled={isProcessing || !btsType || !ipConfigs.ipv6_2gipv6}
-                                        title={!btsType ? "Please select BTS Type" : !ipConfigs.ipv6_2gipv6 ? "Please select Mode for 4GIPV6 + 2GIPV6" : ""}
+                                        disabled={isProcessing || !btsType || !getSelectedConfig()}
+                                        title={!btsType ? "Please select BTS Type" : !getSelectedConfig() ? "Please select at least one IP Configuration" : ""}
                                         sx={{
                                             minWidth: "140px",
                                             fontWeight: 700,

@@ -24,6 +24,7 @@ import SendToDashboardIcon from '@rsuite/icons/SendToDashboard';
 
 const IX_Bharti_ScriptingTool = lazy(() => import("./IXBhartiTool"));
 const ASIM = lazy(() => import('./UPE NT/ASIM'))
+const ASIB = lazy(() => import('./UPE NT/ASIB'))
 
 
 const IX_Bharti_Scripting = () => {
@@ -67,6 +68,9 @@ const IX_Bharti_Scripting = () => {
                                                 <Nav.Item eventKey="1-1" placement="rightStart" className="single-item-custom" icon={< FileUploadIcon style={{}} />} onClick={() => { navigate('/tools/ix_tools/ix_bharti_scripting/ASIM'); show(); setMenuButton(true) }}>
                                                     ASIM
                                                 </Nav.Item>
+                                                 <Nav.Item eventKey="1-2" placement="rightStart" className="single-item-custom" icon={< FileUploadIcon style={{}} />} onClick={() => { navigate('/tools/ix_tools/ix_bharti_scripting/ASIB'); show(); setMenuButton(true) }}>
+                                                    ASIB
+                                                </Nav.Item>
 
                                             </Nav.Menu>
 
@@ -83,6 +87,7 @@ const IX_Bharti_Scripting = () => {
                             <Routes>
                                 <Route path="/" element={<IX_Bharti_ScriptingTool />} />
                                 <Route path="/ASIM" element={<ASIM />} />
+                                <Route path="/ASIB" element={<ASIB />} />
                             </Routes>
                         </Suspense>
                     </Grid>
