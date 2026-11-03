@@ -352,7 +352,7 @@ const Relocation = () => {
 
                                         <Box>
                                             <div className={classes.Front_Box_Hading} style={{ fontSize: '13px' }}>
-                                                Circle (Copy/Paste)
+                                                Circle:
                                             </div>
                                             <TextField
                                                 value={manualCircle}
@@ -366,7 +366,7 @@ const Relocation = () => {
 
                                         <Box>
                                             <div className={classes.Front_Box_Hading} style={{ fontSize: '13px' }}>
-                                                Old Site ID (Copy/Paste)
+                                                Old Site ID:
                                             </div>
                                             <TextField
                                                 value={manualOldSiteId}
@@ -380,7 +380,7 @@ const Relocation = () => {
 
                                         <Box>
                                             <div className={classes.Front_Box_Hading} style={{ fontSize: '13px' }}>
-                                                Site ID (Copy/Paste)
+                                                Site ID:
                                             </div>
                                             <TextField
                                                 value={manualSiteId}

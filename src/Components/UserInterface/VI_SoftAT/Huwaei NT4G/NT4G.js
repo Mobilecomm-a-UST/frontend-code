@@ -1,4 +1,6 @@
 
+
+
 // import React, { useState } from "react";
 // import {
 //     Box,
@@ -30,7 +32,7 @@
 // import OverAllCss from "../../../csss/OverAllCss";
 
 // /* ------------------------------------------------------------------ */
-// /*  Theme                                                              */
+// /*  Theme                                                             */
 // /* ------------------------------------------------------------------ */
 // const C = {
 //     teal: "#006e74",
@@ -72,7 +74,7 @@
 // };
 
 // /* ------------------------------------------------------------------ */
-// /*  Results table                                                      */
+// /*  Results table                                                     */
 // /* ------------------------------------------------------------------ */
 // function ResultTable({ rows }) {
 //     const columns = buildColumns(rows);
@@ -197,7 +199,7 @@
 // }
 
 // /* ================================================================ */
-// /*  NT4G Component                                                   */
+// /*  NT4G Component                                                  */
 // /* ================================================================ */
 // const NT4G = () => {
 //     const [selectedFilesMap, setSelectedFilesMap] = useState({});
@@ -211,11 +213,11 @@
 //     const classes = OverAllCss();
 
 //     const FILE_SECTIONS = [
-//         { key: "hoto_planned_site", label: "1. Hoto Planned Site" },
-//         { key: "site_ip", label: "2. Site IP Plan File" },
-//         { key: "config_data", label: "3. Configuration File" },
-//         { key: "lte_rep", label: "4. LTE Cell Report File" },
-//         { key: "nte_rep", label: "5. NE Report File" }
+//         { key: "hoto_planned_site", label: "1. Hoto Planned Site (Optional)", required: false },
+//         { key: "site_ip", label: "2. Site IP Plan File", required: true },
+//         { key: "config_data", label: "3. Configuration File", required: true },
+//         { key: "lte_rep", label: "4. LTE Cell Report File", required: true },
+//         { key: "nte_rep", label: "5. NE Report File", required: true }
 //     ];
 
 //     const handleFileSelection = (key, event) => {
@@ -270,9 +272,11 @@
 //             return;
 //         }
 
-//         const categoriesWithFilesCount = Object.keys(selectedFilesMap).length;
+//         // Validate that all required categories have at least one file uploaded
+//         const requiredKeys = FILE_SECTIONS.filter(s => s.required).map(s => s.key);
+//         const hasAllRequired = requiredKeys.every(k => selectedFilesMap[k] && selectedFilesMap[k].length > 0);
 
-//         if (categoriesWithFilesCount < 4) {
+//         if (!hasAllRequired) {
 //             setShowError(true);
 //             Swal.fire({ icon: "warning", title: "Missing Files", text: "Please upload files into all 4 required categories." });
 //             return;
@@ -323,7 +327,7 @@
 //     };
 
 //     const totalSelectedFilesCount = Object.values(selectedFilesMap).reduce((acc, curr) => acc + (curr ? curr.length : 0), 0);
-//     const categoriesFilledCount = Object.keys(selectedFilesMap).length;
+//     const requiredSectionsCount = FILE_SECTIONS.filter(s => s.required && selectedFilesMap[s.key] && selectedFilesMap[s.key].length > 0).length;
 
 //     return (
 //         <Box className={classes.Front_Box} sx={{ p: 3 }}>
@@ -378,11 +382,11 @@
 //                 {/* FILE UPLOAD SECTION */}
 //                 <Box>
 //                     <Typography variant="h6" sx={{ fontWeight: 700, color: C.tealDark, mb: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
-//                         📁 Upload Required Files (4 Categories)
+//                         📁 Upload Files (4 Required Categories, 1 Optional)
 //                     </Typography>
 
 //                     <Stack spacing={2.5}>
-//                         {FILE_SECTIONS.map((section, idx) => {
+//                         {FILE_SECTIONS.map((section) => {
 //                             const fileArray = selectedFilesMap[section.key] || [];
 //                             const hasFiles = fileArray.length > 0;
 //                             return (
@@ -442,16 +446,16 @@
 //                         })}
 //                     </Stack>
 
-//                     <Box sx={{ mt: 2, p: 2, bgcolor: categoriesFilledCount === 4 ? '#e8f5e9' : '#fff3e0', borderRadius: 1.5, border: `1px solid ${categoriesFilledCount === 4 ? '#4caf50' : '#ff9800'}` }}>
-//                         <Typography variant="body2" sx={{ fontWeight: 700, color: categoriesFilledCount === 4 ? '#2e7d32' : '#e65100' }}>
-//                             {categoriesFilledCount === 4 ? '✓' : '⚠'} Categories Ready: <span style={{ fontSize: '16px' }}>{categoriesFilledCount} / 4</span> ({totalSelectedFilesCount} files)
+//                     <Box sx={{ mt: 2, p: 2, bgcolor: requiredSectionsCount === 4 ? '#e8f5e9' : '#fff3e0', borderRadius: 1.5, border: `1px solid ${requiredSectionsCount === 4 ? '#4caf50' : '#ff9800'}` }}>
+//                         <Typography variant="body2" sx={{ fontWeight: 700, color: requiredSectionsCount === 4 ? '#2e7d32' : '#e65100' }}>
+//                             {requiredSectionsCount === 4 ? '✓' : '⚠'} Required Categories Ready: <span style={{ fontSize: '16px' }}>{requiredSectionsCount} / 4</span> ({totalSelectedFilesCount} total files selected)
 //                         </Typography>
 //                     </Box>
 
 //                     {showError && (
 //                         <Box sx={{ mt: 2, p: 2, bgcolor: '#ffebee', borderRadius: 1.5, border: '1px solid #f44336' }}>
 //                             <Typography variant="body2" sx={{ fontWeight: 700, color: '#c62828' }}>
-//                                 ❌ Please ensure files are selected for all 4 categories!
+//                                 ❌ Please ensure files are selected for all 4 required categories!
 //                             </Typography>
 //                         </Box>
 //                     )}
@@ -531,7 +535,6 @@
 // };
 
 // export default NT4G;
-
 
 import React, { useState } from "react";
 import {
@@ -731,7 +734,7 @@ function ResultTable({ rows }) {
 }
 
 /* ================================================================ */
-/*  NT4G Component                                                  */
+/*  NT4G Component - Updated with Circle-Based API Routing         */
 /* ================================================================ */
 const NT4G = () => {
     const [selectedFilesMap, setSelectedFilesMap] = useState({});
@@ -751,6 +754,16 @@ const NT4G = () => {
         { key: "lte_rep", label: "4. LTE Cell Report File", required: true },
         { key: "nte_rep", label: "5. NE Report File", required: true }
     ];
+
+    // API Mapping based on Circle
+    const getApiEndpoint = () => {
+        if (selectedCircle === "KAR") {
+            return "nt_4g_tool/ktk_4g/";
+        } else if (selectedCircle === "BIH") {
+            return "nt_4g_tool/4g/";
+        }
+        return null;
+    };
 
     const handleFileSelection = (key, event) => {
         const newFiles = Array.from(event.target.files || []);
@@ -815,6 +828,7 @@ const NT4G = () => {
         }
 
         action(true);
+        const apiEndpoint = getApiEndpoint();
         const formData = new FormData();
         formData.append('circle', selectedCircle);
 
@@ -825,7 +839,7 @@ const NT4G = () => {
         });
 
         try {
-            const response = await postData('nt_4g_tool/4g/', formData);
+            const response = await postData(apiEndpoint, formData);
 
             if (response.status === true) {
                 action(false);
@@ -904,6 +918,8 @@ const NT4G = () => {
                         <Box sx={{ mt: 1.5, p: 1.5, bgcolor: C.labelOdd, borderRadius: 1, border: `1px solid ${C.border}` }}>
                             <Typography variant="caption" sx={{ color: C.tealDark, fontWeight: 700 }}>
                                 ✓ Selected Circle: <span style={{ fontWeight: 700, fontSize: '14px', color: C.teal }}>{selectedCircle}</span>
+                                {selectedCircle === "KAR" && <span style={{ fontSize: '12px', color: '#666', marginLeft: '8px' }}>(Using KTK API)</span>}
+                                {selectedCircle === "BIH" && <span style={{ fontSize: '12px', color: '#666', marginLeft: '8px' }}>(Using Standard API)</span>}
                             </Typography>
                         </Box>
                     )}
