@@ -101,7 +101,6 @@ const Relocation = () => {
 
             if (response && response.status) {
                 setUploadDownloadUrl(response.download_url);
-                downloadFile(response.download_url);
                 Swal.fire({
                     icon: "success",
                     title: "Success",
@@ -154,7 +153,6 @@ const Relocation = () => {
 
             if (response && response.status) {
                 setManualDownloadUrl(response.download_url);
-                downloadFile(response.download_url);
                 Swal.fire({
                     icon: "success",
                     title: "Success",
@@ -195,6 +193,11 @@ const Relocation = () => {
 
             if (response && response.status) {
                 downloadFile(response.download_url);
+                Swal.fire({
+                    icon: "success",
+                    title: "Template Downloaded",
+                    text: "Template downloaded successfully",
+                });
             } else {
                 Swal.fire({
                     icon: "error",
@@ -239,11 +242,6 @@ const Relocation = () => {
         }
     };
 
-    // ========== Get current download URL ==========
-    const getCurrentDownloadUrl = () => {
-        return manualDownloadUrl;
-    };
-
     return (
         <Zoom in={true} timeout={500}>
             <div>
@@ -264,18 +262,12 @@ const Relocation = () => {
                                 </Box>
 
                                 {/* ========== DOWNLOAD ICON - RIGHT SIDE OF HEADING ========== */}
-                                <Tooltip title={uploadDownloadUrl || manualDownloadUrl ? "Download File" : "Download Template"}>
+                                <Tooltip title="Download Template">
                                     <IconButton
-                                        onClick={() => {
-                                            if (uploadDownloadUrl || manualDownloadUrl) {
-                                                downloadFile(uploadDownloadUrl || manualDownloadUrl);
-                                            } else {
-                                                handleTemplateDownload();
-                                            }
-                                        }}
+                                        onClick={handleTemplateDownload}
                                         disabled={templateDownloadProcessing}
                                         sx={{
-                                            color: uploadDownloadUrl || manualDownloadUrl ? '#1da3a3' : '#006e74',
+                                            color: '#006e74',
                                             fontSize: '32px',
                                             '&:hover': { bgcolor: 'rgba(0, 110, 116, 0.1)' }
                                         }}
@@ -326,6 +318,23 @@ const Relocation = () => {
                                             </Button>
                                             <Button variant="contained" onClick={handleFileUploadCancel} style={{ backgroundColor: "red", color: 'white' }} endIcon={<DoDisturbIcon />}>Cancel</Button>
                                         </Box>
+
+                                        {uploadDownloadUrl && (
+                                            <Box sx={{ p: 2, bgcolor: "#e3f2f2", borderRadius: 1.5, border: '2px solid #006e74', textAlign: 'center' }}>
+                                                <Typography variant="body2" sx={{ color: '#006e74', fontWeight: 700, mb: 1.5, fontSize: '13px' }}>
+                                                    ✓ File processed successfully!
+                                                </Typography>
+                                                <Button 
+                                                    variant="contained" 
+                                                    color="success"
+                                                    onClick={() => downloadFile(uploadDownloadUrl)} 
+                                                    startIcon={<FileDownloadIcon />}
+                                                    sx={{ fontWeight: 700, textTransform: "none" }}
+                                                >
+                                                    Download Report
+                                                </Button>
+                                            </Box>
+                                        )}
                                     </Stack>
                                 </Box>
 
@@ -400,10 +409,19 @@ const Relocation = () => {
                                         </Box>
 
                                         {manualDownloadUrl && (
-                                            <Box sx={{ p: 1.5, bgcolor: "#e3f2f2", borderRadius: 1, textAlign: 'center', border: '1px solid #006e74' }}>
-                                                <Typography variant="caption" sx={{ color: '#006e74', fontWeight: 700, fontSize: '12px' }}>
-                                                    ✓ Report downloaded
+                                            <Box sx={{ p: 2, bgcolor: "#e3f2f2", borderRadius: 1.5, border: '2px solid #006e74', textAlign: 'center' }}>
+                                                <Typography variant="body2" sx={{ color: '#006e74', fontWeight: 700, mb: 1.5, fontSize: '13px' }}>
+                                                    ✓ Report generated successfully!
                                                 </Typography>
+                                                <Button 
+                                                    variant="contained" 
+                                                    color="success"
+                                                    onClick={() => downloadFile(manualDownloadUrl)} 
+                                                    startIcon={<FileDownloadIcon />}
+                                                    sx={{ fontWeight: 700, textTransform: "none" }}
+                                                >
+                                                    Download Report
+                                                </Button>
                                             </Box>
                                         )}
                                     </Stack>
