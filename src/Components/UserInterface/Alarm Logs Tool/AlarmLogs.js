@@ -20,6 +20,7 @@ import Loader from '../../Skeleton/Loader';
 import FileUploadIcon from '@rsuite/icons/FileUpload';
 import SendToDashboardIcon from '@rsuite/icons/SendToDashboard';
 import { Alarm } from '@mui/icons-material';
+import ChangeListIcon from '@rsuite/icons/ChangeList';
 
 
 
@@ -27,6 +28,7 @@ const AlarmLogsTool = lazy(() => import("./AlarmLogsTool"));
 const AlarmLogUpload = lazy(() => import("./AlarmLog/AlarmLogUpload"));
 const Dashboard = lazy(() => import("./AlarmLog/Dashboard"));
 const Degrow = lazy(() => import('./AlarmLog/Degrow'))
+const Twamp2 = lazy(() => import('./AlarmLog/Twamp2'))
 
 const AlarmLogs = () => {
     const [expanded, setExpanded] = useState(true);
@@ -67,10 +69,13 @@ const AlarmLogs = () => {
 
 
                                             <Nav.Item eventKey="1" placement="rightStart" className="single-item-custom" icon={< FileUploadIcon style={{}} />} onClick={() => { navigate('/tools/quality_team/alarm_logs/AlarmLogUpload'); show(); setMenuButton(true) }}>
-                                             Alarm Upload File
+                                                Alarm Upload File
                                             </Nav.Item>
                                             <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={< FileUploadIcon style={{}} />} onClick={() => { navigate('/tools/quality_team/alarm_logs/Degrow'); show(); setMenuButton(true) }}>
                                                 De-Grow
+                                            </Nav.Item>
+                                            <Nav.Item eventKey="3" placement="rightStart" className="single-item-custom" icon={<ChangeListIcon />} onClick={() => { navigate('/tools/quality_team/alarm_logs/Twamp2'); show(); setMenuButton(true) }}>
+                                                Twamp 2.0
                                             </Nav.Item>
 
                                             {/* <Nav.Item eventKey="2" placement="rightStart" className="single-item-custom" icon={<SendToDashboardIcon style={{}} />} onClick={() => { navigate('/tools/quality_team/alarm_logs/Dashboard'); show(); setMenuButton(true) }}>
@@ -92,21 +97,7 @@ const AlarmLogs = () => {
                                 <Route path="/AlarmLogUpload" element={<AlarmLogUpload />} />
                                 <Route path="/Dashboard" element={<Dashboard />} />
                                 <Route path='/Degrow' element={<Degrow />} />
-
-
-
-                                {/* <Route path="/uploadfile" element={<UploadFile />} />
-                                <Route path="/dashboard" element={<Dashboard />} /> */}
-
-
-                                {/* {userTypes?.includes('ran_admin') && 
-                                <Route element={<FinalMailPage />} path="/email_dashboard" />
-                                }
-                                
-                                {userTypes?.includes('ran_admin') &&
-                                <Route element={<Module />} path="/module" />
-                                }  */}
-
+                                <Route path='/Twamp2' element={<Twamp2 />} />
                             </Routes>
                         </Suspense>
                     </Grid>
