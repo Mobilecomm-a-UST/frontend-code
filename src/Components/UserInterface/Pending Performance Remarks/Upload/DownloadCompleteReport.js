@@ -817,13 +817,601 @@
 
 
 
+// import React, { useState, useEffect } from "react";
+// import {
+//     Box, Button, Stack, Breadcrumbs, Link, Typography, Slide, Grid,
+//     TextField, MenuItem, Select, InputLabel, FormControl, Divider,
+//     Chip, List, ListItem, ListItemText, Card, CardContent, Paper,
+//     Alert, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
+//     TablePagination, InputAdornment, Tooltip,
+// } from "@mui/material";
+// import {
+//     Upload as UploadIcon,
+//     DoDisturb as DoDisturbIcon,
+//     FileDownload as FileDownloadIcon,
+//     KeyboardArrowRight as KeyboardArrowRightIcon,
+//     Search as SearchIcon,
+// } from "@mui/icons-material";
+// import Swal from "sweetalert2";
+// import { useNavigate } from "react-router-dom";
+// import { postDataa, ServerURL } from "../../../services/FetchNodeServices";
+// import OverAllCss from "../../../csss/OverAllCss";
+// import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
+// import { getDecreyptedData } from '../../../utils/localstorage';
+
+// const circleArray = ['AP','DL','TNCH', 'NESA','RJ','JK','BR','MH', 'MP','MU','JRK','KK','UE','UW','HPHP','OR','WB/KOL'];
+// const bandArray = ['All', '4G', '5G', 'Accepted'];
+// const archivedArray = ['Archived'];
+
+// const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+// const formatMonthToMMMYY = (monthInputValue) => {
+//     if (!monthInputValue) return '';
+//     const [year, month] = monthInputValue.split('-');
+//     const idx = parseInt(month, 10) - 1;
+//     if (idx < 0 || idx > 11 || !year) return '';
+//     return `${MONTH_NAMES[idx]}-${year.slice(-2)}`;
+// };
+
+// const isChronologicalOrder = (startValue, endValue) => {
+//     if (!startValue || !endValue) return false;
+//     const [startYear, startMonth] = startValue.split('-').map((v) => parseInt(v, 10));
+//     const [endYear, endMonth] = endValue.split('-').map((v) => parseInt(v, 10));
+//     if (!startYear || !startMonth || !endYear || !endMonth) return false;
+//     const startIndex = startYear * 12 + (startMonth - 1);
+//     const endIndex = endYear * 12 + (endMonth - 1);
+//     return startIndex <= endIndex;
+// };
+
+// const StyledCard = ({ title, classes, children }) => (
+//     <Box className={classes.main_Box} sx={{ mb: 3 }}>
+//         <Box className={classes.Back_Box} sx={{ width: { md: "75%", xs: "100%" } }}>
+//             <Box className={classes.Box_Hading}>{title}</Box>
+//             <Box sx={{ mt: "-40px" }}>
+//                 {children}
+//             </Box>
+//         </Box>
+//     </Box>
+// );
+
+// const SummaryGrid = ({ summary }) => {
+//     if (!summary) return null;
+//     const labels = {
+//         total_records: "Total Records",
+//         workable: "Workable",
+//         non_workable: "Non-Workable",
+//         pending: "Pending",
+//         accepted: "Accepted",
+//         additional_remark_blank: "Additional Remark Blank",
+//         additional_remark_window_count: "Additional Remark Window Count",
+//     };
+//     return (
+//         <Grid container spacing={1.5}>
+//             {Object.entries(summary).map(([key, value]) => (
+//                 <Grid item xs={6} sm={4} md={3} key={key}>
+//                     <Box sx={{ p: 1.25, textAlign: "center", borderRadius: 2, bgcolor: "#FFFFFF", border: "1px solid #E2E8F0", boxShadow: "0 1px 2px 0 rgb(0 0 0 / 0.03)" }}>
+//                         <Typography variant="caption" sx={{ color: "#64748B", fontWeight: 500 }}>{labels[key] || key}</Typography>
+//                         <Typography variant="h6" sx={{ fontWeight: 700, color: "#0F172A" }}>{value}</Typography>
+//                     </Box>
+//                 </Grid>
+//             ))}
+//         </Grid>
+//     );
+// };
+
+// const DownloadButton = ({ url, label }) => {
+//     if (!url) return null;
+//     return (
+//         <a href={url} download target="_blank" rel="noreferrer">
+//             <Button
+//                 variant="outlined"
+//                 startIcon={<FileDownloadIcon sx={{ color: "green" }} />}
+//                 sx={{ mt: 1, textTransform: "none", fontWeight: 700 }}
+//             >
+//                 {label}
+//             </Button>
+//         </a>
+//     );
+// };
+
+// // ✅ Data Table Component with Pagination & Site ID Filter (Updated with new schema columns)
+// const DataTable = ({ data }) => {
+//     const [page, setPage] = useState(0);
+//     const [rowsPerPage, setRowsPerPage] = useState(10);
+//     const [siteIdFilter, setSiteIdFilter] = useState("");
+
+//     if (!Array.isArray(data) || data.length === 0) {
+//         return null;
+//     }
+
+//     const filteredData = data.filter(row => 
+//         row.site_id && row.site_id.toString().toLowerCase().includes(siteIdFilter.toLowerCase())
+//     );
+
+//     const handleChangePage = (event, newPage) => {
+//         setPage(newPage);
+//     };
+
+//     const handleChangeRowsPerPage = (event) => {
+//         setRowsPerPage(parseInt(event.target.value, 10));
+//         setPage(0);
+//     };
+
+//     const columns = [
+//         { label: "AT Ref No", key: "at_ref_no" },
+//         { label: "Circle", key: "circle" },
+//         { label: "SME Name", key: "sme_name" },
+//         { label: "Site ID", key: "site_id" },
+//         { label: "Band", key: "band" },
+//         { label: "Offered Layer", key: "offered_layer" },
+//         { label: "OEM Name", key: "oem_name" },
+//         { label: "Integration Date", key: "integration_date" },
+//         { label: "MS1", key: "ms1" },
+//         { label: "Aging", key: "aging" },
+//         { label: "Aging Bucket", key: "aging_bucket" },
+//         { label: "Month", key: "month" },
+//         { label: "Project", key: "project" },
+//         { label: "Activity", key: "activity" },
+//         { label: "Performance Status", key: "performance_status" },
+//         { label: "SCFT Status", key: "scft_status" },
+//         { label: "Additional Remarks", key: "additional_remarks" },
+//         { label: "Tag", key: "tag" },
+//         { label: "Workable Date", key: "workable_date" },
+//         { label: "Bucket", key: "bucket" },
+//         { label: "Closure Tat Date", key: "closure_tat_date" },
+//         { label: "Current Tat Date", key: "current_tat_date" },
+//         { label: "Non Workable Count", key: "non_workable_count" },
+//         { label: "Non Workable Days", key: "non_workable_days" },
+//     ];
+
+//     const displayedRows = filteredData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+
+//     return (
+//         <Box sx={{ mt: 4, mb: 3 }}>
+//             <Divider sx={{ mb: 3 }} />
+            
+//             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2, flexWrap: "wrap", gap: 2 }}>
+//                 <Typography sx={{ fontWeight: 700, fontSize: "16px", color: "#1A202C" }}>
+//                     📋 Detailed Records ({filteredData.length} of {data.length} items)
+//                 </Typography>
+//                 <TextField
+//                     size="small"
+//                     placeholder="Filter by Site ID..."
+//                     value={siteIdFilter}
+//                     onChange={(e) => {
+//                         setSiteIdFilter(e.target.value);
+//                         setPage(0);
+//                     }}
+//                     InputProps={{
+//                         startAdornment: (
+//                             <InputAdornment position="start">
+//                                 <SearchIcon sx={{ color: "#999" }} />
+//                             </InputAdornment>
+//                         ),
+//                     }}
+//                     sx={{ minWidth: 220, bgcolor: "#fff" }}
+//                 />
+//             </Box>
+
+//             <TableContainer component={Paper} elevation={0} sx={{ border: "1px solid #E2E8F0", borderRadius: 2, overflowX: "auto", backgroundColor: "#FFFFFF" }}>
+//                 <Table size="small" sx={{ tableLayout: "auto", minWidth: "100%" }}>
+//                     <TableHead>
+//                         <TableRow sx={{ background: "#F8FAFC", whiteSpace: "nowrap" }}>
+//                             {columns.map((col) => (
+//                                 <TableCell 
+//                                     key={col.key} 
+//                                     sx={{ 
+//                                         fontWeight: 700, 
+//                                         fontSize: "12px",
+//                                         color: "#334155",
+//                                         borderBottom: "2px solid #E2E8F0",
+//                                         whiteSpace: "nowrap",
+//                                         minWidth: col.key === "additional_remarks" || col.key === "tag" ? "200px" : "auto",
+//                                         padding: "8px",
+//                                     }}
+//                                 >
+//                                     {col.label}
+//                                 </TableCell>
+//                             ))}
+//                         </TableRow>
+//                     </TableHead>
+//                     <TableBody>
+//                         {displayedRows.length > 0 ? (
+//                             displayedRows.map((row, idx) => (
+//                                 <TableRow 
+//                                     key={idx} 
+//                                     sx={{ 
+//                                         backgroundColor: idx % 2 === 0 ? "#FFFFFF" : "#FAFAFA",
+//                                         "&:hover": { backgroundColor: "#F1F5F9" },
+//                                         height: "auto" 
+//                                     }}
+//                                 >
+//                                     {columns.map((col) => {
+//                                         const cellValue = row[col.key] !== null && row[col.key] !== undefined !== "" ? String(row[col.key]) : "-";
+//                                         const isAdditionalRemarks = col.key === "additional_remarks";
+//                                         const isTag = col.key === "tag";
+//                                         const hasTooltip = (isAdditionalRemarks || isTag);
+
+//                                         return (
+//                                             <TableCell 
+//                                                 key={col.key} 
+//                                                 sx={{ 
+//                                                     fontSize: "12px",
+//                                                     color: "#475569",
+//                                                     borderBottom: "1px solid #E2E8F0",
+//                                                     padding: "8px",
+//                                                     whiteSpace: hasTooltip ? "normal" : "nowrap",
+//                                                     overflow: hasTooltip ? "visible" : "hidden",
+//                                                     textOverflow: hasTooltip ? "clip" : "ellipsis",
+//                                                     maxWidth: hasTooltip ? "250px" : "auto",
+//                                                     minWidth: hasTooltip ? "200px" : "auto",
+//                                                     wordWrap: hasTooltip ? "break-word" : "normal",
+//                                                     verticalAlign: "top",
+//                                                 }}
+//                                             >
+//                                                 {hasTooltip && cellValue !== "-" ? (
+//                                                     <Tooltip 
+//                                                         title={cellValue}
+//                                                         enterDelay={200}
+//                                                         placement="top"
+//                                                         arrow
+//                                                     >
+//                                                         <Box 
+//                                                             sx={{ 
+//                                                                 display: "-webkit-box",
+//                                                                 WebkitLineClamp: 2,
+//                                                                 WebkitBoxOrient: "vertical",
+//                                                                 overflow: "hidden",
+//                                                                 textOverflow: "ellipsis",
+//                                                             }}
+//                                                         >
+//                                                             {cellValue}
+//                                                         </Box>
+//                                                     </Tooltip>
+//                                                 ) : (
+//                                                     cellValue
+//                                                 )}
+//                                             </TableCell>
+//                                         );
+//                                     })}
+//                                 </TableRow>
+//                             ))
+//                         ) : (
+//                             <TableRow>
+//                                 <TableCell colSpan={columns.length} sx={{ textAlign: "center", py: 3, color: "#999" }}>
+//                                     No records found matching the filter
+//                                 </TableCell>
+//                             </TableRow>
+//                         )}
+//                     </TableBody>
+//                 </Table>
+//             </TableContainer>
+
+//             <TablePagination
+//                 rowsPerPageOptions={[5, 10, 25, 50]}
+//                 component="div"
+//                 count={filteredData.length}
+//                 rowsPerPage={rowsPerPage}
+//                 page={page}
+//                 onPageChange={handleChangePage}
+//                 onRowsPerPageChange={handleChangeRowsPerPage}
+//                 sx={{ bgcolor: "#FFFFFF", borderTop: "1px solid #E2E8F0", color: "#64748B" }}
+//             />
+//         </Box>
+//     );
+// };
+
+// const Dashboard = ({ reportResult }) => {
+//     if (!reportResult) return null;
+
+//     let dataArray = [];
+
+//     if (reportResult.data) {
+//         if (Array.isArray(reportResult.data)) {
+//             dataArray = reportResult.data;
+//         } else if (typeof reportResult.data === 'object') {
+//             Object.keys(reportResult.data).forEach((key) => {
+//                 if (Array.isArray(reportResult.data[key])) {
+//                     dataArray = dataArray.concat(reportResult.data[key]);
+//                 }
+//             });
+//         }
+//     }
+
+//     const summaryData = reportResult.counts || null;
+
+//     return (
+//         <Box sx={{ backgroundColor: "#FFFFFF", p: 3, borderRadius: 2, border: "1px solid #E2E8F0", mt: 4, mb: 3, boxShadow: "0 1px 3px 0 rgb(0 0 0 / 0.05)" }}>
+//             <Divider sx={{ mb: 3 }} />
+
+//             <Typography sx={{
+//                 fontWeight: 700,
+//                 fontSize: "18px",
+//                 color: "#0F172A",
+//                 mb: 3,
+//                 letterSpacing: -0.2,
+//             }}>
+//                 📊 Summary Overview
+//             </Typography>
+
+//             {summaryData && (
+//                 <Box sx={{ mb: 4 }}>
+//                     <SummaryGrid summary={summaryData} />
+//                 </Box>
+//             )}
+
+//             <DataTable data={dataArray} />
+//         </Box>
+//     );
+// };
+
+// const DownloadCompleteReport = () => {
+//     const { loading, action } = useLoadingDialog();
+//     const navigate = useNavigate();
+//     const classes = OverAllCss();
+
+//     const userTypes = getDecreyptedData('user_type')?.split(",").map((t) => t.trim());
+
+//     /* ───────────────────────── 3. Download Report ───────────────────────── */
+//     const [reportBand, setReportBand] = useState("");
+//     const [reportArchived, setReportArchived] = useState("");
+//     const [reportStartMonth, setReportStartMonth] = useState("");
+//     const [reportEndMonth, setReportEndMonth] = useState("");
+//     const [reportErrors, setReportErrors] = useState({ band: false, month: false, range: false });
+//     const [reportResult, setReportResult] = useState(null);
+
+//     const [reportSelectedKeys, setReportSelectedKeys] = useState([]);
+
+//     const formattedStartMonth = formatMonthToMMMYY(reportStartMonth);
+//     const formattedEndMonth = formatMonthToMMMYY(reportEndMonth);
+//     const bothMonthsPicked = reportStartMonth !== "" && reportEndMonth !== "";
+//     const isRangeOrderInvalid = bothMonthsPicked && !isChronologicalOrder(reportStartMonth, reportEndMonth);
+
+//     const handleReportSubmit = async () => {
+//         const rangeIsValid = bothMonthsPicked && isChronologicalOrder(reportStartMonth, reportEndMonth);
+//         const isValid = rangeIsValid;
+
+//         if (!isValid) {
+//             setReportErrors({
+//                 band: false,
+//                 month: !bothMonthsPicked,
+//                 range: bothMonthsPicked && !rangeIsValid,
+//             });
+//             return;
+//         }
+
+//         action(true);
+//         const formData = new FormData();
+//         if (reportBand && reportBand !== 'All') {
+//             formData.append("band", reportBand);
+//         } else if (reportBand === 'All') {
+//             formData.append("band", "All");
+//         }
+        
+//         formData.append("start_month", formattedStartMonth);
+//         formData.append("end_month", formattedEndMonth);
+//         if (reportArchived) {
+//             formData.append("archived", reportArchived);
+//         }
+
+//         const selectedKeys = [];
+//         if (reportBand) selectedKeys.push(reportBand);
+//         if (reportArchived) selectedKeys.push(reportArchived);
+//         setReportSelectedKeys(selectedKeys);
+
+//         try {
+//             const response = await postDataa("pending_performance_at_remarks/download/", formData);
+//             action(false);
+
+//             // Check if status is explicitly true for success
+//             const isSuccess = response?.status === true || response?.status === "success";
+
+//             if (isSuccess) {
+//                 setReportResult(response);
+//                 Swal.fire({
+//                     icon: "success",
+//                     title: "Done ✓",
+//                     text: response.message || "Report generated successfully",
+//                     confirmButtonColor: "#198754",
+//                 });
+//             } else {
+//                 // Use `error` key with fallback to `message` for error handling
+//                 const errorMessage = response?.error || response?.message || "Something went wrong";
+                
+//                 Swal.fire({
+//                     icon: "error",
+//                     title: "Error",
+//                     text: errorMessage,
+//                     confirmButtonColor: "#d32f2f",
+//                 });
+//                 setReportResult(null);
+//             }
+//         } catch (error) {
+//             action(false);
+//             console.error("Submit Error:", error);
+            
+//             const errorMessage = error?.error || error?.message || "Failed to download report";
+//             Swal.fire({
+//                 icon: "error",
+//                 title: "Error",
+//                 text: errorMessage,
+//                 confirmButtonColor: "#d32f2f",
+//             });
+//             setReportResult(null);
+//         }
+//     };
+
+//     const handleReportCancel = () => {
+//         setReportBand("");
+//         setReportArchived("");
+//         setReportStartMonth("");
+//         setReportEndMonth("");
+//         setReportErrors({ band: false, month: false, range: false });
+//         setReportResult(null);
+//         setReportSelectedKeys([]);
+//     };
+
+//     useEffect(() => {
+//         document.title = `${window.location.pathname.slice(1).replaceAll('_', ' ').replaceAll('/', ' | ').toUpperCase()}`;
+//     }, []);
+
+//     return (
+//         <>
+//             <Box m={1} ml={2}>
+//                 <Breadcrumbs separator={<KeyboardArrowRightIcon fontSize="small" />}>
+//                     <Link underline="hover" onClick={() => navigate("/tools")}>Tools</Link>
+//                     <Typography color="text.primary">Pending Performance At Remarks</Typography>
+//                 </Breadcrumbs>
+//             </Box>
+
+//             <Slide direction="left" in timeout={1000}>
+//                 <Box>
+//                     <StyledCard title="Download Report" classes={classes}>
+//                         <Stack spacing={2}>
+//                             <Box className={classes.Front_Box}>
+//                                 <div className={classes.Front_Box_Hading}>Select Band:</div>
+//                                 <div className={classes.Front_Box_Select_Button}>
+//                                     <FormControl sx={{ minWidth: 150 }}>
+//                                         <InputLabel id="report-band-label">Select Band</InputLabel>
+//                                         <Select
+//                                             labelId="report-band-label"
+//                                             label="Select Band"
+//                                             value={reportBand}
+//                                             onChange={(e) => { 
+//                                                 setReportBand(e.target.value); 
+//                                                 setReportErrors((p) => ({ ...p, band: false })); 
+//                                             }}
+//                                         >
+//                                             {bandArray.map((b) => (
+//                                                 <MenuItem key={b} value={b}>
+//                                                     {b === 'All' ? 'All Bands' : b}
+//                                                 </MenuItem>
+//                                             ))}
+//                                         </Select>
+//                                     </FormControl>
+//                                 </div>
+//                             </Box>
+
+//                             {userTypes?.includes('QT_AR') && <Box className={classes.Front_Box}>
+//                                 <div className={classes.Front_Box_Hading}>Select Archived:</div>
+//                                 <div className={classes.Front_Box_Select_Button}>
+//                                     <FormControl sx={{ minWidth: 150 }}>
+//                                         <InputLabel id="report-archived-label">Select Archived</InputLabel>
+//                                         <Select
+//                                             labelId="report-archived-label"
+//                                             label="Select Archived"
+//                                             value={reportArchived}
+//                                             onChange={(e) => setReportArchived(e.target.value)}
+//                                         >
+//                                             {archivedArray.map((a) => <MenuItem key={a} value={a}>{a}</MenuItem>)}
+//                                         </Select>
+//                                     </FormControl>
+//                                 </div>
+//                             </Box>}
+
+//                             <Box className={classes.Front_Box}>
+//                                 <div className={classes.Front_Box_Hading}>Select Month Range:</div>
+//                                 <div className={classes.Front_Box_Select_Button}>
+//                                     <Stack direction={{ xs: "column", sm: "row" }} spacing={1.5} alignItems={{ sm: "center" }}>
+//                                         <TextField
+//                                             size="small"
+//                                             type="month"
+//                                             label="From"
+//                                             InputLabelProps={{ shrink: true }}
+//                                             value={reportStartMonth}
+//                                             onChange={(e) => {
+//                                                 setReportStartMonth(e.target.value);
+//                                                 setReportErrors((p) => ({ ...p, month: false, range: false }));
+//                                             }}
+//                                             sx={{ minWidth: 170, bgcolor: "#fff" }}
+//                                         />
+//                                         <Typography sx={{ color: "text.secondary" }}>to</Typography>
+//                                         <TextField
+//                                             size="small"
+//                                             type="month"
+//                                             label="To"
+//                                             InputLabelProps={{ shrink: true }}
+//                                             value={reportEndMonth}
+//                                             inputProps={{ min: reportStartMonth || undefined }}
+//                                             onChange={(e) => {
+//                                                 setReportEndMonth(e.target.value);
+//                                                 setReportErrors((p) => ({ ...p, month: false, range: false }));
+//                                             }}
+//                                             sx={{ minWidth: 170, bgcolor: "#fff" }}
+//                                         />
+//                                     </Stack>
+
+//                                     {bothMonthsPicked && !isRangeOrderInvalid && !reportErrors.month && !reportErrors.range && (
+//                                         <div style={{ marginTop: 6 }}>
+//                                             <span style={{ color: "gray", fontSize: 14 }}>
+//                                                 Will be sent as: start_month={formattedStartMonth}, end_month={formattedEndMonth}
+//                                             </span>
+//                                         </div>
+//                                     )}
+
+//                                     {reportErrors.month && (
+//                                         <div><span style={{ color: "red", fontSize: 18, fontWeight: 600 }}>Please select both a start and end month!</span></div>
+//                                     )}
+//                                     {(reportErrors.range || isRangeOrderInvalid) && !reportErrors.month && (
+//                                         <div><span style={{ color: "red", fontSize: 18, fontWeight: 600 }}>"From" month must be the same as or before the "To" month!</span></div>
+//                                     )}
+//                                 </div>
+//                             </Box>
+
+//                             {(reportResult?.download_url || reportResult?.download_urls) && (
+//                                 <Box className={classes.Front_Box}>
+//                                     <div className={classes.Front_Box_Hading}>Report:</div>
+//                                     <div className={classes.Front_Box_Select_Button}>
+//                                         <Stack direction="row" spacing={1.5} flexWrap="wrap" useFlexGap>
+//                                             {reportResult?.download_url ? (
+//                                                 <DownloadButton
+//                                                     url={reportResult.download_url}
+//                                                     label={`${reportResult.band || reportSelectedKeys[0] || ""} Report`}
+//                                                 />
+//                                             ) : (
+//                                                 (reportSelectedKeys.length > 0
+//                                                     ? reportSelectedKeys
+//                                                     : Object.keys(reportResult.download_urls || {})
+//                                                 ).map((key) => (
+//                                                     reportResult.download_urls?.[key] && (
+//                                                         <DownloadButton
+//                                                             key={key}
+//                                                             url={reportResult.download_urls[key]}
+//                                                             label={`${key} Report`}
+//                                                         />
+//                                                     )
+//                                                 ))
+//                                             )}
+//                                         </Stack>
+//                                     </div>
+//                                 </Box>
+//                             )}
+
+//                             {reportResult && <Dashboard reportResult={reportResult} />}
+//                         </Stack>
+
+//                         <Stack direction={{ xs: "column", md: "row" }} spacing={2} justifyContent="space-around" mt={2}>
+//                             <Button variant="contained" color="success" onClick={handleReportSubmit} endIcon={<UploadIcon />}>Submit</Button>
+//                             <Button variant="contained" onClick={handleReportCancel} sx={{ backgroundColor: "red", color: "white" }} endIcon={<DoDisturbIcon />}>Cancel</Button>
+//                         </Stack>
+//                     </StyledCard>
+//                 </Box>
+//             </Slide>
+
+//             {loading}
+//         </>
+//     );
+// };
+
+// export default DownloadCompleteReport;
+
+
 import React, { useState, useEffect } from "react";
 import {
     Box, Button, Stack, Breadcrumbs, Link, Typography, Slide, Grid,
     TextField, MenuItem, Select, InputLabel, FormControl, Divider,
-    Chip, List, ListItem, ListItemText, Card, CardContent, Paper,
-    Alert, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
-    TablePagination, InputAdornment, Tooltip,
+    Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
+    TablePagination, InputAdornment, Tooltip, Paper,
 } from "@mui/material";
 import {
     Upload as UploadIcon,
@@ -831,6 +1419,7 @@ import {
     FileDownload as FileDownloadIcon,
     KeyboardArrowRight as KeyboardArrowRightIcon,
     Search as SearchIcon,
+    Assessment as AssessmentIcon,
 } from "@mui/icons-material";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
@@ -839,7 +1428,6 @@ import OverAllCss from "../../../csss/OverAllCss";
 import { useLoadingDialog } from "../../../Hooks/LoadingDialog";
 import { getDecreyptedData } from '../../../utils/localstorage';
 
-const circleArray = ['AP','DL','TNCH', 'NESA','RJ','JK','BR','MH', 'MP','MU','JRK','KK','UE','UW','HPHP','OR','WB/KOL'];
 const bandArray = ['All', '4G', '5G', 'Accepted'];
 const archivedArray = ['Archived'];
 
@@ -886,15 +1474,46 @@ const SummaryGrid = ({ summary }) => {
         additional_remark_window_count: "Additional Remark Window Count",
     };
     return (
-        <Grid container spacing={1.5}>
-            {Object.entries(summary).map(([key, value]) => (
-                <Grid item xs={6} sm={4} md={3} key={key}>
-                    <Box sx={{ p: 1.25, textAlign: "center", borderRadius: 2, bgcolor: "#FFFFFF", border: "1px solid #E2E8F0", boxShadow: "0 1px 2px 0 rgb(0 0 0 / 0.03)" }}>
-                        <Typography variant="caption" sx={{ color: "#64748B", fontWeight: 500 }}>{labels[key] || key}</Typography>
-                        <Typography variant="h6" sx={{ fontWeight: 700, color: "#0F172A" }}>{value}</Typography>
-                    </Box>
-                </Grid>
-            ))}
+        <Grid container spacing={2}>
+            {Object.entries(summary).map(([key, value]) => {
+                if (typeof value === 'object' && value !== null) return null;
+                return (
+                    <Grid item xs={12} sm={6} md={3} key={key}>
+                        <Box sx={{ 
+                            p: 2, 
+                            textAlign: "center", 
+                            borderRadius: 3, 
+                            bgcolor: "#FFFFFF", 
+                            border: "1px solid rgba(226, 232, 240, 0.8)", 
+                            boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05)",
+                            transition: "all 0.3s ease",
+                            position: "relative",
+                            overflow: "hidden",
+                            "&:hover": {
+                                transform: "translateY(-4px)",
+                                boxShadow: "0 20px 30px -10px rgba(0, 110, 116, 0.12)",
+                                borderColor: "#006E74"
+                            },
+                            "&::before": {
+                                content: '""',
+                                position: "absolute",
+                                top: 0,
+                                left: 0,
+                                right: 0,
+                                height: "4px",
+                                background: "linear-gradient(90deg, #004d52 0%, #006e74 55%, #4fa3a8 100%)"
+                            }
+                        }}>
+                            <Typography variant="caption" sx={{ color: "#64748B", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.5px", fontSize: "11px" }}>
+                                {labels[key] || key}
+                            </Typography>
+                            <Typography variant="h5" sx={{ fontWeight: 800, color: "#0F172A", mt: 0.5 }}>
+                                {value}
+                            </Typography>
+                        </Box>
+                    </Grid>
+                );
+            })}
         </Grid>
     );
 };
@@ -914,7 +1533,7 @@ const DownloadButton = ({ url, label }) => {
     );
 };
 
-// ✅ Data Table Component with Pagination & Site ID Filter (Updated with new schema columns)
+// ✅ Data Table Component with Pagination & Site ID Filter
 const DataTable = ({ data }) => {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -1027,7 +1646,7 @@ const DataTable = ({ data }) => {
                                     }}
                                 >
                                     {columns.map((col) => {
-                                        const cellValue = row[col.key] !== null && row[col.key] !== undefined !== "" ? String(row[col.key]) : "-";
+                                        const cellValue = row[col.key] !== null && row[col.key] !== undefined && row[col.key] !== "" ? String(row[col.key]) : "-";
                                         const isAdditionalRemarks = col.key === "additional_remarks";
                                         const isTag = col.key === "tag";
                                         const hasTooltip = (isAdditionalRemarks || isTag);
@@ -1109,6 +1728,8 @@ const Dashboard = ({ reportResult }) => {
     if (reportResult.data) {
         if (Array.isArray(reportResult.data)) {
             dataArray = reportResult.data;
+        } else if (Array.isArray(reportResult.data.records)) {
+            dataArray = reportResult.data.records;
         } else if (typeof reportResult.data === 'object') {
             Object.keys(reportResult.data).forEach((key) => {
                 if (Array.isArray(reportResult.data[key])) {
@@ -1116,9 +1737,21 @@ const Dashboard = ({ reportResult }) => {
                 }
             });
         }
+    } else if (reportResult.dashboard && Array.isArray(reportResult.dashboard.records)) {
+        dataArray = reportResult.dashboard.records;
     }
 
-    const summaryData = reportResult.counts || null;
+    const summaryData = 
+        reportResult.counts || 
+        reportResult.data?.counts || 
+        reportResult.dashboard?.counts || 
+        null;
+
+    const recordsShown = 
+        reportResult.records_shown ?? 
+        reportResult.data?.records_shown ?? 
+        reportResult.dashboard?.records_shown ?? 
+        dataArray.length;
 
     return (
         <Box sx={{ backgroundColor: "#FFFFFF", p: 3, borderRadius: 2, border: "1px solid #E2E8F0", mt: 4, mb: 3, boxShadow: "0 1px 3px 0 rgb(0 0 0 / 0.05)" }}>
@@ -1134,8 +1767,48 @@ const Dashboard = ({ reportResult }) => {
                 📊 Summary Overview
             </Typography>
 
+            {/* Records Shown Card at Top Center with 3D/Advanced Styling */}
+            {/* {recordsShown !== undefined && recordsShown !== null && (
+                <Box sx={{ display: "flex", justifyContent: "center", mb: 4 }}>
+                    <Box sx={{ 
+                        p: 2.5, 
+                        width: { xs: "100%", sm: "320px" },
+                        textAlign: "center", 
+                        borderRadius: 3, 
+                        background: "linear-gradient(135deg, #004d52 0%, #006e74 50%, #008991 100%)",
+                        boxShadow: "0 15px 30px -5px rgba(0, 110, 116, 0.3), 0 8px 12px -6px rgba(0, 0, 0, 0.1)",
+                        transform: "translateY(0)",
+                        transition: "all 0.3s ease",
+                        position: "relative",
+                        overflow: "hidden",
+                        border: "1px solid rgba(255, 255, 255, 0.2)",
+                        "&:hover": {
+                            transform: "translateY(-4px)",
+                            boxShadow: "0 20px 35px -5px rgba(0, 110, 116, 0.4)",
+                        },
+                        "&::after": {
+                            content: '""',
+                            position: "absolute",
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            height: "50%",
+                            background: "linear-gradient(to bottom, rgba(255,255,255,0.15), transparent)",
+                            pointerEvents: "none"
+                        }
+                    }}>
+                        <Typography variant="caption" sx={{ color: "#E2E8F0", fontWeight: 700, textTransform: "uppercase", letterSpacing: "1px", fontSize: "11px" }}>
+                            Records Shown
+                        </Typography>
+                        <Typography variant="h4" sx={{ fontWeight: 900, color: "#FFFFFF", mt: 0.5, textShadow: "0 2px 4px rgba(0,0,0,0.2)" }}>
+                            {recordsShown}
+                        </Typography>
+                    </Box>
+                </Box>
+            )} */}
+
             {summaryData && (
-                <Box sx={{ mb: 4 }}>
+                <Box sx={{ mb: 3 }}>
                     <SummaryGrid summary={summaryData} />
                 </Box>
             )}
@@ -1203,7 +1876,6 @@ const DownloadCompleteReport = () => {
             const response = await postDataa("pending_performance_at_remarks/download/", formData);
             action(false);
 
-            // Check if status is explicitly true for success
             const isSuccess = response?.status === true || response?.status === "success";
 
             if (isSuccess) {
@@ -1215,7 +1887,6 @@ const DownloadCompleteReport = () => {
                     confirmButtonColor: "#198754",
                 });
             } else {
-                // Use `error` key with fallback to `message` for error handling
                 const errorMessage = response?.error || response?.message || "Something went wrong";
                 
                 Swal.fire({
